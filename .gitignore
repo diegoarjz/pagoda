@@ -1,0 +1,26 @@
+build
+compile_commands.json
+
+# VIM swap files
+*.swp
+
+# Doxygen generated files
+docs/html/
+
+# Buildsys files
+buildsys/Debug/
+buildsys/Release/
+buildsys/RelWithDebInfo/
+buildsys/MinSizeRel/
+buildsys/.config/
+buildsys/archive/
+buildsys/runs/
+buildsys/data/
+buildsys/*.log
+
+*.pyc
+*__pycache__*
+
+# Third Party Libraries
+third_party/
+
