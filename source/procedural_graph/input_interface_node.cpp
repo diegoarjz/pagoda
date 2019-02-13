@@ -3,7 +3,6 @@
 #include "graph.h"
 #include "graph_execution_context.h"
 #include "node.h"
-#include "node_execution_result.h"
 #include "node_set_visitor.h"
 #include "output_interface_node.h"
 

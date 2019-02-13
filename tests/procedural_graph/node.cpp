@@ -1,5 +1,4 @@
 #include <procedural_graph/graph_execution_context.h>
-#include <procedural_graph/node_execution_result.h>
 #include <procedural_graph/operation_node.h>
 
 #include "../parameter/mock_objects.h"

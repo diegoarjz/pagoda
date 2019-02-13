@@ -111,7 +111,6 @@ set(SELECTOR_PROCEDURAL_GRAPH_HEADERS
     "procedural_graph/xml_parse_result.h"
     "procedural_graph/graph_execution_context.h"
     "procedural_graph/xml_reader_plugin.h"
-    "procedural_graph/node_type.h"
     )
 
 set(SELECTOR_PROCEDURAL_GRAPH_SOURCES

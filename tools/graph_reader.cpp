@@ -3,9 +3,7 @@
 #include <geometry_core/geometry_exporter.h>
 #include <parameter/parameter.h>
 #include <procedural_graph/graph_execution_context.h>
-#include <procedural_graph/node_execution_result.h>
 #include <procedural_graph/node_set_visitor.h>
-#include <procedural_graph/node_type.h>
 #include <procedural_graph/operation_node.h>
 #include <procedural_graph/output_interface_node.h>
 #include <procedural_graph/reader.h>
