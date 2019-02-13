@@ -1,27 +1,27 @@
 #ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 #define SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 
-#include "node_type.h"
-
 #include <parameter/context.h>
 #include <procedural_objects/procedural_operation.h>
 
 #include <memory>
+#include <unordered_set>
 
 namespace selector
 {
-inline constexpr size_t Index(const NodeType &type) { return static_cast<size_t>(type); }
-
-class NodeExecution;
-class NodeExecutionResult;
-using NodeExecutionResultPtr = std::shared_ptr<NodeExecutionResult>;
 struct GraphExecutionContext;
 using GraphExecutionContextPtr = std::shared_ptr<GraphExecutionContext>;
+
+class Node;
+using NodePtr = std::shared_ptr<Node>;
+
+template<class Node>
+using NodeSet = std::unordered_set<std::shared_ptr<Node>>;
 
 class Node : public std::enable_shared_from_this<Node>
 {
 public:
-	Node(NodeType type);
+	Node();
 	virtual ~Node();
 
 	uint32_t GetId() const;
@@ -29,19 +29,28 @@ public:
 
 	void SetName(const std::string &name);
 	const std::string &GetName() const;
-	void SetNodeExecution(std::shared_ptr<NodeExecution> execution);
-	std::shared_ptr<NodeExecution> GetNodeExecution() const;
 	void SetParameterContext(std::shared_ptr<Context> context);
 	std::shared_ptr<Context> GetParameterContext() const;
-	NodeExecutionResultPtr GetResult() const;
 
-	void Execute(GraphExecutionContextPtr executionContext);
+	virtual void Execute(GraphExecutionContextPtr executionContext, const NodeSet<Node> &inNodes,
+	                     const NodeSet<Node> &outNodes) = 0;
 
-	NodeType GetNodeType() const;
+	template<class VisitorT>
+	void Visit(VisitorT *v)
+	{
+		visit(v, this);
+	}
 
 private:
-	class Impl;
-	std::unique_ptr<Impl> m_implementation;
+	template<class VisitorT, class NodeT>
+	void visit(VisitorT *visitor, NodeT *node)
+	{
+		visitor->Visit(node);
+	}
+
+	std::string m_nodeName;
+	uint32_t m_nodeId;
+	std::shared_ptr<Context> m_context;
 };  // class Node
 
 using NodePtr = std::shared_ptr<Node>;

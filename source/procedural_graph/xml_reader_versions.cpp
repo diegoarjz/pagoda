@@ -1,7 +1,7 @@
 #include "xml_reader_versions.h"
 
 #include "node.h"
-#include "operation_execution.h"
+#include "operation_node.h"
 #include "reader.h"
 
 #include "common/utils.h"
@@ -70,26 +70,6 @@ void XMLReaderVersioned::SetParseResult(const ParseResult::Status& status, uint3
 
 namespace xml_v01
 {
-NodeType convert_node_type(const char* type)
-{
-	if (std::strcmp(type, node::types::operation) == 0)
-	{
-		return NodeType::Operation;
-	}
-
-	if (std::strcmp(type, node::types::input_interface) == 0)
-	{
-		return NodeType::InputInterface;
-	}
-
-	if (std::strcmp(type, node::types::output_interface) == 0)
-	{
-		return NodeType::OutputInterface;
-	}
-
-	return NodeType::MAX;
-}
-
 ProceduralOperationType convert_operation_type(const char* type)
 {
 	if (std::strcmp(type, operation::extrude) == 0)
@@ -124,10 +104,12 @@ ParseResult XMLReaderV01::Read(const pugi::xml_document& doc)
 		const char* node_name = node.attribute(xml_v01::node::name).as_string();
 		const char* node_type = node.attribute(xml_v01::node::type).as_string();
 
-		NodeType type = convert_node_type(node_type);
-
-		NodePtr nodePtr = reader->CreateNode(type, node_name, node_id);
+		NodePtr nodePtr = reader->CreateNode(node_type, node_name, node_id);
 		auto inserted = nodes_map.insert(std::make_pair(node_id, nodePtr));
+
+		ParameterIdentifier identifier = ParameterIdentifier::CreateIdentifier(node_name).second;
+		auto parameter_context = std::make_shared<Context>(identifier);
+		nodePtr->SetParameterContext(parameter_context);
 
 		if (!inserted.second)
 		{
@@ -137,24 +119,24 @@ ParseResult XMLReaderV01::Read(const pugi::xml_document& doc)
 			return result;
 		}
 
-		switch (type)
+		if (std::strcmp(node_type, "InputInterface") == 0)
 		{
-			case NodeType::InputInterface:
-				CreateInputInterfaceNode(nodePtr, node);
-				break;
-			case NodeType::OutputInterface:
-				CreateOutputInterfaceNode(nodePtr, node);
-				break;
-			case NodeType::Operation:
-				CreateOperationNode(nodePtr, node);
-				break;
-			default:
-			{
-				ParseResult result;
-				result.offset = 0;
-				result.status = ParseResult::Status::UnknownNodeType;
-				return result;
-			}
+			CreateInputInterfaceNode(nodePtr, node);
+		}
+		else if (std::strcmp(node_type, "OutputInterface") == 0)
+		{
+			CreateOutputInterfaceNode(nodePtr, node);
+		}
+		else if (std::strcmp(node_type, "Operation") == 0)
+		{
+			CreateOperationNode(nodePtr, node);
+		}
+		else
+		{
+			ParseResult result;
+			result.offset = 0;
+			result.status = ParseResult::Status::UnknownNodeType;
+			return result;
 		}
 
 		// Read node custom data
@@ -211,16 +193,11 @@ std::shared_ptr<ParameterBase> XMLReaderV01::CreateParameter(std::shared_ptr<Con
 
 NodePtr XMLReaderV01::CreateOperationNode(NodePtr node, const pugi::xml_node& xml_node)
 {
-	auto execution = std::dynamic_pointer_cast<OperationExecution>(node->GetNodeExecution());
+	auto operationNode = std::dynamic_pointer_cast<OperationNode>(node);
 	pugi::xml_node xml_operation_node = xml_node.child(operation::tag);
 	const char* operation_type = xml_operation_node.attribute(operation::type).as_string();
 	auto operation = ProceduralOperationFactory::Create(convert_operation_type(operation_type));
-	execution->SetOperation(operation);
-
-	const char* node_name = xml_node.attribute(node::name).as_string();
-	ParameterIdentifier identifier = ParameterIdentifier::CreateIdentifier(node_name).second;
-	auto parameter_context = std::make_shared<Context>(identifier);
-	node->SetParameterContext(parameter_context);
+	operationNode->SetOperation(operation);
 
 	pugi::xml_node operation_parameters = xml_operation_node.child(parameter::collection_tag);
 
@@ -237,7 +214,7 @@ NodePtr XMLReaderV01::CreateOperationNode(NodePtr node, const pugi::xml_node& xm
 			return nullptr;
 		}
 
-		auto param = CreateParameter(parameter_context, param_name.as_string(), param_type.as_string(),
+		auto param = CreateParameter(node->GetParameterContext(), param_name.as_string(), param_type.as_string(),
 		                             param_value.as_string(), is_expression.as_bool());
 
 		if (!param)

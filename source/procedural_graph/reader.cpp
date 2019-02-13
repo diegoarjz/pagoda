@@ -1,7 +1,9 @@
 #include "reader.h"
 
 #include "common/assertions.h"
-#include "node_factory.h"
+#include "input_interface_node.h"
+#include "operation_node.h"
+#include "output_interface_node.h"
 #include "parameter/context.h"
 #include "parameter/expression.h"
 #include "xml_reader_plugin.h"
@@ -49,7 +51,7 @@ ParseResult::Status convert_status_code(const pugi::xml_parse_status &status)
 	return ParseResult::Status::UnknownError;
 }
 
-XMLReader::XMLReader() : m_graph(std::make_shared<Graph>(std::make_shared<NodeFactory>())) {}
+XMLReader::XMLReader() : m_graph(std::make_shared<Graph>()) {}
 XMLReader::~XMLReader() {}
 std::shared_ptr<Graph> XMLReader::GetGraph() const { return m_graph; }
 
@@ -75,9 +77,22 @@ ParseResult XMLReader::Read(const std::string &xml)
 	return reader->Read(doc);
 }
 
-std::shared_ptr<Node> XMLReader::CreateNode(NodeType type, const char *name, uint32_t id)
+std::shared_ptr<Node> XMLReader::CreateNode(const char *type, const char *name, uint32_t id)
 {
-	NodePtr node = m_graph->CreateNode(type);
+	NodePtr node = nullptr;
+	if (std::strcmp(type, "InputInterface") == 0)
+	{
+		node = m_graph->CreateNode<InputInterfaceNode>();
+	}
+	else if (std::strcmp(type, "OutputInterface") == 0)
+	{
+		node = m_graph->CreateNode<OutputInterfaceNode>();
+	}
+	else if (std::strcmp(type, "Operation") == 0)
+	{
+		node = m_graph->CreateNode<OperationNode>();
+	}
+
 	DBG_ASSERT(node != nullptr);
 
 	node->SetName(name);

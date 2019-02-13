@@ -24,9 +24,8 @@ set(test_srcs
     "procedural_objects/procedural_object_interface.cpp"
     "procedural_objects/geometry_system.cpp"
     "procedural_graph/graph.cpp"
-    "procedural_graph/node_factory.cpp"
-    "procedural_graph/node_execution_result.cpp"
     "procedural_graph/node.cpp"
+    "procedural_graph/node_set_visitor.cpp"
     )
 
 add_executable(unit_tests ${test_srcs})

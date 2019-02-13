@@ -18,5 +18,7 @@ public:
 	ProceduralObjectSystemWeakPtr m_proceduralObjectSystem;
 	GeometrySystemWeakPtr m_geometrySystem;
 };  // struct GraphExecutionContext
+
+using GraphExecutionContextPtr = std::shared_ptr<GraphExecutionContext>;
 }  // namespace selector
 #endif

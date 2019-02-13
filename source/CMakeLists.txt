@@ -111,7 +111,6 @@ set(SELECTOR_PROCEDURAL_GRAPH_HEADERS
     "procedural_graph/xml_parse_result.h"
     "procedural_graph/graph_execution_context.h"
     "procedural_graph/xml_reader_plugin.h"
-    "procedural_graph/node_factory.h"
     "procedural_graph/node_type.h"
     )
 
@@ -119,17 +118,12 @@ set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
     "procedural_graph/graph.cpp"
     "procedural_graph/node.cpp"
     "procedural_graph/reader.cpp"
+    "procedural_graph/scheduler.cpp"
     "procedural_graph/graph_execution_context.cpp"
     "procedural_graph/xml_reader_versions.cpp"
-    "procedural_graph/node_factory.cpp"
-    "procedural_graph/operation_execution.cpp"
-    "procedural_graph/input_interface_execution.cpp"
-    "procedural_graph/output_interface_execution.cpp"
-    "procedural_graph/node_execution_result.cpp"
-    "procedural_graph/node_execution.cpp"
-    "procedural_graph/input_interface_execution.cpp"
-    "procedural_graph/operation_execution.cpp"
-    "procedural_graph/output_interface_execution.cpp"
+    "procedural_graph/input_interface_node.cpp"
+    "procedural_graph/output_interface_node.cpp"
+    "procedural_graph/operation_node.cpp"
     )
 
 set(SELECTOR_PUBLIC_HEADERS

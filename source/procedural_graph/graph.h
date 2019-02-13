@@ -2,7 +2,7 @@
 #ifndef SELECTOR_PROCEDURAL_GRAH_GRAPH_H_
 #define SELECTOR_PROCEDURAL_GRAH_GRAPH_H_
 
-#include "node_type.h"
+#include "node_set.h"
 
 #include <list>
 #include <memory>
@@ -59,24 +59,31 @@ public:
 	 *                         instantiating \c Node objects for this
 	 *                         \c Graph.
 	 */
-	Graph(std::shared_ptr<NodeFactory> nodeFactory);
+	Graph();
 	~Graph();
 
 	Graph(const Graph &) = delete;
 	Graph &operator=(const Graph &) = delete;
 
 	/**
-	 * Creates a \c Node object for this \c Graph.
+	 * Creates and adds \c Node object for this \c Graph.
 	 *
-	 * The graph takes ownership of the created \c Node.
-	 * Both parameters are passed as is to the \c NodeFactory with
-	 * which the \c Graph was constructed.
-	 *
-	 * @param [in] type     The node type to create.
-	 * @param [in] typeName The name of the type. See \c NodeFactory.
-	 * @return An instance of a \c Node or nullptr if unable to create.
+	 * @return An instance of a \c Node.
 	 */
-	NodePtr CreateNode(NodeType type, const std::string &name = "");
+	template<class NodeT, typename... T>
+	NodePtr CreateNode(T... args)
+	{
+		NodePtr node = std::make_shared<NodeT>(args...);
+		AddNode(node);
+		return node;
+	}
+
+	/**
+	 * Adds a \c Node object to this \c Graph.
+	 *
+	 * The \c Graph will take ownership of the \c Node.
+	 */
+	void AddNode(NodePtr node);
 
 	/**
 	 * Destroys a \c Node object from this \c Graph.
@@ -112,68 +119,40 @@ public:
 	EdgeDestroyed DestroyEdge(NodePtr sourceNode, NodePtr targetNode);
 
 	/**
-	 * Returns all nodes in the \c Graph that have the corresponding \c NodeType.
-	 *
-	 * @param [in] nodeType The type of nodes to return.
-	 * @return An unordered set of \c Node objects belonging to this \c Graph. All nodes
-	 *         are of the type specified in \p nodeType.
+	 * Returns all the \c Node in this \c Graph.
 	 */
-	const std::unordered_set<NodePtr> &GetGraphNodesByType(NodeType nodeType);
+	NodeSet<Node> GetGraphNodes();
 
 	/**
 	 * Returns the input nodes of this \c Graph.
 	 */
-	std::list<NodePtr> GetGraphInputNodes();
+	NodeSet<Node> GetGraphInputNodes();
 
 	/**
 	 * Returns the output nodes of this \c Graph.
 	 */
-	std::list<NodePtr> GetGraphOutputNodes();
+	NodeSet<Node> GetGraphOutputNodes();
 
 	/**
 	 * Returns all \c Node objects that share an edge with \p node.
 	 *
 	 * @param [in] node The node.
 	 */
-	std::list<NodePtr> GetNodesLinkedTo(NodePtr node);
-
-	/**
-	 * Returns \c Node objects of type \p nodeType that share an edge with \p node.
-	 *
-	 * @param [in] node     The node.
-	 * @param [in] nodeType The type of nodes.
-	 */
-	std::list<NodePtr> GetNodesLinkedToByType(NodePtr node, NodeType nodeType);
+	NodeSet<Node> GetNodesAdjacentTo(NodePtr node);
 
 	/**
 	 * Returns all input \c Node objects of \p node.
 	 *
 	 * @param [in] node The node.
 	 */
-	std::list<NodePtr> GetNodeInputNodes(NodePtr node);
-
-	/**
-	 * Returns all input \c Node objects of type \p nodeType of \p node.
-	 *
-	 * @param [in] node The node.
-	 * @param [in] nodeType The type of nodes.
-	 */
-	std::list<NodePtr> GetNodeInputNodesByType(NodePtr node, NodeType nodeType);
+	NodeSet<Node> GetNodeInputNodes(NodePtr node);
 
 	/**
 	 * Returns all output \c Node objects of \p node.
 	 *
 	 * @param [in] node The node.
 	 */
-	std::list<NodePtr> GetNodeOutputNodes(NodePtr node);
-
-	/**
-	 * Returns all output \c Node objects of type \p nodeType of \p node.
-	 *
-	 * @param [in] node The node.
-	 * @param [in] nodeType The type of nodes.
-	 */
-	std::list<NodePtr> GetNodeOutputNodesByType(NodePtr node, NodeType nodeType);
+	NodeSet<Node> GetNodeOutputNodes(NodePtr node);
 
 private:
 	class Impl;

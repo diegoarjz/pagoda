@@ -13,7 +13,7 @@ namespace selector
  * When a \c Node object is executed the value returned by its \c NodeExecution object's
  * Execute method is stored in the \c Node and can be accessed by other \c Node objects.
  *
- * This class takes ownershipt of the value passed in through SetResult and the contained value
+ * This class takes ownership of the value passed in through SetResult and the contained value
  * is destroyed whevener a new value is set or when the \c NodeExecutionResult is destroyed.
  */
 class NodeExecutionResult

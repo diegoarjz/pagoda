@@ -4,8 +4,10 @@
 #include <parameter/parameter.h>
 #include <procedural_graph/graph_execution_context.h>
 #include <procedural_graph/node_execution_result.h>
+#include <procedural_graph/node_set_visitor.h>
 #include <procedural_graph/node_type.h>
-#include <procedural_graph/output_interface_execution.h>
+#include <procedural_graph/operation_node.h>
+#include <procedural_graph/output_interface_node.h>
 #include <procedural_graph/reader.h>
 #include <procedural_graph/scheduler.h>
 #include <procedural_graph/xml_parse_result.h>
@@ -137,17 +139,14 @@ std::list<ProceduralObjectPtr> ExecuteGraph(std::shared_ptr<Graph> graph,
 	}
 
 	std::list<ProceduralObjectPtr> procedural_objects;
-	std::list<NodePtr> output_nodes = graph->GetGraphOutputNodes();
-	for (auto n : output_nodes)
+	auto outputNodes = graph->GetGraphOutputNodes();
+	NodeSet<OutputInterfaceNode> outputInterfaceNodes;
+	node_type_filter(outputNodes, outputInterfaceNodes);
+	for (auto n : outputInterfaceNodes)
 	{
-		if (n->GetNodeType() == NodeType::OutputInterface)
-		{
-			auto result = n->GetResult()->GetResultAs<OutputInterfaceExecution::Result>();
-			for (const auto proceduralObject : *result->m_proceduralObjects)
-			{
-				procedural_objects.push_back(proceduralObject);
-			}
-		}
+		auto nodeProceduralObjects = n->GetProceduralObjects();
+		procedural_objects.insert(std::end(procedural_objects), std::begin(nodeProceduralObjects),
+		                          std::end(nodeProceduralObjects));
 	}
 
 	return procedural_objects;
@@ -192,8 +191,10 @@ void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 	out_file << "\trankdir=LR;" << std::endl;
 	out_file << "\tnode [shape=plaintext fontname=\"Sans serif\" fontsize=\"8\"];" << std::endl;
 
-	auto operation_nodes = graph->GetGraphNodesByType(NodeType::Operation);
-	for (auto n : operation_nodes)
+	auto nodes = graph->GetGraphNodes();
+	NodeSet<OperationNode> operationNodes;
+	node_type_filter(nodes, operationNodes);
+	for (auto n : operationNodes)
 	{
 		auto parameters = n->GetParameterContext()->GetParameters();
 
@@ -216,19 +217,15 @@ void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 		out_file << "</table>>]\n\n";
 	}
 
-	for (uint32_t type = 0; type < Index(NodeType::MAX); ++type)
+	for (auto n : nodes)
 	{
-		auto nodes = graph->GetGraphNodesByType(static_cast<NodeType>(type));
-		for (auto n : nodes)
-		{
-			auto out_nodes = graph->GetNodeOutputNodes(n);
-			std::string source_node_name = n->GetName();
+		auto out_nodes = graph->GetNodeOutputNodes(n);
+		std::string source_node_name = n->GetName();
 
-			for (auto out_node : out_nodes)
-			{
-				std::string target_node_name = out_node->GetName();
-				out_file << "\t" << source_node_name << " -> " << target_node_name << ";" << std::endl;
-			}
+		for (auto out_node : out_nodes)
+		{
+			std::string target_node_name = out_node->GetName();
+			out_file << "\t" << source_node_name << " -> " << target_node_name << ";" << std::endl;
 		}
 	}
 

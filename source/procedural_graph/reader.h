@@ -20,7 +20,7 @@ public:
 	ParseResult Read(const std::string &xml);
 	std::shared_ptr<Graph> GetGraph() const;
 
-	std::shared_ptr<Node> CreateNode(NodeType type, const char *name, uint32_t id);
+	std::shared_ptr<Node> CreateNode(const char *type, const char *name, uint32_t id);
 	void Link(NodePtr from, NodePtr to);
 
 	bool RegisterPlugin(std::shared_ptr<XMLReaderPlugin> plugin);
