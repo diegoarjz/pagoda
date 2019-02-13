@@ -20,6 +20,7 @@ void Scheduler::Initialize()
 	auto graphNodes = m_graph->GetGraphNodes();
 	for (auto node : graphNodes)
 	{
+		DBG_ASSERT_MSG(node->GetParameterContext() != nullptr, "Parameter context should have been set by now");
 		node->GetParameterContext()->SetParent(m_graphParameterContext);
 	}
 

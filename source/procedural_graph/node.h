@@ -18,36 +18,61 @@ using NodePtr = std::shared_ptr<Node>;
 template<class Node>
 using NodeSet = std::unordered_set<std::shared_ptr<Node>>;
 
+/**
+ * Represents a \c Node in a \c Graph.
+ *
+ * Each subclass of \c Node is responsible for implementing an execution logic by
+ * overriding the Node::Execute() method.
+ */
 class Node : public std::enable_shared_from_this<Node>
 {
 public:
 	Node();
 	virtual ~Node();
 
+	Node(const Node &n) = delete;
+	Node &operator=(const Node &n) = delete;
+
+	/**
+	 * Gets the id from this \c Node.
+	 */
 	uint32_t GetId() const;
+	/**
+	 * Sets the id of this \c Node.
+	 */
 	void SetId(uint32_t nodeId);
 
+	/**
+	 * Sets this \c Node name.
+	 */
 	void SetName(const std::string &name);
+	/**
+	 * Gets this \c Node name.
+	 */
 	const std::string &GetName() const;
+
+	/**
+	 * Sets this \c Node parameter \c Context.
+	 */
 	void SetParameterContext(std::shared_ptr<Context> context);
+	/**
+	 * Gets this \c Node parameter \c Context.
+	 */
 	std::shared_ptr<Context> GetParameterContext() const;
 
+	/**
+	 * Executes some operation in the procedural graph.
+	 *
+	 * Subclasses should override this method to implement some execution logic.
+	 *
+	 * @param executionContext  The current \c GraphExecutionContext for the execution.
+	 * @param inNodes           The input nodes to the current \c Node, if any.
+	 * @param outNodes          The output nodes to the current \c Node, if any.
+	 */
 	virtual void Execute(GraphExecutionContextPtr executionContext, const NodeSet<Node> &inNodes,
 	                     const NodeSet<Node> &outNodes) = 0;
 
-	template<class VisitorT>
-	void Visit(VisitorT *v)
-	{
-		visit(v, this);
-	}
-
 private:
-	template<class VisitorT, class NodeT>
-	void visit(VisitorT *visitor, NodeT *node)
-	{
-		visitor->Visit(node);
-	}
-
 	std::string m_nodeName;
 	uint32_t m_nodeId;
 	std::shared_ptr<Context> m_context;

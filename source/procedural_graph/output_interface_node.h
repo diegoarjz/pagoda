@@ -25,12 +25,6 @@ public:
 	const InterfaceName& GetInterfaceName() const;
 	const std::list<ProceduralObjectPtr> GetProceduralObjects() const { return m_proceduralObjects; }
 
-	template<class VisitorT>
-	void Visit(VisitorT* v)
-	{
-		visit(v, this);
-	}
-
 private:
 	InterfaceName m_interfaceName;
 	std::list<ProceduralObjectPtr> m_proceduralObjects;
