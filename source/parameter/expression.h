@@ -33,6 +33,7 @@ public:
 	class ExpressionBackend
 	{
 	public:
+        virtual ~ExpressionBackend() {}
 		virtual void Evaluate() = 0;
 	};  // class ExpressionBackend
 

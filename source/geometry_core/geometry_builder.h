@@ -4,6 +4,8 @@
 #include "common/assertions.h"
 #include "common/profiler.h"
 
+#include <memory>
+#include <vector>
 #include <cstdint>
 
 namespace selector

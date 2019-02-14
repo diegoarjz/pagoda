@@ -1,6 +1,7 @@
 #ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_SET_H_
 #define SELECTOR_PROCEDURAL_GRAPH_NODE_SET_H_
 
+#include <memory>
 #include <unordered_set>
 
 namespace selector

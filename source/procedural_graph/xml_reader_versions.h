@@ -39,6 +39,7 @@ class XMLReaderVersioned
 {
 public:
 	XMLReaderVersioned(XMLReader *reader);
+    virtual ~XMLReaderVersioned() {}
 	virtual ParseResult Read(const pugi::xml_document &doc) = 0;
 
 	void SetParseResult(const ParseResult::Status &status, uint32_t offset);

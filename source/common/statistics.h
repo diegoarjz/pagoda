@@ -44,6 +44,7 @@ public:
 	struct StatsContainer
 	{
 		explicit StatsContainer(const NameType &name) : m_name(name) {}
+        virtual ~StatsContainer() {}
 		NameType m_name;
 
 		virtual void Write(std::ostream &outStream) = 0;
