@@ -6,9 +6,12 @@
 #include "parameter/float_parameter.h"
 #include "parameter/parameter.h"
 #include "procedural_component.h"
+#include "procedural_operation_factory.h"
 
 namespace selector
 {
+REGISTER_PROCEDURAL_OPERATION(CreateRectGeometry);
+
 const InterfaceName CreateRectGeometry::output_geometry(0, 0);
 
 CreateRectGeometry::CreateRectGeometry()

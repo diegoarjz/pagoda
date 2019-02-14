@@ -5,6 +5,7 @@
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
 #include "procedural_component.h"
+#include "procedural_operation_factory.h"
 
 #include <geometry_operations/triangulate.h>
 
@@ -12,6 +13,8 @@
 
 namespace selector
 {
+REGISTER_PROCEDURAL_OPERATION(TriangulateGeometry);
+
 const InterfaceName TriangulateGeometry::sInputGeometry(0, 0);
 const InterfaceName TriangulateGeometry::sOutputGeometry(0, 0);
 
