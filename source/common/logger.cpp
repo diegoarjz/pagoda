@@ -38,7 +38,7 @@ Logger *Logger::debug()
 	{
 		sDebug = std::make_unique<Logger>("debug.log");
 	}
-	return sTrace.get();
+	return sDebug.get();
 }
 
 Logger *Logger::info()

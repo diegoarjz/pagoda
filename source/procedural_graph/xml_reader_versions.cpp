@@ -12,7 +12,6 @@
 
 #include "procedural_objects/create_rect.h"
 #include "procedural_objects/extrude_geometry.h"
-#include "procedural_objects/procedural_operation_factory.h"
 
 #include <iostream>
 
@@ -70,26 +69,6 @@ void XMLReaderVersioned::SetParseResult(const ParseResult::Status& status, uint3
 
 namespace xml_v01
 {
-ProceduralOperationType convert_operation_type(const char* type)
-{
-	if (std::strcmp(type, operation::extrude) == 0)
-	{
-		return ProceduralOperationType::Extrude;
-	}
-
-	if (std::strcmp(type, operation::createRect) == 0)
-	{
-		return ProceduralOperationType::CreateRect;
-	}
-
-	if (std::strcmp(type, operation::triangulate) == 0)
-	{
-		return ProceduralOperationType::Triangulate;
-	}
-
-	return ProceduralOperationType::Max;
-}
-
 XMLReaderV01::XMLReaderV01(XMLReader* reader) : XMLReaderVersioned(reader) {}
 
 ParseResult XMLReaderV01::Read(const pugi::xml_document& doc)
@@ -196,7 +175,7 @@ NodePtr XMLReaderV01::CreateOperationNode(NodePtr node, const pugi::xml_node& xm
 	auto operationNode = std::dynamic_pointer_cast<OperationNode>(node);
 	pugi::xml_node xml_operation_node = xml_node.child(operation::tag);
 	const char* operation_type = xml_operation_node.attribute(operation::type).as_string();
-	auto operation = ProceduralOperationFactory::Create(convert_operation_type(operation_type));
+	auto operation = ProceduralOperation::Create(operation_type);
 	operationNode->SetOperation(operation);
 
 	pugi::xml_node operation_parameters = xml_operation_node.child(parameter::collection_tag);

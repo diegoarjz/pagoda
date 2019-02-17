@@ -54,10 +54,6 @@ public:
 
 	/**
 	 * Constructs a \c Graph.
-	 *
-	 * @param [in] nodeFactory The \c NodeFactory responsible for
-	 *                         instantiating \c Node objects for this
-	 *                         \c Graph.
 	 */
 	Graph();
 	~Graph();

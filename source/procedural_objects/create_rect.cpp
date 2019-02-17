@@ -6,13 +6,11 @@
 #include "parameter/float_parameter.h"
 #include "parameter/parameter.h"
 #include "procedural_component.h"
-#include "procedural_operation_factory.h"
 
 namespace selector
 {
-REGISTER_PROCEDURAL_OPERATION(CreateRectGeometry);
-
 const InterfaceName CreateRectGeometry::output_geometry(0, 0);
+const char* CreateRectGeometry::name = "CreateRectGeometry";
 
 CreateRectGeometry::CreateRectGeometry()
 {
@@ -34,7 +32,6 @@ void CreateRectGeometry::Execute()
 	float w = width->Get<FloatParameter>();
 	float h = height->Get<FloatParameter>();
 
-	// auto create_rect = exection_context->geometry_system->GetCreateRect(w, h);
 	CreateRect<Geometry> create_rect(w, h);
 	GeometrySizes sizes = create_rect.ResultSize();
 	auto geometry = std::make_shared<Geometry>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);

@@ -88,7 +88,6 @@ set(SELECTOR_PROCEDURAL_OBJECTS_SOURCES
     "procedural_objects/extrude_geometry.cpp"
     "procedural_objects/create_rect.cpp"
     "procedural_objects/triangulate_geometry.cpp"
-    "procedural_objects/procedural_operation_factory.cpp"
     )
 
 set(SELECTOR_PROCEDURAL_OBJECTS_PUBLIC_HEADERS

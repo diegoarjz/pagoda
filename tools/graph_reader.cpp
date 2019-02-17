@@ -12,7 +12,10 @@
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
-#include <procedural_objects/procedural_operation_factory.h>
+
+#include <procedural_objects/create_rect.h>
+#include <procedural_objects/extrude_geometry.h>
+#include <procedural_objects/triangulate_geometry.h>
 
 #include <boost/program_options.hpp>
 
@@ -35,6 +38,12 @@ int main(int argc, char* argv[])
 {
 	po::variables_map vm;
 
+	// TODO: this is needed because the registered static member variable is being optimized away
+	//       and classes are not being registered in the factories
+	IsRegistered<ExtrudeGeometry>();
+	IsRegistered<CreateRectGeometry>();
+	IsRegistered<TriangulateGeometry>();
+
 	if (!ParseCommandLine(argc, argv, &vm))
 	{
 		Logger::Shutdown();
@@ -45,10 +54,10 @@ int main(int argc, char* argv[])
 	std::string dot_file;
 	try
 	{
-        if (vm.count("input-file"))
-        {
-            file_path = vm["input-file"].as<std::string>();
-        }
+		if (vm.count("input-file"))
+		{
+			file_path = vm["input-file"].as<std::string>();
+		}
 		if (vm.count("dot"))
 		{
 			dot_file = vm["dot"].as<std::string>();
@@ -63,70 +72,70 @@ int main(int argc, char* argv[])
 		std::cerr << "Error: " << e.what() << std::endl;
 	}
 
-    if (vm.count("list"))
-    {
-        ListOperations();
-    }
+	if (vm.count("list"))
+	{
+		ListOperations();
+	}
 
-    if (file_path.size() > 0)
-    {
-        std::shared_ptr<Graph> graph = ReadGraphFromFile(file_path);
-        if (graph == nullptr)
-        {
-            LOG_FATAL("Unable read a graph file (%s)", file_path.c_str());
-            Logger::Shutdown();
-            return 1;
-        }
+	if (file_path.size() > 0)
+	{
+		std::shared_ptr<Graph> graph = ReadGraphFromFile(file_path);
+		if (graph == nullptr)
+		{
+			LOG_FATAL("Unable read a graph file (%s)", file_path.c_str());
+			Logger::Shutdown();
+			return 1;
+		}
 
-        if (dot_file.size() > 0)
-        {
-            WriteDotFile(graph, dot_file);
-        }
+		if (dot_file.size() > 0)
+		{
+			WriteDotFile(graph, dot_file);
+		}
 
-        if (vm.count("execute"))
-        {
-            auto geom_system = std::make_shared<GeometrySystem>();
-            auto hierarchical_system = std::make_shared<HierarchicalSystem>();
-            auto object_system = std::make_shared<ProceduralObjectSystem>();
-            object_system->RegisterProceduralComponentSystem(geom_system);
-            object_system->RegisterProceduralComponentSystem(hierarchical_system);
-            auto execution_context = std::make_shared<GraphExecutionContext>(graph, object_system, geom_system);
+		if (vm.count("execute"))
+		{
+			auto geom_system = std::make_shared<GeometrySystem>();
+			auto hierarchical_system = std::make_shared<HierarchicalSystem>();
+			auto object_system = std::make_shared<ProceduralObjectSystem>();
+			object_system->RegisterProceduralComponentSystem(geom_system);
+			object_system->RegisterProceduralComponentSystem(hierarchical_system);
+			auto execution_context = std::make_shared<GraphExecutionContext>(graph, object_system, geom_system);
 
-            std::list<ProceduralObjectPtr> procedural_objects = ExecuteGraph(graph, execution_context);
+			std::list<ProceduralObjectPtr> procedural_objects = ExecuteGraph(graph, execution_context);
 
-            if (vm.count("export-geometry"))
-            {
-                std::string export_path = ".";
-                if (vm.count("export-path"))
-                {
-                    export_path = vm["export-path"].as<std::string>();
-                }
+			if (vm.count("export-geometry"))
+			{
+				std::string export_path = ".";
+				if (vm.count("export-path"))
+				{
+					export_path = vm["export-path"].as<std::string>();
+				}
 
-                uint32_t geometry_index = 0;
-                for (auto o : procedural_objects)
-                {
-                    auto geometry_component = o->GetComponent<GeometryComponent>();
-                    auto geometry = geometry_component->GetGeometry();
-                    selector::ObjExporter<Geometry> exporter(geometry);
+				uint32_t geometry_index = 0;
+				for (auto o : procedural_objects)
+				{
+					auto geometry_component = o->GetComponent<GeometryComponent>();
+					auto geometry = geometry_component->GetGeometry();
+					selector::ObjExporter<Geometry> exporter(geometry);
 
-                    std::stringstream geometry_path;
-                    geometry_path << export_path << "/geom" << geometry_index << ".obj";
+					std::stringstream geometry_path;
+					geometry_path << export_path << "/geom" << geometry_index << ".obj";
 
-                    std::ofstream out_file(geometry_path.str());
-                    exporter.Export(out_file);
-                    out_file.close();
-                    geometry_index++;
-                }
-            }
+					std::ofstream out_file(geometry_path.str());
+					exporter.Export(out_file);
+					out_file.close();
+					geometry_index++;
+				}
+			}
 
-            // Clean up
-            std::unordered_set<ProceduralObjectPtr> objects = object_system->GetProceduralObjects();
-            for (ProceduralObjectPtr o : objects)
-            {
-                object_system->KillProceduralObject(o);
-            }
-        }
-    }
+			// Clean up
+			std::unordered_set<ProceduralObjectPtr> objects = object_system->GetProceduralObjects();
+			for (ProceduralObjectPtr o : objects)
+			{
+				object_system->KillProceduralObject(o);
+			}
+		}
+	}
 
 	if (vm.count("show-profile"))
 	{
@@ -292,13 +301,13 @@ void PrintProfile()
 
 void ListOperations()
 {
-    auto proceduralOperationNames = ProceduralOperationFactory::Instance()->RegisteredProceduralOperations();
+	auto proceduralOperationNames = ProceduralOperation::RegisteredTypes();
 
-    std::cout << "Registered procedural operations\n";
-    for (auto name : proceduralOperationNames)
-    {
-        std::cout << "\t" << name << std::endl;
-    }
+	std::cout << "Registered procedural operations\n";
+	for (auto name : proceduralOperationNames)
+	{
+		std::cout << "\t" << name << std::endl;
+	}
 }
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)

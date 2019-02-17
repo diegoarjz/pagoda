@@ -7,14 +7,12 @@
 #include "parameter/float_parameter.h"
 #include "parameter/parameter.h"
 #include "procedural_component.h"
-#include "procedural_operation_factory.h"
 
 #include <memory>
 
 namespace selector
 {
-REGISTER_PROCEDURAL_OPERATION(ExtrudeGeometry);
-
+const char* ExtrudeGeometry::name = "ExtrudeGeometry";
 const InterfaceName ExtrudeGeometry::input_geometry = InterfaceName(0, 0);
 const InterfaceName ExtrudeGeometry::output_geometry = InterfaceName(0, 0);
 

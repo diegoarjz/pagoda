@@ -5,9 +5,10 @@
 
 namespace selector
 {
-class ExtrudeGeometry : public ProceduralOperation
+class ExtrudeGeometry : public ProceduralOperation::Registrar<ExtrudeGeometry>
 {
 public:
+	static const char* name;
 	static const InterfaceName input_geometry;
 	static const InterfaceName output_geometry;
 

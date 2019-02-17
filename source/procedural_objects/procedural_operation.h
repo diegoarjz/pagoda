@@ -3,7 +3,8 @@
 
 #include "procedural_component.h"
 
-#include <parameter/context.h>
+#include "common/factory.h"
+#include "parameter/context.h"
 
 #include <bitset>
 #include <list>
@@ -69,7 +70,7 @@ private:
  * Has input and output \c ProceduralOperationObjectInterface which is used to pass
  * input and output procedural objects.
  */
-class ProceduralOperation
+class ProceduralOperation : public Factory<ProceduralOperation>
 {
 public:
 	virtual ~ProceduralOperation() {}
