@@ -15,9 +15,11 @@ using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 
-class InputInterfaceNode : public Node
+class InputInterfaceNode : public Node::Registrar<InputInterfaceNode>
 {
 public:
+	static const char* name;
+
 	InputInterfaceNode();
 	~InputInterfaceNode();
 	void Execute(GraphExecutionContextPtr graph, const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;

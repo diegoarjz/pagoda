@@ -10,6 +10,8 @@
 
 namespace selector
 {
+const char *OperationNode::name = "OperationNode";
+
 OperationNode::OperationNode() {}
 OperationNode::~OperationNode() {}
 

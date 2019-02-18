@@ -9,9 +9,11 @@ namespace selector
 class ProceduralOperation;
 using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
 
-class OperationNode : public Node
+class OperationNode : public Node::Registrar<OperationNode>
 {
 public:
+	static const char *name;
+
 	OperationNode();
 	~OperationNode();
 	void Execute(GraphExecutionContextPtr graph, const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
