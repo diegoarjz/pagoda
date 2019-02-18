@@ -10,6 +10,8 @@
 
 namespace selector
 {
+const char* OutputInterfaceNode::name = "OutputInterfaceNode";
+
 OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName(0, 0) {}
 OutputInterfaceNode::~OutputInterfaceNode() {}
 

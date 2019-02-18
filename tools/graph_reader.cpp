@@ -3,6 +3,7 @@
 #include <geometry_core/geometry_exporter.h>
 #include <parameter/parameter.h>
 #include <procedural_graph/graph_execution_context.h>
+#include <procedural_graph/input_interface_node.h>
 #include <procedural_graph/node_set_visitor.h>
 #include <procedural_graph/operation_node.h>
 #include <procedural_graph/output_interface_node.h>
@@ -43,6 +44,9 @@ int main(int argc, char* argv[])
 	IsRegistered<ExtrudeGeometry>();
 	IsRegistered<CreateRectGeometry>();
 	IsRegistered<TriangulateGeometry>();
+	IsRegistered<OperationNode>();
+	IsRegistered<InputInterfaceNode>();
+	IsRegistered<OutputInterfaceNode>();
 
 	if (!ParseCommandLine(argc, argv, &vm))
 	{
@@ -297,6 +301,13 @@ void ListOperations()
 
 	std::cout << "Registered procedural operations\n";
 	for (auto name : proceduralOperationNames)
+	{
+		std::cout << "\t" << name << std::endl;
+	}
+
+	auto nodeNames = Node::RegisteredTypes();
+	std::cout << "Registered nodes types\n";
+	for (auto name : nodeNames)
 	{
 		std::cout << "\t" << name << std::endl;
 	}

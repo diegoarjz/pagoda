@@ -1,8 +1,9 @@
 #ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 #define SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 
-#include <parameter/context.h>
-#include <procedural_objects/procedural_operation.h>
+#include "common/factory.h"
+#include "parameter/context.h"
+#include "procedural_objects/procedural_operation.h"
 
 #include <memory>
 #include <unordered_set>
@@ -24,7 +25,7 @@ using NodeSet = std::unordered_set<std::shared_ptr<Node>>;
  * Each subclass of \c Node is responsible for implementing an execution logic by
  * overriding the Node::Execute() method.
  */
-class Node : public std::enable_shared_from_this<Node>
+class Node : public Factory<Node>
 {
 public:
 	Node();
