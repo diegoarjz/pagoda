@@ -12,6 +12,20 @@ namespace selector
 {
 class XMLReaderPlugin;
 
+class GraphReader
+{
+public:
+	GraphReader();
+	~GraphReader();
+
+	GraphPtr Read(const std::string &str);
+	const ParseResult &GetParseResult() const;
+
+private:
+	struct Impl;
+	std::unique_ptr<Impl> m_implementation;
+};
+
 class XMLReader
 {
 public:

@@ -1,6 +1,7 @@
 #include "reader.h"
 
 #include "common/assertions.h"
+#include "graph_reader_grammar.h"
 #include "input_interface_node.h"
 #include "operation_node.h"
 #include "output_interface_node.h"
@@ -16,6 +17,52 @@
 
 namespace selector
 {
+struct GraphReader::Impl
+{
+	Impl() : m_currentParseResult({ParseResult::Status::Ok, 0}) {}
+	GraphPtr Read(const std::string &str)
+	{
+		GraphReaderGrammar<std::string::const_iterator> grammar;
+
+		std::string::const_iterator begin = std::begin(str);
+		std::string::const_iterator end = std::end(str);
+		std::vector<ast::instruction> instructions;
+
+		bool result = qi::phrase_parse(begin, end, grammar, qi::space, instructions);
+
+		if (!result)
+		{
+			LOG_DEBUG("Failed to parse graph");
+		}
+
+		for (auto &instruction : instructions)
+		{
+			std::cout << "Instruction" << std::endl;
+			if (instruction.m_instruction.which() == 0)
+			{
+				auto node_definition = boost::get<ast::node_definition>(instruction.m_instruction);
+				LOG_DEBUG("Creating node %s of type %s", node_definition.m_name.c_str(),
+				          node_definition.m_type.c_str());
+			}
+			else if (instruction.m_instruction.which() == 1)
+			{
+				LOG_DEBUG("Linking nodes");
+			}
+		}
+		return nullptr;
+	}
+	const ParseResult &GetParseResult() const { return m_currentParseResult; }
+
+private:
+	ParseResult m_currentParseResult;
+};
+
+GraphReader::GraphReader() : m_implementation(std::make_unique<GraphReader::Impl>()) {}
+GraphReader::~GraphReader() {}
+
+GraphPtr GraphReader::Read(const std::string &str) { return m_implementation->Read(str); }
+const ParseResult &GraphReader::GetParseResult() const { return m_implementation->GetParseResult(); }
+
 ParseResult::Status convert_status_code(const pugi::xml_parse_status &status)
 {
 	switch (status)
