@@ -7,9 +7,9 @@
 #include <procedural_graph/node_set_visitor.h>
 #include <procedural_graph/operation_node.h>
 #include <procedural_graph/output_interface_node.h>
+#include <procedural_graph/parse_result.h>
 #include <procedural_graph/reader.h>
 #include <procedural_graph/scheduler.h>
-#include <procedural_graph/xml_parse_result.h>
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
@@ -44,9 +44,11 @@ int main(int argc, char* argv[])
 	IsRegistered<ExtrudeGeometry>();
 	IsRegistered<CreateRectGeometry>();
 	IsRegistered<TriangulateGeometry>();
+	/*
 	IsRegistered<OperationNode>();
 	IsRegistered<InputInterfaceNode>();
 	IsRegistered<OutputInterfaceNode>();
+	*/
 
 	if (!ParseCommandLine(argc, argv, &vm))
 	{

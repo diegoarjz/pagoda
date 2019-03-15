@@ -3,6 +3,7 @@
 
 #include "common/profiler.h"
 #include "expression.h"
+#include "parameter.h"
 #include "parameter_identifier.h"
 
 #include <list>

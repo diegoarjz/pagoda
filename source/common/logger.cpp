@@ -36,7 +36,7 @@ Logger *Logger::debug()
 {
 	if (sDebug == nullptr)
 	{
-		sDebug = std::make_unique<Logger>("debug.log");
+		sDebug = std::make_unique<Logger>("debug.log", ConsoleOutput::StdErr);
 	}
 	return sDebug.get();
 }

@@ -4,10 +4,10 @@
 #include "logger.h"
 #include "utils.h"
 
+#include <functional>
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include <functional>
 
 namespace selector
 {
@@ -19,15 +19,20 @@ public:
 
 	virtual ~Factory() {}
 
-	static PointerType Create(const char* name)
+	static PointerType Create(const std::string& name)
 	{
-		// TODO: Better error checking
-		return factoryMethods().at(name)();
+		auto methods = factoryMethods();
+		auto iter = methods.find(name);
+		if (iter == std::end(methods))
+		{
+			return nullptr;
+		}
+		return iter->second();
 	}
 
-	static std::vector<const char*> RegisteredTypes()
+	static std::vector<std::string> RegisteredTypes()
 	{
-		std::vector<const char*> typeNames;
+		std::vector<std::string> typeNames;
 		auto methods = factoryMethods();
 		typeNames.reserve(methods.size());
 
@@ -66,7 +71,7 @@ private:
 
 	static auto& factoryMethods()
 	{
-		static std::unordered_map<const char*, FactoryMethod> s_factoryMethods;
+		static std::unordered_map<std::string, FactoryMethod> s_factoryMethods;
 		return s_factoryMethods;
 	}
 };
