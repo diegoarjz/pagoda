@@ -228,14 +228,7 @@ void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 
 		for (auto par : parameters)
 		{
-			if (par.second->GetExpression() == nullptr)
-			{
-				out_file << "<tr><td>" << par.second->Name() << "</td></tr>\n";
-			}
-			else
-			{
-				out_file << "<tr><td>" << par.second->Name() << "(e)</td></tr>\n";
-			}
+			out_file << "<tr><td>" << par.first << "</td></tr>\n";
 		}
 
 		out_file << "</table>>]\n\n";

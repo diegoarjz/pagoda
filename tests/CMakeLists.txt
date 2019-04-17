@@ -15,10 +15,7 @@ set(test_srcs
     "geometry_operations/extrusion.cpp"
     "geometry_operations/create_rect.cpp"
     "geometry_operations/triangulate.cpp"
-    "parameter/parameter.cpp"
     "parameter/context.cpp"
-    "parameter/parameter_resolver.cpp"
-    "parameter/compiler.cpp"
     "procedural_objects/procedural_object.cpp"
     "procedural_objects/procedural_object_interface.cpp"
     "procedural_objects/geometry_system.cpp"
@@ -38,7 +35,7 @@ set_target_properties(
 target_compile_features(
     unit_tests
     PRIVATE
-        cxx_std_14
+        cxx_std_17
         cxx_constexpr
         cxx_relaxed_constexpr
 )

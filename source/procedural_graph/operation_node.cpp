@@ -27,10 +27,12 @@ void OperationNode::Execute(GraphExecutionContextPtr executionContext, const Nod
 	for (auto param : paramContext->GetParameters())
 	{
 		auto parameter = param.second;
+		/*
 		if (parameter->GetExpression() != nullptr)
 		{
-			parameter->GetExpression()->Evaluate();
+		    parameter->GetExpression()->Evaluate();
 		}
+		*/
 	}
 
 	for (auto inInterface : inputInterfaceNodes)

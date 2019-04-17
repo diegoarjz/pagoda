@@ -19,7 +19,7 @@ public:
 	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) override;
 
 private:
-	std::shared_ptr<ParameterBase> extrusion_amount;
+	float extrusion_amount;
 };  // class ExtrudeGEometry
 
 }  // namespace selector

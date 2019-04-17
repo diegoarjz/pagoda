@@ -1,5 +1,4 @@
 #include <parameter/context.h>
-#include <parameter/float_parameter.h>
 #include <parameter/parameter.h>
 #include <parameter/parameter_identifier.h>
 
@@ -55,25 +54,15 @@ TEST(ContextTest, test_add_parameter)
 {
 	Context c("a_context");
 
-	auto par = c.CreateParameter<FloatParameter>("floatPar", 1.0f);
-	ASSERT_NE(par, nullptr);
-	EXPECT_EQ(par->Name(), "floatPar");
-	EXPECT_EQ(par->GetValue(), 1.0f);
-}
-
-TEST(ContextTest, test_try_add_param_same_name)
-{
-	Context c("a_context");
-
-	c.CreateParameter<FloatParameter>("floatPar", 1.0f);
-	ASSERT_EQ(c.CreateParameter<FloatParameter>("floatPar", 1.0f), nullptr);
+	auto par = c.CreateParameter<float>("floatPar", 1.0f);
+	EXPECT_EQ(std::get<float>(par), 1.0f);
 }
 
 TEST(ContextTest, test_get_parameter)
 {
 	Context c("a_context");
 
-	auto par = c.CreateParameter<FloatParameter>("floatPar", 1.0f);
+	auto par = c.CreateParameter<float>("floatPar", 1.0f);
 	ASSERT_EQ(c.GetParameter("floatPar"), par);
 }
 
@@ -100,7 +89,8 @@ TEST(ContextTest, test_parameters_should_have_different_names_from_sub_contexts)
 
 	c2->SetParent(c1);
 
-	EXPECT_EQ(c1->CreateParameter<FloatParameter>("a_name", 1.0f), nullptr);
+	throw std::runtime_error("Re-implemented");
+	// EXPECT_EQ(c1->CreateParameter<float>("a_name", 1.0f), nullptr);
 }
 
 TEST(ContextTest, test_sub_contexts_should_have_different_names_from_parameters)
@@ -108,6 +98,6 @@ TEST(ContextTest, test_sub_contexts_should_have_different_names_from_parameters)
 	auto c1 = std::make_shared<Context>("parent");
 	auto c2 = std::make_shared<Context>("a_name");
 
-	auto par = c1->CreateParameter<FloatParameter>("a_name", 1.0f);
+	auto par = c1->CreateParameter<float>("a_name", 1.0f);
 	EXPECT_FALSE(c2->SetParent(c1));
 }

@@ -7,7 +7,6 @@
 #include "common/utils.h"
 
 #include "parameter/context.h"
-#include "parameter/float_parameter.h"
 #include "parameter/parameter.h"
 
 #include "procedural_objects/create_rect.h"
@@ -145,29 +144,25 @@ ParseResult XMLReaderV01::Read(const pugi::xml_document& doc)
 	return result;
 }
 
-std::shared_ptr<ParameterBase> XMLReaderV01::CreateParameter(std::shared_ptr<Context> context, const char* name,
-                                                             const char* type, const char* value, bool is_expression)
+Parameter XMLReaderV01::CreateParameter(std::shared_ptr<Context> context, const char* name, const char* type,
+                                        const char* value, bool is_expression)
 {
+	throw std::runtime_error("Re-implemented");
 	if (std::strcmp(type, "float") == 0)
 	{
 		if (!is_expression)
 		{
 			if (!is_float(value))
 			{
-				return nullptr;
+				return 0;
 			}
-			return context->CreateParameter<FloatParameter>(name, std::atof(value));
+			return context->CreateParameter<float>(name, std::atof(value));
 		}
 		else
 		{
-			auto expression = std::make_shared<Expression>(value);
-			auto param = context->CreateParameter<FloatParameter>(name, expression);
-
-			return param;
+			throw std::runtime_error("Re-implemented");
 		}
 	}
-
-	return nullptr;
 }
 
 NodePtr XMLReaderV01::CreateOperationNode(NodePtr node, const pugi::xml_node& xml_node)
@@ -196,11 +191,13 @@ NodePtr XMLReaderV01::CreateOperationNode(NodePtr node, const pugi::xml_node& xm
 		auto param = CreateParameter(node->GetParameterContext(), param_name.as_string(), param_type.as_string(),
 		                             param_value.as_string(), is_expression.as_bool());
 
+		/*
 		if (!param)
 		{
-			SetParseResult(ParseResult::Status::InvalidParameter, par.offset_debug());
-			return nullptr;
+		    SetParseResult(ParseResult::Status::InvalidParameter, par.offset_debug());
+		    return nullptr;
 		}
+		*/
 	}
 
 	return node;

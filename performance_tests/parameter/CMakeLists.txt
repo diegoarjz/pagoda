@@ -27,7 +27,7 @@ foreach(source ${profiling_srcs})
     target_compile_features(
         ${exec_name}
         PRIVATE
-            cxx_std_14
+            cxx_std_17
             cxx_lambdas
     )
 

@@ -2,7 +2,6 @@
 #include "mock_objects.h"
 
 #include <parameter/context.h>
-#include <parameter/float_parameter.h>
 #include <procedural_objects/create_rect.h>
 #include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/geometry_component.h>
@@ -72,52 +71,3 @@ TEST_F(GeometrySystemTest, test_kill_component)
 	auto components = geometry_system->GetComponents();
 	EXPECT_EQ(components.size(), 0);
 }
-
-class CreateRectTest : public ::testing::Test
-{
-protected:
-	void SetUp()
-	{
-		context = std::make_shared<ContextMock>("context");
-		geometry_system_mock = std::make_shared<GeometrySystemMock>();
-		procedural_object_system = std::make_shared<ProceduralObjectSystemMock>();
-
-		exection_context = std::make_shared<OperationExecutionContext>();
-		exection_context->geometry_system = geometry_system_mock;
-		exection_context->procedural_object_system = procedural_object_system;
-		exection_context->parameter_context = context;
-
-		create_rect = std::make_shared<CreateRectGeometry>();
-
-		width_par = std::make_shared<Parameter<FloatParameter>>("width");
-		height_par = std::make_shared<Parameter<FloatParameter>>("height");
-
-		out_mask.set(static_cast<uint32_t>(ComponentType::Geometry));
-		out_mask.set(static_cast<uint32_t>(ComponentType::Hierarchical));
-	}
-
-	void TearDown() {}
-
-	std::shared_ptr<CreateRectGeometry> create_rect;
-	std::shared_ptr<ContextMock> context;
-	std::shared_ptr<ProceduralObjectSystemMock> procedural_object_system;
-	std::shared_ptr<GeometrySystemMock> geometry_system_mock;
-	std::shared_ptr<OperationExecutionContext> exection_context;
-	std::shared_ptr<Parameter<FloatParameter>> width_par;
-	std::shared_ptr<Parameter<FloatParameter>> height_par;
-	ProceduralObjectMask out_mask;
-
-	void SetExecutionContext()
-	{
-		// clang-format off
-        EXPECT_CALL(*context, GetParameter("width"))
-            .Times(1)
-            .WillOnce(::testing::Return(width_par));
-        EXPECT_CALL(*context, GetParameter("height"))
-            .Times(1)
-            .WillOnce(::testing::Return(height_par));
-		// clang-format on
-
-		create_rect->SetExecutionContext(exection_context);
-	}
-};

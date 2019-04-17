@@ -39,7 +39,7 @@ class XMLReaderVersioned
 {
 public:
 	XMLReaderVersioned(XMLReader *reader);
-    virtual ~XMLReaderVersioned() {}
+	virtual ~XMLReaderVersioned() {}
 	virtual ParseResult Read(const pugi::xml_document &doc) = 0;
 
 	void SetParseResult(const ParseResult::Status &status, uint32_t offset);
@@ -126,8 +126,8 @@ private:
 	std::shared_ptr<Node> CreateOperationNode(std::shared_ptr<Node> operation_node, const pugi::xml_node &node);
 	std::shared_ptr<Node> CreateInputInterfaceNode(std::shared_ptr<Node> node, const pugi::xml_node &xml_node);
 	std::shared_ptr<Node> CreateOutputInterfaceNode(std::shared_ptr<Node> node, const pugi::xml_node &xml_node);
-	std::shared_ptr<ParameterBase> CreateParameter(std::shared_ptr<Context> context, const char *name, const char *type,
-	                                               const char *value, bool is_expression);
+	Parameter CreateParameter(std::shared_ptr<Context> context, const char *name, const char *type, const char *value,
+	                          bool is_expression);
 	std::shared_ptr<ProceduralOperation> CreateOperation(const char *operationName);
 	std::unordered_map<uint32_t, std::shared_ptr<Node>> nodes_map;
 };  // class XMLReaderV01

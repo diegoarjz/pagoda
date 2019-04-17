@@ -18,8 +18,8 @@ public:
 	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) override;
 
 private:
-	std::shared_ptr<ParameterBase> width;
-	std::shared_ptr<ParameterBase> height;
+	float width;
+	float height;
 
 };  // class CreateSquareGeometry
 

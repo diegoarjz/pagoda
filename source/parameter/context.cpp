@@ -30,13 +30,14 @@ bool Context::SetParent(std::shared_ptr<Context> new_parent)
 	return true;
 }
 
-std::shared_ptr<ParameterBase> Context::GetParameter(const std::string &parameter_name)
+Parameter Context::GetParameter(const std::string &parameter_name)
 {
+	throw std::runtime_error("Re-implemented.");
 	auto iter = m_parameters.find(parameter_name);
 
 	if (iter == std::end(m_parameters))
 	{
-		return nullptr;
+		return Parameter{};
 	}
 	else
 	{

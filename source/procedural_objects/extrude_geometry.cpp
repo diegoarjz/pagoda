@@ -4,7 +4,6 @@
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
-#include "parameter/float_parameter.h"
 #include "parameter/parameter.h"
 #include "procedural_component.h"
 
@@ -37,8 +36,7 @@ void ExtrudeGeometry::Execute()
 {
 	START_PROFILE;
 
-	float amount = extrusion_amount->Get<FloatParameter>();
-	Extrusion<Geometry> extrude(amount);
+	Extrusion<Geometry> extrude(extrusion_amount);
 
 	while (HasInput(input_geometry))
 	{
@@ -72,6 +70,6 @@ void ExtrudeGeometry::SetExecutionContext(std::shared_ptr<OperationExecutionCont
 	START_PROFILE;
 
 	ProceduralOperation::SetExecutionContext(context);
-	extrusion_amount = context->parameter_context->GetParameterAs<FloatParameter>("extrusion_amount");
+	extrusion_amount = context->parameter_context->GetParameterAs<float>("extrusion_amount");
 }
 }  // namespace selector

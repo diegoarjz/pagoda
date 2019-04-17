@@ -25,8 +25,10 @@ void Scheduler::Initialize()
 	}
 
 	// Compile all expressions
+	/*
 	Compiler compiler(m_graphParameterContext);
 	compiler.Compile();
+	*/
 
 	// Initialize node queue
 	for (NodePtr n : graph_input_nodes)

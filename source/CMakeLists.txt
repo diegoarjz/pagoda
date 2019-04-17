@@ -54,26 +54,20 @@ set(SELECTOR_GEOMETRY_OPERATION_PUBLIC_HEADERS
 
 # Parameter
 set(SELECTOR_PARAMETER_SOURCES
-    "parameter/parameter_base.cpp"
     "parameter/parameter.cpp"
     "parameter/context.cpp"
     "parameter/parameter_identifier.cpp"
-    "parameter/parameter_resolver.cpp"
     "parameter/parameter_validation.cpp"
     "parameter/expression.cpp"
-    "parameter/compiler.cpp"
     )
 
 set(SELECTOR_PARAMETER_PUBLIC_HEADERS
-    "parameter/compiler.h"
-    "parameter/parameter_base.h"
     "parameter/float_parameter.h"
     "parameter/string_parameter.h"
     "parameter/context.h"
     "parameter/expression.h"
     "parameter/parameter.h"
     "parameter/parameter_identifier.h"
-    "parameter/parameter_resolver.h"
 )
 
 # Procedural Objects
@@ -161,7 +155,7 @@ target_include_directories(
 target_compile_features(
     selector
     PRIVATE
-        cxx_std_14
+        cxx_std_17
         cxx_lambdas
         cxx_constexpr
         cxx_relaxed_constexpr

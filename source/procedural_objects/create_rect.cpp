@@ -3,7 +3,6 @@
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
-#include "parameter/float_parameter.h"
 #include "parameter/parameter.h"
 #include "procedural_component.h"
 
@@ -29,10 +28,7 @@ void CreateRectGeometry::Execute()
 {
 	START_PROFILE;
 
-	float w = width->Get<FloatParameter>();
-	float h = height->Get<FloatParameter>();
-
-	CreateRect<Geometry> create_rect(w, h);
+	CreateRect<Geometry> create_rect(width, height);
 	GeometrySizes sizes = create_rect.ResultSize();
 	auto geometry = std::make_shared<Geometry>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);
 	create_rect.Execute(geometry);
@@ -49,9 +45,7 @@ void CreateRectGeometry::SetExecutionContext(std::shared_ptr<OperationExecutionC
 
 	ProceduralOperation::SetExecutionContext(context);
 
-	width = context->parameter_context->GetParameterAs<FloatParameter>("width");
-	height = context->parameter_context->GetParameterAs<FloatParameter>("height");
-
-	DBG_ASSERT_MSG(width != nullptr && height != nullptr, "width or height parameter not found in context");
+	width = context->parameter_context->GetParameterAs<float>("width");
+	height = context->parameter_context->GetParameterAs<float>("height");
 }
 }  // namespace selector
