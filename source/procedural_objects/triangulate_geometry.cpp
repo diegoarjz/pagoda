@@ -12,8 +12,8 @@
 
 namespace selector
 {
-const InterfaceName TriangulateGeometry::sInputGeometry(0, 0);
-const InterfaceName TriangulateGeometry::sOutputGeometry(0, 0);
+const InterfaceName TriangulateGeometry::sInputGeometry("in", 0);
+const InterfaceName TriangulateGeometry::sOutputGeometry("out", 0);
 const char* TriangulateGeometry::name = "TriangulateGeometry";
 
 TriangulateGeometry::TriangulateGeometry()

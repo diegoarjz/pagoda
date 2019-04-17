@@ -13,8 +13,8 @@
 namespace selector
 {
 const char* ExtrudeGeometry::name = "ExtrudeGeometry";
-const InterfaceName ExtrudeGeometry::input_geometry = InterfaceName(0, 0);
-const InterfaceName ExtrudeGeometry::output_geometry = InterfaceName(0, 0);
+const InterfaceName ExtrudeGeometry::input_geometry = InterfaceName("in", 0);
+const InterfaceName ExtrudeGeometry::output_geometry = InterfaceName("out", 0);
 
 ExtrudeGeometry::ExtrudeGeometry()
 {

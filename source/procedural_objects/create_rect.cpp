@@ -9,7 +9,7 @@
 
 namespace selector
 {
-const InterfaceName CreateRectGeometry::output_geometry(0, 0);
+const InterfaceName CreateRectGeometry::output_geometry("out", 0);
 const char* CreateRectGeometry::name = "CreateRectGeometry";
 
 CreateRectGeometry::CreateRectGeometry()

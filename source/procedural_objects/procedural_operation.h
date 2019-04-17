@@ -20,10 +20,10 @@ using ProceduralObjectMask = std::bitset<static_cast<size_t>(ComponentType::MaxC
 
 struct InterfaceName
 {
-	uint16_t name;
+	const char* name;
 	uint16_t offset;
 
-	InterfaceName(uint16_t name, uint16_t offset) : name(name), offset(offset) {}
+	InterfaceName(const char* name, uint16_t offset) : name(name), offset(offset) {}
 
 	InterfaceName Offset(uint16_t o) const { return InterfaceName(name, o); }
 	bool operator==(const InterfaceName& other) const { return name == other.name && offset == other.offset; }
@@ -31,7 +31,10 @@ struct InterfaceName
 
 struct InterfaceNameHasher
 {
-	std::size_t operator()(const InterfaceName& key) const { return key.name << 16 | key.offset; }
+	std::size_t operator()(const InterfaceName& key) const
+	{
+		return std::hash<const char*>()(key.name) ^ (std::hash<uint16_t>()(key.offset) << 1);
+	}
 };  // struct InterfaceNameHasher
 
 struct OperationExecutionContext
@@ -78,7 +81,7 @@ public:
 	/**
 	 * Executes the \c ProceduralOperation.
 	 *
-	 * Base classes must implement this.
+	 * Sub classes must implement this.
 	 */
 	virtual void Execute() = 0;
 	virtual void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) { exection_context = context; }
