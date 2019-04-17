@@ -9,23 +9,22 @@ bool Context::SetParent(std::shared_ptr<Context> new_parent)
 	// Validate that the new_parent doesn't already have a context with
 	// the same name as this.
 	if (new_parent != nullptr &&
-	    (new_parent->m_childrenContexts.find(m_contextName.GetIdentifier()) !=
-	         std::end(new_parent->m_childrenContexts) ||
-	     new_parent->m_parameters.find(m_contextName.GetIdentifier()) != std::end(new_parent->m_parameters)))
+	    (new_parent->m_childrenContexts.find(m_contextName) != std::end(new_parent->m_childrenContexts) ||
+	     new_parent->m_parameters.find(m_contextName) != std::end(new_parent->m_parameters)))
 	{
 		return false;
 	}
 
 	if (m_parentContext.lock() != nullptr)
 	{
-		m_parentContext.lock()->m_childrenContexts.erase(m_contextName.GetIdentifier());
+		m_parentContext.lock()->m_childrenContexts.erase(m_contextName);
 	}
 
 	m_parentContext = new_parent;
 
 	if (new_parent != nullptr)
 	{
-		new_parent->m_childrenContexts.emplace(m_contextName.GetIdentifier(), shared_from_this());
+		new_parent->m_childrenContexts.emplace(m_contextName, shared_from_this());
 	}
 
 	return true;

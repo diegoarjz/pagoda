@@ -153,7 +153,7 @@ int main(int argc, char* argv[])
 std::list<ProceduralObjectPtr> ExecuteGraph(std::shared_ptr<Graph> graph,
                                             std::shared_ptr<GraphExecutionContext> executionContext)
 {
-	auto graph_parameter_context = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("graph").second);
+	auto graph_parameter_context = std::make_shared<Context>("graph");
 
 	Scheduler scheduler(executionContext, graph_parameter_context);
 	scheduler.Initialize();

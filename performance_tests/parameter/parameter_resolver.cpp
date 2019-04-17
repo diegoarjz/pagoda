@@ -20,11 +20,11 @@ std::vector<std::shared_ptr<Context>> CreateLinearContexts(int num)
 {
 	std::vector<std::shared_ptr<Context>> contexts;
 
-	contexts.push_back(std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("ctx").second));
+	contexts.push_back(std::make_shared<Context>("ctx"));
 
 	for (auto i = 0u; i < num - 1; ++i)
 	{
-		auto ctx = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("ctx").second);
+		auto ctx = std::make_shared<Context>("ctx");
 		ctx->SetParent(contexts.back());
 		contexts.push_back(ctx);
 	}

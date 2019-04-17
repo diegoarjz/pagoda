@@ -8,8 +8,6 @@
 #include "parameter.h"
 #include "parameter_validation.h"
 
-#include "exprtk.hpp"
-
 #include <regex>
 #include <stack>
 
@@ -189,18 +187,22 @@ bool Compiler::CompileExpression(std::shared_ptr<Context> context, std::shared_p
 class FloatExpressionBackend : public Expression::ExpressionBackend
 {
 public:
-	FloatExpressionBackend() { expression.register_symbol_table(symbol_table); }
+	FloatExpressionBackend()
+	{ /*expression.register_symbol_table(symbol_table);*/
+	}
 
 	void Evaluate() final
 	{
 		START_PROFILE;
 
-		expression.value();
+		// expression.value();
 	}
 
+	/*
 	exprtk::symbol_table<float> symbol_table;
 	exprtk::expression<float> expression;
 	exprtk::parser<float> parser;
+	*/
 };  // class FloatExpressionBackend
 
 bool Compiler::CompileFloatExpression(std::shared_ptr<Expression> expression, std::shared_ptr<ParameterBase> parameter,
@@ -215,7 +217,7 @@ bool Compiler::CompileFloatExpression(std::shared_ptr<Expression> expression, st
 	expression->SetExpressionBackend(backend);
 
 	// Link output result
-	backend->symbol_table.add_variable("float_out", parameter->Get<FloatParameter>());
+	// backend->symbol_table.add_variable("float_out", parameter->Get<FloatParameter>());
 
 	// Link referenced parameters
 	for (auto var : expression->GetVariables())
@@ -228,11 +230,12 @@ bool Compiler::CompileFloatExpression(std::shared_ptr<Expression> expression, st
 			return false;
 		}
 
-		backend->symbol_table.add_variable(variable->GetVariableName(), referenced_parameter->Get<FloatParameter>());
+		// backend->symbol_table.add_variable(variable->GetVariableName(), referenced_parameter->Get<FloatParameter>());
 	}
 
 	// Compile the final expression
-	bool compiled = backend->parser.compile(compiled_expression, backend->expression);
+	// bool compiled = backend->parser.compile(compiled_expression, backend->expression);
+	bool compiled = false;
 	if (!compiled)
 	{
 		m_compilationError.reason = CompilationFailReason::InvalidSyntax;

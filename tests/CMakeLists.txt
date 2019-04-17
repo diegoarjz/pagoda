@@ -18,7 +18,6 @@ set(test_srcs
     "parameter/parameter.cpp"
     "parameter/context.cpp"
     "parameter/parameter_resolver.cpp"
-    "parameter/parameter_identifier.cpp"
     "parameter/compiler.cpp"
     "procedural_objects/procedural_object.cpp"
     "procedural_objects/procedural_object_interface.cpp"

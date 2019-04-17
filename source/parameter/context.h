@@ -26,7 +26,7 @@ public:
 	explicit Context(const ParameterIdentifier &name);
 
 	bool SetParent(std::shared_ptr<Context> new_parent);
-	const std::string &Name() const { return m_contextName.GetIdentifier(); }
+	const std::string &Name() const { return m_contextName; }
 	const std::unordered_map<std::string, std::shared_ptr<Context>> &Children() { return m_childrenContexts; }
 	std::shared_ptr<Context> Parent() { return m_parentContext.lock(); }
 
@@ -79,21 +79,13 @@ private:
 	{
 		START_PROFILE;
 
-		auto parameter_identifier = ParameterIdentifier::CreateIdentifier(param_name);
-
-		// validate parameter identifier
-		if (!parameter_identifier.first)
-		{
-			return nullptr;
-		}
-
 		// Don't create a parameter if there is a context with the same name
 		if (m_childrenContexts.find(param_name) != std::end(m_childrenContexts))
 		{
 			return nullptr;
 		}
 
-		auto parameter = std::make_shared<typename T::parameter_t>(parameter_identifier.second);
+		auto parameter = std::make_shared<typename T::parameter_t>(param_name);
 		auto inserted = m_parameters.emplace(param_name, parameter);
 
 		if (inserted.second)

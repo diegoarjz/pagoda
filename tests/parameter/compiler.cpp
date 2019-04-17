@@ -15,10 +15,10 @@ class CompilerTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		single_parameter_context = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("context").second);
+		single_parameter_context = std::make_shared<Context>("context");
 		par1 = single_parameter_context->CreateParameter<FloatParameter>("par", 5.0f);
 
-		two_parameters_context = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("child").second);
+		two_parameters_context = std::make_shared<Context>("child");
 		par2 = two_parameters_context->CreateParameter<FloatParameter>("par2", 0.0f);
 		par3 = two_parameters_context->CreateParameter<FloatParameter>("par3", 3.0f);
 

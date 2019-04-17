@@ -115,10 +115,10 @@ class ParameterResolverTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		rootContext = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("root").second);
-		A = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("A").second);
+		rootContext = std::make_shared<Context>("root");
+		A = std::make_shared<Context>("A");
 		A->SetParent(rootContext);
-		B = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("B").second);
+		B = std::make_shared<Context>("B");
 		B->SetParent(rootContext);
 
 		resolver = std::make_shared<ParameterResolver>(rootContext);

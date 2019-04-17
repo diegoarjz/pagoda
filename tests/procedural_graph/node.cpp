@@ -39,7 +39,7 @@ TEST_F(NodeTest, when_getting_node_name_after_construction_should_return_empty_n
 
 TEST_F(NodeTest, when_setting_parameter_context_should_be_able_to_get_the_same_context)
 {
-	auto context = std::make_shared<ContextMock>(ParameterIdentifier::CreateIdentifier("a").second);
+	auto context = std::make_shared<ContextMock>("a");
 	this->node->SetParameterContext(context);
 	EXPECT_EQ(this->node->GetParameterContext(), context);
 }

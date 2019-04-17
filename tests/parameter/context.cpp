@@ -9,15 +9,15 @@ using namespace selector;
 
 TEST(ContextTest, test_creation)
 {
-	auto c1 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("parent_context").second);
+	auto c1 = std::make_shared<Context>("parent_context");
 
 	EXPECT_EQ(c1->Name(), "parent_context");
 }
 
 TEST(ContextTest, test_set_parent)
 {
-	auto c1 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("parent_context").second);
-	auto c2 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("child_context").second);
+	auto c1 = std::make_shared<Context>("parent_context");
+	auto c2 = std::make_shared<Context>("child_context");
 
 	c2->SetParent(c1);
 
@@ -28,9 +28,9 @@ TEST(ContextTest, test_set_parent)
 
 TEST(ContextTest, test_set_new_parent)
 {
-	auto c1 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("parent_context").second);
-	auto c2 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("child_context").second);
-	auto c3 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("new_parent").second);
+	auto c1 = std::make_shared<Context>("parent_context");
+	auto c2 = std::make_shared<Context>("child_context");
+	auto c3 = std::make_shared<Context>("new_parent");
 
 	c2->SetParent(c1);
 	c2->SetParent(c3);
@@ -43,9 +43,9 @@ TEST(ContextTest, test_set_new_parent)
 
 TEST(ContextTest, test_set_new_parent_context_already_has_child_with_same_name)
 {
-	auto c1 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("parent_context").second);
-	auto c2 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("child_context").second);
-	auto c3 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("child_context").second);
+	auto c1 = std::make_shared<Context>("parent_context");
+	auto c2 = std::make_shared<Context>("child_context");
+	auto c3 = std::make_shared<Context>("child_context");
 
 	EXPECT_TRUE(c2->SetParent(c1));
 	EXPECT_FALSE(c3->SetParent(c1));
@@ -53,7 +53,7 @@ TEST(ContextTest, test_set_new_parent_context_already_has_child_with_same_name)
 
 TEST(ContextTest, test_add_parameter)
 {
-	Context c(ParameterIdentifier::CreateIdentifier("a_context").second);
+	Context c("a_context");
 
 	auto par = c.CreateParameter<FloatParameter>("floatPar", 1.0f);
 	ASSERT_NE(par, nullptr);
@@ -63,7 +63,7 @@ TEST(ContextTest, test_add_parameter)
 
 TEST(ContextTest, test_try_add_param_same_name)
 {
-	Context c(ParameterIdentifier::CreateIdentifier("a_context").second);
+	Context c("a_context");
 
 	c.CreateParameter<FloatParameter>("floatPar", 1.0f);
 	ASSERT_EQ(c.CreateParameter<FloatParameter>("floatPar", 1.0f), nullptr);
@@ -71,7 +71,7 @@ TEST(ContextTest, test_try_add_param_same_name)
 
 TEST(ContextTest, test_get_parameter)
 {
-	Context c(ParameterIdentifier::CreateIdentifier("a_context").second);
+	Context c("a_context");
 
 	auto par = c.CreateParameter<FloatParameter>("floatPar", 1.0f);
 	ASSERT_EQ(c.GetParameter("floatPar"), par);
@@ -79,8 +79,8 @@ TEST(ContextTest, test_get_parameter)
 
 TEST(ContextTest, test_get_sub_context)
 {
-	auto c1 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("parent_context").second);
-	auto c2 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("child_context").second);
+	auto c1 = std::make_shared<Context>("parent_context");
+	auto c2 = std::make_shared<Context>("child_context");
 	c2->SetParent(c1);
 
 	ASSERT_EQ(c1->GetSubContext("child_context"), c2);
@@ -88,15 +88,15 @@ TEST(ContextTest, test_get_sub_context)
 
 TEST(ContextTest, test_get_sub_context_non_existing)
 {
-	Context c(ParameterIdentifier::CreateIdentifier("a_context").second);
+	Context c("a_context");
 
 	ASSERT_EQ(c.GetSubContext("a_non_existing_context"), nullptr);
 }
 
 TEST(ContextTest, test_parameters_should_have_different_names_from_sub_contexts)
 {
-	auto c1 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("parent").second);
-	auto c2 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("a_name").second);
+	auto c1 = std::make_shared<Context>("parent");
+	auto c2 = std::make_shared<Context>("a_name");
 
 	c2->SetParent(c1);
 
@@ -105,8 +105,8 @@ TEST(ContextTest, test_parameters_should_have_different_names_from_sub_contexts)
 
 TEST(ContextTest, test_sub_contexts_should_have_different_names_from_parameters)
 {
-	auto c1 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("parent").second);
-	auto c2 = std::make_shared<Context>(ParameterIdentifier::CreateIdentifier("a_name").second);
+	auto c1 = std::make_shared<Context>("parent");
+	auto c2 = std::make_shared<Context>("a_name");
 
 	auto par = c1->CreateParameter<FloatParameter>("a_name", 1.0f);
 	EXPECT_FALSE(c2->SetParent(c1));

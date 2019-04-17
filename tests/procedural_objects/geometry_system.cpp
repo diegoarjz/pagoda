@@ -78,7 +78,7 @@ class CreateRectTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		context = std::make_shared<ContextMock>(ParameterIdentifier::CreateIdentifier("context").second);
+		context = std::make_shared<ContextMock>("context");
 		geometry_system_mock = std::make_shared<GeometrySystemMock>();
 		procedural_object_system = std::make_shared<ProceduralObjectSystemMock>();
 
@@ -89,9 +89,8 @@ protected:
 
 		create_rect = std::make_shared<CreateRectGeometry>();
 
-		width_par = std::make_shared<Parameter<FloatParameter>>(ParameterIdentifier::CreateIdentifier("width").second);
-		height_par =
-		    std::make_shared<Parameter<FloatParameter>>(ParameterIdentifier::CreateIdentifier("height").second);
+		width_par = std::make_shared<Parameter<FloatParameter>>("width");
+		height_par = std::make_shared<Parameter<FloatParameter>>("height");
 
 		out_mask.set(static_cast<uint32_t>(ComponentType::Geometry));
 		out_mask.set(static_cast<uint32_t>(ComponentType::Hierarchical));
