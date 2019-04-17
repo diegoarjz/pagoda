@@ -62,11 +62,9 @@ void TriangulateGeometry::Execute()
 		    outObject->GetComponent<HierarchicalComponent>();
 
 		auto hierarchicalSystem = std::dynamic_pointer_cast<HierarchicalSystem>(
-		    exection_context->procedural_object_system->GetComponentSystem(ComponentType::Hierarchical));
+		    execution_context->procedural_object_system->GetComponentSystem(ComponentType::Hierarchical));
 		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }
-
-std::shared_ptr<ParameterBase> TriangulateGeometry::GetParameter(const std::string& name) { return nullptr; }
 
 }  // namespace selector

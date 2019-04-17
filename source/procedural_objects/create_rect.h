@@ -18,8 +18,6 @@ public:
 	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) override;
 
 private:
-	std::shared_ptr<ParameterBase> GetParameter(const std::string& name) override;
-
 	std::shared_ptr<ParameterBase> width;
 	std::shared_ptr<ParameterBase> height;
 

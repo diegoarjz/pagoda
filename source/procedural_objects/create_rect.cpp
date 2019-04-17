@@ -54,19 +54,4 @@ void CreateRectGeometry::SetExecutionContext(std::shared_ptr<OperationExecutionC
 
 	DBG_ASSERT_MSG(width != nullptr && height != nullptr, "width or height parameter not found in context");
 }
-
-std::shared_ptr<ParameterBase> CreateRectGeometry::GetParameter(const std::string& name)
-{
-	START_PROFILE;
-
-	DBG_ASSERT_MSG(name == "width" || name == "height", "Unknown parameter");
-	if (name == "width")
-	{
-		return width;
-	}
-	else
-	{
-		return height;
-	}
-}
 }  // namespace selector

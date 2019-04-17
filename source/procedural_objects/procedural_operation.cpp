@@ -136,24 +136,10 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 
 	auto mask = output_interfaces[interfaceName]->Mask();
 
-	auto procedural_object = exection_context->procedural_object_system->CreateProceduralObject(mask);
+	auto procedural_object = execution_context->procedural_object_system->CreateProceduralObject(mask);
 	output_interfaces[interfaceName]->AddProceduralObject(procedural_object);
 
 	return procedural_object;
-}
-
-void ProceduralOperation::SetParameter(const std::string& name, std::shared_ptr<ParameterBase> parameter)
-{
-	START_PROFILE;
-
-	GetParameter(name) = parameter;
-}
-
-void ProceduralOperation::UnsetParameter(const std::string& name)
-{
-	START_PROFILE;
-
-	GetParameter(name) = exection_context->parameter_context->GetParameter(name);
 }
 
 }  // namespace selector

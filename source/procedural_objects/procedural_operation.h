@@ -84,7 +84,10 @@ public:
 	 * Sub classes must implement this.
 	 */
 	virtual void Execute() = 0;
-	virtual void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) { exection_context = context; }
+	virtual void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context)
+	{
+		execution_context = context;
+	}
 
 	/**
 	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
@@ -95,32 +98,19 @@ public:
 	 */
 	ProceduralObjectPtr PopProceduralObject(const InterfaceName& interface) const;
 
-	/**
-	 * Sets the \c Parameter to the given \p parameter.
-	 *
-	 * Overrides the one given by the context. The \p name must exist among the \c ProceduralOperation parameters.
-	 */
-	void SetParameter(const std::string& name, std::shared_ptr<ParameterBase> parameter);
-	/**
-	 * Reverts the parameter with the given \p name to the one given in the context.
-	 */
-	void UnsetParameter(const std::string& name);
-
 	virtual bool ValidateProceduralObject(const InterfaceName& interface, ProceduralObjectPtr proceduralObject)
 	{
 		return true;
 	}
 
 protected:
-	virtual std::shared_ptr<ParameterBase> GetParameter(const std::string& name) = 0;
-
 	void CreateInputInterface(const InterfaceName& interfaceName, const ProceduralObjectMask& mask);
 	void CreateOutputInterface(const InterfaceName& interfaceName, const ProceduralObjectMask& mask);
 	std::shared_ptr<ProceduralObject> GetInputProceduralObject(const InterfaceName& interfaceName);
 	bool HasInput(const InterfaceName& interfaceName) const;
 	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(const InterfaceName& interfaceName);
 
-	std::shared_ptr<OperationExecutionContext> exection_context;
+	std::shared_ptr<OperationExecutionContext> execution_context;
 
 private:
 	using InterfaceContainer_t =

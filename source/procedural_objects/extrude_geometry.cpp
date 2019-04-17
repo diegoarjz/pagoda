@@ -62,7 +62,7 @@ void ExtrudeGeometry::Execute()
 		    out_object->GetComponent<HierarchicalComponent>();
 
 		auto hierarchical_system = std::dynamic_pointer_cast<HierarchicalSystem>(
-		    exection_context->procedural_object_system->GetComponentSystem(ComponentType::Hierarchical));
+		    execution_context->procedural_object_system->GetComponentSystem(ComponentType::Hierarchical));
 		hierarchical_system->SetParent(out_hierarchical_component, in_hierarchical_component);
 	}
 }
@@ -73,13 +73,5 @@ void ExtrudeGeometry::SetExecutionContext(std::shared_ptr<OperationExecutionCont
 
 	ProceduralOperation::SetExecutionContext(context);
 	extrusion_amount = context->parameter_context->GetParameterAs<FloatParameter>("extrusion_amount");
-}
-
-std::shared_ptr<ParameterBase> ExtrudeGeometry::GetParameter(const std::string& name)
-{
-	START_PROFILE;
-
-	DBG_ASSERT_MSG(name == "extrusion_amount", "Unknown Parameter");
-	return extrusion_amount;
 }
 }  // namespace selector

@@ -17,9 +17,6 @@ public:
 	virtual ~TriangulateGeometry();
 
 	void Execute() override;
-
-private:
-	std::shared_ptr<ParameterBase> GetParameter(const std::string& name) override;
 };
 }  // namespace selector
 
