@@ -187,6 +187,12 @@ target_compile_definitions(
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
 
+target_link_libraries(
+    selector
+    PUBLIC
+        selscript
+)
+
 include(GNUInstallDirs)
 install(TARGETS selector
     EXPORT selector-export
@@ -231,7 +237,7 @@ install(FILES
 )
 
 install(FILES
-    ${SELECTOR_PROCEDURAL_GRAPH_HEADERS} 
+    ${SELECTOR_PROCEDURAL_GRAPH_HEADERS}
     DESTINATION
         "${CMAKE_INSTALL_INCLUDEDIR}/selector/procedural_graph/"
 )
