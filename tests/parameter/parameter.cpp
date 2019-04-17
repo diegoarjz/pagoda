@@ -1,4 +1,3 @@
-#include <parameter/enumeration_parameter.h>
 #include <parameter/float_parameter.h>
 #include <parameter/parameter.h>
 #include <parameter/parameter_identifier.h>
@@ -44,19 +43,3 @@ TEST(ParameterTest, StringParameterSetter)
 	EXPECT_EQ(par->GetValue(), "new_value");
 }
 
-struct ParameterTypesEnumeration
-{
-	using Values = ParameterTypes;
-};
-TEST(ParameterTest, EnumParameterCreation)
-{
-	auto par = std::make_shared<Parameter<EnumerationParameter<ParameterTypesEnumeration>>>("enumPar");
-	EXPECT_EQ(par->GetValue(), ParameterTypes::Float);
-}
-
-TEST(ParameterTest, EnumParameterSetter)
-{
-	auto par = std::make_shared<Parameter<EnumerationParameter<ParameterTypesEnumeration>>>("enumPar");
-	par->Set<EnumerationParameter<ParameterTypesEnumeration>>(ParameterTypes::String);
-	EXPECT_EQ(par->GetValue(), ParameterTypes::String);
-}

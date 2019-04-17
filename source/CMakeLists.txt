@@ -69,7 +69,6 @@ set(SELECTOR_PARAMETER_PUBLIC_HEADERS
     "parameter/parameter_base.h"
     "parameter/float_parameter.h"
     "parameter/string_parameter.h"
-    "parameter/enumeration_parameter.h"
     "parameter/context.h"
     "parameter/expression.h"
     "parameter/parameter.h"
