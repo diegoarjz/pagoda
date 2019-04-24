@@ -4,7 +4,6 @@
 #include "common/profiler.h"
 #include "expression.h"
 #include "parameter.h"
-#include "parameter_identifier.h"
 
 #include <list>
 #include <string>
@@ -20,7 +19,7 @@ namespace selector
 class Context : public std::enable_shared_from_this<Context>
 {
 public:
-	explicit Context(const ParameterIdentifier &name);
+	explicit Context(const std::string &name);
 
 	bool SetParent(std::shared_ptr<Context> new_parent);
 	const std::string &Name() const { return m_contextName; }
@@ -32,17 +31,7 @@ public:
 	template<class T>
 	Parameter CreateParameter(const std::string &param_name, const T &initial_value)
 	{
-		START_PROFILE;
-
-		throw std::runtime_error("Re-implemented");
-
 		Parameter parameter = initial_value;
-		// Don't create a parameter if there is a context with the same name
-		if (m_childrenContexts.find(param_name) != std::end(m_childrenContexts))
-		{
-			return parameter;
-		}
-
 		m_parameters.emplace(param_name, parameter);
 
 		return parameter;
@@ -61,7 +50,7 @@ public:
 	}
 
 private:
-	ParameterIdentifier m_contextName;
+	std::string m_contextName;
 	std::unordered_map<std::string, Parameter> m_parameters;
 	std::weak_ptr<Context> m_parentContext;
 	std::unordered_map<std::string, std::shared_ptr<Context>> m_childrenContexts;

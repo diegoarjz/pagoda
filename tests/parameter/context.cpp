@@ -1,6 +1,5 @@
 #include <parameter/context.h>
 #include <parameter/parameter.h>
-#include <parameter/parameter_identifier.h>
 
 #include <gtest/gtest.h>
 
@@ -82,22 +81,3 @@ TEST(ContextTest, test_get_sub_context_non_existing)
 	ASSERT_EQ(c.GetSubContext("a_non_existing_context"), nullptr);
 }
 
-TEST(ContextTest, test_parameters_should_have_different_names_from_sub_contexts)
-{
-	auto c1 = std::make_shared<Context>("parent");
-	auto c2 = std::make_shared<Context>("a_name");
-
-	c2->SetParent(c1);
-
-	throw std::runtime_error("Re-implemented");
-	// EXPECT_EQ(c1->CreateParameter<float>("a_name", 1.0f), nullptr);
-}
-
-TEST(ContextTest, test_sub_contexts_should_have_different_names_from_parameters)
-{
-	auto c1 = std::make_shared<Context>("parent");
-	auto c2 = std::make_shared<Context>("a_name");
-
-	auto par = c1->CreateParameter<float>("a_name", 1.0f);
-	EXPECT_FALSE(c2->SetParent(c1));
-}

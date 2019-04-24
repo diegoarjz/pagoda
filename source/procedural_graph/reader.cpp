@@ -11,6 +11,7 @@
 
 #include "common/pugixml.hpp"
 
+#include <cstring>
 #include <iostream>
 #include <unordered_map>
 

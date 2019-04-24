@@ -2,7 +2,7 @@
 
 namespace selector
 {
-Context::Context(const ParameterIdentifier &name) : m_contextName(name) {}
+Context::Context(const std::string &name) : m_contextName(name) {}
 
 bool Context::SetParent(std::shared_ptr<Context> new_parent)
 {
@@ -32,7 +32,6 @@ bool Context::SetParent(std::shared_ptr<Context> new_parent)
 
 Parameter Context::GetParameter(const std::string &parameter_name)
 {
-	throw std::runtime_error("Re-implemented.");
 	auto iter = m_parameters.find(parameter_name);
 
 	if (iter == std::end(m_parameters))

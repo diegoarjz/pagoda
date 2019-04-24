@@ -8,7 +8,7 @@
 
 namespace selector
 {
-using Parameter = std::variant<float, std::string, std::shared_ptr<Expression>>;
+using Parameter = std::variant<float, std::string>;
 }  // namespace selector
 
 #endif

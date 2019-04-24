@@ -14,6 +14,7 @@ foreach(source ${profiling_srcs})
         ${exec_name}
         PRIVATE
             $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
+            ${SELSCRIPT_INCLUDE_DIR}
     )
 
     target_link_libraries(

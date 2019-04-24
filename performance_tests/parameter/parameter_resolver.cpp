@@ -4,7 +4,6 @@
 #include <parameter/context.h>
 #include <parameter/float_parameter.h>
 #include <parameter/parameter.h>
-#include <parameter/parameter_identifier.h>
 #include <parameter/parameter_resolver.h>
 
 #include "../performance_test.h"

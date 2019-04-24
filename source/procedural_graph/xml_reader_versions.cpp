@@ -12,6 +12,7 @@
 #include "procedural_objects/create_rect.h"
 #include "procedural_objects/extrude_geometry.h"
 
+#include <cstring>
 #include <iostream>
 
 namespace selector
@@ -85,7 +86,7 @@ ParseResult XMLReaderV01::Read(const pugi::xml_document& doc)
 		NodePtr nodePtr = reader->CreateNode(node_type, node_name, node_id);
 		auto inserted = nodes_map.insert(std::make_pair(node_id, nodePtr));
 
-		ParameterIdentifier identifier = node_name;
+		std::string identifier = node_name;
 		auto parameter_context = std::make_shared<Context>(identifier);
 		nodePtr->SetParameterContext(parameter_context);
 

@@ -26,6 +26,7 @@ target_include_directories(
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}
+        ${SELSCRIPT_INCLUDE_DIR}
 )
 
 set_target_properties(

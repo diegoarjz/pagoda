@@ -16,6 +16,7 @@ set(test_srcs
     "geometry_operations/create_rect.cpp"
     "geometry_operations/triangulate.cpp"
     "parameter/context.cpp"
+    "parameter/expression.cpp"
     "procedural_objects/procedural_object.cpp"
     "procedural_objects/procedural_object_interface.cpp"
     "procedural_objects/geometry_system.cpp"

@@ -10,8 +10,8 @@ using namespace selector;
 class ContextMock : public Context
 {
 public:
-	ContextMock(const ParameterIdentifier &identifier) : Context(identifier) {}
-	MOCK_METHOD1(GetParameter, std::shared_ptr<ParameterBase>(const std::string &));
+	ContextMock(const std::string &identifier) : Context(identifier) {}
+	MOCK_METHOD1(GetParameter, std::shared_ptr<Parameter>(const std::string &));
 };
 
 #endif

@@ -56,8 +56,6 @@ set(SELECTOR_GEOMETRY_OPERATION_PUBLIC_HEADERS
 set(SELECTOR_PARAMETER_SOURCES
     "parameter/parameter.cpp"
     "parameter/context.cpp"
-    "parameter/parameter_identifier.cpp"
-    "parameter/parameter_validation.cpp"
     "parameter/expression.cpp"
     )
 
@@ -67,7 +65,6 @@ set(SELECTOR_PARAMETER_PUBLIC_HEADERS
     "parameter/context.h"
     "parameter/expression.h"
     "parameter/parameter.h"
-    "parameter/parameter_identifier.h"
 )
 
 # Procedural Objects
@@ -150,6 +147,7 @@ target_include_directories(
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
+        ${SELSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_features(
