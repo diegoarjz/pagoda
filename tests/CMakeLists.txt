@@ -29,7 +29,7 @@ add_executable(unit_tests ${test_srcs})
 
 set_target_properties(
     unit_tests
-    PROPERTIES 
+    PROPERTIES
         COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
@@ -57,6 +57,7 @@ target_include_directories(
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}
+        ${SELSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_definitions(
