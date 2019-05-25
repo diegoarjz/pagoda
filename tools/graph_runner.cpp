@@ -108,6 +108,7 @@ int main(int argc, char* argv[])
 			auto execution_context = std::make_shared<GraphExecutionContext>(graph, object_system, geom_system);
 
 			std::list<ProceduralObjectPtr> procedural_objects = ExecuteGraph(graph, execution_context);
+			std::cout << "Generated " << procedural_objects.size() << " objects" << std::endl;
 
 			if (vm.count("export-geometry"))
 			{
@@ -160,8 +161,12 @@ std::list<ProceduralObjectPtr> ExecuteGraph(std::shared_ptr<Graph> graph,
 	Scheduler scheduler(executionContext, graph_parameter_context);
 	scheduler.Initialize();
 
-	while (scheduler.Step())
+	while (true)
 	{
+		if (!scheduler.Step())
+		{
+			break;
+		}
 	}
 
 	std::list<ProceduralObjectPtr> procedural_objects;

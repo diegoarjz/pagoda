@@ -1,5 +1,5 @@
 set(GraphRunnerSources
-    graph_reader.cpp
+    graph_runner.cpp
     )
 
 add_executable(GraphRunner ${GraphRunnerSources})
@@ -49,3 +49,8 @@ target_link_libraries(
         Boost::program_options
 )
 
+include(GNUInstallDirs)
+install(TARGETS GraphRunner
+    EXPORT GraphRunner-export
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

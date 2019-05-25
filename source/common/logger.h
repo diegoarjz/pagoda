@@ -20,6 +20,7 @@ public:
 		GeometryOperations,
 		Parameter,
 		ProceduralGraph,
+		ProceduralGraphReader,
 		ProceduralObjects,
 		Max
 	};

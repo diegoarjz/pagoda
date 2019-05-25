@@ -6,6 +6,7 @@ compile_commands.json
 
 # Doxygen generated files
 docs/html/
+docs/diagrams/
 
 # Buildsys files
 buildsys/Debug/

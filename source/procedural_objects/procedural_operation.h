@@ -20,10 +20,10 @@ using ProceduralObjectMask = std::bitset<static_cast<size_t>(ComponentType::MaxC
 
 struct InterfaceName
 {
-	const char* name;
+	std::string name;
 	uint16_t offset;
 
-	InterfaceName(const char* name, uint16_t offset) : name(name), offset(offset) {}
+	InterfaceName(const std::string& name, uint16_t offset) : name(name), offset(offset) {}
 
 	InterfaceName Offset(uint16_t o) const { return InterfaceName(name, o); }
 	bool operator==(const InterfaceName& other) const { return name == other.name && offset == other.offset; }
@@ -33,7 +33,7 @@ struct InterfaceNameHasher
 {
 	std::size_t operator()(const InterfaceName& key) const
 	{
-		return std::hash<const char*>()(key.name) ^ (std::hash<uint16_t>()(key.offset) << 1);
+		return std::hash<std::string>()(key.name) ^ (std::hash<uint16_t>()(key.offset) << 1);
 	}
 };  // struct InterfaceNameHasher
 

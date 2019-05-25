@@ -31,7 +31,7 @@ TEST_F(ProceduralOperationObjectInterfaceTest, test_accepts)
 
 	mask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
 
-	ProceduralOperationObjectInterface interface(InterfaceName(0, 0), mask);
+	ProceduralOperationObjectInterface interface(InterfaceName("", 0), mask);
 
 	EXPECT_TRUE(interface.Accepts(procedural_object));
 }
@@ -40,7 +40,7 @@ TEST_F(ProceduralOperationObjectInterfaceTest, test_rejects)
 {
 	procedural_object->SetComponent(geometry_component);
 
-	ProceduralOperationObjectInterface interface(InterfaceName(0, 0), mask);
+	ProceduralOperationObjectInterface interface(InterfaceName("", 0), mask);
 
 	EXPECT_FALSE(interface.Accepts(procedural_object));
 }
@@ -51,7 +51,7 @@ TEST_F(ProceduralOperationObjectInterfaceTest, test_add_object)
 
 	mask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
 
-	ProceduralOperationObjectInterface interface(InterfaceName(0, 0), mask);
+	ProceduralOperationObjectInterface interface(InterfaceName("", 0), mask);
 
 	EXPECT_TRUE(interface.AddProceduralObject(procedural_object));
 	EXPECT_EQ(interface.GetFrontProceduralObject(), procedural_object);
@@ -65,7 +65,7 @@ TEST_F(ProceduralOperationObjectInterfaceTest, test_add_and_pop_object)
 
 	mask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
 
-	ProceduralOperationObjectInterface interface(InterfaceName(0, 0), mask);
+	ProceduralOperationObjectInterface interface(InterfaceName("", 0), mask);
 
 	EXPECT_TRUE(interface.AddProceduralObject(procedural_object));
 	EXPECT_EQ(interface.GetAndPopProceduralObject(), procedural_object);

@@ -12,7 +12,7 @@ namespace selector
 {
 const char* OutputInterfaceNode::name = "OutputInterface";
 
-OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName(0, 0) {}
+OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName("", 0) {}
 OutputInterfaceNode::~OutputInterfaceNode() {}
 
 void OutputInterfaceNode::SetInterfaceName(const InterfaceName& name) { m_interfaceName = name; }

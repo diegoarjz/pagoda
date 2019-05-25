@@ -1,6 +1,7 @@
 #include "reader.h"
 
 #include "common/assertions.h"
+#include "common/logger.h"
 #include "graph_reader_grammar.h"
 #include "input_interface_node.h"
 #include "node.h"
@@ -36,6 +37,7 @@ struct OperationNodeCreator : public Callable
 	virtual ~OperationNodeCreator() {}
 	builtin_value Call(std::unordered_map<std::string, builtin_value> &constructionArgs)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Creating Operation Node");
 		auto node = Node::Create("Operation");
 
 		if (node == nullptr)
@@ -51,6 +53,7 @@ struct OperationNodeCreator : public Callable
 		}
 
 		auto type = boost::get<std::string>(operationType->second);
+		LOG_TRACE(ProceduralGraphReader, "\tType: %s", type.c_str());
 		operationNode->SetName(type);
 		operationNode->SetOperation(ProceduralOperation::Create(type));
 
@@ -63,6 +66,7 @@ struct InputInterfaceNodeCreator : public Callable
 	virtual ~InputInterfaceNodeCreator() {}
 	builtin_value Call(std::unordered_map<std::string, builtin_value> &constructionArgs)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Creating Input Interface Node");
 		auto node = Node::Create("InputInterface");
 
 		if (node == nullptr)
@@ -71,10 +75,13 @@ struct InputInterfaceNodeCreator : public Callable
 		}
 
 		auto interfaceNode = std::dynamic_pointer_cast<InputInterfaceNode>(node);
-		interfaceNode->SetName(boost::get<std::string>(constructionArgs["interface"]));
+		auto interfaceName = boost::get<std::string>(constructionArgs["interface"]);
+		auto interfaceOffset = boost::get<float>(constructionArgs["offset"]);
+		interfaceNode->SetName(interfaceName);
+		LOG_TRACE(ProceduralGraphReader, "\tname %s offset: %f", interfaceName.c_str(), interfaceOffset);
 
 		// TODO: interface name and offset
-		interfaceNode->SetInterfaceName(InterfaceName(0, 0));
+		interfaceNode->SetInterfaceName(InterfaceName(interfaceName.c_str(), interfaceOffset));
 
 		return node;
 	}
@@ -85,6 +92,7 @@ struct OutputInterfaceNodeCreator : public Callable
 	virtual ~OutputInterfaceNodeCreator() {}
 	builtin_value Call(std::unordered_map<std::string, builtin_value> &constructionArgs)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Creating Output Interface Node");
 		auto node = Node::Create("OutputInterface");
 
 		if (node == nullptr)
@@ -93,10 +101,13 @@ struct OutputInterfaceNodeCreator : public Callable
 		}
 
 		auto interfaceNode = std::dynamic_pointer_cast<OutputInterfaceNode>(node);
-		interfaceNode->SetName(boost::get<std::string>(constructionArgs["interface"]));
+		auto interfaceName = boost::get<std::string>(constructionArgs["interface"]);
+		auto interfaceOffset = boost::get<float>(constructionArgs["offset"]);
+		interfaceNode->SetName(interfaceName);
+		LOG_TRACE(ProceduralGraphReader, "\tname %s offset: %f", interfaceName.c_str(), interfaceOffset);
 
 		// TODO: interface name and offset
-		interfaceNode->SetInterfaceName(InterfaceName(0, 0));
+		interfaceNode->SetInterfaceName(InterfaceName(interfaceName.c_str(), interfaceOffset));
 
 		return node;
 	}
@@ -243,6 +254,7 @@ struct interpreter_visitor
 
 	void visit(const ast::graph_definition &graphDef)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Processing Graph Definition");
 		struct statement_visitor : boost::static_visitor<void>
 		{
 			statement_visitor(interpreter_visitor *v) : m_visitor(v) {}
@@ -261,15 +273,18 @@ struct interpreter_visitor
 
 	void visit(const ast::assignment &assignment)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Processing Assignment");
 		m_symbolTable->AddSymbol({assignment.m_lhs.m_name, visit(assignment.m_rhs)});
 	}
 
 	void visit(const ast::node_links &node_links)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Processing Node Links");
 		auto prevNode = boost::get<NodePtr>(visit(node_links[0]));
 		for (auto i = 1u; i < node_links.size(); ++i)
 		{
 			auto nextNode = boost::get<NodePtr>(visit(node_links[i]));
+			LOG_TRACE(ProceduralGraphReader, "\t%d -> %d", prevNode->GetId(), nextNode->GetId());
 			m_graph->CreateEdge(prevNode, nextNode);
 			prevNode = nextNode;
 		}
@@ -277,6 +292,7 @@ struct interpreter_visitor
 
 	builtin_value visit(const ast::expression &expression)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Processing Expression");
 		struct expression_visitor : boost::static_visitor<builtin_value>
 		{
 			expression_visitor(interpreter_visitor *v) : m_visitor(v) {}
@@ -296,10 +312,15 @@ struct interpreter_visitor
 		return boost::apply_visitor(v, expression);
 	}
 
-	builtin_value visit(const ast::literal &literal) { return literal; }
+	builtin_value visit(const ast::literal &literal)
+	{
+		LOG_TRACE(ProceduralGraphReader, "Processing Literal");
+		return literal;
+	}
 
 	builtin_value visit(const ast::variable &variable)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Processing Variable");
 		try
 		{
 			return m_symbolTable->GetSymbol(variable.m_name).m_value;
@@ -318,21 +339,25 @@ struct interpreter_visitor
 		{
 			case '+':
 			{
+				LOG_TRACE(ProceduralGraphReader, "Processing Binary Operation +");
 				binary_op_dispatcher<operations::add> v(lhs, rhs);
 				return boost::apply_visitor(v, lhs);
 			}
 			case '-':
 			{
+				LOG_TRACE(ProceduralGraphReader, "Processing Binary Operation -");
 				binary_op_dispatcher<operations::sub> v(lhs, rhs);
 				return boost::apply_visitor(v, lhs);
 			}
 			case '*':
 			{
+				LOG_TRACE(ProceduralGraphReader, "Processing Binary Operation *");
 				binary_op_dispatcher<operations::mul> v(lhs, rhs);
 				return boost::apply_visitor(v, lhs);
 			}
 			case '/':
 			{
+				LOG_TRACE(ProceduralGraphReader, "Processing Binary Operation /");
 				binary_op_dispatcher<operations::div> v(lhs, rhs);
 				return boost::apply_visitor(v, lhs);
 			};
@@ -342,6 +367,7 @@ struct interpreter_visitor
 
 	builtin_value visit(const ast::node_definition &node_definition)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Processing Node Definition");
 		auto callable = boost::get<CallablePtr>(m_symbolTable->GetSymbol(node_definition.m_nodeType).m_value);
 		auto constructionArgs = visit(node_definition.m_constructionArguments);
 		auto nodeParameters = visit(node_definition.m_nodeParameters);
@@ -377,6 +403,7 @@ struct interpreter_visitor
 
 	std::unordered_map<std::string, builtin_value> visit(const ast::named_arg_list &arg_list)
 	{
+		LOG_TRACE(ProceduralGraphReader, "Processing Named Arg List");
 		std::unordered_map<std::string, builtin_value> values;
 
 		for (const auto &arg : arg_list)

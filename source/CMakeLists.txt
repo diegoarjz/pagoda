@@ -60,8 +60,6 @@ set(SELECTOR_PARAMETER_SOURCES
     )
 
 set(SELECTOR_PARAMETER_PUBLIC_HEADERS
-    "parameter/float_parameter.h"
-    "parameter/string_parameter.h"
     "parameter/context.h"
     "parameter/expression.h"
     "parameter/parameter.h"
