@@ -27,7 +27,7 @@ protected:
 };
 
 typedef ::testing::Types<IndexedFacesTopology<uint32_t>, SplitPointTopology<uint32_t>> TopologyTypes;
-TYPED_TEST_CASE(GeometryTest, TopologyTypes);
+TYPED_TEST_SUITE(GeometryTest, TopologyTypes);
 
 TYPED_TEST(GeometryTest, when_created_should_be_empty)
 {

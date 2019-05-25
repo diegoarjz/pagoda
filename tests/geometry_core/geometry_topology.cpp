@@ -13,7 +13,7 @@ class EdgeHasherTest : public ::testing::Test
 };
 
 typedef ::testing::Types<uint32_t, int32_t> EdgeIndexTypes;
-TYPED_TEST_CASE(EdgeHasherTest, EdgeIndexTypes);
+TYPED_TEST_SUITE(EdgeHasherTest, EdgeIndexTypes);
 
 TYPED_TEST(EdgeHasherTest, test_edge_0_1)
 {
@@ -55,7 +55,7 @@ protected:
 	Topology topology;
 	uint32_t invalidIndex;
 };
-TYPED_TEST_CASE(TopologyTest, TopologyTypes);
+TYPED_TEST_SUITE(TopologyTest, TopologyTypes);
 
 TYPED_TEST(TopologyTest, when_creating_should_be_empty)
 {
@@ -193,7 +193,7 @@ protected:
 	std::vector<typename Topology::IndexType> triangle;
 	std::vector<typename Topology::IndexType> square;
 };
-TYPED_TEST_CASE(TopologyIteratorTest, TopologyTypes);
+TYPED_TEST_SUITE(TopologyIteratorTest, TopologyTypes);
 
 TYPED_TEST(TopologyIteratorTest, when_iterating_over_all_faces_last_element_should_be_faces_end)
 {

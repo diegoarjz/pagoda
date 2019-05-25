@@ -15,7 +15,7 @@ class IndexedContainerTest : public ::testing::Test
 typedef ::testing::Types<IndexedContainer<uint32_t, Vec3F>, AssociativeIndexedContainer<uint32_t, Vec3F>>
     IndexedContainerTypes;
 
-TYPED_TEST_CASE(IndexedContainerTest, IndexedContainerTypes);
+TYPED_TEST_SUITE(IndexedContainerTest, IndexedContainerTypes);
 
 TYPED_TEST(IndexedContainerTest, when_creating_should_return_incremental_indices)
 {

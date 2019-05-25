@@ -21,6 +21,3 @@ buildsys/*.log
 *.pyc
 *__pycache__*
 
-# Third Party Libraries
-third_party/
-

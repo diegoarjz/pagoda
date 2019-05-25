@@ -12,7 +12,7 @@ class RangeTest : public ::testing::Test
 };
 
 typedef ::testing::Types<uint32_t, int32_t, uint16_t, int16_t, uint8_t, int8_t> RangeTypes;
-TYPED_TEST_CASE(RangeTest, RangeTypes);
+TYPED_TEST_SUITE(RangeTest, RangeTypes);
 
 TYPED_TEST(RangeTest, test_start_is_not_equal_to_end)
 {
