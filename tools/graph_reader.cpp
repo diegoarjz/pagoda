@@ -7,9 +7,9 @@
 #include <procedural_graph/node_set_visitor.h>
 #include <procedural_graph/operation_node.h>
 #include <procedural_graph/output_interface_node.h>
+#include <procedural_graph/parse_result.h>
 #include <procedural_graph/reader.h>
 #include <procedural_graph/scheduler.h>
-#include <procedural_graph/xml_parse_result.h>
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
@@ -44,9 +44,11 @@ int main(int argc, char* argv[])
 	IsRegistered<ExtrudeGeometry>();
 	IsRegistered<CreateRectGeometry>();
 	IsRegistered<TriangulateGeometry>();
+	/*
 	IsRegistered<OperationNode>();
 	IsRegistered<InputInterfaceNode>();
 	IsRegistered<OutputInterfaceNode>();
+	*/
 
 	if (!ParseCommandLine(argc, argv, &vm))
 	{
@@ -193,18 +195,10 @@ std::shared_ptr<Graph> ReadGraphFromFile(const std::string& file_path)
 	in_file.seekg(0, std::ios::beg);
 
 	str.assign((std::istreambuf_iterator<char>(in_file)), std::istreambuf_iterator<char>());
-	XMLReader reader;
-	auto read_result = reader.Read(str);
+	GraphReader reader;
+	GraphPtr graph = reader.Read(str);
 
-	if (read_result.status != ParseResult::Status::Ok)
-	{
-		LOG_ERROR("Unable to parse graph file: %s", file_path.c_str());
-		LOG_ERROR("  Status Message: %s", XMLReaderParseMessage(read_result.status));
-		LOG_ERROR("  Offset: %d", read_result.offset);
-		return nullptr;
-	}
-
-	return reader.GetGraph();
+	return graph;
 }
 
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)

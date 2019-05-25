@@ -3,7 +3,7 @@
 
 #include "graph.h"
 #include "node.h"
-#include "xml_parse_result.h"
+#include "parse_result.h"
 
 #include <string>
 #include <unordered_map>
@@ -12,28 +12,19 @@ namespace selector
 {
 class XMLReaderPlugin;
 
-class XMLReader
+class GraphReader
 {
 public:
-	XMLReader();
-	~XMLReader();
-	ParseResult Read(const std::string &xml);
-	std::shared_ptr<Graph> GetGraph() const;
+	GraphReader();
+	~GraphReader();
 
-	std::shared_ptr<Node> CreateNode(const char *type, const char *name, uint32_t id);
-	void Link(NodePtr from, NodePtr to);
-
-	bool RegisterPlugin(std::shared_ptr<XMLReaderPlugin> plugin);
-	void PluginNodeData(const char *pluginName, std::shared_ptr<Node> node, const char *valueName, const char *value);
+	GraphPtr Read(const std::string &str);
+	const ParseResult &GetParseResult() const;
 
 private:
-	void SetParseResult(const ParseResult::Status &status, uint32_t offset);
-	std::shared_ptr<XMLReaderPlugin> GetPlugin(const char *name);
-
-	ParseResult m_currentParseResult;
-	std::shared_ptr<Graph> m_graph;
-	std::unordered_map<std::string, std::shared_ptr<XMLReaderPlugin>> m_plugins;
-};  // class XMLReader
+	struct Impl;
+	std::unique_ptr<Impl> m_implementation;
+};
 }  // namespace selector
 
 #endif

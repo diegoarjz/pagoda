@@ -97,9 +97,8 @@ set(SELECTOR_PROCEDURAL_GRAPH_HEADERS
     "procedural_graph/graph.h"
     "procedural_graph/node.h"
     "procedural_graph/reader.h"
-    "procedural_graph/xml_parse_result.h"
+    "procedural_graph/parse_result.h"
     "procedural_graph/graph_execution_context.h"
-    "procedural_graph/xml_reader_plugin.h"
     )
 
 set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
@@ -108,7 +107,6 @@ set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
     "procedural_graph/reader.cpp"
     "procedural_graph/scheduler.cpp"
     "procedural_graph/graph_execution_context.cpp"
-    "procedural_graph/xml_reader_versions.cpp"
     "procedural_graph/input_interface_node.cpp"
     "procedural_graph/output_interface_node.cpp"
     "procedural_graph/operation_node.cpp"

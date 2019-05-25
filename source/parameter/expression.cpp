@@ -146,6 +146,8 @@ public:
 		}
 	}
 
+	void Visit(ast::ParameterPtr p) override {}
+
 	std::vector<std::string> m_symbols;
 };
 

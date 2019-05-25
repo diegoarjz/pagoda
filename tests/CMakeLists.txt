@@ -23,6 +23,7 @@ set(test_srcs
     "procedural_graph/graph.cpp"
     "procedural_graph/node.cpp"
     "procedural_graph/node_set_visitor.cpp"
+    "procedural_graph/graph_reader_grammar.cpp"
     )
 
 add_executable(unit_tests ${test_srcs})

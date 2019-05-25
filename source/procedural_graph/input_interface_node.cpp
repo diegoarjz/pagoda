@@ -10,7 +10,7 @@
 
 namespace selector
 {
-const char* InputInterfaceNode::name = "InputInterfaceNode";
+const char* InputInterfaceNode::name = "InputInterface";
 
 InputInterfaceNode::InputInterfaceNode() : m_interfaceName(0, 0) {}
 InputInterfaceNode::~InputInterfaceNode() {}

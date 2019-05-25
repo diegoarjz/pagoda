@@ -1,150 +1,435 @@
 #include "reader.h"
 
 #include "common/assertions.h"
+#include "graph_reader_grammar.h"
 #include "input_interface_node.h"
+#include "node.h"
 #include "operation_node.h"
 #include "output_interface_node.h"
-#include "parameter/context.h"
-#include "parameter/expression.h"
-#include "xml_reader_plugin.h"
-#include "xml_reader_versions.h"
+#include "parse_result.h"
 
-#include "common/pugixml.hpp"
+#include "parameter/context.h"
+
+#include "procedural_objects/procedural_operation.h"
 
 #include <cstring>
+#include <exception>
 #include <iostream>
+#include <memory>
 #include <unordered_map>
 
 namespace selector
 {
-ParseResult::Status convert_status_code(const pugi::xml_parse_status &status)
+struct Callable;
+using CallablePtr = std::shared_ptr<Callable>;
+
+using builtin_value = boost::variant<float, std::string, NodePtr, CallablePtr>;
+
+struct Callable
 {
-	switch (status)
-	{
-		case pugi::xml_parse_status::status_ok:
-			return ParseResult::Status::Ok;
-		case pugi::xml_parse_status::status_file_not_found:
-			return ParseResult::Status::FileNotFound;
-		case pugi::xml_parse_status::status_io_error:
-			return ParseResult::Status::IOError;
-		case pugi::xml_parse_status::status_out_of_memory:
-			return ParseResult::Status::OutOfMemory;
-		case pugi::xml_parse_status::status_internal_error:
-			return ParseResult::Status::InternalError;
-		case pugi::xml_parse_status::status_unrecognized_tag:
-			return ParseResult::Status::UnrecognizedTag;
-		case pugi::xml_parse_status::status_bad_pi:
-		case pugi::xml_parse_status::status_bad_comment:
-		case pugi::xml_parse_status::status_bad_cdata:
-		case pugi::xml_parse_status::status_bad_doctype:
-		case pugi::xml_parse_status::status_bad_pcdata:
-		case pugi::xml_parse_status::status_bad_start_element:
-		case pugi::xml_parse_status::status_bad_attribute:
-		case pugi::xml_parse_status::status_bad_end_element:
-			return ParseResult::Status::BadElement;
-		case pugi::xml_parse_status::status_end_element_mismatch:
-			return ParseResult::Status::EndElementMismatch;
-		case pugi::xml_parse_status::status_no_document_element:
-			return ParseResult::Status::NoDocumentElement;
-		default:
-			DBG_ASSERT_MSG(false, "Should not be able to reach this");
-	}
-	return ParseResult::Status::UnknownError;
-}
+	virtual ~Callable() {}
+	virtual builtin_value Call(std::unordered_map<std::string, builtin_value> &) = 0;
+};
 
-XMLReader::XMLReader() : m_graph(std::make_shared<Graph>()) {}
-XMLReader::~XMLReader() {}
-std::shared_ptr<Graph> XMLReader::GetGraph() const { return m_graph; }
-
-ParseResult XMLReader::Read(const std::string &xml)
+struct OperationNodeCreator : public Callable
 {
-	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_string(xml.c_str());
-
-	if (!result)
+	virtual ~OperationNodeCreator() {}
+	builtin_value Call(std::unordered_map<std::string, builtin_value> &constructionArgs)
 	{
-		SetParseResult(convert_status_code(result.status), result.offset);
-		return m_currentParseResult;
+		auto node = Node::Create("Operation");
+
+		if (node == nullptr)
+		{
+			return node;
+		}
+
+		auto operationNode = std::dynamic_pointer_cast<OperationNode>(node);
+		auto operationType = constructionArgs.find("operation");
+		if (operationType == std::end(constructionArgs))
+		{
+			return node;
+		}
+
+		auto type = boost::get<std::string>(operationType->second);
+		operationNode->SetName(type);
+		operationNode->SetOperation(ProceduralOperation::Create(type));
+
+		return node;
 	}
+};
 
-	pugi::xml_node root = doc.child(xml_common::root_node);
-	if (!root)
-	{
-		SetParseResult(ParseResult::Status::GraphElementNotFound, 0);
-		return m_currentParseResult;
-	}
-
-	auto reader = xml_common::create_reader(doc, this);
-	return reader->Read(doc);
-}
-
-std::shared_ptr<Node> XMLReader::CreateNode(const char *type, const char *name, uint32_t id)
+struct InputInterfaceNodeCreator : public Callable
 {
-	NodePtr node = nullptr;
-	if (std::strcmp(type, "InputInterface") == 0)
+	virtual ~InputInterfaceNodeCreator() {}
+	builtin_value Call(std::unordered_map<std::string, builtin_value> &constructionArgs)
 	{
-		node = m_graph->CreateNode<InputInterfaceNode>();
-	}
-	else if (std::strcmp(type, "OutputInterface") == 0)
-	{
-		node = m_graph->CreateNode<OutputInterfaceNode>();
-	}
-	else if (std::strcmp(type, "Operation") == 0)
-	{
-		node = m_graph->CreateNode<OperationNode>();
-	}
+		auto node = Node::Create("InputInterface");
 
-	DBG_ASSERT(node != nullptr);
+		if (node == nullptr)
+		{
+			return node;
+		}
 
-	node->SetName(name);
-	return node;
-}
+		auto interfaceNode = std::dynamic_pointer_cast<InputInterfaceNode>(node);
+		interfaceNode->SetName(boost::get<std::string>(constructionArgs["interface"]));
 
-void XMLReader::Link(NodePtr from, NodePtr to)
+		// TODO: interface name and offset
+		interfaceNode->SetInterfaceName(InterfaceName(0, 0));
+
+		return node;
+	}
+};
+
+struct OutputInterfaceNodeCreator : public Callable
 {
-	// TODO: Error checking
-	m_graph->CreateEdge(from, to);
-}
-
-void XMLReader::SetParseResult(const ParseResult::Status &status, uint32_t offset)
-{
-	m_currentParseResult.status = status;
-	m_currentParseResult.offset = offset;
-}
-
-bool XMLReader::RegisterPlugin(std::shared_ptr<XMLReaderPlugin> plugin)
-{
-	if (m_plugins.find(plugin->PluginName()) != m_plugins.end())
+	virtual ~OutputInterfaceNodeCreator() {}
+	builtin_value Call(std::unordered_map<std::string, builtin_value> &constructionArgs)
 	{
-		return false;
+		auto node = Node::Create("OutputInterface");
+
+		if (node == nullptr)
+		{
+			return node;
+		}
+
+		auto interfaceNode = std::dynamic_pointer_cast<OutputInterfaceNode>(node);
+		interfaceNode->SetName(boost::get<std::string>(constructionArgs["interface"]));
+
+		// TODO: interface name and offset
+		interfaceNode->SetInterfaceName(InterfaceName(0, 0));
+
+		return node;
+	}
+};
+
+struct Symbol
+{
+	std::string m_name;
+	builtin_value m_value;
+};
+
+class SymbolTable
+{
+public:
+	struct SymbolNotFound : public std::exception
+	{
+		SymbolNotFound(const std::string &symbolName) : m_symbolName(symbolName) {}
+		SymbolNotFound() = delete;
+
+		std::string m_symbolName;
+	};
+
+	SymbolTable() = default;
+	SymbolTable(std::shared_ptr<SymbolTable> parentScope) : m_parentScope(parentScope) {}
+	SymbolTable(const SymbolTable &) = delete;
+	SymbolTable &operator=(const SymbolTable &) = delete;
+
+	const Symbol &GetSymbol(const std::string &name)
+	{
+		auto iter = m_symbols.find(name);
+		if (iter != std::end(m_symbols))
+		{
+			return iter->second;
+		}
+		if (!m_parentScope.expired())
+		{
+			return m_parentScope.lock()->GetSymbol(name);
+		}
+
+		throw SymbolNotFound(name);
 	}
 
-	m_plugins[plugin->PluginName()] = plugin;
+	void AddSymbol(const Symbol &symbol) { m_symbols[symbol.m_name] = symbol; }
 
-	return true;
-}
+private:
+	std::weak_ptr<SymbolTable> m_parentScope;
+	std::unordered_map<std::string, Symbol> m_symbols;
+};
 
-std::shared_ptr<XMLReaderPlugin> XMLReader::GetPlugin(const char *name)
+namespace operations
 {
-	if (m_plugins.find(name) == m_plugins.end())
+struct base_operation
+{
+};
+
+struct add : public base_operation
+{
+	static builtin_value apply(const float &lhs, const float &rhs) { return lhs + rhs; }
+	static builtin_value apply(const std::string &lhs, const std::string &rhs) { return lhs + rhs; }
+
+	template<typename LHS, typename RHS>
+	static builtin_value apply(const LHS &lhs, const RHS &rhs)
 	{
-		return nullptr;
+		throw std::runtime_error("Unable to add operands");
+	}
+};
+
+struct sub : public base_operation
+{
+	static builtin_value apply(const float &lhs, const float &rhs) { return lhs - rhs; }
+
+	template<typename LHS, typename RHS>
+	static builtin_value apply(const LHS &lhs, const RHS &rhs)
+	{
+		throw std::runtime_error("Unable to subtract operands");
+	}
+};
+
+struct mul : public base_operation
+{
+	static builtin_value apply(const float &lhs, const float &rhs) { return lhs * rhs; }
+
+	template<typename LHS, typename RHS>
+	static builtin_value apply(const LHS &lhs, const RHS &rhs)
+	{
+		throw std::runtime_error("Unable to multiply operands");
+	}
+};
+
+struct div : public base_operation
+{
+	static builtin_value apply(const float &lhs, const float &rhs) { return lhs / rhs; }
+
+	template<typename LHS, typename RHS>
+	static builtin_value apply(const LHS &lhs, const RHS &rhs)
+	{
+		throw std::runtime_error("Unable to divide operands");
+	}
+};
+}  // namespace operations
+
+template<class OP>
+struct binary_op_dispatcher : public boost::static_visitor<builtin_value>
+{
+	binary_op_dispatcher(const builtin_value &lhs, const builtin_value &rhs) : m_lhs(lhs), m_rhs(rhs) {}
+	binary_op_dispatcher() = delete;
+
+	template<typename LHS>
+	struct rhs_dispatcher : public boost::static_visitor<builtin_value>
+	{
+		rhs_dispatcher(const LHS &lhs) : m_lhs(lhs) {}
+		rhs_dispatcher() = delete;
+
+		template<typename RHS>
+		builtin_value operator()(const RHS &rhs)
+		{
+			return OP::apply(m_lhs, rhs);
+		}
+
+	private:
+		const LHS &m_lhs;
+	};
+
+	template<typename LHS>
+	builtin_value operator()(const LHS &lhs)
+	{
+		rhs_dispatcher<LHS> dispatcher{lhs};
+		return boost::apply_visitor(dispatcher, m_rhs);
 	}
 
-	return m_plugins[name];
-}
+private:
+	const builtin_value &m_lhs;
+	const builtin_value &m_rhs;
+};
 
-void XMLReader::PluginNodeData(const char *pluginName, std::shared_ptr<Node> node, const char *valueName,
-                               const char *value)
+struct interpreter_visitor
 {
-	std::shared_ptr<XMLReaderPlugin> plugin = GetPlugin(pluginName);
-
-	if (plugin == nullptr)
+	interpreter_visitor(GraphPtr graph) : m_symbolTable(std::make_shared<SymbolTable>()), m_graph(graph)
 	{
-		return;
+		m_symbolTable->AddSymbol({"Operation", std::make_shared<OperationNodeCreator>()});
+		m_symbolTable->AddSymbol({"InputInterface", std::make_shared<InputInterfaceNodeCreator>()});
+		m_symbolTable->AddSymbol({"OutputInterface", std::make_shared<OutputInterfaceNodeCreator>()});
 	}
 
-	plugin->ParseNodeData(node, valueName, value);
-}
+	void visit(const ast::graph_definition &graphDef)
+	{
+		struct statement_visitor : boost::static_visitor<void>
+		{
+			statement_visitor(interpreter_visitor *v) : m_visitor(v) {}
+			void operator()(const ast::assignment &assignment) { m_visitor->visit(assignment); }
+			void operator()(const ast::node_links &links) { m_visitor->visit(links); }
+
+			interpreter_visitor *m_visitor;
+		};
+		statement_visitor v{this};
+
+		for (const auto &statement : graphDef.m_statements)
+		{
+			boost::apply_visitor(v, statement);
+		}
+	}
+
+	void visit(const ast::assignment &assignment)
+	{
+		m_symbolTable->AddSymbol({assignment.m_lhs.m_name, visit(assignment.m_rhs)});
+	}
+
+	void visit(const ast::node_links &node_links)
+	{
+		auto prevNode = boost::get<NodePtr>(visit(node_links[0]));
+		for (auto i = 1u; i < node_links.size(); ++i)
+		{
+			auto nextNode = boost::get<NodePtr>(visit(node_links[i]));
+			m_graph->CreateEdge(prevNode, nextNode);
+			prevNode = nextNode;
+		}
+	}
+
+	builtin_value visit(const ast::expression &expression)
+	{
+		struct expression_visitor : boost::static_visitor<builtin_value>
+		{
+			expression_visitor(interpreter_visitor *v) : m_visitor(v) {}
+
+			builtin_value operator()(const ast::literal &literal) { return m_visitor->visit(literal); }
+			builtin_value operator()(const ast::variable &variable) { return m_visitor->visit(variable); }
+			builtin_value operator()(const ast::binary_op &binary_op) { return m_visitor->visit(binary_op); }
+			builtin_value operator()(const ast::node_definition &node_definition)
+			{
+				return m_visitor->visit(node_definition);
+			}
+
+			interpreter_visitor *m_visitor;
+		};
+
+		expression_visitor v{this};
+		return boost::apply_visitor(v, expression);
+	}
+
+	builtin_value visit(const ast::literal &literal) { return literal; }
+
+	builtin_value visit(const ast::variable &variable)
+	{
+		try
+		{
+			return m_symbolTable->GetSymbol(variable.m_name).m_value;
+		}
+		catch (SymbolTable::SymbolNotFound s)
+		{
+			throw std::move(s);  // TODO:
+		}
+	}
+
+	builtin_value visit(const ast::binary_op &op)
+	{
+		auto lhs = visit(op.m_lhs);
+		auto rhs = visit(op.m_rhs);
+		switch (op.m_operation)
+		{
+			case '+':
+			{
+				binary_op_dispatcher<operations::add> v(lhs, rhs);
+				return boost::apply_visitor(v, lhs);
+			}
+			case '-':
+			{
+				binary_op_dispatcher<operations::sub> v(lhs, rhs);
+				return boost::apply_visitor(v, lhs);
+			}
+			case '*':
+			{
+				binary_op_dispatcher<operations::mul> v(lhs, rhs);
+				return boost::apply_visitor(v, lhs);
+			}
+			case '/':
+			{
+				binary_op_dispatcher<operations::div> v(lhs, rhs);
+				return boost::apply_visitor(v, lhs);
+			};
+		}
+		throw std::runtime_error("Unknown operation");
+	}
+
+	builtin_value visit(const ast::node_definition &node_definition)
+	{
+		auto callable = boost::get<CallablePtr>(m_symbolTable->GetSymbol(node_definition.m_nodeType).m_value);
+		auto constructionArgs = visit(node_definition.m_constructionArguments);
+		auto nodeParameters = visit(node_definition.m_nodeParameters);
+		auto node = boost::get<NodePtr>(callable->Call(constructionArgs));
+
+		auto context = std::make_shared<Context>(node_definition.m_nodeType);
+		node->SetParameterContext(context);
+
+		struct parameter_setter : public boost::static_visitor<void>
+		{
+			parameter_setter(std::shared_ptr<Context> c) : m_context(c) {}
+
+			void operator()(const float &v) { m_context->CreateParameter<float>(m_parameterName, v); }
+			void operator()(const std::string &) {}
+			void operator()(const NodePtr &) {}
+			void operator()(const CallablePtr &v) {}
+
+			std::shared_ptr<Context> m_context;
+			std::string m_parameterName;
+		};
+
+		parameter_setter v{context};
+		for (auto n : nodeParameters)
+		{
+			v.m_parameterName = n.first;
+			boost::apply_visitor(v, n.second);
+		}
+
+		m_graph->AddNode(node);
+
+		return node;
+	}
+
+	std::unordered_map<std::string, builtin_value> visit(const ast::named_arg_list &arg_list)
+	{
+		std::unordered_map<std::string, builtin_value> values;
+
+		for (const auto &arg : arg_list)
+		{
+			auto value = visit(arg.m_value);
+			auto inserted = values.insert(std::make_pair(arg.m_name, value));
+			if (!inserted.second)
+			{
+				throw std::runtime_error("Redefinition of named parameter");
+			}
+		}
+
+		return values;
+	}
+
+private:
+	std::shared_ptr<SymbolTable> m_symbolTable;
+	GraphPtr m_graph;
+};
+
+struct GraphReader::Impl
+{
+	Impl() : m_currentParseResult({ParseResult::Status::Ok, 0}) {}
+	GraphPtr Read(const std::string &str)
+	{
+		GraphPtr graph = std::make_shared<Graph>();
+		std::string::const_iterator begin = std::begin(str);
+		std::string::const_iterator end = std::end(str);
+
+		GraphReaderGrammar<std::string::const_iterator> grammar;
+		ast::graph_definition graph_def;
+
+		bool result = qi::phrase_parse(begin, end, grammar, qi::space, graph_def);
+
+		std::cout << "Result: " << result << std::endl;
+		std::cout << "Processed all: " << (begin == end) << std::endl;
+		std::cout << "Left to parse: " << std::endl;
+		std::cout << std::string(begin, end) << std::endl;
+
+		interpreter_visitor visitor{graph};
+		visitor.visit(graph_def);
+
+		return graph;
+	}
+	const ParseResult &GetParseResult() const { return m_currentParseResult; }
+
+private:
+	ParseResult m_currentParseResult;
+};
+
+GraphReader::GraphReader() : m_implementation(std::make_unique<GraphReader::Impl>()) {}
+GraphReader::~GraphReader() {}
+GraphPtr GraphReader::Read(const std::string &str) { return m_implementation->Read(str); }
+const ParseResult &GraphReader::GetParseResult() const { return m_implementation->GetParseResult(); }
 
 }  // namespace selector
