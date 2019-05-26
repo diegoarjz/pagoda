@@ -1,0 +1,11 @@
+@startditaa
++--------------+----------------------+
+|         | procedural graph          |
+|         +---------------------------+
+|math lib | procedural objects        |
+|   &     +---------------------------+
+|common   | geometry operations       |
+|         +---------------+-----------+
+|         | geometry core | parameter |
++---------+---------------+-----------+
+@endditaa
