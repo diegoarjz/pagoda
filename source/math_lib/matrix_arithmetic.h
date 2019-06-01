@@ -46,6 +46,8 @@ MatrixBase<NumCols, NumRows, Rep> operator-(const MatrixBase<NumCols, NumRows, R
 template<int Size, class Rep>
 MatrixBase<Size, Size, Rep> operator*(const MatrixBase<Size, Size, Rep> &lhs, const MatrixBase<Size, Size, Rep> &rhs)
 {
+	START_PROFILE;
+
 	MatrixBase<Size, Size, Rep> result;
 
 	for (uint32_t c = 0; c < Size; ++c)
@@ -92,6 +94,42 @@ MatrixBase<NumCols, NumRows, Rep> operator*(const MatrixBase<NumCols, NumRows, R
 		for (auto c = 0u; c < NumCols; ++c)
 		{
 			result.Value(c, r) = lhs.Value(c, r) * rhs;
+		}
+	}
+
+	return result;
+}
+
+template<int Size, class Rep>
+VecBase<Size, Rep> operator*(const VecBase<Size, Rep> &v, const MatrixBase<Size, Size, Rep> &m)
+{
+	START_PROFILE;
+
+	VecBase<Size, Rep> result;
+
+	for (auto c = 0u; c < Size; ++c)
+	{
+		for (auto r = 0u; r < Size; ++r)
+		{
+			result[c] += v[c] * m.Value(c, r);
+		}
+	}
+
+	return result;
+}
+
+template<int Size, class Rep>
+VecBase<Size, Rep> operator*(const MatrixBase<Size, Size, Rep> &m, const VecBase<Size, Rep> &v)
+{
+	START_PROFILE;
+
+	VecBase<Size, Rep> result;
+
+	for (auto r = 0u; r < Size; ++r)
+	{
+		for (auto c = 0u; c < Size; ++c)
+		{
+			result[r] += m.Value(c, r) * v[r];
 		}
 	}
 

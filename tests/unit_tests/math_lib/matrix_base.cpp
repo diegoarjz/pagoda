@@ -129,3 +129,33 @@ TEST(MatrixBase, when_multiplying_matrices_by_scalars_should_produce_correct_val
 	ASSERT_EQ(r.Col(0), Vec2F(6, 18));
 	ASSERT_EQ(r.Col(1), Vec2F(12, 24));
 }
+
+TEST(MatrixBase, when_left_multiplying_a_vector_with_a_matrix_should_produce_correct_values)
+{
+	MatrixBase<2, 2, float> m1;
+	VecBase<2, float> v(1, 1);
+
+	m1.Value(0, 0) = 1;
+	m1.Value(1, 0) = 2;
+	m1.Value(0, 1) = 3;
+	m1.Value(1, 1) = 4;
+
+	VecBase<2, float> r = v * m1;
+
+	ASSERT_EQ(r, Vec2F(4, 6));
+}
+
+TEST(MatrixBase, when_right_multiplying_a_vector_with_a_matrix_should_produce_correct_values)
+{
+	MatrixBase<2, 2, float> m1;
+	VecBase<2, float> v(1, 1);
+
+	m1.Value(0, 0) = 1;
+	m1.Value(1, 0) = 2;
+	m1.Value(0, 1) = 3;
+	m1.Value(1, 1) = 4;
+
+	VecBase<2, float> r = m1 * v;
+
+	ASSERT_EQ(r, Vec2F(3, 7));
+}
