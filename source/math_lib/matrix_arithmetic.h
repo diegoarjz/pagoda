@@ -20,6 +20,8 @@ MatrixBase<NumCols, NumRows, Rep> operator+(const MatrixBase<NumCols, NumRows, R
 			result.Value(c, r) = lhs.Value(c, r) + rhs.Value(c, r);
 		}
 	}
+
+	return result;
 }
 
 template<int NumCols, int NumRows, class Rep>
@@ -37,6 +39,27 @@ MatrixBase<NumCols, NumRows, Rep> operator-(const MatrixBase<NumCols, NumRows, R
 			result.Value(c, r) = lhs.Value(c, r) - rhs.Value(c, r);
 		}
 	}
+
+	return result;
+}
+
+template<int Size, class Rep>
+MatrixBase<Size, Size, Rep> operator*(const MatrixBase<Size, Size, Rep> &lhs, const MatrixBase<Size, Size, Rep> &rhs)
+{
+	MatrixBase<Size, Size, Rep> result;
+
+	for (uint32_t c = 0; c < Size; ++c)
+	{
+		for (uint32_t r = 0; r < Size; ++r)
+		{
+			for (uint32_t i = 0; i < Size; ++i)
+			{
+				result.Value(c, r) += lhs.Value(i, r) * rhs.Value(c, i);
+			}
+		}
+	}
+
+	return result;
 }
 
 template<int NumCols, int NumRows, class Rep>
@@ -53,6 +76,8 @@ MatrixBase<NumCols, NumRows, Rep> operator*(const Rep &lhs, const MatrixBase<Num
 			result.Value(c, r) = lhs * rhs.Value(c, r);
 		}
 	}
+
+	return result;
 }
 
 template<int NumCols, int NumRows, class Rep>
@@ -69,6 +94,8 @@ MatrixBase<NumCols, NumRows, Rep> operator*(const MatrixBase<NumCols, NumRows, R
 			result.Value(c, r) = lhs.Value(c, r) * rhs;
 		}
 	}
+
+	return result;
 }
 
 }  // namespace selector

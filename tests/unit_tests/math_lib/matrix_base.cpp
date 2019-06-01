@@ -51,3 +51,81 @@ TEST(MatrixBase, when_using_setters_should_update_values_accordingly)
 	ASSERT_EQ(matrix.Row(0), Vec2F(1, 2));
 	ASSERT_EQ(matrix.Row(1), Vec2F(3, 4));
 }
+
+TEST(MatrixBase, when_adding_two_matrices_should_produce_correct_values)
+{
+	MatrixBase<2, 2, float> m1;
+	MatrixBase<2, 2, float> m2;
+
+	m1.Value(0, 0) = 1;
+	m1.Value(1, 0) = 2;
+	m1.Value(0, 1) = 3;
+	m1.Value(1, 1) = 4;
+
+	m2.Value(0, 0) = 1;
+	m2.Value(1, 0) = 2;
+	m2.Value(0, 1) = 3;
+	m2.Value(1, 1) = 4;
+
+	auto r = m1 + m2;
+
+	ASSERT_EQ(r.Col(0), Vec2F(2, 6));
+	ASSERT_EQ(r.Col(1), Vec2F(4, 8));
+}
+
+TEST(MatrixBase, when_subtracting_two_matrices_should_produce_correct_values)
+{
+	MatrixBase<2, 2, float> m1;
+	MatrixBase<2, 2, float> m2;
+
+	m1.Value(0, 0) = 1;
+	m1.Value(1, 0) = 2;
+	m1.Value(0, 1) = 3;
+	m1.Value(1, 1) = 4;
+
+	m2.Value(0, 0) = 1;
+	m2.Value(1, 0) = 2;
+	m2.Value(0, 1) = 3;
+	m2.Value(1, 1) = 4;
+
+	auto r = m1 - m2;
+
+	ASSERT_EQ(r.Col(0), Vec2F(0, 0));
+	ASSERT_EQ(r.Col(1), Vec2F(0, 0));
+}
+
+TEST(MatrixBase, when_multiplying_to_matrices_should_produce_correct_values)
+{
+	MatrixBase<2, 2, float> m1;
+	MatrixBase<2, 2, float> m2;
+
+	m1.Value(0, 0) = 1;
+	m1.Value(1, 0) = 2;
+	m1.Value(0, 1) = 3;
+	m1.Value(1, 1) = 4;
+
+	m2.Value(0, 0) = 4;
+	m2.Value(1, 0) = 3;
+	m2.Value(0, 1) = 2;
+	m2.Value(1, 1) = 1;
+
+	auto r = m1 * m2;
+
+	ASSERT_EQ(r.Col(0), Vec2F(8, 20));
+	ASSERT_EQ(r.Col(1), Vec2F(5, 13));
+}
+
+TEST(MatrixBase, when_multiplying_matrices_by_scalars_should_produce_correct_values)
+{
+	MatrixBase<2, 2, float> m1;
+
+	m1.Value(0, 0) = 1;
+	m1.Value(1, 0) = 2;
+	m1.Value(0, 1) = 3;
+	m1.Value(1, 1) = 4;
+
+	auto r = 2.0f * m1 * 3.0f;
+
+	ASSERT_EQ(r.Col(0), Vec2F(6, 18));
+	ASSERT_EQ(r.Col(1), Vec2F(12, 24));
+}

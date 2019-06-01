@@ -79,9 +79,28 @@ public:
 		return m_elems[col + row * NumCols];
 	}
 
+	const Rep &Value(const size_t &col, const size_t &row) const
+	{
+		START_PROFILE;
+		CRITICAL_ASSERT(col < NumCols);
+		CRITICAL_ASSERT(row < NumRows);
+
+		return m_elems[col + row * NumCols];
+	}
+
 private:
 	Rep m_elems[NumCols * NumRows];
 };  // class MatrixBase
+
+template<int NumCols, int NumRows, class Rep>
+std::ostream &operator<<(std::ostream &o, const MatrixBase<NumCols, NumRows, Rep> &mat)
+{
+	for (auto r = 0u; r < NumRows; ++r)
+	{
+		o << mat.Row(r) << std::endl;
+	}
+	return o;
+}
 
 // Common matrix types
 using Mat2x2F = MatrixBase<2, 2, float>;
