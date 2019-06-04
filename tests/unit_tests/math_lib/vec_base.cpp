@@ -151,3 +151,17 @@ TEST(VecOperations, when_using_cross_product_should_return_the_cross_product_of_
 	EXPECT_EQ(cross_product(Y, Z), X);
 	EXPECT_EQ(cross_product(Z, X), Y);
 }
+
+TEST(VecOperations, when_using_dot_product_should_return_the_dot_product_of_the_two_vectors)
+{
+	VecBase<3, float> v1(1, 2, 3);
+	VecBase<3, float> v2(4, 5, 6);
+	EXPECT_EQ(dot_product(v1, v2), 32);
+}
+
+TEST(VecOperations, when_calculating_the_dot_product_of_orthogonal_vectors_should_return_0)
+{
+	VecBase<3, float> v1(1,0,0);
+	VecBase<3, float> v2(0,2,0);
+	EXPECT_EQ(dot_product(v1, v2), 0.0f);
+}
