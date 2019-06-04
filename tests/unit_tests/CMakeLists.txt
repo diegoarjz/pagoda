@@ -6,6 +6,7 @@ set(test_srcs
     "common/const_str.cpp"
     "math_lib/vec_base.cpp"
     "math_lib/matrix_base.cpp"
+    "math_lib/line_3.cpp"
     "geometry_core/geometry.cpp"
     "geometry_core/geometry_builder.cpp"
     "geometry_core/geometry_exporter.cpp"
