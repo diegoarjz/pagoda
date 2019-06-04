@@ -33,3 +33,10 @@ TEST(LineSegment3D, when_comparing_two_different_line_segments_should_return_not
     ASSERT_EQ(l1 == l2, false);
     ASSERT_EQ(l1 != l2, true);
 }
+
+TEST(LineSegment3D, when_computing_the_lenght_of_a_line_segment_should_return_the_correct_value)
+{
+    LineSegment3D<float> l(Vec3F(0,0,0), Vec3F(1,1,1));
+    ASSERT_EQ(squared_length(l), 3.0f);
+    ASSERT_EQ(length(l), std::sqrt(3.0f));
+}
