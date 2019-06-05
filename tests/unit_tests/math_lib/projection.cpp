@@ -1,0 +1,47 @@
+#include <math_lib/projection.h>
+
+#include <gtest/gtest.h>
+
+using namespace selector;
+
+TEST(ProjectionTest, when_projecting_a_point_to_a_line_should_return_the_correct_point)
+{
+    VecBase<3, float> p(1,1,1);
+    Line3D<float> l(VecBase<3, float>(0,0,0), VecBase<3, float>(0,1,0));
+    ASSERT_EQ(projection(p, l), VecBase<3, float>(0,1,0));
+}
+
+TEST(ProjectionTest, when_projecting_a_point_to_a_line_segment_inside_the_endpoints_should_return_the_projected_point)
+{
+    LineSegment3D<float> ls(Vec3F(0,1,0), Vec3F(1,1,0));
+    Vec3F p(0.5,0,0);
+    ASSERT_EQ(projection(p, ls), Vec3F(0.5,1,0));   
+}
+
+TEST(ProjectionTest, when_projecting_a_point_to_a_line_segment_before_the_source_point_should_return_the_source_point)
+{
+    LineSegment3D<float> ls(Vec3F(0,1,0), Vec3F(1,1,0));
+    Vec3F p(-1,0,0);
+    ASSERT_EQ(projection(p, ls), Vec3F(0,1,0));
+}
+
+TEST(ProjectionTest, when_projecting_a_point_to_a_line_segment_after_the_target_point_should_return_the_target_point)
+{
+    LineSegment3D<float> ls(Vec3F(0,1,0), Vec3F(1,1,0));
+    Vec3F p(2,0,0);
+    ASSERT_EQ(projection(p, ls), Vec3F(1,1,0));
+}
+
+TEST(ProjectionTest, when_projecting_a_line_segment_to_a_line_should_return_a_line_segment_with_the_projected_points)
+{
+    LineSegment3D<float> ls(Vec3F(0,1,0), Vec3F(1,1,0));
+    Line3D<float> l(Vec3F(0,0,0), Vec3F(1,0,0));
+    ASSERT_EQ(projection(ls, l), LineSegment3D<float>(Vec3F(0,0,0), Vec3F(1,0,0));
+}
+
+TEST(ProjectionTest, when_projecting_a_line_segment_that_is_orthogonal_to_a_line_should_return_a_degenerated_line_segment)
+{
+    LineSegment3D<float> ls(Vec3F(0,0,0), Vec3F(0,1,0));
+    Line3D<float> l(Vec3F(0,0,0), Vec3F(1,0,0));
+    ASSERT_EQ(projection(ls, l), LineSegment3D<float>(Vec3F(0,0,0), Vec3F(0,0,0));
+}
