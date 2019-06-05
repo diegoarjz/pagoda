@@ -1,8 +1,6 @@
 #ifndef SELETOR_MATH_LIB_NORMALIZE_H_
 #define SELETOR_MATH_LIB_NORMALIZE_H_
 
-#include <iomanip>
-
 namespace selector
 {
 /**
