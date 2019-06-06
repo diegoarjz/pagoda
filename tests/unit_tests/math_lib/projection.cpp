@@ -45,3 +45,10 @@ TEST(ProjectionTest, when_projecting_a_line_segment_that_is_orthogonal_to_a_line
     Line3D<float> l(Vec3F(0,0,0), Vec3F(1,0,0));
     ASSERT_EQ(projection(ls, l), LineSegment3D<float>(Vec3F(0,0,0), Vec3F(0,0,0));
 }
+
+TEST(ProjectionTest, when_projecting_a_point_onto_a_plane_should_return_the_projected_point)
+{
+    Plane<float> plane(Vec3F(0,0,1), 10);
+    Vec3F p(1,3,0);
+    EXPECT_EQ(projection(p, plane), Vec3F(1,3,10));
+}

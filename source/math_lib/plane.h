@@ -17,6 +17,7 @@ public:
 	 * Constructs the xy-plane;
 	 */
 	Plane() : m_normal(0, 0, 1), m_distance(0) {}
+	
 	/**
 	 * Constructs a plane with the \p normal and \p distance.
 	 */
@@ -25,7 +26,12 @@ public:
 	/**
 	 * Static constructor with a point and a normal.
 	 */
-	static Plane FromPointAndNormal(const PointType &p, const VectorType &n) { return Plane(normalized(n), length(p)); }
+	static Plane FromPointAndNormal(const PointType &p, const VectorType &n)
+	{
+		auto normal = normalized(n);
+		auto distanceToOrigin = dot_product(normal, p);
+		return Plane(normal, distanceToOrigin);
+	}
 
 	/**
 	 * Static constructor from three points.
@@ -34,7 +40,9 @@ public:
 	 */
 	static Plane FromPoints(const PointType &p, const PointType &p1, const PointType &p2)
 	{
-		return Plane(normalized(cross_product(p1 - p, p2 - p)), length(p));
+		auto normal = normalized(cross_product(p1 - p, p2 - p));
+		auto distanceToOrigin = dot_product(normal, p);
+		return Plane(normal, distanceToOrigin);
 	}
 
 	/**
@@ -43,13 +51,27 @@ public:
 	 */
 	static Plane FromPointVectors(const PointType &p, const VectorType &v1, const VectorType &v2)
 	{
-		return Plane(normalized(cross_product(v1, v2)), length(p));
+		auto normal = normalized(cross_product(v1, v2));
+		auto distanceToOrigin = dot_product(normal, p); 
+		return Plane(normal, distanceToOrigin);
 	}
 
 	/**
 	 * Returns the plane normal.
 	 */
 	const VectorType &GetNormal() const { return m_normal; }
+	
+	/**
+	 * Returns a vector orthogonal to the normal.
+	 * The returned vector may not be normalized.
+	 */
+	VectorType GetVector() const { return orthogonal(m_normal); }
+	 
+	 /**
+	  * Returns a vector that is orthogonal to the one return by GetNormal() and GetVector().
+	  * The returned vector may not be normalized.
+	  */
+	 VectorType GetVector2() const { return cross_product(GetVector(), GetNormal()); }
 
 	/**
 	 * Returns the distance between the plane and the origin.
@@ -59,7 +81,12 @@ public:
 	/**
 	 * Returns a point in the plane.
 	 */
-	PointType Point() const { return m_distance * m_normal; }
+	PointType GetPoint() const { return m_distance * m_normal; }
+	
+	/**
+	 * Returns a second point in the Plane.
+	 */
+	PointType GetPoint2() const { return Point() + GetVector(); }
 
 private:
 	VectorType m_normal;  ///< Plane Normal

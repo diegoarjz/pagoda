@@ -42,6 +42,17 @@ LineSegment3D<Rep> projection(const LineSegment3D<Rep> &ls, const Line3D<Rep> &l
 {
  return LineSegment3D<Rep>(projection(ls.GetSourcePoint(), l), projection(ls.GetTargetPoint(), l));
 }
+
+/**
+ * Calculates the projection of a point \p p onto the plane \p plane.
+ */
+ template<class Rep>
+ VecBase<3, Rep> projection(const VecBase<3, Rep> &p, const Plane<Rep> &plane)
+ {
+  auto planeNormal = p.GetNormal();
+  auto dot = dot_product(plane.Point() - p, planeNormal);
+  return p + dot * planeNormal;
+ }
 }
 
 #endif
