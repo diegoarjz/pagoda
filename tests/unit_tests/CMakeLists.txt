@@ -9,6 +9,7 @@ set(test_srcs
     "math_lib/line_3.cpp"
     "math_lib/line_segment_3d.cpp"
     "math_lib/projection.cpp"
+    "math_lib/orthogonal.cpp"
     "geometry_core/geometry.cpp"
     "geometry_core/geometry_builder.cpp"
     "geometry_core/geometry_exporter.cpp"
