@@ -44,6 +44,24 @@ Parameter Context::GetParameter(const std::string &parameter_name)
 	}
 }
 
+void Context::SetParameter(const std::string &parameterName, const Parameter &parameter)
+{
+	m_parameters[parameterName] = parameter;
+}
+
+std::unordered_set<std::string> Context::GetParameterNameList() const
+{
+	std::unordered_set parameterNames;
+	std::transform(std::begin(m_parameters), std::end(m_parameters), std::inserter(parameterNames),
+		[] (std::pair<std::string, Parameter> &p) { return p.first; });
+	return parameterNames;
+}
+
+std::unordered_map<std::string, Parameter> Context::GetParameters()
+{
+	return m_parameters;
+}
+
 std::shared_ptr<Context> Context::GetSubContext(const std::string &context_name)
 {
 	// TODO: unit test this function
