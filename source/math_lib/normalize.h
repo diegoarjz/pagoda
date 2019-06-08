@@ -1,6 +1,8 @@
 #ifndef SELETOR_MATH_LIB_NORMALIZE_H_
 #define SELETOR_MATH_LIB_NORMALIZE_H_
 
+#include "length.h"
+
 namespace selector
 {
 /**

@@ -6,6 +6,9 @@
 #include <common/profiler.h>
 #include <math_lib/vec_base.h>
 
+#include <math_lib/cross_product.h>
+#include <math_lib/normalize.h>
+
 #include <cstdint>
 
 #include "indexed_container.h"
