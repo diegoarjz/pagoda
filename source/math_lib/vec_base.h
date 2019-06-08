@@ -146,9 +146,6 @@ using Vec4D = VecBase<4, double>;
 
 }  // namespace selector
 
-#include "cross_product.h"
-#include "length.h"
-#include "normalize.h"
 #include "vec_arithmetic.h"
 
 #endif
