@@ -108,6 +108,7 @@ set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
     "procedural_graph/input_interface_node.cpp"
     "procedural_graph/output_interface_node.cpp"
     "procedural_graph/operation_node.cpp"
+    "procedural_graph/parameter_node.cpp"
     )
 
 set(SELECTOR_PUBLIC_HEADERS
