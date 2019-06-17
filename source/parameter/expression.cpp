@@ -10,6 +10,7 @@
 #include <value/value_visitor.h>
 
 #include "common/profiler.h"
+#include "parameter_exception.h"
 
 using namespace sscript;
 
@@ -159,7 +160,7 @@ struct to_float : public ValueVisitor<float>
 	template<typename V>
 	float operator()(V&)
 	{
-		throw std::runtime_error("Unable to evaluate expression to float.");
+		throw ParameterException("Unable to evaluate expression to float.");
 	}
 };
 
@@ -170,7 +171,7 @@ struct to_string : public ValueVisitor<std::string>
 	template<typename V>
 	std::string operator()(V&)
 	{
-		throw std::runtime_error("Unable to evaluate expression to string.");
+		throw ParameterException("Unable to evaluate expression to string.");
 	}
 };
 
@@ -226,3 +227,4 @@ float Expression::GetAsFloat() const { return m_implementation->GetAsFloat(); }
 std::string Expression::GetAsString() const { return m_implementation->GetAsString(); }
 
 }  // namespace selector
+	

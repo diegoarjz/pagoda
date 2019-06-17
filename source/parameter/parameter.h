@@ -2,13 +2,45 @@
 #define SELECTOR_PARAMETER_PARAMETER_H_
 
 #include "expression.h"
+#include "parameter_exception.h"
 
 #include <string>
 #include <variant>
 
 namespace selector
 {
-using Parameter = std::variant<float, std::string>;
+using Parameter = std::variant<float, std::string, Expression>;
+
+template<typename T>
+struct parameter_getter : public std::static_visitor<T>
+{
+     T operator()(const T& p) { return p; }
+     
+     T operator()(const Expression &e);can get out of Expression.
+     
+     template<typename V>
+     T operator()(const V& v) { throw ParameterException("Cannot convert parameter"); }
+};
+
+template<>
+float parameter_getter<float>::operator()(const Expression &e);
+
+template<>
+std::string parameter_getter<std::string>::operator()(const Expression &e);
+
+/**
+ * Returns the underlying value for a \c Parameter.
+ * If the \c Parameter is an \c Expression, then it is evaluated and cast to the underlying type.
+ * Note: This should always be used to grab the underlying value of a \c Parameter as the \c Parameter implementation
+ * is more than likely to be modified. This amortizes the API changes.
+ */
+template<class T>
+T get_parameter_as(Parameter &p)
+{
+    parameter_getter getter;
+    return std::apply_visitor(getter, p);
+};
+
 }  // namespace selector
 
 #endif
