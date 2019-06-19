@@ -1,0 +1,93 @@
+#ifndef SELECTOR_PROCEDURAL_GRAPH_GRAPH_DEFINITION_NODE_H_
+#define SELECTOR_PROCEDURAL_GRAPH_GRAPH_DEFINITION_NODE_H_
+
+#include "ast_node.h"
+
+#include <vector>
+
+namespace selector
+{
+class GraphStatementNode;
+using GraphStatementNodePtr = std::shared_ptr<GraphStatementNode>;
+
+class NodeDefinitionNode;
+using NodeDefinitionNodePtr = std::shared_ptr<NodeDefinitionNode>;
+
+class NodeLinkNode;
+using NodeLinkNodePtr = std::shared_ptr<NodeLinkNode>;
+
+/**
+ * Represents an entire graph definition in the graph format.
+ */
+class GraphDefinitionNode : public AstNode
+{
+public:
+	/// Type used to store \c GraphStatementNode.
+    using StatementContainer_t = std::vector<GraphStatementNodePtr>;
+    /// Type used to iterate over \c StatementContainer_t
+    using StatementIterator_t = StatementContainer_t::iterator;
+    
+    /**
+     * Default constructor.
+     */
+    GraphDefinitionNode();
+    /**
+     * Constructs a \c GraphDefinitionNode with the given \p startOffset and \p endOffset.
+     */
+    GraphDefinitionNode(const Offset_t &startOffset, const Offset_t &endOffset);
+    /**
+     * Constructs a \c GraphDefinitionNode with the given \p range.
+     */
+    GraphDefinitionNode(const Range_t &range);
+    
+    virtual ~GraphDefinitionNode();
+    
+    /**
+     * Creates and adds a \c NodeDefinitionNode with the given arguments.
+     * \p args must match one of the constructors in \c NodeDefinitionNode.
+     */
+    template<typename Args...>
+    NodeDefinitionNodePtr CreateNodeDefinitionNode(Args args...)
+    {
+    	auto node = std::make_shared<NodeDefinitionNode>(args...);
+    	AddGraphStatementNode(node);
+    	return node;
+    }
+    
+    /**
+     * Creates and adds a \c NodeLinkNode with the given arguments.
+     * \p args should match one of the constructors in \c NodeLinkNode.
+     */
+    template<typename Args...>
+    NodeLinkNodePtr CreateNodeLinkNode(Args args...)
+    {
+    	auto node = std::make_shared<NodeLinkNode>(args...);
+    	AddGraphStatementNode(node);
+    	return node;
+    }
+    
+    /**
+     * Adds a \c GraphStatementNode to this \c GraphDefinitionNode.
+     */
+    void AddGraphStatementNode(const GraphStatementNodePtr &n);
+    
+    /**
+     * Sets the graph statements.
+     */
+    void SetGraphStatementNodes(const std::vector<GraphStatementNodePtr> &statements);
+    
+    /**
+     * Gets an iterator to the beginning of the graph statements.
+     */
+    StatementIterator_t& begin();
+    /**
+     * Gets an iterator to the end of the graph statements.
+     */
+    StatementIterator_t& end();
+private:
+	/// The graph statements.
+    std::vector<GraphStatementNodePtr> m_graphStatements;
+};
+}
+
+#endif

@@ -145,13 +145,25 @@ struct GraphReaderGrammar : boost::spirit::qi::grammar<Iterator, ast::graph_defi
 		named_arg = (identifier >> ':' >> expression)[_val = construct<ast::named_arg>(qi::_1, qi::_2)];
 		named_arg_list %= -(named_arg % ',');
 
+		/*
+		 * node_definition -> identifier "=" identifier "(" construction_args ")" ("{" execution_args "}")?
+		 */
 		node_definition %= identifier >> '(' >> named_arg_list >> ')' >> -('{' >> named_arg_list >> '}');
-
+		
+		/*
+		 * node_links -> identifier "->" identifier ("->" identifier)*
+		 */
 		node_links = variable[push_back(_val, qi::_1)] >> "->" >> variable[push_back(_val, qi::_1)] >>
 		             *("->" >> variable[push_back(_val, qi::_1)]) >> ';';
 
+		/*
+		 * statement -> node_definition | node_links
+		 */
 		statement %= assignment | node_links;
 
+		/*
+		 * graph_definition -> statement*
+		 */
 		graph_definition = *(statement[push_back(at_c<0>(_val), qi::_1)]);
 	}
 
