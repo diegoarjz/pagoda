@@ -4,6 +4,8 @@ namespace selector
 {
 Context::Context(const std::string &name) : m_contextName(name) {}
 
+Context::~Context() {}
+
 bool Context::SetParent(std::shared_ptr<Context> new_parent)
 {
 	// Validate that the new_parent doesn't already have a context with
@@ -51,16 +53,14 @@ void Context::SetParameter(const std::string &parameterName, const Parameter &pa
 
 std::unordered_set<std::string> Context::GetParameterNameList() const
 {
-	std::unordered_set parameterNames;
-	std::transform(std::begin(m_parameters), std::end(m_parameters), std::inserter(parameterNames),
-		[] (std::pair<std::string, Parameter> &p) { return p.first; });
+	std::unordered_set<std::string> parameterNames;
+	std::transform(std::begin(m_parameters), std::end(m_parameters),
+	               std::inserter(parameterNames, std::end(parameterNames)),
+	               [](const std::pair<std::string, Parameter> &p) { return p.first; });
 	return parameterNames;
 }
 
-std::unordered_map<std::string, Parameter> Context::GetParameters()
-{
-	return m_parameters;
-}
+std::unordered_map<std::string, Parameter> Context::GetParameters() const { return m_parameters; }
 
 std::shared_ptr<Context> Context::GetSubContext(const std::string &context_name)
 {
