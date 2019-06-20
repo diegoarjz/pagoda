@@ -3,6 +3,9 @@
 
 #include "parameter.h"
 
+#include <unordered_map>
+#include <unordered_set>
+
 namespace selector
 {
 /**
@@ -13,24 +16,24 @@ namespace selector
 class IParameterizable
 {
 public:
-    /**
-     * Returns a \c Parameter based on its \p parameterName.
-     */
-    virtual Parameter GetParameter(const std::string &parameterName) = 0;
-    /**
-     * Sets the \c Parameter with \p parameterName to the value given by \p parameter.
-     */
-    virtual void SetParameter(const std::string &parameterName, const Parameter &parameter) = 0;
-    /**
-     * Returns the list of names of all exposed \c Parameter.
-     */
-    virtual std::unordered_set<std::string> GetParameterNameList() const = 0;
-    /**
-     * Returns all exposed \c Parameter.
-     */
-    virtual std::unordered_map<std::string, Parameter> GetParameters() const = 0;
-    
-    /**
+	/**
+	 * Returns a \c Parameter based on its \p parameterName.
+	 */
+	virtual Parameter GetParameter(const std::string &parameterName) = 0;
+	/**
+	 * Sets the \c Parameter with \p parameterName to the value given by \p parameter.
+	 */
+	virtual void SetParameter(const std::string &parameterName, const Parameter &parameter) = 0;
+	/**
+	 * Returns the list of names of all exposed \c Parameter.
+	 */
+	virtual std::unordered_set<std::string> GetParameterNameList() const = 0;
+	/**
+	 * Returns all exposed \c Parameter.
+	 */
+	virtual std::unordered_map<std::string, Parameter> GetParameters() const = 0;
+
+	/**
 	 * Utility method to retrieve and cast a parameter to the intended type.
 	 */
 	template<class T>
@@ -39,6 +42,6 @@ public:
 		return std::get<T>(GetParameter(parameter_name));
 	}
 };
-}
+}  // namespace selector
 
 #endif
