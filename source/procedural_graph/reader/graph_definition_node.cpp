@@ -16,8 +16,23 @@ GraphDefinitionNode::GraphDefinitionNode(const Range_t &range)
 {
 }
 
+GraphDefinitionNode::GraphDefinitionNode(const StatementContainer_t &statements)
+	: m_graphStatements(statements)
+{
+}
+
 GraphDefinitionNode::~GraphDefinitionNode()
 {
+}
+
+const StatementContainer_t& GraphDefinitionNode::GetGraphStatementNodes() const
+{
+	return m_graphStatements;
+}
+
+StatementContainer_t& GraphDefinitionNode::GetGraphStatements()
+{
+	return m_graphStatements;
 }
 
 void GraphDefinitionNode::AddGraphStatementNode(const GraphStatementNodePtr &n)

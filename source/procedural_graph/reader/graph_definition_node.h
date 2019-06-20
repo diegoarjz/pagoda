@@ -39,6 +39,10 @@ public:
      * Constructs a \c GraphDefinitionNode with the given \p range.
      */
     GraphDefinitionNode(const Range_t &range);
+    /**
+     * Constructs a \c GraphDefinitionNode with the given \p statements.
+     */
+    GraphDefinitionNode(const StatementContainer_t &statements);
     
     virtual ~GraphDefinitionNode();
     
@@ -66,6 +70,14 @@ public:
     	return node;
     }
     
+    /**
+     * Returns the graph statements.
+     */
+    const StatementContainer_t& GetGraphStatementNodes() const;
+    /**
+     * Returns the graph statements.
+     */
+     StatementContainer_t& GetGraphStatements();
     /**
      * Adds a \c GraphStatementNode to this \c GraphDefinitionNode.
      */
