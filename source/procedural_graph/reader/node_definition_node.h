@@ -20,19 +20,19 @@ public:
     using ExecutionArgumentContainer_t = std::vector<NamedArgumentPtr>;
 
 	/**
-	 * Constructs a \c NodeDefinitionNode with the \p name and \p args.
+	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args.
 	 */
-	NodeDefinitionNode(const std::string &name, const ConstructionArgumentContainer_t &args);
+	NodeDefinitionNode(const std::string &name, const std::string &nodeType, const ConstructionArgumentContainer_t &args);
 	
 	/**
-	 * Constructs a \c NodeDefinitionNode with the \p name and \p args, passing \p startOffset and \p endOffset to the respective \c AstNode constructor.
+	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args, passing \p startOffset and \p endOffset to the respective \c AstNode constructor.
 	 */
-	NodeDefinitionNode(const NodeOffset_t &startOffset, const NodeOffset_t &endOffset, const std::string &name, const ConstructionArgumentContainer_t &args);
+	NodeDefinitionNode(const NodeOffset_t &startOffset, const NodeOffset_t &endOffset, const std::string &name, const std::string &nodeType, const ConstructionArgumentContainer_t &args);
 	
 	/**
-	 * Constructs a \c NodeDefinitionNode with the \p name and \p args, passing \p nodeRange to the respective \c AstNode constructor.
+	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args, passing \p nodeRange to the respective \c AstNode constructor.
 	 */
-	NodeDefinitionNode(const NodeRange_t &nodeRange, const std::string &name, const ConstructionArgumentContainer_t &args);
+	NodeDefinitionNode(const NodeRange_t &nodeRange, const std::string &name, const std::string &nodeType, const ConstructionArgumentContainer_t &args);
     
     virtual ~NodeDefinitionNode();
     
@@ -105,6 +105,7 @@ public:
     
 private:
     std::string m_nodeName;										///< The graph's \c Node name.
+    std::string m_nodeType;										///< The type of node to create.
     ConstructionArgumentContainer_t m_constructionArguments;		///< The construction arguments.
     ExecutionArgumentContainer_t m_executionArguments;			///< The execution arguments.
 };

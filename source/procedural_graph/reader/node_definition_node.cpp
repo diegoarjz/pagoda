@@ -2,22 +2,25 @@
 
 namespace selector
 {
-NodeDefinitionNode::NodeDefinitionNode(const std::string &name, const ConstructionArgumentContainer_t &args)
+NodeDefinitionNode::NodeDefinitionNode(const std::string &name, const std::string &nodeType, const ConstructionArgumentContainer_t &args)
 	: m_nodeName(name),
+	  m_nodeType(nodeType),
 	  m_constructionArguments(args)
 {
 }
 
-NodeDefinitionNode::NodeDefinitionNode(const NodeOffset_t &startOffset, const NodeOffset_t &endOffset, const std::string &name, const ConstructionArgumentContainer_t &args)
+NodeDefinitionNode::NodeDefinitionNode(const NodeOffset_t &startOffset, const NodeOffset_t &endOffset, const std::string &name, const std::string &nodeType, const ConstructionArgumentContainer_t &args)
 	: AstNode(startOffset, endOffset),
 	  m_nodeName(name),
+	  m_nodeType(nodeType),
 	  m_constructionArguments(args)
 {
 }
 
-NodeDefinitionNode::NodeDefinitionNode(const NodeRange_t &nodeRange, const std::string &name, const ConstructionArgumentContainer_t &args)
+NodeDefinitionNode::NodeDefinitionNode(const NodeRange_t &nodeRange, const std::string &name, const std::string &nodeType, const ConstructionArgumentContainer_t &args)
 	: AstNode(nodeRange),
 	  m_nodeName(name),
+	  m_nodeType(nodeType),
 	  m_constructionArguments(args)
 {
 }
