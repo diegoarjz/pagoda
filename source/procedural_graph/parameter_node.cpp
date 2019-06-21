@@ -1,25 +1,27 @@
 #include "parameter_node.h"
 
+#include "common/assertions.h"
+
 namespace selector
 {
-const char *name = "ParameterNode";
+const char *ParameterNode::name = "ParameterNode";
 
 ParameterNode::ParameterNode() {}
 
-ParameterNode~ParameterNode() {}
+ParameterNode::~ParameterNode() {}
 
-void ParameterNodeExecute(GraphExecutionContextPtr graph, const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
+void ParameterNode::Execute(GraphExecutionContextPtr ctx, const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
 {
-    START_PROFILE;
-    
-    auto parameterContext = GetParameterContext();
-    for (const auto& parameter : parameterContext->GetParameters())
-    {
-        for (const auto& outNode : outNodes)
-        {
-            DBG_ASSERT_MSG(outNode->GetParameterContext() != nullptr, "Out node doesn't have a ParameterContext set.");
-            outNode->GetParameterContext()->SetParameter(parameter.first, parameter.second);
-        }
-    }
+	START_PROFILE;
+
+	auto parameterContext = GetParameterContext();
+	for (const auto &parameter : parameterContext->GetParameters())
+	{
+		for (const auto &outNode : outNodes)
+		{
+			DBG_ASSERT_MSG(outNode->GetParameterContext() != nullptr, "Out node doesn't have a ParameterContext set.");
+			outNode->GetParameterContext()->SetParameter(parameter.first, parameter.second);
+		}
+	}
 }
-}
+}  // namespace selector

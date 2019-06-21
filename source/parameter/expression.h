@@ -19,6 +19,8 @@ public:
 	 */
 	static std::shared_ptr<Expression> CreateExpression(const std::string& expressionString);
 
+	Expression();
+
 	/**
 	 * Returns all variables present in the expression.
 	 */
@@ -34,8 +36,6 @@ public:
 	std::string GetAsString() const;
 
 private:
-	Expression();
-	
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
 };
