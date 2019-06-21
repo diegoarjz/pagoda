@@ -227,4 +227,4 @@ float Expression::GetAsFloat() const { return m_implementation->GetAsFloat(); }
 std::string Expression::GetAsString() const { return m_implementation->GetAsString(); }
 
 }  // namespace selector
-	
+

@@ -57,6 +57,7 @@ set(SELECTOR_PARAMETER_SOURCES
     "parameter/parameter.cpp"
     "parameter/context.cpp"
     "parameter/expression.cpp"
+    "parameter/parameter_exception.cpp"
     )
 
 set(SELECTOR_PARAMETER_PUBLIC_HEADERS
