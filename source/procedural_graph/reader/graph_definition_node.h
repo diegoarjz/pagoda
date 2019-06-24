@@ -23,83 +23,84 @@ class GraphDefinitionNode : public AstNode
 {
 public:
 	/// Type used to store \c GraphStatementNode.
-    using StatementContainer_t = std::vector<GraphStatementNodePtr>;
-    /// Type used to iterate over \c StatementContainer_t
-    using StatementIterator_t = StatementContainer_t::iterator;
-    
-    /**
-     * Default constructor.
-     */
-    GraphDefinitionNode();
-    /**
-     * Constructs a \c GraphDefinitionNode with the given \p startOffset and \p endOffset.
-     */
-    GraphDefinitionNode(const Offset_t &startOffset, const Offset_t &endOffset);
-    /**
-     * Constructs a \c GraphDefinitionNode with the given \p range.
-     */
-    GraphDefinitionNode(const Range_t &range);
-    /**
-     * Constructs a \c GraphDefinitionNode with the given \p statements.
-     */
-    GraphDefinitionNode(const StatementContainer_t &statements);
-    
-    virtual ~GraphDefinitionNode();
-    
-    /**
-     * Creates and adds a \c NodeDefinitionNode with the given arguments.
-     * \p args must match one of the constructors in \c NodeDefinitionNode.
-     */
-    template<typename Args...>
-    NodeDefinitionNodePtr CreateNodeDefinitionNode(Args args...)
-    {
-    	auto node = std::make_shared<NodeDefinitionNode>(args...);
-    	AddGraphStatementNode(node);
-    	return node;
-    }
-    
-    /**
-     * Creates and adds a \c NodeLinkNode with the given arguments.
-     * \p args should match one of the constructors in \c NodeLinkNode.
-     */
-    template<typename Args...>
-    NodeLinkNodePtr CreateNodeLinkNode(Args args...)
-    {
-    	auto node = std::make_shared<NodeLinkNode>(args...);
-    	AddGraphStatementNode(node);
-    	return node;
-    }
-    
-    /**
-     * Returns the graph statements.
-     */
-    const StatementContainer_t& GetGraphStatementNodes() const;
-    /**
-     * Returns the graph statements.
-     */
-     StatementContainer_t& GetGraphStatements();
-    /**
-     * Adds a \c GraphStatementNode to this \c GraphDefinitionNode.
-     */
-    void AddGraphStatementNode(const GraphStatementNodePtr &n);
-    
-    /**
-     * Sets the graph statements.
-     */
-    void SetGraphStatementNodes(const std::vector<GraphStatementNodePtr> &statements);
-    
-    /**
-     * Gets an iterator to the beginning of the graph statements.
-     */
-    StatementIterator_t& begin();
-    /**
-     * Gets an iterator to the end of the graph statements.
-     */
-    StatementIterator_t& end();
+	using StatementContainer_t = std::vector<GraphStatementNodePtr>;
+	/// Type used to iterate over \c StatementContainer_t
+	using StatementIterator_t = StatementContainer_t::iterator;
+
+	/**
+	 * Default constructor.
+	 */
+	GraphDefinitionNode();
+	/**
+	 * Constructs a \c GraphDefinitionNode with the given \p startOffset and \p endOffset.
+	 */
+	GraphDefinitionNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset);
+	/**
+	 * Constructs a \c GraphDefinitionNode with the given \p range.
+	 */
+	GraphDefinitionNode(const AstNode::NodeRange_t &range);
+	/**
+	 * Constructs a \c GraphDefinitionNode with the given \p statements.
+	 */
+	GraphDefinitionNode(const StatementContainer_t &statements);
+
+	virtual ~GraphDefinitionNode();
+
+	/**
+	 * Creates and adds a \c NodeDefinitionNode with the given arguments.
+	 * \p args must match one of the constructors in \c NodeDefinitionNode.
+	 */
+	template<typename... Args>
+	NodeDefinitionNodePtr CreateNodeDefinitionNode(Args... args)
+	{
+		auto node = std::make_shared<NodeDefinitionNode>(args...);
+		AddGraphStatementNode(node);
+		return node;
+	}
+
+	/**
+	 * Creates and adds a \c NodeLinkNode with the given arguments.
+	 * \p args should match one of the constructors in \c NodeLinkNode.
+	 */
+	template<typename... Args>
+	NodeLinkNodePtr CreateNodeLinkNode(Args... args)
+	{
+		auto node = std::make_shared<NodeLinkNode>(args...);
+		AddGraphStatementNode(node);
+		return node;
+	}
+
+	/**
+	 * Returns the graph statements.
+	 */
+	const StatementContainer_t &GetGraphStatementNodes() const;
+	/**
+	 * Returns the graph statements.
+	 */
+	StatementContainer_t &GetGraphStatements();
+	/**
+	 * Adds a \c GraphStatementNode to this \c GraphDefinitionNode.
+	 */
+	void AddGraphStatementNode(const GraphStatementNodePtr &n);
+
+	/**
+	 * Sets the graph statements.
+	 */
+	void SetGraphStatementNodes(const std::vector<GraphStatementNodePtr> &statements);
+
+	/**
+	 * Gets an iterator to the beginning of the graph statements.
+	 */
+	StatementIterator_t begin();
+	/**
+	 * Gets an iterator to the end of the graph statements.
+	 */
+	StatementIterator_t end();
+
 private:
 	/// The graph statements.
-    std::vector<GraphStatementNodePtr> m_graphStatements;
+	std::vector<GraphStatementNodePtr> m_graphStatements;
 };
-}
+}  // namespace selector
 
 #endif

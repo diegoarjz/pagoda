@@ -2,68 +2,40 @@
 
 namespace selector
 {
-NamedArgument::NamedArgument(const Offset_t &startOffset, const Offset_t &endOffset, const std::string &name, const ArgumentType_t type, const std::string &value)
-	: AstNode(startOffset, endOffset),
-	  m_name(name),
-	  m_argumentType(type),
-	  m_argumentValue(value)
+NamedArgument::NamedArgument(const std::string& name, const ArgumentType type, const std::string& value)
+    : m_name(name), m_argumentType(type), m_argumentValue(value)
 {
 }
 
-NamedArgument::NamedArgument(const Range_t &range, const std::string &name, const ArgumentType_t type, const std::string &value)
-	: AstNode(Range),
-	  m_name(name),
-	  m_argumentType(type),
-	  m_argumentValue(value)
-{
-}
-    
-NamedArgument::~NamedArgument()
+NamedArgument::NamedArgument(const AstNode::Offset_t& startOffset, const AstNode::Offset_t& endOffset,
+                             const std::string& name, const NamedArgument::ArgumentType type, const std::string& value)
+    : AstNode(startOffset, endOffset), m_name(name), m_argumentType(type), m_argumentValue(value)
 {
 }
 
-const std::string& NamedArgument::GetName() const
+NamedArgument::NamedArgument(const AstNode::NodeRange_t& range, const std::string& name,
+                             const NamedArgument::ArgumentType type, const std::string& value)
+    : AstNode(range), m_name(name), m_argumentType(type), m_argumentValue(value)
 {
-	return m_name;
 }
 
-std::string& NamedArgument::GetName()
-{
-	return m_name;
-}
-	
-void NamedArgument::SetName(const std::string& name)
-{
-	m_name = name;
-}
+NamedArgument::~NamedArgument() {}
 
-const ArgumentType& NamedArgument::GetArgumentType() const
-{
-	return m_argumentType;
-}
+const std::string& NamedArgument::GetName() const { return m_name; }
 
-ArgumentType& NamedArgument::GetArgumentType()
-{
-	return m_argumentType;
-}
+std::string& NamedArgument::GetName() { return m_name; }
 
-void NamedArgument::SetArgumentType(const ArgumentType& type)
-{
-	m_argumentType = type;
-}
+void NamedArgument::SetName(const std::string& name) { m_name = name; }
 
-const std::string& NamedArgument::GetArgumentValue() const
-{
-	return m_argumentValue;
-}
+const NamedArgument::ArgumentType& NamedArgument::GetArgumentType() const { return m_argumentType; }
 
-std::string& NamedArgument::GetArgumentValue()
-{
-	return m_argumentValue;
-}
+NamedArgument::ArgumentType& NamedArgument::GetArgumentType() { return m_argumentType; }
 
-void NamedArgument::SetArgumentValue(const std::string &argumentValue)
-{
-	m_argumentValue = argumentValue;
-}
-}
+void NamedArgument::SetArgumentType(const NamedArgument::ArgumentType& type) { m_argumentType = type; }
+
+const std::string& NamedArgument::GetArgumentValue() const { return m_argumentValue; }
+
+std::string& NamedArgument::GetArgumentValue() { return m_argumentValue; }
+
+void NamedArgument::SetArgumentValue(const std::string& argumentValue) { m_argumentValue = argumentValue; }
+}  // namespace selector

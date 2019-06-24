@@ -15,23 +15,23 @@ public:
 	using Offset_t = std::size_t;
 	/// Type indicating a range between two positions within the graph format string.
 	using NodeRange_t = std::pair<Offset_t, Offset_t>;
-	
+
 	AstNode() = default;
 	AstNode(const AstNode &) = delete;
 	AstNode &operator=(const AstNode &) = delete;
-	
+
 	/**
 	 * Constructs the \c AstNode given its start and end offset.
 	 */
 	AstNode(const Offset_t &startOffset, const Offset_t &endOffset);
-	
+
 	/**
 	 * Constructs the \c AstNode given a its \c NodeRange_t.
 	 */
 	AstNode(const NodeRange_t &nodeRange);
-	
+
 	virtual ~AstNode();
-	
+
 	/**
 	 * Sets the Node's start offset.
 	 */
@@ -40,16 +40,16 @@ public:
 	 * Sets the Node's end offset.
 	 */
 	void SetEndOffset(const Offset_t &offset);
-	
+
 	/**
 	 * Gets the Node's start offset.
 	 */
-	const Offset_t& GetStartOffset() const;
+	const Offset_t &GetStartOffset() const;
 	/**
 	 * Gets the Node's end offset.
 	 */
-	const Offset_t& GetEndOFfset() const;
-	
+	const Offset_t &GetEndOffset() const;
+
 	/**
 	 * Sets the Node's range.
 	 */
@@ -58,15 +58,15 @@ public:
 	 * Gets the Node's range.
 	 */
 	NodeRange_t GetNodeRange() const;
-	
+
 	// virtual void AcceptVisitor(AstVisitor *) = 0;
 private:
-	Offset_t m_startOffset; ///< Offset to the start of this node in the text
-	Offset_t m_endOffset;   ///< Offset to the end of this node in the text
+	Offset_t m_startOffset;  ///< Offset to the start of this node in the text
+	Offset_t m_endOffset;    ///< Offset to the end of this node in the text
 };
 
 using AstNodePtr = std::shared_ptr<AstNode>;
 
-}
+}  // namespace selector
 
 #endif

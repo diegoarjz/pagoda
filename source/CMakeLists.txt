@@ -110,6 +110,11 @@ set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
     "procedural_graph/output_interface_node.cpp"
     "procedural_graph/operation_node.cpp"
     "procedural_graph/parameter_node.cpp"
+    "procedural_graph/reader/ast_node.cpp"
+    "procedural_graph/reader/graph_definition_node.cpp"
+    "procedural_graph/reader/named_argument.cpp"
+    "procedural_graph/reader/node_definition_node.cpp"
+    "procedural_graph/reader/node_link_node.cpp"
     )
 
 set(SELECTOR_PUBLIC_HEADERS
