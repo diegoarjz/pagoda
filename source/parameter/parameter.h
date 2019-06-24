@@ -9,17 +9,20 @@
 
 namespace selector
 {
-using Parameter = std::variant<float, std::string, Expression>;
+using Parameter = std::variant<float, std::string, ExpressionPtr>;
 
 template<typename T>
-struct parameter_getter : public std::static_visitor<T>
+struct parameter_getter
 {
-     T operator()(const T& p) { return p; }
-     
-     T operator()(const Expression &e);can get out of Expression.
-     
-     template<typename V>
-     T operator()(const V& v) { throw ParameterException("Cannot convert parameter"); }
+	T operator()(const T &p) { return p; }
+
+	T operator()(const Expression &e);
+
+	template<typename V>
+	T operator()(const V &v)
+	{
+		throw ParameterException("Cannot convert parameter");
+	}
 };
 
 template<>
@@ -37,8 +40,8 @@ std::string parameter_getter<std::string>::operator()(const Expression &e);
 template<class T>
 T get_parameter_as(Parameter &p)
 {
-    parameter_getter getter;
-    return std::apply_visitor(getter, p);
+	parameter_getter<T> getter;
+	return std::visit(getter, p);
 };
 
 }  // namespace selector

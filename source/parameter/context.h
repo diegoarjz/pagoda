@@ -25,6 +25,8 @@ public:
 	 */
 	explicit Context(const std::string &name);
 
+	virtual ~Context();
+
 	/**
 	 * Sets this \c Context parent to \p new_parent.
 	 */
@@ -47,22 +49,22 @@ public:
 	std::shared_ptr<Context> GetSubContext(const std::string &context_name);
 
 	/**
-     * Returns a \c Parameter based on its \p parameterName.
-     */
-    Parameter GetParameter(const std::string &parameterName) override;
-    /**
-     * Sets the \c Parameter with \p parameterName to the value given by \p parameter.
-     */
-    void SetParameter(const std::string &parameterName, const Parameter &parameter) override;
-    /**
-     * Returns the list of names of all exposed \c Parameter.
-     */
- 	std::unordered_set<std::string> GetParameterNameList() const override;
- 	/**
-     * Returns all exposed \c Parameter.
-     */
-	std::unordered_map<std::string, Parameter> GetParameters() override { return m_parameters; }
-	
+	 * Returns a \c Parameter based on its \p parameterName.
+	 */
+	Parameter GetParameter(const std::string &parameterName) override;
+	/**
+	 * Sets the \c Parameter with \p parameterName to the value given by \p parameter.
+	 */
+	void SetParameter(const std::string &parameterName, const Parameter &parameter) override;
+	/**
+	 * Returns the list of names of all exposed \c Parameter.
+	 */
+	std::unordered_set<std::string> GetParameterNameList() const override;
+	/**
+	 * Returns all exposed \c Parameter.
+	 */
+	std::unordered_map<std::string, Parameter> GetParameters() const override;
+
 	/**
 	 * Creates, stores and returns a \c Parameter with the given \p param_name and \p initial_value.
 	 */

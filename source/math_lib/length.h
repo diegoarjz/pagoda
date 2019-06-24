@@ -1,6 +1,8 @@
 #ifndef SELECTOR_MATH_LIB_LENGHT_H_
 #define SELECTOR_MATH_LIB_LENGHT_H_
 
+#include "line_segment_3d.h"
+
 #include <cmath>
 
 namespace selector
@@ -30,7 +32,7 @@ inline Rep squared_length(const VecBase<Size, Rep> &vec)
 template<class Rep>
 inline Rep squared_length(const LineSegment3D<Rep> &lineSegment)
 {
-	return squared_length(lineSegment.GetSupportingVector());
+	return squared_length(lineSegment.GetSupportVector());
 }
 
 /**
@@ -48,9 +50,9 @@ inline Rep length(const VecBase<Size, Rep> &vec)
  * Calculates the length of a \c LineSegment3D.
  */
 template<class Rep>
-inline Rep length*const LineSegment3D<Rep> &lineSegment)
+inline Rep length(const LineSegment3D<Rep> &lineSegment)
 {
-	return length(lineSegment.GetSupportingVector());
+	return length(lineSegment.GetSupportVector());
 }
 
 }  // namespace selector

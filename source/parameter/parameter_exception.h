@@ -2,6 +2,7 @@
 #define SELECTOR_PARAMETER_PARAMETER_EXCEPTION_H_
 
 #include <exception>
+#include <stdexcept>
 
 namespace selector
 {
@@ -11,9 +12,9 @@ namespace selector
 class ParameterException : public std::runtime_error
 {
 public:
-    ParameterException(const std::string &msg);
+	ParameterException(const std::string &msg);
 };
 
-}
+}  // namespace selector
 
 #endif

@@ -1,5 +1,10 @@
 #include <math_lib/vec_base.h>
 
+#include <math_lib/cross_product.h>
+#include <math_lib/dot_product.h>
+#include <math_lib/length.h>
+#include <math_lib/normalize.h>
+
 #include <iterator>
 
 #include <gtest/gtest.h>
@@ -161,7 +166,7 @@ TEST(VecOperations, when_using_dot_product_should_return_the_dot_product_of_the_
 
 TEST(VecOperations, when_calculating_the_dot_product_of_orthogonal_vectors_should_return_0)
 {
-	VecBase<3, float> v1(1,0,0);
-	VecBase<3, float> v2(0,2,0);
+	VecBase<3, float> v1(1, 0, 0);
+	VecBase<3, float> v2(0, 2, 0);
 	EXPECT_EQ(dot_product(v1, v2), 0.0f);
 }
