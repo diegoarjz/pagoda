@@ -31,6 +31,12 @@ std::string &NodeDefinitionNode::GetNodeName() { return m_nodeName; }
 
 void NodeDefinitionNode::SetNodeName(const std::string &name) { m_nodeName = name; }
 
+const std::string &NodeDefinitionNode::GetNodeType() const { return m_nodeType; }
+
+std::string &NodeDefinitionNode::GetNodeType() { return m_nodeType; }
+
+void NodeDefinitionNode::SetNodeType(const std::string &type) { m_nodeType = type; }
+
 const NodeDefinitionNode::ConstructionArgumentContainer_t &NodeDefinitionNode::GetConstructionArguments() const
 {
 	return m_constructionArguments;

@@ -1,4 +1,4 @@
-	#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_DEFINITION_NODE_H_
+#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_DEFINITION_NODE_H_
 #define SELECTOR_PROCEDURAL_GRAPH_NODE_DEFINITION_NODE_H_
 
 #include "graph_statement_node.h"
@@ -66,6 +66,21 @@ public:
 	void SetNodeName(const std::string &name);
 
 	/**
+	 * Gets the node type.
+	 */
+	const std::string &GetNodeType() const;
+
+	/**
+	 * Gets the node type.
+	 */
+	std::string &GetNodeType();
+
+	/**
+	 * Sets the node type.
+	 */
+	void SetNodeType(const std::string &type);
+
+	/**
 	 * Returns the construction arguments.
 	 */
 	const ConstructionArgumentContainer_t &GetConstructionArguments() const;
@@ -87,7 +102,7 @@ public:
 	template<typename... Args>
 	NamedArgumentPtr CreateConstructionArgument(Args... args)
 	{
-		m_constructionArguments.emplace_back(args...);
+		m_constructionArguments.emplace_back(std::make_shared<NamedArgument>(args...));
 		return m_constructionArguments.back();
 	}
 
@@ -113,7 +128,7 @@ public:
 	template<typename... Args>
 	NamedArgumentPtr CreateExecutionArgument(Args... args)
 	{
-		m_executionArguments.emplace_back(args...);
+		m_executionArguments.emplace_back(std::make_shared<NamedArgument>(args...));
 		return m_executionArguments.back();
 	}
 
