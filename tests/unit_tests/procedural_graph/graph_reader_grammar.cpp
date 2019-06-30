@@ -1,4 +1,4 @@
-#include <procedural_graph/graph_reader_grammar.h>
+#include <procedural_graph/reader/graph_reader_grammar.h>
 
 #include <boost/spirit/include/qi.hpp>
 
@@ -22,9 +22,10 @@ TEST_F(GraphReaderGrammarTest, test_literal_floats)
 
 	for (auto p : literals)
 	{
-		ast::literal l;
-		std::string::const_iterator begin = std::begin(std::get<0>(p));
-		std::string::const_iterator end = std::end(std::get<0>(p));
+		std::string in = std::get<0>(p);
+		boost::variant<std::string, float> l;
+		std::string::const_iterator begin = std::begin(in);
+		std::string::const_iterator end = std::end(in);
 		bool r = qi::phrase_parse(begin, end, m_grammar.literal, qi::space, l);
 
 		EXPECT_TRUE(r);
@@ -39,7 +40,7 @@ TEST_F(GraphReaderGrammarTest, test_literal_strings)
 
 	for (auto p : literals)
 	{
-		ast::literal l;
+		boost::variant<std::string, float> l;
 		std::string::const_iterator begin = std::begin(std::get<0>(p));
 		std::string::const_iterator end = std::end(std::get<0>(p));
 		bool r = qi::phrase_parse(begin, end, m_grammar.literal, qi::space, l);
@@ -56,7 +57,7 @@ TEST_F(GraphReaderGrammarTest, test_literal_failure)
 
 	for (auto p : literals)
 	{
-		ast::literal l;
+		boost::variant<std::string, float> l;
 		std::string::const_iterator begin = std::begin(p);
 		std::string::const_iterator end = std::end(p);
 		bool r = qi::phrase_parse(begin, end, m_grammar.literal, qi::space, l);
@@ -97,117 +98,115 @@ TEST_F(GraphReaderGrammarTest, test_identifier_fail)
 	}
 }
 
-TEST_F(GraphReaderGrammarTest, test_variable)
+TEST_F(GraphReaderGrammarTest, test_expression)
 {
-	selector::ast::variable var;
-	std::string v = "variable_name";
-	std::string::const_iterator begin = std::begin(v);
-	std::string::const_iterator end = std::end(v);
-	bool r = qi::phrase_parse(begin, end, m_grammar.identifier, qi::space, var);
+	std::pair<std::string, std::string> expressions[] = {{"$<a;>$", "a;"}, {"$<1+2;>$", "1+2;"}};
 
-	EXPECT_TRUE(r);
-	EXPECT_EQ(begin, end);
-	EXPECT_EQ(var.m_name, v);
+	for (auto e : expressions)
+	{
+		std::string out;
+		std::string::const_iterator begin = std::begin(std::get<0>(e));
+		std::string::const_iterator end = std::end(std::get<0>(e));
+		bool r = qi::phrase_parse(begin, end, m_grammar.expression, qi::space, out);
+
+		EXPECT_TRUE(r) << "Should have matched " << std::get<0>(e);
+		EXPECT_EQ(begin, end);
+		EXPECT_EQ(out, std::get<1>(e));
+	}
 }
 
-TEST_F(GraphReaderGrammarTest, test_expressions_valid)
+TEST_F(GraphReaderGrammarTest, test_named_simple_arg)
 {
-	// clang-format off
-    std::string expressions[] = {
-        "1", "a", "\"b\"",
-        "1+1", "1-1", "1*1", "1/1",
-        "\"a\"+1", "\"a\"+\"a\"",
-        "a+1", "a*1", "a+a",
-        "1+1+1", "1*1+1*1", "1*(1+1)*1"
-    };
-	// clang-format on
+	std::string args[] = {"a : \"abc\"", "b:123.0"};
 
-	for (auto p : expressions)
+	for (auto a : args)
 	{
-		selector::ast::expression i;
-		std::string::const_iterator begin = std::begin(p);
-		std::string::const_iterator end = std::end(p);
-		bool r = qi::phrase_parse(begin, end, m_grammar.expression, qi::space, i);
+		std::string out;
+		std::string::const_iterator begin = std::begin(a);
+		std::string::const_iterator end = std::end(a);
+		bool r = qi::phrase_parse(begin, end, m_grammar.named_simple_arg, qi::space, out);
 
-		EXPECT_TRUE(r) << "Should have matched " << p;
+		EXPECT_TRUE(r) << "Should have matched " << a;
 		EXPECT_EQ(begin, end);
 	}
 }
 
-TEST_F(GraphReaderGrammarTest, test_expressions_invalid)
+TEST_F(GraphReaderGrammarTest, test_construction_args)
 {
-	// clang-format off
-    std::string expressions[] = {
-        "", "-", "+", "*", "/", "()"
-    };
-	// clang-format on
+	std::string args[] = {"", "a : \"abc\", b:123.0", "b:123.0"};
 
-	for (auto p : expressions)
+	for (auto a : args)
 	{
-		selector::ast::expression i;
-		std::string::const_iterator begin = std::begin(p);
-		std::string::const_iterator end = std::end(p);
-		bool r = qi::phrase_parse(begin, end, m_grammar.expression, qi::space, i);
+		std::string out;
+		std::string::const_iterator begin = std::begin(a);
+		std::string::const_iterator end = std::end(a);
+		bool r = qi::phrase_parse(begin, end, m_grammar.construction_args, qi::space, out);
 
-		EXPECT_FALSE(r) << "Should not have matched " << p;
+		EXPECT_TRUE(r) << "Should have matched " << a;
+		EXPECT_EQ(begin, end);
 	}
 }
 
-TEST_F(GraphReaderGrammarTest, test_assignment)
+TEST_F(GraphReaderGrammarTest, test_named_expression_arg)
 {
-	selector::ast::assignment assignment;
-	std::string s = "a = b";
+	std::string args[] = {"a : \"abc\"", "b:123.0", "c:$<1+2;>$"};
 
-	std::string::const_iterator begin = std::begin(s);
-	std::string::const_iterator end = std::end(s);
-	bool r = qi::phrase_parse(begin, end, m_grammar.assignment, qi::space, assignment);
+	for (auto a : args)
+	{
+		std::string out;
+		std::string::const_iterator begin = std::begin(a);
+		std::string::const_iterator end = std::end(a);
+		bool r = qi::phrase_parse(begin, end, m_grammar.named_expression_arg, qi::space, out);
 
-	EXPECT_TRUE(r);
-	EXPECT_EQ(begin, end);
-	EXPECT_EQ(assignment.m_lhs.m_name, "a");
+		EXPECT_TRUE(r) << "Should have matched " << a;
+		EXPECT_EQ(begin, end);
+	}
 }
 
-TEST_F(GraphReaderGrammarTest, test_named_arg)
+TEST_F(GraphReaderGrammarTest, test_execution_args)
 {
-	selector::ast::named_arg named_arg;
-	std::string s = "a: 1";
+	std::string args[] = {"", "a : \"abc\", b:123.0, c:$<a*b;>$", "b:123.0"};
 
-	std::string::const_iterator begin = std::begin(s);
-	std::string::const_iterator end = std::end(s);
-	bool r = qi::phrase_parse(begin, end, m_grammar.named_arg, qi::space, named_arg);
+	for (auto a : args)
+	{
+		std::string out;
+		std::string::const_iterator begin = std::begin(a);
+		std::string::const_iterator end = std::end(a);
+		bool r = qi::phrase_parse(begin, end, m_grammar.execution_args, qi::space, out);
 
-	EXPECT_TRUE(r);
-	EXPECT_EQ(begin, end);
-	EXPECT_EQ(named_arg.m_name, "a");
-	EXPECT_EQ(named_arg.m_value.which(), 0);
+		EXPECT_TRUE(r) << "Should have matched " << a;
+		EXPECT_EQ(begin, end);
+	}
 }
 
 TEST_F(GraphReaderGrammarTest, test_node_definition)
 {
-	selector::ast::node_definition node_def;
-	std::string s = "Operation(type: \"Extrude\"){amount: 10}";
+	std::string def[] = {"n = Operation(a:1,b:2)", "n = Operation(a:1){}", "n = Operation(a:1){a:$<1+1;>$}"};
 
-	std::string::const_iterator begin = std::begin(s);
-	std::string::const_iterator end = std::end(s);
-	bool r = qi::phrase_parse(begin, end, m_grammar.node_definition, qi::space, node_def);
+	for (auto a : def)
+	{
+		std::string out;
+		std::string::const_iterator begin = std::begin(a);
+		std::string::const_iterator end = std::end(a);
+		bool r = qi::phrase_parse(begin, end, m_grammar.node_definition, qi::space, out);
 
-	EXPECT_TRUE(r);
-	EXPECT_EQ(begin, end);
-	EXPECT_EQ(node_def.m_nodeType, "Operation");
-	EXPECT_EQ(node_def.m_constructionArguments.size(), 1);
-	EXPECT_EQ(node_def.m_nodeParameters.size(), 1);
+		EXPECT_TRUE(r);
+		EXPECT_EQ(begin, end) << "Should have matched " << a;
+	}
 }
 
-TEST_F(GraphReaderGrammarTest, test_node_definition_assignment)
+TEST_F(GraphReaderGrammarTest, test_node_links)
 {
-	selector::ast::assignment node_assignment;
-	std::string s = "n = Operation(type: \"Extrude\"){amount: 10}";
+	std::string links[] = {"n1 -> n2", "n1->n2->n3"};
 
-	std::string::const_iterator begin = std::begin(s);
-	std::string::const_iterator end = std::end(s);
-	bool r = qi::phrase_parse(begin, end, m_grammar.assignment, qi::space, node_assignment);
+	for (auto a : links)
+	{
+		std::string out;
+		std::string::const_iterator begin = std::begin(a);
+		std::string::const_iterator end = std::end(a);
+		bool r = qi::phrase_parse(begin, end, m_grammar.node_links, qi::space, out);
 
-	EXPECT_TRUE(r);
-	EXPECT_EQ(begin, end);
-	EXPECT_EQ(node_assignment.m_lhs.m_name, "n");
+		EXPECT_TRUE(r);
+		EXPECT_EQ(begin, end) << "Should have matched " << a;
+	}
 }

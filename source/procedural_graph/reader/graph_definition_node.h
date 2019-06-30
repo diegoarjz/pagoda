@@ -101,6 +101,8 @@ private:
 	/// The graph statements.
 	std::vector<GraphStatementNodePtr> m_graphStatements;
 };
+
+using GraphDefinitionNodePtr = std::shared_ptr<GraphDefinitionNode>;
 }  // namespace selector
 
 #endif

@@ -149,7 +149,7 @@ struct GraphReaderGrammar : boost::spirit::qi::grammar<Iterator, ast::graph_defi
 		 * node_definition -> identifier "=" identifier "(" construction_args ")" ("{" execution_args "}")?
 		 */
 		node_definition %= identifier >> '(' >> named_arg_list >> ')' >> -('{' >> named_arg_list >> '}');
-		
+
 		/*
 		 * node_links -> identifier "->" identifier ("->" identifier)*
 		 */
