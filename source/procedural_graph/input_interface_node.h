@@ -22,6 +22,9 @@ public:
 
 	InputInterfaceNode();
 	~InputInterfaceNode();
+
+	void SetConstructionArguments(const std::unordered_map<std::string, Parameter>&) override;
+
 	void Execute(GraphExecutionContextPtr graph, const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;
 	void SetInterfaceName(const InterfaceName& interfaceName);
 	const InterfaceName& GetInterfaceName() const;

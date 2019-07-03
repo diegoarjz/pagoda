@@ -15,6 +15,23 @@ const char *OperationNode::name = "Operation";
 OperationNode::OperationNode() {}
 OperationNode::~OperationNode() {}
 
+void OperationNode::SetConstructionArguments(const std::unordered_map<std::string, Parameter> &constructionArgs)
+{
+	auto operationIter = constructionArgs.find("operation");
+	if (operationIter == std::end(constructionArgs))
+	{
+		// TODO: throw
+	}
+
+	auto operation = ProceduralOperation::Create(get_parameter_as<std::string>(operationIter->second));
+	if (operation == nullptr)
+	{
+		// TODO: throw
+	}
+
+	SetOperation(operation);
+}
+
 void OperationNode::SetOperation(ProceduralOperationPtr operation) { m_operation = operation; }
 
 void OperationNode::Execute(GraphExecutionContextPtr executionContext, const NodeSet<Node> &inNodes,

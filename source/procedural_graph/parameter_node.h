@@ -18,6 +18,9 @@ public:
 
 	ParameterNode();
 	~ParameterNode();
+
+	void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &) override;
+
 	void Execute(GraphExecutionContextPtr ctx, const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
 };
 

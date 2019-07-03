@@ -38,7 +38,7 @@ std::string parameter_getter<std::string>::operator()(const Expression &e);
  * is more than likely to be modified. This amortizes the API changes.
  */
 template<class T>
-T get_parameter_as(Parameter &p)
+T get_parameter_as(const Parameter &p)
 {
 	parameter_getter<T> getter;
 	return std::visit(getter, p);

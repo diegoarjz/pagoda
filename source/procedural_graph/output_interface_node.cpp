@@ -15,6 +15,24 @@ const char* OutputInterfaceNode::name = "OutputInterface";
 OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName("", 0) {}
 OutputInterfaceNode::~OutputInterfaceNode() {}
 
+void OutputInterfaceNode::SetConstructionArguments(const std::unordered_map<std::string, Parameter>& constructionArgs)
+{
+	auto interfaceNameIter = constructionArgs.find("interface");
+	if (interfaceNameIter == std::end(constructionArgs))
+	{
+		// TODO: throw
+	}
+	auto offsetIter = constructionArgs.find("offset");
+
+	auto interfaceName = get_parameter_as<std::string>(interfaceNameIter->second);
+	uint16_t offset = 0;
+	if (offsetIter != std::end(constructionArgs))
+	{
+		offset = static_cast<uint16_t>(get_parameter_as<float>(offsetIter->second));
+	}
+	SetInterfaceName(InterfaceName(interfaceName, offset));
+}
+
 void OutputInterfaceNode::SetInterfaceName(const InterfaceName& name) { m_interfaceName = name; }
 const InterfaceName& OutputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
 

@@ -34,6 +34,8 @@ public:
 	Node(const Node &n) = delete;
 	Node &operator=(const Node &n) = delete;
 
+	virtual void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &) = 0;
+
 	/**
 	 * Gets the id from this \c Node.
 	 */

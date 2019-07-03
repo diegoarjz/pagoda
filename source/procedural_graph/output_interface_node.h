@@ -17,10 +17,13 @@ using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 class OutputInterfaceNode : public Node::Registrar<OutputInterfaceNode>
 {
 public:
-    static const char* name;
+	static const char* name;
 
 	OutputInterfaceNode();
 	~OutputInterfaceNode();
+
+	void SetConstructionArguments(const std::unordered_map<std::string, Parameter>&) override;
+
 	void Execute(GraphExecutionContextPtr graph, const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;
 
 	void SetInterfaceName(const InterfaceName& name);
