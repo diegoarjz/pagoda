@@ -4,6 +4,8 @@ namespace selector
 {
 NodeLinkNode::NodeLinkNode() : GraphStatementNode() {}
 
+NodeLinkNode::NodeLinkNode(const NodeLinkContainer_t &linkedNodes) : m_linkedNodes(linkedNodes) {}
+
 NodeLinkNode::NodeLinkNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset,
                            const NodeLinkContainer_t &linkedNodes)
     : GraphStatementNode(startOffset, endOffset), m_linkedNodes(linkedNodes)

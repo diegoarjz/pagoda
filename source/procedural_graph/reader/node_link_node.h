@@ -27,6 +27,11 @@ public:
 	/**
 	 * Constructs a \c NodeLinkNode using the \p linkedNodes.
 	 */
+	NodeLinkNode(const NodeLinkContainer_t &linkedNodes);
+
+	/**
+	 * Constructs a \c NodeLinkNode using the \p linkedNodes.
+	 */
 	NodeLinkNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset,
 	             const NodeLinkContainer_t &linkedNodes);
 
