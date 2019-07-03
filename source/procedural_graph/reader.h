@@ -10,8 +10,6 @@
 
 namespace selector
 {
-class XMLReaderPlugin;
-
 class GraphReader
 {
 public:
