@@ -34,7 +34,15 @@ public:
 	Node(const Node &n) = delete;
 	Node &operator=(const Node &n) = delete;
 
-	virtual void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &) = 0;
+	/**
+	 * Sets the construction arguments from \p arguments.
+	 */
+	virtual void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &arguments) = 0;
+	
+	/**
+	 * Sets the execution arguments from \p arguments.
+	 */
+	void SetExecutionArguments(const std::unordered_map<std::string, Parameter> &arguments);
 
 	/**
 	 * Gets the id from this \c Node.

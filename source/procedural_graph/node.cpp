@@ -13,4 +13,14 @@ const std::string &Node::GetName() const { return m_nodeName; }
 
 void Node::SetParameterContext(std::shared_ptr<Context> context) { m_context = context; }
 std::shared_ptr<Context> Node::GetParameterContext() const { return m_context; }
+
+void Node::SetExecutionArguments(const std::unordered_map<std::string, Parameter> &arguments)
+{
+	DBG_ASSERT_MSG(m_context != nullptr, "m_context is not set on Node");
+	for (const auto &arg : arguments)
+	{
+		m_context->SetParameter(arg->first, arg->second);
+	}
+}
+
 }  // namespace selector

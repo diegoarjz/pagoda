@@ -132,6 +132,11 @@ public:
 		return m_executionArguments.back();
 	}
 
+	/**
+	 * Allows \c AstNodeVisitor to visit this node type.
+	 */
+	void AcceptVisitor(AstNodeVisitor *visitor) override;
+	
 private:
 	std::string m_nodeName;                                   ///< The graph's \c Node name.
 	std::string m_nodeType;                                   ///< The type of node to create.

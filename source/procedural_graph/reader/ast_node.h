@@ -5,6 +5,8 @@
 
 namespace selector
 {
+class AstNodeVisitor;
+
 /**
  * Represents an Abstract Syntax Tree node for the graph file format.
  */
@@ -59,7 +61,10 @@ public:
 	 */
 	NodeRange_t GetNodeRange() const;
 
-	// virtual void AcceptVisitor(AstVisitor *) = 0;
+	/**
+	 * Allows \c AstNodeVisitor to visit each node type.
+	 */
+	virtual void AcceptVisitor(AstNodeVisitor *) = 0;
 private:
 	Offset_t m_startOffset;  ///< Offset to the start of this node in the text
 	Offset_t m_endOffset;    ///< Offset to the end of this node in the text

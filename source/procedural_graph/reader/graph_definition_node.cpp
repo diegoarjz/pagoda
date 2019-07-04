@@ -36,4 +36,9 @@ GraphDefinitionNode::StatementIterator_t GraphDefinitionNode::begin() { return m
 
 GraphDefinitionNode::StatementIterator_t GraphDefinitionNode::end() { return m_graphStatements.end(); }
 
+void GraphDefinitionNode::AcceptVisitor(AstNodeVisitor *visitor)
+{
+	visitor->Visit(std::dynamic_pointer_cast<GraphDefinitionNode>(shared_from_this()).get());
+}
+	
 }  // namespace selector

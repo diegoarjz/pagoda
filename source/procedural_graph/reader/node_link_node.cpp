@@ -30,4 +30,9 @@ void NodeLinkNode::AddLinkedNode(const std::string &nodeName) { m_linkedNodes.em
 NodeLinkNode::NodeLinkContainerIterator_t NodeLinkNode::begin() { return m_linkedNodes.begin(); }
 
 NodeLinkNode::NodeLinkContainerIterator_t NodeLinkNode::end() { return m_linkedNodes.end(); }
+
+void NodeLinkNode::AcceptVisitor(AstNodeVisitor *visitor)
+{
+	visitor->Visit(std::dynamic_pointer_cast<NodeLinkNode>(shared_from_this()).get());
+}
 }  // namespace selector

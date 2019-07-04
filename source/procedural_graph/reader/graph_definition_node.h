@@ -97,6 +97,10 @@ public:
 	 */
 	StatementIterator_t end();
 
+	/**
+	 * Allows \c AstNodeVisitor to visit this node type.
+	 */
+	void AcceptVisitor(AstNodeVisitor *visitor) override;
 private:
 	/// The graph statements.
 	std::vector<GraphStatementNodePtr> m_graphStatements;

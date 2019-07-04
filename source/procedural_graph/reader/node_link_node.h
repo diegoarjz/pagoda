@@ -72,6 +72,11 @@ public:
 	 */
 	NodeLinkContainerIterator_t end();
 
+	/**
+	 * Allows \c AstNodeVisitor to visit this node type.
+	 */
+	void AcceptVisitor(AstNodeVisitor *visitor) override;
+	
 private:
 	NodeLinkContainer_t m_linkedNodes;  ///< List of linked nodes.
 };
