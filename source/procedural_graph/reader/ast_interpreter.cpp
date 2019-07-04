@@ -89,5 +89,15 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 	}
 }
 
+const std::unordered_map<std::string, NodePtr>& AstInterpreter::GetNodeTable() const
+{
+	return m_nodeTable;
+}
+
+const std::unordered_map<std::string, Parameter>& AstInterpreter::GetCurrentNamedArguments() const
+{
+	return m_currentNamedParameters;
+}
+
 }
 	

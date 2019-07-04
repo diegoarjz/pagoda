@@ -116,6 +116,7 @@ set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
     "procedural_graph/reader/node_definition_node.cpp"
     "procedural_graph/reader/node_link_node.cpp"
     "procedural_graph/reader/graph_reader_grammar_helper.cpp"
+    "procedural_graph/reader/ast_interpreter.cpp"
     )
 
 set(SELECTOR_PUBLIC_HEADERS
