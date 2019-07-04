@@ -21,6 +21,8 @@ public:
 	}
 
 	StubAstNode(const AstNode::NodeRange_t &range) : AstNode(range) {}
+
+	void AcceptVisitor(AstNodeVisitor *visitor) override {}
 };
 
 class AstNodeTest : public ::testing::Test

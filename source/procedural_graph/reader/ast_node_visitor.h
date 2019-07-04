@@ -3,6 +3,10 @@
 
 namespace selector
 {
+class GraphDefinitionNode;
+class NamedArgument;
+class NodeDefinitionNode;
+class NodeLinkNode;
 /**
  * Implements logic to iterate over an \c AstNode tree.
  */
@@ -14,6 +18,6 @@ public:
 	virtual void Visit(NodeDefinitionNode *nodeDefinition) = 0;
 	virtual void Visit(NodeLinkNode *nodeLink) = 0;
 };
-}
+}  // namespace selector
 
 #endif

@@ -38,7 +38,7 @@ public:
 	 * Sets the construction arguments from \p arguments.
 	 */
 	virtual void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &arguments) = 0;
-	
+
 	/**
 	 * Sets the execution arguments from \p arguments.
 	 */

@@ -1,5 +1,7 @@
 #include "named_argument.h"
 
+#include "ast_node_visitor.h"
+
 namespace selector
 {
 NamedArgument::NamedArgument(const std::string& name, const ArgumentType type, const std::string& value)
@@ -39,7 +41,7 @@ std::string& NamedArgument::GetArgumentValue() { return m_argumentValue; }
 
 void NamedArgument::SetArgumentValue(const std::string& argumentValue) { m_argumentValue = argumentValue; }
 
-void NamedArgument::AcceptVisitor(AstNodeVisitor *visitor)
+void NamedArgument::AcceptVisitor(AstNodeVisitor* visitor)
 {
 	visitor->Visit(std::dynamic_pointer_cast<NamedArgument>(shared_from_this()).get());
 }

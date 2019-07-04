@@ -1,5 +1,7 @@
 #include "node.h"
 
+#include "common/assertions.h"
+
 namespace selector
 {
 Node::Node() : m_nodeName(""), m_nodeId(0), m_context(nullptr) {}
@@ -19,7 +21,7 @@ void Node::SetExecutionArguments(const std::unordered_map<std::string, Parameter
 	DBG_ASSERT_MSG(m_context != nullptr, "m_context is not set on Node");
 	for (const auto &arg : arguments)
 	{
-		m_context->SetParameter(arg->first, arg->second);
+		m_context->SetParameter(arg.first, arg.second);
 	}
 }
 

@@ -1,10 +1,15 @@
 #include "ast_interpreter.h"
 
+#include "graph_definition_node.h"
+#include "named_argument.h"
+#include "node_definition_node.h"
+#include "node_link_node.h"
+
 #include "procedural_graph/graph.h"
+#include "procedural_graph/node.h"
 
 namespace selector
 {
-
 AstInterpreter::AstInterpreter(GraphPtr graph) : m_graph(graph), m_nextNodeId(0) {}
 
 void AstInterpreter::Visit(GraphDefinitionNode *graphDefinition)
@@ -27,7 +32,7 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 		}
 		case NamedArgument::ArgumentType::Float:
 		{
-			param = std::atof(namedArgument->GetArgumentValue());
+			param = std::atof(namedArgument->GetArgumentValue().c_str());
 			break;
 		}
 		case NamedArgument::ArgumentType::Expression:
@@ -40,29 +45,29 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 			// THROW
 		}
 	}
-	m_namedArguments[namedArgument->GetName()] = param;
+	m_currentNamedParameters[namedArgument->GetName()] = param;
 }
 
 void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 {
-	m_namedArguments.clear();
-	for (const auto& namedArgument : nodeDefinition->GetConstructionArguments())
+	m_currentNamedParameters.clear();
+	for (const auto &namedArgument : nodeDefinition->GetConstructionArguments())
 	{
 		namedArgument->AcceptVisitor(this);
 	}
-	
+
 	auto node = Node::Create(nodeDefinition->GetNodeType());
-	node->SetNodeId(m_nextNodeId++);
+	node->SetId(m_nextNodeId++);
 	node->SetName(nodeDefinition->GetNodeName());
-	node->SetConstructionArguments(m_namedArguments);
-	
-	m_namedArguments.clear();
-	for (const auto& namedArgument : nodeDefinition->GetExecutionArguments())
+	node->SetConstructionArguments(m_currentNamedParameters);
+
+	m_currentNamedParameters.clear();
+	for (const auto &namedArgument : nodeDefinition->GetExecutionArguments())
 	{
 		namedArgument->AcceptVisitor(this);
 	}
-	node->SetExecutionArguments(m_namedArguments);
-	
+	node->SetExecutionArguments(m_currentNamedParameters);
+
 	m_graph->AddNode(node);
 }
 
@@ -70,34 +75,31 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 {
 	auto end = nodeLink->end();
 	auto prevNodeName = nodeLink->begin();
-	auto currentNodeName = std::next(prevNode);
-	
+	auto currentNodeName = std::next(prevNodeName);
+
 	while (currentNodeName != end)
 	{
-		auto prevNode = m_nodeTable.find(*prevNode);
-		auto currNode = m_nodeTable.find(*currentNode);
-		
-		if (prevNode == std::end(m_nodeTable) || currentNode == std::end(m_nodeTable))
+		auto prevNode = m_nodeTable.find(*prevNodeName);
+		auto currNode = m_nodeTable.find(*currentNodeName);
+
+		if (prevNode == std::end(m_nodeTable) || currNode == std::end(m_nodeTable))
 		{
 			// THROW
 		}
-		
-		m_graph->CreateEdge(*prevNode, *currentNode);
-		
+
+		m_graph->CreateEdge(prevNode->second, currNode->second);
+
 		++prevNodeName;
 		++currentNodeName;
 	}
 }
 
-const std::unordered_map<std::string, NodePtr>& AstInterpreter::GetNodeTable() const
-{
-	return m_nodeTable;
-}
+const std::unordered_map<std::string, NodePtr> &AstInterpreter::GetNodeTable() const { return m_nodeTable; }
 
-const std::unordered_map<std::string, Parameter>& AstInterpreter::GetCurrentNamedArguments() const
+const std::unordered_map<std::string, Parameter> &AstInterpreter::GetCurrentNamedArguments() const
 {
 	return m_currentNamedParameters;
 }
 
-}
-	
+}  // namespace selector
+

@@ -1,5 +1,7 @@
 #include "node_link_node.h"
 
+#include "ast_node_visitor.h"
+
 namespace selector
 {
 NodeLinkNode::NodeLinkNode() : GraphStatementNode() {}
