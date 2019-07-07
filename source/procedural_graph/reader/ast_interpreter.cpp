@@ -5,6 +5,7 @@
 #include "node_definition_node.h"
 #include "node_link_node.h"
 
+#include "parameter/context.h"
 #include "procedural_graph/graph.h"
 #include "procedural_graph/node.h"
 
@@ -57,6 +58,7 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	}
 
 	auto node = Node::Create(nodeDefinition->GetNodeType());
+	node->SetParameterContext(std::make_shared<Context>(nodeDefinition->GetNodeName()));
 	node->SetId(m_nextNodeId++);
 	node->SetName(nodeDefinition->GetNodeName());
 	node->SetConstructionArguments(m_currentNamedParameters);
@@ -69,6 +71,7 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	node->SetExecutionArguments(m_currentNamedParameters);
 
 	m_graph->AddNode(node);
+    m_nodeTable[nodeDefinition->GetNodeName()] = node;
 }
 
 void AstInterpreter::Visit(NodeLinkNode *nodeLink)

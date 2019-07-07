@@ -98,7 +98,7 @@ struct GraphReaderGrammar
 		 */
 		node_links = eps[ _val = bind(CreateNodeLink) ] >>
                      identifier[ bind(AddLinkedNode, _val, _1) ] >> "->" >>
-                     (identifier[ bind(AddLinkedNode, _val, _1) ] % "->");
+                     (identifier[ bind(AddLinkedNode, _val, _1) ] % "->") > ';';
 
 		/*
 		 * graph_definition -> (node_definition | node_links)*

@@ -30,3 +30,16 @@ def extrusion(test):
 
     test.tester.file_contents_should_match("geom0.obj")
     test.tester.file_contents_should_match("extrusion.dot")
+
+@deregress.test
+def expressions_in_parameters(test):
+    test.runner.executable(PATH_TO_GRAPH_RUNNER) \
+        .arg("--input-file={}".format(os.path.join(THIS_DIRECTORY, "expression.sel"))) \
+        .arg("--execute") \
+        .arg("--export-geometry") \
+        .arg("--export-path=.") \
+        .arg("--dot=expression.dot") \
+        .run()
+
+    test.tester.file_contents_should_match("geom0.obj")
+    test.tester.file_contents_should_match("expression.dot")

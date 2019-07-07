@@ -39,7 +39,7 @@ public:
 	template<class T>
 	T GetParameterAs(const std::string &parameter_name)
 	{
-		return std::get<T>(GetParameter(parameter_name));
+		return get_parameter_as<T>(GetParameter(parameter_name));
 	}
 };
 }  // namespace selector

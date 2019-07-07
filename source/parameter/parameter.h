@@ -26,10 +26,12 @@ struct parameter_getter
 };
 
 template<>
-float parameter_getter<float>::operator()(const Expression &e);
+template<>
+float parameter_getter<float>::operator()<ExpressionPtr>(const std::shared_ptr<Expression> &e);
 
 template<>
-std::string parameter_getter<std::string>::operator()(const Expression &e);
+template<>
+std::string parameter_getter<std::string>::operator()<ExpressionPtr>(const ExpressionPtr &e);
 
 /**
  * Returns the underlying value for a \c Parameter.

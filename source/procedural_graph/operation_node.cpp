@@ -41,17 +41,6 @@ void OperationNode::Execute(GraphExecutionContextPtr executionContext, const Nod
 	NodeSet<InputInterfaceNode> inputInterfaceNodes;
 	node_type_filter<InputInterfaceNode>(inNodes, inputInterfaceNodes);
 
-	for (auto param : paramContext->GetParameters())
-	{
-		auto parameter = param.second;
-		/*
-		if (parameter->GetExpression() != nullptr)
-		{
-		    parameter->GetExpression()->Evaluate();
-		}
-		*/
-	}
-
 	for (auto inInterface : inputInterfaceNodes)
 	{
 		auto proceduralObjects = inInterface->GetProceduralObjects();

@@ -15,7 +15,7 @@ class Expression
 public:
 	/**
 	 * Creates an expression from the \p expressionString.
-	 * Parses and creates an intermediary representation that will be executing later on.
+	 * Parses and creates an intermediary representation that will be executed later on.
 	 */
 	static std::shared_ptr<Expression> CreateExpression(const std::string& expressionString);
 
@@ -30,6 +30,7 @@ public:
 	 * Evaluates the expression to a float.
 	 */
 	float GetAsFloat() const;
+
 	/**
 	 * Evaluates the expression to a string.
 	 */

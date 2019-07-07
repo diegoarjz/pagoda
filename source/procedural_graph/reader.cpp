@@ -1,5 +1,6 @@
 #include "reader.h"
 
+#include "reader/ast_interpreter.h"
 #include "reader/graph_definition_node.h"
 #include "reader/graph_reader_grammar.h"
 
@@ -32,11 +33,13 @@ struct GraphReader::Impl
 
 		if (!result || begin != end)
 		{
+			std::cout << " found: " << std::string(begin, end);
 			m_currentParseResult.status = ParseResult::Status::UnknownError;
 			return nullptr;
 		}
 
-		// TODO: Interpret the ast here...
+		AstInterpreter interpreter(graph);
+		interpreter.Visit(graph_def.get());
 
 		/*
 		std::string::const_iterator begin = std::begin(str);

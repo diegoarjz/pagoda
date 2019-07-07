@@ -5,4 +5,3 @@ create_rect_out = OutputInterface(interface: "out", offset: 0)
 
 parameter -> renaming -> create_rect;
 create_rect -> create_rect_out;
-

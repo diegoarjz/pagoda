@@ -4,7 +4,7 @@
 
 namespace selector
 {
-const char *ParameterNode::name = "ParameterNode";
+const char *ParameterNode::name = "Parameter";
 
 ParameterNode::ParameterNode() {}
 

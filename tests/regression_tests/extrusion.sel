@@ -7,5 +7,3 @@ extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
 extrusion_out = OutputInterface(interface: "out", offset: 0)
 
 create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out;
-
-

@@ -1,11 +1,11 @@
 parameter = Parameter() { amount: 10 }
 
 create_rect = Operation(operation: "CreateRectGeometry") {
-    width: amount, height: 10
+    width: $< amount; >$, height: 10
 }
 create_rect_out = OutputInterface(interface: "out", offset: 0)
 extrusion_in = InputInterface(interface: "in", offset: 0)
-extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: amount}
+extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: $< amount; >$}
 extrusion_out = OutputInterface(interface: "out", offset: 0)
 
 parameter -> create_rect;
