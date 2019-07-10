@@ -25,15 +25,28 @@ public:
 	 * Returns all variables present in the expression.
 	 */
 	const std::vector<std::string>& GetVariables() const;
+	
+	void SetVariableValue(const std::string &variableName, Parameter value);
+	
+	std::vector<std::weak_ptr<Expression>>& GetDependentExpressions() const;
+	
+	void SetDirty();
+	
+	bool IsDirty() const;
+
+	/**
+	 * Evaluates the expression and returns it as a \c Parameter.
+	 */
+	 Parameter GetAsParameter();
 
 	/**
 	 * Evaluates the expression to a float.
 	 */
-	float GetAsFloat() const;
+	float GetAsFloat();
 	/**
 	 * Evaluates the expression to a string.
 	 */
-	std::string GetAsString() const;
+	std::string GetAsString();
 
 private:
 	class Impl;
