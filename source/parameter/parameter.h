@@ -1,7 +1,6 @@
 #ifndef SELECTOR_PARAMETER_PARAMETER_H_
 #define SELECTOR_PARAMETER_PARAMETER_H_
 
-#include "expression.h"
 #include "parameter_exception.h"
 
 #include <string>
@@ -9,6 +8,9 @@
 
 namespace selector
 {
+class Expression;
+using ExpressionPtr = std::shared_ptr<Expression>;
+
 using Parameter = std::variant<float, std::string, ExpressionPtr>;
 
 template<typename T>

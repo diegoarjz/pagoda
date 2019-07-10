@@ -291,7 +291,7 @@ TEST_F(GraphReaderGrammarTest, test_node_definition_construction)
 
 TEST_F(GraphReaderGrammarTest, test_node_links)
 {
-	std::string links[] = {"n1 -> n2", "n1->n2->n3"};
+	std::string links[] = {"n1 -> n2;", "n1->n2->n3;"};
 
 	for (auto a : links)
 	{
@@ -307,7 +307,7 @@ TEST_F(GraphReaderGrammarTest, test_node_links)
 
 TEST_F(GraphReaderGrammarTest, test_node_links_construction)
 {
-	std::string a = "n1->n2->n3";
+	std::string a = "n1->n2->n3;";
 	NodeLinkNodePtr out;
 	std::string::const_iterator begin = std::begin(a);
 	std::string::const_iterator end = std::end(a);

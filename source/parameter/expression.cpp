@@ -3,6 +3,7 @@
 #include <intermediate/ast.h>
 #include <intermediate/ast_visitor.h>
 #include <interpreter/interpreter.h>
+#include <interpreter/symbol_table.h>
 #include <parser/parser.h>
 #include <value/float_value.h>
 #include <value/integer_value.h>
@@ -12,6 +13,8 @@
 #include "common/profiler.h"
 #include "parameter_exception.h"
 
+#include <unordered_map>
+
 using namespace sscript;
 
 namespace selector
@@ -19,7 +22,7 @@ namespace selector
 class ExpressionInterpreter : public Interpreter
 {
 public:
-	static ExpressionInterpreter& GetInstance()
+	static ExpressionInterpreter &GetInstance()
 	{
 		static ExpressionInterpreter sInterpreter;
 		return sInterpreter;
@@ -104,7 +107,7 @@ public:
 
 	void Visit(ast::StatementBlockPtr s) override
 	{
-		for (auto& s : s->GetStatements())
+		for (auto &s : s->GetStatements())
 		{
 			s->AcceptVisitor(this);
 		}
@@ -113,7 +116,7 @@ public:
 	void Visit(ast::CallPtr c) override
 	{
 		c->GetCallee()->AcceptVisitor(this);
-		for (auto& a : c->GetArguments())
+		for (auto &a : c->GetArguments())
 		{
 			a->AcceptVisitor(this);
 		}
@@ -141,7 +144,7 @@ public:
 
 	void Visit(ast::ProgramPtr p) override
 	{
-		for (auto& s : p->GetStatements())
+		for (auto &s : p->GetStatements())
 		{
 			s->AcceptVisitor(this);
 		}
@@ -154,11 +157,11 @@ public:
 
 struct to_float : public ValueVisitor<float>
 {
-	float operator()(Float& f) { return f.m_value; }
-	float operator()(Integer& i) { return i.m_value; }
+	float operator()(Float &f) { return f.m_value; }
+	float operator()(Integer &i) { return i.m_value; }
 
 	template<typename V>
-	float operator()(V&)
+	float operator()(V &)
 	{
 		throw ParameterException("Unable to evaluate expression to float.");
 	}
@@ -166,50 +169,129 @@ struct to_float : public ValueVisitor<float>
 
 struct to_string : public ValueVisitor<std::string>
 {
-	std::string operator()(String& s) { return s.m_value; }
+	std::string operator()(String &s) { return s.m_value; }
 
 	template<typename V>
-	std::string operator()(V&)
+	std::string operator()(V &)
 	{
 		throw ParameterException("Unable to evaluate expression to string.");
 	}
 };
 
-class Expression::Impl
+struct base_value_to_parameter : public ValueVisitor<Parameter>
+{
+	Parameter operator()(Float &f) { return f.m_value; }
+	Parameter operator()(String &s) { return s.m_value; }
+
+	template<typename V>
+	std::string operator()(V &)
+	{
+		throw ParameterException("Unimplemented Expression to Parameter conversion");
+	}
+};
+
+struct parameter_to_base_value
+{
+	BaseValuePtr operator()(const float &f) { return std::make_shared<Float>(f); }
+	BaseValuePtr operator()(const std::string &s) { return std::make_shared<String>(s); }
+	BaseValuePtr operator()(const ExpressionPtr &e)
+	{
+		auto parameter = e->GetAsParameter();
+		return std::visit(*this, parameter);
+	}
+};
+
+class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
 {
 public:
-	Impl(ast::ProgramPtr&& program) : m_expression(program) {}
+	Impl(ast::ProgramPtr &&program) : m_expression(program) {}
 	~Impl() {}
 
-	float GetAsFloat() const
-	{
-		auto& i = ExpressionInterpreter::GetInstance();
-		i.Interpret(m_expression);
-		auto lastValue = i.GetLastEvaluatedExpression();
-		to_float f;
+	float GetAsFloat() { return GetAs<float, to_float>(); }
 
-		return apply_visitor(f, lastValue);
+	std::string GetAsString() { return GetAs<std::string, to_string>(); }
+
+	Parameter GetAsParameter() { return GetAs<Parameter, base_value_to_parameter>(); }
+
+	template<class Return_t, class Visitor_t>
+	Return_t GetAs()
+	{
+		Evaluate();
+		Visitor_t visitor;
+		return apply_visitor(visitor, m_lastComputedValue);
 	}
 
-	std::string GetAsString() const
+	void Evaluate()
 	{
-		auto& i = ExpressionInterpreter::GetInstance();
-		i.Interpret(m_expression);
-		auto lastValue = i.GetLastEvaluatedExpression();
-		to_string s;
+		if (m_lastComputedValue == nullptr)
+		{
+			auto &interpreter = ExpressionInterpreter::GetInstance();
 
-		return apply_visitor(s, lastValue);
+			auto variables = std::make_shared<SymbolTable>("variables");
+			parameter_to_base_value converter;
+			for (const auto &var : m_variableValues)
+			{
+				variables->Declare({var.first, std::visit(converter, var.second)});
+			}
+			interpreter.PushExternalSymbols(variables);
+
+			interpreter.Interpret(m_expression);
+			m_lastComputedValue = interpreter.GetLastEvaluatedExpression();
+
+			// TODO: this would not be needed if ExpressionInterpreter wasn't a singleton
+			interpreter.PopExternalSymbols();
+		}
 	}
+
+	void SetVariableValue(const std::string &variableName, Parameter value)
+	{
+		struct dependent_expression_adder
+		{
+			dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
+
+			void operator()(const ExpressionPtr &e) { e->AddDependentExpression(m_expression); }
+			void operator()(const float &) {}
+			void operator()(const std::string &) {}
+
+			ExpressionPtr m_expression;
+		};
+
+		dependent_expression_adder adder(m_expressionInterface);
+		std::visit(adder, value);
+
+		m_variableValues[variableName] = value;
+		SetDirty();
+	}
+
+	void AddDependentExpression(ExpressionPtr e) { m_dependentExpressions.push_back(e); }
+
+	const std::vector<std::weak_ptr<Expression>> GetDependentExpressions() const { return m_dependentExpressions; }
+
+	void SetDirty()
+	{
+		m_lastComputedValue = nullptr;
+		for (const auto &e : m_dependentExpressions)
+		{
+			e.lock()->SetDirty();
+		}
+	}
+
+	bool IsDirty() const { return m_lastComputedValue == nullptr; }
 
 	ast::ProgramPtr m_expression;
 	std::vector<std::string> m_variables;
+	std::unordered_map<std::string, Parameter> m_variableValues;
+	std::vector<std::weak_ptr<Expression>> m_dependentExpressions;
+	BaseValuePtr m_lastComputedValue;
+	ExpressionPtr m_expressionInterface;
 };
 
-std::shared_ptr<Expression> Expression::CreateExpression(const std::string& expressionString)
+std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expressionString)
 {
 	auto expression = std::make_shared<Expression>();
 	Parser p;
 	expression->m_implementation = std::make_unique<Expression::Impl>(p.Parse(expressionString));
+	expression->m_implementation->m_expressionInterface = expression;
 
 	ExpressionValidator validator;
 	expression->m_implementation->m_expression->AcceptVisitor(&validator);
@@ -220,11 +302,29 @@ std::shared_ptr<Expression> Expression::CreateExpression(const std::string& expr
 
 Expression::Expression() : m_implementation(nullptr) {}
 
-const std::vector<std::string>& Expression::GetVariables() const { return m_implementation->m_variables; }
+const std::vector<std::string> &Expression::GetVariables() const { return m_implementation->m_variables; }
 
-float Expression::GetAsFloat() const { return m_implementation->GetAsFloat(); }
+void Expression::SetVariableValue(const std::string &variableName, Parameter value)
+{
+	m_implementation->SetVariableValue(variableName, value);
+}
 
-std::string Expression::GetAsString() const { return m_implementation->GetAsString(); }
+void Expression::SetDirty() { m_implementation->SetDirty(); }
+
+bool Expression::IsDirty() const { return m_implementation->IsDirty(); }
+
+void Expression::AddDependentExpression(ExpressionPtr e) { m_implementation->AddDependentExpression(e); }
+
+const std::vector<std::weak_ptr<Expression>> Expression::GetDependentExpressions() const
+{
+	return m_implementation->GetDependentExpressions();
+}
+
+Parameter Expression::GetAsParameter() { return m_implementation->GetAsParameter(); }
+
+float Expression::GetAsFloat() { return m_implementation->GetAsFloat(); }
+
+std::string Expression::GetAsString() { return m_implementation->GetAsString(); }
 
 }  // namespace selector
 

@@ -1,6 +1,8 @@
 #ifndef SELECTOR_PARAMETER_EXPRESSION_H_
 #define SELECTOR_PARAMETER_EXPRESSION_H_
 
+#include "parameter.h"
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -26,15 +28,29 @@ public:
 	 */
 	const std::vector<std::string>& GetVariables() const;
 
+	void SetVariableValue(const std::string& variableName, Parameter value);
+
+	void AddDependentExpression(ExpressionPtr e);
+	const std::vector<std::weak_ptr<Expression>> GetDependentExpressions() const;
+
+	void SetDirty();
+
+	bool IsDirty() const;
+
+	/**
+	 * Evaluates the expression and returns it as a \c Parameter.
+	 */
+	Parameter GetAsParameter();
+
 	/**
 	 * Evaluates the expression to a float.
 	 */
-	float GetAsFloat() const;
+	float GetAsFloat();
 
 	/**
 	 * Evaluates the expression to a string.
 	 */
-	std::string GetAsString() const;
+	std::string GetAsString();
 
 private:
 	class Impl;
