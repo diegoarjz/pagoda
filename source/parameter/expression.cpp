@@ -223,6 +223,8 @@ public:
 
 	void Evaluate()
 	{
+		START_PROFILE;
+		
 		if (m_lastComputedValue == nullptr)
 		{
 			auto &interpreter = ExpressionInterpreter::GetInstance();
@@ -245,6 +247,8 @@ public:
 
 	void SetVariableValue(const std::string &variableName, Parameter value)
 	{
+		START_PROFILE;
+		
 		struct dependent_expression_adder
 		{
 			dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
@@ -288,6 +292,8 @@ public:
 
 std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expressionString)
 {
+	START_PROFILE;
+	
 	auto expression = std::make_shared<Expression>();
 	Parser p;
 	expression->m_implementation = std::make_unique<Expression::Impl>(p.Parse(expressionString));
