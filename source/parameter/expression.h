@@ -28,13 +28,32 @@ public:
 	 */
 	const std::vector<std::string>& GetVariables() const;
 
+	/**
+	 * Sets the variable with \p variableName name to the value given by \p value.
+	 *
+	 * If \p value is an \c Expression then it is added as a dependent expression.
+	 */
 	void SetVariableValue(const std::string& variableName, Parameter value);
 
+	/**
+	 * Adds \p e as an \c Expression that is dependent on this \c Expression's value
+	 * to be evaluated.
+	 */
 	void AddDependentExpression(ExpressionPtr e);
+	
+	/**
+	 * Returns the set of dependent expressions.
+	 */
 	const std::vector<std::weak_ptr<Expression>> GetDependentExpressions() const;
 
+	/**
+	 * Marks this \c Expression as dirty, propagating it to all dependent \c Expression.
+	 */
 	void SetDirty();
 
+	/**
+	 * Returns true if the \c Expression is dirty.
+	 */
 	bool IsDirty() const;
 
 	/**
