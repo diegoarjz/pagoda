@@ -1,6 +1,7 @@
 #include "node.h"
 
 #include "common/assertions.h"
+#include "parameter/parameter.h"
 
 namespace selector
 {
@@ -32,11 +33,11 @@ void Node::SetExpressionVariables()
 		// TODO: Should not rely on the exception
 		try
 		{
-			auto e = std::get<ExpressionPtr>(p);
+			auto e = get_parameter_as<ExpressionPtr>(p.second);
 			for (const auto &var : e->GetVariables())
 			{
 				auto parameter = m_context->GetParameter(var);
-				e->SetVariableValue(parameter);
+				e->SetVariableValue(var, parameter);
 			}
 		}
 		catch (...)
