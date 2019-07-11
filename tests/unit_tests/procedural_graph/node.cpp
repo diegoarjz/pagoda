@@ -48,3 +48,14 @@ TEST_F(NodeTest, when_getting_parameter_context_before_setting_should_return_nul
 {
 	EXPECT_EQ(this->node->GetParameterContext(), nullptr);
 }
+
+TEST_F(NodeTest, when_setting_expression_variables_should_set_the_variables_in_expressions)
+{
+	auto context = std::make_shared<Context>("a");
+	auto expr = Expression::CreateExpression("par2 * 2");
+	context->SetParameter("par1", expr);
+	context->SetParameter("par2", 3);
+	node->SetParameterContext(context);
+	node->SetExpressionVariables();
+	ASSERT_EQ(expr->GetAsFloat(), 6.0f);
+}

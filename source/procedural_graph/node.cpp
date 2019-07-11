@@ -25,4 +25,25 @@ void Node::SetExecutionArguments(const std::unordered_map<std::string, Parameter
 	}
 }
 
+void Node::SetExpressionVariables()
+{
+	for (auto &p : m_context->GetParameters())
+	{
+		// TODO: Should not rely on the exception
+		try
+		{
+			auto e = std::get<ExpressionPtr>(p);
+			for (const auto &var : e->GetVariables())
+			{
+				auto parameter = m_context->GetParameter(var);
+				e->SetVariableValue(parameter);
+			}
+		}
+		catch (...)
+		{
+			continue;
+		}
+	}
+}
+
 }  // namespace selector

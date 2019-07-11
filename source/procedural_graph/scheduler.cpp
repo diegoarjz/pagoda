@@ -46,6 +46,7 @@ bool Scheduler::Step()
 	auto in_nodes = m_graph->GetNodeInputNodes(next_node);
 	auto out_nodes = m_graph->GetNodeOutputNodes(next_node);
 
+	next_node->SetExpressionVariables();
 	next_node->Execute(m_graphExecutionContext, in_nodes, out_nodes);
 
 	for (NodePtr n : out_nodes)
