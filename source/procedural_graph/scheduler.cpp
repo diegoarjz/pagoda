@@ -1,6 +1,7 @@
 #include "scheduler.h"
 
 #include "graph_execution_context.h"
+#include "breadth_first_node_visitor.h"
 
 namespace selector
 {
@@ -25,9 +26,42 @@ void Scheduler::Initialize()
 	}
 
 	// Initialize node queue
-	for (NodePtr n : graph_input_nodes)
+	struct Delegate
 	{
-		m_executionQueue.push(n);
+		delegate(GraphPtr graph) : m_graph(graph), m_maxDepth(0) {}
+		
+		void operator()(NodePtr &n)
+		{
+			auto seenNodeIter = m_nodeDepths.find(n);
+			if (seenNodeIter == m_nodeDepths.end())
+			{
+				seenNodeIter = m_nodeDepths.emplace(n, 0);
+			}
+			
+			auto thisNodeDepth = seenNodeIter->second;
+			m_maxDepth = std::max(m_maxDepth, thisNodeDepth);
+			for (auto outNode : m_graph->GetNodeOutNodes(n))
+			{
+				if (m_nodeDepths[outNode] <= thisNodeDepth)
+				{
+					m_nodeDepths[outNode] = thisNodeDepth + 1;
+				}
+			}
+		}
+		
+		std::unordered_map<NodePtr, uint32_t> m_nodeDepths;
+		GraphPtr m_graph;
+		uint32_t m_maxDepth;
+	};
+	
+	Delegate d;
+	BreadthFirstVisitor<Delegate> v(m_graph, delegate);
+	v.Visit();
+	
+	m_executionQueue.resize(d.m_maxDepth);
+	for (auto n : d.m_nodeDepths)
+	{
+		m_executionQueue[n.second].push_back(n.first);
 	}
 }
 
@@ -49,6 +83,7 @@ bool Scheduler::Step()
 	next_node->SetExpressionVariables();
 	next_node->Execute(m_graphExecutionContext, in_nodes, out_nodes);
 
+	/*
 	for (NodePtr n : out_nodes)
 	{
 		auto inserted = m_seenNodes.insert(n);
@@ -58,6 +93,7 @@ bool Scheduler::Step()
 			m_executionQueue.push(n);
 		}
 	}
+	*/
 
 	return true;
 }
