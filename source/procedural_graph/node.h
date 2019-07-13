@@ -71,10 +71,10 @@ public:
 	 * Gets this \c Node parameter \c Context.
 	 */
 	std::shared_ptr<Context> GetParameterContext() const;
-	
+
 	/**
 	 * Sets all the expression variables.
-	 * 
+	 *
 	 * Values are fetched from the \c Node's parameter \c Context.
 	 */
 	virtual void SetExpressionVariables();

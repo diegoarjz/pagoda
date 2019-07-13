@@ -3,20 +3,19 @@
 
 #include "node_visitor.h"
 
+#include <queue>
+
 namespace selector
 {
 template<class Delegate_t>
 class BreadthFirstNodeVisitor : public NodeVisitor<Delegate_t>
 {
 public:
-	BreadthFirstNodeVisitor(GraphPtr graph, Delegate_t &delegate)
-		: NodeVisitor<Delegate_t>(graph, delegate)
-	{
-	}
-	
+	BreadthFirstNodeVisitor(GraphPtr graph, Delegate_t &delegate) : NodeVisitor<Delegate_t>(graph, delegate) {}
+
 	void Visit() override
 	{
-		auto graphInNodes = m_graph->GetGraphInputNodes();
+		auto graphInNodes = this->m_graph->GetGraphInputNodes();
 		for (auto &n : graphInNodes)
 		{
 			m_nodesToVisit.push(n);
@@ -26,19 +25,20 @@ public:
 		{
 			auto n = m_nodesToVisit.front();
 			m_nodesToVisit.pop();
-			
-			m_delegate(n);
-		
-			auto outNodes = m_graph->GetNodeOutputNodes(n);
+
+			this->m_delegate(n);
+
+			auto outNodes = this->m_graph->GetNodeOutputNodes(n);
 			for (auto outNode : outNodes)
 			{
 				m_nodesToVisit.push(outNode);
 			}
 		}
 	}
+
 private:
 	std::queue<NodePtr> m_nodesToVisit;
 };
-}
+}  // namespace selector
 
 #endif
