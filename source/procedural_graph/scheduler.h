@@ -1,6 +1,7 @@
 #ifndef SELECTOR_PROCEDURAL_GRAPH_SCHEDULER_H_
 #define SELECTOR_PROCEDURAL_GRAPH_SCHEDULER_H_
 
+#include "execution_queue.h"
 #include "graph.h"
 #include "node.h"
 
@@ -28,9 +29,7 @@ private:
 	std::shared_ptr<GraphExecutionContext> m_graphExecutionContext;
 	std::shared_ptr<Graph> m_graph;
 	std::shared_ptr<Context> m_graphParameterContext;
-	std::vector<std::list<NodeWeakPtr>> m_executionQueue;
-	std::size_t m_currentBucket;
-	NodeWeakPtrSet m_seenNodes;
+	ExecutionQueue m_executionQueue;
 };  // class Scheduler
 }  // namespace selector
 #endif
