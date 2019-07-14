@@ -37,7 +37,6 @@ add_subdirectory(source)
 add_subdirectory(performance_tests)
 add_subdirectory(tools)
 
-find_package(GTest REQUIRED)
 enable_testing()
 add_subdirectory(tests)
 
