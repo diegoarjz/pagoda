@@ -58,12 +58,14 @@ set(SELECTOR_PARAMETER_SOURCES
     "parameter/context.cpp"
     "parameter/expression.cpp"
     "parameter/parameter_exception.cpp"
+    "parameter/variable.cpp"
     )
 
 set(SELECTOR_PARAMETER_PUBLIC_HEADERS
     "parameter/context.h"
     "parameter/expression.h"
     "parameter/parameter.h"
+    "parameter/variable.h"
 )
 
 # Procedural Objects

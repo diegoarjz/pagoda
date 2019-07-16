@@ -15,16 +15,12 @@ namespace selector
 class Variable
 {
 public:
-
 	/**
 	 * Hashes the \c Variable so that it can be used in unordered_sets.
 	 */
 	struct Hash
 	{
-		size_t operator()(const Variable &v) const
-		{
-			return std::hash<std::string>()(v.ToString());
-		}
+		size_t operator()(const Variable &v) const { return std::hash<std::string>()(v.ToString()); }
 	};
 
 	/**
@@ -36,34 +32,34 @@ public:
 	 * Creates a \c Variable given its list of identifiers.
 	 */
 	explicit Variable(const std::list<std::string> &identifiers);
-	
+
 	~Variable();
-	
+
 	/**
 	 * Returns the list of identifiers.
 	 */
-	const std::list<std::string>& GetIdentifiers() const;
-	
+	const std::list<std::string> &GetIdentifiers() const;
+
 	/**
 	 * Creates a string repreenting this variable.
 	 */
 	const std::string ToString() const;
-	
+
 	/**
 	 * Adds an identifier to this \v Variable.
 	 */
 	void AddIdentifier(const std::string &i);
-	
+
 	bool IsCompound() const;
-	
-	bool operator==(const Variable &v);
-	bool operator!=(const Variable &v);
-	bool operator==(const std::string &v);
-	bool operator!=(const std::string &v);
-	
+
+	bool operator==(const Variable &v) const;
+	bool operator!=(const Variable &v) const;
+	bool operator==(const std::string &v) const;
+	bool operator!=(const std::string &v) const;
+
 private:
-	std::list<std::string> m_identifiers; ///< The list of identifiers.
+	std::list<std::string> m_identifiers;  ///< The list of identifiers.
 };
-}
+}  // namespace selector
 
 #endif
