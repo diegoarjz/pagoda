@@ -14,13 +14,20 @@ protected:
 
 TEST_F(ExpressionTest, when_creating_an_expression_should_be_able_to_resolve_variables)
 {
-	auto expression = Expression::CreateExpression("a + b;");
+	auto expression = Expression::CreateExpression("a + b2;");
 	auto variables = expression->GetVariables();
 	ASSERT_EQ(variables.size(), 2);
-	for (auto v : std::vector<std::string>{"a", "b"})
+	for (auto v : std::vector<std::string>{"a", "b2"})
 	{
 		ASSERT_NE(std::find(std::begin(variables), std::end(variables), v), std::end(variables));
 	}
+}
+
+TEST_F(ExpressionTest, when_resolving_variables_should_be_able_to_get_compound_variables)
+{
+	auto expression = Expression::CreateExpression("a.b.c + d.e;");
+	auto variables = expression->GetVariables();
+	ASSERT_EQ(variables.size(), 2);
 }
 
 TEST_F(ExpressionTest, when_evaluating_an_expression_should_be_able_to_evaluate_to_floats)
