@@ -28,6 +28,9 @@ void CreateRectGeometry::Execute()
 {
 	START_PROFILE;
 
+	float width = execution_context->parameter_context->GetParameterAs<float>("width");
+	float height = execution_context->parameter_context->GetParameterAs<float>("height");
+
 	CreateRect<Geometry> create_rect(width, height);
 	GeometrySizes sizes = create_rect.ResultSize();
 	auto geometry = std::make_shared<Geometry>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);
@@ -37,15 +40,5 @@ void CreateRectGeometry::Execute()
 	std::shared_ptr<GeometryComponent> geometry_component = object->GetComponent<GeometryComponent>();
 
 	geometry_component->SetGeometry(geometry);
-}
-
-void CreateRectGeometry::SetExecutionContext(std::shared_ptr<OperationExecutionContext> context)
-{
-	START_PROFILE;
-
-	ProceduralOperation::SetExecutionContext(context);
-
-	width = context->parameter_context->GetParameterAs<float>("width");
-	height = context->parameter_context->GetParameterAs<float>("height");
 }
 }  // namespace selector

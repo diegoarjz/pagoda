@@ -36,12 +36,14 @@ void ExtrudeGeometry::Execute()
 {
 	START_PROFILE;
 
-	Extrusion<Geometry> extrude(extrusion_amount);
-
 	while (HasInput(input_geometry))
 	{
-		// Geometry
 		ProceduralObjectPtr in_object = GetInputProceduralObject(input_geometry);
+
+		float extrusion_amount = execution_context->parameter_context->GetParameterAs<float>("extrusion_amount");
+		Extrusion<Geometry> extrude(extrusion_amount);
+
+		// Geometry
 		ProceduralObjectPtr out_object = CreateOutputProceduralObject(output_geometry);
 		std::shared_ptr<GeometryComponent> geometry_component = out_object->GetComponent<GeometryComponent>();
 		std::shared_ptr<GeometryComponent> in_geometry_component = in_object->GetComponent<GeometryComponent>();
@@ -63,13 +65,5 @@ void ExtrudeGeometry::Execute()
 		    execution_context->procedural_object_system->GetComponentSystem(ComponentType::Hierarchical));
 		hierarchical_system->SetParent(out_hierarchical_component, in_hierarchical_component);
 	}
-}
-
-void ExtrudeGeometry::SetExecutionContext(std::shared_ptr<OperationExecutionContext> context)
-{
-	START_PROFILE;
-
-	ProceduralOperation::SetExecutionContext(context);
-	extrusion_amount = context->parameter_context->GetParameterAs<float>("extrusion_amount");
 }
 }  // namespace selector

@@ -16,10 +16,6 @@ public:
 	virtual ~ExtrudeGeometry();
 
 	void Execute() override;
-	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) override;
-
-private:
-	float extrusion_amount;
 };  // class ExtrudeGEometry
 
 }  // namespace selector

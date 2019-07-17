@@ -5,6 +5,7 @@
 
 #include "common/factory.h"
 #include "parameter/context.h"
+#include "parameter/parameterizable.h"
 
 #include <bitset>
 #include <list>
@@ -73,9 +74,10 @@ private:
  * Has input and output \c ProceduralOperationObjectInterface which is used to pass
  * input and output procedural objects.
  */
-class ProceduralOperation : public Factory<ProceduralOperation>
+class ProceduralOperation : public Factory<ProceduralOperation>, public IParameterizable
 {
 public:
+	ProceduralOperation();
 	virtual ~ProceduralOperation() {}
 
 	/**
@@ -84,10 +86,8 @@ public:
 	 * Sub classes must implement this.
 	 */
 	virtual void Execute() = 0;
-	virtual void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context)
-	{
-		execution_context = context;
-	}
+
+	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) { execution_context = context; }
 
 	/**
 	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
@@ -102,6 +102,26 @@ public:
 	{
 		return true;
 	}
+
+	/**
+	 * Gets a \c Parameter from this \c ProceduralOperation.
+	 */
+	Parameter GetParameter(const std::string& parameterName) override;
+
+	/**
+	 * Sets a \c Parameter in this \c ProceduralOperation.
+	 */
+	void SetParameter(const std::string& parameterName, const Parameter& parameter) override;
+
+	/**
+	 * Gets the name of all \c Parameter in this \c ProceduralOperation.
+	 */
+	std::unordered_set<std::string> GetParameterNameList() const override;
+
+	/**
+	 * Gets all the \c Parameter in this \c ProceduralOperation.
+	 */
+	std::unordered_map<std::string, Parameter> GetParameters() const override;
 
 protected:
 	void CreateInputInterface(const InterfaceName& interfaceName, const ProceduralObjectMask& mask);
@@ -118,6 +138,9 @@ private:
 
 	InterfaceContainer_t input_interfaces;
 	InterfaceContainer_t output_interfaces;
+
+	std::shared_ptr<Context> m_parameterContext;  ///< The parameter \c Context for the \c ProceduralOperation
+
 };  // class ProceduralOperation
 }  // namespace selector
 #endif

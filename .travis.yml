@@ -5,6 +5,7 @@ compiler:
 # Boost
 addons:
     apt:
+        packages: libboost-all-dev
         packages:
             - libboost-all-dev
             - libstdc++-7-dev

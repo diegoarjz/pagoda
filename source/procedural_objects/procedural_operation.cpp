@@ -60,6 +60,8 @@ ProceduralObjectPtr ProceduralOperationObjectInterface::GetAndPopProceduralObjec
 	}
 }
 
+ProceduralOperation::ProceduralOperation() : m_parameterContext(std::make_shared<Context>("operation")) {}
+
 bool ProceduralOperation::PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object)
 {
 	START_PROFILE;
@@ -140,6 +142,26 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 	output_interfaces[interfaceName]->AddProceduralObject(procedural_object);
 
 	return procedural_object;
+}
+
+Parameter ProceduralOperation::GetParameter(const std::string& parameterName)
+{
+	return m_parameterContext->GetParameter(parameterName);
+}
+
+void ProceduralOperation::SetParameter(const std::string& parameterName, const Parameter& parameter)
+{
+	m_parameterContext->SetParameter(parameterName, parameter);
+}
+
+std::unordered_set<std::string> ProceduralOperation::GetParameterNameList() const
+{
+	return m_parameterContext->GetParameterNameList();
+}
+
+std::unordered_map<std::string, Parameter> ProceduralOperation::GetParameters() const
+{
+	return m_parameterContext->GetParameters();
 }
 
 }  // namespace selector
