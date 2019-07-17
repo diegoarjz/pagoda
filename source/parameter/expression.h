@@ -2,6 +2,7 @@
 #define SELECTOR_PARAMETER_EXPRESSION_H_
 
 #include "parameter.h"
+#include "variable.h"
 
 #include <memory>
 #include <string>
@@ -26,14 +27,19 @@ public:
 	/**
 	 * Returns all variables present in the expression.
 	 */
-	const std::vector<std::string>& GetVariables() const;
+	const std::unordered_set<Variable, Variable::Hash>& GetVariables() const;
 
 	/**
-	 * Sets the variable with \p variableName name to the value given by \p value.
+	 * Sets the variable \p variable to the value given by \p value.
 	 *
 	 * If \p value is an \c Expression then it is added as a dependent expression.
 	 */
-	void SetVariableValue(const std::string& variableName, Parameter value);
+	void SetVariableValue(const Variable& variable, Parameter value);
+	
+	/**
+	 * Sets the variable whith \p variableName to the value given by \p value.
+	 */
+	void SetVariableValue(const std::string &variableNamae, Parameter value);
 
 	/**
 	 * Adds \p e as an \c Expression that is dependent on this \c Expression's value

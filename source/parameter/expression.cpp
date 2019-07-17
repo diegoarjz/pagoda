@@ -38,13 +38,25 @@ private:
 class ExpressionValidator : public AstVisitor
 {
 public:
+	ExpressionValidator() : m_getExpressionCount(0) {}
+	
 	void Visit(ast::FloatPtr) override {}
 
 	void Visit(ast::IntegerPtr) override {}
 
 	void Visit(ast::StringPtr) override {}
 
-	void Visit(ast::IdentifierPtr i) override { m_symbols.push_back(i->GetIdentifier()); }
+	void Visit(ast::IdentifierPtr i) override
+	{
+		if (m_getExpressionCount == 0)
+		{
+			m_symbols.push_back(Variable(i->GetIdentifier()));
+		}
+		else
+		{
+			m_symbols.back().AddIdentifier(i->GetIdentifier());
+		}
+	}
 
 	void Visit(ast::BooleanPtr) override {}
 
@@ -131,7 +143,9 @@ public:
 	void Visit(ast::GetExpressionPtr g) override
 	{
 		g->GetLhs()->AcceptVisitor(this);
+		++m_getExpressionCount;
 		g->GetIdentifier()->AcceptVisitor(this);
+		--m_getExpressionCount;
 	}
 
 	void Visit(ast::SetExpressionPtr s) override
@@ -152,7 +166,8 @@ public:
 
 	void Visit(ast::ParameterPtr p) override {}
 
-	std::vector<std::string> m_symbols;
+	std::vector<Variable> m_symbols;
+	uint32_t m_getExpressionCount;
 };
 
 struct to_float : public ValueVisitor<float>
@@ -245,7 +260,7 @@ public:
 		}
 	}
 
-	void SetVariableValue(const std::string &variableName, Parameter value)
+	void SetVariableValue(const Variable &variableName, Parameter value)
 	{
 		START_PROFILE;
 		
@@ -266,6 +281,11 @@ public:
 		m_variableValues[variableName] = value;
 		SetDirty();
 	}
+	
+	void SetVariableValue(const std::string &variableName, Parameter value)
+	{
+		SetVariableValue(Variable(variableName), value);
+	}
 
 	void AddDependentExpression(ExpressionPtr e) { m_dependentExpressions.push_back(e); }
 
@@ -283,8 +303,8 @@ public:
 	bool IsDirty() const { return m_lastComputedValue == nullptr; }
 
 	ast::ProgramPtr m_expression;
-	std::vector<std::string> m_variables;
-	std::unordered_map<std::string, Parameter> m_variableValues;
+	std::unordered_set<Variable, Variable::Hash> m_variables;
+	std::unordered_map<Variable, Parameter, Variable::Hash> m_variableValues;
 	std::vector<std::weak_ptr<Expression>> m_dependentExpressions;
 	BaseValuePtr m_lastComputedValue;
 	ExpressionPtr m_expressionInterface;
@@ -308,11 +328,16 @@ std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expr
 
 Expression::Expression() : m_implementation(nullptr) {}
 
-const std::vector<std::string> &Expression::GetVariables() const { return m_implementation->m_variables; }
+const std::unordered_map<Variable, Variable::Hash> &Expression::GetVariables() const { return m_implementation->m_variables; }
 
-void Expression::SetVariableValue(const std::string &variableName, Parameter value)
+void Expression::SetVariableValue(const Variable &variableName, Parameter value)
 {
 	m_implementation->SetVariableValue(variableName, value);
+}
+
+void Expression::SetVariableValue(const std::string &variableNamae, Parameter value)
+{
+	m_implementation->SetVariableValue(variableName, Parameter value);
 }
 
 void Expression::SetDirty() { m_implementation->SetDirty(); }
