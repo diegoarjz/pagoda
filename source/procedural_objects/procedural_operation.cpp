@@ -60,9 +60,7 @@ ProceduralObjectPtr ProceduralOperationObjectInterface::GetAndPopProceduralObjec
 	}
 }
 
-ProceduralOperation::ProceduralOperation() : m_context(std::make_shared<Context>("operation"))
-{
-}
+ProceduralOperation::ProceduralOperation() : m_parameterContext(std::make_shared<Context>("operation")) {}
 
 bool ProceduralOperation::PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object)
 {
@@ -146,24 +144,24 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 	return procedural_object;
 }
 
-Parameter ProceduralOperation::GetParameter(const std::string &parameterName)
+Parameter ProceduralOperation::GetParameter(const std::string& parameterName)
 {
-	return m_context->GetParameter(parameterName);
+	return m_parameterContext->GetParameter(parameterName);
 }
 
-void ProceduralOperation::SetParameter(const std::string &parameterName, const Parameter &parameter)
+void ProceduralOperation::SetParameter(const std::string& parameterName, const Parameter& parameter)
 {
-	m_context->SetParameter(parameterName, parameter);
+	m_parameterContext->SetParameter(parameterName, parameter);
 }
 
 std::unordered_set<std::string> ProceduralOperation::GetParameterNameList() const
 {
-	return m_context->GetParameterNameList();
+	return m_parameterContext->GetParameterNameList();
 }
 
 std::unordered_map<std::string, Parameter> ProceduralOperation::GetParameters() const
 {
-	return m_context->GetParameters();
+	return m_parameterContext->GetParameters();
 }
 
 }  // namespace selector

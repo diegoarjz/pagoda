@@ -36,7 +36,7 @@ void Node::SetExpressionVariables()
 			auto e = get_parameter_as<ExpressionPtr>(p.second);
 			for (const auto &var : e->GetVariables())
 			{
-				auto parameter = m_context->GetParameter(var);
+				auto parameter = m_context->GetParameter(var.ToString());
 				e->SetVariableValue(var, parameter);
 			}
 		}

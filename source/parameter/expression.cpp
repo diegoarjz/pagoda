@@ -39,7 +39,7 @@ class ExpressionValidator : public AstVisitor
 {
 public:
 	ExpressionValidator() : m_getExpressionCount(0) {}
-	
+
 	void Visit(ast::FloatPtr) override {}
 
 	void Visit(ast::IntegerPtr) override {}
@@ -239,7 +239,7 @@ public:
 	void Evaluate()
 	{
 		START_PROFILE;
-		
+
 		if (m_lastComputedValue == nullptr)
 		{
 			auto &interpreter = ExpressionInterpreter::GetInstance();
@@ -248,7 +248,8 @@ public:
 			parameter_to_base_value converter;
 			for (const auto &var : m_variableValues)
 			{
-				variables->Declare({var.first, std::visit(converter, var.second)});
+				// TODO: This needs fixing if we're going to have compound variables here.
+				variables->Declare({var.first.GetIdentifiers().front(), std::visit(converter, var.second)});
 			}
 			interpreter.PushExternalSymbols(variables);
 
@@ -263,7 +264,7 @@ public:
 	void SetVariableValue(const Variable &variableName, Parameter value)
 	{
 		START_PROFILE;
-		
+
 		struct dependent_expression_adder
 		{
 			dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
@@ -281,7 +282,7 @@ public:
 		m_variableValues[variableName] = value;
 		SetDirty();
 	}
-	
+
 	void SetVariableValue(const std::string &variableName, Parameter value)
 	{
 		SetVariableValue(Variable(variableName), value);
@@ -313,7 +314,7 @@ public:
 std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expressionString)
 {
 	START_PROFILE;
-	
+
 	auto expression = std::make_shared<Expression>();
 	Parser p;
 	expression->m_implementation = std::make_unique<Expression::Impl>(p.Parse(expressionString));
@@ -321,23 +322,28 @@ std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expr
 
 	ExpressionValidator validator;
 	expression->m_implementation->m_expression->AcceptVisitor(&validator);
-	expression->m_implementation->m_variables = validator.m_symbols;
+	std::copy(
+	    validator.m_symbols.begin(), validator.m_symbols.end(),
+	    std::inserter(expression->m_implementation->m_variables, expression->m_implementation->m_variables.end()));
 
 	return expression;
 }
 
 Expression::Expression() : m_implementation(nullptr) {}
 
-const std::unordered_map<Variable, Variable::Hash> &Expression::GetVariables() const { return m_implementation->m_variables; }
+const std::unordered_set<Variable, Variable::Hash> &Expression::GetVariables() const
+{
+	return m_implementation->m_variables;
+}
 
 void Expression::SetVariableValue(const Variable &variableName, Parameter value)
 {
 	m_implementation->SetVariableValue(variableName, value);
 }
 
-void Expression::SetVariableValue(const std::string &variableNamae, Parameter value)
+void Expression::SetVariableValue(const std::string &variableName, Parameter value)
 {
-	m_implementation->SetVariableValue(variableName, Parameter value);
+	m_implementation->SetVariableValue(variableName, value);
 }
 
 void Expression::SetDirty() { m_implementation->SetDirty(); }
