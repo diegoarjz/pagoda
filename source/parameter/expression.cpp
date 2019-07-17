@@ -214,6 +214,7 @@ struct parameter_to_base_value
 		auto parameter = e->GetAsParameter();
 		return std::visit(*this, parameter);
 	}
+	BaseValuePtr operator()(const IParameterizablePtr &p) { return nullptr; }
 };
 
 class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
@@ -270,6 +271,7 @@ public:
 			dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
 
 			void operator()(const ExpressionPtr &e) { e->AddDependentExpression(m_expression); }
+			void operator()(const IParameterizablePtr &) {}
 			void operator()(const float &) {}
 			void operator()(const std::string &) {}
 

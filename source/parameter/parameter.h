@@ -11,7 +11,10 @@ namespace selector
 class Expression;
 using ExpressionPtr = std::shared_ptr<Expression>;
 
-using Parameter = std::variant<float, std::string, ExpressionPtr>;
+class IParameterizable;
+using IParameterizablePtr = std::shared_ptr<IParameterizable>;
+
+using Parameter = std::variant<float, std::string, ExpressionPtr, IParameterizablePtr>;
 
 template<typename T>
 struct parameter_getter
