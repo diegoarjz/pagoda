@@ -86,11 +86,8 @@ public:
 	 * Sub classes must implement this.
 	 */
 	virtual void Execute() = 0;
-	
-	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context)
-	{
-		execution_context = context;
-	}
+
+	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) { execution_context = context; }
 
 	/**
 	 * Pushes the given \p procedural_object to the input interface with the given \p interface.

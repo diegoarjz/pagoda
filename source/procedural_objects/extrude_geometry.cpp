@@ -39,11 +39,11 @@ void ExtrudeGeometry::Execute()
 	while (HasInput(input_geometry))
 	{
 		ProceduralObjectPtr in_object = GetInputProceduralObject(input_geometry);
-	
-		float extrusion_amount = context->parameter_context->GetParameterAs<float>("extrusion_amount");
+
+		float extrusion_amount = execution_context->parameter_context->GetParameterAs<float>("extrusion_amount");
 		Extrusion<Geometry> extrude(extrusion_amount);
-	
-		// Geometry	
+
+		// Geometry
 		ProceduralObjectPtr out_object = CreateOutputProceduralObject(output_geometry);
 		std::shared_ptr<GeometryComponent> geometry_component = out_object->GetComponent<GeometryComponent>();
 		std::shared_ptr<GeometryComponent> in_geometry_component = in_object->GetComponent<GeometryComponent>();

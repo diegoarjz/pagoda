@@ -27,9 +27,9 @@ CreateRectGeometry::~CreateRectGeometry() {}
 void CreateRectGeometry::Execute()
 {
 	START_PROFILE;
-	
-	float width = context->parameter_context->GetParameterAs<float>("width");
-	float height = context->parameter_context->GetParameterAs<float>("height");
+
+	float width = execution_context->parameter_context->GetParameterAs<float>("width");
+	float height = execution_context->parameter_context->GetParameterAs<float>("height");
 
 	CreateRect<Geometry> create_rect(width, height);
 	GeometrySizes sizes = create_rect.ResultSize();
