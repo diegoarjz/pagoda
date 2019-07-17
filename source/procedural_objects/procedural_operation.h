@@ -86,7 +86,8 @@ public:
 	 * Sub classes must implement this.
 	 */
 	virtual void Execute() = 0;
-	virtual void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context)
+	
+	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context)
 	{
 		execution_context = context;
 	}

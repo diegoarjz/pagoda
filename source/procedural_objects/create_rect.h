@@ -15,12 +15,6 @@ public:
 	virtual ~CreateRectGeometry();
 
 	void Execute() override;
-	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) override;
-
-private:
-	float width;
-	float height;
-
 };  // class CreateSquareGeometry
 
 }  // namespace selector
