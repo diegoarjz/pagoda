@@ -5,7 +5,7 @@
 
 #include "common/factory.h"
 #include "parameter/context.h"
-#include "parameter/parametrizable.h"
+#include "parameter/parameterizable.h"
 
 #include <bitset>
 #include <list>
@@ -108,12 +108,12 @@ public:
 	/**
 	 * Gets a \c Parameter from this \c ProceduralOperation.
 	 */
-	Parameter GetParameter(const std::string &parameterName) override;
+	Parameter GetParameter(const std::string& parameterName) override;
 
 	/**
 	 * Sets a \c Parameter in this \c ProceduralOperation.
 	 */
-	void SetParameter(const std::string &parameterName, const Parameter &parameter) override;
+	void SetParameter(const std::string& parameterName, const Parameter& parameter) override;
 
 	/**
 	 * Gets the name of all \c Parameter in this \c ProceduralOperation.
@@ -140,8 +140,9 @@ private:
 
 	InterfaceContainer_t input_interfaces;
 	InterfaceContainer_t output_interfaces;
-	
-	Context m_parameterContext; ///< The parameter \c Context for the \c ProceduralOperation
+
+	std::shared_ptr<Context> m_parameterContext;  ///< The parameter \c Context for the \c ProceduralOperation
+
 };  // class ProceduralOperation
 }  // namespace selector
 #endif

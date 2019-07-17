@@ -1,5 +1,7 @@
 #include "procedural_object.h"
 
+#include "parameter/context.h"
+
 namespace selector
 {
 ProceduralObjectSystem::~ProceduralObjectSystem()
@@ -118,9 +120,13 @@ void ProceduralObjectSystem::KillProceduralObject(std::shared_ptr<ProceduralObje
 }
 
 ProceduralObject::ProceduralObject()
-    : components(static_cast<size_t>(ComponentType::MaxComponents)), procedural_object_mask(), m_context(std::make_shared<Context>("object"))
+    : components(static_cast<size_t>(ComponentType::MaxComponents)),
+      procedural_object_mask(),
+      m_context(std::make_shared<Context>("object"))
 {
 }
+
+ProceduralObject::~ProceduralObject() {}
 
 void ProceduralObject::SetComponent(const ComponentType& type, std::shared_ptr<ProceduralComponent> component)
 {
@@ -131,12 +137,12 @@ void ProceduralObject::SetComponent(const ComponentType& type, std::shared_ptr<P
 	components[static_cast<uint32_t>(type)] = component;
 }
 
-Parameter ProceduralObject::GetParameter(const std::string &parameterName)
+Parameter ProceduralObject::GetParameter(const std::string& parameterName)
 {
 	return m_context->GetParameter(parameterName);
 }
 
-void ProceduralObject::SetParameter(const std::string &parameterName, const Parameter &parameter)
+void ProceduralObject::SetParameter(const std::string& parameterName, const Parameter& parameter)
 {
 	m_context->SetParameter(parameterName, parameter);
 }

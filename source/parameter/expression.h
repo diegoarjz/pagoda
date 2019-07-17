@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace selector
@@ -35,18 +36,18 @@ public:
 	 * If \p value is an \c Expression then it is added as a dependent expression.
 	 */
 	void SetVariableValue(const Variable& variable, Parameter value);
-	
+
 	/**
 	 * Sets the variable whith \p variableName to the value given by \p value.
 	 */
-	void SetVariableValue(const std::string &variableNamae, Parameter value);
+	void SetVariableValue(const std::string& variableName, Parameter value);
 
 	/**
 	 * Adds \p e as an \c Expression that is dependent on this \c Expression's value
 	 * to be evaluated.
 	 */
 	void AddDependentExpression(ExpressionPtr e);
-	
+
 	/**
 	 * Returns the set of dependent expressions.
 	 */
