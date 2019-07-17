@@ -3,7 +3,7 @@
 
 #include "procedural_component.h"
 
-#include <geometry_core/geometry.h>
+#include "geometry_core/geometry.h"
 
 #include <bitset>
 #include <list>
@@ -13,6 +13,9 @@
 
 namespace selector
 {
+class Context;
+using ContextPtr = std::shared_ptr<Context>;
+
 using ProceduralObjectMask = std::bitset<static_cast<size_t>(ComponentType::MaxComponents)>;
 
 class ProceduralComponentSystem
@@ -75,7 +78,7 @@ private:
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
 using ProceduralObjectSystemWeakPtr = std::weak_ptr<ProceduralObjectSystem>;
 
-class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>
+class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>, public IParametrizable
 {
 public:
 	ProceduralObject();
@@ -110,11 +113,32 @@ public:
 
 	const ProceduralObjectMask& Mask() const { return procedural_object_mask; }
 
+	/**
+	 * Gets a \c Parameter from this \c ProceduralObject.
+	 */
+	Parameter GetParameter(const std::string &parameterName) override;
+
+	/**
+	 * Sets a \c Parameter in this \c ProceduralObject.
+	 */
+	void SetParameter(const std::string &parameterName, const Parameter &parameter) override;
+
+	/**
+	 * Gets the name of all \c Parameter in this \c ProceduralObject.
+	 */
+	std::unordered_set<std::string> GetParameterNameList() const override;
+
+	/**
+	 * Gets all the \c Parameter in this \c ProceduralObject.
+	 */
+	std::unordered_map<std::string, Parameter> GetParameters() const override;
+	
 private:
-	// ID
 	// Procedural Components
 	std::vector<ProceduralComponentWeakPtr> components;
 	ProceduralObjectMask procedural_object_mask;
+	
+	ContextPtr m_context; ///< The parameter \c Context for this \c ProceduralObject
 };  // class ProceduralObject
 
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
