@@ -59,6 +59,7 @@ set(SELECTOR_PARAMETER_SOURCES
     "parameter/expression.cpp"
     "parameter/parameter_exception.cpp"
     "parameter/variable.cpp"
+    "parameter/variable_resolver.cpp"
     )
 
 set(SELECTOR_PARAMETER_PUBLIC_HEADERS
@@ -66,6 +67,7 @@ set(SELECTOR_PARAMETER_PUBLIC_HEADERS
     "parameter/expression.h"
     "parameter/parameter.h"
     "parameter/variable.h"
+    "parameter/variable_resolver.h"
 )
 
 # Procedural Objects

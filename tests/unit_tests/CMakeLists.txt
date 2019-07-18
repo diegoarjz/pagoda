@@ -23,6 +23,7 @@ set(test_srcs
     "parameter/context.cpp"
     "parameter/expression.cpp"
     "parameter/variable.cpp"
+    "parameter/variable_resolver.cpp"
     "procedural_objects/procedural_object.cpp"
     "procedural_objects/procedural_object_interface.cpp"
     "procedural_objects/geometry_system.cpp"
