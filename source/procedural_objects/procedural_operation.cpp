@@ -60,7 +60,7 @@ ProceduralObjectPtr ProceduralOperationObjectInterface::GetAndPopProceduralObjec
 	}
 }
 
-ProceduralOperation::ProceduralOperation() : m_parameterContext(std::make_shared<Context>("operation")) {}
+ProceduralOperation::ProceduralOperation() : m_parameterContext(std::make_shared<Context>("op")) {}
 
 bool ProceduralOperation::PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object)
 {
@@ -120,7 +120,10 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::GetInputProceduralObject(
 {
 	START_PROFILE;
 
-	return input_interfaces[interfaceName]->GetAndPopProceduralObject();
+	auto object = input_interfaces[interfaceName]->GetAndPopProceduralObject();
+	m_parameterContext->SetParameter(interfaceName.ToString(), object);
+
+	return object;
 }
 
 bool ProceduralOperation::HasInput(const InterfaceName& interfaceName) const

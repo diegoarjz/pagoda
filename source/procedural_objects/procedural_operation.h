@@ -28,6 +28,8 @@ struct InterfaceName
 
 	InterfaceName Offset(uint16_t o) const { return InterfaceName(name, o); }
 	bool operator==(const InterfaceName& other) const { return name == other.name && offset == other.offset; }
+
+	std::string ToString() const { return name + std::to_string(offset); }
 };  // struct InterfaceName
 
 struct InterfaceNameHasher
@@ -74,7 +76,9 @@ private:
  * Has input and output \c ProceduralOperationObjectInterface which is used to pass
  * input and output procedural objects.
  */
-class ProceduralOperation : public Factory<ProceduralOperation>, public IParameterizable
+class ProceduralOperation : public Factory<ProceduralOperation>,
+                            public IParameterizable,
+                            public std::enable_shared_from_this<ProceduralOperation>
 {
 public:
 	ProceduralOperation();
@@ -87,7 +91,11 @@ public:
 	 */
 	virtual void Execute() = 0;
 
-	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context) { execution_context = context; }
+	void SetExecutionContext(std::shared_ptr<OperationExecutionContext> context)
+	{
+		execution_context = context;
+		execution_context->parameter_context->SetParameter("op", shared_from_this());
+	}
 
 	/**
 	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
