@@ -122,6 +122,11 @@ public:
 	 * Gets all the \c Parameter in this \c ProceduralOperation.
 	 */
 	std::unordered_map<std::string, Parameter> GetParameters() const override;
+	
+	/**
+	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
+	 */
+	 Parameter ResolveVariable(const Variable &v) const override;
 
 protected:
 	void CreateInputInterface(const InterfaceName& interfaceName, const ProceduralObjectMask& mask);

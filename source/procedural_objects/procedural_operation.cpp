@@ -164,4 +164,9 @@ std::unordered_map<std::string, Parameter> ProceduralOperation::GetParameters() 
 	return m_parameterContext->GetParameters();
 }
 
+Parameter ProceduralOperation::ResolveVariable(const Variable &v) const
+{
+	return m_parameterContext->ResolveVariable(v);
+}
+
 }  // namespace selector
