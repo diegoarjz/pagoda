@@ -64,6 +64,10 @@ public:
 	 * Returns all exposed \c Parameter.
 	 */
 	std::unordered_map<std::string, Parameter> GetParameters() const override;
+	/**
+	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
+	 */
+	Parameter ResolveVariable(const Variable &v) const override;
 
 	/**
 	 * Creates, stores and returns a \c Parameter with the given \p param_name and \p initial_value.
@@ -78,6 +82,9 @@ public:
 	}
 
 private:
+
+	Parameter ResolveVariable(const std::list<std::string>::iter &startIter, const std::list<std::string>::iter &endIter) const;
+
 	std::string m_contextName;
 	std::unordered_map<std::string, Parameter> m_parameters;
 	std::weak_ptr<Context> m_parentContext;

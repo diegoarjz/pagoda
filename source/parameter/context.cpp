@@ -62,6 +62,25 @@ std::unordered_set<std::string> Context::GetParameterNameList() const
 
 std::unordered_map<std::string, Parameter> Context::GetParameters() const { return m_parameters; }
 
+Parameter Context::ResolveVariable(const Variable &v) const
+{
+	const auto &variableIdentifiers = v.GetIdentifiers();
+	return ResolveVariable(variableIdentifiers.begin(), variableIdentifiers.end());
+}
+
+Parameter Context::ResolveVariable(const std::list<std::string>::iter &startIter,
+									const std::list<std::string>::iter &endIter) const
+{
+	auto nextIter = std::next(iter);
+	if (nextIter == endIter)
+	{
+		return GetParameter(*startIter);
+	}
+	
+	return std::get<IParameterizablePtr>(
+		GetParameter(*startIter))->ResolveVariable(nextIter, endIter);
+}
+
 std::shared_ptr<Context> Context::GetSubContext(const std::string &context_name)
 {
 	// TODO: unit test this function

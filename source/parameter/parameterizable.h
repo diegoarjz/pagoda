@@ -2,6 +2,7 @@
 #define SELECTOR_PARAMETER_PARAMETERIZABLE_H_
 
 #include "parameter.h"
+#include "variable.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -32,6 +33,10 @@ public:
 	 * Returns all exposed \c Parameter.
 	 */
 	virtual std::unordered_map<std::string, Parameter> GetParameters() const = 0;
+	/**
+	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
+	 */
+	 virtual Parameter ResolveVariable(const Variable &v) const = 0;
 
 	/**
 	 * Utility method to retrieve and cast a parameter to the intended type.
