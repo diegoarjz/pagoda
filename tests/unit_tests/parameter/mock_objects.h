@@ -11,7 +11,7 @@ class ContextMock : public Context
 {
 public:
 	ContextMock(const std::string &identifier) : Context(identifier) {}
-	MOCK_METHOD1(GetParameter, Parameter(const std::string &));
+	MOCK_CONST_METHOD1(GetParameter, Parameter(const std::string &));
 };
 
 #endif

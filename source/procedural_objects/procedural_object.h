@@ -120,7 +120,7 @@ public:
 	/**
 	 * Gets a \c Parameter from this \c ProceduralObject.
 	 */
-	Parameter GetParameter(const std::string& parameterName) override;
+	Parameter GetParameter(const std::string& parameterName) const override;
 
 	/**
 	 * Sets a \c Parameter in this \c ProceduralObject.
@@ -136,11 +136,11 @@ public:
 	 * Gets all the \c Parameter in this \c ProceduralObject.
 	 */
 	std::unordered_map<std::string, Parameter> GetParameters() const override;
-	
+
 	/**
 	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
 	 */
-	 Parameter ResolveVariable(const Variable &v) const override;
+	Parameter ResolveVariable(const Variable& v) const override;
 
 private:
 	// Procedural Components

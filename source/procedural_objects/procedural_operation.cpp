@@ -144,7 +144,7 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 	return procedural_object;
 }
 
-Parameter ProceduralOperation::GetParameter(const std::string& parameterName)
+Parameter ProceduralOperation::GetParameter(const std::string& parameterName) const
 {
 	return m_parameterContext->GetParameter(parameterName);
 }
@@ -164,7 +164,7 @@ std::unordered_map<std::string, Parameter> ProceduralOperation::GetParameters() 
 	return m_parameterContext->GetParameters();
 }
 
-Parameter ProceduralOperation::ResolveVariable(const Variable &v) const
+Parameter ProceduralOperation::ResolveVariable(const Variable& v) const
 {
 	return m_parameterContext->ResolveVariable(v);
 }

@@ -83,18 +83,18 @@ TEST(ContextTest, test_get_sub_context_non_existing)
 
 TEST(ContextTest, when_resolving_a_simple_variable_should_return_the_parameter_value)
 {
-	Context c("c");
+	auto c = std::make_shared<Context>("c");
 	c->SetParameter("a", 123.0f);
 	auto val = c->ResolveVariable(Variable("a"));
-	EXPECT_EQ(val, 123.0f);
+	EXPECT_EQ(get_parameter_as<float>(val), 123.0f);
 }
 
 TEST(ContextTest, when_resolving_a_compound_variable_should_traverse_the_hierarchy)
 {
-	Context c1("c1");
-	Context c2("c2");
+	auto c1 = std::make_shared<Context>("c1");
+	auto c2 = std::make_shared<Context>("c2");
 	c1->SetParameter("c2", c2);
 	c2->SetParameter("a", 123.0f);
 	auto val = c1->ResolveVariable(Variable("c2.a"));
-	EXPECT_EQ(val, 123.0f);
+	EXPECT_EQ(get_parameter_as<float>(val), 123.0f);
 }

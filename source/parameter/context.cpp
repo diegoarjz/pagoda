@@ -32,7 +32,7 @@ bool Context::SetParent(std::shared_ptr<Context> new_parent)
 	return true;
 }
 
-Parameter Context::GetParameter(const std::string &parameter_name)
+Parameter Context::GetParameter(const std::string &parameter_name) const
 {
 	auto iter = m_parameters.find(parameter_name);
 
@@ -68,17 +68,17 @@ Parameter Context::ResolveVariable(const Variable &v) const
 	return ResolveVariable(variableIdentifiers.begin(), variableIdentifiers.end());
 }
 
-Parameter Context::ResolveVariable(const std::list<std::string>::iter &startIter,
-									const std::list<std::string>::iter &endIter) const
+Parameter Context::ResolveVariable(const std::list<std::string>::const_iterator &startIter,
+                                   const std::list<std::string>::const_iterator &endIter) const
 {
-	auto nextIter = std::next(iter);
+	auto nextIter = std::next(startIter);
 	if (nextIter == endIter)
 	{
 		return GetParameter(*startIter);
 	}
-	
-	return std::get<IParameterizablePtr>(
-		GetParameter(*startIter))->ResolveVariable(nextIter, endIter);
+
+	return std::get<IParameterizablePtr>(GetParameter(*startIter))
+	    ->ResolveVariable(Variable(std::list<std::string>{nextIter, endIter}));
 }
 
 std::shared_ptr<Context> Context::GetSubContext(const std::string &context_name)

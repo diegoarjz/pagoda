@@ -137,7 +137,7 @@ void ProceduralObject::SetComponent(const ComponentType& type, std::shared_ptr<P
 	components[static_cast<uint32_t>(type)] = component;
 }
 
-Parameter ProceduralObject::GetParameter(const std::string& parameterName)
+Parameter ProceduralObject::GetParameter(const std::string& parameterName) const
 {
 	return m_context->GetParameter(parameterName);
 }
@@ -157,7 +157,7 @@ std::unordered_map<std::string, Parameter> ProceduralObject::GetParameters() con
 	return m_context->GetParameters();
 }
 
-Parameter ProceduralObject::ResolveVariable(const Variable &v) const
+Parameter ProceduralObject::ResolveVariable(const Variable& v) const
 {
 	// ProceduralObject variables
 	return m_context->ResolveVariable(v);

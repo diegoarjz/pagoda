@@ -14,10 +14,10 @@ protected:
 
 TEST_F(ExpressionTest, when_creating_an_expression_should_be_able_to_resolve_variables)
 {
-	auto expression = Expression::CreateExpression("a + b2;");
+	auto expression = Expression::CreateExpression("a + b;");
 	auto variables = expression->GetVariables();
 	ASSERT_EQ(variables.size(), 2);
-	for (auto v : std::vector<std::string>{"a", "b2"})
+	for (auto v : std::vector<std::string>{"a", "b"})
 	{
 		ASSERT_NE(std::find(std::begin(variables), std::end(variables), v), std::end(variables));
 	}
@@ -28,6 +28,11 @@ TEST_F(ExpressionTest, when_resolving_variables_should_be_able_to_get_compound_v
 	auto expression = Expression::CreateExpression("a.b.c + d.e;");
 	auto variables = expression->GetVariables();
 	ASSERT_EQ(variables.size(), 2);
+	std::list<std::string> variableNames;
+	std::transform(variables.begin(), variables.end(), std::back_inserter(variableNames),
+	               [](const Variable &v) { return v.ToString(); });
+	EXPECT_NE(std::find(variableNames.begin(), variableNames.end(), "a.b.c"), variableNames.end());
+	EXPECT_NE(std::find(variableNames.begin(), variableNames.end(), "d.e"), variableNames.end());
 }
 
 TEST_F(ExpressionTest, when_evaluating_an_expression_should_be_able_to_evaluate_to_floats)

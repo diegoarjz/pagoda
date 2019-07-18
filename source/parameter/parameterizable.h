@@ -20,7 +20,7 @@ public:
 	/**
 	 * Returns a \c Parameter based on its \p parameterName.
 	 */
-	virtual Parameter GetParameter(const std::string &parameterName) = 0;
+	virtual Parameter GetParameter(const std::string &parameterName) const = 0;
 	/**
 	 * Sets the \c Parameter with \p parameterName to the value given by \p parameter.
 	 */
@@ -36,7 +36,7 @@ public:
 	/**
 	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
 	 */
-	 virtual Parameter ResolveVariable(const Variable &v) const = 0;
+	virtual Parameter ResolveVariable(const Variable &v) const = 0;
 
 	/**
 	 * Utility method to retrieve and cast a parameter to the intended type.

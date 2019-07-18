@@ -51,7 +51,7 @@ public:
 	/**
 	 * Returns a \c Parameter based on its \p parameterName.
 	 */
-	Parameter GetParameter(const std::string &parameterName) override;
+	Parameter GetParameter(const std::string &parameterName) const override;
 	/**
 	 * Sets the \c Parameter with \p parameterName to the value given by \p parameter.
 	 */
@@ -82,8 +82,8 @@ public:
 	}
 
 private:
-
-	Parameter ResolveVariable(const std::list<std::string>::iter &startIter, const std::list<std::string>::iter &endIter) const;
+	Parameter ResolveVariable(const std::list<std::string>::const_iterator &startIter,
+	                          const std::list<std::string>::const_iterator &endIter) const;
 
 	std::string m_contextName;
 	std::unordered_map<std::string, Parameter> m_parameters;
