@@ -68,6 +68,13 @@ public:
 	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
 	 */
 	Parameter ResolveVariable(const Variable &v) const override;
+	
+	/**
+	 * Sets all variables in all expressions to the value given by a parameter.
+	 * Only expressions in the root \c Context are updated as these are the ones
+	 * the user set.
+	 */
+	void UpdateExpressions();
 
 	/**
 	 * Creates, stores and returns a \c Parameter with the given \p param_name and \p initial_value.

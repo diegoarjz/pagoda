@@ -39,6 +39,7 @@ void ExtrudeGeometry::Execute()
 	while (HasInput(input_geometry))
 	{
 		ProceduralObjectPtr in_object = GetInputProceduralObject(input_geometry);
+		m_parameterContext()->UpdateExpressions();
 
 		float extrusion_amount = execution_context->parameter_context->GetParameterAs<float>("extrusion_amount");
 		Extrusion<Geometry> extrude(extrusion_amount);

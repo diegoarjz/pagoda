@@ -9,6 +9,8 @@
 #include <value/integer_value.h>
 #include <value/string_value.h>
 #include <value/value_visitor.h>
+#include <value/class_value.h>
+#include <value/instance_value.h>
 
 #include "common/profiler.h"
 #include "parameter_exception.h"
@@ -27,13 +29,22 @@ public:
 		static ExpressionInterpreter sInterpreter;
 		return sInterpreter;
 	}
+	
+	static std::shared_ptr<Instance> MakeParameterInstance()
+	{
+		return std::make_shared<Instance>(m_parameterClass);
+	}
 
 private:
 	ExpressionInterpreter() : Interpreter()
 	{
 		// TODO: Add built-in functions
 	}
+	
+	static const ClassPtr m_parameterClass;
 };
+
+const ClassPtr ExpressionInterpreter::m_parameterClass = std::make_shared<Class>("SelectorObject");
 
 class ExpressionValidator : public AstVisitor
 {
@@ -249,8 +260,24 @@ public:
 			parameter_to_base_value converter;
 			for (const auto &var : m_variableValues)
 			{
-				// TODO: This needs fixing if we're going to have compound variables here.
-				variables->Declare({var.first.GetIdentifiers().front(), std::visit(converter, var.second)});
+				const std::list<std::string> &variableIdentifiers = var.first.GetIdentifiers();
+				
+				auto &identifierIter = variableIdentifiers.begin();
+				auto currentSymbolTable = variables;
+				std::size_t count = 1;
+				
+				for (std::size_t i = 1; i < variableIdentifiers.size(); ++i, ++identifierIter)
+				{
+					std::shared_ptr<Instance> nextInstance = value_as<Instance>(currentSymbolTable->Get(*identifierIter));
+					if (nextInstance == nullptr)
+					{
+						nextInstance = ExpressionInterpreter::MakeParameterInstance();
+						currentSymbolTable->Declare({*identifierIter, nextInstance});
+					}
+					currentSymbolTable = nextInstance->GetLocalSymbolTable();
+				}
+				
+				currentSymbolTable->Declare({*identifierIter, std::visit(converter, var.second)});
 			}
 			interpreter.PushExternalSymbols(variables);
 

@@ -92,4 +92,25 @@ std::shared_ptr<Context> Context::GetSubContext(const std::string &context_name)
 
 	return iter->second;
 }
+
+void Context::UpdateExpressions()
+{
+	// Set the parameters
+	for (auto &p : GetParameters())
+	{
+		// TODO: Should not rely on the exception
+		try
+		{
+			auto e = get_parameter_as<ExpressionPtr>(p.second);
+			for (const auto &var : e->GetVariables())
+			{
+				e->SetVariableValue(var, ResolveVariable(var));
+			}
+		}
+		catch (...)
+		{
+			continue;
+		}
+	}
+}
 }  // namespace selector
