@@ -11,6 +11,7 @@
 #include <procedural_graph/parse_result.h>
 #include <procedural_graph/reader.h>
 #include <procedural_graph/scheduler.h>
+#include <procedural_graph/graph_dot_exporter.h>
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
@@ -210,44 +211,12 @@ std::shared_ptr<Graph> ReadGraphFromFile(const std::string& file_path)
 
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 {
-	std::ofstream out_file(file_path);
+	std::ofstream outFile(file_path);
 
-	out_file << "digraph {" << std::endl;
-	out_file << "\trankdir=LR;" << std::endl;
-	out_file << "\tnode [shape=plaintext fontname=\"Sans serif\" fontsize=\"8\"];" << std::endl;
-
-	auto nodes = graph->GetGraphNodes();
-	NodeSet<OperationNode> operationNodes;
-	node_type_filter(nodes, operationNodes);
-	for (auto n : operationNodes)
-	{
-		auto parameters = n->GetParameterContext()->GetParameters();
-
-		out_file << "\t" << n->GetName() << " [ label=<\n";
-		out_file << "<table border=\"1\" cellborder=\"0\" cellspacing=\"1\">\n";
-		out_file << "<tr><td align=\"left\"><b>" << n->GetName() << "</b></td></tr>\n";
-
-		for (auto par : parameters)
-		{
-			out_file << "<tr><td>" << par.first << "</td></tr>\n";
-		}
-
-		out_file << "</table>>]\n\n";
-	}
-
-	for (auto n : nodes)
-	{
-		auto out_nodes = graph->GetNodeOutputNodes(n);
-		std::string source_node_name = n->GetName();
-
-		for (auto out_node : out_nodes)
-		{
-			std::string target_node_name = out_node->GetName();
-			out_file << "\t" << source_node_name << " -> " << target_node_name << ";" << std::endl;
-		}
-	}
-
-	out_file << "}";
+	GraphDotExporter exporter(graph);
+	exporter.SetRankBy(GraphDotExporter::RankBy::Depth);
+	exporter.SetShowParameters(true);
+	exporter.Export(outFile);
 }
 
 const char* XMLReaderParseMessage(selector::ParseResult::Status status)
