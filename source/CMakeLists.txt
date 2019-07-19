@@ -81,6 +81,7 @@ set(SELECTOR_PROCEDURAL_OBJECTS_SOURCES
     "procedural_objects/extrude_geometry.cpp"
     "procedural_objects/create_rect.cpp"
     "procedural_objects/triangulate_geometry.cpp"
+    "procedural_objects/export_geometry.cpp"
     )
 
 set(SELECTOR_PROCEDURAL_OBJECTS_PUBLIC_HEADERS
@@ -93,6 +94,7 @@ set(SELECTOR_PROCEDURAL_OBJECTS_PUBLIC_HEADERS
     "procedural_objects/extrude_geometry.h"
     "procedural_objects/create_rect.h"
     "procedural_objects/hierarchical_system.h"
+    "procedural_objects/export_geometry.h"
     )
 
 # Procedural Graph
