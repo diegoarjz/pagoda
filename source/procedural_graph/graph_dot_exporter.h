@@ -8,6 +8,8 @@ namespace selector
 {
 class Graph;
 using GraphPtr = std::shared_ptr<Graph>;
+class Node;
+using NodePtr = std::shared_ptr<Node>;
 
 class GraphDotExporter
 {
@@ -17,19 +19,19 @@ public:
 	 */
 	enum class RankBy
 	{
-		None,				///< Don't specify any ranking.
-		Depth,				///< Rank by depth to a graph input node.
-		ExecutionOrder		///< Rank by the execution order.
+		None,           ///< Don't specify any ranking.
+		Depth,          ///< Rank by depth to a graph input node.
+		ExecutionOrder  ///< Rank by the execution order.
 	};
-	
+
 	/**
 	 * Defines the rank direction.
 	 */
-	 enum class RankDirection
-	 {
-	 	LeftToRight,		///< Displays the nodes from left to right.
-	 	TopToBottom			///< Displays the nodes from top to bottom.
-	 };
+	enum class RankDirection
+	{
+		LeftToRight,  ///< Displays the nodes from left to right.
+		TopToBottom   ///< Displays the nodes from top to bottom.
+	};
 
 	GraphDotExporter(GraphPtr graph);
 	~GraphDotExporter();
@@ -38,46 +40,45 @@ public:
 	 * Sets the rank by mode.
 	 */
 	void SetRankBy(const RankBy &rankBy);
-	
+
 	/**
 	 * Gets the rank by mode.
 	 */
 	RankBy GetRankBy() const;
-	
+
 	/**
 	 * Sets the rank direction mode.
 	 */
 	void SetRankDirection(const RankDirection &rankDirection);
-	
+
 	/**
 	 * Gets the rank direction mode.
 	 */
 	RankDirection GetRankDirection() const;
-	
+
 	/**
 	 * Defines whether \c Node parameters should be shown or not.
 	 */
-	void SetShowParameters(bool &show);
-	
+	void SetShowParameters(const bool &show);
+
 	/**
 	 * Gets whether the \c Node parameters are to be shown or not.
 	 */
-	 bool GetShowParameters() const;
-	 
-	 /**
-	  * Exports the graph to \p outStream.
-	  */
-	void Export(std::ostream &outStream);
-	
-private:
+	bool GetShowParameters() const;
 
+	/**
+	 * Exports the graph to \p outStream.
+	 */
+	void Export(std::ostream &outStream);
+
+private:
 	/**
 	 * The information about how to export a \c Node.
 	 */
 	struct NodeExportInfo
 	{
-		NodePtr m_node;		///< The \c Node to export.
-		uint32_t m_rank;	///< The node's rank.
+		NodePtr m_node;   ///< The \c Node to export.
+		uint32_t m_rank;  ///< The node's rank.
 	};
 
 	/**
@@ -90,6 +91,6 @@ private:
 	RankDirection m_rankDirection;
 	bool m_showParameters;
 };
-}
+}  // namespace selector
 
 #endif
