@@ -144,6 +144,7 @@ protected:
 	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(const InterfaceName& interfaceName);
 
 	std::shared_ptr<OperationExecutionContext> execution_context;
+	std::shared_ptr<Context> m_parameterContext;  ///< The parameter \c Context for the \c ProceduralOperation
 
 private:
 	using InterfaceContainer_t =
@@ -151,8 +152,6 @@ private:
 
 	InterfaceContainer_t input_interfaces;
 	InterfaceContainer_t output_interfaces;
-
-	std::shared_ptr<Context> m_parameterContext;  ///< The parameter \c Context for the \c ProceduralOperation
 
 };  // class ProceduralOperation
 }  // namespace selector

@@ -5,12 +5,12 @@
 #include <interpreter/interpreter.h>
 #include <interpreter/symbol_table.h>
 #include <parser/parser.h>
+#include <value/class_value.h>
 #include <value/float_value.h>
+#include <value/instance_value.h>
 #include <value/integer_value.h>
 #include <value/string_value.h>
 #include <value/value_visitor.h>
-#include <value/class_value.h>
-#include <value/instance_value.h>
 
 #include "common/profiler.h"
 #include "parameter_exception.h"
@@ -29,18 +29,15 @@ public:
 		static ExpressionInterpreter sInterpreter;
 		return sInterpreter;
 	}
-	
-	static std::shared_ptr<Instance> MakeParameterInstance()
-	{
-		return std::make_shared<Instance>(m_parameterClass);
-	}
+
+	static std::shared_ptr<Instance> MakeParameterInstance() { return std::make_shared<Instance>(m_parameterClass); }
 
 private:
 	ExpressionInterpreter() : Interpreter()
 	{
 		// TODO: Add built-in functions
 	}
-	
+
 	static const ClassPtr m_parameterClass;
 };
 
@@ -261,14 +258,14 @@ public:
 			for (const auto &var : m_variableValues)
 			{
 				const std::list<std::string> &variableIdentifiers = var.first.GetIdentifiers();
-				
-				auto &identifierIter = variableIdentifiers.begin();
+
+				auto identifierIter = variableIdentifiers.begin();
 				auto currentSymbolTable = variables;
-				std::size_t count = 1;
-				
+
 				for (std::size_t i = 1; i < variableIdentifiers.size(); ++i, ++identifierIter)
 				{
-					std::shared_ptr<Instance> nextInstance = value_as<Instance>(currentSymbolTable->Get(*identifierIter));
+					std::shared_ptr<Instance> nextInstance =
+					    value_as<std::shared_ptr<Instance>>(currentSymbolTable->Get(*identifierIter).m_value);
 					if (nextInstance == nullptr)
 					{
 						nextInstance = ExpressionInterpreter::MakeParameterInstance();
@@ -276,7 +273,7 @@ public:
 					}
 					currentSymbolTable = nextInstance->GetLocalSymbolTable();
 				}
-				
+
 				currentSymbolTable->Declare({*identifierIter, std::visit(converter, var.second)});
 			}
 			interpreter.PushExternalSymbols(variables);
