@@ -264,13 +264,18 @@ public:
 
 				for (std::size_t i = 1; i < variableIdentifiers.size(); ++i, ++identifierIter)
 				{
-					std::shared_ptr<Instance> nextInstance =
-					    value_as<std::shared_ptr<Instance>>(currentSymbolTable->Get(*identifierIter).m_value);
-					if (nextInstance == nullptr)
-					{
-						nextInstance = ExpressionInterpreter::MakeParameterInstance();
-						currentSymbolTable->Declare({*identifierIter, nextInstance});
-					}
+                    SymbolTable::SymbolEntry entry;
+                    try
+                    {
+                        entry = currentSymbolTable->Get(*identifierIter);
+                    }
+                    catch (SymbolNotFoundException &e)
+                    {
+                        currentSymbolTable->Declare({*identifierIter, ExpressionInterpreter::MakeParameterInstance()});
+                        entry = currentSymbolTable->Get(*identifierIter);
+                    }
+                    
+                    std::shared_ptr<Instance> nextInstance = std::dynamic_pointer_cast<Instance>(entry.m_value);
 					currentSymbolTable = nextInstance->GetLocalSymbolTable();
 				}
 

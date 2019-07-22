@@ -56,3 +56,18 @@ def parameter_overwrite(test):
 
     test.tester.file_contents_should_match("geom0.obj")
     test.tester.file_contents_should_match("parameter_overwrite.dot")
+
+@deregress.test
+def export_geometry(test):
+    test.runner.executable(PATH_TO_GRAPH_RUNNER) \
+        .arg("--input-file={}".format(os.path.join(THIS_DIRECTORY, "export_geometry.sel"))) \
+        .arg("--execute") \
+        .arg("--export-path=.") \
+        .arg("--dot=export_geometry.dot") \
+        .run()
+
+    # The .000000 is needed because of the float to string conversions...
+    test.tester.file_contents_should_match("geometry_0.000000.obj")
+    test.tester.file_contents_should_match("geometry_1.000000.obj")
+    test.tester.file_contents_should_match("export_geometry.dot")
+

@@ -11,6 +11,7 @@
 #include <procedural_graph/parse_result.h>
 #include <procedural_graph/reader.h>
 #include <procedural_graph/scheduler.h>
+#include <procedural_objects/export_geometry.h>
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
@@ -45,6 +46,7 @@ int main(int argc, char* argv[])
 	IsRegistered<ExtrudeGeometry>();
 	IsRegistered<CreateRectGeometry>();
 	IsRegistered<TriangulateGeometry>();
+	IsRegistered<ExportGeometry>();
 	/*
 	IsRegistered<OperationNode>();
 	IsRegistered<InputInterfaceNode>();
