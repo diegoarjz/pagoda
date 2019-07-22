@@ -104,6 +104,7 @@ set(SELECTOR_PROCEDURAL_GRAPH_HEADERS
     "procedural_graph/reader.h"
     "procedural_graph/parse_result.h"
     "procedural_graph/graph_execution_context.h"
+    "procedural_graph/graph_dot_exporter.h"
     )
 
 set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
@@ -124,6 +125,7 @@ set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
     "procedural_graph/reader/graph_reader_grammar_helper.cpp"
     "procedural_graph/reader/ast_interpreter.cpp"
     "procedural_graph/execution_queue.cpp"
+    "procedural_graph/graph_dot_exporter.cpp"
     )
 
 set(SELECTOR_PUBLIC_HEADERS

@@ -118,6 +118,11 @@ public:
 	 * Returns all the \c Node in this \c Graph.
 	 */
 	NodeSet<Node> GetGraphNodes();
+	
+	/**
+	 * Returns the number of \c Node in this \c Graph.
+	 */
+	std::size_t GetNodeCount() const;
 
 	/**
 	 * Returns the input nodes of this \c Graph.

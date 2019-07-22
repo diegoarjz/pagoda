@@ -99,6 +99,8 @@ public:
 	}
 
 	NodeSet<Node> GetGraphNodes() { return m_nodes; }
+	
+	std::size_t GetNodeCount() const { return m_nodes.size(); }
 
 	NodeSet<Node> GetInputNodes()
 	{
@@ -187,6 +189,8 @@ Graph::EdgeDestroyed Graph::DestroyEdge(NodePtr source_node, NodePtr target_node
 }
 
 NodeSet<Node> Graph::GetGraphNodes() { return m_implementation->GetGraphNodes(); }
+
+std::size_t Graph::GetNodeCount() const { return m_implementation->GetNodeCount(); }
 
 NodeSet<Node> Graph::GetGraphInputNodes() { return m_implementation->GetInputNodes(); }
 
