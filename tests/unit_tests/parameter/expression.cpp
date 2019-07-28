@@ -49,6 +49,13 @@ TEST_F(ExpressionTest, when_evaluating_an_expression_should_be_able_to_evaluate_
 	ASSERT_EQ(std::get<std::string>(expression->GetAsParameter()), "abc123");
 }
 
+TEST_F(ExpressionTest, when_evaluating_an_expression_should_be_able_to_evaluate_to_integers)
+{
+	auto expression = Expression::CreateExpression("1 + 2;");
+	ASSERT_EQ(expression->GetAsFloat(), 3);
+	ASSERT_EQ(std::get<int>(expression->GetAsParameter()), 3);
+}
+
 TEST_F(ExpressionTest, when_evaluating_an_expression_with_variables_should_be_able_to_resolve_their_value)
 {
 	auto expression = Expression::CreateExpression("a + b;");

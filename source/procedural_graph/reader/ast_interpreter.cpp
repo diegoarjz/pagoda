@@ -33,7 +33,12 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 		}
 		case NamedArgument::ArgumentType::Float:
 		{
-			param = std::atof(namedArgument->GetArgumentValue().c_str());
+			param = static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str()));
+			break;
+		}
+		case NamedArgument::ArgumentType::Integer:
+		{
+			param = static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str()));
 			break;
 		}
 		case NamedArgument::ArgumentType::Expression:
@@ -71,7 +76,7 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	node->SetExecutionArguments(m_currentNamedParameters);
 
 	m_graph->AddNode(node);
-    m_nodeTable[nodeDefinition->GetNodeName()] = node;
+	m_nodeTable[nodeDefinition->GetNodeName()] = node;
 }
 
 void AstInterpreter::Visit(NodeLinkNode *nodeLink)

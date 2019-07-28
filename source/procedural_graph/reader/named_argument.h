@@ -21,6 +21,7 @@ public:
 	{
 		String,
 		Float,
+		Integer,
 		Expression
 	};
 
@@ -86,6 +87,7 @@ public:
 	 * Allows \c AstNodeVisitor to visit this node type.
 	 */
 	void AcceptVisitor(AstNodeVisitor *visitor) override;
+
 private:
 	std::string m_name;           ///< The name for this \c NamedArgument
 	ArgumentType m_argumentType;  ///< The type of the \c NamedArgument

@@ -66,8 +66,7 @@ def export_geometry(test):
         .arg("--dot=export_geometry.dot") \
         .run()
 
-    # The .000000 is needed because of the float to string conversions...
-    test.tester.file_contents_should_match("geometry_0.000000.obj")
-    test.tester.file_contents_should_match("geometry_1.000000.obj")
+    test.tester.file_contents_should_match("geometry_0.obj")
+    test.tester.file_contents_should_match("geometry_1.obj")
     test.tester.file_contents_should_match("export_geometry.dot")
 

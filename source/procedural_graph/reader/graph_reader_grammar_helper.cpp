@@ -20,6 +20,11 @@ NamedArgumentPtr CreateFloatNamedArgument(std::string &name, float &f)
 	return std::make_shared<NamedArgument>(name, NamedArgument::ArgumentType::Float, std::to_string(f));
 }
 
+NamedArgumentPtr CreateIntegerNamedArgument(std::string &name, int &f)
+{
+	return std::make_shared<NamedArgument>(name, NamedArgument::ArgumentType::Integer, std::to_string(f));
+}
+
 NamedArgumentPtr CreateExpressionNamedArgument(std::string &name, std::string &expression)
 {
 	return std::make_shared<NamedArgument>(name, NamedArgument::ArgumentType::Expression, expression);

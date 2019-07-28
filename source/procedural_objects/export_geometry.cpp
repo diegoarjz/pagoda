@@ -30,7 +30,9 @@ void ExportGeometry::Execute()
 
 	while (HasInput(inputGeometry))
 	{
-		m_parameterContext->SetParameter("count", objectCount);
+		m_parameterContext->SetParameter("count", static_cast<int>(objectCount));
+
+		auto p = m_parameterContext->GetParameter("count");
 
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 		execution_context->parameter_context->UpdateExpressions();
@@ -39,7 +41,8 @@ void ExportGeometry::Execute()
 		auto geometry = geometryComponent->GetGeometry();
 		selector::ObjExporter<Geometry> exporter(geometry);
 
-		std::string outputPath = get_parameter_as<std::string>(execution_context->parameter_context->GetParameter("path"));
+		std::string outputPath =
+		    get_parameter_as<std::string>(execution_context->parameter_context->GetParameter("path"));
 		std::ofstream out_file(outputPath.c_str());
 		exporter.Export(out_file);
 		out_file.close();

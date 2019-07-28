@@ -190,6 +190,18 @@ struct to_float : public ValueVisitor<float>
 	}
 };
 
+struct to_int : public ValueVisitor<int>
+{
+	int operator()(Float &f) { return f.m_value; }
+	int operator()(Integer &i) { return i.m_value; }
+
+	template<typename V>
+	int operator()(V &)
+	{
+		throw ParameterException("Unable to evaluate expression to float.");
+	}
+};
+
 struct to_string : public ValueVisitor<std::string>
 {
 	std::string operator()(String &s) { return s.m_value; }
@@ -205,6 +217,7 @@ struct base_value_to_parameter : public ValueVisitor<Parameter>
 {
 	Parameter operator()(Float &f) { return f.m_value; }
 	Parameter operator()(String &s) { return s.m_value; }
+	Parameter operator()(Integer &s) { return s.m_value; }
 
 	template<typename V>
 	std::string operator()(V &)
@@ -216,6 +229,7 @@ struct base_value_to_parameter : public ValueVisitor<Parameter>
 struct parameter_to_base_value
 {
 	BaseValuePtr operator()(const float &f) { return std::make_shared<Float>(f); }
+	BaseValuePtr operator()(const int &i) { return std::make_shared<Integer>(i); }
 	BaseValuePtr operator()(const std::string &s) { return std::make_shared<String>(s); }
 	BaseValuePtr operator()(const ExpressionPtr &e)
 	{
@@ -232,6 +246,8 @@ public:
 	~Impl() {}
 
 	float GetAsFloat() { return GetAs<float, to_float>(); }
+
+	float GetAsInt() { return GetAs<int, to_int>(); }
 
 	std::string GetAsString() { return GetAs<std::string, to_string>(); }
 
@@ -264,18 +280,18 @@ public:
 
 				for (std::size_t i = 1; i < variableIdentifiers.size(); ++i, ++identifierIter)
 				{
-                    SymbolTable::SymbolEntry entry;
-                    try
-                    {
-                        entry = currentSymbolTable->Get(*identifierIter);
-                    }
-                    catch (SymbolNotFoundException &e)
-                    {
-                        currentSymbolTable->Declare({*identifierIter, ExpressionInterpreter::MakeParameterInstance()});
-                        entry = currentSymbolTable->Get(*identifierIter);
-                    }
-                    
-                    std::shared_ptr<Instance> nextInstance = std::dynamic_pointer_cast<Instance>(entry.m_value);
+					SymbolTable::SymbolEntry entry;
+					try
+					{
+						entry = currentSymbolTable->Get(*identifierIter);
+					}
+					catch (SymbolNotFoundException &e)
+					{
+						currentSymbolTable->Declare({*identifierIter, ExpressionInterpreter::MakeParameterInstance()});
+						entry = currentSymbolTable->Get(*identifierIter);
+					}
+
+					std::shared_ptr<Instance> nextInstance = std::dynamic_pointer_cast<Instance>(entry.m_value);
 					currentSymbolTable = nextInstance->GetLocalSymbolTable();
 				}
 
@@ -391,6 +407,8 @@ const std::vector<std::weak_ptr<Expression>> Expression::GetDependentExpressions
 Parameter Expression::GetAsParameter() { return m_implementation->GetAsParameter(); }
 
 float Expression::GetAsFloat() { return m_implementation->GetAsFloat(); }
+
+int Expression::GetAsInt() { return m_implementation->GetAsInt(); }
 
 std::string Expression::GetAsString() { return m_implementation->GetAsString(); }
 

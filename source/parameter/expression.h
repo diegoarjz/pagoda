@@ -74,6 +74,11 @@ public:
 	float GetAsFloat();
 
 	/**
+	 * Evaluates the expression to an integer.
+	 */
+	int GetAsInt();
+
+	/**
 	 * Evaluates the expression to a string.
 	 */
 	std::string GetAsString();

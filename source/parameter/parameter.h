@@ -14,7 +14,7 @@ using ExpressionPtr = std::shared_ptr<Expression>;
 class IParameterizable;
 using IParameterizablePtr = std::shared_ptr<IParameterizable>;
 
-using Parameter = std::variant<float, std::string, ExpressionPtr, IParameterizablePtr>;
+using Parameter = std::variant<float, int, std::string, ExpressionPtr, IParameterizablePtr>;
 
 template<typename T>
 struct parameter_getter
@@ -33,6 +33,10 @@ struct parameter_getter
 template<>
 template<>
 float parameter_getter<float>::operator()<ExpressionPtr>(const std::shared_ptr<Expression> &e);
+
+template<>
+template<>
+int parameter_getter<int>::operator()<ExpressionPtr>(const std::shared_ptr<Expression> &e);
 
 template<>
 template<>

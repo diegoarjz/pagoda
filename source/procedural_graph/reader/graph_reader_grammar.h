@@ -65,7 +65,8 @@ struct GraphReaderGrammar
 		 * named_simple_arg -> identifier ":" literal
 		 */
 		named_simple_arg = (identifier >> ':' >> quoted_string) [_val = bind(CreateStringNamedArgument, _1, _2)] |
-                           (identifier >> ':' >> float_) [_val = bind(CreateFloatNamedArgument, _1, _2)];
+                           (identifier >> ':' >> float_) [_val = bind(CreateFloatNamedArgument, _1, _2)] |
+                           (identifier >> ':' >> int_ >> !float_) [_val = bind(CreateIntegerNamedArgument, _1, _2)];
 
 		/*
 		 * construction_args -> (named_simple_arg ("," named_simple_arg)*)?
