@@ -11,6 +11,8 @@ set(test_srcs
     "math_lib/plane.cpp"
     "math_lib/projection.cpp"
     "math_lib/orthogonal.cpp"
+    "math_lib/intersectinos.cpp"
+    "math_lib/nearest_pointst.cpp"
     "geometry_core/geometry.cpp"
     "geometry_core/geometry_builder.cpp"
     "geometry_core/geometry_exporter.cpp"
