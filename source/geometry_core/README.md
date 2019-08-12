@@ -46,7 +46,6 @@ In the following, $p$ represents a Point, $s$ a SplitPoint, $e$ an Edge and $f$ 
 
 Operations on Point:
 
-* $edge(p)$:  Returns the edge leaving $p$.
 * $split\_point(p, e)$: Returns the SplitPoint contained $p$ and is the source SplitPoint of $e$.
 * $face(p, e)$: Returns the Face incident in $p$ that has as its edge $e$.
 

@@ -34,6 +34,7 @@ set(SELECTOR_MATH_LIB_PUBLIC_HEADERS
 # Geometry core
 set(SELECTOR_GEOMCORE_SOURCES
     "geometry_core/scope.cpp"
+    "geometry_core/split_point_topology.cpp"
     )
 
 set(SELECTOR_GEOMCORE_PUBLIC_HEADERS
@@ -43,6 +44,7 @@ set(SELECTOR_GEOMCORE_PUBLIC_HEADERS
     "geometry_core/geometry_exporter.h"
     "geometry_core/geometry_topology.h"
     "geometry_core/indexed_container.h"
+    "geometry_core/split_point_topology.h"
     "geometry_core/scope.h"
     )
 
