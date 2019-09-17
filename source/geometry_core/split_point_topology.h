@@ -29,7 +29,7 @@ private:
 	template<typename T>
 	struct HandleHasher
 	{
-		std::size_t operator()(const T &handle) { return static_cast<std::size_t>(handle.GetIndex()); }
+		std::size_t operator()(const T &handle) const { return static_cast<std::size_t>(handle.GetIndex()); }
 	};  // struct HandleHasher
 public:
 	struct PointHandle : public Handle
@@ -107,6 +107,7 @@ public:
 	 */
 	struct CreateFaceResult
 	{
+        CreateFaceResult(FaceHandle f, std::array<PointHandle, 3> points) : m_face(f), m_points(points) {}
 		FaceHandle m_face;
 		std::array<PointHandle, 3> m_points;
 	};
@@ -123,6 +124,7 @@ public:
 	 * Modifying the topology
 	 */
 	SplitPointHandle SplitEdge(const EdgeHandle &e);
+    SplitPointHandle SplitEdge(const EdgeHandle &e, const PointHandle &p);
 	SplitPointHandle CollapseEdge(const EdgeHandle &e);
 	SplitPointHandle CollapseEdge(const EdgeHandle &e, const PointHandle &p);
 
@@ -131,7 +133,7 @@ public:
 		std::array<FaceHandle, 2> m_faces;
 		std::array<EdgeHandle, 2> m_edges;
 	};
-	SplitFaceResult SplitFace(const FaceHandle &f, const EdgeHandle &e0, const EdgeHandle &e1);
+	//SplitFaceResult SplitFace(const FaceHandle &f, const EdgeHandle &e0, const EdgeHandle &e1);
 
 	/*
 	 * Deleting parts of the topology.

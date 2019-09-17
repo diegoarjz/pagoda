@@ -117,10 +117,10 @@ public:
 		START_PROFILE;
 
 		IndexType newIndex = CreateIndex();
-		auto insertResult = m_container.emplace(args...);
+		/*auto insertResult = */m_container.emplace(args...);
 		// TODO: Check if the value was indeed inserted.
 
-		return std::make_pair(newIndex, insertResult.second);
+		return IndexValuePair_t{newIndex, m_container[newIndex]};
 	}
 
 	void Delete(const IndexType& index) { m_container.erase(index); }
