@@ -4,6 +4,7 @@
 #include "indexed_container.h"
 
 #include <array>
+#include <iostream>
 #include <unordered_set>
 
 namespace selector
@@ -17,48 +18,117 @@ public:
 	using Index_t = uint32_t;  ///< Type used by indices.
 
 private:
+	/**
+	 * Represents a handle in that references a topology component.
+	 */
 	struct Handle
 	{
-		explicit Handle(const Index_t &index) : m_index(index) {}
+		Handle(const Index_t &index) : m_index(index) {}
 		Index_t GetIndex() const { return m_index; }
+		operator Index_t() const { return m_index; }
 
 	protected:
 		Index_t m_index;
 	};
 
+	/**
+	 * Hashes a handle of a given type.
+	 */
 	template<typename T>
 	struct HandleHasher
 	{
 		std::size_t operator()(const T &handle) const { return static_cast<std::size_t>(handle.GetIndex()); }
 	};  // struct HandleHasher
+
+	struct Point
+	{
+		std::unordered_set<Index_t> m_edges;
+	};
+
+	struct SplitPoint
+	{
+		Index_t m_point;
+		Index_t m_face;
+		Index_t m_incomingEdge;
+		Index_t m_outgoingEdge;
+	};
+
+	struct Edge
+	{
+		Index_t m_source;
+		Index_t m_destination;
+	};
+
+	struct Face
+	{
+		Index_t m_splitPoint;
+	};
+
+	using PointContainer_t = AssociativeIndexedContainer<Index_t, Point>;
+	using SplitPointContainer_t = AssociativeIndexedContainer<Index_t, SplitPoint>;
+	using EdgeContainer_t = AssociativeIndexedContainer<Index_t, Edge>;
+	using FaceContainer_t = AssociativeIndexedContainer<Index_t, Face>;
+
 public:
+	/**
+	 * Handle to a \c Point.
+	 */
 	struct PointHandle : public Handle
 	{
-		explicit PointHandle(const Index_t &index) : Handle(index) {}
+		PointHandle(const Index_t &index) : Handle(index) {}
+
+		/**
+		 * Implicit cast to an \c Index_t
+		 */
+		operator Index_t() const { return m_index; }
 
 		bool operator==(const PointHandle &p) const { return m_index == p.m_index; }
 		bool operator!=(const PointHandle &p) const { return m_index != p.m_index; }
 	};
 
+	/**
+	 * Handle to a \c SplitPoint.
+	 */
 	struct SplitPointHandle : public Handle
 	{
-		explicit SplitPointHandle(const Index_t &index) : Handle(index) {}
+		SplitPointHandle(const Index_t &index) : Handle(index) {}
+
+		/**
+		 * Implicit cast to an \c Index_t
+		 */
+		operator Index_t() const { return m_index; }
 
 		bool operator==(const SplitPointHandle &s) const { return m_index == s.m_index; }
 		bool operator!=(const SplitPointHandle &s) const { return m_index != s.m_index; }
 	};
 
+	/**
+	 * Handle to an \c Edge
+	 */
 	struct EdgeHandle : public Handle
 	{
-		explicit EdgeHandle(const Index_t &index) : Handle(index) {}
+		EdgeHandle(const Index_t &index) : Handle(index) {}
+
+		/**
+		 * Implicit cast to an \c Index_t
+		 */
+		operator Index_t() const { return m_index; }
 
 		bool operator==(const EdgeHandle &e) const { return m_index == e.m_index; }
 		bool operator!=(const EdgeHandle &e) const { return m_index != e.m_index; }
 	};
 
+	/**
+	 * Handle to a \c Face.
+	 */
 	struct FaceHandle : public Handle
 	{
-		explicit FaceHandle(const Index_t &index) : Handle(index) {}
+		FaceHandle(const Index_t &index) : Handle(index) {}
+
+		/**
+		 * Implicit cast to an \c Index_t
+		 */
+		operator Index_t() const { return m_index; }
 
 		bool operator==(const FaceHandle &f) const { return m_index == f.m_index; }
 		bool operator!=(const FaceHandle &f) const { return m_index != f.m_index; }
@@ -107,7 +177,7 @@ public:
 	 */
 	struct CreateFaceResult
 	{
-        CreateFaceResult(FaceHandle f, std::array<PointHandle, 3> points) : m_face(f), m_points(points) {}
+		CreateFaceResult(FaceHandle f, std::array<PointHandle, 3> points) : m_face(f), m_points(points) {}
 		FaceHandle m_face;
 		std::array<PointHandle, 3> m_points;
 	};
@@ -124,7 +194,7 @@ public:
 	 * Modifying the topology
 	 */
 	SplitPointHandle SplitEdge(const EdgeHandle &e);
-    SplitPointHandle SplitEdge(const EdgeHandle &e, const PointHandle &p);
+	SplitPointHandle SplitEdge(const EdgeHandle &e, const PointHandle &p);
 	SplitPointHandle CollapseEdge(const EdgeHandle &e);
 	SplitPointHandle CollapseEdge(const EdgeHandle &e, const PointHandle &p);
 
@@ -133,7 +203,7 @@ public:
 		std::array<FaceHandle, 2> m_faces;
 		std::array<EdgeHandle, 2> m_edges;
 	};
-	//SplitFaceResult SplitFace(const FaceHandle &f, const EdgeHandle &e0, const EdgeHandle &e1);
+	// SplitFaceResult SplitFace(const FaceHandle &f, const EdgeHandle &e0, const EdgeHandle &e1);
 
 	/*
 	 * Deleting parts of the topology.
@@ -152,35 +222,90 @@ public:
 	EdgeHandleSet GetSharedEdges(const FaceHandle &f0, const FaceHandle &f1);
 	bool IsValid();
 
+	/*
+	 * Iterators and Circulators.
+	 */
+
+	class PointIterator
+	{
+	public:
+		PointIterator(PointContainer_t &container) : m_currentIterator(container.begin()) {}
+
+		PointHandle operator*() { return PointHandle(m_currentIterator->first); }
+
+		PointHandle operator->() { return PointHandle(m_currentIterator->first); }
+
+		PointIterator &operator++()
+		{
+			++m_currentIterator;
+			return *this;
+		}
+
+		PointIterator &operator++(int)
+		{
+			++m_currentIterator;
+			return *this;
+		}
+
+		bool operator==(const PointIterator &other) { return m_currentIterator == other.m_currentIterator; }
+
+		bool operator!=(const PointIterator &other) { return m_currentIterator == other.m_currentIterator; }
+
+	private:
+		typename PointContainer_t::iterator m_currentIterator;
+	};
+
+	PointIterator PointsBegin();
+	PointIterator PointsEnd();
+
+	class VertexIterator
+	{
+	};
+
+	VertexIterator VerticesBegin();
+	VertexIterator VerticesEnd();
+
+	class EdgeIterator
+	{
+	};
+
+	EdgeIterator EdgesBegin();
+	EdgeIterator EdgesEnd();
+
+	class FaceIterator
+	{
+	};
+
+	FaceIterator FacesBegin();
+	FaceIterator FacesEnd();
+
+	class PointVertexIterator
+	{
+	};
+
+	class PointEdgeIterator
+	{
+	};
+
+	class PointFaceIterator
+	{
+	};
+
+	class FaceVertexCirculator
+	{
+	};
+
+	class FaceEdgeCirculator
+	{
+	};
+
+	class FacePointCirculator
+	{
+	};
+
+	void DumpToStream(std::ostream &outStream);
+
 private:
-	struct Point
-	{
-		std::unordered_set<Index_t> m_edges;
-	};
-
-	struct SplitPoint
-	{
-		Index_t m_point;
-		Index_t m_face;
-		Index_t m_incomingEdge;
-		Index_t m_outgoingEdge;
-	};
-
-	struct Edge
-	{
-		Index_t m_source;
-		Index_t m_destination;
-	};
-
-	struct Face
-	{
-		Index_t m_splitPoint;
-	};
-
-	using PointContainer_t = AssociativeIndexedContainer<Index_t, Point>;
-	using SplitPointContainer_t = AssociativeIndexedContainer<Index_t, SplitPoint>;
-	using EdgeContainer_t = AssociativeIndexedContainer<Index_t, Edge>;
-	using FaceContainer_t = AssociativeIndexedContainer<Index_t, Face>;
 
 	template<int size>
 	using IndexPointPairArray_t = std::array<PointContainer_t::IndexValuePair_t, size>;

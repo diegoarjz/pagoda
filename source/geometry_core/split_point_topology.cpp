@@ -123,7 +123,7 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace()
 SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointHandle &p0)
 {
 	// Points
-    auto p = m_points.Get(p0.GetIndex());
+	auto p = m_points.Get(p0.GetIndex());
 	IndexPointPairArray_t<3> points = {PointContainer_t::IndexValuePair_t{p0.GetIndex(), m_points.Get(p0.GetIndex())},
 	                                   m_points.CreateAndGet(), m_points.CreateAndGet()};
 
@@ -176,18 +176,17 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const IndexP
                                                                     const IndexSplitPointPairArray_t<3> &splitPoints,
                                                                     const IndexEdgePairArray_t<3> &edges)
 {
-
 	FaceContainer_t::IndexValuePair_t face = m_faces.CreateAndGet();
-    std::get<1>(face).m_splitPoint = std::get<0>(splitPoints[0]);
+	std::get<1>(face).m_splitPoint = std::get<0>(splitPoints[0]);
 
 	// Connect the elements
 	for (uint32_t i = 0; i < 3; ++i)
 	{
 		auto &point = std::get<1>(points[i]);
 		auto &edge = std::get<1>(edges[i]);
-		//auto &prevEdge = std::get<1>(edges[(i - 1) % 3]);
+		// auto &prevEdge = std::get<1>(edges[(i - 1) % 3]);
 		auto &sourceSplitPoint = std::get<1>(splitPoints[i]);
-		//auto &destinationSplitPoint = std::get<1>(splitPoints[(i + 1) % 3]);
+		// auto &destinationSplitPoint = std::get<1>(splitPoints[(i + 1) % 3]);
 
 		point.m_edges.insert(std::get<0>(edges[i]));  // TODO: check if the point was inserted
 
@@ -203,11 +202,9 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const IndexP
 	// TODO: Validate face
 	// ValidateFace(std::get<0>(face));
 
-	CreateFaceResult result(FaceHandle(std::get<0>(face)), {
-        PointHandle(std::get<0>(points[0])),
-        PointHandle(std::get<0>(points[1])),
-        PointHandle(std::get<0>(points[2]))
-    });
+	CreateFaceResult result(FaceHandle(std::get<0>(face)),
+	                        {PointHandle(std::get<0>(points[0])), PointHandle(std::get<0>(points[1])),
+	                         PointHandle(std::get<0>(points[2]))});
 
 	return result;
 }
@@ -228,13 +225,13 @@ SplitPointTopology::SplitPointHandle SplitPointTopology::AddPointToFace(const Fa
 
 	m_points.Get(p.GetIndex()).m_edges.insert(std::get<0>(newEdge));  // TODO: Check if the edge was inserted
 
-    std::get<1>(newSplitPoint).m_point = p.GetIndex();
-    std::get<1>(newSplitPoint).m_face = f.GetIndex();
-    std::get<1>(newSplitPoint).m_incomingEdge = e.GetIndex();
-    std::get<1>(newSplitPoint).m_outgoingEdge = std::get<0>(newEdge);
+	std::get<1>(newSplitPoint).m_point = p.GetIndex();
+	std::get<1>(newSplitPoint).m_face = f.GetIndex();
+	std::get<1>(newSplitPoint).m_incomingEdge = e.GetIndex();
+	std::get<1>(newSplitPoint).m_outgoingEdge = std::get<0>(newEdge);
 
-    std::get<1>(newEdge).m_source = std::get<0>(newSplitPoint);
-    std::get<1>(newEdge).m_destination = edge.m_destination;
+	std::get<1>(newEdge).m_source = std::get<0>(newSplitPoint);
+	std::get<1>(newEdge).m_destination = edge.m_destination;
 
 	nextSplitPoint.m_incomingEdge = std::get<0>(newEdge);
 	edge.m_destination = std::get<0>(newSplitPoint);
@@ -258,22 +255,22 @@ SplitPointTopology::SplitPointHandle SplitPointTopology::SplitEdge(const EdgeHan
 	Point &point = m_points.Get(p.GetIndex());
 	SplitPointContainer_t::IndexValuePair_t newSplitPoint = m_splitPoints.CreateAndGet();
 	Edge &edge = m_edges.Get(e.GetIndex());
-	//SplitPoint &nextSplitPoint = m_splitPoints.Get(edge.m_destination);
+	// SplitPoint &nextSplitPoint = m_splitPoints.Get(edge.m_destination);
 	EdgeContainer_t::IndexValuePair_t newEdge = m_edges.CreateAndGet();
 
 	point.m_edges.insert(std::get<0>(newEdge));  // TODO: check if the edge was inserted.
 
-    std::get<1>(newSplitPoint).m_point = p.GetIndex();
-    std::get<1>(newSplitPoint).m_incomingEdge = e.GetIndex();
-    std::get<1>(newSplitPoint).m_outgoingEdge = std::get<0>(newEdge);
-    std::get<1>(newSplitPoint).m_face = GetFace(e).GetIndex();
+	std::get<1>(newSplitPoint).m_point = p.GetIndex();
+	std::get<1>(newSplitPoint).m_incomingEdge = e.GetIndex();
+	std::get<1>(newSplitPoint).m_outgoingEdge = std::get<0>(newEdge);
+	std::get<1>(newSplitPoint).m_face = GetFace(e).GetIndex();
 
-    std::get<1>(newEdge).m_source = std::get<0>(newSplitPoint);
-    std::get<1>(newEdge).m_destination = edge.m_destination;
+	std::get<1>(newEdge).m_source = std::get<0>(newSplitPoint);
+	std::get<1>(newEdge).m_destination = edge.m_destination;
 
 	edge.m_destination = std::get<0>(newSplitPoint);
 
-    std::get<1>(newSplitPoint).m_incomingEdge = std::get<0>(newEdge);
+	std::get<1>(newSplitPoint).m_incomingEdge = std::get<0>(newEdge);
 
 	// TODO: ValidateEdge(e.GetIndex());
 	// TODO: ValidateEdge(std::get<0>(newEdge));
@@ -296,12 +293,12 @@ SplitPointTopology::SplitPointHandle SplitPointTopology::CollapseEdge(const Edge
 	Point &prevPoint = m_points.Get(prevSplitPoint.m_point);
 	prevPoint.m_edges.erase(e.GetIndex());
 
-    /*
+	/*
 	if (prevPoint.m_splitPoints.size() == 0)
 	{
-		// TODO: delete point
+	    // TODO: delete point
 	}
-    */
+	*/
 	// TODO: delete split point
 	// TODO: delete edge
 	// TODO: Delete previous edges, split points and points
@@ -314,9 +311,9 @@ SplitPointTopology::SplitPointHandle SplitPointTopology::CollapseEdge(const Edge
 SplitPointTopology::SplitFaceResult SplitPointTopology::SplitFace(const FaceHandle &f, const EdgeHandle &e0,
                                                                   const EdgeHandle &e1)
 {
-	SplitFaceResult result;
+    SplitFaceResult result;
 
-	return result;
+    return result;
 }
 */
 
@@ -326,7 +323,7 @@ SplitPointTopology::SplitFaceResult SplitPointTopology::SplitFace(const FaceHand
 void SplitPointTopology::DeleteFace(const FaceHandle &f)
 {
 	Face &face = m_faces.Get(f.GetIndex());
-	//SplitPoint &splitPoint = m_splitPoints.Get(face.m_splitPoint);
+	// SplitPoint &splitPoint = m_splitPoints.Get(face.m_splitPoint);
 
 	Index_t currentSplitPointIndex = GetNextSplitPoint(SplitPointHandle(face.m_splitPoint)).GetIndex();
 	uint32_t splitPointCount = 0;
@@ -395,8 +392,8 @@ SplitPointTopology::EdgeHandleSet SplitPointTopology::GetEdges(const PointHandle
 
 	// TODO: Check how to do a set union
 	std::unordered_set<Index_t> edgesToCheck = point0.m_edges;
-    edgesToCheck.insert(std::begin(point1.m_edges), std::end(point1.m_edges));
-    //(point1.m_edges);
+	edgesToCheck.insert(std::begin(point1.m_edges), std::end(point1.m_edges));
+	//(point1.m_edges);
 
 	for (const auto &edgeIndex : edgesToCheck)
 	{
@@ -417,22 +414,22 @@ SplitPointTopology::FaceHandleSet SplitPointTopology::GetFaces(const PointHandle
 {
 	FaceHandleSet faces;
 
-    const Point &point = m_points.Get(p.GetIndex());
-    for (const auto &edge : point.m_edges)
-    {
-        faces.insert(GetFace(EdgeHandle(edge)));
-    }
+	const Point &point = m_points.Get(p.GetIndex());
+	for (const auto &edge : point.m_edges)
+	{
+		faces.insert(GetFace(EdgeHandle(edge)));
+	}
 
-    /*
+	/*
 	PointHandle currentPoint = GetNextPoint(p);
 
 	while (currentPoint != p)
 	{
-		const SplitPoint &s = m_splitPoints.Get(GetSplitPoint(currentPoint.GetIndex())).GetIndex();
-		faces.insert(s.m_face);
-		currentPoint = GeteNextPoint(currentPoint);
+	    const SplitPoint &s = m_splitPoints.Get(GetSplitPoint(currentPoint.GetIndex())).GetIndex();
+	    faces.insert(s.m_face);
+	    currentPoint = GeteNextPoint(currentPoint);
 	}
-    */
+	*/
 
 	return faces;
 }
@@ -481,7 +478,7 @@ bool SplitPointTopology::IsValid()
 		hasErrors = hasErrors || ValidateFace(f.first);
 	}
 
-	CRITICAL_ASSERT_MSG(!hasErrors, "Invalid topology");
+	CRITICAL_ASSERT_MSG(hasErrors, "Invalid topology");
 	return !hasErrors;
 }
 
@@ -658,4 +655,42 @@ bool SplitPointTopology::ValidateFace(const Index_t &f)
 	return isValid;
 }
 
-}  // namespace selector
+void SplitPointTopology::DumpToStream(std::ostream &outStream)
+{
+	outStream << "IsValid: " << (IsValid() ? "true" : "false") << std::endl;
+	outStream << "Points:" << std::endl;
+	for (const auto &p : m_points)
+	{
+		outStream << " " << p.first << ":" << std::endl;
+		for (const auto &e : p.second.m_edges)
+		{
+			outStream << "  Edge: " << e << std::endl;
+		}
+	}
+
+	outStream << "SplitPoints:" << std::endl;
+	for (const auto &sp : m_splitPoints)
+	{
+		outStream << " " << sp.first << ":" << std::endl;
+		outStream << "  Point: " << sp.second.m_point << std::endl;
+		outStream << "  Face: " << sp.second.m_face << std::endl;
+		outStream << "  Incoming Edge: " << sp.second.m_incomingEdge << std::endl;
+		outStream << "  Outgoing Edge: " << sp.second.m_outgoingEdge << std::endl;
+	}
+
+	outStream << "Edges:" << std::endl;
+	for (const auto &e : m_edges)
+	{
+		outStream << " " << e.first << ":" << std::endl;
+		outStream << "  Source SplitPoint: " << e.second.m_source << std::endl;
+		outStream << "  Destination SplitPoint: " << e.second.m_destination << std::endl;
+	}
+
+	outStream << "Faces:" << std::endl;
+	for (const auto &f : m_faces)
+	{
+		outStream << " " << f.first << ":" << std::endl;
+		outStream << "  SplitPoint: " << f.second.m_splitPoint << std::endl;
+	}
+}
+}
