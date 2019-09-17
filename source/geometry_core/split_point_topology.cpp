@@ -685,4 +685,43 @@ bool SplitPointTopology::ValidateFace(const Index_t &f)
 	return isValid;
 }
 
+void SplitPointTopology::DumpToStream(std::ostream &outStream)
+{
+	outStream << "IsValid: " << (IsValid() ? "true" : "false") << std::endl;
+	outStream << "Points:" << std::endl;
+	for (const auto &p : m_points)
+	{
+		outStream << " " << p.first << ":" << std::endl;
+		for (const auto &e : p.second.m_edges)
+		{
+			outStream << "  Edge: " << e << std::endl;
+		}
+	}
+	
+	outStream << "SplitPoints:" << std::endl;
+	for (const auto &sp : m_splitPoints)
+	{
+		outStream << " " << sp.first << ":" << std::endl;
+		outStream << "  Point: " << sp.second.m_point << std::endl;
+		outStream << "  Face: " << sp.second.m_face << std::endl;
+		outStream << "  Incoming Edge: " << sp.second.m_incomingEdge << std::endl;
+		outStream << "  Outgoing Edge: " << sp.second.m_outgoingEdge << std::endl;
+	}
+	
+	outStream << "Edges:" << std::endl;
+	for (const auto &e : m_edges)
+	{
+		outStream << " " << e.first << ":" << std::endl;
+		outStream << "  Source SplitPoint: " << e.second.m_source << std::endl;
+		outStream << "  Destination SplitPoint: " << e.second.m_destination << std::endl;
+	}
+	
+	outStream << "Faces:" << std::endl;
+	for (const auto &f : m_faces)
+	{
+		outStream << " " << f.second << ":" << std::endl;
+		outStream << "  SplitPoint: " << f.second.m_face << std::endl;
+	}
+}
+
 }
