@@ -2,13 +2,14 @@ dist: xenial
 language: cpp
 compiler:
     - clang
-# Boost
 addons:
     apt:
-        packages: libboost-all-dev
         packages:
             - libboost-all-dev
             - libstdc++-7-dev
+            - clang-7.0
+env:
+    - CC=clang CXX=clang++ CXXFLAGS="-stdlib=libc++" LDFLAGS="-stdlib=libc++"
 before_install:
     - sudo apt-get -qq update
     - sudo apt-get install -y libgtest-dev
@@ -16,7 +17,8 @@ before_script:
     - git submodule update --init --recursive
     - mkdir build
     - cd build
-    - cmake ..
+    - cmake -DCMAKE_EXE_LINKER_FLAGS="-stdlib=libc++" ..
 script:
     - cmake --build .
     - ./test/unit_tests/unit_tests
+

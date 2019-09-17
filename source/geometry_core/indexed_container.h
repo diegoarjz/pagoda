@@ -21,7 +21,7 @@ public:
 	using iterator = typename ContainerType::iterator;
 	using const_iterator = typename ContainerType::const_iterator;
 	using IndexValuePair_t = std::pair<IndexType, ValueType&>;
-	
+
 	ValueType& Get(const IndexType& index)
 	{
 		START_PROFILE;
@@ -47,17 +47,17 @@ public:
 
 		return static_cast<IndexType>(m_container.size() - 1);
 	}
-	
+
 	template<typename... Args>
 	IndexValuePair_t CreateAndGet(Args... args)
 	{
 		START_PROFILE;
-		
+
 		auto& value = m_container.emplace_back(args...);
-		
+
 		return std::make_pair(static_cast<IndexType>(m_container.size() - 1), value);
 	}
-	
+
 	index_iterator index_begin() const { return Range<size_t>(m_container.size()).begin(); }
 	index_iterator index_end() const { return Range<size_t>(m_container.size()).end(); }
 	iterator begin() { return m_container.begin(); }
@@ -110,28 +110,22 @@ public:
 
 		return new_index;
 	}
-	
+
 	template<typename... Args>
-	IndexValuePair_t CreateAndGet(Args.. args)
+	IndexValuePair_t CreateAndGet(Args... args)
 	{
 		START_PROFILE;
-		
+
 		IndexType newIndex = CreateIndex();
-		auto insertResult = m_container.emplace(args);
+		auto insertResult = m_container.emplace(args...);
 		// TODO: Check if the value was indeed inserted.
-		
+
 		return std::make_pair(newIndex, insertResult.second);
 	}
-	
-	void Delete(const IndexType &index)
-	{
-		m_container.erase(index);
-	}
-	
-	bool HasIndex(const IndexType &index)
-	{
-		return m_container.find(index) != std::end(m_container);
-	}
+
+	void Delete(const IndexType& index) { m_container.erase(index); }
+
+	bool HasIndex(const IndexType& index) { return m_container.find(index) != std::end(m_container); }
 
 	iterator begin() { return m_container.begin(); }
 	iterator end() { return m_container.end(); }
