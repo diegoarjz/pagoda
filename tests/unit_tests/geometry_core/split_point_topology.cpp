@@ -8,6 +8,28 @@
 
 using namespace selector;
 
+TEST(HandleImplicitCastTest, test_implicit_casts)
+{
+	SplitPointTopology::PointHandle p = 1;
+	SplitPointTopology::FaceHandle f = 2;
+	SplitPointTopology::EdgeHandle e = 3;
+	SplitPointTopology::SplitPointHandle s = 4;
+
+	EXPECT_EQ(p.GetIndex(), 1);
+	EXPECT_EQ(f.GetIndex(), 2);
+	EXPECT_EQ(e.GetIndex(), 3);
+	EXPECT_EQ(s.GetIndex(), 4);
+
+	SplitPointTopology::Index_t i = p;
+	EXPECT_EQ(i, 1);
+	i = f;
+	EXPECT_EQ(i, 2);
+	i = e;
+	EXPECT_EQ(i, 3);
+	i = s;
+	EXPECT_EQ(i, 4);
+}
+
 class SplitPointTopologyCreateFaceTest : public ::testing::Test
 {
 protected:
@@ -21,7 +43,6 @@ protected:
 TEST_F(SplitPointTopologyCreateFaceTest, when_creating_a_face_should_return_a_face_with_three_points)
 {
 	SplitPointTopology::CreateFaceResult result = m_topology.CreateFace();
-
 	EXPECT_EQ(result.m_face.GetIndex(), 0);
 	EXPECT_EQ(result.m_points[0].GetIndex(), 0);
 	EXPECT_EQ(result.m_points[1].GetIndex(), 1);
@@ -54,27 +75,6 @@ TEST_F(SplitPointTopologyCreateFaceTest, when_creating_faces_should_be_able_to_r
 	EXPECT_TRUE(m_topology.IsValid());
 }
 
-class SplitPointTopologyAddPointToFaceTest : public ::testing::Test
-{
-protected:
-	void SetUp() {}
-
-	void TearDown() {}
-
-	SplitPointTopology m_topology;
-};
-
-/*
-TEST_F(SplitPointTopologyAddPointToFaceTest, when_adding_with_an_existing_point_should_return_that_point)
-{
-	auto newFace = m_topology.CreateFace();
-	auto p = m_topology.AddPointToFace(newFace.m_points[0]);
-	EXPECT_EQ(p.GetIndex(), m_points[0].GetIndex());
-
-	EXPECT_TRUE(m_topology.IsValid());
-}
-*/
-
 class SplitPointTopologyOperationsTest : public ::testing::Test
 {
 protected:
@@ -85,69 +85,56 @@ protected:
 	SplitPointTopology m_topology;
 };
 
-TEST_F(SplitPointTopologyOperationsTest,
-       when_getting_the_split_point_from_a_point_should_get_the_respective_split_point)
+TEST_F(SplitPointTopologyOperationsTest, when_getting_the_split_point_from_a_point_should_get_the_respective_split_point)
 {
-    /*
-    auto face = m_topology.CreateFace();
+	auto face = m_topology.CreateFace();
+
 	for (auto i = 0u; i < 3; ++i)
 	{
-		SplitPointTopology::SplitPointHandle splitPoint = m_topology.GetSplitPoint(face.m_points[i], face.m_face);
-		EXPECT_EQ(m_topology.GetPoint(splitPoint), face.m_points[i]);
+        auto point = face.m_points[i];
+        auto edge = *(m_topology.GetOutEdges(point).begin());
+        EXPECT_EQ(point, m_topology.GetPoint(m_topology.GetSource(edge)));
 	}
-
-	EXPECT_TRUE(m_topology.IsValid());
-    */
 }
 
 TEST_F(SplitPointTopologyOperationsTest, when_getting_the_split_point_from_a_face_should_get_the_respective_face)
 {
-    auto face = m_topology.CreateFace();
+	auto face = m_topology.CreateFace();
 	auto splitPoint = m_topology.GetSplitPoint(face.m_face);
 	EXPECT_EQ(m_topology.GetFace(splitPoint), face.m_face);
-
-	EXPECT_TRUE(m_topology.IsValid());
 }
 
 TEST_F(SplitPointTopologyOperationsTest, when_getting_the_edges_from_a_split_point_should_return_the_respective_edge)
 {
-    /*
-    auto face = m_topology.CreateFace();
+	auto face = m_topology.CreateFace();
 	for (auto i = 0u; i < 3; ++i)
 	{
-		auto splitPoint = m_topology.GetSplitPoint(face.m_points[i]);
-		auto outgoingEdge = m_topology.GetOutgoingEdge(splitPoint);
-		auto incomingEdge = m_topology.GetIncomingEdge(splitPoint);
+        auto point = face.m_points[i];
+        auto edge = *(m_topology.GetOutEdges(point).begin());
+	    auto splitPoint = m_topology.GetSource(edge);
+	    auto outgoingEdge = m_topology.GetOutEdge(splitPoint);
+	    auto incomingEdge = m_topology.GetInEdge(splitPoint);
 
-		EXPECT_EQ(m_topology.GetSource(outgoingEdge), splitPoint);
-		EXPECT_EQ(m_topology.GetDestination(incomingEdge), splitPoint);
+	    EXPECT_EQ(m_topology.GetSource(outgoingEdge), splitPoint);
+	    EXPECT_EQ(m_topology.GetDestination(incomingEdge), splitPoint);
 	}
-
-	EXPECT_TRUE(m_topology.IsValid());
-    */
 }
 
 TEST_F(SplitPointTopologyOperationsTest, when_getting_the_face_from_an_edge_should_return_the_respective_face)
 {
-    /*
-    auto face = m_topology.CreateFace();
+	auto face = m_topology.CreateFace();
 	for (auto i = 0u; i < 3; ++i)
 	{
-		auto splitPoint = m_topology.GetSplitPoint(face.m_points[i]);
-		auto outgoingEdge = m_topology.GetOutgoingEdge(splitPoint);
-		auto incomingEdge = m_topology.GetIncomingEdge(splitPoint);
-
-		EXPECT_EQ(m_topology.GetFace(outgoingEdge), m_face1.m_face)
+        auto point = face.m_points[i];
+        auto edge = *(m_topology.GetOutEdges(point).begin());
+	    EXPECT_EQ(m_topology.GetFace(edge), face.m_face);
 	}
-
-	EXPECT_TRUE(m_topology.IsValid());
-    */
 }
 
 class SplitPointTopologyNavigationTest : public ::testing::Test
 {
 protected:
-	void SetUp() {  }
+	void SetUp() {}
 
 	void TearDown() {}
 
@@ -156,48 +143,200 @@ protected:
 
 TEST_F(SplitPointTopologyNavigationTest, when_navigating_the_split_points_should_be_able_to_circle_the_face)
 {
-    //auto &topology = m_topology;
-    //auto face = m_topology.CreateFace();
-	//auto next = [&topology](SplitPointTopology::SplitPointHandle &p) { return topology.GetNextSplitPoint(p); };
-	//auto prev = [&topology](SplitPointTopology::SplitPointHandle &p) { return topology.GetPrevSplitPoint(p); };
+	auto &topology = m_topology;
+	auto face = m_topology.CreateFace();
+	auto next = [&topology](SplitPointTopology::SplitPointHandle p) { return topology.GetNextSplitPoint(p); };
+	auto prev = [&topology](SplitPointTopology::SplitPointHandle p) { return topology.GetPrevSplitPoint(p); };
 
-    /*
 	for (auto i = 0u; i < 3; ++i)
 	{
-		auto splitPoint = m_topology.GetSplitPoint(face.m_points[i]);
-		EXPECT_EQ(next(next(next(splitPoint))), splitPoint);
-		EXPECT_EQ(prev(prev(prev(splitPoint))), splitPoint);
+        auto point = face.m_points[i];
+        auto edge = *(m_topology.GetOutEdges(point).begin());
+        SplitPointTopology::SplitPointHandle splitPoint = m_topology.GetSource(edge);
+	    EXPECT_EQ(next(next(next(splitPoint))), splitPoint);
+	    EXPECT_EQ(prev(prev(prev(splitPoint))), splitPoint);
 	}
-    */
-
-	//EXPECT_TRUE(m_topology.IsValid());
 }
 
 TEST_F(SplitPointTopologyNavigationTest, when_navigating_the_edges_should_be_able_to_circle_the_face)
 {
-    /*
-    auto &topology;
-    auto face = m_topology.CreateFace();
-	auto next = [&topology](SplitPointTopology::EdgeHandle &e) { return topology.GetNextEdge(e); };
-	auto prev = [&topology](SplitPointTopology::EdgeHandle &e) { return topology.GetPrevEdge(e); };
+	auto &topology = m_topology;
+	auto face = m_topology.CreateFace();
+	auto next = [&topology](SplitPointTopology::EdgeHandle e) { return topology.GetNextEdge(e); };
+	auto prev = [&topology](SplitPointTopology::EdgeHandle e) { return topology.GetPrevEdge(e); };
 
 	for (auto i = 0u; i < 3; ++i)
 	{
-		auto splitPoint = m_topology.GetSplitPoint(face.m_points[i]);
-		auto edge = m_topology.GetOutgoingEdge(splitPoint);
+        auto point = face.m_points[i];
+        auto edge = *(m_topology.GetOutEdges(point).begin());
 
-		EXPECT_EQ(next(next(next(edge))), edge);
-		EXPECT_EQ(prev(prev(prev(edge))), edge);
+	    EXPECT_EQ(next(next(next(edge))), edge);
+	    EXPECT_EQ(prev(prev(prev(edge))), edge);
 	}
+}
 
-	EXPECT_TRUE(m_topology.IsValid());
-    */
+class SplitPointTopologyIteratorsTest : public ::testing::Test
+{
+protected:
+    void SetUp()
+    {
+        m_face = m_topology.CreateFace();
+    }
+
+    void TearDown() {}
+
+    SplitPointTopology m_topology;
+    SplitPointTopology::CreateFaceResult m_face;
+};
+
+TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_points_should_go_through_all)
+{
+    auto iter = m_topology.PointsBegin();
+    auto endIter = m_topology.PointsEnd();
+    std::unordered_set<SplitPointTopology::Index_t> seenPoints;
+
+    for (/**/; iter != endIter; ++iter)
+    {
+        EXPECT_TRUE(seenPoints.find((*iter).GetIndex()) == seenPoints.end());
+        seenPoints.insert((*iter).GetIndex());
+    }
+    EXPECT_EQ(seenPoints.size(), 3);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_split_points_should_go_through_all)
+{
+    auto iter = m_topology.SplitPointsBegin();
+    auto endIter = m_topology.SplitPointsEnd();
+    std::unordered_set<SplitPointTopology::Index_t> seenSplitPoints;
+
+    for (/**/; iter != endIter; ++iter)
+    {
+        EXPECT_TRUE(seenSplitPoints.find((*iter).GetIndex()) == seenSplitPoints.end());
+        seenSplitPoints.insert((*iter).GetIndex());
+    }
+    EXPECT_EQ(seenSplitPoints.size(), 3);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_edges_should_go_through_all)
+{
+    auto iter = m_topology.EdgesBegin();
+    auto endIter = m_topology.EdgesEnd();
+    std::unordered_set<SplitPointTopology::Index_t> seenEdges;
+
+    for (/**/; iter != endIter; ++iter)
+    {
+        EXPECT_TRUE(seenEdges.find((*iter).GetIndex()) == seenEdges.end());
+        seenEdges.insert((*iter).GetIndex());
+    }
+    EXPECT_EQ(seenEdges.size(), 3);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_faces_should_go_through_all)
+{
+    m_topology.CreateFace();
+    auto iter = m_topology.FacesBegin();
+    auto endIter = m_topology.FacesEnd();
+    std::unordered_set<SplitPointTopology::Index_t> seenFaces;
+
+    for (/**/; iter != endIter; ++iter)
+    {
+        EXPECT_TRUE(seenFaces.find((*iter).GetIndex()) == seenFaces.end());
+        seenFaces.insert((*iter).GetIndex());
+    }
+    EXPECT_EQ(seenFaces.size(), 2);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_edges_should_go_through_all)
+{
+    m_topology.CreateFace(m_face.m_points[0]);
+    auto iter = m_topology.PointEdgesBegin(m_face.m_points[0]);
+    auto endIter = m_topology.PointEdgesEnd(m_face.m_points[0]);
+    std::unordered_set<SplitPointTopology::Index_t> seenEdges;
+
+    for (/**/; iter != endIter; ++iter)
+    {
+        EXPECT_TRUE(seenEdges.find((*iter).GetIndex()) == seenEdges.end());
+        seenEdges.insert((*iter).GetIndex());
+    }
+    EXPECT_EQ(seenEdges.size(), 2);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_split_points_should_go_through_all)
+{
+    m_topology.CreateFace(m_face.m_points[0]);
+    auto iter = m_topology.PointSplitPointBegin(m_face.m_points[0]);
+    auto endIter = m_topology.PointSplitPointEnd(m_face.m_points[0]);
+    std::unordered_set<SplitPointTopology::Index_t> seenSplitPoints;
+
+    for (/**/; iter != endIter; ++iter)
+    {
+        EXPECT_TRUE(seenSplitPoints.find((*iter).GetIndex()) == seenSplitPoints.end());
+        seenSplitPoints.insert((*iter).GetIndex());
+    }
+    EXPECT_EQ(seenSplitPoints.size(), 2);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_faces_should_go_through_all)
+{
+    m_topology.CreateFace(m_face.m_points[0]);
+    auto iter = m_topology.PointFaceBegin(m_face.m_points[0]);
+    auto endIter = m_topology.PointFaceEnd(m_face.m_points[0]);
+    std::unordered_set<SplitPointTopology::Index_t> seenFaces;
+
+    for (/**/; iter != endIter; ++iter)
+    {
+        EXPECT_TRUE(seenFaces.find((*iter).GetIndex()) == seenFaces.end());
+        seenFaces.insert((*iter).GetIndex());
+    }
+    EXPECT_EQ(seenFaces.size(), 2);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_edges_should_go_through_all)
+{
+    auto iter = m_topology.FaceEdgeCirculatorBegin(m_face.m_face);
+    std::unordered_set<SplitPointTopology::Index_t> seenEdges;
+
+    while (iter)
+    {
+        EXPECT_TRUE(seenEdges.find((*iter).GetIndex()) == seenEdges.end());
+        seenEdges.insert((*iter).GetIndex());
+        ++iter;
+    }
+    EXPECT_EQ(seenEdges.size(), 3);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_split_points_should_go_through_all)
+{
+    auto iter = m_topology.FaceSplitPointCirculatorBegin(m_face.m_face);
+    std::unordered_set<SplitPointTopology::Index_t> seenSplitPoints;
+
+    while (iter)
+    {
+        EXPECT_TRUE(seenSplitPoints.find((*iter).GetIndex()) == seenSplitPoints.end());
+        seenSplitPoints.insert((*iter).GetIndex());
+        ++iter;
+    }
+    EXPECT_EQ(seenSplitPoints.size(), 3);
+}
+
+TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_points_should_go_through_all)
+{
+    auto iter = m_topology.FacePointCirculatorBegin(m_face.m_face);
+    std::unordered_set<SplitPointTopology::Index_t> seenPoints;
+
+    while (iter)
+    {
+        EXPECT_TRUE(seenPoints.find((*iter).GetIndex()) == seenPoints.end());
+        seenPoints.insert((*iter).GetIndex());
+        ++iter;
+    }
+    EXPECT_EQ(seenPoints.size(), 3);
 }
 
 class SplitPointTopologySplitEdgeTest : public ::testing::Test
 {
 protected:
-	void SetUp() {  }
+	void SetUp() {}
 
 	void TearDown() {}
 
@@ -206,50 +345,33 @@ protected:
 
 TEST_F(SplitPointTopologySplitEdgeTest, when_splitting_an_edge_should_create_a_new_split_point_in_the_same_face)
 {
-    auto face = m_topology.CreateFace();
+	auto face = m_topology.CreateFace();
 	auto edge = m_topology.GetEdge(face.m_face);
 	SplitPointTopology::SplitPointHandle s = m_topology.SplitEdge(edge);
-	EXPECT_EQ(m_topology.GetOutEdge(s), edge);
 	EXPECT_EQ(m_topology.GetFace(s), face.m_face);
-
 	EXPECT_TRUE(m_topology.IsValid());
-}
-
-TEST_F(SplitPointTopologySplitEdgeTest, when_splitting_an_edge_should_keep_a_valid_topology)
-{
-    /*
-    auto &topology = m_topology;
-    auto face = m_topology.CreateFace();
-	auto edge = m_topology.GetEdge(face.m_face);
-	SplitPointTopology::SplitPointHandle splitPoint = m_topology.SplitEdge(edge);
-
-	auto next = [&topology](SplitPointTopology::SplitPointHandle &p) { return topology.GetNextSplitPoint(p); };
-	auto prev = [&topology](SplitPointTopology::SplitPointHandle &p) { return topology.GetPrevSplitPoint(p); };
-
-	EXPECT_EQ(next(next(next(next(splitPoint)))), splitPoint);
-	EXPECT_EQ(prev(prev(prev(prev(splitPoint)))), splitPoint);
-    */
 }
 
 class SplitPointTopologyCollapseEdgeTest : public ::testing::Test
 {
 protected:
-	void SetUp() { m_triangle.CreateFace(); }
+	void SetUp()
+	{
+		m_face = m_triangle.CreateFace();
+		m_triangle.SplitEdge(0);
+	}
 
 	void TearDown() {}
 
 	SplitPointTopology m_triangle;
+	SplitPointTopology::CreateFaceResult m_face;
 };
 
 TEST_F(SplitPointTopologyCollapseEdgeTest, when_collapsing_an_edge_should_remove_the_destination_split_point)
 {
-    /*
-	auto edgeToCollapse = m_triangle.GetEdge(m_triangle.m_face);
-	auto nextEdge = m_triangle.GetNextEdge(edgeToCollapse);
-	auto splitPointCollapsedTo = m_triangle.CollapseEdge(edgeToCollapse);
-	EXPECT_EQ(splitPointCollapsedTo, m_triangle.GetSource(nextEdge);
+	auto edgeToCollapse = m_triangle.GetEdge(m_face.m_face);
+	m_triangle.CollapseEdge(edgeToCollapse);
 	EXPECT_TRUE(m_triangle.IsValid());
-    */
 }
 
 TEST_F(SplitPointTopologyCollapseEdgeTest, when_face_is_a_triangle_should_not_allow_collapsing) {}
@@ -259,7 +381,7 @@ class SplitPointTopologySplitFaceTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		//m_topology.AddPointToFace();
+		// m_topology.AddPointToFace();
 	}
 
 	void TearDown() {}
