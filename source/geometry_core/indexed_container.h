@@ -127,6 +127,8 @@ public:
 
 	bool HasIndex(const IndexType& index) { return m_container.find(index) != std::end(m_container); }
 
+    std::size_t Count() const { return m_container.size(); }
+
 	iterator begin() { return m_container.begin(); }
 	iterator end() { return m_container.end(); }
 	const_iterator begin() const { return m_container.begin(); }

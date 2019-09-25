@@ -376,6 +376,104 @@ TEST_F(SplitPointTopologyCollapseEdgeTest, when_collapsing_an_edge_should_remove
 
 TEST_F(SplitPointTopologyCollapseEdgeTest, when_face_is_a_triangle_should_not_allow_collapsing) {}
 
+class SplitPointTopologyDeleteTest : public ::testing::Test
+{
+protected:
+	void SetUp()
+	{
+		m_face = m_triangle.CreateFace();
+	}
+
+	void TearDown() {}
+
+	SplitPointTopology m_triangle;
+	SplitPointTopology::CreateFaceResult m_face;
+};
+
+TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_face_should_cascade)
+{
+    m_triangle.DeleteFace(m_face.m_face);
+    EXPECT_EQ(m_triangle.GetFaceCount(), 0);
+    EXPECT_EQ(m_triangle.GetPointCount(), 0);
+    EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
+    EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
+    EXPECT_TRUE(m_triangle.IsValid());
+}
+
+TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_face_should_not_affect_adjacent_faces)
+{
+    m_triangle.CreateFace(m_face.m_points[0], m_face.m_points[1]);
+    m_triangle.DeleteFace(m_face.m_face);
+    EXPECT_EQ(m_triangle.GetFaceCount(), 1);
+    EXPECT_EQ(m_triangle.GetPointCount(), 3);
+    EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
+    EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
+    EXPECT_TRUE(m_triangle.IsValid());
+}
+
+TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_cascade)
+{
+    m_triangle.DeletePoint(m_face.m_points[0]);
+    EXPECT_EQ(m_triangle.GetFaceCount(), 0);
+    EXPECT_EQ(m_triangle.GetPointCount(), 0);
+    EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
+    EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
+    EXPECT_TRUE(m_triangle.IsValid());
+}
+
+TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_not_affect_unrelated_faces)
+{
+    m_triangle.CreateFace(m_face.m_points[0], m_face.m_points[1]);
+    m_triangle.DeletePoint(m_face.m_points[2]);
+    EXPECT_EQ(m_triangle.GetFaceCount(), 1);
+    EXPECT_EQ(m_triangle.GetPointCount(), 3);
+    EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
+    EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
+    EXPECT_TRUE(m_triangle.IsValid());
+}
+
+TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_cascade)
+{
+    m_triangle.DeleteSplitPoint(m_triangle.GetSplitPoint(m_face.m_face));
+    EXPECT_EQ(m_triangle.GetFaceCount(), 0);
+    EXPECT_EQ(m_triangle.GetPointCount(), 0);
+    EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
+    EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
+    EXPECT_TRUE(m_triangle.IsValid());
+}
+
+TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_not_affect_unrelated_faces)
+{
+    m_triangle.CreateFace(m_face.m_points[1], m_face.m_points[2]);
+    m_triangle.DeleteSplitPoint(m_triangle.GetSplitPoint(m_face.m_face));
+    EXPECT_EQ(m_triangle.GetFaceCount(), 1);
+    EXPECT_EQ(m_triangle.GetPointCount(), 3);
+    EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
+    EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
+    EXPECT_TRUE(m_triangle.IsValid());
+}
+
+TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_cascade)
+{
+    m_triangle.DeleteEdge(m_triangle.GetEdge(m_face.m_face));
+    EXPECT_EQ(m_triangle.GetFaceCount(), 0);
+    EXPECT_EQ(m_triangle.GetPointCount(), 0);
+    EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
+    EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
+    EXPECT_TRUE(m_triangle.IsValid());
+}
+
+TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_not_affect_unrelated_faces)
+{
+    m_triangle.CreateFace(m_face.m_points[1], m_face.m_points[2]);
+    m_triangle.DeleteEdge(m_triangle.GetEdge(m_face.m_face));
+    EXPECT_EQ(m_triangle.GetFaceCount(), 1);
+    EXPECT_EQ(m_triangle.GetPointCount(), 3);
+    EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
+    EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
+    EXPECT_TRUE(m_triangle.IsValid());
+}
+
 class SplitPointTopologySplitFaceTest : public ::testing::Test
 {
 protected:

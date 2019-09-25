@@ -159,6 +159,11 @@ public:
 	SplitPointTopology();
 	~SplitPointTopology();
 
+    std::size_t GetFaceCount() const;
+    std::size_t GetPointCount() const;
+    std::size_t GetSplitPointCount() const;
+    std::size_t GetEdgeCount() const;
+
 	/*
 	 * Operations
 	 */
@@ -166,7 +171,6 @@ public:
 	 * Gets the \c FaceHandle that belongs to the \c PointHandle \p p and is the source \c SplitPoint of \p e.
 	 */
 	FaceHandle GetFace(const PointHandle &p, const EdgeHandle &e) const;
-
 	/**
 	 * Gets a handle to the \c Point that the \c SplitPointHandle \p s belongs to.
 	 */
@@ -488,7 +492,7 @@ public:
 		    : m_topology(topology),
 		      m_currentEdge(m_topology->GetEdge(faceHandle)),
 		      m_lastEdge(m_currentEdge),
-              m_initialPosition(true)
+		      m_initialPosition(true)
 		{
 		}
 
@@ -502,13 +506,13 @@ public:
 		FaceEdgeCirculator &operator++()
 		{
 			m_currentEdge = m_topology->GetNextEdge(m_currentEdge);
-            m_initialPosition = false;
+			m_initialPosition = false;
 			return *this;
 		}
 		FaceEdgeCirculator &operator++(int)
 		{
 			m_currentEdge = m_topology->GetNextEdge(m_currentEdge);
-            m_initialPosition = false;
+			m_initialPosition = false;
 			return *this;
 		}
 
@@ -519,18 +523,18 @@ public:
 		const SplitPointTopology *m_topology;
 		EdgeHandle m_currentEdge;
 		EdgeHandle m_lastEdge;
-        bool m_initialPosition;
+		bool m_initialPosition;
 	};
 
 	FaceEdgeCirculator FaceEdgeCirculatorBegin(const FaceHandle &f);
 
 	class FaceSplitPointCirculator
 	{
-    public:
-        FaceSplitPointCirculator(const SplitPointTopology *topology, const FaceEdgeCirculator &circulator)
-            : m_topology(topology),
-              m_currentCirculator(circulator)
-        {}
+	public:
+		FaceSplitPointCirculator(const SplitPointTopology *topology, const FaceEdgeCirculator &circulator)
+		    : m_topology(topology), m_currentCirculator(circulator)
+		{
+		}
 
 		bool IsValid() const { return m_currentCirculator.IsValid(); }
 
@@ -541,48 +545,60 @@ public:
 
 		FaceSplitPointCirculator &operator++()
 		{
-            ++m_currentCirculator;
+			++m_currentCirculator;
 			return *this;
 		}
 		FaceSplitPointCirculator &operator++(int)
 		{
-            ++m_currentCirculator;
+			++m_currentCirculator;
 			return *this;
 		}
 
-		bool operator==(const FaceSplitPointCirculator &other) { return m_currentCirculator == other.m_currentCirculator; }
-		bool operator!=(const FaceSplitPointCirculator &other) { return m_currentCirculator != other.m_currentCirculator; }
+		bool operator==(const FaceSplitPointCirculator &other)
+		{
+			return m_currentCirculator == other.m_currentCirculator;
+		}
+		bool operator!=(const FaceSplitPointCirculator &other)
+		{
+			return m_currentCirculator != other.m_currentCirculator;
+		}
 
 	private:
 		const SplitPointTopology *m_topology;
-        FaceEdgeCirculator m_currentCirculator;
+		FaceEdgeCirculator m_currentCirculator;
 	};
 
-    FaceSplitPointCirculator FaceSplitPointCirculatorBegin(const FaceHandle &f);
+	FaceSplitPointCirculator FaceSplitPointCirculatorBegin(const FaceHandle &f);
 
 	class FacePointCirculator
 	{
-    public:
-        FacePointCirculator(const SplitPointTopology *topology, const FaceEdgeCirculator &circulator)
-            : m_topology(topology),
-              m_currentCirculator(circulator)
-        {}
+	public:
+		FacePointCirculator(const SplitPointTopology *topology, const FaceEdgeCirculator &circulator)
+		    : m_topology(topology), m_currentCirculator(circulator)
+		{
+		}
 
 		bool IsValid() const { return m_currentCirculator.IsValid(); }
 
 		operator bool() const { return IsValid(); }
 
-		PointHandle operator*() { return m_topology->GetPoint(m_topology->GetSource((*m_currentCirculator).GetIndex())); }
-		PointHandle operator->() { return m_topology->GetPoint(m_topology->GetSource((*m_currentCirculator).GetIndex())); }
+		PointHandle operator*()
+		{
+			return m_topology->GetPoint(m_topology->GetSource((*m_currentCirculator).GetIndex()));
+		}
+		PointHandle operator->()
+		{
+			return m_topology->GetPoint(m_topology->GetSource((*m_currentCirculator).GetIndex()));
+		}
 
 		FacePointCirculator &operator++()
 		{
-            ++m_currentCirculator;
+			++m_currentCirculator;
 			return *this;
 		}
 		FacePointCirculator &operator++(int)
 		{
-            ++m_currentCirculator;
+			++m_currentCirculator;
 			return *this;
 		}
 
@@ -591,10 +607,10 @@ public:
 
 	private:
 		const SplitPointTopology *m_topology;
-        FaceEdgeCirculator m_currentCirculator;
+		FaceEdgeCirculator m_currentCirculator;
 	};
 
-    FacePointCirculator FacePointCirculatorBegin(const FaceHandle &f);
+	FacePointCirculator FacePointCirculatorBegin(const FaceHandle &f);
 
 	void DumpToStream(std::ostream &outStream);
 
