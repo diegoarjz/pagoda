@@ -290,14 +290,11 @@ public:
 	 */
 	SplitPointHandle CollapseEdge(const EdgeHandle &e);
 
-	/*
-	struct SplitFaceResult
-	{
-	    std::array<FaceHandle, 2> m_faces;
-	    std::array<EdgeHandle, 2> m_edges;
-	};
-	SplitFaceResult SplitFace(const FaceHandle &f, const EdgeHandle &e0, const EdgeHandle &e1);
-	*/
+    /**
+     * Splits a face between two split points.
+     * @return \c FaceHandle with referring to the new \c Face.
+     */
+	FaceHandle SplitFace(const FaceHandle &f, const EdgeHandle &e0, const EdgeHandle &e1);
 
 	/*
 	 * Deleting parts of the topology.

@@ -479,12 +479,28 @@ class SplitPointTopologySplitFaceTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		// m_topology.AddPointToFace();
+        m_face = m_topology.CreateFace();
+        m_topology.SplitEdge(m_topology.GetEdge(m_face.m_face));
 	}
 
 	void TearDown() {}
 
 	SplitPointTopology m_topology;
+    SplitPointTopology::CreateFaceResult m_face;
 };
 
-TEST_F(SplitPointTopologySplitFaceTest, when_splitting_a_face_should_create_two_edges_between_the_points) {}
+TEST_F(SplitPointTopologySplitFaceTest, when_splitting_a_face_should_create_two_edges_between_the_points)
+{
+    auto e0 = m_topology.GetEdge(m_face.m_face);
+    auto e1 = m_topology.GetNextEdge(e0);
+
+    m_topology.DumpToStream(std::cout);
+    m_topology.SplitFace(m_face.m_face, e0, e1);
+    m_topology.DumpToStream(std::cout);
+
+    ASSERT_TRUE(m_topology.IsValid());
+    EXPECT_EQ(m_topology.GetFaceCount(), 2);
+    EXPECT_EQ(m_topology.GetPointCount(), 4);
+    EXPECT_EQ(m_topology.GetSplitPointCount(), 6);
+    EXPECT_EQ(m_topology.GetEdgeCount(), 6);
+}
