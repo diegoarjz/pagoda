@@ -19,24 +19,14 @@ class Triangulate
 private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
-	using IndexType = typename Geometry::IndexType;
+	using IndexType = typename Geometry::Index_t;
 
 public:
 	Triangulate() {}
 
 	GeometrySizes ResultSize(GeometryPtr geometryIn) const
 	{
-		uint32_t numVerts = geometryIn->GetNumVertices();
-		uint32_t numFaces = 0;
-
-		auto faceEnd = geometryIn->FacesEnd();
-		for (auto faceIter = geometryIn->FacesBegin(); faceIter != faceEnd; ++faceIter)
-		{
-			auto faceVertexSize = geometryIn->FaceVertexSize(*faceIter);
-			numFaces += faceVertexSize - 2;
-		}
-
-		return GeometrySizes(numVerts, numFaces * 3, numFaces);
+		return GeometrySizes(0,0,0);
 	}
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
@@ -44,11 +34,8 @@ public:
 		START_PROFILE;
 
 		LOG_TRACE(GeometryOperations, "Triangulate.");
-		LOG_TRACE(GeometryOperations, "\tGeometry In. #Vertices: %d #Edges: %d #Faces: %d",
-		          geometryIn->GetNumVertices(), geometryIn->GetNumEdges(), geometryIn->GetNumFaces());
-		LOG_TRACE(GeometryOperations, "\tGeometry Out. Reserved #Vertices: %d #Edges: %d #Faces: %d",
-		          geometryOut->GetReservedVertices(), geometryOut->GetReservedEdges(), geometryOut->GetReservedFaces());
 
+        /*
 		GeometryBuilderT<Geometry> builder(geometryOut);
 
 		auto vertIterEnd = geometryIn->VerticesEnd();
@@ -76,6 +63,7 @@ public:
 				faceBuilder.CloseFace();
 			}
 		}
+        */
 	}
 };
 }  // namespace selector

@@ -12,6 +12,7 @@
 #include <cstdint>
 
 #include "indexed_container.h"
+#include "split_point_topology.h"
 
 #include <memory>
 
@@ -22,10 +23,6 @@ namespace selector
  */
 struct DefaultVertexAttributes
 {
-	using PositionType = Vec3F;
-
-	/// Vertex position.
-	Vec3F m_position;
 	/// Normal at the point. May differ from the face normal.
 	Vec3F m_normal;
 };  // struct VertAttributes
@@ -65,125 +62,36 @@ inline typename Geometry::PositionType face_normal(std::shared_ptr<Geometry> geo
 	return normalized(cross_product(pos2 - pos1, pos0 - pos1));
 }
 
-template<class Topology, class F = DefaultFaceAttributes, class E = DefaultEdgeAttributes,
+template<class Topology = SplitPointTopology, class F = DefaultFaceAttributes, class E = DefaultEdgeAttributes,
          class V = DefaultVertexAttributes>
-class GeometryT
+class GeometryBase : public Topology
 {
 public:
-	using IndexType = typename Topology::IndexType;
-	using FacesIterator = typename Topology::FacesIterator;
-	using EdgesIterator = typename Topology::EdgesIterator;
-	using VertexIterator = typename Topology::VertexIterator;
-	using FaceEdgeCirculator = typename Topology::FaceEdgeCirculator;
-	using FaceVertexCirculator = typename Topology::FaceVertexCirculator;
+	using Index_t = typename Topology::Index_t;
 	using FaceAttributes = F;
 	using EdgeAttributes = E;
 	using VertexAttributes = V;
-	using PositionType = typename VertexAttributes::PositionType;
+	using PositionType = Vec3F;
 
-	static constexpr IndexType sInvalidIndex = std::numeric_limits<IndexType>::max();
-
-	GeometryT(uint32_t num_vertices, uint32_t num_edges, uint32_t num_faces)
+	void SetPosition(const Index_t &index, const PositionType &p)
 	{
-		LOG_TRACE(GeometryCore, "New Geometry. #verts: %d #edges, %d #faces: %d", num_vertices, num_edges, num_faces);
-
-		m_topology.ReserveFaces(num_faces);
-		m_topology.ReserveEdges(num_edges);
-		m_topology.ReserveVertices(num_vertices);
-
-		m_vertexAttributes.reserve(num_vertices);
-		m_edgeAttributes.reserve(num_edges);
-		m_faceAttributes.reserve(num_faces);
+		m_vertexPositions.GetOrCreate(index, p) = p;
 	}
 
-	IndexType CreateVertex(const PositionType &position)
-	{
-		START_PROFILE;
-		LOG_TRACE(GeometryCore, "Creating a vertex: (%f, %f, %f)", position[0], position[1], position[2]);
+	PositionType &GetPosition(const Index_t &index)
+    {
+        return m_vertexPositions.GetOrCreate(index);
+    }
 
-		if (GetNumVertices() == GetReservedVertices())
-		{
-			LOG_TRACE(GeometryCore, "\tVertices are full: %d reserved vertices", GetReservedVertices());
-			return sInvalidIndex;
-		}
-
-		IndexType vertex_index = m_topology.CreateVertex();
-		IndexType attributes_index = m_vertexAttributes.Create();
-		auto &attributes = m_vertexAttributes.Get(attributes_index);
-		attributes.m_position = position;
-		DBG_ASSERT(vertex_index == attributes_index);
-		return vertex_index;
-	}
-
-	template<class T>
-	IndexType CreateFace(const T &vertex_indices)
-	{
-		START_PROFILE;
-		LOG_TRACE(GeometryCore, "Creating a face. Index count: %d", vertex_indices.size());
-
-		if (GetNumFaces() == GetReservedFaces())
-		{
-			LOG_TRACE(GeometryCore, "\tFaces are full: %d reserved faces", GetReservedFaces());
-			return sInvalidIndex;
-		}
-
-#ifdef DEBUG
-		for (const auto &i : vertex_indices)
-		{
-			LOG_TRACE(GeometryCore, "\tIndex: %d", i);
-		}
-#endif
-
-		auto face_index = m_topology.CreateFace(vertex_indices);
-		auto attributes_index = m_faceAttributes.Create();
-		DBG_ASSERT(face_index == attributes_index);
-
-#ifdef DEBUG
-		auto iter = FaceEdgeBegin(face_index);
-#endif
-
-		auto num_vertices = vertex_indices.size();
-		for (uint32_t i = 0; i < num_vertices; ++i)
-		{
-#ifdef DEBUG
-			auto edge_index = m_edgeAttributes.Create();
-			DBG_ASSERT(edge_index == *iter);
-			++iter;
-#else
-			m_edgeAttributes.Create();
-#endif
-		}
-		return face_index;
-	}
-
-	VertexAttributes &GetVertexAttributes(const IndexType &vertex) { return m_vertexAttributes.Get(vertex); }
-	EdgeAttributes &GetEdgeAttributes(const IndexType &edge) { return m_edgeAttributes.Get(edge); }
-	FaceAttributes GetFaceAttributes(const IndexType &face) { return m_faceAttributes.Get(face); }
-
-	FacesIterator FacesBegin() { return m_topology.FacesBegin(); }
-	FacesIterator FacesEnd() { return m_topology.FacesEnd(); }
-	EdgesIterator EdgesBegin() { return m_topology.EdgesBegin(); }
-	EdgesIterator EdgesEnd() { return m_topology.EdgesEnd(); }
-	VertexIterator VerticesBegin() { return m_topology.VerticesBegin(); }
-	VertexIterator VerticesEnd() { return m_topology.VerticesEnd(); }
-	FaceEdgeCirculator FaceEdgeBegin(const IndexType &face_index) { return m_topology.FaceEdgeBegin(face_index); }
-	FaceVertexCirculator FaceVertexBegin(const IndexType &face_index) { return m_topology.FaceVertexBegin(face_index); }
-
-	uint32_t FaceVertexSize(const IndexType &face_index) const { return m_topology.FaceVertexSize(face_index); }
-
-	uint32_t GetNumFaces() const { return m_topology.GetNumFaces(); }
-	uint32_t GetNumEdges() const { return m_topology.GetNumEdges(); }
-	uint32_t GetNumVertices() const { return m_topology.GetNumVertices(); }
-
-	uint32_t GetReservedFaces() const { return m_topology.GetReservedFaces(); }
-	uint32_t GetReservedEdges() const { return m_topology.GetReservedEdges(); }
-	uint32_t GetReservedVertices() const { return m_topology.GetReservedVertices(); }
+	VertexAttributes &GetVertexAttributes(const Index_t &vertex) { return m_vertexAttributes.GetOrCreate(vertex); }
+	EdgeAttributes &GetEdgeAttributes(const Index_t &edge) { return m_edgeAttributes.GetOrCreate(edge); }
+	FaceAttributes &GetFaceAttributes(const Index_t &face) { return m_faceAttributes.GetOrCreate(face); }
 
 private:
-	Topology m_topology;
-	IndexedContainer<IndexType, VertexAttributes> m_vertexAttributes;
-	IndexedContainer<IndexType, EdgeAttributes> m_edgeAttributes;
-	IndexedContainer<IndexType, FaceAttributes> m_faceAttributes;
+	AssociativeIndexedContainer<Index_t, PositionType> m_vertexPositions;
+	AssociativeIndexedContainer<Index_t, VertexAttributes> m_vertexAttributes;
+	AssociativeIndexedContainer<Index_t, EdgeAttributes> m_edgeAttributes;
+	AssociativeIndexedContainer<Index_t, FaceAttributes> m_faceAttributes;
 };  // class Geometry
 
 }  // namespace selector

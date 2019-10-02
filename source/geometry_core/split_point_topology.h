@@ -250,10 +250,10 @@ public:
 	 */
 	struct CreateFaceResult
 	{
-		CreateFaceResult() : m_face(s_invalidIndex), m_points{s_invalidIndex, s_invalidIndex, s_invalidIndex} {};
-		CreateFaceResult(FaceHandle f, std::array<PointHandle, 3> points) : m_face(f), m_points(points) {}
+		CreateFaceResult() : m_face(s_invalidIndex), m_splitPoints{s_invalidIndex, s_invalidIndex, s_invalidIndex} {};
+		CreateFaceResult(FaceHandle f, std::array<SplitPointHandle, 3> splitPoints) : m_face(f), m_splitPoints(splitPoints) {}
 		FaceHandle m_face;
-		std::array<PointHandle, 3> m_points;
+		std::array<SplitPointHandle, 3> m_splitPoints;
 	};
 
 	/**
@@ -271,6 +271,11 @@ public:
 	 * \c Point \p p0 and \p p1 must already be defined in the topology and the remaining \c Point is connected to both.
 	 */
 	CreateFaceResult CreateFace(const PointHandle &p0, const PointHandle &p1);
+	/**
+	 * Creates a \c Face in this topology with 3 \c Point.
+     * If any of the points doesn't exist, it is created.
+	 */
+	CreateFaceResult CreateFace(const PointHandle &p0, const PointHandle &p1, const PointHandle &p2);
 
 	/*
 	 * Modifying the topology

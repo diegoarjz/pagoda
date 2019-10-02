@@ -182,6 +182,33 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointH
 	return CreateFace(points, splitPoints, edges);
 }
 
+SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointHandle &p0, const PointHandle &p1, const PointHandle &p2)
+{
+    START_PROFILE;
+    LOG_TRACE(GeometryCore, "Creating a face with points %d, %d and %d", p0.GetIndex(), p1.GetIndex(), p2.GetIndex());
+    auto getOrCreatePoint = [this](const PointHandle &p)
+    {
+        if (p.GetIndex() == s_invalidIndex)
+        {
+            return m_points.CreateAndGet();
+        }
+        return PointContainer_t::IndexValuePair_t{p, m_points.Get(p)};
+    };
+	// Points
+	IndexPointPairArray_t<3> points = {getOrCreatePoint(p0),
+	                                   getOrCreatePoint(p1),
+	                                   getOrCreatePoint(p2)};
+
+	// SplitPoints
+	IndexSplitPointPairArray_t<3> splitPoints = {m_splitPoints.CreateAndGet(), m_splitPoints.CreateAndGet(),
+	                                             m_splitPoints.CreateAndGet()};
+
+	// Edges
+	IndexEdgePairArray_t<3> edges = {m_edges.CreateAndGet(), m_edges.CreateAndGet(), m_edges.CreateAndGet()};
+
+	return CreateFace(points, splitPoints, edges);
+}
+
 SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const IndexPointPairArray_t<3> &points,
                                                                     const IndexSplitPointPairArray_t<3> &splitPoints,
                                                                     const IndexEdgePairArray_t<3> &edges)
@@ -222,7 +249,7 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const IndexP
 	}
 
     IsValid();
-	return CreateFaceResult(std::get<0>(face), {std::get<0>(points[0]), std::get<0>(points[1]), std::get<0>(points[2])});
+	return CreateFaceResult(std::get<0>(face), {std::get<0>(splitPoints[0]), std::get<0>(splitPoints[1]), std::get<0>(splitPoints[2])});
 }
 
 void SplitPointTopology::SetOutgoingEdge(const SplitPointHandle &s, const EdgeHandle &e)
@@ -376,8 +403,6 @@ SplitPointTopology::FaceHandle SplitPointTopology::SplitFace(const FaceHandle &f
     auto e5 = GetPrevEdge(e0);
     auto p0 = GetPoint(d);
     auto p1 = GetPoint(a);
-    auto &point0 = m_points.Get(p0);
-    auto &point1 = m_points.Get(p1);
 
     LOG_TRACE(GeometryCore, "Splitting face %d for edges %d and %d", f, e0, e1);
     // 1. Create face f1

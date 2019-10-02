@@ -49,8 +49,7 @@ void TriangulateGeometry::Execute()
 		std::shared_ptr<GeometryComponent> outGeometryComponent = outObject->GetComponent<GeometryComponent>();
 
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
-		GeometrySizes sizes = triangulate.ResultSize(inGeometry);
-		auto outGeometry = std::make_shared<Geometry>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);
+		auto outGeometry = std::make_shared<Geometry>();
 
 		triangulate.Execute(inGeometry, outGeometry);
 		outGeometryComponent->SetGeometry(outGeometry);

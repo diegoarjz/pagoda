@@ -1,6 +1,5 @@
 #include <geometry_core/geometry.h>
 #include <geometry_core/geometry_builder.h>
-#include <geometry_core/geometry_topology.h>
 #include <math_lib/vec_base.h>
 
 #include <gmock/gmock.h>
@@ -12,145 +11,83 @@
 using namespace selector;
 using namespace ::testing;
 
-using GeometryType = GeometryT<SplitPointTopology<uint32_t>>;
+using GeometryType = GeometryBase<>;
 
 class GeometryBuilderTest : public ::testing::Test
 {
 protected:
-	virtual void SetUp() { m_mockGeometry = std::make_shared<MockGeometry>(); }
+	virtual void SetUp() { m_geometry = std::make_shared<GeometryType>(); }
 
 	virtual void TearDown() {}
 
-	std::shared_ptr<MockGeometry> m_mockGeometry;
+	std::shared_ptr<GeometryType> m_geometry;
 };
 
-TEST_F(GeometryBuilderTest, when_creating_points_should_delegate_creation_to_geometry)
+TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 {
-	// clang-format off
-    EXPECT_CALL(*m_mockGeometry, CreateVertex(Vec3F{0,0,0}))
-        .Times(1)
-        .WillOnce(Return(0));
-    EXPECT_CALL(*m_mockGeometry, CreateVertex(Vec3F{0,0,1}))
-        .Times(1)
-        .WillOnce(Return(1));
-	// clang-format on
+	auto builder = std::make_shared<GeometryBuilderT<GeometryType>>(m_geometry);
+	auto p1 = builder->AddPoint({0, 0, 0});
+	auto p2 = builder->AddPoint({0, 0, 1});
+	auto p3 = builder->AddPoint({0, 0, 2});
+	auto p4 = builder->AddPoint({0, 0, 3});
+	auto p5 = builder->AddPoint({0, 0, 4});
 
-	auto builder = std::make_shared<GeometryBuilderT<MockGeometry>>(m_mockGeometry);
-	builder->AddPoint({0, 0, 0});
-	builder->AddPoint({0, 0, 1});
-}
+	auto faceBuilder = builder->StartFace(5);
+	faceBuilder.AddIndex(p1);
+	faceBuilder.AddIndex(p2);
+	faceBuilder.AddIndex(p3);
+	faceBuilder.AddIndex(p4);
+	faceBuilder.AddIndex(p5);
+	faceBuilder.CloseFace();
 
-TEST_F(GeometryBuilderTest, when_creating_points_should_return_index_returned_by_geometry)
-{
-	// clang-format off
-    EXPECT_CALL(*m_mockGeometry, CreateVertex(Vec3F{1,2,3}))
-        .Times(1)
-        .WillOnce(Return(123));
-	// clang-format on
+	EXPECT_EQ(m_geometry->GetFaceCount(), 1);
+	EXPECT_EQ(m_geometry->GetPointCount(), 5);
+	EXPECT_EQ(m_geometry->GetSplitPointCount(), 5);
+	EXPECT_EQ(m_geometry->GetEdgeCount(), 5);
+	EXPECT_TRUE(m_geometry->IsValid());
 
-	auto builder = std::make_shared<GeometryBuilderT<MockGeometry>>(m_mockGeometry);
-	EXPECT_EQ(builder->AddPoint(Vec3F{1, 2, 3}), 123);
-}
-
-TEST_F(GeometryBuilderTest, when_starting_a_single_face_should_return_an_initialized_face_builder)
-{
-	// clang-format off
-    EXPECT_CALL(*m_mockGeometry, GetReservedFaces())
-        .Times(1)
-        .WillOnce(Return(1));
-	// clang-format on
-	//
-	auto builder = std::make_shared<GeometryBuilderT<MockGeometry>>(m_mockGeometry);
-	FaceBuilder<MockGeometry> faceBuilder = builder->StartFace(4);
-	EXPECT_EQ(faceBuilder.m_geometry, m_mockGeometry);
-	EXPECT_EQ(faceBuilder.m_faceIndices.size(), 0);
-	EXPECT_EQ(faceBuilder.m_faceIndices.capacity(), 4);
-}
-
-TEST_F(GeometryBuilderTest, when_starting_many_faces_with_same_size_return_same_number_of_face_builders)
-{
-	// clang-format off
-    EXPECT_CALL(*m_mockGeometry, GetReservedFaces())
-        .Times(1)
-        .WillOnce(Return(10));
-	// clang-format on
-	auto builder = std::make_shared<GeometryBuilderT<MockGeometry>>(m_mockGeometry);
-	std::vector<FaceBuilder<MockGeometry>> faceBuilders = builder->StartFaces(10, 3);
-
-	EXPECT_EQ(faceBuilders.size(), 10);
-	for (const auto &fb : faceBuilders)
+	typename SplitPointTopology::SplitPointHandle currentSplitPoint = GeometryType::s_invalidIndex;
+	for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter)
 	{
-		EXPECT_EQ(fb.m_geometry, m_mockGeometry);
-		EXPECT_EQ(fb.m_faceIndices.size(), 0);
-		EXPECT_EQ(fb.m_faceIndices.capacity(), 3);
+		auto position = m_geometry->GetPosition(m_geometry->GetPoint((*iter)));
+		if (position == Vec3F(0, 0, 0))
+		{
+			currentSplitPoint = *iter;
+			break;
+		}
+	}
+
+	std::array<Vec3F, 5> expected = {Vec3F{0, 0, 0}, Vec3F{0, 0, 1}, Vec3F{0, 0, 2}, Vec3F{0, 0, 3}, Vec3F{0, 0, 4}};
+
+	for (auto i = 0u; i < 5; ++i)
+	{
+		EXPECT_EQ(m_geometry->GetPosition(m_geometry->GetPoint(currentSplitPoint)), expected[i]);
+		currentSplitPoint = m_geometry->GetNextSplitPoint(currentSplitPoint);
 	}
 }
 
-TEST_F(GeometryBuilderTest, when_starting_many_faces_with_different_size_return_same_number_of_face_builders)
+TEST_F(GeometryBuilderTest, when_creating_a_face_should_be_able_to_reuse_points)
 {
-	// clang-format off
-    EXPECT_CALL(*m_mockGeometry, GetReservedFaces())
-        .Times(1)
-        .WillOnce(Return(3));
-	// clang-format on
-	auto builder = std::make_shared<GeometryBuilderT<MockGeometry>>(m_mockGeometry);
-	std::vector<FaceBuilder<MockGeometry>> faceBuilders = builder->StartFaces(std::vector<uint32_t>{1, 2, 3});
+    auto builder = std::make_shared<GeometryBuilderT<GeometryType>>(m_geometry);
+    std::array<GeometryType::Index_t, 4> points = {
+        builder->AddPoint({0,0,0}), builder->AddPoint({0,0,1}), builder->AddPoint({0,1,1}), builder->AddPoint({1,1,1})
+    };
 
-	EXPECT_EQ(faceBuilders.size(), 3);
-	uint32_t size = 1;
-	for (const auto &fb : faceBuilders)
-	{
-		EXPECT_EQ(fb.m_geometry, m_mockGeometry);
-		EXPECT_EQ(fb.m_faceIndices.size(), 0);
-		EXPECT_EQ(fb.m_faceIndices.capacity(), size++);
-	}
-}
+    auto faceBuilder1 = builder->StartFace(3);
+    faceBuilder1.AddIndex(points[0]);
+    faceBuilder1.AddIndex(points[1]);
+    faceBuilder1.AddIndex(points[2]);
+    auto faceBuilder2 = builder->StartFace(3);
+    faceBuilder2.AddIndex(points[2]);
+    faceBuilder2.AddIndex(points[3]);
+    faceBuilder2.AddIndex(points[1]);
 
-class FaceBuilderTest : public Test
-{
-protected:
-	virtual void SetUp() { m_mockGeometry = std::make_shared<MockGeometry>(); }
+    faceBuilder1.CloseFace();
+    faceBuilder2.CloseFace();
 
-	virtual void TearDown() {}
-
-	std::shared_ptr<MockGeometry> m_mockGeometry;
-};
-
-TEST_F(FaceBuilderTest, when_creating_should_reserve_size_for_indices)
-{
-	FaceBuilder<MockGeometry> faceBuilder(this->m_mockGeometry, 10);
-
-	EXPECT_EQ(faceBuilder.m_geometry, m_mockGeometry);
-	EXPECT_EQ(faceBuilder.m_faceIndices.size(), 0);
-	EXPECT_EQ(faceBuilder.m_faceIndices.capacity(), 10);
-}
-
-TEST_F(FaceBuilderTest, when_adding_indices_should_add_in_order)
-{
-	FaceBuilder<MockGeometry> faceBuilder(m_mockGeometry, 3);
-
-	faceBuilder.AddIndex(1);
-	faceBuilder.AddIndex(2);
-	faceBuilder.AddIndex(3);
-
-	EXPECT_EQ(faceBuilder.m_faceIndices.size(), 3);
-	EXPECT_EQ(faceBuilder.m_faceIndices[0], 1);
-	EXPECT_EQ(faceBuilder.m_faceIndices[1], 2);
-	EXPECT_EQ(faceBuilder.m_faceIndices[2], 3);
-}
-
-TEST_F(FaceBuilderTest, when_closing_face_should_delegate_to_geometry_should_return_same_face_index)
-{
-	// clang-format off
-    EXPECT_CALL(*m_mockGeometry, UntemplatedCreateFace(std::vector<uint32_t>{1,2,3}))
-            .Times(1)
-            .WillOnce(Return(123));
-	// clang-format on
-	FaceBuilder<MockGeometry> faceBuilder(m_mockGeometry, 3);
-
-	faceBuilder.AddIndex(1);
-	faceBuilder.AddIndex(2);
-	faceBuilder.AddIndex(3);
-
-	EXPECT_EQ(faceBuilder.CloseFace(), 123);
+	EXPECT_EQ(m_geometry->GetFaceCount(), 2);
+	EXPECT_EQ(m_geometry->GetPointCount(), 4);
+	EXPECT_EQ(m_geometry->GetSplitPointCount(), 6);
+	EXPECT_EQ(m_geometry->GetEdgeCount(), 6);
+	EXPECT_TRUE(m_geometry->IsValid());
 }

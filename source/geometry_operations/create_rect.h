@@ -27,8 +27,6 @@ public:
 	{
 		START_PROFILE;
 		LOG_TRACE(GeometryOperations, "CreateRect. Width: %f Height: %f", m_width, m_height);
-		LOG_TRACE(GeometryOperations, "\tGeometry Out. Reserved #Vertices: %d #Edges: %d #Faces: %d",
-		          geometryOut->GetReservedVertices(), geometryOut->GetReservedEdges(), geometryOut->GetReservedFaces());
 
 		Vec3F center(0, 0, 0);
 		Vec3F width_direction(1, 0, 0);

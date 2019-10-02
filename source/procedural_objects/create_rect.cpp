@@ -32,8 +32,7 @@ void CreateRectGeometry::Execute()
 	float height = execution_context->parameter_context->GetParameterAs<float>("height");
 
 	CreateRect<Geometry> create_rect(width, height);
-	GeometrySizes sizes = create_rect.ResultSize();
-	auto geometry = std::make_shared<Geometry>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);
+	auto geometry = std::make_shared<Geometry>();
 	create_rect.Execute(geometry);
 
 	ProceduralObjectPtr object = CreateOutputProceduralObject(output_geometry);

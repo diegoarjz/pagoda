@@ -5,7 +5,6 @@
 
 #include "geometry_core/geometry.h"
 #include "geometry_core/geometry_builder.h"
-#include "geometry_core/geometry_topology.h"
 
 namespace selector
 {

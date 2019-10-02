@@ -3,18 +3,17 @@
 #include <geometry_core/geometry.h>
 #include <geometry_core/geometry_builder.h>
 #include <geometry_core/geometry_exporter.h>
-#include <geometry_core/geometry_topology.h>
 #include <math_lib/vec_base.h>
 
 #include <gtest/gtest.h>
 
 using namespace selector;
 
-using GeometryType = GeometryT<SplitPointTopology<uint32_t>>;
+using GeometryType = GeometryBase<>;
 
 TEST(GeometryExporter, geometry_exporter_export_obj_one_face)
 {
-	auto geom = std::make_shared<GeometryType>(4, 1, 5);
+	auto geom = std::make_shared<GeometryType>();
 	GeometryBuilderT<GeometryType> builder(geom);
 
 	builder.AddPoint(Vec3F(0, 0, 0));

@@ -16,7 +16,7 @@ protected:
 	/// Convenience alias for a shared pointer to a Geometry
 	using GeometryPtr = std::shared_ptr<Geometry>;
 	/// Convenience alias for a Geometry face Index
-	using IndexType = typename Geometry::IndexType;
+	using IndexType = typename Geometry::Index_t;
 	/// Convenience alias for a Geometry position
 	using PositionType = typename Geometry::PositionType;
 
@@ -28,6 +28,7 @@ public:
 	 */
 	bool Export(std::ostream &out_stream)
 	{
+        /*
 		auto num_points = m_geometry->GetNumVertices();
 		auto num_faces = m_geometry->GetNumFaces();
 
@@ -62,6 +63,7 @@ public:
 
 		EndGeometry(out_stream);
 
+        */
 		return true;
 	}
 

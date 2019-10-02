@@ -117,17 +117,29 @@ public:
 		START_PROFILE;
 
 		IndexType newIndex = CreateIndex();
-		/*auto insertResult = */m_container.emplace(args...);
+		/*auto insertResult = */ m_container.emplace(args...);
 		// TODO: Check if the value was indeed inserted.
 
 		return IndexValuePair_t{newIndex, m_container[newIndex]};
+	}
+
+	ValueType& GetOrCreate(const IndexType& index, const ValueType& v = ValueType())
+	{
+		START_PROFILE;
+		if (HasIndex(index))
+		{
+			return Get(index);
+		}
+		m_container[index] = v;
+
+		return m_container[index];
 	}
 
 	void Delete(const IndexType& index) { m_container.erase(index); }
 
 	bool HasIndex(const IndexType& index) { return m_container.find(index) != std::end(m_container); }
 
-    std::size_t Count() const { return m_container.size(); }
+	std::size_t Count() const { return m_container.size(); }
 
 	iterator begin() { return m_container.begin(); }
 	iterator end() { return m_container.end(); }

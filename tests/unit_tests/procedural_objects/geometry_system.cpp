@@ -21,7 +21,7 @@ protected:
 	void SetUp()
 	{
 		geometry_system = std::make_shared<GeometrySystem>();
-		geometry = std::make_shared<Geometry>(5, 5, 5);
+		geometry = std::make_shared<Geometry>();
 	}
 
 	void TearDown()

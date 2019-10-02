@@ -20,7 +20,7 @@ class Extrusion
 private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
-	using IndexType = typename Geometry::IndexType;
+	using IndexType = typename Geometry::Index_t;
 
 public:
 	/**
@@ -31,48 +31,19 @@ public:
 		DBG_ASSERT_MSG(extrusion_amount != 0, "Can't extrude by zero.");
 	}
 
-	// TODO Fix here
 	GeometrySizes ResultSize(GeometryPtr geometryIn) const
 	{
-		auto in_num_points = geometryIn->GetNumVertices();
-		size_t out_edge_count = 0u;
-		size_t out_num_points = static_cast<size_t>(in_num_points);
-		size_t out_face_count = 0u;
-		size_t num_side_faces = 0u;
-
-		auto face_end = geometryIn->FacesEnd();
-		uint32_t bottom_face_index = 0;
-		for (auto face_iter = geometryIn->FacesBegin(); face_iter != face_end; ++face_iter, ++bottom_face_index)
-		{
-			auto face_vertex_size = geometryIn->FaceVertexSize(*face_iter);
-
-			out_edge_count += 6 * face_vertex_size;
-
-			/*
-			 * Number of output points is calculated by
-			 *  points in original geometry + face num points
-			 */
-			out_num_points += face_vertex_size;
-
-			out_face_count += 2 + face_vertex_size;
-
-			num_side_faces += face_vertex_size;
-		}
-
-		return GeometrySizes(out_num_points, out_edge_count, out_face_count);
+		return GeometrySizes(0,0,0);
 	}
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
 	{
 		START_PROFILE;
 		LOG_TRACE(GeometryOperations, "Extrusion. Amount: %f", m_extrusionAMount);
-		LOG_TRACE(GeometryOperations, "\tGeometry In. #Vertices: %d #Edges: %d #Faces: %d",
-		          geometryIn->GetNumVertices(), geometryIn->GetNumEdges(), geometryIn->GetNumFaces());
-		LOG_TRACE(GeometryOperations, "\tGeometry Out. Reserved #Vertices: %d #Edges: %d #Faces: %d",
-		          geometryOut->GetReservedVertices(), geometryOut->GetReservedEdges(), geometryOut->GetReservedFaces());
 
 		GeometryBuilderT<Geometry> builder(geometryOut);
 
+        /*
 		auto in_num_points = geometryIn->GetNumVertices();
 		std::vector<Vec3F> in_points;
 		in_points.reserve(in_num_points);
@@ -132,6 +103,7 @@ public:
 			}
 			top_face.CloseFace();
 		}
+        */
 	}
 
 private:

@@ -50,8 +50,7 @@ void ExtrudeGeometry::Execute()
 		std::shared_ptr<GeometryComponent> in_geometry_component = in_object->GetComponent<GeometryComponent>();
 		GeometryPtr in_geometry = in_geometry_component->GetGeometry();
 
-		GeometrySizes sizes = extrude.ResultSize(in_geometry);
-		auto out_geometry = std::make_shared<Geometry>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);
+		auto out_geometry = std::make_shared<Geometry>();
 		extrude.Execute(in_geometry, out_geometry);
 
 		geometry_component->SetGeometry(out_geometry);

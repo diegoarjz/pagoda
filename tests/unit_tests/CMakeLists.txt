@@ -17,7 +17,6 @@ set(test_srcs
     "geometry_core/geometry_builder.cpp"
     "geometry_core/geometry_exporter.cpp"
     "geometry_core/indexed_container.cpp"
-    "geometry_core/geometry_topology.cpp"
     "geometry_core/split_point_topology.cpp"
     "geometry_core/scope.cpp"
     "geometry_operations/extrusion.cpp"

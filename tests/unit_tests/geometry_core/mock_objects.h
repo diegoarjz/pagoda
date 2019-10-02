@@ -6,18 +6,18 @@
 class MockGeometry
 {
 public:
-	using IndexType = uint32_t;
+	using Index_t = uint32_t;
 	using PositionType = selector::Vec3F;
 
-	MOCK_METHOD1(CreateVertex, IndexType(const PositionType &position));
+	MOCK_METHOD1(CreateVertex, Index_t(const PositionType &position));
 	MOCK_CONST_METHOD0(GetNumVertices, uint32_t(void));
 	MOCK_CONST_METHOD0(GetReservedVertices, uint32_t(void));
 	MOCK_CONST_METHOD0(GetReservedFaces, uint32_t(void));
-	MOCK_METHOD1(UntemplatedCreateFace, IndexType(const std::vector<IndexType> &));
-	MOCK_METHOD1(UntemplatedCreateFace, IndexType(const std::list<IndexType> &));
+	MOCK_METHOD1(UntemplatedCreateFace, Index_t(const std::vector<Index_t> &));
+	MOCK_METHOD1(UntemplatedCreateFace, Index_t(const std::list<Index_t> &));
 
 	template<class T>
-	IndexType CreateFace(const T &vertex_indices)
+	Index_t CreateFace(const T &vertex_indices)
 	{
 		return UntemplatedCreateFace(vertex_indices);
 	}

@@ -6,7 +6,6 @@
 
 #include <geometry_core/geometry.h>
 #include <geometry_core/geometry_builder.h>
-#include <geometry_core/geometry_topology.h>
 #include <geometry_operations/create_rect.h>
 #include <geometry_operations/extrusion.h>
 #include <parameter/parameter.h>
@@ -14,7 +13,7 @@
 namespace selector
 {
 // TODO: Maybe move these type defs to geometry core
-using Geometry = GeometryT<SplitPointTopology<uint32_t>>;
+using Geometry = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<Geometry>;
 using GeometryBuilder = GeometryBuilderT<Geometry>;
 using GeometryBuilderPtr = std::shared_ptr<GeometryBuilder>;

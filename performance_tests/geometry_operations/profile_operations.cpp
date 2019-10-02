@@ -5,7 +5,6 @@
 #include <common/profiler.h>
 #include <common/statistics.h>
 #include <geometry_core/geometry_exporter.h>
-#include <geometry_core/geometry_topology.h>
 #include <geometry_operations/create_rect.h>
 #include <geometry_operations/extrusion.h>
 #include <math_lib/vec_base.h>
@@ -15,7 +14,7 @@
 
 using namespace selector;
 
-using GeometryType = GeometryT<SplitPointTopology<uint32_t>>;
+using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;
 
 std::string PerformanceTest::TestName() { return __FILE__; }
@@ -39,23 +38,22 @@ void ExportGeometry(GeometryPtr geom, const std::string& file)
 void RunQuadExtrusion()
 {
 	// Quad
-	GeometryPtr in = std::make_shared<GeometryType>(4, 1, 5);
+	GeometryPtr in = std::make_shared<GeometryType>();
 	Vec3F points[] = {Vec3F(0, 0, 0), Vec3F(1, 0, 0), Vec3F(1, 1, 0), Vec3F(0, 1, 0)};
 	for (auto& v : points)
 	{
-		in->CreateVertex(v);
+		//in->CreateVertex(v);
 	}
-	in->CreateFace(std::vector<uint32_t>{
-	    0,
-	    1,
-	    2,
-	    3,
-	});
+	//in->CreateFace(std::vector<uint32_t>{
+	    //0,
+	    //1,
+	    //2,
+	    //3,
+	//});
 
 	Extrusion<GeometryType> extrusion(1.0f);
-	GeometrySizes sizes = extrusion.ResultSize(in);
 
-	GeometryPtr out = std::make_shared<GeometryType>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);
+	GeometryPtr out = std::make_shared<GeometryType>();
 	{
 		OneShotProfiler p(extrusion_quad);
 		extrusion.Execute(in, out);
@@ -67,18 +65,18 @@ void RunQuadExtrusion()
 void RunCompoundQuadExtrusion()
 {
 	// Quad
-	GeometryPtr in = std::make_shared<GeometryType>(4, 1, 5);
+	GeometryPtr in = std::make_shared<GeometryType>();
 	Vec3F points[] = {Vec3F(0, 0, 0), Vec3F(1, 0, 0), Vec3F(1, 1, 0), Vec3F(0, 1, 0)};
 	for (auto& v : points)
 	{
-		in->CreateVertex(v);
+		//in->CreateVertex(v);
 	}
-	in->CreateFace(std::vector<uint32_t>{
-	    0,
-	    1,
-	    2,
-	    3,
-	});
+	//in->CreateFace(std::vector<uint32_t>{
+	    //0,
+	    //1,
+	    //2,
+	    //3,
+	//});
 
 	GeometryPtr out = nullptr;
 	{
@@ -90,8 +88,7 @@ void RunCompoundQuadExtrusion()
 		out = in;
 		for (auto i = 0u; i < 5; ++i)
 		{
-			GeometrySizes sizes = extrusion.ResultSize(in);
-			out = std::make_shared<GeometryType>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);
+			out = std::make_shared<GeometryType>();
 			extrusion.Execute(in, out);
 			in = out;
 		}
@@ -104,8 +101,7 @@ void RunCreateRect()
 {
 	CreateRect<GeometryType> create(10, 10);
 
-	GeometrySizes sizes = create.ResultSize();
-	GeometryPtr out = std::make_shared<GeometryType>(sizes.m_numVertices, sizes.m_numEdges, sizes.m_numFaces);
+	GeometryPtr out = std::make_shared<GeometryType>();
 	{
 		OneShotProfiler p(create_rect);
 		create.Execute(out);
