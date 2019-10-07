@@ -8,5 +8,11 @@ extrusion_in = InputInterface(interface: "in", offset: 0)
 extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
 extrusion_out = OutputInterface(interface: "out", offset: 0)
 
+export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry = Operation(operation: "ExportGeometry") {
+    path: "geometry.obj"
+}
+
 parameter -> create_rect;
-create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out;
+export_geometry_in -> export_geometry;
+create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out -> export_geometry_in;

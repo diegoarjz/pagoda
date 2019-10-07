@@ -1,39 +1,79 @@
-#include <geometry_operations/triangulate.h>
-
+#include <common/file_util.h>
 #include <geometry_core/geometry.h>
 #include <geometry_core/geometry_builder.h>
+#include <geometry_core/geometry_exporter.h>
+#include <geometry_operations/triangulate.h>
 
 #include <gtest/gtest.h>
+
+#include "../test_utils.h"
 
 using namespace selector;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;
 
-TEST(TriangulateTest, when_calculating_geometry_size_for_a_quad_should_return_2_triangles)
+class TriangulateTest : public SelectorTestFixture<::testing::Test>
 {
-    /*
-	auto geometry = std::make_shared<GeometryType>();
-	Vec3F vert[] = {{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}};
-	GeometryBuilderT<GeometryType> b(geometry);
-
-	for (auto v : vert)
+public:
+	void SetUp()
 	{
-		b.AddPoint(v);
+		m_geometry = std::make_shared<GeometryType>();
+		m_geometryOut = std::make_shared<GeometryType>();
 	}
-	auto faceBuilder = b.StartFace(4);
-	faceBuilder.AddIndex(0);
-	faceBuilder.AddIndex(1);
-	faceBuilder.AddIndex(2);
-	faceBuilder.AddIndex(3);
-	faceBuilder.CloseFace();
+
+	void TearDown() {}
+
+	std::shared_ptr<GeometryType> m_geometry;
+	std::shared_ptr<GeometryType> m_geometryOut;
+};
+
+TEST_F(TriangulateTest, test_triangulate_triangle)
+{
+	GeometryBuilderT<GeometryType> builder(m_geometry);
+
+	builder.AddPoint(Vec3F(0, 0, 0));
+	builder.AddPoint(Vec3F(1, 0, 0));
+	builder.AddPoint(Vec3F(1, 1, 0));
+
+	auto face = builder.StartFace(3);
+	face.AddIndex(0);
+	face.AddIndex(1);
+	face.AddIndex(2);
+	face.CloseFace();
 
 	Triangulate<GeometryType> t;
+	t.Execute(m_geometry, m_geometryOut);
 
-	GeometrySizes sizes = t.ResultSize(geometry);
+	ObjExporter<GeometryType> exporter(m_geometryOut);
+	std::stringstream ss;
+	exporter.Export(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "geometry.obj", GetShouldWriteFiles());
+    match.Match(ss.str());
+}
 
-	EXPECT_EQ(sizes.m_numVertices, 4);
-	EXPECT_EQ(sizes.m_numEdges, 6);
-	EXPECT_EQ(sizes.m_numFaces, 2);
-    */
+TEST_F(TriangulateTest, test_triangulate_square)
+{
+	GeometryBuilderT<GeometryType> builder(m_geometry);
+
+	builder.AddPoint(Vec3F(0, 0, 0));
+	builder.AddPoint(Vec3F(1, 0, 0));
+	builder.AddPoint(Vec3F(1, 1, 0));
+	builder.AddPoint(Vec3F(0, 1, 0));
+
+	auto face = builder.StartFace(4);
+	face.AddIndex(0);
+	face.AddIndex(1);
+	face.AddIndex(2);
+	face.AddIndex(3);
+	face.CloseFace();
+
+	Triangulate<GeometryType> t;
+	t.Execute(m_geometry, m_geometryOut);
+
+	ObjExporter<GeometryType> exporter(m_geometryOut);
+	std::stringstream ss;
+	exporter.Export(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "geometry.obj", GetShouldWriteFiles());
+    match.Match(ss.str());
 }

@@ -4,10 +4,16 @@ create_rect = Operation(operation: "CreateRectGeometry") {
     width: $< amount; >$, height: $< amount / 2; >$
 }
 create_rect_out = OutputInterface(interface: "out", offset: 0)
+
 extrusion_in = InputInterface(interface: "in", offset: 0)
 extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: $< 2 * amount; >$}
 extrusion_out = OutputInterface(interface: "out", offset: 0)
 
+export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry = Operation(operation: "ExportGeometry") {
+    path: "geometry.obj"
+}
+
 parameter -> create_rect;
 parameter -> extrusion;
-create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out;
+create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out -> export_geometry_in -> export_geometry;

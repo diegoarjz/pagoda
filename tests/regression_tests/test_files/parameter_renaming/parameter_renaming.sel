@@ -1,0 +1,13 @@
+parameter = Parameter() { size: 10 }
+renaming = Parameter() { width: $< size*2; >$, height: $< size/2; >$ }
+create_rect = Operation(operation: "CreateRectGeometry") {}
+create_rect_out = OutputInterface(interface: "out", offset: 0)
+
+export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry = Operation(operation: "ExportGeometry") {
+    path: "geometry.obj"
+}
+
+parameter -> renaming -> create_rect;
+export_geometry_in -> export_geometry;
+create_rect -> create_rect_out -> export_geometry_in;

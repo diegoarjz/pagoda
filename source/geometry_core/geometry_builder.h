@@ -2,8 +2,8 @@
 #define SELECTOR_GEOMETRY_CORE_GEOMETRY_BUILDER_H
 
 #include "common/assertions.h"
-#include "common/profiler.h"
 #include "common/logger.h"
+#include "common/profiler.h"
 #include "indexed_container.h"
 
 #include <cstdint>
@@ -53,10 +53,14 @@ public:
 		/**
 		 * Constructs a FaceBuilder with all the parameters.
 		 */
-		FaceBuilder(GeometryBuilder *builder, std::shared_ptr<Geometry> &geom, uint32_t num_points)
+		FaceBuilder(GeometryBuilder *builder, std::shared_ptr<Geometry> &geom, uint32_t numPoints = 0)
 		    : m_builder(builder), m_geometry(geom)
 		{
-			m_faceIndices.reserve(num_points);
+            LOG_TRACE(GeometryCore, "Created FaceBuilder with %d points", numPoints);
+            if (numPoints > 0)
+            {
+                m_faceIndices.reserve(numPoints);
+            }
 		}
 
 		/**
@@ -65,7 +69,7 @@ public:
 		 */
 		void AddIndex(const Index_t &index)
 		{
-            LOG_TRACE(GeometryCore, "Adding index %d to face builder.", index);
+			LOG_TRACE(GeometryCore, "Adding index %d to face builder.", index);
 			DBG_ASSERT_MSG(m_faceIndices.size() < m_faceIndices.capacity(),
 			               "Trying to add a vertex index past the end");
 
@@ -93,16 +97,13 @@ public:
 			START_PROFILE;
 			DBG_ASSERT_MSG(m_faceIndices.size() >= 3, "Trying to close a face with less than 3 points");
 
-            LOG_TRACE(GeometryCore, "Closing face");
-            for (const auto &i : m_faceIndices)
-            {
-                LOG_TRACE(GeometryCore, " Face Point Index: %d. Topology Point Index: %d. Position: (%f, %f, %f).",
-                        i,
-                        m_builder->m_pointData.Get(i).m_index,
-                        m_builder->m_pointData.Get(i).m_position[0],
-                        m_builder->m_pointData.Get(i).m_position[1],
-                        m_builder->m_pointData.Get(i).m_position[2]);
-            }
+			LOG_TRACE(GeometryCore, "Closing face");
+			for (const auto &i : m_faceIndices)
+			{
+				LOG_TRACE(GeometryCore, " Face Point Index: %d. Topology Point Index: %d. Position: (%f, %f, %f).", i,
+				          m_builder->m_pointData.Get(i).m_index, m_builder->m_pointData.Get(i).m_position[0],
+				          m_builder->m_pointData.Get(i).m_position[1], m_builder->m_pointData.Get(i).m_position[2]);
+			}
 
 			auto face = m_geometry->CreateFace(m_builder->m_pointData.Get(m_faceIndices[0]).m_index,
 			                                   m_builder->m_pointData.Get(m_faceIndices[1]).m_index,
@@ -118,19 +119,19 @@ public:
 
 			for (auto i = 3; i < m_faceIndices.size(); ++i)
 			{
-                LOG_TRACE(GeometryCore, " Going to split edge %d", currentEdge);
+				LOG_TRACE(GeometryCore, " Going to split edge %d", currentEdge);
 
-				auto &pointData = m_builder->m_pointData.Get(i);
+				auto &pointData = m_builder->m_pointData.Get(m_faceIndices[i]);
 				if (pointData.m_index == Geometry::s_invalidIndex)
 				{
-                    LOG_TRACE(GeometryCore, " Needs to create a new point");
+					LOG_TRACE(GeometryCore, " Needs to create a new point");
 					auto newSplitPoint = m_geometry->SplitEdge(currentEdge);
 					pointData.m_index = m_geometry->GetPoint(newSplitPoint);
 				}
 				else
 				{
-                    LOG_TRACE(GeometryCore, " Reusing previous point %d", pointData.m_index);
-					m_geometry->SplitEdge(currentEdge);
+					LOG_TRACE(GeometryCore, " Reusing previous point %d", pointData.m_index);
+					m_geometry->SplitEdge(currentEdge, pointData.m_index);
 				}
 				m_geometry->SetPosition(pointData.m_index, pointData.m_position);
 				currentEdge = m_geometry->GetNextEdge(currentEdge);
@@ -153,13 +154,10 @@ public:
 
 	/**
 	 * Starts a face in the geometry with the given number of points.
-	 * Faces will be created contiguously.
 	 */
-	FaceBuilder StartFace(uint32_t num_points)
+	FaceBuilder StartFace(uint32_t num_points = 0)
 	{
 		START_PROFILE;
-
-		DBG_ASSERT_MSG(num_points > 0, "A face must have more than 0 points");
 
 		FaceBuilder face_builder(this, m_geometry, num_points);
 
@@ -168,13 +166,10 @@ public:
 
 	/**
 	 * Creates num_faces faces in the geometry all with num_points points.
-	 * Each face is created contiguously to the one before.
 	 */
-	std::vector<FaceBuilder> StartFaces(uint32_t num_faces, uint32_t num_points)
+	std::vector<FaceBuilder> StartFaces(uint32_t num_faces, uint32_t num_points = 0)
 	{
 		START_PROFILE;
-
-		DBG_ASSERT_MSG(num_points > 0, "A face must have more than 0 points.");
 
 		std::vector<FaceBuilder> face_builders;
 
@@ -208,14 +203,12 @@ public:
 
 	/**
 	 * Adds a point to the geometry and returns its index.
-	 * Points are added sequentially to the geometry.
 	 */
 	Index_t AddPoint(const PositionType &pos)
 	{
 		START_PROFILE;
+        LOG_TRACE(GeometryCore, "Adding point with position (%f, %f, %f) to geometry builder", pos[0], pos[1], pos[2]);
 
-		// Index_t vert_index = m_geometry->CreateVertex(pos);
-		// return vert_index;
 		return m_pointData.Create(PointData(pos));
 	}
 

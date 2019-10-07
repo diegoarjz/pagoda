@@ -30,7 +30,7 @@ TEST(HandleImplicitCastTest, test_implicit_casts)
 	EXPECT_EQ(i, 4);
 }
 
-class SplitPointTopologyCreateFaceTest : public ::testing::Test
+class SplitPointTopologyCreateFaceTest : public SelectorTestFixture<::testing::Test>
 {
 protected:
 	void SetUp() {}
@@ -48,6 +48,11 @@ TEST_F(SplitPointTopologyCreateFaceTest, when_creating_a_face_should_return_a_fa
 	EXPECT_EQ(result.m_splitPoints[1].GetIndex(), 1);
 	EXPECT_EQ(result.m_splitPoints[2].GetIndex(), 2);
 	EXPECT_TRUE(m_topology.IsValid());
+
+    std::stringstream ss;
+    m_topology.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyCreateFaceTest, when_creating_two_faces_should_return_different_indices)
@@ -62,6 +67,11 @@ TEST_F(SplitPointTopologyCreateFaceTest, when_creating_two_faces_should_return_d
 		EXPECT_EQ(results[i].m_splitPoints[2].GetIndex(), i * 3 + 2);
 	}
 	EXPECT_TRUE(m_topology.IsValid());
+
+    std::stringstream ss;
+    m_topology.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyCreateFaceTest, when_creating_faces_should_be_able_to_reuse_points)
@@ -75,9 +85,14 @@ TEST_F(SplitPointTopologyCreateFaceTest, when_creating_faces_should_be_able_to_r
 	EXPECT_EQ(m_topology.GetPoint(results2.m_splitPoints[1].GetIndex()), m_topology.GetPoint(results1.m_splitPoints[1].GetIndex()));
 	EXPECT_EQ(m_topology.GetPoint(results2.m_splitPoints[2].GetIndex()).GetIndex(), 3);
 	EXPECT_TRUE(m_topology.IsValid());
+
+    std::stringstream ss;
+    m_topology.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
-class SplitPointTopologyOperationsTest : public ::testing::Test
+class SplitPointTopologyOperationsTest : public SelectorTestFixture<::testing::Test>
 {
 protected:
 	void SetUp() {}
@@ -133,7 +148,7 @@ TEST_F(SplitPointTopologyOperationsTest, when_getting_the_face_from_an_edge_shou
 	}
 }
 
-class SplitPointTopologyNavigationTest : public ::testing::Test
+class SplitPointTopologyNavigationTest : public SelectorTestFixture<::testing::Test>
 {
 protected:
 	void SetUp() {}
@@ -177,7 +192,7 @@ TEST_F(SplitPointTopologyNavigationTest, when_navigating_the_edges_should_be_abl
 	}
 }
 
-class SplitPointTopologyIteratorsTest : public ::testing::Test
+class SplitPointTopologyIteratorsTest : public SelectorTestFixture<::testing::Test>
 {
 protected:
     void SetUp()
@@ -335,7 +350,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_points_should
     EXPECT_EQ(seenPoints.size(), 3);
 }
 
-class SplitPointTopologySplitEdgeTest : public ::testing::Test
+class SplitPointTopologySplitEdgeTest : public SelectorTestFixture<::testing::Test>
 {
 protected:
 	void SetUp() {}
@@ -352,9 +367,14 @@ TEST_F(SplitPointTopologySplitEdgeTest, when_splitting_an_edge_should_create_a_n
 	SplitPointTopology::SplitPointHandle s = m_topology.SplitEdge(edge);
 	EXPECT_EQ(m_topology.GetFace(s), face.m_face);
 	EXPECT_TRUE(m_topology.IsValid());
+
+    std::stringstream ss;
+    m_topology.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
-class SplitPointTopologyCollapseEdgeTest : public ::testing::Test
+class SplitPointTopologyCollapseEdgeTest : public SelectorTestFixture<::testing::Test>
 {
 protected:
 	void SetUp()
@@ -374,11 +394,16 @@ TEST_F(SplitPointTopologyCollapseEdgeTest, when_collapsing_an_edge_should_remove
 	auto edgeToCollapse = m_triangle.GetEdge(m_face.m_face);
 	m_triangle.CollapseEdge(edgeToCollapse);
 	EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyCollapseEdgeTest, when_face_is_a_triangle_should_not_allow_collapsing) {}
 
-class SplitPointTopologyDeleteTest : public ::testing::Test
+class SplitPointTopologyDeleteTest : public SelectorTestFixture<::testing::Test>
 {
 protected:
 	void SetUp()
@@ -400,6 +425,11 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_face_should_cascade)
     EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
     EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
     EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_face_should_not_affect_adjacent_faces)
@@ -411,6 +441,11 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_face_should_not_affect_adja
     EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
     EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
     EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_cascade)
@@ -421,6 +456,11 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_cascade)
     EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
     EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
     EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_not_affect_unrelated_faces)
@@ -432,6 +472,11 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_not_affect_unr
     EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
     EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
     EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_cascade)
@@ -442,6 +487,11 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_cascade)
     EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
     EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
     EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_not_affect_unrelated_faces)
@@ -453,6 +503,11 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_not_affe
     EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
     EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
     EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_cascade)
@@ -463,6 +518,11 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_cascade)
     EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
     EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
     EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_not_affect_unrelated_faces)
@@ -474,9 +534,14 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_not_affect_unr
     EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
     EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
     EXPECT_TRUE(m_triangle.IsValid());
+
+    std::stringstream ss;
+    m_triangle.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }
 
-class SplitPointTopologySplitFaceTest : public ::testing::Test
+class SplitPointTopologySplitFaceTest : public SelectorTestFixture<::testing::Test>
 {
 protected:
 	void SetUp()
@@ -496,13 +561,16 @@ TEST_F(SplitPointTopologySplitFaceTest, when_splitting_a_face_should_create_two_
     auto e0 = m_topology.GetEdge(m_face.m_face);
     auto e1 = m_topology.GetNextEdge(e0);
 
-    m_topology.DumpToStream(std::cout);
     m_topology.SplitFace(m_face.m_face, e0, e1);
-    m_topology.DumpToStream(std::cout);
 
     ASSERT_TRUE(m_topology.IsValid());
     EXPECT_EQ(m_topology.GetFaceCount(), 2);
     EXPECT_EQ(m_topology.GetPointCount(), 4);
     EXPECT_EQ(m_topology.GetSplitPointCount(), 6);
     EXPECT_EQ(m_topology.GetEdgeCount(), 6);
+
+    std::stringstream ss;
+    m_topology.DumpToStream(ss);
+    MatchFile match(GetCurrentTestFileResultsDirectory() /= "topology.txt", GetShouldWriteFiles());
+    match.Match(ss.str());
 }

@@ -19,15 +19,12 @@ class Triangulate
 private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
-	using IndexType = typename Geometry::Index_t;
+	using Index_t = typename Geometry::Index_t;
 
 public:
 	Triangulate() {}
 
-	GeometrySizes ResultSize(GeometryPtr geometryIn) const
-	{
-		return GeometrySizes(0,0,0);
-	}
+	GeometrySizes ResultSize(GeometryPtr geometryIn) const { return GeometrySizes(0, 0, 0); }
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
 	{
@@ -35,23 +32,23 @@ public:
 
 		LOG_TRACE(GeometryOperations, "Triangulate.");
 
-        /*
 		GeometryBuilderT<Geometry> builder(geometryOut);
 
-		auto vertIterEnd = geometryIn->VerticesEnd();
-		for (auto vertIter = geometryIn->VerticesBegin(); vertIter != vertIterEnd; ++vertIter)
+		std::unordered_map<Index_t, Index_t> pointsMap;
+
+		auto pointEndIter = geometryIn->PointsEnd();
+		for (auto pointIter = geometryIn->PointsBegin(); pointIter != pointEndIter; ++pointIter)
 		{
-			auto vertPos = geometryIn->GetVertexAttributes(*vertIter).m_position;
-			builder.AddPoint(vertPos);
+			auto vertPos = geometryIn->GetPosition(*pointIter);
+			pointsMap[*pointIter] = builder.AddPoint(vertPos);
 		}
 
-		auto faceIterEnd = geometryIn->FacesEnd();
-		for (auto faceIter = geometryIn->FacesBegin(); faceIter != faceIterEnd; ++faceIter)
+		for (auto faceIter = geometryIn->FacesBegin(); faceIter != geometryIn->FacesEnd(); ++faceIter)
 		{
-			std::vector<IndexType> indices;
-			for (auto faceVCirc = geometryIn->FaceVertexBegin(*faceIter); faceVCirc.IsValid(); ++faceVCirc)
+			std::vector<Index_t> indices;
+			for (auto fpCirc = geometryIn->FacePointCirculatorBegin(*faceIter); fpCirc; ++fpCirc)
 			{
-				indices.push_back(*faceVCirc);
+				indices.push_back(pointsMap[*fpCirc]);
 			}
 
 			for (uint32_t i = 2; i < indices.size(); ++i)
@@ -63,7 +60,6 @@ public:
 				faceBuilder.CloseFace();
 			}
 		}
-        */
 	}
 };
 }  // namespace selector

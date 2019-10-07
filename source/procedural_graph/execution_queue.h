@@ -10,16 +10,33 @@ using GraphPtr = std::shared_ptr<Graph>;
 class Node;
 using NodePtr = std::shared_ptr<Node>;
 
+/**
+ * Implements a queue of \c Node that reflect the order in which they will be executed.
+ */
 class ExecutionQueue
 {
 public:
+    /**
+     * Constructs the \c ExecutionQueue from a \c Graph.
+     */
 	ExecutionQueue(GraphPtr graph);
 	~ExecutionQueue();
 
+    /**
+     * Returns the next \c Node in the queue.
+     * @return the next \c Node or nullptr if empty.
+     */
 	NodePtr GetNextNode();
 
+    /**
+     * Resets the \c ExecutionQueue to the beginning of the queue.
+     * Nodes are not deleted and the order is kept.
+     */
 	void Reset();
 
+    /**
+     * Returns the number of \c Node in the queue.
+     */
 	std::size_t GetNodeCount() const;
 
 private:

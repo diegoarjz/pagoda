@@ -5,7 +5,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include("Selector")
 include("gtest")
 
-find_package(Boost COMPONENTS chrono system program_options)
+find_package(Boost COMPONENTS chrono system program_options filesystem)
 
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

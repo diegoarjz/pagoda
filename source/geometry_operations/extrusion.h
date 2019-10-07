@@ -20,7 +20,7 @@ class Extrusion
 private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
-	using IndexType = typename Geometry::Index_t;
+	using Index_t = typename Geometry::Index_t;
 
 public:
 	/**
@@ -31,10 +31,7 @@ public:
 		DBG_ASSERT_MSG(extrusion_amount != 0, "Can't extrude by zero.");
 	}
 
-	GeometrySizes ResultSize(GeometryPtr geometryIn) const
-	{
-		return GeometrySizes(0,0,0);
-	}
+	GeometrySizes ResultSize(GeometryPtr geometryIn) const { return GeometrySizes(0, 0, 0); }
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
 	{
@@ -43,67 +40,71 @@ public:
 
 		GeometryBuilderT<Geometry> builder(geometryOut);
 
-        /*
-		auto in_num_points = geometryIn->GetNumVertices();
-		std::vector<Vec3F> in_points;
-		in_points.reserve(in_num_points);
-		for (auto vert_iter = geometryIn->VerticesBegin(); vert_iter != geometryIn->VerticesEnd(); ++vert_iter)
+        std::unordered_map<Index_t, Index_t> pointsMap;
+
+		auto inNumPoints = geometryIn->GetPointCount();
+		std::vector<Vec3F> inVertices;
+		inVertices.reserve(inNumPoints);
+		for (auto pointIter = geometryIn->PointsBegin(); pointIter != geometryIn->PointsEnd(); ++pointIter)
 		{
-			auto vert_position = geometryIn->GetVertexAttributes(*vert_iter).m_position;
-			in_points.push_back(vert_position);
-			builder.AddPoint(vert_position);
+			auto vertPosition = geometryIn->GetPosition(*pointIter);
+			inVertices.push_back(vertPosition);
+			pointsMap[*pointIter] = builder.AddPoint(vertPosition);
 		}
 
-		auto f_iter_end = geometryIn->FacesEnd();
-		for (auto f_iter = geometryIn->FacesBegin(); f_iter != f_iter_end; ++f_iter)
+		for (auto fIter = geometryIn->FacesBegin(); fIter != geometryIn->FacesEnd(); ++fIter)
 		{
-			uint32_t bottom_face_size = geometryIn->FaceVertexSize(*f_iter);
-			auto extrusion_vector = m_extrusionAMount * face_normal<Geometry>(geometryIn, *f_iter);
-			auto bottom_face = builder.StartFace(bottom_face_size);
-			auto top_face = builder.StartFace(bottom_face_size);
-			auto side_faces = builder.StartFaces(bottom_face_size, 4);
-
-			std::vector<IndexType> bottom_indices;
-			bottom_indices.reserve(bottom_face_size);
-			std::vector<IndexType> top_indices;
-			top_indices.reserve(bottom_face_size);
-
-			for (auto f_v_circ = geometryIn->FaceVertexBegin(*f_iter); f_v_circ.IsValid(); ++f_v_circ)
+			uint32_t bottomFaceSize = 0;
+			for (auto facePointIter = geometryIn->FacePointCirculatorBegin(*fIter); facePointIter; ++facePointIter)
 			{
-				auto bottom_position = geometryIn->GetVertexAttributes(*f_v_circ).m_position;
-				auto top_position = bottom_position + extrusion_vector;
-
-				bottom_indices.push_back(*f_v_circ);
-				top_indices.push_back(builder.AddPoint(top_position));
+				++bottomFaceSize;
 			}
 
-			for (uint32_t i = 0; i < top_indices.size(); ++i)
+			auto extrusionVector = m_extrusionAMount * face_normal<Geometry>(geometryIn, *fIter);
+			auto bottomFace = builder.StartFace(bottomFaceSize);
+			auto topFace = builder.StartFace(bottomFaceSize);
+			auto sideFaces = builder.StartFaces(bottomFaceSize, 4);
+
+			std::vector<Index_t> bottomIndices;
+			bottomIndices.reserve(bottomFaceSize);
+			std::vector<Index_t> topIndices;
+			topIndices.reserve(bottomFaceSize);
+
+			for (auto facePointIter = geometryIn->FacePointCirculatorBegin(*fIter); facePointIter; ++facePointIter)
 			{
-				top_face.AddIndex(top_indices[i]);
+				auto bottomPosition = geometryIn->GetPosition(*facePointIter);
+				auto topPosition = bottomPosition + extrusionVector;
+
+				bottomIndices.push_back(pointsMap[(*facePointIter)]);
+				topIndices.push_back(builder.AddPoint(topPosition));
 			}
 
-			for (uint32_t i = 0; i < top_indices.size(); ++i)
+			for (auto i = 0u; i < topIndices.size(); ++i)
 			{
-				auto &side_face = side_faces[i];
-				side_face.AddIndex(bottom_indices[i]);
-				side_face.AddIndex(bottom_indices[(i + 1) % bottom_face_size]);
-				side_face.AddIndex(top_indices[(i + 1) % bottom_face_size]);
-				side_face.AddIndex(top_indices[i]);
+				topFace.AddIndex(topIndices[i]);
 			}
 
-			for (int32_t i = bottom_indices.size() - 1; i >= 0; --i)
+			for (auto i = 0u; i < topIndices.size(); ++i)
 			{
-				bottom_face.AddIndex(bottom_indices[i]);
+				auto &sideFace = sideFaces[i];
+				sideFace.AddIndex(bottomIndices[i]);
+				sideFace.AddIndex(bottomIndices[(i + 1) % bottomFaceSize]);
+				sideFace.AddIndex(topIndices[(i + 1) % bottomFaceSize]);
+				sideFace.AddIndex(topIndices[i]);
 			}
 
-			bottom_face.CloseFace();
-			for (auto &f : side_faces)
+			for (int32_t i = bottomIndices.size() - 1; i >= 0; --i)
+			{
+				bottomFace.AddIndex(bottomIndices[i]);
+			}
+
+			bottomFace.CloseFace();
+			for (auto &f : sideFaces)
 			{
 				f.CloseFace();
 			}
-			top_face.CloseFace();
+			topFace.CloseFace();
 		}
-        */
 	}
 
 private:

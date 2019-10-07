@@ -1,0 +1,19 @@
+IsValid: true
+Points:
+ 2 Edges: 2, 
+ 1 Edges: 1, 
+ 0 Edges: 0, 
+
+SplitPoints:
+ 2:  P: 2 F: 0 In: 1 Out: 2
+ 1:  P: 1 F: 0 In: 0 Out: 1
+ 0:  P: 0 F: 0 In: 2 Out: 0
+
+Edges:
+ 2: 2 -> 0
+ 1: 1 -> 2
+ 0: 0 -> 1
+
+Faces:
+ 0:   SP: 2
+

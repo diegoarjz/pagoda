@@ -8,6 +8,7 @@ set(SELECTOR_COMMON_SOURCES
     "common/version.cpp"
     "common/logger.cpp"
     "common/utils.cpp"
+    "common/file_util.cpp"
 )
 
 set(SELECTOR_COMMON_PUBLIC_HEADERS
@@ -18,6 +19,7 @@ set(SELECTOR_COMMON_PUBLIC_HEADERS
     "common/profiler.h"
     "common/statistics.h"
     "common/logger.h"
+    "common/file_util.h"
 )
 
 # Math lib

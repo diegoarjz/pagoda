@@ -32,20 +32,3 @@ TEST_F(GeometryTest, when_created_should_be_empty)
     EXPECT_EQ(emptyGeometry->GetPointCount(), 0);
 }
 
-TEST_F(GeometryTest, when_setting_position_should_store_them)
-{
-    /*
-    m_geometry->SetPosition(m_face.m_points[0], Vec3F(1,2,3));
-    EXPECT_EQ(m_geometry->GetPosition(m_face.m_points[0]), Vec3F(1,2,3));
-    */
-}
-
-TEST_F(GeometryTest, when_getting_attributes_should_create_them)
-{
-    /*
-    auto &faceAttr = m_geometry->GetFaceAttributes(m_face.m_face);
-    faceAttr.m_normal = Vec3F(1,0,0);
-    EXPECT_EQ(m_geometry->GetFaceAttributes(m_face.m_face).m_normal, Vec3F(1,0,0));
-    */
-}
-

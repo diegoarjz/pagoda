@@ -24,56 +24,46 @@ public:
 	GeometryExporter(GeometryPtr geom) : m_geometry(geom) {}
 
 	/**
-	 * Exports the Geometry to the \p out_stream.
+	 * Exports the Geometry to the \p outStream.
 	 */
-	bool Export(std::ostream &out_stream)
+	bool Export(std::ostream &outStream)
 	{
-        /*
-		auto num_points = m_geometry->GetNumVertices();
-		auto num_faces = m_geometry->GetNumFaces();
+        std::unordered_map<typename Geometry::Index_t, std::size_t> geometryToExportMap;
+        std::size_t pointIndex = 0;
 
-		StartGeometry(out_stream, num_points, num_faces);
+        StartGeometry(outStream);
 
-		auto verts_end = m_geometry->VerticesEnd();
-		for (auto vert = m_geometry->VerticesBegin(); vert != verts_end; ++vert)
-		{
-			PositionType point = m_geometry->GetVertexAttributes(*vert).m_position;
-			ExportPoint(out_stream, point);
-		}
+        for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter)
+        {
+            auto pointHandle = m_geometry->GetPoint(*iter);
+            if (geometryToExportMap.find(pointHandle) == std::end(geometryToExportMap))
+            {
+                geometryToExportMap[pointHandle] = pointIndex++;
+                ExportPoint(outStream, m_geometry->GetPosition(m_geometry->GetPoint(*iter)));
+            }
+        }
 
-		auto face_end_iter = m_geometry->FacesEnd();
-		for (auto face = m_geometry->FacesBegin(); face != face_end_iter; ++face)
-		{
-			std::vector<IndexType> face_indices;
-
-			for (auto vert = m_geometry->FaceVertexBegin(*face); vert.IsValid(); ++vert)
-			{
-				face_indices.push_back(*vert);
-			}
-
-			StartFace(out_stream, face_indices.size());
-
-			for (auto &vert : face_indices)
-			{
-				FaceAddIndex(out_stream, vert);
-			}
-
-			EndFace(out_stream);
-		}
-
-		EndGeometry(out_stream);
-
-        */
+        for (auto faceIter = m_geometry->FacesBegin(); faceIter != m_geometry->FacesEnd(); ++faceIter)
+        {
+            StartFace(outStream);
+            auto circ = m_geometry->FaceSplitPointCirculatorBegin(*faceIter);
+            while (circ)
+            {
+                FaceAddIndex(outStream, geometryToExportMap[m_geometry->GetPoint(*circ)]);
+                ++circ;
+            }
+            EndFace(outStream);
+        }
 		return true;
 	}
 
 protected:
-	virtual void StartGeometry(std::ostream &out_stream, uint32_t num_points, uint32_t num_faces) = 0;
-	virtual void ExportPoint(std::ostream &out_stream, const PositionType &position) = 0;
-	virtual void StartFace(std::ostream &out_stream, const size_t &num_points) = 0;
-	virtual void FaceAddIndex(std::ostream &out_stream, const IndexType &index) = 0;
-	virtual void EndFace(std::ostream &out_stream) = 0;
-	virtual void EndGeometry(std::ostream &out_stream) = 0;
+	virtual void StartGeometry(std::ostream &outStream) = 0;
+	virtual void ExportPoint(std::ostream &outStream, const PositionType &position) = 0;
+	virtual void StartFace(std::ostream &outStream) = 0;
+	virtual void FaceAddIndex(std::ostream &outStream, const IndexType &index) = 0;
+	virtual void EndFace(std::ostream &outStream) = 0;
+	virtual void EndGeometry(std::ostream &outStream) = 0;
 
 	GeometryPtr m_geometry;
 };  // class GeometryExporter
@@ -91,66 +81,25 @@ public:
 	explicit ObjExporter(typename GeometryExporter<G>::GeometryPtr geom) : GeometryExporter<G>(geom) {}
 
 protected:
-	void StartGeometry(std::ostream &out_stream, uint32_t num_points, uint32_t num_faces) final {}
+	void StartGeometry(std::ostream &outStream) final {}
 
-	void ExportPoint(std::ostream &out_stream, const typename GeometryExporter<G>::PositionType &position) final
+	void ExportPoint(std::ostream &outStream, const typename GeometryExporter<G>::PositionType &position) final
 	{
-		out_stream << "v " << position[0] << " " << position[1] << " " << position[2] << "\n";
+		outStream << "v " << position[0] << " " << position[1] << " " << position[2] << "\n";
 	}
 
-	void StartFace(std::ostream &out_stream, const size_t &num_points) final { out_stream << "f "; }
+	void StartFace(std::ostream &outStream) final { outStream << "f "; }
 
-	void FaceAddIndex(std::ostream &out_stream, const typename GeometryExporter<G>::IndexType &index) final
+	void FaceAddIndex(std::ostream &outStream, const typename GeometryExporter<G>::IndexType &index) final
 	{
-		out_stream << (index + 1) << " ";
+		outStream << (index + 1) << " ";
 	}
 
-	void EndFace(std::ostream &out_stream) final { out_stream << "\n"; }
+	void EndFace(std::ostream &outStream) final { outStream << "\n"; }
 
-	void EndGeometry(std::ostream &out_stream) final {}
+	void EndGeometry(std::ostream &outStream) final {}
 
 };  // class ObjExporter
-
-/**
- * Exports the Geometry in Selector's binary format.
- *
- * Format Specification:
- *
- * | Header   |
- * | Vertex 0 |
- * |    ...   |
- * | Vertex n |
- * | Face 0   |
- * |    ...   |
- * | Face n   |
- */
-template<class G>
-class SelBinaryGeometryExporter : public GeometryExporter<G>
-{
-public:
-	SelBinaryGeometryExporter(typename GeometryExporter<G>::GeometryPtr geom) : GeometryExporter<G>(geom) {}
-
-protected:
-	struct Header
-	{
-		char m_formatVersion;
-		uint32_t m_numPoints;
-		uint32_t m_numFaces;
-	};  // struct Header
-
-	void StartGeometry(std::ostream &out_stream, uint32_t num_points, uint32_t num_faces) final {}
-
-	void ExportPoint(std::ostream &out_stream, const typename GeometryExporter<G>::PositionType &position) final {}
-
-	void StartFace(std::ostream &out_stream, const size_t &num_points) final {}
-
-	void FaceAddIndex(std::ostream &out_stream, const typename GeometryExporter<G>::IndexType &index) final {}
-
-	void EndFace(std::ostream &out_stream) final {}
-
-	void EndGeometry(std::ostream &out_stream) final {}
-
-};  // class SelBinaryGeometryExporter
 
 }  // namespace selector
 #endif

@@ -86,9 +86,12 @@ target_link_libraries(
         selector
         Boost::chrono
         Boost::system
+        Boost::filesystem
         pthread
         gmock
         gtest
 )
+
+file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_test(NAME unit_tests COMMAND unit_tests)

@@ -48,17 +48,15 @@ struct DefaultFaceAttributes
  */
 template<class Geometry>
 inline typename Geometry::PositionType face_normal(std::shared_ptr<Geometry> geometry,
-                                                   const typename Geometry::IndexType &face)
+                                                   const typename Geometry::Index_t &face)
 {
 	START_PROFILE;
-	DBG_ASSERT_MSG(geometry->FaceVertexSize(face) >= 3,
-	               "Can't calculate the normal of a face with less than 3 vertices. Invalid Face?");
-	auto f_v_circ = geometry->FaceVertexBegin(face);
-	typename Geometry::PositionType pos0 = geometry->GetVertexAttributes(*f_v_circ).m_position;
-	++f_v_circ;
-	typename Geometry::PositionType pos1 = geometry->GetVertexAttributes(*f_v_circ).m_position;
-	++f_v_circ;
-	typename Geometry::PositionType pos2 = geometry->GetVertexAttributes(*f_v_circ).m_position;
+	auto facePointCirc = geometry->FacePointCirculatorBegin(face);
+	typename Geometry::PositionType pos0 = geometry->GetPosition(*facePointCirc);
+	++facePointCirc;
+	typename Geometry::PositionType pos1 = geometry->GetPosition(*facePointCirc);
+	++facePointCirc;
+	typename Geometry::PositionType pos2 = geometry->GetPosition(*facePointCirc);
 	return normalized(cross_product(pos2 - pos1, pos0 - pos1));
 }
 

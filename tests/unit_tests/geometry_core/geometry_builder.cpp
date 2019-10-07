@@ -69,25 +69,27 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 TEST_F(GeometryBuilderTest, when_creating_a_face_should_be_able_to_reuse_points)
 {
     auto builder = std::make_shared<GeometryBuilderT<GeometryType>>(m_geometry);
-    std::array<GeometryType::Index_t, 4> points = {
-        builder->AddPoint({0,0,0}), builder->AddPoint({0,0,1}), builder->AddPoint({0,1,1}), builder->AddPoint({1,1,1})
+    std::array<GeometryType::Index_t, 6> points = {
+        builder->AddPoint({0,0,0}), builder->AddPoint({0,0,1}), builder->AddPoint({0,1,1}), builder->AddPoint({0,1,0}), builder->AddPoint({1,1,1}), builder->AddPoint({1,0,1})
     };
 
-    auto faceBuilder1 = builder->StartFace(3);
+    auto faceBuilder1 = builder->StartFace(5);
     faceBuilder1.AddIndex(points[0]);
     faceBuilder1.AddIndex(points[1]);
     faceBuilder1.AddIndex(points[2]);
-    auto faceBuilder2 = builder->StartFace(3);
+    faceBuilder1.AddIndex(points[3]);
+    auto faceBuilder2 = builder->StartFace(4);
     faceBuilder2.AddIndex(points[2]);
-    faceBuilder2.AddIndex(points[3]);
+    faceBuilder2.AddIndex(points[4]);
+    faceBuilder2.AddIndex(points[4]);
     faceBuilder2.AddIndex(points[1]);
 
     faceBuilder1.CloseFace();
     faceBuilder2.CloseFace();
 
 	EXPECT_EQ(m_geometry->GetFaceCount(), 2);
-	EXPECT_EQ(m_geometry->GetPointCount(), 4);
-	EXPECT_EQ(m_geometry->GetSplitPointCount(), 6);
-	EXPECT_EQ(m_geometry->GetEdgeCount(), 6);
+	EXPECT_EQ(m_geometry->GetPointCount(), 6);
+	EXPECT_EQ(m_geometry->GetSplitPointCount(), 8);
+	EXPECT_EQ(m_geometry->GetEdgeCount(), 8);
 	EXPECT_TRUE(m_geometry->IsValid());
 }

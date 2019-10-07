@@ -248,7 +248,9 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const IndexP
         SetIncomingEdge(std::get<0>(splitPoints[(i + 1) % 3]), std::get<0>(edges[i]));
 	}
 
+#ifdef DEBUG
     IsValid();
+#endif
 	return CreateFaceResult(std::get<0>(face), {std::get<0>(splitPoints[0]), std::get<0>(splitPoints[1]), std::get<0>(splitPoints[2])});
 }
 
@@ -445,7 +447,9 @@ SplitPointTopology::FaceHandle SplitPointTopology::SplitFace(const FaceHandle &f
     SetPoint(d_, p0);
     SetPoint(d, p0);
 
+#ifdef DEBUG
     IsValid();
+#endif
 
     return f1;
 }
@@ -498,7 +502,9 @@ void SplitPointTopology::DeleteFace(const FaceHandle &f)
     }
 
 	m_faces.Delete(f);
+#ifdef DEBUG
 	IsValid();
+#endif
 }
 
 void SplitPointTopology::DeletePoint(const PointHandle &p)
@@ -514,7 +520,9 @@ void SplitPointTopology::DeletePoint(const PointHandle &p)
     {
         DeleteEdge(e);
     }
+#ifdef DEBUG
 	IsValid();
+#endif
 }
 
 void SplitPointTopology::DeleteEdge(const EdgeHandle &e)
@@ -524,7 +532,9 @@ void SplitPointTopology::DeleteEdge(const EdgeHandle &e)
 	Edge &edge = m_edges.Get(e);
 	SplitPoint &splitPoint = m_splitPoints.Get(edge.m_source);
 	DeleteFace(splitPoint.m_face);
+#ifdef DEBUG
 	IsValid();
+#endif
 }
 
 void SplitPointTopology::DeleteSplitPoint(const SplitPointHandle &s)
@@ -533,7 +543,9 @@ void SplitPointTopology::DeleteSplitPoint(const SplitPointHandle &s)
     LOG_TRACE(GeometryCore, "Deleting Split Point %d", s);
 	SplitPoint &splitPoint = m_splitPoints.Get(s);
 	DeleteFace(splitPoint.m_face);
+#ifdef DEBUG
 	IsValid();
+#endif
 }
 
 /*
@@ -890,9 +902,9 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 		{
 			outStream << e << ", ";
 		}
-        std::cout << std::endl;
+        outStream << std::endl;
 	}
-    std::cout << std::endl;
+    outStream << std::endl;
 
 	outStream << "SplitPoints:" << std::endl;
 	for (const auto &sp : m_splitPoints)

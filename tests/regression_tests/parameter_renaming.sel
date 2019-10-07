@@ -1,7 +1,0 @@
-parameter = Parameter() { size: 10 }
-renaming = Parameter() { width: size*2, height: size/2 }
-create_rect = Operation(operation: "CreateRectGeometry") {}
-create_rect_out = OutputInterface(interface: "out", offset: 0)
-
-parameter -> renaming -> create_rect;
-create_rect -> create_rect_out;
