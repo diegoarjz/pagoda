@@ -4,6 +4,7 @@
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/procedural_object.h>
+#include <procedural_objects/procedural_object_system.h>
 
 #include <gmock/gmock.h>
 

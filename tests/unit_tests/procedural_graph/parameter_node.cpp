@@ -21,7 +21,7 @@ TEST(ParameterNode, when_executing_a_parameter_node_should_propagate_the_paramet
 	p->GetParameterContext()->SetParameter("a", 123.0f);
 	p->GetParameterContext()->SetParameter("b", 0.0f);
 
-	p->Execute(nullptr, emptyNodeSet, outNodes);
+	p->Execute(emptyNodeSet, outNodes);
 
 	for (auto &n : outNodes)
 	{
@@ -43,7 +43,7 @@ TEST(ParameterNode, when_executing_a_parameter_node_should_overwrite_parameters_
 	NodeSet<Node> outNodes{p2};
 	NodeSet<Node> emptyNodeSet;
 
-	p->Execute(nullptr, emptyNodeSet, outNodes);
+	p->Execute(emptyNodeSet, outNodes);
 
 	EXPECT_EQ(p2->GetParameterContext()->GetParameterAs<float>("a"), 123.0f);
 }

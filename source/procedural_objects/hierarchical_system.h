@@ -3,6 +3,7 @@
 
 #include "procedural_object.h"
 #include "procedural_operation.h"
+#include "procedural_component_system.h"
 
 namespace selector
 {
@@ -11,6 +12,7 @@ class HierarchicalComponent;
 class HierarchicalSystem : public ProceduralComponentSystem
 {
 public:
+    HierarchicalSystem();
 	virtual ~HierarchicalSystem();
 
 	ComponentType GetType() const override { return ComponentType::Hierarchical; }

@@ -68,7 +68,7 @@ public:
 	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
 	 */
 	Parameter ResolveVariable(const Variable &v) const override;
-	
+
 	/**
 	 * Sets all variables in all expressions to the value given by a parameter.
 	 * Only expressions in the root \c Context are updated as these are the ones

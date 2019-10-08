@@ -1,65 +1,14 @@
 #include "procedural_operation.h"
 
+#include "procedural_object_system.h"
+
 #include "common/assertions.h"
 #include "procedural_object.h"
 
+#include "../selector.h"
+
 namespace selector
 {
-ProceduralOperationObjectInterface::ProceduralOperationObjectInterface(const InterfaceName& name,
-                                                                       const ProceduralObjectMask& mask)
-    : interface_name(name), interface_mask(mask)
-{
-}
-
-bool ProceduralOperationObjectInterface::Accepts(ProceduralObjectPtr procedural_object)
-{
-	return interface_mask == procedural_object->Mask();
-}
-
-bool ProceduralOperationObjectInterface::AddProceduralObject(ProceduralObjectPtr procedural_object)
-{
-	START_PROFILE;
-
-	if (Accepts(procedural_object))
-	{
-		procedural_objects.push_back(procedural_object);
-
-		return true;
-	}
-	return false;
-}
-
-ProceduralObjectPtr ProceduralOperationObjectInterface::GetFrontProceduralObject()
-{
-	START_PROFILE;
-
-	if (procedural_objects.size() > 0)
-	{
-		auto object = procedural_objects.front();
-		return object;
-	}
-	else
-	{
-		return nullptr;
-	}
-}
-
-ProceduralObjectPtr ProceduralOperationObjectInterface::GetAndPopProceduralObject()
-{
-	START_PROFILE;
-
-	if (procedural_objects.size() > 0)
-	{
-		auto object = procedural_objects.front();
-		procedural_objects.pop_front();
-		return object;
-	}
-	else
-	{
-		return nullptr;
-	}
-}
-
 ProceduralOperation::ProceduralOperation() : m_parameterContext(std::make_shared<Context>("op")) {}
 
 bool ProceduralOperation::PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object)
@@ -141,7 +90,7 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 
 	auto mask = output_interfaces[interfaceName]->Mask();
 
-	auto procedural_object = execution_context->procedural_object_system->CreateProceduralObject(mask);
+	auto procedural_object = Selector::GetInstance().GetProceduralObjectSystem()->CreateProceduralObject(mask);
 	output_interfaces[interfaceName]->AddProceduralObject(procedural_object);
 
 	return procedural_object;

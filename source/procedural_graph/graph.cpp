@@ -1,6 +1,7 @@
 #include "graph.h"
 
 #include "common/assertions.h"
+#include "default_scheduler.h"
 #include "node.h"
 
 #include <array>
@@ -20,7 +21,7 @@ private:
 	using AdjacencyContainer = std::unordered_map<NodeWeakPtr, Adjacency, NodeWeakPtrHasher, NodeWeakPtrEqual>;
 
 public:
-	Impl() {}
+	Impl(Graph *graph) : m_graph(graph) {}
 
 	void AddNode(NodePtr node)
 	{
@@ -99,7 +100,7 @@ public:
 	}
 
 	NodeSet<Node> GetGraphNodes() { return m_nodes; }
-	
+
 	std::size_t GetNodeCount() const { return m_nodes.size(); }
 
 	NodeSet<Node> GetInputNodes()
@@ -150,7 +151,32 @@ public:
 		return nodes;
 	}
 
+	void SetScheduler(std::unique_ptr<IScheduler> scheduler) { m_scheduler = std::move(scheduler); }
+
+	void Execute()
+	{
+		IScheduler *scheduler = GetScheduler();
+		scheduler->Initialize();
+		while (true)
+		{
+			if (!scheduler->Step())
+			{
+				break;
+			}
+		}
+		scheduler->Finalize();
+	}
+
 private:
+	IScheduler *GetScheduler()
+	{
+		if (m_scheduler == nullptr)
+		{
+		    m_scheduler = Graph::GetSchedulerFactory()(*m_graph);
+		}
+		return m_scheduler.get();
+	}
+
 	void CollectNodes(const NodeWeakPtrSet &node_set, NodeSet<Node> &outSet)
 	{
 		for (auto n : node_set)
@@ -168,9 +194,11 @@ private:
 	AdjacencyContainer m_adjacencies;
 	NodeWeakPtrSet m_inputNodes;
 	NodeWeakPtrSet m_outputNodes;
+	Graph *m_graph;
+	std::unique_ptr<IScheduler> m_scheduler;
 };
 
-Graph::Graph() : m_implementation(std::make_unique<Graph::Impl>()) {}
+Graph::Graph() : m_implementation(std::make_unique<Graph::Impl>(this)) {}
 
 Graph::~Graph() {}
 
@@ -202,4 +230,21 @@ NodeSet<Node> Graph::GetNodeInputNodes(NodePtr node) { return m_implementation->
 
 NodeSet<Node> Graph::GetNodeOutputNodes(NodePtr node) { return m_implementation->GetOutNodes(node); }
 
+void Graph::SetScheduler(std::unique_ptr<IScheduler> scheduler)
+{
+	m_implementation->SetScheduler(std::move(scheduler));
+}
+
+void Graph::Execute() { m_implementation->Execute(); }
+
+void Graph::SetSchedulerFactory(const SchedulerFactoryFunction_t &factoryFunction)
+{
+	s_schedulerFactoryFunction = factoryFunction;
+}
+
+Graph::SchedulerFactoryFunction_t Graph::GetSchedulerFactory() { return s_schedulerFactoryFunction; }
+
+Graph::SchedulerFactoryFunction_t Graph::s_schedulerFactoryFunction = [](Graph &graph) {
+	return std::make_unique<DefaultScheduler>(graph);
+};
 }  // namespace selector

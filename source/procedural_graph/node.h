@@ -84,12 +84,10 @@ public:
 	 *
 	 * Subclasses should override this method to implement some execution logic.
 	 *
-	 * @param executionContext  The current \c GraphExecutionContext for the execution.
 	 * @param inNodes           The input nodes to the current \c Node, if any.
 	 * @param outNodes          The output nodes to the current \c Node, if any.
 	 */
-	virtual void Execute(GraphExecutionContextPtr executionContext, const NodeSet<Node> &inNodes,
-	                     const NodeSet<Node> &outNodes) = 0;
+	virtual void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) = 0;
 
 private:
 	std::string m_nodeName;

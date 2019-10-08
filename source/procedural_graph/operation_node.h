@@ -19,7 +19,7 @@ public:
 
 	void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &) override;
 
-	void Execute(GraphExecutionContextPtr graph, const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
+	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
 	void SetOperation(ProceduralOperationPtr operation);
 	ProceduralOperationPtr GetOperation() const { return m_operation; }
 

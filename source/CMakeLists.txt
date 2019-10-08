@@ -77,6 +77,8 @@ set(SELECTOR_PARAMETER_PUBLIC_HEADERS
 # Procedural Objects
 set(SELECTOR_PROCEDURAL_OBJECTS_SOURCES
     "procedural_objects/procedural_object.cpp"
+    "procedural_objects/procedural_object_system.cpp"
+    "procedural_objects/procedural_component_system.cpp"
     "procedural_objects/procedural_operation.cpp"
     "procedural_objects/geometry_system.cpp"
     "procedural_objects/geometry_component.cpp"
@@ -86,12 +88,15 @@ set(SELECTOR_PROCEDURAL_OBJECTS_SOURCES
     "procedural_objects/create_rect.cpp"
     "procedural_objects/triangulate_geometry.cpp"
     "procedural_objects/export_geometry.cpp"
+    "procedural_objects/procedural_operation_object_interface.cpp"
     )
 
 set(SELECTOR_PROCEDURAL_OBJECTS_PUBLIC_HEADERS
     "procedural_objects/geometry_system.h"
     "procedural_objects/procedural_component.h"
     "procedural_objects/procedural_object.h"
+    "procedural_objects/procedural_object_system.h"
+    "procedural_objects/procedural_component_system.h"
     "procedural_objects/procedural_operation.h"
     "procedural_objects/geometry_component.h"
     "procedural_objects/hierarchical_component.h"
@@ -107,16 +112,16 @@ set(SELECTOR_PROCEDURAL_GRAPH_HEADERS
     "procedural_graph/node.h"
     "procedural_graph/reader.h"
     "procedural_graph/parse_result.h"
-    "procedural_graph/graph_execution_context.h"
     "procedural_graph/graph_dot_exporter.h"
+    "procedural_graph/default_scheduler.h"
+    "procedural_graph/scheduler.h"
     )
 
 set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
     "procedural_graph/graph.cpp"
     "procedural_graph/node.cpp"
     "procedural_graph/reader.cpp"
-    "procedural_graph/scheduler.cpp"
-    "procedural_graph/graph_execution_context.cpp"
+    "procedural_graph/default_scheduler.cpp"
     "procedural_graph/input_interface_node.cpp"
     "procedural_graph/output_interface_node.cpp"
     "procedural_graph/operation_node.cpp"
@@ -138,6 +143,7 @@ set(SELECTOR_PUBLIC_HEADERS
     "${SELECTOR_GEOMCORE_PUBLIC_HEADERS}"
     "${SELECTOR_GEOMETRY_OPERATION_PUBLIC_HEADERS}"
     "${SELECTOR_PROCEDURAL_GRAPH_HEADERS}"
+    "selector.h"
 )
 
 set(SELECTOR_SOURCES
@@ -146,6 +152,7 @@ set(SELECTOR_SOURCES
     "${SELECTOR_PARAMETER_SOURCES}"
     "${SELECTOR_PROCEDURAL_OBJECTS_SOURCES}"
     "${SELECTOR_PROCEDURAL_GRAPH_SOURCES}"
+    "selector.cpp"
    )
 
 add_library(

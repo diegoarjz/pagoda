@@ -21,16 +21,15 @@ class NodeVisitorTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		m_graph = std::make_shared<Graph>();
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
 	}
 
 	void TearDown() {}
 
-	GraphPtr m_graph;
+	Graph m_graph;
 	std::vector<NodePtr> m_nodes;
 };
 
@@ -50,17 +49,16 @@ class BreadthFirstNodeVisitorTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		m_graph = std::make_shared<Graph>();
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
 	}
 
 	void TearDown() {}
 
-	GraphPtr m_graph;
+	Graph m_graph;
 	std::vector<NodePtr> m_nodes;
 };
 
@@ -89,9 +87,9 @@ TEST_F(BreadthFirstNodeVisitorTest, when_visiting_should_visit_the_nodes_in_brea
 	m_nodes[2]->SetId(2);
 	m_nodes[3]->SetId(1);
 	m_nodes[4]->SetId(0);
-	m_graph->CreateEdge(m_nodes[0], m_nodes[1]);
-	m_graph->CreateEdge(m_nodes[1], m_nodes[2]);
-	m_graph->CreateEdge(m_nodes[0], m_nodes[3]);
+	m_graph.CreateEdge(m_nodes[0], m_nodes[1]);
+	m_graph.CreateEdge(m_nodes[1], m_nodes[2]);
+	m_graph.CreateEdge(m_nodes[0], m_nodes[3]);
 
 	BreadthFirstNodeVisitor v(m_graph, d);
 	v.Visit();

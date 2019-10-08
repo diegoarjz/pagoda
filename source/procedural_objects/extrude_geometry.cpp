@@ -1,11 +1,15 @@
 #include "extrude_geometry.h"
 
+#include "procedural_object_system.h"
+
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
 #include "parameter/parameter.h"
 #include "procedural_component.h"
+
+#include "../selector.h"
 
 #include <memory>
 
@@ -28,6 +32,8 @@ ExtrudeGeometry::ExtrudeGeometry()
 	out_geometry_mask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
 	out_geometry_mask.set(static_cast<uint32_t>(HierarchicalComponent::GetType()));
 	CreateOutputInterface(output_geometry, out_geometry_mask);
+
+    SetParameter("extrusion_amount", 0.0f);
 }
 
 ExtrudeGeometry::~ExtrudeGeometry() {}
@@ -39,9 +45,8 @@ void ExtrudeGeometry::Execute()
 	while (HasInput(input_geometry))
 	{
 		ProceduralObjectPtr in_object = GetInputProceduralObject(input_geometry);
-		m_parameterContext->UpdateExpressions();
 
-		float extrusion_amount = execution_context->parameter_context->GetParameterAs<float>("extrusion_amount");
+		float extrusion_amount = GetParameterAs<float>("extrusion_amount");
 		Extrusion<Geometry> extrude(extrusion_amount);
 
 		// Geometry
@@ -62,7 +67,7 @@ void ExtrudeGeometry::Execute()
 		    out_object->GetComponent<HierarchicalComponent>();
 
 		auto hierarchical_system = std::dynamic_pointer_cast<HierarchicalSystem>(
-		    execution_context->procedural_object_system->GetComponentSystem(ComponentType::Hierarchical));
+		    Selector::GetInstance().GetProceduralObjectSystem()->GetComponentSystem(ComponentType::Hierarchical));
 		hierarchical_system->SetParent(out_hierarchical_component, in_hierarchical_component);
 	}
 }

@@ -95,7 +95,7 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 				}
 			};
 
-			BreadthFirstNodeVisitor<decltype(delegate)> visitor(m_graph, delegate);
+			BreadthFirstNodeVisitor<decltype(delegate)> visitor(*m_graph, delegate);
 			visitor.Visit();
 
 			std::transform(depths.begin(), depths.end(), std::back_inserter(nodes),
@@ -107,7 +107,7 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 		}
 		case RankBy::ExecutionOrder:
 		{
-			ExecutionQueue q(m_graph);
+			ExecutionQueue q(*m_graph);
 			NodePtr n;
 			uint32_t rank = 0;
 			auto inserter = std::back_inserter(nodes);

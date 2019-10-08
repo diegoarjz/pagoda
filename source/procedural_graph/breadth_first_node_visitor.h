@@ -11,11 +11,11 @@ template<class Delegate_t>
 class BreadthFirstNodeVisitor : public NodeVisitor<Delegate_t>
 {
 public:
-	BreadthFirstNodeVisitor(GraphPtr graph, Delegate_t &delegate) : NodeVisitor<Delegate_t>(graph, delegate) {}
+	BreadthFirstNodeVisitor(Graph& graph, Delegate_t &delegate) : NodeVisitor<Delegate_t>(graph, delegate) {}
 
 	void Visit() override
 	{
-		auto graphInNodes = this->m_graph->GetGraphInputNodes();
+		auto graphInNodes = this->m_graph.GetGraphInputNodes();
 		for (auto &n : graphInNodes)
 		{
 			m_nodesToVisit.push(n);
@@ -28,7 +28,7 @@ public:
 
 			this->m_delegate(n);
 
-			auto outNodes = this->m_graph->GetNodeOutputNodes(n);
+			auto outNodes = this->m_graph.GetNodeOutputNodes(n);
 			for (auto outNode : outNodes)
 			{
 				m_nodesToVisit.push(outNode);

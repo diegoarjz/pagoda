@@ -4,6 +4,7 @@
 #include <procedural_objects/hierarchical_component.h>
 #include <procedural_objects/hierarchical_system.h>
 #include <procedural_objects/procedural_object.h>
+#include <procedural_objects/procedural_object_system.h>
 
 #include <gtest/gtest.h>
 

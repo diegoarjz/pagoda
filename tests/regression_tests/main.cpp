@@ -3,22 +3,13 @@
 #include <common/file_util.h>
 #include <common/logger.h>
 #include <procedural_graph/graph.h>
-#include <procedural_graph/graph_execution_context.h>
 #include <procedural_graph/reader.h>
-#include <procedural_graph/scheduler.h>
+#include <procedural_graph/default_scheduler.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
 #include <procedural_objects/procedural_object.h>
 
-#include <procedural_graph/input_interface_node.h>
-#include <procedural_graph/operation_node.h>
-#include <procedural_graph/output_interface_node.h>
-#include <procedural_graph/parameter_node.h>
-
-#include <procedural_objects/create_rect.h>
-#include <procedural_objects/export_geometry.h>
-#include <procedural_objects/extrude_geometry.h>
-#include <procedural_objects/triangulate_geometry.h>
+#include <selector.h>
 
 #include <boost/filesystem/path.hpp>
 
@@ -70,25 +61,7 @@ public:
 
 	void ExecuteGraph()
 	{
-		auto geomSystem = std::make_shared<GeometrySystem>();
-		auto hierarchicalSystem = std::make_shared<HierarchicalSystem>();
-		auto objectSystem = std::make_shared<ProceduralObjectSystem>();
-		objectSystem->RegisterProceduralComponentSystem(geomSystem);
-		objectSystem->RegisterProceduralComponentSystem(hierarchicalSystem);
-
-		auto executionContext = std::make_shared<GraphExecutionContext>(m_graph, objectSystem, geomSystem);
-		auto graphParameterContext = std::make_shared<Context>("graph");
-
-		Scheduler scheduler(executionContext, graphParameterContext);
-		scheduler.Initialize();
-
-		while (true)
-		{
-			if (!scheduler.Step())
-			{
-				break;
-			}
-		}
+        m_graph->Execute();
 	}
 
 	void MatchFiles()
@@ -124,15 +97,7 @@ REGRESSION_TEST(parameter_renaming, {"geometry.obj"});
 
 int main(int argc, char* argv[])
 {
-	IsRegistered<OperationNode>();
-	IsRegistered<InputInterfaceNode>();
-	IsRegistered<OutputInterfaceNode>();
-	IsRegistered<ParameterNode>();
-
-	IsRegistered<ExtrudeGeometry>();
-	IsRegistered<CreateRectGeometry>();
-	IsRegistered<TriangulateGeometry>();
-	IsRegistered<ExportGeometry>();
+    Selector::GetInstance();
 
 	RegressionTest::SetExecutablePath(argv[0]);
 	::testing::InitGoogleTest(&argc, argv);

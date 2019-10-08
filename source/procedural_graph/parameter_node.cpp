@@ -12,7 +12,7 @@ ParameterNode::~ParameterNode() {}
 
 void ParameterNode::SetConstructionArguments(const std::unordered_map<std::string, Parameter> &constructionArgs) {}
 
-void ParameterNode::Execute(GraphExecutionContextPtr ctx, const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
+void ParameterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
 {
 	START_PROFILE;
 

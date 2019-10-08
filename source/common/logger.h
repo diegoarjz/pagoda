@@ -14,6 +14,7 @@ class Logger
 public:
 	enum class TraceLogs
 	{
+        Core,
 		Common,
 		MathLib,
 		GeometryCore,

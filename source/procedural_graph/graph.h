@@ -3,11 +3,13 @@
 #define SELECTOR_PROCEDURAL_GRAH_GRAPH_H_
 
 #include "node_set.h"
+#include "scheduler.h"
 
 #include <list>
 #include <memory>
 #include <string>
 #include <unordered_set>
+#include <functional>
 
 namespace selector
 {
@@ -34,6 +36,12 @@ using NodePtr = std::shared_ptr<Node>;
 class Graph
 {
 public:
+    using SchedulerFactoryFunction_t = std::function<std::unique_ptr<IScheduler>(Graph&)>;
+
+    static void SetSchedulerFactory(const SchedulerFactoryFunction_t &factoryFunction);
+
+    static SchedulerFactoryFunction_t GetSchedulerFactory();
+
 	/**
 	 * Result of calling CreateEdge.
 	 */
@@ -118,7 +126,7 @@ public:
 	 * Returns all the \c Node in this \c Graph.
 	 */
 	NodeSet<Node> GetGraphNodes();
-	
+
 	/**
 	 * Returns the number of \c Node in this \c Graph.
 	 */
@@ -155,9 +163,21 @@ public:
 	 */
 	NodeSet<Node> GetNodeOutputNodes(NodePtr node);
 
+    /**
+     * Sets the \c IScheduler for this \c Graph to \p scheduler.
+     */
+    void SetScheduler(std::unique_ptr<IScheduler> scheduler);
+
+    /**
+     * Executes the \c Graph using the defined \c IScheduler.
+     */
+    void Execute();
+
 private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
+
+    static SchedulerFactoryFunction_t s_schedulerFactoryFunction;
 };  // class Graph
 
 using GraphPtr = std::shared_ptr<Graph>;

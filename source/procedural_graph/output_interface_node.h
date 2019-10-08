@@ -24,7 +24,7 @@ public:
 
 	void SetConstructionArguments(const std::unordered_map<std::string, Parameter>&) override;
 
-	void Execute(GraphExecutionContextPtr graph, const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;
+	void Execute(const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;
 
 	void SetInterfaceName(const InterfaceName& name);
 	const InterfaceName& GetInterfaceName() const;

@@ -1,12 +1,16 @@
 #include "triangulate_geometry.h"
 
+#include "procedural_object_system.h"
+
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
 #include "procedural_component.h"
 
-#include <geometry_operations/triangulate.h>
+#include "geometry_operations/triangulate.h"
+
+#include "../selector.h"
 
 #include <memory>
 
@@ -61,7 +65,7 @@ void TriangulateGeometry::Execute()
 		    outObject->GetComponent<HierarchicalComponent>();
 
 		auto hierarchicalSystem = std::dynamic_pointer_cast<HierarchicalSystem>(
-		    execution_context->procedural_object_system->GetComponentSystem(ComponentType::Hierarchical));
+		    Selector::GetInstance().GetProceduralObjectSystem()->GetComponentSystem(ComponentType::Hierarchical));
 		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }

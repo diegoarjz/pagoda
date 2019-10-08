@@ -1,7 +1,6 @@
 #include "operation_node.h"
 
 #include "graph.h"
-#include "graph_execution_context.h"
 #include "input_interface_node.h"
 #include "node.h"
 #include "node_set_visitor.h"
@@ -34,8 +33,7 @@ void OperationNode::SetConstructionArguments(const std::unordered_map<std::strin
 
 void OperationNode::SetOperation(ProceduralOperationPtr operation) { m_operation = operation; }
 
-void OperationNode::Execute(GraphExecutionContextPtr executionContext, const NodeSet<Node> &inNodes,
-                            const NodeSet<Node> &outNodes)
+void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
 {
 	std::shared_ptr<Context> paramContext = GetParameterContext();
 	NodeSet<InputInterfaceNode> inputInterfaceNodes;
@@ -52,13 +50,13 @@ void OperationNode::Execute(GraphExecutionContextPtr executionContext, const Nod
 		}
 	}
 
-	// TODO: Is it really necessary to always create an OperationExecutionContext?
-	auto ctx = std::make_shared<OperationExecutionContext>();
-	ctx->geometry_system = executionContext->m_geometrySystem.lock();
-	ctx->procedural_object_system = executionContext->m_proceduralObjectSystem.lock();
-	ctx->parameter_context = paramContext;
+    const auto& operationParameters = m_operation->GetParameterNameList();
+    for (const auto& parameterName : operationParameters)
+    {
+        m_operation->SetParameter(parameterName, paramContext->GetParameter(parameterName));
+    }
+    paramContext->SetParameter("op", m_operation);
 
-	m_operation->SetExecutionContext(ctx);
 	m_operation->Execute();
 }
 

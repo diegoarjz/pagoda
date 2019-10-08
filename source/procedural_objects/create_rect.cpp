@@ -19,6 +19,9 @@ CreateRectGeometry::CreateRectGeometry()
 	out_geometry_mask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
 	out_geometry_mask.set(static_cast<uint32_t>(HierarchicalComponent::GetType()));
 
+    SetParameter("width", 0.0f);
+    SetParameter("height", 0.0f);
+
 	CreateOutputInterface(output_geometry, out_geometry_mask);
 }
 
@@ -28,8 +31,8 @@ void CreateRectGeometry::Execute()
 {
 	START_PROFILE;
 
-	float width = execution_context->parameter_context->GetParameterAs<float>("width");
-	float height = execution_context->parameter_context->GetParameterAs<float>("height");
+	float width = GetParameterAs<float>("width");
+	float height = GetParameterAs<float>("height");
 
 	CreateRect<Geometry> create_rect(width, height);
 	auto geometry = std::make_shared<Geometry>();

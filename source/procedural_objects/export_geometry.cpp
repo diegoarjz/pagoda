@@ -18,6 +18,8 @@ ExportGeometry::ExportGeometry()
 	inGeometryMask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
 	inGeometryMask.set(static_cast<uint32_t>(HierarchicalComponent::GetType()));
 	CreateInputInterface(inputGeometry, inGeometryMask);
+
+    SetParameter("path", "geometry");
 }
 
 ExportGeometry::~ExportGeometry() {}
@@ -35,14 +37,13 @@ void ExportGeometry::Execute()
 		auto p = m_parameterContext->GetParameter("count");
 
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
-		execution_context->parameter_context->UpdateExpressions();
+		m_parameterContext->UpdateExpressions();
 
 		auto geometryComponent = inObject->GetComponent<GeometryComponent>();
 		auto geometry = geometryComponent->GetGeometry();
 		selector::ObjExporter<Geometry> exporter(geometry);
 
-		std::string outputPath =
-		    get_parameter_as<std::string>(execution_context->parameter_context->GetParameter("path"));
+		std::string outputPath = get_parameter_as<std::string>(GetParameter("path"));
 		std::ofstream out_file(outputPath.c_str());
 		exporter.Export(out_file);
 		out_file.close();

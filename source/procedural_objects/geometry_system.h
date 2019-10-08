@@ -3,6 +3,7 @@
 
 #include "procedural_object.h"
 #include "procedural_operation.h"
+#include "procedural_component_system.h"
 
 #include <geometry_core/geometry.h>
 #include <geometry_core/geometry_builder.h>
@@ -28,6 +29,7 @@ class GeometryComponent;
 class GeometrySystem : public ProceduralComponentSystem
 {
 public:
+    GeometrySystem();
 	virtual ~GeometrySystem();
 
 	ComponentType GetType() const override { return ComponentType::Geometry; }

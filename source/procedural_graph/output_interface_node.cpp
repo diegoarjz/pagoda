@@ -1,7 +1,6 @@
 #include "output_interface_node.h"
 
 #include "graph.h"
-#include "graph_execution_context.h"
 #include "node.h"
 #include "node_set_visitor.h"
 #include "operation_node.h"
@@ -36,8 +35,7 @@ void OutputInterfaceNode::SetConstructionArguments(const std::unordered_map<std:
 void OutputInterfaceNode::SetInterfaceName(const InterfaceName& name) { m_interfaceName = name; }
 const InterfaceName& OutputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
 
-void OutputInterfaceNode::Execute(GraphExecutionContextPtr executionContext, const NodeSet<Node>& inNodes,
-                                  const NodeSet<Node>& outNodes)
+void OutputInterfaceNode::Execute(const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes)
 {
 	START_PROFILE;
 

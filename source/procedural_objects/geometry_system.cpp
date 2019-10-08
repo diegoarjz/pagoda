@@ -7,6 +7,7 @@
 
 namespace selector
 {
+GeometrySystem::GeometrySystem() : ProceduralComponentSystem("GeometrySystem") {}
 GeometrySystem::~GeometrySystem()
 {
 	DBG_ASSERT_MSG(geometry_components.size() == 0, "Geometry System has components on destruction");

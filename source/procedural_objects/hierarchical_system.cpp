@@ -4,6 +4,7 @@
 
 namespace selector
 {
+HierarchicalSystem::HierarchicalSystem() : ProceduralComponentSystem("HierarchicalSystem") {}
 HierarchicalSystem::~HierarchicalSystem() {}
 
 std::shared_ptr<ProceduralComponent> HierarchicalSystem::CreateComponent()

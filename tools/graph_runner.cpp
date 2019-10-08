@@ -1,9 +1,9 @@
+#include <common/file_util.h>
 #include <common/logger.h>
 #include <common/profiler.h>
 #include <geometry_core/geometry_exporter.h>
 #include <parameter/parameter.h>
 #include <procedural_graph/graph_dot_exporter.h>
-#include <procedural_graph/graph_execution_context.h>
 #include <procedural_graph/input_interface_node.h>
 #include <procedural_graph/node_set_visitor.h>
 #include <procedural_graph/operation_node.h>
@@ -11,7 +11,7 @@
 #include <procedural_graph/parameter_node.h>
 #include <procedural_graph/parse_result.h>
 #include <procedural_graph/reader.h>
-#include <procedural_graph/scheduler.h>
+#include <procedural_graph/default_scheduler.h>
 #include <procedural_objects/export_geometry.h>
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
@@ -32,32 +32,16 @@ using namespace selector;
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
 std::shared_ptr<Graph> ReadGraphFromFile(const std::string& file_path);
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path);
-std::list<ProceduralObjectPtr> ExecuteGraph(std::shared_ptr<Graph> graph,
-                                            std::shared_ptr<GraphExecutionContext> execution_context);
+void ExecuteGraph(std::shared_ptr<Graph> graph);
 void ListOperations();
 void PrintProfile();
-const char* XMLReaderParseMessage(selector::ParseResult::Status status);
 
 int main(int argc, char* argv[])
 {
 	po::variables_map vm;
 
-	// TODO: this is needed because the registered static member variable is being optimized away
-	//       and classes are not being registered in the factories
-	IsRegistered<ExtrudeGeometry>();
-	IsRegistered<CreateRectGeometry>();
-	IsRegistered<TriangulateGeometry>();
-	IsRegistered<ExportGeometry>();
-	/*
-	IsRegistered<OperationNode>();
-	IsRegistered<InputInterfaceNode>();
-	IsRegistered<OutputInterfaceNode>();
-	*/
-	IsRegistered<ParameterNode>();
-
 	if (!ParseCommandLine(argc, argv, &vm))
 	{
-		Logger::Shutdown();
 		return 0;
 	}
 
@@ -94,7 +78,6 @@ int main(int argc, char* argv[])
 		if (graph == nullptr)
 		{
 			LOG_FATAL("Unable read a graph file (%s)", file_path.c_str());
-			Logger::Shutdown();
 			return 1;
 		}
 
@@ -105,47 +88,7 @@ int main(int argc, char* argv[])
 
 		if (vm.count("execute"))
 		{
-			auto geom_system = std::make_shared<GeometrySystem>();
-			auto hierarchical_system = std::make_shared<HierarchicalSystem>();
-			auto object_system = std::make_shared<ProceduralObjectSystem>();
-			object_system->RegisterProceduralComponentSystem(geom_system);
-			object_system->RegisterProceduralComponentSystem(hierarchical_system);
-			auto execution_context = std::make_shared<GraphExecutionContext>(graph, object_system, geom_system);
-
-			std::list<ProceduralObjectPtr> procedural_objects = ExecuteGraph(graph, execution_context);
-			std::cout << "Generated " << procedural_objects.size() << " objects" << std::endl;
-
-			if (vm.count("export-geometry"))
-			{
-				std::string export_path = ".";
-				if (vm.count("export-path"))
-				{
-					export_path = vm["export-path"].as<std::string>();
-				}
-
-				uint32_t geometry_index = 0;
-				for (auto o : procedural_objects)
-				{
-					auto geometry_component = o->GetComponent<GeometryComponent>();
-					auto geometry = geometry_component->GetGeometry();
-					selector::ObjExporter<Geometry> exporter(geometry);
-
-					std::stringstream geometry_path;
-					geometry_path << export_path << "/geom" << geometry_index << ".obj";
-
-					std::ofstream out_file(geometry_path.str());
-					exporter.Export(out_file);
-					out_file.close();
-					geometry_index++;
-				}
-			}
-
-			// Clean up
-			std::unordered_set<ProceduralObjectPtr> objects = object_system->GetProceduralObjects();
-			for (ProceduralObjectPtr o : objects)
-			{
-				object_system->KillProceduralObject(o);
-			}
+			ExecuteGraph(graph);
 		}
 	}
 
@@ -154,59 +97,18 @@ int main(int argc, char* argv[])
 		PrintProfile();
 	}
 
-	Logger::Shutdown();
 	return 0;
 }
 
-std::list<ProceduralObjectPtr> ExecuteGraph(std::shared_ptr<Graph> graph,
-                                            std::shared_ptr<GraphExecutionContext> executionContext)
+void ExecuteGraph(std::shared_ptr<Graph> graph)
 {
-	auto graph_parameter_context = std::make_shared<Context>("graph");
-
-	Scheduler scheduler(executionContext, graph_parameter_context);
-	scheduler.Initialize();
-
-	while (true)
-	{
-		if (!scheduler.Step())
-		{
-			break;
-		}
-	}
-
-	std::list<ProceduralObjectPtr> procedural_objects;
-	auto outputNodes = graph->GetGraphOutputNodes();
-	NodeSet<OutputInterfaceNode> outputInterfaceNodes;
-	node_type_filter(outputNodes, outputInterfaceNodes);
-	for (auto n : outputInterfaceNodes)
-	{
-		auto nodeProceduralObjects = n->GetProceduralObjects();
-		procedural_objects.insert(std::end(procedural_objects), std::begin(nodeProceduralObjects),
-		                          std::end(nodeProceduralObjects));
-	}
-
-	return procedural_objects;
+    graph->Execute();
 }
 
 std::shared_ptr<Graph> ReadGraphFromFile(const std::string& file_path)
 {
-	// TODO: this really is not good code...
-	std::ifstream in_file(file_path);
-	if (!in_file)
-	{
-		LOG_ERROR("Unable to open graph file %s", file_path.c_str());
-		return nullptr;
-	}
-
-	std::string str;
-
-	in_file.seekg(0, std::ios::end);
-	str.reserve(in_file.tellg());
-	in_file.seekg(0, std::ios::beg);
-
-	str.assign((std::istreambuf_iterator<char>(in_file)), std::istreambuf_iterator<char>());
 	GraphReader reader;
-	GraphPtr graph = reader.Read(str);
+	GraphPtr graph = reader.Read(FileUtil::LoadFileToString(file_path));
 
 	return graph;
 }
@@ -219,47 +121,6 @@ void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 	exporter.SetRankBy(GraphDotExporter::RankBy::Depth);
 	exporter.SetShowParameters(true);
 	exporter.Export(outFile);
-}
-
-const char* XMLReaderParseMessage(selector::ParseResult::Status status)
-{
-	switch (status)
-	{
-		case selector::ParseResult::Status::Ok:
-			return "Ok";
-		case selector::ParseResult::Status::FileNotFound:
-			return "File Not Found";
-		case selector::ParseResult::Status::IOError:
-			return "I/O Error";
-		case selector::ParseResult::Status::OutOfMemory:
-			return "Out of Memory";
-		case selector::ParseResult::Status::InternalError:
-			return "Internal Error";
-		case selector::ParseResult::Status::UnrecognizedTag:
-			return "Unrecognized Tag";
-		case selector::ParseResult::Status::BadElement:
-			return "Bad Element";
-		case selector::ParseResult::Status::EndElementMismatch:
-			return "End Element Mismatch";
-		case selector::ParseResult::Status::NoDocumentElement:
-			return "No Document Element";
-		case selector::ParseResult::Status::VersionMismatch:
-			return "Version Mismatch";
-		case selector::ParseResult::Status::GraphElementNotFound:
-			return "Graph Element Not Found";
-		case selector::ParseResult::Status::VersionElementNotFound:
-			return "Version Element Not Found";
-		case selector::ParseResult::Status::DuplicatedNodeId:
-			return "Duplicated Node ID";
-		case selector::ParseResult::Status::UnknownNodeType:
-			return "Unknown Node Type";
-		case selector::ParseResult::Status::InvalidParameter:
-			return "Invalid Parameter";
-		case selector::ParseResult::Status::UnknownError:
-			return "Unknown Error";
-		default:
-			return "??";
-	};
 }
 
 void PrintProfile()
@@ -298,8 +159,6 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
             ("input-file", po::value<std::string>(), "Input Graph specification file.")
             ("dot", po::value<std::string>(), "Outputs the graph in dot format to the specified file.")
             ("execute", "Executes the graph")
-            ("export-geometry", "Exports the geometry generated by executing the graph")
-            ("export-path", po::value<std::string>(), "Path to which geometries are exported")
             ("show-profile", "Prints profiling information");
 		// clang-format on
 

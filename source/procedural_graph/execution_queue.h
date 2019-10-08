@@ -19,7 +19,7 @@ public:
     /**
      * Constructs the \c ExecutionQueue from a \c Graph.
      */
-	ExecutionQueue(GraphPtr graph);
+	ExecutionQueue(Graph& graph);
 	~ExecutionQueue();
 
     /**
