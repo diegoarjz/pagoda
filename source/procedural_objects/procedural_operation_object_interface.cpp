@@ -4,15 +4,14 @@
 
 namespace selector
 {
-ProceduralOperationObjectInterface::ProceduralOperationObjectInterface(const InterfaceName& name,
-                                                                       const ProceduralObjectMask& mask)
-    : interface_name(name), interface_mask(mask)
+ProceduralOperationObjectInterface::ProceduralOperationObjectInterface(const InterfaceName& name)
+    : interface_name(name)
 {
 }
 
 bool ProceduralOperationObjectInterface::Accepts(ProceduralObjectPtr procedural_object)
 {
-	return interface_mask == procedural_object->Mask();
+	return true;
 }
 
 bool ProceduralOperationObjectInterface::AddProceduralObject(ProceduralObjectPtr procedural_object)

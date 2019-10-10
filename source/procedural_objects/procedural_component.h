@@ -9,22 +9,15 @@ class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 using ProceduralObjectWeakPtr = std::weak_ptr<ProceduralObject>;
 
-enum class ComponentType
-{
-	Geometry,
-	Hierarchical,
-	MaxComponents
-};  // enum class ComponentType
-
 class ProceduralComponent
 {
 public:
 	virtual ~ProceduralComponent(){};
 
-	virtual ComponentType Type() const = 0;
-
 	void SetParentObject(ProceduralObjectPtr parent) { parent_object = parent; }
 	ProceduralObjectPtr GetParentObject() { return parent_object.lock(); }
+
+    virtual std::string GetType() const = 0;
 
 protected:
 	ProceduralComponent(){};

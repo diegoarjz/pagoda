@@ -20,19 +20,12 @@ const InterfaceName TriangulateGeometry::sInputGeometry("in", 0);
 const InterfaceName TriangulateGeometry::sOutputGeometry("out", 0);
 const char* TriangulateGeometry::name = "TriangulateGeometry";
 
-TriangulateGeometry::TriangulateGeometry()
+TriangulateGeometry::TriangulateGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
 
-	ProceduralObjectMask inGeometryMask;
-	inGeometryMask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
-	inGeometryMask.set(static_cast<uint32_t>(HierarchicalComponent::GetType()));
-	CreateInputInterface(sInputGeometry, inGeometryMask);
-
-	ProceduralObjectMask outGeometryMask;
-	outGeometryMask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
-	outGeometryMask.set(static_cast<uint32_t>(HierarchicalComponent::GetType()));
-	CreateOutputInterface(sOutputGeometry, outGeometryMask);
+	CreateInputInterface(sInputGeometry);
+	CreateOutputInterface(sOutputGeometry);
 }
 
 TriangulateGeometry::~TriangulateGeometry() {}
@@ -40,6 +33,8 @@ TriangulateGeometry::~TriangulateGeometry() {}
 void TriangulateGeometry::Execute()
 {
 	START_PROFILE;
+	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	Triangulate<Geometry> triangulate;
 
@@ -49,8 +44,10 @@ void TriangulateGeometry::Execute()
 		ProceduralObjectPtr inObject = GetInputProceduralObject(sInputGeometry);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(sOutputGeometry);
 
-		std::shared_ptr<GeometryComponent> inGeometryComponent = inObject->GetComponent<GeometryComponent>();
-		std::shared_ptr<GeometryComponent> outGeometryComponent = outObject->GetComponent<GeometryComponent>();
+		std::shared_ptr<GeometryComponent> inGeometryComponent =
+		    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+		std::shared_ptr<GeometryComponent> outGeometryComponent =
+		    geometrySystem->GetComponentAs<GeometryComponent>(outObject);
 
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 		auto outGeometry = std::make_shared<Geometry>();
@@ -60,12 +57,10 @@ void TriangulateGeometry::Execute()
 
 		// Hierarchy
 		std::shared_ptr<HierarchicalComponent> inHierarchicalComponent =
-		    inObject->GetComponent<HierarchicalComponent>();
+		    hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		std::shared_ptr<HierarchicalComponent> outHierarchicalComponent =
-		    outObject->GetComponent<HierarchicalComponent>();
+		    hierarchicalSystem->GetComponentAs<HierarchicalComponent>(outObject);
 
-		auto hierarchicalSystem = std::dynamic_pointer_cast<HierarchicalSystem>(
-		    Selector::GetInstance().GetProceduralObjectSystem()->GetComponentSystem(ComponentType::Hierarchical));
 		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }

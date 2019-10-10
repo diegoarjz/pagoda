@@ -4,6 +4,8 @@
 #include <procedural_graph/operation_node.h>
 #include <procedural_graph/output_interface_node.h>
 
+#include <selector.h>
+
 #include <gtest/gtest.h>
 
 #include "mock_objects.h"
@@ -15,7 +17,7 @@ class GraphSimpleOperationsTest : public ::testing::Test
 protected:
 	virtual void SetUp()
 	{
-		graph = std::make_shared<Graph>();
+		graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
 		input_interface_node = graph->CreateNode<InputInterfaceNode>();
 		output_interface_node = graph->CreateNode<OutputInterfaceNode>();
 		operation_node = graph->CreateNode<OperationNode>();
@@ -25,6 +27,7 @@ protected:
 	NodePtr input_interface_node;
 	NodePtr output_interface_node;
 	NodePtr operation_node;
+    Selector m_selector;
 };
 
 TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_it_from_the_graph)

@@ -8,13 +8,15 @@ namespace selector
 {
 class ProceduralOperation;
 using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
+class OperationFactory;
+using OperationFactoryPtr = std::shared_ptr<OperationFactory>;
 
-class OperationNode : public Node::Registrar<OperationNode>
+class OperationNode : public Node
 {
 public:
 	static const char *name;
 
-	OperationNode();
+	OperationNode(OperationFactoryPtr operationFactory);
 	~OperationNode();
 
 	void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &) override;
@@ -25,6 +27,7 @@ public:
 
 private:
 	ProceduralOperationPtr m_operation;
+    OperationFactoryPtr m_operationFactory;
 };  // class OperationNode
 }  // namespace selector
 

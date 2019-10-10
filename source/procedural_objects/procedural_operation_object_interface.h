@@ -32,10 +32,9 @@ struct InterfaceNameHasher
 class ProceduralOperationObjectInterface
 {
 public:
-	ProceduralOperationObjectInterface(const InterfaceName& name, const ProceduralObjectMask& mask);
+	ProceduralOperationObjectInterface(const InterfaceName& name);
 
 	const InterfaceName& Name() const { return interface_name; }
-	const ProceduralObjectMask& Mask() const { return interface_mask; }
 
 	bool Accepts(ProceduralObjectPtr procedural_object);
 	bool AddProceduralObject(ProceduralObjectPtr procedural_object);
@@ -45,7 +44,6 @@ public:
 
 private:
 	InterfaceName interface_name;
-	ProceduralObjectMask interface_mask;
 	std::list<ProceduralObjectPtr> procedural_objects;
 };  // class ProceduralOperationObjectInterface
 }  // namespace selector

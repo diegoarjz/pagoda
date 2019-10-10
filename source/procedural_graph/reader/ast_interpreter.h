@@ -6,6 +6,7 @@
 
 #include "ast_node_visitor.h"
 #include "parameter/parameter.h"
+#include "procedural_graph/node_factory.h"
 
 namespace selector
 {

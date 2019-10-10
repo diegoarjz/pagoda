@@ -6,14 +6,14 @@
 
 namespace selector
 {
-class TriangulateGeometry : public ProceduralOperation::Registrar<TriangulateGeometry>
+class TriangulateGeometry : public ProceduralOperation
 {
 public:
 	static const InterfaceName sInputGeometry;
 	static const InterfaceName sOutputGeometry;
 	static const char* name;
 
-	TriangulateGeometry();
+	TriangulateGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~TriangulateGeometry();
 
 	void Execute() override;

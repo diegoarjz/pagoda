@@ -4,23 +4,9 @@
 
 namespace selector
 {
-ProceduralObject::ProceduralObject()
-    : components(static_cast<size_t>(ComponentType::MaxComponents)),
-      procedural_object_mask(),
-      m_context(std::make_shared<Context>("object"))
-{
-}
+ProceduralObject::ProceduralObject() : m_context(std::make_shared<Context>("object")) {}
 
 ProceduralObject::~ProceduralObject() {}
-
-void ProceduralObject::SetComponent(const ComponentType& type, std::shared_ptr<ProceduralComponent> component)
-{
-	START_PROFILE;
-
-	DBG_ASSERT_MSG(components[static_cast<uint32_t>(type)].expired(), "Trying to overwrite a component already set");
-	procedural_object_mask.set(static_cast<uint32_t>(type));
-	components[static_cast<uint32_t>(type)] = component;
-}
 
 Parameter ProceduralObject::GetParameter(const std::string& parameterName) const
 {

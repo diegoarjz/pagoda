@@ -28,7 +28,7 @@ protected:
 	{
 		if (component != nullptr)
 		{
-			geometry_system->KillProceduralComponent(component);
+			//geometry_system->KillProceduralComponent(component);
 		}
 	}
 
@@ -39,35 +39,23 @@ protected:
 
 TEST_F(GeometrySystemTest, test_create_component)
 {
-	auto procedural_component = geometry_system->CreateComponent();
+    auto proceduralObject = std::make_shared<ProceduralObject>();
+	auto procedural_component = geometry_system->CreateComponent(proceduralObject);
 	component = std::dynamic_pointer_cast<GeometryComponent>(procedural_component);
 
-	EXPECT_EQ(procedural_component->Type(), ComponentType::Geometry);
+	EXPECT_EQ(procedural_component->GetType(), GeometryComponent::GetComponentSystemName());
 	EXPECT_NE(component, nullptr);
 
-	auto components = geometry_system->GetComponents();
-	EXPECT_EQ(components.size(), 1);
-	auto c = *components.begin();
-	EXPECT_EQ(c, std::dynamic_pointer_cast<GeometryComponent>(component));
-}
-
-TEST_F(GeometrySystemTest, test_create_component_with_geometry)
-{
-	component = geometry_system->CreateComponent(geometry);
-
-	EXPECT_EQ(component->Type(), ComponentType::Geometry);
-	EXPECT_EQ(component->GetGeometry(), geometry);
-
-	auto components = geometry_system->GetComponents();
-	EXPECT_EQ(components.size(), 1);
-	EXPECT_EQ(*components.begin(), component);
+	auto returned_component = geometry_system->GetComponent(proceduralObject);
+	EXPECT_EQ(returned_component, std::dynamic_pointer_cast<GeometryComponent>(component));
 }
 
 TEST_F(GeometrySystemTest, test_kill_component)
 {
-	auto component = geometry_system->CreateComponent();
+    auto proceduralObject = std::make_shared<ProceduralObject>();
+	auto component = geometry_system->CreateComponent(proceduralObject);
 
-	geometry_system->KillProceduralComponent(component);
-	auto components = geometry_system->GetComponents();
-	EXPECT_EQ(components.size(), 0);
+	geometry_system->KillProceduralComponent(proceduralObject);
+	auto returned_component = geometry_system->GetComponent(proceduralObject);
+	EXPECT_EQ(returned_component, nullptr);
 }

@@ -1,9 +1,12 @@
 #include "hierarchical_component.h"
 
 #include "common/profiler.h"
+#include "hierarchical_system.h"
 
 namespace selector
 {
+std::string HierarchicalComponent::GetComponentSystemName() { return HierarchicalSystem::GetComponentSystemName(); }
+
 void HierarchicalComponent::SetParent(std::shared_ptr<HierarchicalComponent> parent)
 {
 	START_PROFILE;

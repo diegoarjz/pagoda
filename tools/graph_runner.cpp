@@ -21,6 +21,8 @@
 #include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/triangulate_geometry.h>
 
+#include <selector.h>
+
 #include <boost/program_options.hpp>
 
 #include <fstream>
@@ -30,15 +32,16 @@ namespace po = boost::program_options;
 using namespace selector;
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
-std::shared_ptr<Graph> ReadGraphFromFile(const std::string& file_path);
+std::shared_ptr<Graph> ReadGraphFromFile(Selector &selector, const std::string& file_path);
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path);
 void ExecuteGraph(std::shared_ptr<Graph> graph);
-void ListOperations();
 void PrintProfile();
 
 int main(int argc, char* argv[])
 {
 	po::variables_map vm;
+
+    Selector selector;
 
 	if (!ParseCommandLine(argc, argv, &vm))
 	{
@@ -67,14 +70,9 @@ int main(int argc, char* argv[])
 		std::cerr << "Error: " << e.what() << std::endl;
 	}
 
-	if (vm.count("list"))
-	{
-		ListOperations();
-	}
-
 	if (file_path.size() > 0)
 	{
-		std::shared_ptr<Graph> graph = ReadGraphFromFile(file_path);
+		std::shared_ptr<Graph> graph = ReadGraphFromFile(selector, file_path);
 		if (graph == nullptr)
 		{
 			LOG_FATAL("Unable read a graph file (%s)", file_path.c_str());
@@ -105,9 +103,9 @@ void ExecuteGraph(std::shared_ptr<Graph> graph)
     graph->Execute();
 }
 
-std::shared_ptr<Graph> ReadGraphFromFile(const std::string& file_path)
+std::shared_ptr<Graph> ReadGraphFromFile(Selector &selector, const std::string& file_path)
 {
-	GraphReader reader;
+	GraphReader reader(selector.GetNodeFactory());
 	GraphPtr graph = reader.Read(FileUtil::LoadFileToString(file_path));
 
 	return graph;
@@ -129,24 +127,6 @@ void PrintProfile()
 	consoleLogger.Log();
 }
 
-void ListOperations()
-{
-	auto proceduralOperationNames = ProceduralOperation::RegisteredTypes();
-
-	std::cout << "Registered procedural operations\n";
-	for (auto name : proceduralOperationNames)
-	{
-		std::cout << "\t" << name << std::endl;
-	}
-
-	auto nodeNames = Node::RegisteredTypes();
-	std::cout << "Registered nodes types\n";
-	for (auto name : nodeNames)
-	{
-		std::cout << "\t" << name << std::endl;
-	}
-}
-
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
 {
 	try
@@ -155,7 +135,6 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
 		// clang-format off
         desc.add_options()
             ("help", "Print help message.")
-            ("list", "Lists available operations.")
             ("input-file", po::value<std::string>(), "Input Graph specification file.")
             ("dot", po::value<std::string>(), "Outputs the graph in dot format to the specified file.")
             ("execute", "Executes the graph")

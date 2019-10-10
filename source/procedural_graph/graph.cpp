@@ -3,6 +3,7 @@
 #include "common/assertions.h"
 #include "default_scheduler.h"
 #include "node.h"
+#include "node_factory.h"
 
 #include <array>
 
@@ -21,7 +22,7 @@ private:
 	using AdjacencyContainer = std::unordered_map<NodeWeakPtr, Adjacency, NodeWeakPtrHasher, NodeWeakPtrEqual>;
 
 public:
-	Impl(Graph *graph) : m_graph(graph) {}
+	Impl(NodeFactoryPtr nodeFactory, Graph *graph) : m_graph(graph), m_nodeFactory(nodeFactory) {}
 
 	void AddNode(NodePtr node)
 	{
@@ -167,6 +168,13 @@ public:
 		scheduler->Finalize();
 	}
 
+    NodePtr CreateNode(const std::string &nodeType)
+    {
+        auto node = m_nodeFactory->Create(nodeType);
+        AddNode(node);
+        return node;
+    }
+
 private:
 	IScheduler *GetScheduler()
 	{
@@ -196,9 +204,10 @@ private:
 	NodeWeakPtrSet m_outputNodes;
 	Graph *m_graph;
 	std::unique_ptr<IScheduler> m_scheduler;
+    NodeFactoryPtr m_nodeFactory;
 };
 
-Graph::Graph() : m_implementation(std::make_unique<Graph::Impl>(this)) {}
+Graph::Graph(NodeFactoryPtr nodeFactory) : m_implementation(std::make_unique<Graph::Impl>(nodeFactory, this)) {}
 
 Graph::~Graph() {}
 
@@ -234,6 +243,8 @@ void Graph::SetScheduler(std::unique_ptr<IScheduler> scheduler)
 {
 	m_implementation->SetScheduler(std::move(scheduler));
 }
+
+NodePtr Graph::CreateNode(const std::string &nodeType) { return m_implementation->CreateNode(nodeType); }
 
 void Graph::Execute() { m_implementation->Execute(); }
 

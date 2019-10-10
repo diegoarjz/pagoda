@@ -4,17 +4,18 @@
 #include "procedural_component.h"
 
 #include <list>
+#include <string>
 
 namespace selector
 {
 class HierarchicalComponent : public ProceduralComponent, public std::enable_shared_from_this<HierarchicalComponent>
 {
 public:
-	static ComponentType GetType() { return ComponentType::Hierarchical; }
+	static std::string GetComponentSystemName();
 
 	virtual ~HierarchicalComponent(){};
 
-	ComponentType Type() const override { return GetType(); }
+    std::string GetType() const override { return GetComponentSystemName(); }
 
 	size_t ChildrenCount() const { return children.size(); }
 	std::shared_ptr<HierarchicalComponent> GetParent() const { return parent.lock(); }

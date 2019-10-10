@@ -6,13 +6,18 @@
 
 namespace selector
 {
-    ProceduralComponentSystem::ProceduralComponentSystem(const std::string &name) : m_systemName(name)
+    ProceduralComponentSystemBase::ProceduralComponentSystemBase(const std::string &name) : m_systemName(name)
     {
-        LOG_TRACE(Core, "Creating ProceduralComponentSystem: %s", m_systemName.c_str());
+		LOG_TRACE(Core, "Creating ProceduralComponentSystem: %s", m_systemName.c_str());
     }
 
-    ProceduralComponentSystem::~ProceduralComponentSystem()
+    ProceduralComponentSystemBase::~ProceduralComponentSystemBase()
     {
-        LOG_TRACE(Core, "Destroying ProceduralComponentSystem: %s", m_systemName.c_str());
+		LOG_TRACE(Core, "Destroying ProceduralComponentSystem: %s", m_systemName.c_str());
+    }
+
+	std::string ProceduralComponentSystemBase::GetComponentSystemTypeName() const
+    {
+        return m_systemName;
     }
 }

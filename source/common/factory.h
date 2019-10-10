@@ -11,26 +11,32 @@
 
 namespace selector
 {
-template<class Base>
+template<class ObjectType>
 class Factory
 {
 public:
-	using PointerType = std::shared_ptr<Base>;
+	using PointerType_t = std::shared_ptr<ObjectType>;
+	using FactoryMethod_t = std::function<PointerType_t(void)>;
+
+	Factory(const std::string& name) : m_name(name) { LOG_TRACE(Common, "Factory %s created", name.c_str()); }
 
 	virtual ~Factory() {}
 
-	static PointerType Create(const std::string& name)
+	PointerType_t Create(const std::string& name)
 	{
+		LOG_TRACE(Common, "Factory %s creating object of type %s", m_name.c_str(), name.c_str());
+
 		auto methods = factoryMethods();
 		auto iter = methods.find(name);
 		if (iter == std::end(methods))
 		{
+			LOG_TRACE(Common, " Element type not found. Returning nullptr.");
 			return nullptr;
 		}
 		return iter->second();
 	}
 
-	static std::vector<std::string> RegisteredTypes()
+	std::vector<std::string> RegisteredTypes()
 	{
 		std::vector<std::string> typeNames;
 		auto methods = factoryMethods();
@@ -44,47 +50,23 @@ public:
 		return typeNames;
 	}
 
-	template<class T>
-	struct Registrar : public Base
+	void Register(const std::string& name, const FactoryMethod_t& method)
 	{
-		friend T;
+		LOG_TRACE(Common, "Registering type %s with %s factory", name.c_str(), m_name.c_str());
 
-		static bool Register()
-		{
-			const auto name = T::name;
-			Factory::factoryMethods()[name] = []() -> PointerType { return std::make_shared<T>(); };
-			return true;
-		}
-
-		static const bool registered;
-
-	private:
-		Registrar() { (void)(registered); }
-	};
-
-	friend Base;
+		factoryMethods()[name] = method;
+	}
 
 private:
-	using FactoryMethod = std::function<PointerType(void)>;
-
-	Factory() = default;
-
-	static auto& factoryMethods()
+	auto& factoryMethods()
 	{
-		static std::unordered_map<std::string, FactoryMethod> s_factoryMethods;
+		static std::unordered_map<std::string, FactoryMethod_t> s_factoryMethods;
 		return s_factoryMethods;
 	}
+
+	std::string m_name;
 };
 
-template<class Base>
-template<class T>
-const bool Factory<Base>::Registrar<T>::registered = Factory<Base>::Registrar<T>::Register();
-
-template<class T>
-bool IsRegistered()
-{
-	return T::registered;
-}
 }  // namespace selector
 
 #endif

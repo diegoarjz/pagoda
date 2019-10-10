@@ -5,13 +5,14 @@
 #include "node.h"
 #include "node_set_visitor.h"
 
-#include <procedural_objects/procedural_operation.h>
+#include "procedural_objects/operation_factory.h"
+#include "procedural_objects/procedural_operation.h"
 
 namespace selector
 {
 const char *OperationNode::name = "Operation";
 
-OperationNode::OperationNode() {}
+OperationNode::OperationNode(OperationFactoryPtr operationFactory) : m_operationFactory(operationFactory) {}
 OperationNode::~OperationNode() {}
 
 void OperationNode::SetConstructionArguments(const std::unordered_map<std::string, Parameter> &constructionArgs)
@@ -22,7 +23,7 @@ void OperationNode::SetConstructionArguments(const std::unordered_map<std::strin
 		// TODO: throw
 	}
 
-	auto operation = ProceduralOperation::Create(get_parameter_as<std::string>(operationIter->second));
+	auto operation = m_operationFactory->Create(get_parameter_as<std::string>(operationIter->second));
 	if (operation == nullptr)
 	{
 		// TODO: throw
@@ -50,12 +51,12 @@ void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 		}
 	}
 
-    const auto& operationParameters = m_operation->GetParameterNameList();
-    for (const auto& parameterName : operationParameters)
-    {
-        m_operation->SetParameter(parameterName, paramContext->GetParameter(parameterName));
-    }
-    paramContext->SetParameter("op", m_operation);
+	const auto &operationParameters = m_operation->GetParameterNameList();
+	for (const auto &parameterName : operationParameters)
+	{
+		m_operation->SetParameter(parameterName, paramContext->GetParameter(parameterName));
+	}
+	paramContext->SetParameter("op", m_operation);
 
 	m_operation->Execute();
 }

@@ -2,4 +2,5 @@
 
 namespace selector
 {
+std::string GeometryComponent::GetComponentSystemName() { return GeometrySystem::GetComponentSystemName(); }
 }  // namespace selector

@@ -10,10 +10,13 @@
 
 namespace selector
 {
+class NodeFactory;
+using NodeFactoryPtr = std::shared_ptr<NodeFactory>;
+
 class GraphReader
 {
 public:
-	GraphReader();
+	GraphReader(NodeFactoryPtr nodeFactory);
 	~GraphReader();
 
 	GraphPtr Read(const std::string &str);

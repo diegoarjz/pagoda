@@ -11,11 +11,11 @@ namespace selector
 class GeometryComponent : public ProceduralComponent
 {
 public:
-	static ComponentType GetType() { return ComponentType::Geometry; }
+	static std::string GetComponentSystemName();
 
 	virtual ~GeometryComponent(){};
 
-	ComponentType Type() const override { return GetType(); }
+    std::string GetType() const override { return GetComponentSystemName(); }
 	void SetGeometry(GeometryPtr geom) { geometry = geom; }
 	GeometryPtr GetGeometry() const { return geometry; }
 

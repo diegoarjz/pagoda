@@ -4,6 +4,7 @@
 
 #include "geometry_component.h"
 #include "hierarchical_component.h"
+#include "procedural_object_system.h"
 
 #include <fstream>
 
@@ -12,12 +13,9 @@ namespace selector
 const char* ExportGeometry::name = "ExportGeometry";
 const InterfaceName ExportGeometry::inputGeometry = InterfaceName("in", 0);
 
-ExportGeometry::ExportGeometry()
+ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
-	ProceduralObjectMask inGeometryMask;
-	inGeometryMask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
-	inGeometryMask.set(static_cast<uint32_t>(HierarchicalComponent::GetType()));
-	CreateInputInterface(inputGeometry, inGeometryMask);
+	CreateInputInterface(inputGeometry);
 
     SetParameter("path", "geometry");
 }
@@ -29,6 +27,7 @@ void ExportGeometry::Execute()
 	START_PROFILE;
 
 	uint32_t objectCount = 0;
+    auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	while (HasInput(inputGeometry))
 	{
@@ -39,7 +38,7 @@ void ExportGeometry::Execute()
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 		m_parameterContext->UpdateExpressions();
 
-		auto geometryComponent = inObject->GetComponent<GeometryComponent>();
+		auto geometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		auto geometry = geometryComponent->GetGeometry();
 		selector::ObjExporter<Geometry> exporter(geometry);
 

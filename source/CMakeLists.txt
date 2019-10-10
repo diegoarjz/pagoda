@@ -89,6 +89,7 @@ set(SELECTOR_PROCEDURAL_OBJECTS_SOURCES
     "procedural_objects/triangulate_geometry.cpp"
     "procedural_objects/export_geometry.cpp"
     "procedural_objects/procedural_operation_object_interface.cpp"
+    "procedural_objects/operation_factory.cpp"
     )
 
 set(SELECTOR_PROCEDURAL_OBJECTS_PUBLIC_HEADERS
@@ -104,6 +105,7 @@ set(SELECTOR_PROCEDURAL_OBJECTS_PUBLIC_HEADERS
     "procedural_objects/create_rect.h"
     "procedural_objects/hierarchical_system.h"
     "procedural_objects/export_geometry.h"
+    "procedural_objects/operation_factory.h"
     )
 
 # Procedural Graph
@@ -115,6 +117,7 @@ set(SELECTOR_PROCEDURAL_GRAPH_HEADERS
     "procedural_graph/graph_dot_exporter.h"
     "procedural_graph/default_scheduler.h"
     "procedural_graph/scheduler.h"
+    "procedural_graph/node_factory.h"
     )
 
 set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
@@ -135,6 +138,7 @@ set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
     "procedural_graph/reader/ast_interpreter.cpp"
     "procedural_graph/execution_queue.cpp"
     "procedural_graph/graph_dot_exporter.cpp"
+    "procedural_graph/node_factory.cpp"
     )
 
 set(SELECTOR_PUBLIC_HEADERS

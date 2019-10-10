@@ -19,19 +19,12 @@ const char* ExtrudeGeometry::name = "ExtrudeGeometry";
 const InterfaceName ExtrudeGeometry::input_geometry = InterfaceName("in", 0);
 const InterfaceName ExtrudeGeometry::output_geometry = InterfaceName("out", 0);
 
-ExtrudeGeometry::ExtrudeGeometry()
+ExtrudeGeometry::ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
 
-	ProceduralObjectMask in_geometry_mask;
-	in_geometry_mask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
-	in_geometry_mask.set(static_cast<uint32_t>(HierarchicalComponent::GetType()));
-	CreateInputInterface(input_geometry, in_geometry_mask);
-
-	ProceduralObjectMask out_geometry_mask;
-	out_geometry_mask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
-	out_geometry_mask.set(static_cast<uint32_t>(HierarchicalComponent::GetType()));
-	CreateOutputInterface(output_geometry, out_geometry_mask);
+	CreateInputInterface(input_geometry);
+	CreateOutputInterface(output_geometry);
 
     SetParameter("extrusion_amount", 0.0f);
 }
@@ -41,6 +34,8 @@ ExtrudeGeometry::~ExtrudeGeometry() {}
 void ExtrudeGeometry::Execute()
 {
 	START_PROFILE;
+    auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+    auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	while (HasInput(input_geometry))
 	{
@@ -51,8 +46,8 @@ void ExtrudeGeometry::Execute()
 
 		// Geometry
 		ProceduralObjectPtr out_object = CreateOutputProceduralObject(output_geometry);
-		std::shared_ptr<GeometryComponent> geometry_component = out_object->GetComponent<GeometryComponent>();
-		std::shared_ptr<GeometryComponent> in_geometry_component = in_object->GetComponent<GeometryComponent>();
+		std::shared_ptr<GeometryComponent> geometry_component = geometrySystem->CreateComponentAs<GeometryComponent>(out_object);
+		std::shared_ptr<GeometryComponent> in_geometry_component = geometrySystem->GetComponentAs<GeometryComponent>(in_object);
 		GeometryPtr in_geometry = in_geometry_component->GetGeometry();
 
 		auto out_geometry = std::make_shared<Geometry>();
@@ -62,13 +57,11 @@ void ExtrudeGeometry::Execute()
 
 		// Hierarchy
 		std::shared_ptr<HierarchicalComponent> in_hierarchical_component =
-		    in_object->GetComponent<HierarchicalComponent>();
+		    hierarchicalSystem->GetComponentAs<HierarchicalComponent>(in_object);
 		std::shared_ptr<HierarchicalComponent> out_hierarchical_component =
-		    out_object->GetComponent<HierarchicalComponent>();
+		    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(out_object);
 
-		auto hierarchical_system = std::dynamic_pointer_cast<HierarchicalSystem>(
-		    Selector::GetInstance().GetProceduralObjectSystem()->GetComponentSystem(ComponentType::Hierarchical));
-		hierarchical_system->SetParent(out_hierarchical_component, in_hierarchical_component);
+		hierarchicalSystem->SetParent(out_hierarchical_component, in_hierarchical_component);
 	}
 }
 }  // namespace selector

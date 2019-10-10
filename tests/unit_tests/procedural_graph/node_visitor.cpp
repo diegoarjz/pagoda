@@ -4,6 +4,8 @@
 #include <procedural_graph/node_visitor.h>
 #include <procedural_graph/operation_node.h>
 
+#include <selector.h>
+
 #include <gtest/gtest.h>
 
 using namespace selector;
@@ -21,22 +23,24 @@ class NodeVisitorTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+        m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 	}
 
 	void TearDown() {}
 
-	Graph m_graph;
+	GraphPtr m_graph;
 	std::vector<NodePtr> m_nodes;
+    Selector m_selector;
 };
 
 TEST_F(NodeVisitorTest, when_visiting_should_call_the_delegate_for_each_node)
 {
 	Delegate d;
-	NodeVisitor visitor(m_graph, d);
+	NodeVisitor visitor(*m_graph, d);
 	visitor.Visit();
 	for (auto n : m_nodes)
 	{
@@ -49,23 +53,25 @@ class BreadthFirstNodeVisitorTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph.CreateNode<OperationNode>());
+        m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 	}
 
 	void TearDown() {}
 
-	Graph m_graph;
+	GraphPtr m_graph;
 	std::vector<NodePtr> m_nodes;
+    Selector m_selector;
 };
 
 TEST_F(BreadthFirstNodeVisitorTest, when_visiting_should_call_the_delegate_for_each_node)
 {
 	Delegate d;
-	NodeVisitor visitor(m_graph, d);
+	NodeVisitor visitor(*m_graph, d);
 	visitor.Visit();
 	for (auto n : m_nodes)
 	{
@@ -87,11 +93,11 @@ TEST_F(BreadthFirstNodeVisitorTest, when_visiting_should_visit_the_nodes_in_brea
 	m_nodes[2]->SetId(2);
 	m_nodes[3]->SetId(1);
 	m_nodes[4]->SetId(0);
-	m_graph.CreateEdge(m_nodes[0], m_nodes[1]);
-	m_graph.CreateEdge(m_nodes[1], m_nodes[2]);
-	m_graph.CreateEdge(m_nodes[0], m_nodes[3]);
+	m_graph->CreateEdge(m_nodes[0], m_nodes[1]);
+	m_graph->CreateEdge(m_nodes[1], m_nodes[2]);
+	m_graph->CreateEdge(m_nodes[0], m_nodes[3]);
 
-	BreadthFirstNodeVisitor v(m_graph, d);
+	BreadthFirstNodeVisitor v(*m_graph, d);
 	v.Visit();
 
 	EXPECT_EQ(d.m_visitedNodes[0]->GetId(), 0);

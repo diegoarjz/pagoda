@@ -10,40 +10,13 @@
 
 using namespace selector;
 
-TEST(ProceduralObject, add_procedural_component)
-{
-	ProceduralObjectPtr o = std::make_shared<ProceduralObject>();
-	std::shared_ptr<GeometryComponent> geom = std::make_shared<GeometryComponent>();
-	ProceduralObjectMask expected_mask;
-	expected_mask.set(static_cast<uint32_t>(GeometryComponent::GetType()));
-
-	o->SetComponent(geom);
-
-	EXPECT_EQ(o->GetComponent<GeometryComponent>(), geom);
-	EXPECT_EQ(geom->GetParentObject(), o);
-	EXPECT_EQ(o->Mask(), expected_mask);
-}
-
-TEST(ProceduralObject, remove_procedural_component)
-{
-	ProceduralObjectPtr o = std::make_shared<ProceduralObject>();
-	std::shared_ptr<GeometryComponent> geom = std::make_shared<GeometryComponent>();
-	ProceduralObjectMask expected_mask;
-
-	o->SetComponent(geom);
-	auto removed = o->RemoveComponent<GeometryComponent>();
-
-	EXPECT_EQ(removed, geom);
-	EXPECT_EQ(o->GetComponent<GeometryComponent>(), nullptr);
-	EXPECT_EQ(geom->GetParentObject(), nullptr);
-	EXPECT_EQ(o->Mask(), expected_mask);
-}
-
 TEST(ProceduralObject, hierarchical_component_set_parent)
 {
+    auto proceduralObject = std::make_shared<ProceduralObject>();
+    auto proceduralObject2 = std::make_shared<ProceduralObject>();
 	auto hierarchical_system = std::make_shared<HierarchicalSystem>();
-	auto parent = std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent());
-	auto child = std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent());
+	auto parent = std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject));
+	auto child = std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject2));
 
 	hierarchical_system->SetParent(parent, child);
 	EXPECT_EQ(child->GetParent(), parent);
@@ -54,22 +27,6 @@ TEST(ProceduralObject, hierarchical_component_set_parent)
 	EXPECT_EQ(child->GetParent(), nullptr);
 	EXPECT_EQ(parent->ChildrenCount(), 0);
 	EXPECT_EQ(parent->cbegin(), parent->cend());
-}
-
-TEST(ProceduralObject, test_mask_set_and_unset)
-{
-	ProceduralObjectPtr o = std::make_shared<ProceduralObject>();
-	std::shared_ptr<GeometryComponent> geom = std::make_shared<GeometryComponent>();
-
-	ProceduralObjectMask expected_mask;
-
-	o->SetComponent(geom);
-	expected_mask.set(static_cast<uint32_t>(GeometryComponent::GetType()), true);
-	EXPECT_EQ(o->Mask(), expected_mask);
-
-	o->RemoveComponent<GeometryComponent>();
-	expected_mask.set(static_cast<uint32_t>(GeometryComponent::GetType()), false);
-	EXPECT_EQ(o->Mask(), expected_mask);
 }
 
 class ProceduralObjectSystemTest : public ::testing::Test

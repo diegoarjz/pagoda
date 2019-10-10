@@ -62,7 +62,7 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 		namedArgument->AcceptVisitor(this);
 	}
 
-	auto node = Node::Create(nodeDefinition->GetNodeType());
+	auto node = m_graph->CreateNode(nodeDefinition->GetNodeType());
 	node->SetParameterContext(std::make_shared<Context>(nodeDefinition->GetNodeName()));
 	node->SetId(m_nextNodeId++);
 	node->SetName(nodeDefinition->GetNodeName());

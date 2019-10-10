@@ -15,6 +15,9 @@
 
 namespace selector
 {
+class ProceduralObjectSystem;
+using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
+
 /**
  * @brief Base class for a procedural operation.
  *
@@ -24,12 +27,10 @@ namespace selector
  * Has input and output \c ProceduralOperationObjectInterface which is used to pass
  * input and output procedural objects.
  */
-class ProceduralOperation : public Factory<ProceduralOperation>,
-                            public IParameterizable,
-                            public std::enable_shared_from_this<ProceduralOperation>
+class ProceduralOperation : public IParameterizable, public std::enable_shared_from_this<ProceduralOperation>
 {
 public:
-	ProceduralOperation();
+	ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem);
 	virtual ~ProceduralOperation() {}
 
 	/**
@@ -79,13 +80,14 @@ public:
 	Parameter ResolveVariable(const Variable& v) const override;
 
 protected:
-	void CreateInputInterface(const InterfaceName& interfaceName, const ProceduralObjectMask& mask);
-	void CreateOutputInterface(const InterfaceName& interfaceName, const ProceduralObjectMask& mask);
+	void CreateInputInterface(const InterfaceName& interfaceName);
+	void CreateOutputInterface(const InterfaceName& interfaceName);
 	std::shared_ptr<ProceduralObject> GetInputProceduralObject(const InterfaceName& interfaceName);
 	bool HasInput(const InterfaceName& interfaceName) const;
 	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(const InterfaceName& interfaceName);
 
 	std::shared_ptr<Context> m_parameterContext;  ///< The parameter \c Context for the \c ProceduralOperation
+	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 
 private:
 	using InterfaceContainer_t =

@@ -1,4 +1,5 @@
 #include <procedural_graph/operation_node.h>
+#include <procedural_objects/operation_factory.h>
 
 #include "../parameter/mock_objects.h"
 #include "mock_objects.h"
@@ -10,11 +11,16 @@ using namespace selector;
 class NodeTest : public ::testing::Test
 {
 protected:
-	void SetUp() { node = std::make_shared<OperationNode>(); }
+	void SetUp()
+	{
+		m_operationFactory = std::make_shared<OperationFactory>();
+		node = std::make_shared<OperationNode>(m_operationFactory);
+	}
 
 	void TearDown() {}
 
 	std::shared_ptr<Node> node;
+	OperationFactoryPtr m_operationFactory;
 };
 
 TEST_F(NodeTest, when_setting_node_id_should_be_able_to_get_node_id)

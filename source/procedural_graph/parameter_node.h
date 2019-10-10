@@ -11,7 +11,7 @@ namespace selector
  * All parameters in defined in this node are set in the parameter context of each of the
  * output nodes overwriting them.
  */
-class ParameterNode : public Node::Registrar<ParameterNode>
+class ParameterNode : public Node
 {
 public:
 	static const char *name;

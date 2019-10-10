@@ -5,13 +5,13 @@
 
 namespace selector
 {
-class CreateRectGeometry : public ProceduralOperation::Registrar<CreateRectGeometry>
+class CreateRectGeometry : public ProceduralOperation
 {
 public:
 	static const InterfaceName output_geometry;
 	static const char* name;
 
-	CreateRectGeometry();
+	CreateRectGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateRectGeometry();
 
 	void Execute() override;

@@ -5,14 +5,14 @@
 
 namespace selector
 {
-class ExtrudeGeometry : public ProceduralOperation::Registrar<ExtrudeGeometry>
+class ExtrudeGeometry : public ProceduralOperation
 {
 public:
 	static const char* name;
 	static const InterfaceName input_geometry;
 	static const InterfaceName output_geometry;
 
-	ExtrudeGeometry();
+	ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtrudeGeometry();
 
 	void Execute() override;

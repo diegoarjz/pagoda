@@ -7,51 +7,9 @@
 
 namespace selector
 {
-GeometrySystem::GeometrySystem() : ProceduralComponentSystem("GeometrySystem") {}
-GeometrySystem::~GeometrySystem()
-{
-	DBG_ASSERT_MSG(geometry_components.size() == 0, "Geometry System has components on destruction");
-}
+const std::string GeometrySystem::GetComponentSystemName() { return "GeometrySystem"; }
 
-std::shared_ptr<GeometryComponent> GeometrySystem::CreateComponent(GeometryPtr geometry)
-{
-	START_PROFILE;
-
-	auto geometry_component = std::dynamic_pointer_cast<GeometryComponent>(CreateComponent());
-	geometry_component->SetGeometry(geometry);
-	return geometry_component;
-}
-
-std::shared_ptr<ProceduralComponent> GeometrySystem::CreateComponent()
-{
-	START_PROFILE;
-
-	auto geometry_component = std::make_shared<GeometryComponent>();
-	geometry_components.insert(geometry_component);
-	return geometry_component;
-}
-
-void GeometrySystem::KillProceduralComponent(std::shared_ptr<ProceduralComponent> component)
-{
-	START_PROFILE;
-
-	DBG_ASSERT_MSG(std::dynamic_pointer_cast<GeometryComponent>(component) != nullptr,
-	               "Trying to kill a component that is not a geometry component");
-	geometry_components.erase(std::dynamic_pointer_cast<GeometryComponent>(component));
-}
-
-CreateRect<Geometry> GeometrySystem::GetCreateRect(const float& width, const float& height)
-{
-	START_PROFILE;
-
-	return CreateRect<Geometry>(width, height);
-}
-
-Extrusion<Geometry> GeometrySystem::GetExtrude(const float& amount)
-{
-	START_PROFILE;
-
-	return Extrusion<Geometry>(amount);
-}
+GeometrySystem::GeometrySystem() : ProceduralComponentSystem(GetComponentSystemName()) {}
+GeometrySystem::~GeometrySystem() {}
 
 }  // namespace selector

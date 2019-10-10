@@ -7,7 +7,6 @@
 
 namespace selector
 {
-using ProceduralObjectMask = std::bitset<static_cast<size_t>(ComponentType::MaxComponents)>;
 }
 
 #endif

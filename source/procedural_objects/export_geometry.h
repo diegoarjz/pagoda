@@ -5,13 +5,13 @@
 
 namespace selector
 {
-class ExportGeometry : public ProceduralOperation::Registrar<ExportGeometry>
+class ExportGeometry : public ProceduralOperation
 {
 public:
 	static const char* name;
 	static const InterfaceName inputGeometry;
 
-	ExportGeometry();
+	ExportGeometry(ProceduralObjectSystemPtr objectSystem);
 	~ExportGeometry();
 
 	void Execute() override;

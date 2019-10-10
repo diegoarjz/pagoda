@@ -14,8 +14,8 @@ std::unique_ptr<Logger> Logger::sFatal = nullptr;
 std::list<typename Logger::LogFile> Logger::sLogFiles;
 
 const bool Logger::trace_enabled[static_cast<uint32_t>(Logger::TraceLogs::Max)] = {
-    false,  // Core,
-    false,  // Common,
+    true,  // Core,
+    true,  // Common,
     false,  // MathLib,
     false,  // GeometryCore,
     false,  // GeometryOperations,

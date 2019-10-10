@@ -16,29 +16,29 @@
 
 namespace selector
 {
-Selector& Selector::GetInstance()
-{
-	static Selector instance;
-	return instance;
-}
-
 Selector::Selector()
 {
 	LOG_TRACE(Core, "Initializing Selector");
 
-	IsRegistered<ExtrudeGeometry>();
-	IsRegistered<CreateRectGeometry>();
-	IsRegistered<TriangulateGeometry>();
-	IsRegistered<ExportGeometry>();
-
-	IsRegistered<OperationNode>();
-	IsRegistered<InputInterfaceNode>();
-	IsRegistered<OutputInterfaceNode>();
-	IsRegistered<ParameterNode>();
-
 	m_proceduralObjectSystem = std::make_shared<ProceduralObjectSystem>();
 	m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<GeometrySystem>());
 	m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<HierarchicalSystem>());
+
+	m_operationFactory = std::make_shared<OperationFactory>();
+
+    // Register Nodes
+	m_nodeFactory = std::make_shared<NodeFactory>();
+	m_nodeFactory->Register("InputInterface", []() { return std::make_shared<InputInterfaceNode>(); });
+	m_nodeFactory->Register("OutputInterface", []() { return std::make_shared<OutputInterfaceNode>(); });
+	m_nodeFactory->Register("Parameter", []() { return std::make_shared<ParameterNode>(); });
+	m_nodeFactory->Register("Operation",
+	                        [this]() { return std::make_shared<OperationNode>(m_operationFactory); });
+
+    // Register Operations
+    m_operationFactory->Register("CreateRectGeometry", [this](){ return std::make_shared<CreateRectGeometry>(m_proceduralObjectSystem); });
+    m_operationFactory->Register("ExportGeometry", [this](){ return std::make_shared<ExportGeometry>(m_proceduralObjectSystem); });
+    m_operationFactory->Register("ExtrudeGeometry", [this](){ return std::make_shared<ExtrudeGeometry>(m_proceduralObjectSystem); });
+    m_operationFactory->Register("TriangulateGeometry", [this](){ return std::make_shared<TriangulateGeometry>(m_proceduralObjectSystem); });
 }
 
 Selector::~Selector()
@@ -48,5 +48,9 @@ Selector::~Selector()
 }
 
 ProceduralObjectSystemPtr Selector::GetProceduralObjectSystem() { return m_proceduralObjectSystem; }
+
+OperationFactoryPtr Selector::GetOperationFactory() { return m_operationFactory; }
+
+NodeFactoryPtr Selector::GetNodeFactory() { return m_nodeFactory; }
 
 }  // namespace selector

@@ -14,9 +14,10 @@
 namespace selector
 {
 class Node;
-class NodeFactory;
-
 using NodePtr = std::shared_ptr<Node>;
+
+class NodeFactory;
+using NodeFactoryPtr = std::shared_ptr<NodeFactory>;
 
 /**
  * @brief Represents a procedural graph.
@@ -63,7 +64,7 @@ public:
 	/**
 	 * Constructs a \c Graph.
 	 */
-	Graph();
+	Graph(NodeFactoryPtr nodeFactory);
 	~Graph();
 
 	Graph(const Graph &) = delete;
@@ -74,13 +75,18 @@ public:
 	 *
 	 * @return An instance of a \c Node.
 	 */
-	template<class NodeT, typename... T>
-	NodePtr CreateNode(T... args)
+	template<class N>
+	NodePtr CreateNode()
 	{
-		NodePtr node = std::make_shared<NodeT>(args...);
-		AddNode(node);
-		return node;
+		return CreateNode(N::name);
 	}
+
+    /**
+     * Creates and adds a \c Node for this \c Graph.
+     *
+     * @return An instance of a \c Node.
+     */
+    NodePtr CreateNode(const std::string &nodeType);
 
 	/**
 	 * Adds a \c Node object to this \c Graph.

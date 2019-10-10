@@ -54,7 +54,7 @@ public:
 	std::shared_ptr<Graph> ReadGraphFromFile(const std::string& filePath)
 	{
 		std::string str = FileUtil::LoadFileToString(filePath);
-		GraphReader reader;
+		GraphReader reader(m_selector.GetNodeFactory());
 		m_graph = reader.Read(str);
 		return m_graph;
 	}
@@ -79,6 +79,7 @@ private:
 	std::vector<std::string> m_filesToMatch;
 
 	GraphPtr m_graph;
+    Selector m_selector;
 
 	static boost::filesystem::path s_testFilesDirectory;
 };
@@ -97,14 +98,10 @@ REGRESSION_TEST(parameter_renaming, {"geometry.obj"});
 
 int main(int argc, char* argv[])
 {
-    Selector::GetInstance();
-
 	RegressionTest::SetExecutablePath(argv[0]);
 	::testing::InitGoogleTest(&argc, argv);
 
 	auto returnVal = RUN_ALL_TESTS();
-
-	selector::Logger::Shutdown();
 
 	return returnVal;
 }

@@ -9,7 +9,7 @@
 
 namespace selector
 {
-ProceduralOperation::ProceduralOperation() : m_parameterContext(std::make_shared<Context>("op")) {}
+ProceduralOperation::ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem) : m_parameterContext(std::make_shared<Context>("op")), m_proceduralObjectSystem(proceduralObjectSystem) {}
 
 bool ProceduralOperation::PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object)
 {
@@ -49,20 +49,20 @@ ProceduralObjectPtr ProceduralOperation::PopProceduralObject(const InterfaceName
 	return output_interface->second->GetAndPopProceduralObject();
 }
 
-void ProceduralOperation::CreateInputInterface(const InterfaceName& interfaceName, const ProceduralObjectMask& mask)
+void ProceduralOperation::CreateInputInterface(const InterfaceName& interfaceName)
 {
 	START_PROFILE;
 
 	input_interfaces.emplace(
-	    std::make_pair(interfaceName, std::make_unique<ProceduralOperationObjectInterface>(interfaceName, mask)));
+	    std::make_pair(interfaceName, std::make_unique<ProceduralOperationObjectInterface>(interfaceName)));
 }
 
-void ProceduralOperation::CreateOutputInterface(const InterfaceName& interfaceName, const ProceduralObjectMask& mask)
+void ProceduralOperation::CreateOutputInterface(const InterfaceName& interfaceName)
 {
 	START_PROFILE;
 
 	output_interfaces.emplace(
-	    std::make_pair(interfaceName, std::make_unique<ProceduralOperationObjectInterface>(interfaceName, mask)));
+	    std::make_pair(interfaceName, std::make_unique<ProceduralOperationObjectInterface>(interfaceName)));
 }
 
 std::shared_ptr<ProceduralObject> ProceduralOperation::GetInputProceduralObject(const InterfaceName& interfaceName)
@@ -88,9 +88,7 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 {
 	START_PROFILE;
 
-	auto mask = output_interfaces[interfaceName]->Mask();
-
-	auto procedural_object = Selector::GetInstance().GetProceduralObjectSystem()->CreateProceduralObject(mask);
+	auto procedural_object = m_proceduralObjectSystem->CreateProceduralObject();
 	output_interfaces[interfaceName]->AddProceduralObject(procedural_object);
 
 	return procedural_object;

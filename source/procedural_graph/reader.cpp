@@ -7,6 +7,7 @@
 #include "common/assertions.h"
 #include "common/logger.h"
 #include "parse_result.h"
+#include "procedural_graph/node_factory.h"
 
 #include <cstring>
 #include <exception>
@@ -18,10 +19,11 @@ namespace selector
 {
 struct GraphReader::Impl
 {
-	Impl() : m_currentParseResult({ParseResult::Status::Ok, 0}) {}
+	Impl(NodeFactoryPtr nodeFactory) : m_nodeFactory(nodeFactory), m_currentParseResult({ParseResult::Status::Ok, 0}) {}
+
 	GraphPtr Read(const std::string &str)
 	{
-		GraphPtr graph = std::make_shared<Graph>();
+		GraphPtr graph = std::make_shared<Graph>(m_nodeFactory);
 
 		std::string::const_iterator begin = std::begin(str);
 		std::string::const_iterator end = std::end(str);
@@ -41,33 +43,16 @@ struct GraphReader::Impl
 		AstInterpreter interpreter(graph);
 		interpreter.Visit(graph_def.get());
 
-		/*
-		std::string::const_iterator begin = std::begin(str);
-		std::string::const_iterator end = std::end(str);
-
-		GraphReaderGrammar<std::string::const_iterator> grammar;
-		ast::graph_definition graph_def;
-
-		bool result = qi::phrase_parse(begin, end, grammar, qi::space, graph_def);
-
-		std::cout << "Result: " << result << std::endl;
-		std::cout << "Processed all: " << (begin == end) << std::endl;
-		std::cout << "Left to parse: " << std::endl;
-		std::cout << std::string(begin, end) << std::endl;
-
-		interpreter_visitor visitor{graph};
-		visitor.visit(graph_def);
-
-		*/
 		return graph;
 	}
 	const ParseResult &GetParseResult() const { return m_currentParseResult; }
 
 private:
+    NodeFactoryPtr m_nodeFactory;
 	ParseResult m_currentParseResult;
 };
 
-GraphReader::GraphReader() : m_implementation(std::make_unique<GraphReader::Impl>()) {}
+GraphReader::GraphReader(NodeFactoryPtr nodeFactory) : m_implementation(std::make_unique<GraphReader::Impl>(nodeFactory)) {}
 GraphReader::~GraphReader() {}
 GraphPtr GraphReader::Read(const std::string &str) { return m_implementation->Read(str); }
 const ParseResult &GraphReader::GetParseResult() const { return m_implementation->GetParseResult(); }

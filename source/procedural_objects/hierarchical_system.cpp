@@ -4,27 +4,10 @@
 
 namespace selector
 {
-HierarchicalSystem::HierarchicalSystem() : ProceduralComponentSystem("HierarchicalSystem") {}
+const std::string HierarchicalSystem::GetComponentSystemName() { return "HierarchicalSystem"; }
+
+HierarchicalSystem::HierarchicalSystem() : ProceduralComponentSystem(GetComponentSystemName()) {}
 HierarchicalSystem::~HierarchicalSystem() {}
-
-std::shared_ptr<ProceduralComponent> HierarchicalSystem::CreateComponent()
-{
-	START_PROFILE;
-
-	auto hierarchical_component = std::make_shared<HierarchicalComponent>();
-	hierarchical_components.insert(hierarchical_component);
-	root_components.insert(hierarchical_component);
-	return std::dynamic_pointer_cast<ProceduralComponent>(hierarchical_component);
-}
-
-void HierarchicalSystem::KillProceduralComponent(std::shared_ptr<ProceduralComponent> component)
-{
-	START_PROFILE;
-
-	DBG_ASSERT_MSG(std::dynamic_pointer_cast<HierarchicalComponent>(component) != nullptr,
-	               "Trying to kill a component that is not a geometry component");
-	hierarchical_components.erase(std::dynamic_pointer_cast<HierarchicalComponent>(component));
-}
 
 void HierarchicalSystem::SetParent(std::shared_ptr<HierarchicalComponent> parent,
                                    std::shared_ptr<HierarchicalComponent> child)

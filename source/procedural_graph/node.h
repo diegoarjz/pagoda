@@ -25,7 +25,7 @@ using NodeSet = std::unordered_set<std::shared_ptr<Node>>;
  * Each subclass of \c Node is responsible for implementing an execution logic by
  * overriding the Node::Execute() method.
  */
-class Node : public Factory<Node>
+class Node
 {
 public:
 	Node();

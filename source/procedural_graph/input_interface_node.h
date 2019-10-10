@@ -15,7 +15,7 @@ using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 
-class InputInterfaceNode : public Node::Registrar<InputInterfaceNode>
+class InputInterfaceNode : public Node
 {
 public:
 	static const char* name;

@@ -9,21 +9,15 @@ namespace selector
 {
 class HierarchicalComponent;
 
-class HierarchicalSystem : public ProceduralComponentSystem
+class HierarchicalSystem : public ProceduralComponentSystem<HierarchicalComponent>
 {
 public:
+    using Component_t = HierarchicalComponent;
+
+	static const std::string GetComponentSystemName();
+
     HierarchicalSystem();
 	virtual ~HierarchicalSystem();
-
-	ComponentType GetType() const override { return ComponentType::Hierarchical; }
-
-	std::shared_ptr<ProceduralComponent> CreateComponent() override;
-	void KillProceduralComponent(std::shared_ptr<ProceduralComponent> component) override;
-
-	const std::unordered_set<std::shared_ptr<HierarchicalComponent>> &GetComponents() const
-	{
-		return hierarchical_components;
-	}
 
 	void SetParent(std::shared_ptr<HierarchicalComponent> parent, std::shared_ptr<HierarchicalComponent> child);
 
@@ -45,7 +39,6 @@ private:
 		}
 	};  // struct HierarchicalComponentEqual
 
-	std::unordered_set<std::shared_ptr<HierarchicalComponent>> hierarchical_components;
 	std::unordered_set<std::weak_ptr<HierarchicalComponent>, HierarchicalComponentWeakPtrHasher,
 	                   HierarchicalComponentEqual>
 	    root_components;

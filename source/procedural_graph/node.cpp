@@ -26,9 +26,6 @@ void Node::SetExecutionArguments(const std::unordered_map<std::string, Parameter
 	}
 }
 
-void Node::SetExpressionVariables()
-{
-	m_context->UpdateExpressions();
-}
+void Node::SetExpressionVariables() { m_context->UpdateExpressions(); }
 
 }  // namespace selector
