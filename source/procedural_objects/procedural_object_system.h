@@ -1,13 +1,13 @@
 #ifndef SELECTOR_PROCEDURAL_OBJECT_SYSTEM_H_
 #define SELECTOR_PROCEDURAL_OBJECT_SYSTEM_H_
 
-#include "procedural_object_mask.h"
 #include "common/assertions.h"
 #include "common/profiler.h"
+#include "procedural_object_mask.h"
 
 #include <memory>
-#include <unordered_set>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace selector
 {
@@ -39,7 +39,7 @@ public:
 		    "Unregistering a ComponentSystem while there are procedural objects may cause incorrect behaviour.");
 		START_PROFILE;
 
-        std::string type = System::GetComponentSystem();
+		std::string type = System::GetComponentSystem();
 
 		auto iteratorToSystems = m_proceduralComponentSystems.find(type);
 		if (iteratorToSystems == std::end(m_proceduralComponentSystems))
@@ -51,11 +51,11 @@ public:
 		return true;
 	}
 
-    template<class System>
-    std::shared_ptr<System> GetComponentSystem()
-    {
-        return std::dynamic_pointer_cast<System>(GetComponentSystem(System::GetComponentSystemName()));
-    }
+	template<class System>
+	std::shared_ptr<System> GetComponentSystem()
+	{
+		return std::dynamic_pointer_cast<System>(GetComponentSystem(System::GetComponentSystemName()));
+	}
 
 	std::shared_ptr<ProceduralComponentSystemBase> GetComponentSystem(const std::string& systemName);
 

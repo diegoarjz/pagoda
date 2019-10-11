@@ -4,6 +4,8 @@
 #include "common/assertions.h"
 #include "common/logger.h"
 
+#include "procedural_component_system_base.h"
+
 #include <string>
 #include <unordered_map>
 
@@ -15,37 +17,15 @@ using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 class ProceduralComponent;
 using ProceduralComponentPtr = std::shared_ptr<ProceduralComponent>;
 
-class ProceduralComponentSystemBase
-{
-public:
-	ProceduralComponentSystemBase(const std::string &name);
-	virtual ~ProceduralComponentSystemBase();
-
-	std::string GetComponentSystemTypeName() const;
-	virtual std::shared_ptr<ProceduralComponent> CreateComponent(ProceduralObjectPtr) = 0;
-	virtual std::shared_ptr<ProceduralComponent> GetComponent(ProceduralObjectPtr object) = 0;
-	virtual void KillProceduralComponent(ProceduralObjectPtr) = 0;
-
-	template<typename C>
-	std::shared_ptr<C> GetComponentAs(ProceduralObjectPtr object)
-	{
-		return std::dynamic_pointer_cast<C>(GetComponent(object));
-	}
-
-	template<typename C>
-	std::shared_ptr<C> CreateComponentAs(ProceduralObjectPtr object)
-	{
-		return std::dynamic_pointer_cast<C>(CreateComponent(object));
-	}
-
-private:
-	const std::string m_systemName;
-};
-
+/**
+ * Base template class for a \c ProceduralComponentSytem that holds \c ProceduralComponent
+ * of type C.
+ */
 template<class C>
 class ProceduralComponentSystem : public ProceduralComponentSystemBase
 {
 public:
+    /// Type of \c ProceduralComponent managed by this \c ProceduralComponentSystem.
 	using Component_t = C;
 
 	ProceduralComponentSystem(const std::string &name) : ProceduralComponentSystemBase(name)
@@ -56,6 +36,9 @@ public:
     {
     }
 
+    /**
+     * Creates a \c ProceduralComponent of type \c Component_t for the \c ProceduralObject give in \p object.
+     */
 	std::shared_ptr<ProceduralComponent> CreateComponent(ProceduralObjectPtr object) override
 	{
         DBG_ASSERT_MSG(object != nullptr, "Can't create a component (%s) for a null ProceduralObject", GetComponentSystemTypeName().c_str());
@@ -67,6 +50,9 @@ public:
 		return component;
 	}
 
+    /**
+     * Returns the \c ProceduralComponent for the \c ProceduralObject \p object.
+     */
 	std::shared_ptr<ProceduralComponent> GetComponent(ProceduralObjectPtr object) override
 	{
         DBG_ASSERT_MSG(object != nullptr, "Can't get a component (%s) for a null ProceduralObject", GetComponentSystemTypeName().c_str());
@@ -78,9 +64,13 @@ public:
 		return component->second;
 	}
 
+    /**
+     * Deletes the \c ProceduralComponent for the \c ProceduralObject \p object.
+     */
 	void KillProceduralComponent(ProceduralObjectPtr object) override { m_components.erase(object); }
 
 private:
+    /// Stores the \c ProceduralComponent for each \c ProceduralObject.
 	std::unordered_map<ProceduralObjectPtr, std::shared_ptr<Component_t>> m_components;
 };  // class ProceduralComponentSystem
 

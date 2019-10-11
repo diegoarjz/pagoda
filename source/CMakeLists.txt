@@ -78,7 +78,7 @@ set(SELECTOR_PARAMETER_PUBLIC_HEADERS
 set(SELECTOR_PROCEDURAL_OBJECTS_SOURCES
     "procedural_objects/procedural_object.cpp"
     "procedural_objects/procedural_object_system.cpp"
-    "procedural_objects/procedural_component_system.cpp"
+    "procedural_objects/procedural_component_system_base.cpp"
     "procedural_objects/procedural_operation.cpp"
     "procedural_objects/geometry_system.cpp"
     "procedural_objects/geometry_component.cpp"
