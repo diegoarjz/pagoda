@@ -44,7 +44,6 @@ set(SELECTOR_GEOMCORE_PUBLIC_HEADERS
     "geometry_core/geometry_sizes.h"
     "geometry_core/geometry_builder.h"
     "geometry_core/geometry_exporter.h"
-    "geometry_core/geometry_topology.h"
     "geometry_core/indexed_container.h"
     "geometry_core/split_point_topology.h"
     "geometry_core/scope.h"
