@@ -249,7 +249,7 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const IndexP
 	}
 
 #ifdef DEBUG
-    IsValid();
+    LOG_TRACE(GeometryCore, "CreateFace: IsValid: %d", IsValid());
 #endif
 	return CreateFaceResult(std::get<0>(face), {std::get<0>(splitPoints[0]), std::get<0>(splitPoints[1]), std::get<0>(splitPoints[2])});
 }
