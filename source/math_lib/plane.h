@@ -90,6 +90,24 @@ public:
 	 */
 	PointType GetPoint2() const { return GetPoint() + GetVector(); }
 
+    /**
+     * Indicates on which side of the plane a geometry element is.
+     */
+    enum class PlaneSide { Front, Back, Contained };
+
+    /**
+     * Returns on which side of the plane the \p point is.
+     */
+    PlaneSide GetPlaneSide(const VectorType &point)
+    {
+        auto dot = dot_product(GetNormal(), point - GetPoint());
+        if (dot == Rep(0))
+        {
+            return PlaneSide::Contained;
+        }
+        return dot > Rep(0) ? PlaneSide::Front : PlaneSide::Back;
+    }
+
 private:
 	VectorType m_normal;  ///< Plane Normal
 	Rep m_distance;       ///< Distance to origin

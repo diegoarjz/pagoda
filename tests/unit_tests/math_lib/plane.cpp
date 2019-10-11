@@ -58,3 +58,12 @@ TEST(Plane, when_getting_points_contained_in_the_plane_should_have_zero_distance
 	EXPECT_EQ(projection(p1, plane), p1);
 	EXPECT_EQ(projection(p2, plane), p2);
 }
+
+TEST(Plane, when_a_getting_the_side_of_the_plane_a_point_is_in_should_return_the_right_value)
+{
+    Plane<float> plane = Plane<float>::FromPointAndNormal(Vec3F(0,0,0), Vec3F(1,0,0));
+
+    EXPECT_EQ(plane.GetPlaneSide(Vec3F(1,0,0)), Plane<float>::PlaneSide::Front);
+    EXPECT_EQ(plane.GetPlaneSide(Vec3F(0,0,0)), Plane<float>::PlaneSide::Contained);
+    EXPECT_EQ(plane.GetPlaneSide(Vec3F(-1,0,0)), Plane<float>::PlaneSide::Back);
+}
