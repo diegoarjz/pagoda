@@ -1,4 +1,5 @@
 #include <geometry_core/split_point_topology.h>
+#include <common/logger.h>
 #include <math_lib/vec_base.h>
 
 #include <gtest/gtest.h>

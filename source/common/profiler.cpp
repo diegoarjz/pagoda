@@ -3,6 +3,9 @@
 #include "assertions.h"
 #include "statistics.h"
 
+#include <algorithm>
+#include <array>
+#include <iomanip>
 #include <iostream>
 #include <list>
 
@@ -110,7 +113,7 @@ ConsoleProfilerLogger::ConsoleProfilerLogger(const ProfilerManager* manager) : P
 
 ConsoleProfilerLogger::~ConsoleProfilerLogger() {}
 
-void ConsoleProfilerLogger::Log()
+void ConsoleProfilerLogger::Log(std::size_t nLines)
 {
 	using Entry = typename ProfilerManager::ProfileEntry;
 
@@ -119,10 +122,40 @@ void ConsoleProfilerLogger::Log()
 
 	sorted_by_time.sort([](const Entry& lhs, const Entry& rhs) { return lhs.m_time > rhs.m_time; });
 
-	for (auto e : sorted_by_time)
+	std::array<std::size_t, 5> columnsMaxSize;
+    for (auto i = 0u; i < 5; ++i)
+    {
+        columnsMaxSize[i] = 0;
+    }
+
+	std::size_t count = 0;
+	for (const auto& e : sorted_by_time)
 	{
-		std::cout << e.m_name << "(" << e.m_file << ":" << e.m_line << ") - " << e.m_calls << " calls " << e.m_time
-		          << std::endl;
+		columnsMaxSize[0] = std::max(columnsMaxSize[0], std::strlen(e.m_file));
+		columnsMaxSize[1] = std::max(columnsMaxSize[1], std::to_string(e.m_line).size());
+		columnsMaxSize[2] = std::max(columnsMaxSize[2], std::strlen(e.m_name));
+		columnsMaxSize[3] = std::max(columnsMaxSize[3], std::to_string(e.m_calls).size());
+
+		++count;
+		if (nLines != 0 && count > nLines)
+		{
+			break;
+		}
+	}
+
+	count = 0;
+	for (const auto& e : sorted_by_time)
+	{
+		std::cout << std::setw(columnsMaxSize[0]) << e.m_file;
+		std::cout << "(" << std::setw(columnsMaxSize[1]) << e.m_line << "): ";
+		std::cout << std::setw(columnsMaxSize[2]) << e.m_name << " ";
+		std::cout << std::setw(columnsMaxSize[3]) << e.m_calls << " ";
+		std::cout << e.m_time << std::endl;
+		++count;
+		if (nLines != 0 && count > nLines)
+		{
+			break;
+		}
 	}
 }
 

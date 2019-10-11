@@ -54,6 +54,11 @@ private:
 	 */
 	struct SplitPoint
 	{
+		SplitPoint()
+		    : m_point(s_invalidIndex), m_face(s_invalidIndex), m_incomingEdge(s_invalidIndex), m_outgoingEdge(s_invalidIndex)
+		{
+		}
+
 		Index_t m_point;         ///< \c Point to which the \c SplitPoint belongs.
 		Index_t m_face;          ///< \c Face to which the \c SplitPoint belongs.
 		Index_t m_incomingEdge;  ///< \c Edge that has this \c SplitPoint as its destination.
@@ -65,6 +70,7 @@ private:
 	 */
 	struct Edge
 	{
+		Edge() : m_source(s_invalidIndex), m_destination(s_invalidIndex) {}
 		Index_t m_source;       ///< Source \c SplitPoint.
 		Index_t m_destination;  ///< Destination \c SplitPoint.
 	};
@@ -74,6 +80,7 @@ private:
 	 */
 	struct Face
 	{
+		Face() : m_splitPoint(s_invalidIndex) {}
 		Index_t m_splitPoint;  ///< A \c SplitPoint for this \c Face.
 	};
 
@@ -159,10 +166,10 @@ public:
 	SplitPointTopology();
 	~SplitPointTopology();
 
-    std::size_t GetFaceCount() const;
-    std::size_t GetPointCount() const;
-    std::size_t GetSplitPointCount() const;
-    std::size_t GetEdgeCount() const;
+	std::size_t GetFaceCount() const;
+	std::size_t GetPointCount() const;
+	std::size_t GetSplitPointCount() const;
+	std::size_t GetEdgeCount() const;
 
 	/*
 	 * Operations
@@ -251,7 +258,10 @@ public:
 	struct CreateFaceResult
 	{
 		CreateFaceResult() : m_face(s_invalidIndex), m_splitPoints{s_invalidIndex, s_invalidIndex, s_invalidIndex} {};
-		CreateFaceResult(FaceHandle f, std::array<SplitPointHandle, 3> splitPoints) : m_face(f), m_splitPoints(splitPoints) {}
+		CreateFaceResult(FaceHandle f, std::array<SplitPointHandle, 3> splitPoints)
+		    : m_face(f), m_splitPoints(splitPoints)
+		{
+		}
 		FaceHandle m_face;
 		std::array<SplitPointHandle, 3> m_splitPoints;
 	};
@@ -273,7 +283,7 @@ public:
 	CreateFaceResult CreateFace(const PointHandle &p0, const PointHandle &p1);
 	/**
 	 * Creates a \c Face in this topology with 3 \c Point.
-     * If any of the points doesn't exist, it is created.
+	 * If any of the points doesn't exist, it is created.
 	 */
 	CreateFaceResult CreateFace(const PointHandle &p0, const PointHandle &p1, const PointHandle &p2);
 
@@ -295,10 +305,10 @@ public:
 	 */
 	SplitPointHandle CollapseEdge(const EdgeHandle &e);
 
-    /**
-     * Splits a face between two split points.
-     * @return \c FaceHandle with referring to the new \c Face.
-     */
+	/**
+	 * Splits a face between two split points.
+	 * @return \c FaceHandle with referring to the new \c Face.
+	 */
 	FaceHandle SplitFace(const FaceHandle &f, const EdgeHandle &e0, const EdgeHandle &e1);
 
 	/*

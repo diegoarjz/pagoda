@@ -157,7 +157,7 @@ public:
 	ProfilerLogger(const ProfilerManager* manager);
 	virtual ~ProfilerLogger();
 
-	virtual void Log() = 0;
+	virtual void Log(std::size_t nLines = 0) = 0;
 
 protected:
 	const ProfilerManager* m_manager;
@@ -173,7 +173,7 @@ public:
 	explicit ConsoleProfilerLogger(const ProfilerManager* manager);
 	virtual ~ConsoleProfilerLogger();
 
-	void Log() final;
+	void Log(std::size_t nLines = 0) final;
 };  // class ConsoleProfilerLogger
 
 #ifdef SELECTOR_PROFILER_ACTIVE

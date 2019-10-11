@@ -105,10 +105,7 @@ void ExecuteGraph(std::shared_ptr<Graph> graph)
 
 std::shared_ptr<Graph> ReadGraphFromFile(Selector &selector, const std::string& file_path)
 {
-	GraphReader reader(selector.GetNodeFactory());
-	GraphPtr graph = reader.Read(FileUtil::LoadFileToString(file_path));
-
-	return graph;
+	return selector.CreateGraphFromFile(file_path);
 }
 
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)

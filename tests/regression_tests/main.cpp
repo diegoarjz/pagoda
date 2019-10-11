@@ -2,6 +2,7 @@
 
 #include <common/file_util.h>
 #include <common/logger.h>
+#include <common/profiler.h>
 #include <procedural_graph/graph.h>
 #include <procedural_graph/reader.h>
 #include <procedural_graph/default_scheduler.h>
@@ -53,10 +54,8 @@ public:
 
 	std::shared_ptr<Graph> ReadGraphFromFile(const std::string& filePath)
 	{
-		std::string str = FileUtil::LoadFileToString(filePath);
-		GraphReader reader(m_selector.GetNodeFactory());
-		m_graph = reader.Read(str);
-		return m_graph;
+		m_graph = m_selector.CreateGraphFromFile(filePath);
+        return m_graph;
 	}
 
 	void ExecuteGraph()
@@ -102,6 +101,9 @@ int main(int argc, char* argv[])
 	::testing::InitGoogleTest(&argc, argv);
 
 	auto returnVal = RUN_ALL_TESTS();
+
+	ConsoleProfilerLogger consoleLogger(ProfilerManager::Instance());
+	consoleLogger.Log(20);
 
 	return returnVal;
 }

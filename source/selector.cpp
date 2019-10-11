@@ -1,12 +1,15 @@
 #include "selector.h"
 
 #include "common/factory.h"
+#include "common/file_util.h"
 #include "common/logger.h"
 
+#include <procedural_graph/graph.h>
 #include <procedural_graph/input_interface_node.h>
 #include <procedural_graph/operation_node.h>
 #include <procedural_graph/output_interface_node.h>
 #include <procedural_graph/parameter_node.h>
+#include <procedural_graph/reader.h>
 #include <procedural_objects/create_rect.h>
 #include <procedural_objects/export_geometry.h>
 #include <procedural_objects/extrude_geometry.h>
@@ -16,41 +19,77 @@
 
 namespace selector
 {
-Selector::Selector()
+class Selector::Impl
 {
-	LOG_TRACE(Core, "Initializing Selector");
+public:
+	Impl()
+	{
+		LOG_TRACE(Core, "Initializing Selector");
 
-	m_proceduralObjectSystem = std::make_shared<ProceduralObjectSystem>();
-	m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<GeometrySystem>());
-	m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<HierarchicalSystem>());
+		m_proceduralObjectSystem = std::make_shared<ProceduralObjectSystem>();
+		m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<GeometrySystem>());
+		m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<HierarchicalSystem>());
 
-	m_operationFactory = std::make_shared<OperationFactory>();
+		m_operationFactory = std::make_shared<OperationFactory>();
 
-    // Register Nodes
-	m_nodeFactory = std::make_shared<NodeFactory>();
-	m_nodeFactory->Register("InputInterface", []() { return std::make_shared<InputInterfaceNode>(); });
-	m_nodeFactory->Register("OutputInterface", []() { return std::make_shared<OutputInterfaceNode>(); });
-	m_nodeFactory->Register("Parameter", []() { return std::make_shared<ParameterNode>(); });
-	m_nodeFactory->Register("Operation",
-	                        [this]() { return std::make_shared<OperationNode>(m_operationFactory); });
+		// Register Nodes
+		m_nodeFactory = std::make_shared<NodeFactory>();
+		m_nodeFactory->Register("InputInterface", []() { return std::make_shared<InputInterfaceNode>(); });
+		m_nodeFactory->Register("OutputInterface", []() { return std::make_shared<OutputInterfaceNode>(); });
+		m_nodeFactory->Register("Parameter", []() { return std::make_shared<ParameterNode>(); });
+		m_nodeFactory->Register("Operation", [this]() { return std::make_shared<OperationNode>(m_operationFactory); });
 
-    // Register Operations
-    m_operationFactory->Register("CreateRectGeometry", [this](){ return std::make_shared<CreateRectGeometry>(m_proceduralObjectSystem); });
-    m_operationFactory->Register("ExportGeometry", [this](){ return std::make_shared<ExportGeometry>(m_proceduralObjectSystem); });
-    m_operationFactory->Register("ExtrudeGeometry", [this](){ return std::make_shared<ExtrudeGeometry>(m_proceduralObjectSystem); });
-    m_operationFactory->Register("TriangulateGeometry", [this](){ return std::make_shared<TriangulateGeometry>(m_proceduralObjectSystem); });
-}
+		// Register Operations
+		m_operationFactory->Register(
+		    "CreateRectGeometry", [this]() { return std::make_shared<CreateRectGeometry>(m_proceduralObjectSystem); });
+		m_operationFactory->Register("ExportGeometry",
+		                             [this]() { return std::make_shared<ExportGeometry>(m_proceduralObjectSystem); });
+		m_operationFactory->Register("ExtrudeGeometry",
+		                             [this]() { return std::make_shared<ExtrudeGeometry>(m_proceduralObjectSystem); });
+		m_operationFactory->Register("TriangulateGeometry", [this]() {
+			return std::make_shared<TriangulateGeometry>(m_proceduralObjectSystem);
+		});
+	}
 
-Selector::~Selector()
-{
-	LOG_TRACE(Core, "Shutting down Selector");
-	Logger::Shutdown();
-}
+	~Impl()
+	{
+		LOG_TRACE(Core, "Shutting down Selector");
+		Logger::Shutdown();
+	}
 
-ProceduralObjectSystemPtr Selector::GetProceduralObjectSystem() { return m_proceduralObjectSystem; }
+	ProceduralObjectSystemPtr GetProceduralObjectSystem() { return m_proceduralObjectSystem; }
 
-OperationFactoryPtr Selector::GetOperationFactory() { return m_operationFactory; }
+	OperationFactoryPtr GetOperationFactory() { return m_operationFactory; }
 
-NodeFactoryPtr Selector::GetNodeFactory() { return m_nodeFactory; }
+	NodeFactoryPtr GetNodeFactory() { return m_nodeFactory; }
 
+	GraphPtr CreateGraph() { return std::make_shared<Graph>(GetNodeFactory()); }
+
+	GraphPtr CreateGraphFromFile(const std::string &filePath)
+	{
+		LOG_TRACE(Core, "Creating Graph From File: %s", filePath.c_str());
+		GraphReader reader(GetNodeFactory());
+		GraphPtr graph = reader.Read(FileUtil::LoadFileToString(filePath));
+		LOG_TRACE(Core, "graph: 0x%x", graph.get());
+		return graph;
+	}
+
+private:
+	ProceduralObjectSystemPtr m_proceduralObjectSystem;
+	OperationFactoryPtr m_operationFactory;
+	NodeFactoryPtr m_nodeFactory;
+};
+
+Selector::Selector() : m_implementation(std::make_unique<Selector::Impl>()) {}
+Selector::~Selector() {}
+
+ProceduralObjectSystemPtr Selector::GetProceduralObjectSystem() { return m_implementation->GetProceduralObjectSystem(); }
+
+OperationFactoryPtr Selector::GetOperationFactory() { return m_implementation->GetOperationFactory(); }
+
+NodeFactoryPtr Selector::GetNodeFactory() { return m_implementation->GetNodeFactory(); }
+
+GraphPtr Selector::CreateGraph() { return m_implementation->CreateGraph(); }
+
+GraphPtr Selector::CreateGraphFromFile(const std::string &filePath) { return m_implementation->CreateGraphFromFile(filePath); }
 }  // namespace selector

@@ -242,7 +242,7 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const IndexP
         AddEdge(std::get<0>(points[i]), std::get<0>(edges[i]));
 
         SetOutgoingEdge(std::get<0>(splitPoints[i]), std::get<0>(edges[i]));
-        SetIncomingEdge(std::get<0>(splitPoints[i]), std::get<0>(edges[(i - 1) % 4]));
+        SetIncomingEdge(std::get<0>(splitPoints[i]), std::get<0>(edges[(i - 1) % 3]));
         SetPoint(std::get<0>(splitPoints[i]), std::get<0>(points[i]));
         SetFace(std::get<0>(splitPoints[i]), std::get<0>(face));
         SetIncomingEdge(std::get<0>(splitPoints[(i + 1) % 3]), std::get<0>(edges[i]));
@@ -306,7 +306,7 @@ void SplitPointTopology::SetPoint(const SplitPointHandle &s, const PointHandle &
 void SplitPointTopology::AddEdge(const PointHandle &p, const EdgeHandle &e)
 {
     START_PROFILE;
-    LOG_TRACE(GeometryCore, "Adding Edge %d to Point", e, p);
+    LOG_TRACE(GeometryCore, "Adding Edge %d to Point %d", e, p);
 	auto &point = m_points.Get(p);
 	point.m_edges.insert(e);
 }
