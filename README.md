@@ -34,22 +34,21 @@ $ make && make test && make install
 ```
 
 If all goes well you will have built and installed the selector library,
-headers and the GraphRunner executable. The GraphRunner executable is what
+headers and the sel executable. The sel executable is what
 allows you to execute a procedural graph in the specified in the selector
 format.
 
 # Executing your first procedural graph
 
-The GraphRunner executable takes a procedural graph file and optionally exports
-all the generated geometries into multiple files.
+The sel executable takes a procedural graph file and optionally executes it.
 
 A procedural graph is a directed graph that details the execution of the
 operations and the flow of procedural objects through the operations.
 
 All sorts of concepts in a procedural graph are represented by nodes.
-Operations nodes, interfaces between procedural operations, etc. The reasoning
+Operations nodes, interfaces between procedural operations, parameter nodes, etc. The reasoning
 for this approach is that it allows a higher level of flexibility and
-extensibility while defining procedural graph.  Links between nodes do
+extensibility while defining procedural graphs. Links between nodes usually
 represent the flow of procedural objects but different nodes might process the
 objects in different ways. Some may create new geometry with procedural
 operations. Other might filter the flow of objects through the nodes.
@@ -61,13 +60,19 @@ This is illustrated in the following snippet:
 create_rect = Operation(operation: "CreateRectGeometry") { width: 10, height: 10 }
 create_rect_out = OutputInterface(interface: "out", offset: 0)
 create_rect -> create_rect_out;
+
+export_in = InputInterface(interface: "in", offset: 0)
+export = Operation(operation: "ExportGeometry") { path: "rect.geom" }
+export_in -> export;
+
+create_rect_out -> export_in;
 ```
 
 Creating a node is similar to constructing an object in object oriented
 programming. You call the constructor of the node's type (e.g., Operation or
 OutputInterface) with some parameters inside the round brackets (the
 construction arguments). Because all nodes can contain parameters (influencing
-the node's execution) you can also specify these inside the curly brackets (the
+the node's execution) you specify these inside the curly brackets (the
 execution parameters).
 
 Nodes can be assigned to names which are then used to create links between nodes.
@@ -78,17 +83,17 @@ parameters will be passed to the operation, which will create a 10x10 square.
 
 On the second line, an _OutputInterface_ node is created. Since the
 _OutputInterface_ nodes don't require execution parameters the curly brackets
-were omitted.
+were omitted. The third line links both nodes.
 
-Finally, the third line links both nodes.
+Similarly, lines four to six create an Operation node to export the geometry and its input interface. The final line links the output of the create_rect operation and the export geometry.
 
 To execute this node you can run the following on the command line:
 
 ```
-GraphRunner --input-file=create_rect.sel --execute --export-geometry --export-path=.
+sel create_rect.sel --execute
 ```
 
-You will then have a geom0.obj file with the square.
+You will then have a rect.obj file with the square.
 
 # Selector Roadmap
 

@@ -3,6 +3,7 @@
 #include <common/profiler.h>
 #include <geometry_core/geometry_exporter.h>
 #include <parameter/parameter.h>
+#include <procedural_graph/default_scheduler.h>
 #include <procedural_graph/graph_dot_exporter.h>
 #include <procedural_graph/input_interface_node.h>
 #include <procedural_graph/node_set_visitor.h>
@@ -11,7 +12,6 @@
 #include <procedural_graph/parameter_node.h>
 #include <procedural_graph/parse_result.h>
 #include <procedural_graph/reader.h>
-#include <procedural_graph/default_scheduler.h>
 #include <procedural_objects/export_geometry.h>
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
@@ -32,7 +32,7 @@ namespace po = boost::program_options;
 using namespace selector;
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
-std::shared_ptr<Graph> ReadGraphFromFile(Selector &selector, const std::string& file_path);
+std::shared_ptr<Graph> ReadGraphFromFile(Selector& selector, const std::string& file_path);
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path);
 void ExecuteGraph(std::shared_ptr<Graph> graph);
 void PrintProfile();
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 {
 	po::variables_map vm;
 
-    Selector selector;
+	Selector selector;
 
 	if (!ParseCommandLine(argc, argv, &vm))
 	{
@@ -52,9 +52,9 @@ int main(int argc, char* argv[])
 	std::string dot_file;
 	try
 	{
-		if (vm.count("input-file"))
+		if (vm.count("file"))
 		{
-			file_path = vm["input-file"].as<std::string>();
+			file_path = vm["file"].as<std::string>();
 		}
 		if (vm.count("dot"))
 		{
@@ -98,12 +98,9 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void ExecuteGraph(std::shared_ptr<Graph> graph)
-{
-    graph->Execute();
-}
+void ExecuteGraph(std::shared_ptr<Graph> graph) { graph->Execute(); }
 
-std::shared_ptr<Graph> ReadGraphFromFile(Selector &selector, const std::string& file_path)
+std::shared_ptr<Graph> ReadGraphFromFile(Selector& selector, const std::string& file_path)
 {
 	return selector.CreateGraphFromFile(file_path);
 }
@@ -128,22 +125,25 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
 {
 	try
 	{
+		po::positional_options_description positionalOptions;
+		positionalOptions.add("file", 1);
+
 		po::options_description desc("Options");
 		// clang-format off
         desc.add_options()
             ("help", "Print help message.")
-            ("input-file", po::value<std::string>(), "Input Graph specification file.")
+            ("file", po::value<std::string>(), "Input Graph specification file.")
             ("dot", po::value<std::string>(), "Outputs the graph in dot format to the specified file.")
             ("execute", "Executes the graph")
             ("show-profile", "Prints profiling information");
 		// clang-format on
 
-		po::store(po::parse_command_line(argc, argv, desc), *out_vm);
+		po::store(po::command_line_parser(argc, argv).options(desc).positional(positionalOptions).run(), *out_vm);
 		po::notify(*out_vm);
 
 		if (out_vm->count("help"))
 		{
-			std::cout << "Procedural Graph Reader" << std::endl << desc << std::endl;
+			std::cout << "Selector command line tool" << std::endl << desc << std::endl;
 			return false;
 		}
 	}

@@ -1,17 +1,17 @@
-set(GraphRunnerSources
-    graph_runner.cpp
+set(SelSources
+    sel.cpp
     )
 
-add_executable(GraphRunner ${GraphRunnerSources})
+add_executable(sel ${SelSources})
 
 target_compile_features(
-    GraphRunner
+    sel
     PRIVATE
         cxx_std_17
 )
 
 target_compile_options(
-    GraphRunner
+    sel
     PRIVATE
         -Wall
         -Werror
@@ -19,7 +19,7 @@ target_compile_options(
 )
 
 target_include_directories(
-    GraphRunner
+    sel
     PUBLIC
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -30,18 +30,18 @@ target_include_directories(
 )
 
 set_target_properties(
-    GraphRunner
+    sel
     PROPERTIES
         COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 target_compile_definitions(
-    GraphRunner
+    sel
     PRIVATE
 )
 
 target_link_libraries(
-    GraphRunner
+    sel
     PRIVATE
         selector
         Boost::chrono
@@ -50,7 +50,7 @@ target_link_libraries(
 )
 
 include(GNUInstallDirs)
-install(TARGETS GraphRunner
-    EXPORT GraphRunner-export
+install(TARGETS sel
+    EXPORT sel-export
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
