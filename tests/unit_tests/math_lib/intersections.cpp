@@ -64,3 +64,18 @@ TEST(PlaneVsLineIntersectionTest, when_the_plane_and_line_are_coplanar_should_re
 	EXPECT_EQ(i.m_type, PlaneLineIntersection::Type::Coplanar);
 }
 
+TEST(PlaneVsLineIntersectionTest, has_intersection_test)
+{
+	// clang-format off
+	std::vector<std::tuple<Plane<float>, Line3D<float>, Vec3F>> tests = {
+	    {Plane<float>::FromPointAndNormal({0, 0, 0}, {1, 0, 0}), Line3D<float>::FromTwoPoints({-5, -5, 0}, {5, -5, 0}), Vec3F{0, -5, 0}}
+    };
+	// clang-format on
+
+	for (const auto &t : tests)
+	{
+		auto i = intersection(std::get<0>(t), std::get<1>(t));
+		EXPECT_EQ(i.m_intersection, std::get<2>(t));
+	}
+}
+

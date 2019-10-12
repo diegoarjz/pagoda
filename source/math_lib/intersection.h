@@ -108,7 +108,7 @@ Intersection<PlaneLineIntersection, VecBase<3, Rep>> intersection(const Plane<Re
 		return i;
 	}
 
-	auto u = dot_product(planeNormal, linePoint) / denominator;
+	auto u = dot_product(planeNormal, planePoint - linePoint) / denominator;
 	i.m_type = PlaneLineIntersection::Type::Intersection;
 	i.m_intersection = linePoint + lineVector * u;
 	return i;
