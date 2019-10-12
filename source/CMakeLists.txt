@@ -1,166 +1,29 @@
-
-# Common
-set(SELECTOR_COMMON_SOURCES
-    "common/assertions.cpp"
-    "common/profiler.cpp"
-    "common/pugixml.cpp"
-    "common/statistics.cpp"
-    "common/version.cpp"
-    "common/logger.cpp"
-    "common/utils.cpp"
-    "common/file_util.cpp"
-)
-
-set(SELECTOR_COMMON_PUBLIC_HEADERS
-    "common/range.h"
-    "common/utils.h"
-    "common/version.h"
-    "common/assertions.h"
-    "common/profiler.h"
-    "common/statistics.h"
-    "common/logger.h"
-    "common/file_util.h"
-)
-
-# Math lib
-set(SELECTOR_MATH_LIB_PUBLIC_HEADERS
-    "math_lib/cross_product.h"
-    "math_lib/length.h"
-    "math_lib/matrix_arithmetic.h"
-    "math_lib/matrix_base.h"
-    "math_lib/normalize.h"
-    "math_lib/vec_arithmetic.h"
-    "math_lib/vec_base.h"
-    )
-
-# Geometry core
-set(SELECTOR_GEOMCORE_SOURCES
-    "geometry_core/scope.cpp"
-    "geometry_core/split_point_topology.cpp"
-    )
-
-set(SELECTOR_GEOMCORE_PUBLIC_HEADERS
-    "geometry_core/geometry.h"
-    "geometry_core/geometry_sizes.h"
-    "geometry_core/geometry_builder.h"
-    "geometry_core/geometry_exporter.h"
-    "geometry_core/indexed_container.h"
-    "geometry_core/split_point_topology.h"
-    "geometry_core/scope.h"
-    )
-
-# Geometry operations
-set(SELECTOR_GEOMETRY_OPERATION_PUBLIC_HEADERS
-    "geometry_operations/create_rect.h"
-    "geometry_operations/extrusion.h"
-)
-
-# Parameter
-set(SELECTOR_PARAMETER_SOURCES
-    "parameter/parameter.cpp"
-    "parameter/context.cpp"
-    "parameter/expression.cpp"
-    "parameter/parameter_exception.cpp"
-    "parameter/variable.cpp"
-    "parameter/variable_resolver.cpp"
-    )
-
-set(SELECTOR_PARAMETER_PUBLIC_HEADERS
-    "parameter/context.h"
-    "parameter/expression.h"
-    "parameter/parameter.h"
-    "parameter/variable.h"
-    "parameter/variable_resolver.h"
-)
-
-# Procedural Objects
-set(SELECTOR_PROCEDURAL_OBJECTS_SOURCES
-    "procedural_objects/procedural_object.cpp"
-    "procedural_objects/procedural_object_system.cpp"
-    "procedural_objects/procedural_component_system_base.cpp"
-    "procedural_objects/procedural_operation.cpp"
-    "procedural_objects/geometry_system.cpp"
-    "procedural_objects/geometry_component.cpp"
-    "procedural_objects/hierarchical_component.cpp"
-    "procedural_objects/hierarchical_system.cpp"
-    "procedural_objects/extrude_geometry.cpp"
-    "procedural_objects/create_rect.cpp"
-    "procedural_objects/triangulate_geometry.cpp"
-    "procedural_objects/export_geometry.cpp"
-    "procedural_objects/procedural_operation_object_interface.cpp"
-    "procedural_objects/operation_factory.cpp"
-    )
-
-set(SELECTOR_PROCEDURAL_OBJECTS_PUBLIC_HEADERS
-    "procedural_objects/geometry_system.h"
-    "procedural_objects/procedural_component.h"
-    "procedural_objects/procedural_object.h"
-    "procedural_objects/procedural_object_system.h"
-    "procedural_objects/procedural_component_system.h"
-    "procedural_objects/procedural_operation.h"
-    "procedural_objects/geometry_component.h"
-    "procedural_objects/hierarchical_component.h"
-    "procedural_objects/extrude_geometry.h"
-    "procedural_objects/create_rect.h"
-    "procedural_objects/hierarchical_system.h"
-    "procedural_objects/export_geometry.h"
-    "procedural_objects/operation_factory.h"
-    )
-
-# Procedural Graph
-set(SELECTOR_PROCEDURAL_GRAPH_HEADERS
-    "procedural_graph/graph.h"
-    "procedural_graph/node.h"
-    "procedural_graph/reader.h"
-    "procedural_graph/parse_result.h"
-    "procedural_graph/graph_dot_exporter.h"
-    "procedural_graph/default_scheduler.h"
-    "procedural_graph/scheduler.h"
-    "procedural_graph/node_factory.h"
-    )
-
-set(SELECTOR_PROCEDURAL_GRAPH_SOURCES
-    "procedural_graph/graph.cpp"
-    "procedural_graph/node.cpp"
-    "procedural_graph/reader.cpp"
-    "procedural_graph/default_scheduler.cpp"
-    "procedural_graph/input_interface_node.cpp"
-    "procedural_graph/output_interface_node.cpp"
-    "procedural_graph/operation_node.cpp"
-    "procedural_graph/parameter_node.cpp"
-    "procedural_graph/reader/ast_node.cpp"
-    "procedural_graph/reader/graph_definition_node.cpp"
-    "procedural_graph/reader/named_argument.cpp"
-    "procedural_graph/reader/node_definition_node.cpp"
-    "procedural_graph/reader/node_link_node.cpp"
-    "procedural_graph/reader/graph_reader_grammar_helper.cpp"
-    "procedural_graph/reader/ast_interpreter.cpp"
-    "procedural_graph/execution_queue.cpp"
-    "procedural_graph/graph_dot_exporter.cpp"
-    "procedural_graph/node_factory.cpp"
-    )
-
 set(SELECTOR_PUBLIC_HEADERS
-    "${SELECTOR_COMMON_PUBLIC_HEADERS}"
-    "${SELECTOR_MATH_LIB_PUBLIC_HEADERS}"
-    "${SELECTOR_GEOMCORE_PUBLIC_HEADERS}"
-    "${SELECTOR_GEOMETRY_OPERATION_PUBLIC_HEADERS}"
-    "${SELECTOR_PROCEDURAL_GRAPH_HEADERS}"
     "selector.h"
 )
 
 set(SELECTOR_SOURCES
-    "${SELECTOR_COMMON_SOURCES}"
-    "${SELECTOR_GEOMCORE_SOURCES}"
-    "${SELECTOR_PARAMETER_SOURCES}"
-    "${SELECTOR_PROCEDURAL_OBJECTS_SOURCES}"
-    "${SELECTOR_PROCEDURAL_GRAPH_SOURCES}"
+    "selector.h"
     "selector.cpp"
-   )
+)
 
-add_library(
-    selector
-    "${SELECTOR_SOURCES}"
+add_subdirectory(common)
+add_subdirectory(geometry_core)
+add_subdirectory(geometry_operations)
+add_subdirectory(math_lib)
+add_subdirectory(parameter)
+add_subdirectory(procedural_graph)
+add_subdirectory(procedural_objects)
+
+add_library(selector STATIC "${SELECTOR_SOURCES}"
+    $<TARGET_OBJECTS:common>
+    $<TARGET_OBJECTS:geometry_core>
+    $<TARGET_OBJECTS:geometry_operations>
+    $<TARGET_OBJECTS:math_lib>
+    $<TARGET_OBJECTS:parameter>
+    $<TARGET_OBJECTS:procedural_graph>
+    $<TARGET_OBJECTS:procedural_graph_reader>
+    $<TARGET_OBJECTS:procedural_objects>
 )
 
 set_target_properties(
