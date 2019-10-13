@@ -4,6 +4,7 @@
 #include "vec_base.h"
 
 #include "cross_product.h"
+#include "dot_product.h"
 #include "orthogonal.h"
 
 namespace selector
@@ -90,28 +91,66 @@ public:
 	 */
 	PointType GetPoint2() const { return GetPoint() + GetVector(); }
 
-    /**
-     * Indicates on which side of the plane a geometry element is.
-     */
-    enum class PlaneSide { Front, Back, Contained };
+	/**
+	 * Indicates on which side of the plane a geometry element is.
+	 */
+	enum class PlaneSide
+	{
+		Front,
+		Back,
+		Contained
+	};
 
-    /**
-     * Returns on which side of the plane the \p point is.
-     */
-    PlaneSide GetPlaneSide(const VectorType &point)
-    {
-        auto dot = dot_product(GetNormal(), point - GetPoint());
-        if (dot == Rep(0))
-        {
-            return PlaneSide::Contained;
-        }
-        return dot > Rep(0) ? PlaneSide::Front : PlaneSide::Back;
-    }
+	/**
+	 * Returns on which side of the plane the \p point is.
+	 */
+	PlaneSide GetPlaneSide(const VectorType &point)
+	{
+		auto dot = dot_product(GetNormal(), point - GetPoint());
+		if (dot == Rep(0))
+		{
+			return PlaneSide::Contained;
+		}
+		return dot > Rep(0) ? PlaneSide::Front : PlaneSide::Back;
+	}
 
 private:
 	VectorType m_normal;  ///< Plane Normal
 	Rep m_distance;       ///< Distance to origin
 };
+
+template<class Rep>
+std::string to_string(const Plane<Rep> &plane)
+{
+	std::stringstream ss;
+	ss << "Plane: [";
+	ss << plane.GetNormal() << ", " << plane.GetDistanceToOrigin();
+	ss << "]";
+	return ss.str();
+}
+
+template<class Rep>
+std::ostream &operator<<(std::ostream &o, const Plane<Rep> &plane)
+{
+	o << "Plane: [";
+	o << plane.GetNormal() << ", " << plane.GetDistanceToOrigin();
+	o << "]";
+	return o;
+}
+
+template<class Rep>
+std::string to_string(const typename Plane<Rep>::PlaneSide &side)
+{
+	if (side == selector::Plane<Rep>::PlaneSide::Front)
+	{
+		return "front";
+	}
+	if (side == selector::Plane<Rep>::PlaneSide::Back)
+	{
+		return "back";
+	}
+	return "contained";
+}
 }  // namespace selector
 
 #endif

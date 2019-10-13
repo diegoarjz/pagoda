@@ -1,0 +1,33 @@
+create_rect = Operation(operation: "CreateRectGeometry") {
+    width: 10, height: 10
+}
+create_rect_out = OutputInterface(interface: "out", offset: 0)
+
+extrusion_in = InputInterface(interface: "in", offset: 0)
+extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
+extrusion_out = OutputInterface(interface: "out", offset: 0)
+
+clip_geometry_in = InputInterface(interface: "in", offset: 0)
+clip_geometry = Operation(operation: "ClipGeometry") {
+    position_x: 0, position_y: 0, position_z: 4,
+    normal_x: 1, normal_y: 2, normal_z: 3
+}
+front_geometry = OutputInterface(interface: "front", offset: 0)
+back_geometry = OutputInterface(interface: "back", offset: 0)
+
+export_front_geometry_in = InputInterface(interface: "in", offset: 0)
+export_front_geometry = Operation(operation: "ExportGeometry") {
+    path: "front.obj"
+}
+
+export_back_geometry_in = InputInterface(interface: "in", offset: 0)
+export_back_geometry = Operation(operation: "ExportGeometry") {
+    path: "back.obj"
+}
+
+create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out -> clip_geometry_in -> clip_geometry;
+clip_geometry -> front_geometry;
+clip_geometry -> back_geometry;
+
+front_geometry -> export_front_geometry_in -> export_front_geometry;
+back_geometry -> export_back_geometry_in -> export_back_geometry;

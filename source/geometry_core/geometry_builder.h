@@ -56,11 +56,11 @@ public:
 		FaceBuilder(GeometryBuilder *builder, std::shared_ptr<Geometry> &geom, uint32_t numPoints = 0)
 		    : m_builder(builder), m_geometry(geom)
 		{
-            LOG_TRACE(GeometryCore, "Created FaceBuilder with %d points", numPoints);
-            if (numPoints > 0)
-            {
-                m_faceIndices.reserve(numPoints);
-            }
+			LOG_TRACE(GeometryCore, "Created FaceBuilder with %d points", numPoints);
+			if (numPoints > 0)
+			{
+				m_faceIndices.reserve(numPoints);
+			}
 		}
 
 		/**
@@ -72,11 +72,6 @@ public:
 			LOG_TRACE(GeometryCore, "Adding index %d to face builder.", index);
 			DBG_ASSERT_MSG(m_faceIndices.size() < m_faceIndices.capacity(),
 			               "Trying to add a vertex index past the end");
-
-			if (m_faceIndices.size() >= m_faceIndices.capacity())
-			{
-				return;
-			}
 
 			m_faceIndices.push_back(index);
 		}
@@ -207,7 +202,7 @@ public:
 	Index_t AddPoint(const PositionType &pos)
 	{
 		START_PROFILE;
-        LOG_TRACE(GeometryCore, "Adding point with position (%f, %f, %f) to geometry builder", pos[0], pos[1], pos[2]);
+		LOG_TRACE(GeometryCore, "Adding point with position (%f, %f, %f) to geometry builder", pos[0], pos[1], pos[2]);
 
 		return m_pointData.Create(PointData(pos));
 	}

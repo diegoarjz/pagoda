@@ -135,6 +135,14 @@ std::ostream& operator<<(std::ostream& o, const VecBase<Size, Rep>& vec)
 	return o;
 }
 
+template<int Size, class Rep>
+std::string to_string(const VecBase<Size, Rep>& vec)
+{
+	std::stringstream ss;
+	ss << vec;
+	return ss.str();
+}
+
 // Common vector types
 using Vec2F = VecBase<2, float>;
 using Vec3F = VecBase<3, float>;

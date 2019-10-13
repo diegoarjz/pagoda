@@ -10,6 +10,8 @@
 #include <procedural_graph/output_interface_node.h>
 #include <procedural_graph/parameter_node.h>
 #include <procedural_graph/reader.h>
+
+#include <procedural_objects/clip_geometry.h>
 #include <procedural_objects/create_rect.h>
 #include <procedural_objects/export_geometry.h>
 #include <procedural_objects/extrude_geometry.h>
@@ -49,6 +51,8 @@ public:
 		m_operationFactory->Register("TriangulateGeometry", [this]() {
 			return std::make_shared<TriangulateGeometry>(m_proceduralObjectSystem);
 		});
+		m_operationFactory->Register("ClipGeometry",
+		                             [this]() { return std::make_shared<ClipGeometry>(m_proceduralObjectSystem); });
 	}
 
 	~Impl()
@@ -83,7 +87,10 @@ private:
 Selector::Selector() : m_implementation(std::make_unique<Selector::Impl>()) {}
 Selector::~Selector() {}
 
-ProceduralObjectSystemPtr Selector::GetProceduralObjectSystem() { return m_implementation->GetProceduralObjectSystem(); }
+ProceduralObjectSystemPtr Selector::GetProceduralObjectSystem()
+{
+	return m_implementation->GetProceduralObjectSystem();
+}
 
 OperationFactoryPtr Selector::GetOperationFactory() { return m_implementation->GetOperationFactory(); }
 
@@ -91,5 +98,8 @@ NodeFactoryPtr Selector::GetNodeFactory() { return m_implementation->GetNodeFact
 
 GraphPtr Selector::CreateGraph() { return m_implementation->CreateGraph(); }
 
-GraphPtr Selector::CreateGraphFromFile(const std::string &filePath) { return m_implementation->CreateGraphFromFile(filePath); }
+GraphPtr Selector::CreateGraphFromFile(const std::string &filePath)
+{
+	return m_implementation->CreateGraphFromFile(filePath);
+}
 }  // namespace selector

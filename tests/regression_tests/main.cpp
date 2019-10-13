@@ -3,9 +3,9 @@
 #include <common/file_util.h>
 #include <common/logger.h>
 #include <common/profiler.h>
+#include <procedural_graph/default_scheduler.h>
 #include <procedural_graph/graph.h>
 #include <procedural_graph/reader.h>
-#include <procedural_graph/default_scheduler.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
 #include <procedural_objects/procedural_object.h>
@@ -55,13 +55,10 @@ public:
 	std::shared_ptr<Graph> ReadGraphFromFile(const std::string& filePath)
 	{
 		m_graph = m_selector.CreateGraphFromFile(filePath);
-        return m_graph;
+		return m_graph;
 	}
 
-	void ExecuteGraph()
-	{
-        m_graph->Execute();
-	}
+	void ExecuteGraph() { m_graph->Execute(); }
 
 	void MatchFiles()
 	{
@@ -78,22 +75,23 @@ private:
 	std::vector<std::string> m_filesToMatch;
 
 	GraphPtr m_graph;
-    Selector m_selector;
+	Selector m_selector;
 
 	static boost::filesystem::path s_testFilesDirectory;
 };
 boost::filesystem::path RegressionTest::s_testFilesDirectory = "";
 
-#define REGRESSION_TEST(NAME, FILES_TO_MATCH) \
-	TEST(RegressionTestCase, NAME) { RegressionTest(#NAME, FILES_TO_MATCH); }
+#define REGRESSION_TEST(NAME, ...) \
+	TEST(RegressionTestCase, NAME) { RegressionTest(#NAME, {__VA_ARGS__}); }
 
-REGRESSION_TEST(create_rect, {"geometry.obj"});
-REGRESSION_TEST(export_geometry, {"geometry.obj"});
-REGRESSION_TEST(expression, {"geometry.obj"});
-REGRESSION_TEST(extrusion, {"geometry.obj"});
-REGRESSION_TEST(parameter_definition, {"geometry.obj"});
-REGRESSION_TEST(parameter_overwrite, {"geometry.obj"});
-REGRESSION_TEST(parameter_renaming, {"geometry.obj"});
+REGRESSION_TEST(create_rect, "geometry.obj");
+REGRESSION_TEST(export_geometry, "geometry.obj");
+REGRESSION_TEST(expression, "geometry.obj");
+REGRESSION_TEST(extrusion, "geometry.obj");
+REGRESSION_TEST(parameter_definition, "geometry.obj");
+REGRESSION_TEST(parameter_overwrite, "geometry.obj");
+REGRESSION_TEST(parameter_renaming, "geometry.obj");
+REGRESSION_TEST(clip_geometry, "front.obj", "back.obj");
 
 int main(int argc, char* argv[])
 {
