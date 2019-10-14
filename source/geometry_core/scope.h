@@ -2,15 +2,55 @@
 #define SELECTOR_GEOMETRY_CORE_SCOPE_H_
 
 #include <math_lib/matrix_base.h>
+#include <math_lib/plane.h>
 #include <math_lib/vec_base.h>
+
+#include <array>
 
 namespace selector
 {
 class Scope
 {
 public:
+	/**
+	 * Names of the points in the box defined by this scope.
+	 *
+	 * \verbatim
+	 *       g-------h
+	 *      /|      /|
+	 *     / |     / |
+	 *    e--|----f  |
+	 *    |  c----|--d
+	 *    | /     | /
+	 *    a-------b
+	 *    a - LowerBottomLeft
+	 *    b - LowerBottomRight
+	 *    c - LowerTopLeft
+	 *    d - LowerTopRight
+	 *    e - HigherBottomLeft
+	 *    f - HigherBottomRight
+	 *    g - HigherTopLeft
+	 *    h - HigherTopRight
+	 * \endverbatim
+	 */
+	enum class BoxPoints
+	{
+		// Binary Representation
+		// zyx
+		LowerBottomLeft = 0,   // Origin
+		LowerBottomRight = 1,  // Along X Axis
+		LowerTopLeft = 2,      // Along Y Axis
+		LowerTopRight = 3,
+
+		HigherBottomLeft = 4,  // Along Z Axis
+		HigherBottomRight = 5,
+		HigherTopLeft = 6,
+		HigherTopRight = 7,
+	};
+
 	Scope();
 	Scope(const Vec3F &pos, const Vec3F &size, const Mat3x3F &rot);
+	Scope(const std::array<Vec3F, 8> &boxPoints);
 
 	Vec3F GetPosition() const;
 	void SetPosition(const Vec3F &pos);
@@ -19,9 +59,60 @@ public:
 	Mat3x3F GetRotation() const;
 	void SetRotation(const Mat3x3F &rotation);
 
+	Vec3F GetXAxis() const;
+	Vec3F GetYAxis() const;
+	Vec3F GetZAxis() const;
+
+	Plane<float> GetXYPlane() const;
+	Plane<float> GetXZPlane() const;
+	Plane<float> GetYZPlane() const;
+
+	template<class Geometry>
+	static Scope FromGeometryAndConstrainedRotation(const std::shared_ptr<Geometry> geom, const Mat3x3F &rotation)
+	{
+		Scope s;
+		auto pIter = geom->PointsBegin();
+		auto p0 = geom->GetPosition(*pIter);
+		s.SetRotation(rotation);
+		auto xAxis = rotation.Col(0);
+		auto yAxis = rotation.Col(1);
+		auto zAxis = rotation.Col(2);
+
+		float minX = std::numeric_limits<float>::max();
+		float maxX = -std::numeric_limits<float>::max();
+		float minY = std::numeric_limits<float>::max();
+		float maxY = -std::numeric_limits<float>::max();
+		float minZ = std::numeric_limits<float>::max();
+		float maxZ = -std::numeric_limits<float>::max();
+
+		auto pIterEnd = geom->PointsEnd();
+		for (/**/; pIter != pIterEnd; ++pIter)
+		{
+			auto diff = geom->GetPosition(*pIter) - p0;
+			float xProjection = dot_product(xAxis, diff);
+			float yProjection = dot_product(yAxis, diff);
+			float zProjection = dot_product(zAxis, diff);
+
+			minX = std::min(minX, xProjection);
+			maxX = std::max(maxX, xProjection);
+			minY = std::min(minY, yProjection);
+			maxY = std::max(maxY, yProjection);
+			minZ = std::min(minZ, zProjection);
+			maxZ = std::max(maxZ, zProjection);
+		}
+		Vec3F size(maxX - minX, maxY - minY, maxZ - minZ);
+		s.SetPosition(p0 + xAxis * minX + yAxis * minY + zAxis * minZ);
+		s.SetSize(size);
+
+		return s;
+	}
+
 private:
+	/// Scope position in world coordinates
 	Vec3F m_position;
+	/// Scope size in world coordinates
 	Vec3F m_size;
+	/// Scope rotation
 	Mat3x3F m_rotation;
 };  // class Scope
 }  // namespace selector

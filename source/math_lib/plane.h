@@ -5,6 +5,7 @@
 
 #include "cross_product.h"
 #include "dot_product.h"
+#include "normalize.h"
 #include "orthogonal.h"
 
 namespace selector

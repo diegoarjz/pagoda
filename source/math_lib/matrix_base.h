@@ -57,6 +57,16 @@ public:
 		return c;
 	}
 
+	void SetCol(const size_t &colIndex, const ColumnType &col)
+	{
+		START_PROFILE;
+		CRITICAL_ASSERT(colIndex < NumCols);
+		for (auto i = 0u; i < NumRows; ++i)
+		{
+			m_elems[colIndex + NumCols * i] = col[i];
+		}
+	}
+
 	RowType Row(const size_t &row) const
 	{
 		START_PROFILE;
@@ -68,6 +78,17 @@ public:
 			r[i] = m_elems[i + NumRows * row];
 		}
 		return r;
+	}
+
+	void SetRow(const size_t &rowIndex, const RowType &row)
+	{
+		START_PROFILE;
+		CRITICAL_ASSERT(rowIndex < NumRows);
+
+		for (auto i = 0u; i < NumCols; ++i)
+		{
+			m_elems[i + NumRows * rowIndex] = row[i];
+		}
 	}
 
 	Rep &Value(const size_t &col, const size_t &row)

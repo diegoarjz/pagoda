@@ -74,6 +74,11 @@ void ClipGeometry::Execute()
 
 		clip.Execute(inGeometry, front, back);
 
+		frontGeometryComponent->SetScope(
+		    Scope::FromGeometryAndConstrainedRotation(front, inGeometryComponent->GetScope().GetRotation()));
+		backGeometryComponent->SetScope(
+		    Scope::FromGeometryAndConstrainedRotation(back, inGeometryComponent->GetScope().GetRotation()));
+
 		auto parentHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		for (const auto& object : {frontProceduralObject, backProceduralObject})
 		{

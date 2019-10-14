@@ -47,13 +47,14 @@ void TriangulateGeometry::Execute()
 		std::shared_ptr<GeometryComponent> inGeometryComponent =
 		    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		std::shared_ptr<GeometryComponent> outGeometryComponent =
-		    geometrySystem->GetComponentAs<GeometryComponent>(outObject);
+		    geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 		auto outGeometry = std::make_shared<Geometry>();
 
 		triangulate.Execute(inGeometry, outGeometry);
 		outGeometryComponent->SetGeometry(outGeometry);
+		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
 
 		// Hierarchy
 		std::shared_ptr<HierarchicalComponent> inHierarchicalComponent =
