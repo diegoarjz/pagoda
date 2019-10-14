@@ -118,7 +118,7 @@ void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 void PrintProfile()
 {
 	ConsoleProfilerLogger consoleLogger(ProfilerManager::Instance());
-	consoleLogger.Log();
+	consoleLogger.Log(20);
 }
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)

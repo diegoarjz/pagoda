@@ -1,14 +1,18 @@
 set(GEOMETRY_OPERATIONS_SRCS
+    "create_box.h"
     "create_rect.h"
     "extrusion.h"
     "extrusion_profile.h"
+    "plane_splits.h"
     "triangulate.h"
 )
 
 set(GEOMETRY_OPERATIONS_PUBLIC_HEADERS
+    "create_box.h"
     "create_rect.h"
     "extrusion.h"
     "extrusion_profile.h"
+    "plane_splits.h"
     "triangulate.h"
 )
 

@@ -94,6 +94,7 @@ REGRESSION_TEST(parameter_overwrite, "geometry.obj");
 REGRESSION_TEST(parameter_renaming, "geometry.obj");
 REGRESSION_TEST(clip_geometry, "front.obj", "back.obj", "scope0.obj", "scope1.obj");
 REGRESSION_TEST(triangulate_geometry, "geometry.obj");
+REGRESSION_TEST(repeat_split, "geometry_0.obj", "geometry_1.obj", "geometry_2.obj", "geometry_3.obj");
 
 int main(int argc, char* argv[])
 {

@@ -45,6 +45,20 @@ Vec3F Scope::GetXAxis() const { return m_rotation.Col(0); }
 Vec3F Scope::GetYAxis() const { return m_rotation.Col(1); }
 Vec3F Scope::GetZAxis() const { return m_rotation.Col(2); }
 
+Vec3F Scope::GetAxis(const std::string &axisName) const
+{
+	if (axisName == "x")
+	{
+		return GetXAxis();
+	}
+	else if (axisName == "y")
+	{
+		return GetYAxis();
+	}
+	CRITICAL_ASSERT_MSG(axisName == "z", "Axis name must be one of x, y or z");
+	return GetZAxis();
+}
+
 Plane<float> Scope::GetXYPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetZAxis()); }
 Plane<float> Scope::GetXZPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetYAxis()); }
 Plane<float> Scope::GetYZPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetXAxis()); }

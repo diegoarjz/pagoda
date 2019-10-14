@@ -57,8 +57,8 @@ public:
 		// Bottom face
 		auto face = builder.StartFace(4);
 		face.AddIndex(pointIndices[0]);
-		face.AddIndex(pointIndices[3]);
 		face.AddIndex(pointIndices[2]);
+		face.AddIndex(pointIndices[3]);
 		face.AddIndex(pointIndices[1]);
 		face.CloseFace();
 
@@ -66,8 +66,8 @@ public:
 		face = builder.StartFace(4);
 		face.AddIndex(pointIndices[4]);
 		face.AddIndex(pointIndices[5]);
-		face.AddIndex(pointIndices[6]);
 		face.AddIndex(pointIndices[7]);
+		face.AddIndex(pointIndices[6]);
 		face.CloseFace();
 
 		// Front Face

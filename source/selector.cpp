@@ -19,6 +19,7 @@
 #include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
+#include <procedural_objects/repeat_split.h>
 #include <procedural_objects/triangulate_geometry.h>
 
 namespace selector
@@ -59,6 +60,8 @@ public:
 		});
 		m_operationFactory->Register("ClipGeometry",
 		                             [this]() { return std::make_shared<ClipGeometry>(m_proceduralObjectSystem); });
+		m_operationFactory->Register("RepeatSplit",
+		                             [this]() { return std::make_shared<RepeatSplit>(m_proceduralObjectSystem); });
 	}
 
 	~Impl()

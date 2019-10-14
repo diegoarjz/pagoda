@@ -1,0 +1,17 @@
+create_box = Operation(operation: "CreateBoxGeometry") {
+    xSize: 10, ySize: 10, zSize: 20
+}
+create_box_out = OutputInterface(interface: "out", offset: 0)
+create_box -> create_box_out;
+
+repeat_split_in = InputInterface(interface: "in", offset: 0)
+repeat_split = Operation(operation: "RepeatSplit") { size: 5, adjust: $< true; >$, axis: "z" }
+repeat_split_out = OutputInterface(interface: "out", offset: 0)
+create_box_out -> repeat_split_in -> repeat_split -> repeat_split_out;
+
+export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry = Operation(operation: "ExportGeometry") {
+    path: $< "geometry_" + count + ".obj"; >$
+}
+
+repeat_split_out -> export_geometry_in -> export_geometry;

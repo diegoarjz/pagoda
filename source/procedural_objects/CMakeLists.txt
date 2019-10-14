@@ -1,4 +1,6 @@
 set(PROCEDURAL_OBJECTS_SRCS
+    "repeat_split.cpp"
+    "repeat_split.h"
     "clip_geometry.cpp"
     "clip_geometry.h"
     "extract_scope.h"
@@ -40,6 +42,7 @@ set(PROCEDURAL_OBJECTS_SRCS
 )
 
 set(PROCEDURAL_OBJECTS_PUBLIC_HEADERS
+    "repeat_split.h"
     "clip_geometry.h"
     "extract_scope.h"
     "create_rect.h"

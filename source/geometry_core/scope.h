@@ -62,6 +62,7 @@ public:
 	Vec3F GetXAxis() const;
 	Vec3F GetYAxis() const;
 	Vec3F GetZAxis() const;
+	Vec3F GetAxis(const std::string &axisName) const;
 
 	Plane<float> GetXYPlane() const;
 	Plane<float> GetXZPlane() const;
