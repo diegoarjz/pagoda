@@ -67,6 +67,11 @@ public:
 	Plane<float> GetXZPlane() const;
 	Plane<float> GetYZPlane() const;
 
+	Vec3F LocalPointInWorld(const Vec3F &localPoint) const;
+	Vec3F GetLocalPoint(const BoxPoints &p) const;
+	Vec3F GetWorldPoint(const BoxPoints &p) const;
+	std::array<Vec3F, 8> GetWorldPoints() const;
+
 	template<class Geometry>
 	static Scope FromGeometryAndConstrainedRotation(const std::shared_ptr<Geometry> geom, const Mat3x3F &rotation)
 	{

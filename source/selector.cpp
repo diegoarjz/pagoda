@@ -15,6 +15,7 @@
 #include <procedural_objects/create_box.h>
 #include <procedural_objects/create_rect.h>
 #include <procedural_objects/export_geometry.h>
+#include <procedural_objects/extract_scope.h>
 #include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
@@ -49,6 +50,8 @@ public:
 		    "CreateBoxGeometry", [this]() { return std::make_shared<CreateBoxGeometry>(m_proceduralObjectSystem); });
 		m_operationFactory->Register("ExportGeometry",
 		                             [this]() { return std::make_shared<ExportGeometry>(m_proceduralObjectSystem); });
+		m_operationFactory->Register("ExtractScope",
+		                             [this]() { return std::make_shared<ExtractScope>(m_proceduralObjectSystem); });
 		m_operationFactory->Register("ExtrudeGeometry",
 		                             [this]() { return std::make_shared<ExtrudeGeometry>(m_proceduralObjectSystem); });
 		m_operationFactory->Register("TriangulateGeometry", [this]() {

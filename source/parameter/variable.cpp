@@ -1,5 +1,9 @@
 #include "variable.h"
 
+#include "common/assertions.h"
+
+#include <iostream>
+
 namespace selector
 {
 Variable::Variable(const std::string &compoundVariable)
@@ -15,7 +19,10 @@ Variable::Variable(const std::string &compoundVariable)
 	m_identifiers.push_back(compoundVariable.substr(prev, curr - prev));
 }
 
-Variable::Variable(const std::list<std::string> &identifiers) : m_identifiers(identifiers) {}
+Variable::Variable(const std::list<std::string> &identifiers) : m_identifiers(identifiers)
+{
+	DBG_ASSERT_MSG(identifiers.size() > 0, "Need at least one identifier for a variable");
+}
 
 Variable::~Variable() {}
 

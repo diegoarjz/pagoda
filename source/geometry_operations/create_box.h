@@ -34,6 +34,8 @@ public:
 
 	CreateBox(const std::array<Vec3F, 8> &points) : m_points(points) {}
 
+	CreateBox(const Scope &s) : m_points(s.GetWorldPoints()) {}
+
 	void Execute(GeometryPtr geometryOut)
 	{
 		START_PROFILE;

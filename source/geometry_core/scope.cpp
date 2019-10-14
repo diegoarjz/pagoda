@@ -41,11 +41,38 @@ Mat3x3F Scope::GetRotation() const { return m_rotation; }
 
 void Scope::SetRotation(const Mat3x3F &rotation) { m_rotation = rotation; }
 
-Vec3F Scope::GetXAxis() const { return m_rotation.Col(1); }
-Vec3F Scope::GetYAxis() const { return m_rotation.Col(2); }
-Vec3F Scope::GetZAxis() const { return m_rotation.Col(3); }
+Vec3F Scope::GetXAxis() const { return m_rotation.Col(0); }
+Vec3F Scope::GetYAxis() const { return m_rotation.Col(1); }
+Vec3F Scope::GetZAxis() const { return m_rotation.Col(2); }
 
 Plane<float> Scope::GetXYPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetZAxis()); }
 Plane<float> Scope::GetXZPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetYAxis()); }
 Plane<float> Scope::GetYZPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetXAxis()); }
+
+Vec3F Scope::LocalPointInWorld(const Vec3F &localPoint) const
+{
+	return m_position + GetXAxis() * localPoint[0] + GetYAxis() * localPoint[1] + GetZAxis() * localPoint[2];
+}
+
+Vec3F Scope::GetLocalPoint(const BoxPoints &p) const
+{
+	uint32_t index = static_cast<uint32_t>(p);
+	Vec3F localPoint;
+	localPoint[0] = ((index & (1 << 0)) != 0 ? m_size[0] : 0);
+	localPoint[1] = ((index & (1 << 1)) != 0 ? m_size[1] : 0);
+	localPoint[2] = ((index & (1 << 2)) != 0 ? m_size[2] : 0);
+	return localPoint;
+}
+
+Vec3F Scope::GetWorldPoint(const BoxPoints &p) const { return LocalPointInWorld(GetLocalPoint(p)); }
+
+std::array<Vec3F, 8> Scope::GetWorldPoints() const
+{
+	std::array<Vec3F, 8> boxPoints;
+	for (int i = 0; i < 8; ++i)
+	{
+		boxPoints[i] = GetWorldPoint(static_cast<BoxPoints>(i));
+	}
+	return boxPoints;
+}
 }  // namespace selector

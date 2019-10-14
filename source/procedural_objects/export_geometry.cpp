@@ -17,7 +17,7 @@ ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem) : Procedu
 {
 	CreateInputInterface(inputGeometry);
 
-    SetParameter("path", "geometry");
+	SetParameter("path", "geometry.obj");
 }
 
 ExportGeometry::~ExportGeometry() {}
@@ -27,22 +27,20 @@ void ExportGeometry::Execute()
 	START_PROFILE;
 
 	uint32_t objectCount = 0;
-    auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	while (HasInput(inputGeometry))
 	{
 		m_parameterContext->SetParameter("count", static_cast<int>(objectCount));
-
-		auto p = m_parameterContext->GetParameter("count");
+		m_parameterContext->UpdateExpressions();
 
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
-		m_parameterContext->UpdateExpressions();
 
 		auto geometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		auto geometry = geometryComponent->GetGeometry();
 		selector::ObjExporter<Geometry> exporter(geometry);
 
-		std::string outputPath = get_parameter_as<std::string>(GetParameter("path"));
+		std::string outputPath = get_parameter_as<std::string>(GetParameterAs<std::string>("path"));
 		std::ofstream out_file(outputPath.c_str());
 		exporter.Export(out_file);
 		out_file.close();

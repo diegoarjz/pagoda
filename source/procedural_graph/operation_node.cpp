@@ -57,6 +57,7 @@ void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 		m_operation->SetParameter(parameterName, paramContext->GetParameter(parameterName));
 	}
 	paramContext->SetParameter("op", m_operation);
+	paramContext->UpdateExpressions();
 
 	m_operation->Execute();
 }

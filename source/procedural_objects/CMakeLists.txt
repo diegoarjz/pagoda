@@ -1,6 +1,8 @@
 set(PROCEDURAL_OBJECTS_SRCS
     "clip_geometry.cpp"
     "clip_geometry.h"
+    "extract_scope.h"
+    "extract_scope.cpp"
     "create_rect.cpp"
     "create_rect.h"
     "create_box.h"
@@ -39,6 +41,7 @@ set(PROCEDURAL_OBJECTS_SRCS
 
 set(PROCEDURAL_OBJECTS_PUBLIC_HEADERS
     "clip_geometry.h"
+    "extract_scope.h"
     "create_rect.h"
     "create_box.h"
     "export_geometry.h"
