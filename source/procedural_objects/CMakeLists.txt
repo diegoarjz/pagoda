@@ -3,6 +3,8 @@ set(PROCEDURAL_OBJECTS_SRCS
     "clip_geometry.h"
     "create_rect.cpp"
     "create_rect.h"
+    "create_box.h"
+    "create_box.cpp"
     "export_geometry.cpp"
     "export_geometry.h"
     "extrude_geometry.cpp"
@@ -38,6 +40,7 @@ set(PROCEDURAL_OBJECTS_SRCS
 set(PROCEDURAL_OBJECTS_PUBLIC_HEADERS
     "clip_geometry.h"
     "create_rect.h"
+    "create_box.h"
     "export_geometry.h"
     "extrude_geometry.h"
     "geometry_component.h"

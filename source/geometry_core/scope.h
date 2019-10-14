@@ -23,14 +23,14 @@ public:
 	 *    |  c----|--d
 	 *    | /     | /
 	 *    a-------b
-	 *    a - LowerBottomLeft
-	 *    b - LowerBottomRight
-	 *    c - LowerTopLeft
-	 *    d - LowerTopRight
-	 *    e - HigherBottomLeft
-	 *    f - HigherBottomRight
-	 *    g - HigherTopLeft
-	 *    h - HigherTopRight
+	 *    a - LowerBottomLeft (0)
+	 *    b - LowerBottomRight (1)
+	 *    c - LowerTopLeft (2)
+	 *    d - LowerTopRight (3)
+	 *    e - HigherBottomLeft (4)
+	 *    f - HigherBottomRight (5)
+	 *    g - HigherTopLeft (6)
+	 *    h - HigherTopRight (7)
 	 * \endverbatim
 	 */
 	enum class BoxPoints

@@ -12,6 +12,7 @@
 #include <procedural_graph/reader.h>
 
 #include <procedural_objects/clip_geometry.h>
+#include <procedural_objects/create_box.h>
 #include <procedural_objects/create_rect.h>
 #include <procedural_objects/export_geometry.h>
 #include <procedural_objects/extrude_geometry.h>
@@ -44,6 +45,8 @@ public:
 		// Register Operations
 		m_operationFactory->Register(
 		    "CreateRectGeometry", [this]() { return std::make_shared<CreateRectGeometry>(m_proceduralObjectSystem); });
+		m_operationFactory->Register(
+		    "CreateBoxGeometry", [this]() { return std::make_shared<CreateBoxGeometry>(m_proceduralObjectSystem); });
 		m_operationFactory->Register("ExportGeometry",
 		                             [this]() { return std::make_shared<ExportGeometry>(m_proceduralObjectSystem); });
 		m_operationFactory->Register("ExtrudeGeometry",
