@@ -639,13 +639,13 @@ private:
 	CreateFaceResult CreateFace(const IndexPointPairArray_t<3> &points,
 	                            const IndexSplitPointPairArray_t<3> &splitPoints, const IndexEdgePairArray_t<3> &edges);
 
-	void SetOutgoingEdge(const SplitPointHandle &s, const EdgeHandle &e);
-	void SetIncomingEdge(const SplitPointHandle &s, const EdgeHandle &e);
-	void SetSource(const EdgeHandle &e, const SplitPointHandle &s);
-	void SetDestination(const EdgeHandle &e, const SplitPointHandle &s);
-	void SetFace(const SplitPointHandle &s, const FaceHandle &f);
-	void SetSplitPoint(const FaceHandle &f, const SplitPointHandle &s);
-	void SetPoint(const SplitPointHandle &s, const PointHandle &p);
+	void SetOutgoingEdge(SplitPoint &splitPoint, Edge &edge, const SplitPointHandle &s, const EdgeHandle &e);
+	void SetIncomingEdge(SplitPoint &splitPoint, Edge &edge, const SplitPointHandle &s, const EdgeHandle &e);
+	void SetSource(Edge &edge, SplitPoint &splitPoint, const EdgeHandle &e, const SplitPointHandle &s);
+	void SetDestination(Edge &edge, SplitPoint &splitPoint, const EdgeHandle &e, const SplitPointHandle &s);
+	void SetFace(SplitPoint &splitPoint, Face &face, const SplitPointHandle &s, const FaceHandle &f);
+	void SetSplitPoint(Face &face, SplitPoint &splitPoint, const FaceHandle &f, const SplitPointHandle &s);
+	void SetPoint(SplitPoint &splitPoint, Point &point, const SplitPointHandle &s, const PointHandle &p);
 	void AddEdge(const PointHandle &p, const EdgeHandle &e);
 
 	bool ValidatePoint(const Index_t &p);
