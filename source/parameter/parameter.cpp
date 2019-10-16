@@ -14,6 +14,21 @@ float parameter_getter<float>::operator()<ExpressionPtr>(const ExpressionPtr &e)
 
 template<>
 template<>
+bool parameter_getter<bool>::operator()<std::string>(const std::string &s)
+{
+    if (s == "true")
+    {
+        return true;
+    }
+    else if (s == "false")
+    {
+        return false;
+    }
+    throw ParameterException("Can't convert \"" + s + "\" to bool");
+}
+
+template<>
+template<>
 int parameter_getter<int>::operator()<ExpressionPtr>(const std::shared_ptr<Expression> &e)
 {
 	return e->GetAsInt();

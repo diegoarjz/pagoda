@@ -45,8 +45,8 @@ void RepeatSplit::Execute()
 
 		auto size = GetParameterAs<float>("size");
 		auto axis = GetParameterAs<std::string>("axis");
-		// auto adjust = GetParameterAs<bool>("adjust");
-		PlaneSplits<Geometry> planeSplit(CreatePlanes(inScope, size, axis, false));
+		auto adjust = GetParameterAs<bool>("adjust");
+		PlaneSplits<Geometry> planeSplit(CreatePlanes(inScope, size, axis, adjust));
 
 		std::vector<GeometryPtr> splitGeometries;
 

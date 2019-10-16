@@ -14,7 +14,7 @@ using ExpressionPtr = std::shared_ptr<Expression>;
 class IParameterizable;
 using IParameterizablePtr = std::shared_ptr<IParameterizable>;
 
-using Parameter = std::variant<float, int, std::string, ExpressionPtr, IParameterizablePtr>;
+using Parameter = std::variant<float, int, bool, std::string, ExpressionPtr, IParameterizablePtr>;
 
 template<typename T>
 struct parameter_getter
@@ -29,6 +29,10 @@ struct parameter_getter
 		throw ParameterException("Cannot convert parameter");
 	}
 };
+
+template<>
+template<>
+bool parameter_getter<bool>::operator()<std::string>(const std::string &s);
 
 template<>
 template<>
