@@ -22,7 +22,16 @@ bool DefaultScheduler::Step()
 	auto outNodes = m_graph.GetNodeOutputNodes(nextNode);
 
 	nextNode->SetExpressionVariables();
-	nextNode->Execute(inNodes, outNodes);
+	try
+	{
+		nextNode->Execute(inNodes, outNodes);
+	}
+	catch (...)
+	{
+		LOG_FATAL("Unknown exception caught while executing Node %s(%d)", nextNode->GetName().c_str(),
+		          nextNode->GetId());
+		throw;
+	}
 
 	return true;
 }

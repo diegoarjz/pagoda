@@ -60,7 +60,7 @@ void RepeatSplit::Execute()
 			    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outProceduralObject);
 
 			outGeometryComponent->SetGeometry(g);
-			// outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(g, inScope.GetRotation()));
+			outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(g, inScope.GetRotation()));
 			hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 		}
 	}
@@ -96,6 +96,11 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const fl
 	std::vector<Plane<float>> planes;
 	float planeDistance = size;
 	uint32_t numPlanes = scopeSize / planeDistance - 1;
+	if (adjust)
+	{
+		planeDistance = scopeSize / numPlanes;
+	}
+
 	auto translationVector = scopeAxis * planeDistance;
 	scopeAxis = -1 * scopeAxis;
 	auto currentPoint = scopePlane.GetPoint() + translationVector;

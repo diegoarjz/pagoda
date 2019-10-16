@@ -55,7 +55,10 @@ private:
 	struct SplitPoint
 	{
 		SplitPoint()
-		    : m_point(s_invalidIndex), m_face(s_invalidIndex), m_incomingEdge(s_invalidIndex), m_outgoingEdge(s_invalidIndex)
+		    : m_point(s_invalidIndex),
+		      m_face(s_invalidIndex),
+		      m_incomingEdge(s_invalidIndex),
+		      m_outgoingEdge(s_invalidIndex)
 		{
 		}
 
@@ -162,9 +165,6 @@ public:
 	using EdgeHandleSet = std::unordered_set<EdgeHandle, HandleHasher<EdgeHandle>>;
 	/// Set of \c FaceHandle.
 	using FaceHandleSet = std::unordered_set<FaceHandle, HandleHasher<FaceHandle>>;
-
-	SplitPointTopology();
-	~SplitPointTopology();
 
 	std::size_t GetFaceCount() const;
 	std::size_t GetPointCount() const;

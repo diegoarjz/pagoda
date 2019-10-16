@@ -117,10 +117,11 @@ public:
 		START_PROFILE;
 
 		IndexType newIndex = CreateIndex();
-		/*auto insertResult = */ m_container.emplace(args...);
-		// TODO: Check if the value was indeed inserted.
+        ValueType value(args...);
+		auto insertResult = m_container.emplace(newIndex, value);
+        DBG_ASSERT_MSG(insertResult.second, "Unable to create and insert");
 
-		return IndexValuePair_t{newIndex, m_container[newIndex]};
+		return IndexValuePair_t{newIndex, insertResult.first->second};
 	}
 
 	ValueType& GetOrCreate(const IndexType& index, const ValueType& v = ValueType())

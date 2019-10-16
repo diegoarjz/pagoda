@@ -40,11 +40,17 @@ public:
 
 			clip.Execute(currentGeometry, frontGeometry, backGeometry);
 
-			outGeometries.push_back(frontGeometry);
+			if (frontGeometry->GetFaceCount() > 0)
+			{
+				outGeometries.push_back(frontGeometry);
+			}
 			currentGeometry = backGeometry;
 		}
 
-		outGeometries.push_back(currentGeometry);
+		if (currentGeometry->GetFaceCount() > 0)
+		{
+			outGeometries.push_back(currentGeometry);
+		}
 	}
 
 private:
