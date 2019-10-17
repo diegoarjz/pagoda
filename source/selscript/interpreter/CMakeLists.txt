@@ -10,10 +10,10 @@ set(INTERPRETER_PUBLIC_HEADERS
     "symbol_table.h"
 )
 
-add_library(interpreter OBJECT ${INTERPRETER_SOURCES})
+add_library(selscript_interpreter OBJECT ${INTERPRETER_SOURCES})
 
 target_include_directories(
-    interpreter
+    selscript_interpreter
     PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
@@ -21,13 +21,13 @@ target_include_directories(
 )
 
 target_compile_features(
-    interpreter
+    selscript_interpreter
     PRIVATE
         cxx_std_17
 )
 
 target_compile_options(
-    interpreter
+    selscript_interpreter
     PRIVATE
         -Wall
         -Werror
@@ -35,19 +35,19 @@ target_compile_options(
 )
 
 target_link_libraries(
-    interpreter
+    selscript_interpreter
     PRIVATE
 )
 
 include(GNUInstallDirs)
-install(TARGETS interpreter
-    EXPORT interpreter-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/interpreter
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/interpreter
+install(TARGETS selscript_interpreter
+    EXPORT selscript_interpreter-export
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_interpreter
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_interpreter
 )
-install(FILES ${INTERPRETER_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/interpreter)
+install(FILES ${INTERPRETER_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/selscript_interpreter)
 
-install(EXPORT interpreter-export
+install(EXPORT selscript_interpreter-export
     FILE
         InterpreterTargets.cmake
     NAMESPACE

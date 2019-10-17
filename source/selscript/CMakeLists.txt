@@ -4,12 +4,12 @@ add_subdirectory(binding)
 add_subdirectory(parser)
 add_subdirectory(interpreter)
 
-add_library(selscript STATIC
-    $<TARGET_OBJECTS:parser>
-    $<TARGET_OBJECTS:value>
-    $<TARGET_OBJECTS:intermediate>
-    $<TARGET_OBJECTS:interpreter>
-    $<TARGET_OBJECTS:binding>
+add_library(selscript OBJECT
+    $<TARGET_OBJECTS:selscript_binding>
+    $<TARGET_OBJECTS:selscript_intermediate>
+    $<TARGET_OBJECTS:selscript_interpreter>
+    $<TARGET_OBJECTS:selscript_parser>
+    $<TARGET_OBJECTS:selscript_value>
 )
 
 target_include_directories(

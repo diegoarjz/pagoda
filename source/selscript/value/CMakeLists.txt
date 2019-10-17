@@ -31,10 +31,10 @@ set(VALUE_PUBLIC_HEADERS
     "value_visitor.h"
 )
 
-add_library(value OBJECT ${VALUE_SOURCES})
+add_library(selscript_value OBJECT ${VALUE_SOURCES})
 
 target_include_directories(
-    value
+    selscript_value
     PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
@@ -42,13 +42,13 @@ target_include_directories(
 )
 
 target_compile_features(
-    value
+    selscript_value
     PRIVATE
         cxx_std_17
 )
 
 target_compile_options(
-    value
+    selscript_value
     PRIVATE
         -Wall
         -Werror
@@ -56,14 +56,14 @@ target_compile_options(
 )
 
 include(GNUInstallDirs)
-install(TARGETS value
-    EXPORT value-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/value
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/value
+install(TARGETS selscript_value
+    EXPORT selscript_value-export
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_value
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_value
 )
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/value)
+install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/selscript_value)
 
-install(EXPORT value-export
+install(EXPORT selscript_value-export
     FILE
         ValueTargets.cmake
     NAMESPACE

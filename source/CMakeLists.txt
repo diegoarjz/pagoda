@@ -25,6 +25,11 @@ add_library(selector STATIC "${SELECTOR_SOURCES}"
     $<TARGET_OBJECTS:procedural_graph>
     $<TARGET_OBJECTS:procedural_graph_reader>
     $<TARGET_OBJECTS:procedural_objects>
+    $<TARGET_OBJECTS:selscript_binding>
+    $<TARGET_OBJECTS:selscript_intermediate>
+    $<TARGET_OBJECTS:selscript_interpreter>
+    $<TARGET_OBJECTS:selscript_parser>
+    $<TARGET_OBJECTS:selscript_value>
 )
 
 set_target_properties(
@@ -39,12 +44,6 @@ target_include_directories(
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-)
-
-target_link_libraries(
-    selector
-    PRIVATE
-        selscript
 )
 
 target_compile_features(

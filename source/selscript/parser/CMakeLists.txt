@@ -9,12 +9,11 @@ set(PARSER_PUBLIC_HEADERS
     "parser.h"
 )
 
-add_library(parser OBJECT ${PARSER_SOURCES}
-        $<TARGET_OBJECTS:intermediate>
+add_library(selscript_parser OBJECT ${PARSER_SOURCES}
 )
 
 target_include_directories(
-    parser
+    selscript_parser
     PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
@@ -22,13 +21,13 @@ target_include_directories(
 )
 
 target_compile_features(
-    parser
+    selscript_parser
     PRIVATE
         cxx_std_17
 )
 
 target_compile_options(
-    parser
+    selscript_parser
     PRIVATE
         -Wall
         -Werror
@@ -36,19 +35,19 @@ target_compile_options(
 )
 
 target_link_libraries(
-    parser
+    selscript_parser
     PRIVATE
 )
 
 include(GNUInstallDirs)
-install(TARGETS parser
-    EXPORT parser-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/parser
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/parser
+install(TARGETS selscript_parser
+    EXPORT selscript_parser-export
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_parser
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_parser
 )
-install(FILES ${PARSER_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/parser)
+install(FILES ${PARSER_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/selscript_parser)
 
-install(EXPORT parser-export
+install(EXPORT selscript_parser-export
     FILE
         ParserTargets.cmake
     NAMESPACE

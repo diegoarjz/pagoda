@@ -9,10 +9,10 @@ set(BINDING_PUBLIC_HEADERS
     "functional.h"
 )
 
-add_library(binding OBJECT ${BINDING_SOURCES})
+add_library(selscript_binding OBJECT ${BINDING_SOURCES})
 
 target_include_directories(
-    binding
+    selscript_binding
     PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
@@ -20,13 +20,13 @@ target_include_directories(
 )
 
 target_compile_features(
-    binding
+    selscript_binding
     PRIVATE
         cxx_std_17
 )
 
 target_compile_options(
-    binding
+    selscript_binding
     PRIVATE
         -Wall
         -Werror
@@ -34,19 +34,19 @@ target_compile_options(
 )
 
 target_link_libraries(
-    binding
+    selscript_binding
     PRIVATE
 )
 
 include(GNUInstallDirs)
-install(TARGETS binding
-    EXPORT binding-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/binding
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/binding
+install(TARGETS selscript_binding
+    EXPORT selscript_binding-export
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_binding
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_binding
 )
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/binding)
+install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/selscript_binding)
 
-install(EXPORT binding-export
+install(EXPORT selscript_binding-export
     FILE
         BindingTargets.cmake
     NAMESPACE

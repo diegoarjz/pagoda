@@ -21,10 +21,10 @@ set(INTERMEDIATE_PUBLIC_HEADERS
     "set_expression.h"
 )
 
-add_library(intermediate OBJECT ${INTERMEDIATE_SOURCES})
+add_library(selscript_intermediate OBJECT ${INTERMEDIATE_SOURCES})
 
 target_include_directories(
-    intermediate
+    selscript_intermediate
     PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
@@ -32,13 +32,13 @@ target_include_directories(
 )
 
 target_compile_features(
-    intermediate
+    selscript_intermediate
     PRIVATE
         cxx_std_17
 )
 
 target_compile_options(
-    intermediate
+    selscript_intermediate
     PRIVATE
         -Wall
         -Werror
@@ -46,14 +46,14 @@ target_compile_options(
 )
 
 include(GNUInstallDirs)
-install(TARGETS intermediate
-    EXPORT intermediate-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/intermediate
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/intermediate
+install(TARGETS selscript_intermediate
+    EXPORT selscript_intermediate-export
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_intermediate
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_intermediate
 )
-install(FILES ${INTERMEDIATE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/intermediate)
+install(FILES ${INTERMEDIATE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/selscript_intermediate)
 
-install(EXPORT intermediate-export
+install(EXPORT selscript_intermediate-export
     FILE
         IntermediateTargets.cmake
     NAMESPACE
