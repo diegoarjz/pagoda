@@ -1,0 +1,57 @@
+add_subdirectory(intermediate)
+add_subdirectory(value)
+add_subdirectory(binding)
+add_subdirectory(parser)
+add_subdirectory(interpreter)
+
+add_library(selscript STATIC
+    $<TARGET_OBJECTS:parser>
+    $<TARGET_OBJECTS:value>
+    $<TARGET_OBJECTS:intermediate>
+    $<TARGET_OBJECTS:interpreter>
+    $<TARGET_OBJECTS:binding>
+)
+
+target_include_directories(
+    selscript
+    PRIVATE
+        $<INSTALL_INTERFACE:selector>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
+        ${Boost_INCLUDE_DIRS}
+)
+
+target_compile_features(
+    selscript
+    PRIVATE
+        cxx_std_17
+)
+
+target_compile_options(
+    selscript
+    PRIVATE
+        -Wall
+        -Werror
+        -pedantic-errors
+)
+
+target_link_libraries(
+    selscript
+    PRIVATE
+)
+
+
+include(GNUInstallDirs)
+install(TARGETS selscript
+    EXPORT selscript-export
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/
+)
+
+install(EXPORT selscript-export
+    FILE
+        SelScriptTargets.cmake
+    NAMESPACE
+        Selector::
+    DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}/selector/selscript/cmake/
+)

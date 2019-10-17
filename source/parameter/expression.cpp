@@ -1,16 +1,16 @@
 #include "expression.h"
 
-#include <intermediate/ast.h>
-#include <intermediate/ast_visitor.h>
-#include <interpreter/interpreter.h>
-#include <interpreter/symbol_table.h>
-#include <parser/parser.h>
-#include <value/class_value.h>
-#include <value/float_value.h>
-#include <value/instance_value.h>
-#include <value/integer_value.h>
-#include <value/string_value.h>
-#include <value/value_visitor.h>
+#include "selscript/intermediate/ast.h"
+#include "selscript/intermediate/ast_visitor.h"
+#include "selscript/interpreter/interpreter.h"
+#include "selscript/interpreter/symbol_table.h"
+#include "selscript/parser/parser.h"
+#include "selscript/value/class_value.h"
+#include "selscript/value/float_value.h"
+#include "selscript/value/instance_value.h"
+#include "selscript/value/integer_value.h"
+#include "selscript/value/string_value.h"
+#include "selscript/value/value_visitor.h"
 
 #include "common/profiler.h"
 #include "parameter_exception.h"

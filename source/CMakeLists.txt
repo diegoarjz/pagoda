@@ -14,6 +14,7 @@ add_subdirectory(math_lib)
 add_subdirectory(parameter)
 add_subdirectory(procedural_graph)
 add_subdirectory(procedural_objects)
+add_subdirectory(selscript)
 
 add_library(selector STATIC "${SELECTOR_SOURCES}"
     $<TARGET_OBJECTS:common>
@@ -38,7 +39,12 @@ target_include_directories(
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
+)
+
+target_link_libraries(
+    selector
+    PRIVATE
+        selscript
 )
 
 target_compile_features(
@@ -67,12 +73,6 @@ target_compile_definitions(
         -DASSERTS_ENABLED=${Selector_ENABLE_ASSERTIONS}
         SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
-)
-
-target_link_libraries(
-    selector
-    PUBLIC
-        selscript
 )
 
 include(GNUInstallDirs)

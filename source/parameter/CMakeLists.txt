@@ -32,7 +32,6 @@ target_include_directories(
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
 )
 
 set_target_properties(

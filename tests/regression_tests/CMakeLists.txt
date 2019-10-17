@@ -34,7 +34,6 @@ target_include_directories(
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_definitions(
