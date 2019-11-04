@@ -2,7 +2,7 @@
 
 #include "ast_visitor.h"
 
-namespace sscript
+namespace selector
 {
 namespace ast
 {
@@ -19,4 +19,4 @@ void GetExpression::AcceptVisitor(AstVisitor *v)
 }
 
 }  // namespace ast
-}  // namespace sscript
+}  // namespace selector

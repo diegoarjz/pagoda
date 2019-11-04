@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-namespace sscript
+namespace selector
 {
 class AstVisitor;
 
@@ -377,4 +377,4 @@ private:
 using ProgramPtr = std::shared_ptr<Program>;
 
 }  // namespace ast
-}  // namespace sscript
+}  // namespace selector

@@ -44,7 +44,7 @@ void GraphDotExporter::Export(std::ostream &outStream)
 
 		if (m_showParameters)
 		{
-			auto parameters = node->GetParameterContext()->GetParameters();
+			auto parameters = node->GetMembers();
 			for (auto par : parameters)
 			{
 				outStream << "<tr><td>" << par.first << "</td></tr>\n";

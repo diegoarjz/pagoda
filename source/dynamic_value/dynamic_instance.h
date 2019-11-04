@@ -1,0 +1,46 @@
+#pragma once
+
+#include "dynamic_value_base.h"
+
+namespace selector
+{
+class TypeInfo;
+using TypeInfoPtr = std::shared_ptr<TypeInfo>;
+
+class DynamicClass;
+using DynamicClassPtr = std::shared_ptr<DynamicClass>;
+
+class Function;
+using FunctionPtr = std::shared_ptr<Function>;
+
+class ICallableBody;
+
+class DynamicValueTable;
+
+/**
+ * Represents a dynamic instance that can be created in selscript.
+ */
+class DynamicInstance : public DynamicValueBase
+{
+public:
+	static const TypeInfoPtr s_typeInfo;
+
+	explicit DynamicInstance(DynamicClassPtr klass);
+	virtual ~DynamicInstance();
+
+	std::string ToString() const override;
+
+	void AcceptVisitor(ValueVisitorBase& visitor) override;
+
+	FunctionPtr Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals = nullptr);
+	std::shared_ptr<DynamicValueTable> GetInstanceValueTable();
+
+	std::shared_ptr<DynamicValueBase> GetMember(const std::string& memberName);
+
+private:
+	DynamicClassPtr m_class;
+	std::shared_ptr<DynamicValueTable> m_valueTable;
+};
+
+using DynamicInstancePtr = std::shared_ptr<DynamicInstance>;
+}  // namespace selector

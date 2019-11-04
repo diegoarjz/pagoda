@@ -117,6 +117,25 @@ TEST(VecBase, when_dividing_by_a_scalar_on_the_left_should_divide_the_scalar_by_
 	EXPECT_EQ((2 / vec), expected);
 }
 
+TEST(VecBase, test_named_accessors)
+{
+	VecBase<4, float> vec(1, 2, 3, 4);
+	EXPECT_EQ(vec.X(), 1);
+	EXPECT_EQ(vec.Y(), 2);
+	EXPECT_EQ(vec.Z(), 3);
+	EXPECT_EQ(vec.W(), 4);
+
+	vec.X() = 5;
+	vec.Y() = 6;
+	vec.Z() = 7;
+	vec.W() = 8;
+
+	EXPECT_EQ(vec.X(), 5);
+	EXPECT_EQ(vec.Y(), 6);
+	EXPECT_EQ(vec.Z(), 7);
+	EXPECT_EQ(vec.W(), 8);
+}
+
 TEST(VecOperations, when_using_squared_length_on_a_vector_should_return_the_squared_length_of_the_vector)
 {
 	VecBase<3, float> vec(1, 1, 1);

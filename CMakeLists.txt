@@ -11,7 +11,6 @@ find_package(Boost COMPONENTS chrono system program_options filesystem)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(source)
-add_subdirectory(performance_tests)
 add_subdirectory(tools)
 
 enable_testing()

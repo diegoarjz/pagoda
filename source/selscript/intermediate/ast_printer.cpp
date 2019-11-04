@@ -1,6 +1,6 @@
 #include "ast_printer.h"
 
-namespace sscript
+namespace selector
 {
 AstPrinter::AstPrinter() : m_indentation(0) {}
 
@@ -258,4 +258,4 @@ void AstPrinter::indent() { ++m_indentation; }
 
 std::string AstPrinter::indentation() { return std::string(m_indentation, ' '); }
 void AstPrinter::deindent() { --m_indentation; }
-}  // namespace sscript
+}  // namespace selector

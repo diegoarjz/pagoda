@@ -17,8 +17,8 @@ CreateRectGeometry::CreateRectGeometry(ProceduralObjectSystemPtr objectSystem) :
 {
 	START_PROFILE;
 
-	SetParameter("width", 0.0f);
-	SetParameter("height", 0.0f);
+	RegisterMember("width", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("height", std::make_shared<FloatValue>(0.0f));
 
 	CreateOutputInterface(output_geometry);
 }
@@ -29,8 +29,8 @@ void CreateRectGeometry::Execute()
 {
 	START_PROFILE;
 
-	float width = GetParameterAs<float>("width");
-	float height = GetParameterAs<float>("height");
+	float width = get_parameter_as<float>(GetMember("width"));
+	float height = get_parameter_as<float>(GetMember("height"));
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();

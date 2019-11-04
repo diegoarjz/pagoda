@@ -1,26 +1,31 @@
 #include "expression.h"
 
+#include "../dynamic_value/boolean_value.h"
+#include "../dynamic_value/dynamic_class.h"
+#include "../dynamic_value/dynamic_instance.h"
+#include "../dynamic_value/dynamic_value_table.h"
+#include "../dynamic_value/float_value.h"
+#include "../dynamic_value/function.h"
+#include "../dynamic_value/integer_value.h"
+#include "../dynamic_value/null_object_value.h"
+#include "../dynamic_value/string_value.h"
+#include "../dynamic_value/value_not_found.h"
+#include "../dynamic_value/value_visitor.h"
+
 #include "selscript/intermediate/ast.h"
 #include "selscript/intermediate/ast_visitor.h"
 #include "selscript/interpreter/interpreter.h"
-#include "selscript/interpreter/symbol_table.h"
 #include "selscript/parser/parser.h"
-#include "selscript/value/class_value.h"
-#include "selscript/value/float_value.h"
-#include "selscript/value/instance_value.h"
-#include "selscript/value/integer_value.h"
-#include "selscript/value/string_value.h"
-#include "selscript/value/value_visitor.h"
 
 #include "common/profiler.h"
 #include "parameter_exception.h"
 
 #include <unordered_map>
 
-using namespace sscript;
-
 namespace selector
 {
+const TypeInfoPtr Expression::s_typeInfo = std::make_shared<TypeInfo>("Expression");
+
 class ExpressionInterpreter : public Interpreter
 {
 public:
@@ -30,7 +35,10 @@ public:
 		return sInterpreter;
 	}
 
-	static std::shared_ptr<Instance> MakeParameterInstance() { return std::make_shared<Instance>(m_parameterClass); }
+	static std::shared_ptr<DynamicInstance> MakeParameterInstance()
+	{
+		return std::make_shared<DynamicInstance>(m_parameterClass);
+	}
 
 private:
 	ExpressionInterpreter() : Interpreter()
@@ -38,10 +46,10 @@ private:
 		// TODO: Add built-in functions
 	}
 
-	static const ClassPtr m_parameterClass;
+	static const DynamicClassPtr m_parameterClass;
 };
 
-const ClassPtr ExpressionInterpreter::m_parameterClass = std::make_shared<Class>("SelectorObject");
+const DynamicClassPtr ExpressionInterpreter::m_parameterClass = std::make_shared<DynamicClass>("SelectorObject");
 
 class ExpressionValidator : public AstVisitor
 {
@@ -178,88 +186,11 @@ public:
 	uint32_t m_getExpressionCount;
 };
 
-struct to_float : public ValueVisitor<float>
-{
-	float operator()(Float &f) { return f.m_value; }
-	float operator()(Integer &i) { return i.m_value; }
-
-	template<typename V>
-	float operator()(V &)
-	{
-		throw ParameterException("Unable to evaluate expression to float.");
-	}
-};
-
-struct to_int : public ValueVisitor<int>
-{
-	int operator()(Float &f) { return f.m_value; }
-	int operator()(Integer &i) { return i.m_value; }
-
-	template<typename V>
-	int operator()(V &)
-	{
-		throw ParameterException("Unable to evaluate expression to float.");
-	}
-};
-
-struct to_string : public ValueVisitor<std::string>
-{
-	std::string operator()(String &s) { return s.m_value; }
-
-	template<typename V>
-	std::string operator()(V &)
-	{
-		throw ParameterException("Unable to evaluate expression to string.");
-	}
-};
-
-struct base_value_to_parameter : public ValueVisitor<Parameter>
-{
-	Parameter operator()(Float &f) { return f.m_value; }
-	Parameter operator()(String &s) { return s.m_value; }
-	Parameter operator()(Integer &s) { return s.m_value; }
-
-	template<typename V>
-	std::string operator()(V &)
-	{
-		throw ParameterException("Unimplemented Expression to Parameter conversion");
-	}
-};
-
-struct parameter_to_base_value
-{
-	BaseValuePtr operator()(const float &f) { return std::make_shared<Float>(f); }
-	BaseValuePtr operator()(const int &i) { return std::make_shared<Integer>(i); }
-	BaseValuePtr operator()(const std::string &s) { return std::make_shared<String>(s); }
-	BaseValuePtr operator()(const ExpressionPtr &e)
-	{
-		auto parameter = e->GetAsParameter();
-		return std::visit(*this, parameter);
-	}
-	BaseValuePtr operator()(const IParameterizablePtr &p) { return nullptr; }
-};
-
 class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
 {
 public:
 	Impl(ast::ProgramPtr &&program) : m_expression(program) {}
 	~Impl() {}
-
-	float GetAsFloat() { return GetAs<float, to_float>(); }
-
-	float GetAsInt() { return GetAs<int, to_int>(); }
-
-	std::string GetAsString() { return GetAs<std::string, to_string>(); }
-
-	Parameter GetAsParameter() { return GetAs<Parameter, base_value_to_parameter>(); }
-
-	template<class Return_t, class Visitor_t>
-	Return_t GetAs()
-	{
-		Evaluate();
-		Visitor_t visitor;
-		return apply_visitor(visitor, m_lastComputedValue);
-	}
 
 	void Evaluate()
 	{
@@ -269,9 +200,8 @@ public:
 		{
 			auto &interpreter = ExpressionInterpreter::GetInstance();
 
-			auto variables = std::make_shared<SymbolTable>("variables");
-			parameter_to_base_value converter;
-			for (const auto &var : m_variableValues)
+			auto variables = std::make_shared<DynamicValueTable>("variables");
+			for (auto &var : m_variableValues)
 			{
 				const std::list<std::string> &variableIdentifiers = var.first.GetIdentifiers();
 
@@ -280,22 +210,26 @@ public:
 
 				for (std::size_t i = 1; i < variableIdentifiers.size(); ++i, ++identifierIter)
 				{
-					SymbolTable::SymbolEntry entry;
+					DynamicValueBasePtr entry;
 					try
 					{
 						entry = currentSymbolTable->Get(*identifierIter);
 					}
-					catch (SymbolNotFoundException &e)
+					catch (ValueNotFoundException &e)
 					{
-						currentSymbolTable->Declare({*identifierIter, ExpressionInterpreter::MakeParameterInstance()});
+						currentSymbolTable->Declare(*identifierIter, ExpressionInterpreter::MakeParameterInstance());
 						entry = currentSymbolTable->Get(*identifierIter);
 					}
 
-					std::shared_ptr<Instance> nextInstance = std::dynamic_pointer_cast<Instance>(entry.m_value);
-					currentSymbolTable = nextInstance->GetLocalSymbolTable();
+					std::shared_ptr<DynamicInstance> nextInstance = std::dynamic_pointer_cast<DynamicInstance>(entry);
+					currentSymbolTable = nextInstance->GetInstanceValueTable();
 				}
 
-				currentSymbolTable->Declare({*identifierIter, std::visit(converter, var.second)});
+				throw std::runtime_error("Unimplemented");
+				/*
+				currentSymbolTable->Declare(*identifierIter,
+				                            std::get<0>(var.second));  // std::visit(converter, var.second)});
+				                            */
 			}
 			interpreter.PushExternalSymbols(variables);
 
@@ -307,20 +241,20 @@ public:
 		}
 	}
 
-	void SetVariableValue(const Variable &variableName, Parameter value)
+	void SetVariableValue(const Variable &variableName, DynamicValueBasePtr value)
 	{
 		START_PROFILE;
+		throw std::runtime_error("Unimplemented");
 
+		/*
 		struct dependent_expression_adder
 		{
-			dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
+		    dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
 
-			void operator()(const ExpressionPtr &e) { e->AddDependentExpression(m_expression); }
-			void operator()(const IParameterizablePtr &) {}
-			void operator()(const float &) {}
-			void operator()(const std::string &) {}
+		    void operator()(const DynamicValueBasePtr &) {}
+		    void operator()(const ExpressionPtr &e) { e->AddDependentExpression(m_expression); }
 
-			ExpressionPtr m_expression;
+		    ExpressionPtr m_expression;
 		};
 
 		dependent_expression_adder adder(m_expressionInterface);
@@ -328,9 +262,10 @@ public:
 
 		m_variableValues[variableName] = value;
 		SetDirty();
+		*/
 	}
 
-	void SetVariableValue(const std::string &variableName, Parameter value)
+	void SetVariableValue(const std::string &variableName, DynamicValueBasePtr value)
 	{
 		SetVariableValue(Variable(variableName), value);
 	}
@@ -350,11 +285,13 @@ public:
 
 	bool IsDirty() const { return m_lastComputedValue == nullptr; }
 
+	std::string ToString() const { return "<Expression>"; }
+
 	ast::ProgramPtr m_expression;
 	std::unordered_set<Variable, Variable::Hash> m_variables;
-	std::unordered_map<Variable, Parameter, Variable::Hash> m_variableValues;
+	std::unordered_map<Variable, DynamicValueBasePtr, Variable::Hash> m_variableValues;
 	std::vector<std::weak_ptr<Expression>> m_dependentExpressions;
-	BaseValuePtr m_lastComputedValue;
+	DynamicValueBasePtr m_lastComputedValue;
 	ExpressionPtr m_expressionInterface;
 };
 
@@ -376,19 +313,19 @@ std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expr
 	return expression;
 }
 
-Expression::Expression() : m_implementation(nullptr) {}
+Expression::Expression() : DynamicValueBase(s_typeInfo), m_implementation(nullptr) {}
 
 const std::unordered_set<Variable, Variable::Hash> &Expression::GetVariables() const
 {
 	return m_implementation->m_variables;
 }
 
-void Expression::SetVariableValue(const Variable &variableName, Parameter value)
+void Expression::SetVariableValue(const Variable &variableName, DynamicValueBasePtr value)
 {
 	m_implementation->SetVariableValue(variableName, value);
 }
 
-void Expression::SetVariableValue(const std::string &variableName, Parameter value)
+void Expression::SetVariableValue(const std::string &variableName, DynamicValueBasePtr value)
 {
 	m_implementation->SetVariableValue(variableName, value);
 }
@@ -404,13 +341,8 @@ const std::vector<std::weak_ptr<Expression>> Expression::GetDependentExpressions
 	return m_implementation->GetDependentExpressions();
 }
 
-Parameter Expression::GetAsParameter() { return m_implementation->GetAsParameter(); }
+std::string Expression::ToString() const { return m_implementation->ToString(); }
 
-float Expression::GetAsFloat() { return m_implementation->GetAsFloat(); }
-
-int Expression::GetAsInt() { return m_implementation->GetAsInt(); }
-
-std::string Expression::GetAsString() { return m_implementation->GetAsString(); }
-
+void Expression::AcceptVisitor(ValueVisitorBase &visitor) { visitor.Visit(*this); }
 }  // namespace selector
 

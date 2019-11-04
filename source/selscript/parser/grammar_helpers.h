@@ -4,10 +4,10 @@
 #include "../intermediate/ast.h"
 #include "../intermediate/class_declaration.h"
 #include "../intermediate/get_expression.h"
-#include "../intermediate/set_expression.h"
 #include "../intermediate/parameter.h"
+#include "../intermediate/set_expression.h"
 
-namespace sscript
+namespace selector
 {
 ast::IdentifierPtr make_identifier(const std::vector<char> &identifier);
 
@@ -72,4 +72,4 @@ ast::StatementPtr make_for_loop(
     const boost::optional<ast::ExpressionPtr> &condition, const boost::optional<ast::ExpressionPtr> &increment,
     const ast::StatementPtr body);
 
-}  // namespace sscript
+}  // namespace selector

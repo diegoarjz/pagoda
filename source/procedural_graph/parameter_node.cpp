@@ -1,6 +1,7 @@
 #include "parameter_node.h"
 
 #include "common/assertions.h"
+#include "common/profiler.h"
 
 namespace selector
 {
@@ -10,19 +11,20 @@ ParameterNode::ParameterNode() {}
 
 ParameterNode::~ParameterNode() {}
 
-void ParameterNode::SetConstructionArguments(const std::unordered_map<std::string, Parameter> &constructionArgs) {}
+void ParameterNode::SetConstructionArguments(
+    const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
+{
+}
 
 void ParameterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
 {
 	START_PROFILE;
 
-	auto parameterContext = GetParameterContext();
-	for (const auto &parameter : parameterContext->GetParameters())
+	for (const auto &parameter : GetMembers())
 	{
 		for (const auto &outNode : outNodes)
 		{
-			DBG_ASSERT_MSG(outNode->GetParameterContext() != nullptr, "Out node doesn't have a ParameterContext set.");
-			outNode->GetParameterContext()->SetParameter(parameter.first, parameter.second);
+			outNode->SetMember(parameter.first, parameter.second);
 		}
 	}
 }

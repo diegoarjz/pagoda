@@ -2,7 +2,7 @@
 
 #include "ast.h"
 
-namespace sscript
+namespace selector
 {
 namespace ast
 {
@@ -20,8 +20,8 @@ public:
 
 private:
 	std::string m_identifierName;
-    boost::optional<std::string> m_typeName;
+	boost::optional<std::string> m_typeName;
 };
 using ParameterPtr = std::shared_ptr<Parameter>;
 }  // namespace ast
-}  // namespace sscript
+}  // namespace selector

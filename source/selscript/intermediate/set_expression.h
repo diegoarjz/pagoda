@@ -2,7 +2,7 @@
 
 #include "ast.h"
 
-namespace sscript
+namespace selector
 {
 namespace ast
 {
@@ -26,4 +26,4 @@ private:
 };
 using SetExpressionPtr = std::shared_ptr<SetExpression>;
 }  // namespace ast
-}  // namespace sscript
+}  // namespace selector

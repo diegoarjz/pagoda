@@ -1,13 +1,11 @@
 set(INTERPRETER_SOURCES
     "interpreter.cpp"
     "interpreter_visitor.cpp"
-    "symbol_table.cpp"
 )
 
 set(INTERPRETER_PUBLIC_HEADERS
     "interpreter.h"
     "interpreter_visitor.h"
-    "symbol_table.h"
 )
 
 add_library(selscript_interpreter OBJECT ${INTERPRETER_SOURCES})

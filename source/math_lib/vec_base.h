@@ -16,6 +16,7 @@ class VecBase
 {
 public:
 	using VecType = VecBase<Size, Rep>;
+	using Rep_t = Rep;
 	static const size_t kSize = Size;
 	static const size_t kSizeInBytes = Size * sizeof(Rep);
 
@@ -117,6 +118,45 @@ public:
 	{
 		CRITICAL_ASSERT(idx < Size);
 		return m_elems[idx];
+	}
+
+	Rep& X() { return m_elems[0]; }
+	const Rep& X() const { return m_elems[0]; }
+
+	template<int U = Size>
+	typename std::enable_if<(U > 1), Rep>::type& Y()
+	{
+		return m_elems[1];
+	}
+
+	template<int U = Size>
+	const typename std::enable_if<(U > 1), Rep>::type& Y() const
+	{
+		return m_elems[1];
+	}
+
+	template<int U = Size>
+	typename std::enable_if<(U > 2), Rep>::type& Z()
+	{
+		return m_elems[2];
+	}
+
+	template<int U = Size>
+	const typename std::enable_if<(U > 2), Rep>::type& Z() const
+	{
+		return m_elems[2];
+	}
+
+	template<int U = Size>
+	typename std::enable_if<(U > 3), Rep>::type& W()
+	{
+		return m_elems[3];
+	}
+
+	template<int U = Size>
+	const typename std::enable_if<(U > 3), Rep>::type& W() const
+	{
+		return m_elems[3];
 	}
 
 private:

@@ -1,11 +1,12 @@
 #include "interpreter.h"
 
+#include "../../dynamic_value/dynamic_value_table.h"
+#include "../../dynamic_value/value_not_found.h"
 #include "interpreter_visitor.h"
-#include "symbol_table.h"
 
 #include <stack>
 
-namespace sscript
+namespace selector
 {
 class Interpreter::Impl
 {
@@ -19,16 +20,16 @@ public:
 		{
 			program->AcceptVisitor(&m_visitor);
 		}
-		catch (SymbolNotFoundException &e)
+		catch (ValueNotFoundException &e)
 		{
-			m_visitor.GetCurrentSymbolTable()->DumpSymbols();
+			m_visitor.GetCurrentSymbolTable()->DumpSymbols(std::cout);
 			throw e;
 		}
 
 		return false;
 	}
 
-	void PushExternalSymbols(std::shared_ptr<SymbolTable> &externalSymbols)
+	void PushExternalSymbols(std::shared_ptr<DynamicValueTable> &externalSymbols)
 	{
 		if (m_externalSymbols.size() == 0)
 		{
@@ -61,10 +62,10 @@ public:
 		}
 	}
 
-	BaseValuePtr GetLastEvaluatedExpression() const { return m_visitor.GetLastEvaluatedExpression(); }
+	DynamicValueBasePtr GetLastEvaluatedExpression() const { return m_visitor.GetLastEvaluatedExpression(); }
 
 private:
-	std::stack<std::shared_ptr<SymbolTable>> m_externalSymbols;
+	std::stack<std::shared_ptr<DynamicValueTable>> m_externalSymbols;
 	interpreter_visitor m_visitor;
 };
 
@@ -74,12 +75,15 @@ Interpreter::~Interpreter() {}
 
 bool Interpreter::Interpret(const ast::ProgramPtr &program) { return m_implementation->Interpret(program); }
 
-void Interpreter::PushExternalSymbols(std::shared_ptr<SymbolTable> &externalSymbols)
+void Interpreter::PushExternalSymbols(std::shared_ptr<DynamicValueTable> &externalSymbols)
 {
 	m_implementation->PushExternalSymbols(externalSymbols);
 }
 
 void Interpreter::PopExternalSymbols() { m_implementation->PopExternalSymbols(); }
 
-BaseValuePtr Interpreter::GetLastEvaluatedExpression() const { return m_implementation->GetLastEvaluatedExpression(); }
-}  // namespace sscript
+DynamicValueBasePtr Interpreter::GetLastEvaluatedExpression() const
+{
+	return m_implementation->GetLastEvaluatedExpression();
+}
+}  // namespace selector

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace sscript
+namespace selector
 {
 namespace ast
 {
@@ -19,4 +19,4 @@ public:
 
 private:
 };
-}  // namespace sscript
+}  // namespace selector

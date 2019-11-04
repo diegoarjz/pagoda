@@ -4,6 +4,8 @@
 #include "parameter.h"
 #include "variable.h"
 
+#include "../dynamic_value/dynamic_value_base.h"
+
 #include <memory>
 #include <string>
 #include <unordered_set>
@@ -11,12 +13,17 @@
 
 namespace selector
 {
+class TypeInfo;
+using TypeInfoPtr = std::shared_ptr<TypeInfo>;
+
 /**
  * Implements expressions that can be evaluated to a parameter.
  */
-class Expression
+class Expression : public DynamicValueBase
 {
 public:
+	static const TypeInfoPtr s_typeInfo;
+
 	/**
 	 * Creates an expression from the \p expressionString.
 	 * Parses and creates an intermediary representation that will be executed later on.
@@ -35,18 +42,18 @@ public:
 	 *
 	 * If \p value is an \c Expression then it is added as a dependent expression.
 	 */
-	void SetVariableValue(const Variable& variable, Parameter value);
+	void SetVariableValue(const Variable& variable, DynamicValueBasePtr value);
 
 	/**
 	 * Sets the variable whith \p variableName to the value given by \p value.
 	 */
-	void SetVariableValue(const std::string& variableName, Parameter value);
+	void SetVariableValue(const std::string& variableName, DynamicValueBasePtr value);
 
 	/**
 	 * Adds \p e as an \c Expression that is dependent on this \c Expression's value
 	 * to be evaluated.
 	 */
-	void AddDependentExpression(ExpressionPtr e);
+	void AddDependentExpression(std::shared_ptr<Expression> e);
 
 	/**
 	 * Returns the set of dependent expressions.
@@ -63,25 +70,9 @@ public:
 	 */
 	bool IsDirty() const;
 
-	/**
-	 * Evaluates the expression and returns it as a \c Parameter.
-	 */
-	Parameter GetAsParameter();
+	std::string ToString() const override;
 
-	/**
-	 * Evaluates the expression to a float.
-	 */
-	float GetAsFloat();
-
-	/**
-	 * Evaluates the expression to an integer.
-	 */
-	int GetAsInt();
-
-	/**
-	 * Evaluates the expression to a string.
-	 */
-	std::string GetAsString();
+	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
 private:
 	class Impl;

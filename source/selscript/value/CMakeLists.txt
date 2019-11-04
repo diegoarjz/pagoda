@@ -1,34 +1,13 @@
 set(VALUE_SOURCES
-    "base_value.cpp"
-    "boolean_value.cpp"
     "builtin_functions.cpp"
-    "function.cpp"
-    "class_value.cpp"
-    "float_value.cpp"
-    "integer_value.cpp"
-    "instance_value.cpp"
-    "null_object_value.cpp"
-    "string_value.cpp"
-    "type_info.cpp"
-    "undefined_operator.cpp"
+    "builtin_functions.h"
+    "script_callable_body.h"
+    "script_callable_body.cpp"
 )
 
 set(VALUE_PUBLIC_HEADERS
-    "base_value.h"
-    "boolean_value.h"
-    "builtin_function.h"
     "builtin_functions.h"
-    "callable.h"
-    "class_value.h"
-    "float_value.h"
-    "function.h"
-    "instance_value.h"
-    "integer_value.h"
-    "null_object_value.h"
-    "string_value.h"
-    "type_info.h"
-    "undefined_operator.h"
-    "value_visitor.h"
+    "script_callable_body.h"
 )
 
 add_library(selscript_value OBJECT ${VALUE_SOURCES})

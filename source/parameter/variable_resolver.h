@@ -6,21 +6,24 @@
 
 namespace selector
 {
+class DynamicValueBase;
+using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
+
 /**
- * Resolves a \c Parameter value given a \c Variable.
- * Walks through the hierarchy of \c IParameterizable within a \c Parameter
+ * Resolves a \c DynamicValueBasePtr value given a \c Variable.
+ * Walks through the hierarchy of \c DynamicValueBasePtr within a \c DynamicValueBasePtr
  */
 class VariableResolver
 {
 public:
 	VariableResolver(const Variable &v);
 	~VariableResolver();
-	
-	Parameter Resolve(IParameterizablePtr parameterizable);
+
+	DynamicValueBasePtr Resolve(DynamicValueBasePtr parameterizable);
 
 private:
 	Variable m_variable;
 };
-}
+}  // namespace selector
 
 #endif

@@ -1,11 +1,14 @@
 #include "node.h"
 
+#include "../dynamic_value/type_info.h"
 #include "common/assertions.h"
 #include "parameter/parameter.h"
 
 namespace selector
 {
-Node::Node() : m_nodeName(""), m_nodeId(0), m_context(nullptr) {}
+const TypeInfoPtr Node::s_typeInfo = std::make_shared<TypeInfo>("Node");
+
+Node::Node() : DynamicValueBase(s_typeInfo), ClassBase("Node"), m_nodeName(""), m_nodeId(0) {}
 Node::~Node() {}
 
 uint32_t Node::GetId() const { return m_nodeId; }
@@ -14,18 +17,18 @@ void Node::SetId(uint32_t nodeId) { m_nodeId = nodeId; }
 void Node::SetName(const std::string &name) { m_nodeName = name; }
 const std::string &Node::GetName() const { return m_nodeName; }
 
-void Node::SetParameterContext(std::shared_ptr<Context> context) { m_context = context; }
-std::shared_ptr<Context> Node::GetParameterContext() const { return m_context; }
-
-void Node::SetExecutionArguments(const std::unordered_map<std::string, Parameter> &arguments)
+void Node::SetExecutionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &arguments)
 {
-	DBG_ASSERT_MSG(m_context != nullptr, "m_context is not set on Node");
 	for (const auto &arg : arguments)
 	{
-		m_context->SetParameter(arg.first, arg.second);
+		RegisterMember(arg.first, arg.second);
 	}
 }
 
-void Node::SetExpressionVariables() { m_context->UpdateExpressions(); }
+void Node::SetExpressionVariables() { throw std::runtime_error("Unimplemented"); /*m_context->UpdateExpressions();*/ }
+
+std::string Node::ToString() const { return "<Node>"; }
+
+void Node::AcceptVisitor(ValueVisitorBase &visitor) { throw std::runtime_error("Unimplemented"); }
 
 }  // namespace selector

@@ -7,7 +7,7 @@
 namespace selector
 {
 /**
- * Exception thrown whenever for invalid operations with \c Parameter.
+ * Exception thrown whenever for invalid operations with \c DynamicValueBasePtr.
  */
 class ParameterException : public std::runtime_error
 {

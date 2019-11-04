@@ -1,6 +1,7 @@
 #include "graph.h"
 
 #include "common/assertions.h"
+#include "common/profiler.h"
 #include "default_scheduler.h"
 #include "node.h"
 #include "node_factory.h"
@@ -168,19 +169,19 @@ public:
 		scheduler->Finalize();
 	}
 
-    NodePtr CreateNode(const std::string &nodeType)
-    {
-        auto node = m_nodeFactory->Create(nodeType);
-        AddNode(node);
-        return node;
-    }
+	NodePtr CreateNode(const std::string &nodeType)
+	{
+		auto node = m_nodeFactory->Create(nodeType);
+		AddNode(node);
+		return node;
+	}
 
 private:
 	IScheduler *GetScheduler()
 	{
 		if (m_scheduler == nullptr)
 		{
-		    m_scheduler = Graph::GetSchedulerFactory()(*m_graph);
+			m_scheduler = Graph::GetSchedulerFactory()(*m_graph);
 		}
 		return m_scheduler.get();
 	}
@@ -204,7 +205,7 @@ private:
 	NodeWeakPtrSet m_outputNodes;
 	Graph *m_graph;
 	std::unique_ptr<IScheduler> m_scheduler;
-    NodeFactoryPtr m_nodeFactory;
+	NodeFactoryPtr m_nodeFactory;
 };
 
 Graph::Graph(NodeFactoryPtr nodeFactory) : m_implementation(std::make_unique<Graph::Impl>(nodeFactory, this)) {}

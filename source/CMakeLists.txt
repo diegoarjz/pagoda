@@ -14,6 +14,7 @@ add_subdirectory(math_lib)
 add_subdirectory(parameter)
 add_subdirectory(procedural_graph)
 add_subdirectory(procedural_objects)
+add_subdirectory(dynamic_value)
 add_subdirectory(selscript)
 
 add_library(selector STATIC "${SELECTOR_SOURCES}"
@@ -25,11 +26,11 @@ add_library(selector STATIC "${SELECTOR_SOURCES}"
     $<TARGET_OBJECTS:procedural_graph>
     $<TARGET_OBJECTS:procedural_graph_reader>
     $<TARGET_OBJECTS:procedural_objects>
-    $<TARGET_OBJECTS:selscript_binding>
     $<TARGET_OBJECTS:selscript_intermediate>
     $<TARGET_OBJECTS:selscript_interpreter>
     $<TARGET_OBJECTS:selscript_parser>
     $<TARGET_OBJECTS:selscript_value>
+    $<TARGET_OBJECTS:dynamic_value>
 )
 
 set_target_properties(

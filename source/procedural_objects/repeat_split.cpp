@@ -1,5 +1,8 @@
 #include "repeat_split.h"
 
+#include "dynamic_value/boolean_value.h"
+#include "dynamic_value/float_value.h"
+#include "dynamic_value/string_value.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
@@ -21,9 +24,9 @@ RepeatSplit::RepeatSplit(ProceduralObjectSystemPtr objectSystem) : ProceduralOpe
 	CreateInputInterface(inputGeometry);
 	CreateOutputInterface(outputGeometry);
 
-	SetParameter("size", 0.0f);
-	SetParameter("axis", "x");
-	SetParameter("adjust", false);
+	RegisterMember("size", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("axis", std::make_shared<String>("x"));
+	RegisterMember("adjust", std::make_shared<Boolean>(false));
 }
 
 RepeatSplit::~RepeatSplit() {}
@@ -43,9 +46,9 @@ void RepeatSplit::Execute()
 		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		auto inScope = inGeometryComponent->GetScope();
 
-		auto size = GetParameterAs<float>("size");
-		auto axis = GetParameterAs<std::string>("axis");
-		auto adjust = GetParameterAs<bool>("adjust");
+		auto size = get_parameter_as<float>(GetMember("size"));
+		auto axis = get_parameter_as<std::string>(GetMember("axis"));
+		auto adjust = get_parameter_as<bool>(GetMember("adjust"));
 		PlaneSplits<Geometry> planeSplit(CreatePlanes(inScope, size, axis, adjust));
 
 		std::vector<GeometryPtr> splitGeometries;

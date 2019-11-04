@@ -1,13 +1,10 @@
 set(PARAMETER_SRCS
-    "context.cpp"
-    "context.h"
     "expression.cpp"
     "expression.h"
     "parameter.cpp"
     "parameter.h"
     "parameter_exception.cpp"
     "parameter_exception.h"
-    "parameterizable.h"
     "variable.cpp"
     "variable.h"
     "variable_resolver.cpp"
@@ -15,11 +12,9 @@ set(PARAMETER_SRCS
 )
 
 set(PARAMETER_PUBLIC_HEADERS
-    "context.h"
     "expression.h"
     "parameter.h"
     "parameter_exception.h"
-    "parameterizable.h"
     "variable.h"
     "variable_resolver.h"
 )

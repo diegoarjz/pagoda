@@ -1,8 +1,8 @@
 #pragma once
 
-#include "grammar_helpers.h"
 #include "../intermediate/ast.h"
 #include "../intermediate/class_declaration.h"
+#include "grammar_helpers.h"
 
 #include <boost/phoenix/object/construct.hpp>
 #include <boost/phoenix/phoenix.hpp>
@@ -10,7 +10,7 @@
 
 using namespace boost::spirit::qi;
 
-namespace sscript
+namespace selector
 {
 template<class Iterator>
 struct grammar : boost::spirit::qi::grammar<Iterator, ast::ProgramPtr(), boost::spirit::qi::space_type>
@@ -300,4 +300,4 @@ struct grammar : boost::spirit::qi::grammar<Iterator, ast::ProgramPtr(), boost::
 	rule<Iterator, ast::ClassDeclarationPtr(), space_type> class_declaration;
 	rule<Iterator, ast::ExpressionPtr(), space_type> primary;
 };
-}  // namespace sscript
+}  // namespace selector

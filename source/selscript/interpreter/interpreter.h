@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace sscript
+namespace selector
 {
 namespace ast
 {
@@ -11,10 +11,10 @@ class Program;
 using ProgramPtr = std::shared_ptr<Program>;
 }  // namespace ast
 
-struct BaseValue;
-using BaseValuePtr = std::shared_ptr<BaseValue>;
+class DynamicValueBase;
+using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
 
-class SymbolTable;
+class DynamicValueTable;
 
 class Interpreter
 {
@@ -24,13 +24,13 @@ public:
 
 	bool Interpret(const ast::ProgramPtr &program);
 
-	void PushExternalSymbols(std::shared_ptr<SymbolTable> &externalSymbols);
+	void PushExternalSymbols(std::shared_ptr<DynamicValueTable> &externalSymbols);
 	void PopExternalSymbols();
 
-	BaseValuePtr GetLastEvaluatedExpression() const;
+	DynamicValueBasePtr GetLastEvaluatedExpression() const;
 
 private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
 };
-}  // namespace sscript
+}  // namespace selector

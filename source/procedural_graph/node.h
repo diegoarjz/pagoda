@@ -1,8 +1,9 @@
 #ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 #define SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 
+#include "../dynamic_value/class_base.h"
+#include "../dynamic_value/dynamic_value_base.h"
 #include "common/factory.h"
-#include "parameter/context.h"
 #include "procedural_objects/procedural_operation.h"
 
 #include <memory>
@@ -10,9 +11,6 @@
 
 namespace selector
 {
-struct GraphExecutionContext;
-using GraphExecutionContextPtr = std::shared_ptr<GraphExecutionContext>;
-
 class Node;
 using NodePtr = std::shared_ptr<Node>;
 
@@ -25,9 +23,11 @@ using NodeSet = std::unordered_set<std::shared_ptr<Node>>;
  * Each subclass of \c Node is responsible for implementing an execution logic by
  * overriding the Node::Execute() method.
  */
-class Node
+class Node : public DynamicValueBase, public ClassBase
 {
 public:
+	static const TypeInfoPtr s_typeInfo;
+
 	Node();
 	virtual ~Node();
 
@@ -37,12 +37,12 @@ public:
 	/**
 	 * Sets the construction arguments from \p arguments.
 	 */
-	virtual void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &arguments) = 0;
+	virtual void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &arguments) = 0;
 
 	/**
 	 * Sets the execution arguments from \p arguments.
 	 */
-	void SetExecutionArguments(const std::unordered_map<std::string, Parameter> &arguments);
+	void SetExecutionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &arguments);
 
 	/**
 	 * Gets the id from this \c Node.
@@ -63,16 +63,6 @@ public:
 	const std::string &GetName() const;
 
 	/**
-	 * Sets this \c Node parameter \c Context.
-	 */
-	void SetParameterContext(std::shared_ptr<Context> context);
-
-	/**
-	 * Gets this \c Node parameter \c Context.
-	 */
-	std::shared_ptr<Context> GetParameterContext() const;
-
-	/**
 	 * Sets all the expression variables.
 	 *
 	 * Values are fetched from the \c Node's parameter \c Context.
@@ -89,10 +79,13 @@ public:
 	 */
 	virtual void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) = 0;
 
+	std::string ToString() const override;
+
+	void AcceptVisitor(ValueVisitorBase &visitor) override;
+
 private:
 	std::string m_nodeName;
 	uint32_t m_nodeId;
-	std::shared_ptr<Context> m_context;
 };  // class Node
 
 using NodePtr = std::shared_ptr<Node>;

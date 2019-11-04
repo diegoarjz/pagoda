@@ -1,12 +1,11 @@
 #ifndef SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 #define SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 
+#include "../dynamic_value/class_base.h"
+#include "../dynamic_value/dynamic_value_base.h"
+#include "common/factory.h"
 #include "procedural_component.h"
 #include "procedural_operation_object_interface.h"
-
-#include "common/factory.h"
-#include "parameter/context.h"
-#include "parameter/parameterizable.h"
 
 #include <bitset>
 #include <list>
@@ -18,6 +17,9 @@ namespace selector
 class ProceduralObjectSystem;
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
 
+class TypeInfo;
+using TypeInfoPtr = std::shared_ptr<TypeInfo>;
+
 /**
  * @brief Base class for a procedural operation.
  *
@@ -27,9 +29,13 @@ using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
  * Has input and output \c ProceduralOperationObjectInterface which is used to pass
  * input and output procedural objects.
  */
-class ProceduralOperation : public IParameterizable, public std::enable_shared_from_this<ProceduralOperation>
+class ProceduralOperation : public std::enable_shared_from_this<ProceduralOperation>,
+                            public DynamicValueBase,
+                            public ClassBase
 {
 public:
+	static const TypeInfoPtr s_typeInfo;
+
 	ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem);
 	virtual ~ProceduralOperation() {}
 
@@ -54,30 +60,9 @@ public:
 		return true;
 	}
 
-	/**
-	 * Gets a \c Parameter from this \c ProceduralOperation.
-	 */
-	Parameter GetParameter(const std::string& parameterName) const override;
+	std::string ToString() const override;
 
-	/**
-	 * Sets a \c Parameter in this \c ProceduralOperation.
-	 */
-	void SetParameter(const std::string& parameterName, const Parameter& parameter) override;
-
-	/**
-	 * Gets the name of all \c Parameter in this \c ProceduralOperation.
-	 */
-	std::unordered_set<std::string> GetParameterNameList() const override;
-
-	/**
-	 * Gets all the \c Parameter in this \c ProceduralOperation.
-	 */
-	std::unordered_map<std::string, Parameter> GetParameters() const override;
-
-	/**
-	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
-	 */
-	Parameter ResolveVariable(const Variable& v) const override;
+	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
 protected:
 	void CreateInputInterface(const InterfaceName& interfaceName);
@@ -85,8 +70,6 @@ protected:
 	std::shared_ptr<ProceduralObject> GetInputProceduralObject(const InterfaceName& interfaceName);
 	bool HasInput(const InterfaceName& interfaceName) const;
 	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(const InterfaceName& interfaceName);
-
-	std::shared_ptr<Context> m_parameterContext;  ///< The parameter \c Context for the \c ProceduralOperation
 	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 
 private:

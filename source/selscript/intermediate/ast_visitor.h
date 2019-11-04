@@ -7,7 +7,7 @@
 #include "parameter.h"
 #include "set_expression.h"
 
-namespace sscript
+namespace selector
 {
 class AstVisitor
 {
@@ -38,4 +38,4 @@ public:
 	virtual void Visit(ast::VarDeclPtr) = 0;
 	virtual void Visit(ast::ParameterPtr) = 0;
 };
-}  // namespace sscript
+}  // namespace selector

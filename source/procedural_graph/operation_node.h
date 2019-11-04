@@ -19,7 +19,7 @@ public:
 	OperationNode(OperationFactoryPtr operationFactory);
 	~OperationNode();
 
-	void SetConstructionArguments(const std::unordered_map<std::string, Parameter> &) override;
+	void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &) override;
 
 	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
 	void SetOperation(ProceduralOperationPtr operation);
@@ -27,7 +27,7 @@ public:
 
 private:
 	ProceduralOperationPtr m_operation;
-    OperationFactoryPtr m_operationFactory;
+	OperationFactoryPtr m_operationFactory;
 };  // class OperationNode
 }  // namespace selector
 

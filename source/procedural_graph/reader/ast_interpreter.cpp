@@ -5,7 +5,9 @@
 #include "node_definition_node.h"
 #include "node_link_node.h"
 
-#include "parameter/context.h"
+#include "dynamic_value/float_value.h"
+#include "dynamic_value/integer_value.h"
+#include "dynamic_value/string_value.h"
 #include "procedural_graph/graph.h"
 #include "procedural_graph/node.h"
 
@@ -23,22 +25,26 @@ void AstInterpreter::Visit(GraphDefinitionNode *graphDefinition)
 
 void AstInterpreter::Visit(NamedArgument *namedArgument)
 {
-	Parameter param;
+	DynamicValueBasePtr param;
 	switch (namedArgument->GetArgumentType())
 	{
 		case NamedArgument::ArgumentType::String:
 		{
-			param = namedArgument->GetArgumentValue();
+			param = std::make_shared<String>(namedArgument->GetArgumentValue());
+			// param = namedArgument->GetArgumentValue();
 			break;
 		}
 		case NamedArgument::ArgumentType::Float:
 		{
-			param = static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str()));
+			param =
+			    std::make_shared<FloatValue>(static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str())));
+			// param = static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str()));
 			break;
 		}
 		case NamedArgument::ArgumentType::Integer:
 		{
-			param = static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str()));
+			param = std::make_shared<Integer>(static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str())));
+			// param = static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str()));
 			break;
 		}
 		case NamedArgument::ArgumentType::Expression:
@@ -63,7 +69,6 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	}
 
 	auto node = m_graph->CreateNode(nodeDefinition->GetNodeType());
-	node->SetParameterContext(std::make_shared<Context>(nodeDefinition->GetNodeName()));
 	node->SetId(m_nextNodeId++);
 	node->SetName(nodeDefinition->GetNodeName());
 	node->SetConstructionArguments(m_currentNamedParameters);
@@ -104,7 +109,7 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 
 const std::unordered_map<std::string, NodePtr> &AstInterpreter::GetNodeTable() const { return m_nodeTable; }
 
-const std::unordered_map<std::string, Parameter> &AstInterpreter::GetCurrentNamedArguments() const
+const std::unordered_map<std::string, DynamicValueBasePtr> &AstInterpreter::GetCurrentNamedArguments() const
 {
 	return m_currentNamedParameters;
 }

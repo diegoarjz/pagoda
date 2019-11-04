@@ -23,12 +23,12 @@ ClipGeometry::ClipGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 	CreateOutputInterface(frontGeometry);
 	CreateOutputInterface(backGeometry);
 
-	SetParameter("normal_x", 0.0f);
-	SetParameter("normal_y", 0.0f);
-	SetParameter("normal_z", 0.0f);
-	SetParameter("position_x", 0.0f);
-	SetParameter("position_y", 0.0f);
-	SetParameter("position_z", 0.0f);
+	RegisterMember("normal_x", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("normal_y", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("normal_z", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("position_x", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("position_y", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("position_z", std::make_shared<FloatValue>(0.0f));
 }
 
 ClipGeometry::~ClipGeometry() {}
@@ -47,14 +47,14 @@ void ClipGeometry::Execute()
 		Clip<Geometry> clip(
 		    Plane<float>::FromPointAndNormal(
             {
-                GetParameterAs<float>("position_x"),
-                GetParameterAs<float>("position_y"),
-                GetParameterAs<float>("position_z")
+                get_parameter_as<float>(GetMember("position_x")),
+                get_parameter_as<float>(GetMember("position_y")),
+                get_parameter_as<float>(GetMember("position_z"))
             },
             {
-                GetParameterAs<float>("normal_x"),
-                GetParameterAs<float>("normal_y"),
-                GetParameterAs<float>("normal_z")
+                get_parameter_as<float>(GetMember("normal_x")),
+                get_parameter_as<float>(GetMember("normal_y")),
+                get_parameter_as<float>(GetMember("normal_z"))
             }));
 		// clang-format on
 

@@ -1,5 +1,6 @@
 #include "default_scheduler.h"
 
+#include "../common/profiler.h"
 #include "breadth_first_node_visitor.h"
 
 namespace selector

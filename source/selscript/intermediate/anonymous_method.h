@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace sscript
+namespace selector
 {
 namespace ast
 {
@@ -26,4 +26,4 @@ private:
 };
 using AnonymousMethodPtr = std::shared_ptr<AnonymousMethod>;
 }  // namespace ast
-}  // namespace sscript
+}  // namespace selector

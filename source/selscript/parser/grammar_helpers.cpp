@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace sscript
+namespace selector
 {
 ast::IdentifierPtr make_identifier(const std::vector<char> &identifier)
 {
@@ -177,15 +177,14 @@ ast::FunctionDeclarationPtr make_function(ast::IdentifierPtr identifier,
 
 ast::ParameterPtr make_parameter(ast::IdentifierPtr identifier)
 {
-    return std::make_shared<ast::Parameter>(identifier->GetIdentifier());
+	return std::make_shared<ast::Parameter>(identifier->GetIdentifier());
 }
 
 ast::ParameterPtr add_parameter_type(ast::ParameterPtr parameter, ast::IdentifierPtr parameterType)
 {
-    parameter->SetParameterType(parameterType->GetIdentifier());
-    return parameter;
+	parameter->SetParameterType(parameterType->GetIdentifier());
+	return parameter;
 }
-
 
 ast::ReturnPtr make_return_statement(boost::optional<ast::ExpressionPtr> return_expression)
 {
@@ -249,4 +248,4 @@ ast::StatementPtr make_for_loop(
 	return outerBlock;
 }
 
-}  // namespace sscript
+}  // namespace selector

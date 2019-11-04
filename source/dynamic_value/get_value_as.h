@@ -1,0 +1,65 @@
+#pragma once
+
+#include "binding/can_cast_to_native.h"
+#include "binding/native_value_name.h"
+
+#include "../parameter/expression.h"
+#include "boolean_value.h"
+#include "dynamic_class.h"
+#include "dynamic_instance.h"
+#include "dynamic_value_base.h"
+#include "float_value.h"
+#include "function.h"
+#include "integer_value.h"
+#include "null_object_value.h"
+#include "string_value.h"
+#include "type_info.h"
+#include "value_visitor.h"
+#include "vector3.h"
+
+namespace selector
+{
+/**
+ * Exception to be thrown when it is impossible to cast a \c DynamicValueBase to a native type.
+ */
+template<class T, typename N>
+class UnableToCastToNative : public std::runtime_error
+{
+public:
+	UnableToCastToNative()
+	    : std::runtime_error("Unable to cast dynamic value of type " + T::s_typeInfo->GetTypeName() +
+	                         " to native type " + native_value_name<N>::GetName())
+	{
+	}
+	virtual ~UnableToCastToNative() {}
+};
+
+template<class T>
+class convert_to_native_visitor : public ValueVisitor<typename std::remove_reference<T>::type>
+{
+public:
+	template<typename V>
+	typename std::enable_if<can_cast_to_native<V, T>::value, T>::type operator()(V& value)
+	{
+		return static_cast<T>(value);
+	}
+
+	template<typename V>
+	typename std::enable_if<!can_cast_to_native<V, T>::value, T>::type operator()(V& value)
+	{
+		throw UnableToCastToNative<V, T>();
+	}
+};
+
+/**
+ * Returns the value of type T stored in the \c DynamicValueBase \p v.
+ * If the cast is impossible, \c UnableToCastToNative is thrown.
+ * @throws UnableToCastToNative
+ */
+template<typename T>
+typename std::remove_reference<T>::type get_value_as(DynamicValueBase& v)
+{
+	convert_to_native_visitor<T> visitor;
+	return apply_visitor(visitor, v);
+}
+}  // namespace selector

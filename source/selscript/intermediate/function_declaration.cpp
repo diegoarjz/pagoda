@@ -2,7 +2,7 @@
 
 #include "ast_visitor.h"
 
-namespace sscript
+namespace selector
 {
 namespace ast
 {
@@ -12,4 +12,4 @@ void FunctionDeclaration::AcceptVisitor(AstVisitor *v)
 	v->Visit(std::dynamic_pointer_cast<FunctionDeclaration>(shared_from_this()));
 }
 }  // namespace ast
-}  // namespace sscript
+}  // namespace selector

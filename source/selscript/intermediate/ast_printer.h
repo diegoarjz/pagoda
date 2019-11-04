@@ -3,7 +3,7 @@
 #include "ast.h"
 #include "ast_visitor.h"
 
-namespace sscript
+namespace selector
 {
 class AstPrinter : public AstVisitor
 {
@@ -34,7 +34,7 @@ public:
 	void Visit(ast::StringPtr) override;
 	void Visit(ast::UnaryPtr) override;
 	void Visit(ast::VarDeclPtr) override;
-    void Visit(ast::ParameterPtr) override;
+	void Visit(ast::ParameterPtr) override;
 
 private:
 	void indent();
@@ -43,4 +43,4 @@ private:
 
 	uint32_t m_indentation;
 };
-}  // namespace sscript
+}  // namespace selector

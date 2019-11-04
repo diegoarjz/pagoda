@@ -9,7 +9,12 @@
 
 namespace selector
 {
-ProceduralOperation::ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem) : m_parameterContext(std::make_shared<Context>("op")), m_proceduralObjectSystem(proceduralObjectSystem) {}
+const TypeInfoPtr ProceduralOperation::s_typeInfo = std::make_shared<TypeInfo>("ProceduralOperation");
+
+ProceduralOperation::ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem)
+    : DynamicValueBase(s_typeInfo), ClassBase("ProceduralOperation"), m_proceduralObjectSystem(proceduralObjectSystem)
+{
+}
 
 bool ProceduralOperation::PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object)
 {
@@ -70,7 +75,7 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::GetInputProceduralObject(
 	START_PROFILE;
 
 	auto object = input_interfaces[interfaceName]->GetAndPopProceduralObject();
-	m_parameterContext->SetParameter(interfaceName.ToString(), object);
+	// m_parameterContext->SetParameter(interfaceName.ToString(), object);
 
 	return object;
 }
@@ -94,29 +99,8 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 	return procedural_object;
 }
 
-Parameter ProceduralOperation::GetParameter(const std::string& parameterName) const
-{
-	return m_parameterContext->GetParameter(parameterName);
-}
+std::string ProceduralOperation::ToString() const { return "<ProceduralOperation>"; }
 
-void ProceduralOperation::SetParameter(const std::string& parameterName, const Parameter& parameter)
-{
-	m_parameterContext->SetParameter(parameterName, parameter);
-}
-
-std::unordered_set<std::string> ProceduralOperation::GetParameterNameList() const
-{
-	return m_parameterContext->GetParameterNameList();
-}
-
-std::unordered_map<std::string, Parameter> ProceduralOperation::GetParameters() const
-{
-	return m_parameterContext->GetParameters();
-}
-
-Parameter ProceduralOperation::ResolveVariable(const Variable& v) const
-{
-	return m_parameterContext->ResolveVariable(v);
-}
+void ProceduralOperation::AcceptVisitor(ValueVisitorBase& visitor) { throw std::runtime_error("Unimplemented"); }
 
 }  // namespace selector

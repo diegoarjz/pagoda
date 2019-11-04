@@ -6,7 +6,7 @@
 
 #include <boost/spirit/include/support_line_pos_iterator.hpp>
 
-namespace sscript
+namespace selector
 {
 Parser::Parser() {}
 
@@ -37,4 +37,4 @@ ast::ProgramPtr Parser::Parse(const std::string &source)
 
 	return program;
 }
-}  // namespace sscript
+}  // namespace selector

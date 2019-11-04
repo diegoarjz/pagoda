@@ -29,13 +29,13 @@ public:
 	void Visit(NodeLinkNode *nodeLink) override;
 
 	const std::unordered_map<std::string, NodePtr> &GetNodeTable() const;
-	const std::unordered_map<std::string, Parameter> &GetCurrentNamedArguments() const;
+	const std::unordered_map<std::string, DynamicValueBasePtr> &GetCurrentNamedArguments() const;
 
 private:
 	GraphPtr m_graph;
 
 	std::unordered_map<std::string, NodePtr> m_nodeTable;
-	std::unordered_map<std::string, Parameter> m_currentNamedParameters;
+	std::unordered_map<std::string, DynamicValueBasePtr> m_currentNamedParameters;
 	uint32_t m_nextNodeId;
 };
 }  // namespace selector

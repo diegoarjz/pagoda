@@ -1,7 +1,5 @@
-#include "../parameter/mock_objects.h"
 #include "mock_objects.h"
 
-#include <parameter/context.h>
 #include <procedural_objects/create_rect.h>
 #include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/geometry_component.h>
@@ -28,7 +26,7 @@ protected:
 	{
 		if (component != nullptr)
 		{
-			//geometry_system->KillProceduralComponent(component);
+			// geometry_system->KillProceduralComponent(component);
 		}
 	}
 
@@ -39,7 +37,7 @@ protected:
 
 TEST_F(GeometrySystemTest, test_create_component)
 {
-    auto proceduralObject = std::make_shared<ProceduralObject>();
+	auto proceduralObject = std::make_shared<ProceduralObject>();
 	auto procedural_component = geometry_system->CreateComponent(proceduralObject);
 	component = std::dynamic_pointer_cast<GeometryComponent>(procedural_component);
 
@@ -52,7 +50,7 @@ TEST_F(GeometrySystemTest, test_create_component)
 
 TEST_F(GeometrySystemTest, test_kill_component)
 {
-    auto proceduralObject = std::make_shared<ProceduralObject>();
+	auto proceduralObject = std::make_shared<ProceduralObject>();
 	auto component = geometry_system->CreateComponent(proceduralObject);
 
 	geometry_system->KillProceduralComponent(proceduralObject);

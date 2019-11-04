@@ -2,7 +2,7 @@
 
 #include "ast.h"
 
-namespace sscript
+namespace selector
 {
 namespace ast
 {
@@ -31,4 +31,4 @@ private:
 using FunctionDeclarationPtr = std::shared_ptr<FunctionDeclaration>;
 
 }  // namespace ast
-}  // namespace sscript
+}  // namespace selector

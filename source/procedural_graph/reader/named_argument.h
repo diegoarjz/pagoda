@@ -15,7 +15,7 @@ class NamedArgument : public AstNode
 public:
 	/**
 	 * Types of Arguments.
-	 * Should match the types of \c Parameter.
+	 * Should match the types of \c DynamicValueBasePtr.
 	 */
 	enum class ArgumentType
 	{

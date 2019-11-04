@@ -4,6 +4,7 @@
 #include "node.h"
 #include "node_set_visitor.h"
 #include "output_interface_node.h"
+#include "parameter/parameter.h"
 
 #include <procedural_objects/procedural_operation.h>
 
@@ -14,7 +15,8 @@ const char* InputInterfaceNode::name = "InputInterface";
 InputInterfaceNode::InputInterfaceNode() : m_interfaceName("", 0) {}
 InputInterfaceNode::~InputInterfaceNode() {}
 
-void InputInterfaceNode::SetConstructionArguments(const std::unordered_map<std::string, Parameter>& constructionArgs)
+void InputInterfaceNode::SetConstructionArguments(
+    const std::unordered_map<std::string, DynamicValueBasePtr>& constructionArgs)
 {
 	auto interfaceNameIter = constructionArgs.find("interface");
 	if (interfaceNameIter == std::end(constructionArgs))

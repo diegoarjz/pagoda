@@ -1,12 +1,10 @@
 #ifndef SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 #define SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 
-#include "procedural_component.h"
-
+#include "dynamic_value/class_base.h"
 #include "geometry_core/geometry.h"
-
 #include "parameter/parameter.h"
-#include "parameter/parameterizable.h"
+#include "procedural_component.h"
 
 #include <bitset>
 #include <list>
@@ -19,36 +17,22 @@ namespace selector
 class Context;
 using ContextPtr = std::shared_ptr<Context>;
 
-class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>, public IParameterizable
+class TypeInfo;
+using TypeInfoPtr = std::shared_ptr<TypeInfo>;
+
+class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>,
+                         public DynamicValueBase,
+                         public ClassBase
 {
 public:
+	static const TypeInfoPtr s_typeInfo;
+
 	ProceduralObject();
 	virtual ~ProceduralObject();
 
-	/**
-	 * Gets a \c Parameter from this \c ProceduralObject.
-	 */
-	Parameter GetParameter(const std::string& parameterName) const override;
+	std::string ToString() const override;
 
-	/**
-	 * Sets a \c Parameter in this \c ProceduralObject.
-	 */
-	void SetParameter(const std::string& parameterName, const Parameter& parameter) override;
-
-	/**
-	 * Gets the name of all \c Parameter in this \c ProceduralObject.
-	 */
-	std::unordered_set<std::string> GetParameterNameList() const override;
-
-	/**
-	 * Gets all the \c Parameter in this \c ProceduralObject.
-	 */
-	std::unordered_map<std::string, Parameter> GetParameters() const override;
-
-	/**
-	 * Resolves a \c Variable within the hierarchy of \c IParameterizable.
-	 */
-	Parameter ResolveVariable(const Variable& v) const override;
+	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
 private:
 	ContextPtr m_context;  ///< The parameter \c Context for this \c ProceduralObject

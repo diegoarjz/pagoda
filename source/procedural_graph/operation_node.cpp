@@ -4,6 +4,7 @@
 #include "input_interface_node.h"
 #include "node.h"
 #include "node_set_visitor.h"
+#include "parameter/parameter.h"
 
 #include "procedural_objects/operation_factory.h"
 #include "procedural_objects/procedural_operation.h"
@@ -15,7 +16,8 @@ const char *OperationNode::name = "Operation";
 OperationNode::OperationNode(OperationFactoryPtr operationFactory) : m_operationFactory(operationFactory) {}
 OperationNode::~OperationNode() {}
 
-void OperationNode::SetConstructionArguments(const std::unordered_map<std::string, Parameter> &constructionArgs)
+void OperationNode::SetConstructionArguments(
+    const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
 {
 	auto operationIter = constructionArgs.find("operation");
 	if (operationIter == std::end(constructionArgs))
@@ -36,7 +38,6 @@ void OperationNode::SetOperation(ProceduralOperationPtr operation) { m_operation
 
 void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
 {
-	std::shared_ptr<Context> paramContext = GetParameterContext();
 	NodeSet<InputInterfaceNode> inputInterfaceNodes;
 	node_type_filter<InputInterfaceNode>(inNodes, inputInterfaceNodes);
 
@@ -51,13 +52,16 @@ void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 		}
 	}
 
+	throw std::runtime_error("Unimplemented");
+	/*
 	const auto &operationParameters = m_operation->GetParameterNameList();
 	for (const auto &parameterName : operationParameters)
 	{
-		m_operation->SetParameter(parameterName, paramContext->GetParameter(parameterName));
+	    m_operation->SetMember(parameterName, GetMember(parameterName));
 	}
-	paramContext->SetParameter("op", m_operation);
-	paramContext->UpdateExpressions();
+	*/
+	// paramContext->SetParameter("op", m_operation);
+	// paramContext->UpdateExpressions();
 
 	m_operation->Execute();
 }

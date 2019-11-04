@@ -1,4 +1,3 @@
-#include <parameter/context.h>
 #include <parameter/parameter.h>
 #include <parameter/variable.h>
 #include <parameter/variable_resolver.h>
@@ -13,10 +12,10 @@ protected:
 	void SetUp()
 	{
 		m_rootContext = std::make_shared<Context>("root");
-		m_rootContext->SetParameter("par1", 123.0f);
+		m_rootContext->SetParameter("par1", std::make_shared<FloatValue>(123.0f));
 
 		auto context = std::make_shared<Context>("context1");
-		context->SetParameter("par2", 321.0f);
+		context->SetParameter("par2", std::make_shared<FloatValue>(321.0f));
 
 		m_rootContext->SetParameter("c1", context);
 	}

@@ -1,7 +1,6 @@
 #include <procedural_graph/operation_node.h>
 #include <procedural_objects/operation_factory.h>
 
-#include "../parameter/mock_objects.h"
 #include "mock_objects.h"
 
 #include <gtest/gtest.h>
@@ -42,25 +41,16 @@ TEST_F(NodeTest, when_getting_node_name_after_construction_should_return_empty_n
 	EXPECT_EQ(this->node->GetName(), "");
 }
 
-TEST_F(NodeTest, when_setting_parameter_context_should_be_able_to_get_the_same_context)
-{
-	auto context = std::make_shared<ContextMock>("a");
-	this->node->SetParameterContext(context);
-	EXPECT_EQ(this->node->GetParameterContext(), context);
-}
-
-TEST_F(NodeTest, when_getting_parameter_context_before_setting_should_return_nullptr)
-{
-	EXPECT_EQ(this->node->GetParameterContext(), nullptr);
-}
-
 TEST_F(NodeTest, when_setting_expression_variables_should_set_the_variables_in_expressions)
 {
+	FAIL();
+	/*
 	auto context = std::make_shared<Context>("a");
 	auto expr = Expression::CreateExpression("par * 2;");
 	context->SetParameter("par1", expr);
-	context->SetParameter("par", 3.0f);
+	context->SetParameter("par", std::make_shared<FloatValue>(3.0f));
 	node->SetParameterContext(context);
 	node->SetExpressionVariables();
 	ASSERT_EQ(expr->GetAsFloat(), 6.0f);
+	*/
 }

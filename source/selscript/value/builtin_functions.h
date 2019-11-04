@@ -3,19 +3,17 @@
 #include <memory>
 #include <vector>
 
-namespace sscript
+namespace selector
 {
-struct BaseValue;
-using BaseValuePtr = std::shared_ptr<BaseValue>;
-struct Float;
-using FloatPtr = std::shared_ptr<Float>;
-struct Integer;
+class DynamicValueBase;
+using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
+class FloatValue;
+using FloatPtr = std::shared_ptr<FloatValue>;
+class Integer;
 using IntegerPtr = std::shared_ptr<Integer>;
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
-void print(const std::vector<BaseValuePtr>& args);
-IntegerPtr time();
-
-TypeInfoPtr type(const BaseValuePtr& value);
-}  // namespace sscript
+void print(const std::vector<DynamicValueBasePtr>& args);
+TypeInfoPtr type(const DynamicValueBasePtr& value);
+}  // namespace selector

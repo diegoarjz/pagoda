@@ -1,214 +1,56 @@
 #include "interpreter_visitor.h"
 
-#include "../binding/make_builtin_function.h"
-#include "../value/base_value.h"
-#include "../value/boolean_value.h"
-#include "../value/builtin_function.h"
+#include "../../dynamic_value/binding/binary_ops.h"
+#include "../../dynamic_value/binding/make_free_function.h"
+#include "../../dynamic_value/binding/unary_ops.h"
+#include "../../dynamic_value/boolean_value.h"
+#include "../../dynamic_value/dynamic_class.h"
+#include "../../dynamic_value/dynamic_instance.h"
+#include "../../dynamic_value/dynamic_value_base.h"
+#include "../../dynamic_value/dynamic_value_table.h"
+#include "../../dynamic_value/float_value.h"
+#include "../../dynamic_value/function.h"
+#include "../../dynamic_value/get_value_as.h"
+#include "../../dynamic_value/icallable.h"
+#include "../../dynamic_value/integer_value.h"
+#include "../../dynamic_value/null_object_value.h"
+#include "../../dynamic_value/string_value.h"
+#include "../../dynamic_value/type_info.h"
+#include "../../dynamic_value/value_visitor.h"
+#include "../../dynamic_value/vector3.h"
 #include "../value/builtin_functions.h"
-#include "../value/callable.h"
-#include "../value/class_value.h"
-#include "../value/float_value.h"
-#include "../value/function.h"
-#include "../value/instance_value.h"
-#include "../value/integer_value.h"
-#include "../value/null_object_value.h"
-#include "../value/string_value.h"
-#include "../value/value_visitor.h"
 
-#include "symbol_table.h"
+#include "../value/script_callable_body.h"
 
-namespace sscript
+namespace selector
 {
-namespace bin_ops
-{
-struct add
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs + rhs;
-	}
-};
-
-struct sub
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs - rhs;
-	}
-};
-
-struct mul
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs * rhs;
-	}
-};
-
-struct div
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs / rhs;
-	}
-};
-
-struct eq
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs == rhs;
-	}
-};
-
-struct ne
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs != rhs;
-	}
-};
-
-struct gt
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs > rhs;
-	}
-};
-
-struct gte
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs >= rhs;
-	}
-};
-
-struct lt
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs < rhs;
-	}
-};
-
-struct lte
-{
-	template<typename LHS, typename RHS>
-	static BaseValuePtr apply(const LHS &lhs, const RHS &rhs)
-	{
-		return lhs <= rhs;
-	}
-};
-}  // namespace bin_ops
-
-namespace unary_ops
-{
-struct negate
-{
-	template<typename T>
-	static BaseValuePtr apply(const T &v)
-	{
-		return std::make_shared<Boolean>(!v);
-	}
-};
-
-struct minus
-{
-	template<typename T>
-	static BaseValuePtr apply(const T &v)
-	{
-		return -v;
-	}
-};
-}  // namespace unary_ops
-
-template<class Op>
-struct unary_ops_dispatcher : public ValueVisitor<BaseValuePtr>
-{
-	template<typename Operand>
-	BaseValuePtr operator()(const Operand &operand)
-	{
-		return Op::apply(operand);
-	}
-};
-
-template<class OP>
-struct binary_op_dispatcher : public ValueVisitor<BaseValuePtr>
-{
-	BaseValuePtr m_lhs;
-	BaseValuePtr m_rhs;
-
-	binary_op_dispatcher(const BaseValuePtr &lhs, const BaseValuePtr &rhs) : m_lhs(lhs), m_rhs(rhs) {}
-
-	template<typename LHS>
-	struct binary_op_rhs_dispatcher : public ValueVisitor<BaseValuePtr>
-	{
-		const LHS &m_lhs;
-		explicit binary_op_rhs_dispatcher(const LHS &lhs) : m_lhs(lhs) {}
-
-		template<typename RHS>
-		BaseValuePtr operator()(const RHS &rhs)
-		{
-			return OP::apply(m_lhs, rhs);
-		}
-	};
-
-	template<typename LHS>
-	BaseValuePtr operator()(const LHS &lhs)
-	{
-		binary_op_rhs_dispatcher<LHS> rhs_visitor{lhs};
-		return apply_visitor(rhs_visitor, m_rhs);
-	}
-};
-
-struct is_true : public ValueVisitor<bool>
-{
-	template<typename T>
-	bool operator()(const T &t)
-	{
-		return static_cast<bool>(t);
-	}
-};
-
 // clang-format off
-#define MAKE_BUILTIN_CALLABLE(function) { #function, sscript::make_builtin_function( #function , make_function(function)) }
+#define MAKE_BUILTIN_CALLABLE(function) { #function, selector::make_free_function( #function , make_function(function)) }
 // clang-format on
 
 interpreter_visitor::interpreter_visitor()
-    : m_globals(std::make_shared<SymbolTable>("Global")), m_symbolTable(m_globals)
+    : m_globals(std::make_shared<DynamicValueTable>("Global")), m_symbolTable(m_globals)
 {
-	m_globals->Declare(MAKE_BUILTIN_CALLABLE(print));
-	m_globals->Declare(MAKE_BUILTIN_CALLABLE(type));
-	m_globals->Declare(MAKE_BUILTIN_CALLABLE(time));
-	m_globals->Declare({"Integer", Integer::typeInfo});
-	m_globals->Declare({"Boolean", Boolean::typeInfo});
-	m_globals->Declare({"Float", Float::typeInfo});
-	m_globals->Declare({"String", String::typeInfo});
+	// m_globals->Declare(MAKE_BUILTIN_CALLABLE(print));
+	// m_globals->Declare(MAKE_BUILTIN_CALLABLE(type));
+	// m_globals->Declare(MAKE_BUILTIN_CALLABLE(time));
+	/*
+	m_globals->Declare("Integer", Integer::s_typeInfo);
+	m_globals->Declare("Boolean", Boolean::s_typeInfo);
+	m_globals->Declare("Float", FloatValue::s_typeInfo);
+	m_globals->Declare("String", String::s_typeInfo);
+	*/
 }
 
 interpreter_visitor::~interpreter_visitor() {}
 
-void interpreter_visitor::Visit(ast::FloatPtr n) { PushValue(std::make_shared<Float>(n->GetNumber())); }
+void interpreter_visitor::Visit(ast::FloatPtr n) { PushValue(std::make_shared<FloatValue>(n->GetNumber())); }
 
 void interpreter_visitor::Visit(ast::IntegerPtr n) { PushValue(std::make_shared<Integer>(n->GetInteger())); }
 
 void interpreter_visitor::Visit(ast::StringPtr s) { PushValue(std::make_shared<String>(s->GetString())); }
 
-void interpreter_visitor::Visit(ast::IdentifierPtr i)
-{
-	PushValue(GetCurrentSymbolTable()->Get(i->GetIdentifier()).m_value);
-}
+void interpreter_visitor::Visit(ast::IdentifierPtr i) { PushValue(GetCurrentSymbolTable()->Get(i->GetIdentifier())); }
 
 void interpreter_visitor::Visit(ast::BooleanPtr b) { PushValue(std::make_shared<Boolean>(b->GetBoolean())); }
 
@@ -226,26 +68,26 @@ void interpreter_visitor::Visit(ast::ArithmeticOpPtr op)
 	{
 		case ast::ArithmeticOp::types::Add:
 		{
-			binary_op_dispatcher<bin_ops::add> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<add> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 		case ast::ArithmeticOp::types::Sub:
 		{
-			binary_op_dispatcher<bin_ops::sub> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<sub> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 		case ast::ArithmeticOp::types::Mul:
 		{
-			binary_op_dispatcher<bin_ops::mul> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<mul> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 		case ast::ArithmeticOp::types::Div:
 		{
-			binary_op_dispatcher<bin_ops::div> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<div> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 	}
@@ -260,14 +102,14 @@ void interpreter_visitor::Visit(ast::UnaryPtr u)
 	{
 		case ast::Unary::types::Neg:
 		{
-			unary_ops_dispatcher<unary_ops::negate> v;
-			PushValue(apply_visitor(v, rhs));
+			unary_ops_dispatcher<negate> v;
+			PushValue(apply_visitor(v, *rhs));
 			break;
 		}
 		case ast::Unary::types::Min:
 		{
-			unary_ops_dispatcher<unary_ops::minus> v;
-			PushValue(apply_visitor(v, rhs));
+			unary_ops_dispatcher<minus> v;
+			PushValue(apply_visitor(v, *rhs));
 			break;
 		}
 	}
@@ -284,38 +126,38 @@ void interpreter_visitor::Visit(ast::ComparisonOpPtr op)
 	{
 		case ast::ComparisonOp::types::Eq:
 		{
-			binary_op_dispatcher<bin_ops::eq> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<eq> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 		case ast::ComparisonOp::types::Ne:
 		{
-			binary_op_dispatcher<bin_ops::ne> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<neq> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 		case ast::ComparisonOp::types::Gt:
 		{
-			binary_op_dispatcher<bin_ops::gt> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<gt> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 		case ast::ComparisonOp::types::Gte:
 		{
-			binary_op_dispatcher<bin_ops::gte> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<gte> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 		case ast::ComparisonOp::types::Lt:
 		{
-			binary_op_dispatcher<bin_ops::lt> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<lt> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 		case ast::ComparisonOp::types::Lte:
 		{
-			binary_op_dispatcher<bin_ops::lte> v(lhs, rhs);
-			PushValue(apply_visitor(v, lhs));
+			binary_op_dispatcher<lte> v(lhs, rhs);
+			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
 	}
@@ -327,8 +169,7 @@ void interpreter_visitor::Visit(ast::LogicOpPtr op)
 
 	auto lhs = PopValue();
 
-	is_true t;
-	auto lhs_true = apply_visitor(t, lhs);
+	auto lhs_true = get_value_as<bool>(*lhs);
 	switch (op->GetOperationType())
 	{
 		case ast::LogicOp::types::And:
@@ -337,7 +178,7 @@ void interpreter_visitor::Visit(ast::LogicOpPtr op)
 			{
 				op->GetRhs()->AcceptVisitor(this);
 				auto rhs = PopValue();
-				PushValue(std::make_shared<Boolean>(apply_visitor(t, rhs)));
+				PushValue(std::make_shared<Boolean>(get_value_as<bool>(*rhs)));
 				return;
 			}
 			PushValue(std::make_shared<Boolean>(false));
@@ -352,7 +193,7 @@ void interpreter_visitor::Visit(ast::LogicOpPtr op)
 			}
 			op->GetRhs()->AcceptVisitor(this);
 			auto rhs = PopValue();
-			PushValue(std::make_shared<Boolean>(apply_visitor(t, rhs)));
+			PushValue(std::make_shared<Boolean>(get_value_as<bool>(*rhs)));
 			break;
 		}
 	}
@@ -379,8 +220,7 @@ void interpreter_visitor::Visit(ast::IfStatementPtr i)
 
 	auto falseStatement = i->GetFalseStatement();
 
-	is_true t;
-	if (apply_visitor(t, condition))
+	if (get_value_as<bool>(*condition))
 	{
 		i->GetTrueStatement()->AcceptVisitor(this);
 	}
@@ -392,12 +232,11 @@ void interpreter_visitor::Visit(ast::IfStatementPtr i)
 
 void interpreter_visitor::Visit(ast::LoopPtr l)
 {
-	is_true t;
 	while (true)
 	{
 		l->GetCondition()->AcceptVisitor(this);
 		auto condition = PopValue();
-		if (!apply_visitor(t, condition))
+		if (!get_value_as<bool>(*condition))
 		{
 			break;
 		}
@@ -412,11 +251,11 @@ void interpreter_visitor::Visit(ast::VarDeclPtr v)
 	if (rhs)
 	{
 		rhs->AcceptVisitor(this);
-		GetCurrentSymbolTable()->Declare({v->GetIdentifier()->GetIdentifier(), PopValue()});
+		GetCurrentSymbolTable()->Declare(v->GetIdentifier()->GetIdentifier(), PopValue());
 	}
 	else
 	{
-		GetCurrentSymbolTable()->Declare({v->GetIdentifier()->GetIdentifier(), std::make_shared<NullObject>()});
+		GetCurrentSymbolTable()->Declare(v->GetIdentifier()->GetIdentifier(), std::make_shared<NullObject>());
 	}
 }
 
@@ -435,28 +274,28 @@ void interpreter_visitor::Visit(ast::StatementBlockPtr b)
 
 void interpreter_visitor::EnterBlock()
 {
-	m_symbolTable = std::make_shared<SymbolTable>("Block", GetCurrentSymbolTable());
+	m_symbolTable = std::make_shared<DynamicValueTable>("Block", GetCurrentSymbolTable());
 }
 
-void interpreter_visitor::ExitBlock(const std::shared_ptr<SymbolTable> &previousSymbolTable)
+void interpreter_visitor::ExitBlock(const std::shared_ptr<DynamicValueTable> &previousSymbolTable)
 {
 	m_symbolTable = previousSymbolTable;
 }
 
-void interpreter_visitor::EnterFunction(const CallablePtr &callable)
+void interpreter_visitor::EnterFunction(const ICallablePtr &callable)
 {
 	auto closure = callable->GetClosure();
 	if (closure)
 	{
-		m_symbolTable = std::make_shared<SymbolTable>(callable->GetCallableName(), closure);
+		m_symbolTable = std::make_shared<DynamicValueTable>(callable->GetCallableName(), closure);
 	}
 	else
 	{
-		m_symbolTable = std::make_shared<SymbolTable>(callable->GetCallableName(), m_globals);
+		m_symbolTable = std::make_shared<DynamicValueTable>(callable->GetCallableName(), m_globals);
 	}
 }
 
-void interpreter_visitor::ExitFunction(const std::shared_ptr<SymbolTable> &previousSymbolTable)
+void interpreter_visitor::ExitFunction(const std::shared_ptr<DynamicValueTable> &previousSymbolTable)
 {
 	m_symbolTable = previousSymbolTable;
 }
@@ -465,9 +304,9 @@ void interpreter_visitor::Visit(ast::CallPtr c)
 {
 	c->GetCallee()->AcceptVisitor(this);
 	auto popped = PopValue();
-	auto callee = std::dynamic_pointer_cast<Callable>(popped);
+	auto callee = std::dynamic_pointer_cast<ICallable>(popped);
 
-	std::vector<BaseValuePtr> args;
+	std::vector<DynamicValueBasePtr> args;
 	for (auto &a : c->GetArguments())
 	{
 		a->AcceptVisitor(this);
@@ -483,9 +322,9 @@ void interpreter_visitor::Visit(ast::CallPtr c)
 	EnterFunction(callee);
 	try
 	{
-		callee->Call(this, args);
+		callee->Call(args);
 	}
-	catch (BaseValuePtr &f)
+	catch (DynamicValueBasePtr &f)
 	{
 		ExitFunction(prevSymbolTable);
 		PushValue(f);
@@ -498,19 +337,21 @@ void interpreter_visitor::Visit(ast::CallPtr c)
 
 void interpreter_visitor::Visit(ast::FunctionDeclarationPtr func)
 {
-	auto identifier = func->GetIdentifier()->GetIdentifier();
+	auto identifier = func->GetIdentifier();
 	auto parameters = func->GetParameters();
 	auto body = func->GetFunctionBody();
+	auto callableBody = std::make_shared<ScriptCallableBody>(identifier, body, parameters);
 
-	auto callable = std::make_shared<Function>();
-	callable->SetCallableBody(body);
-	callable->SetCallableName(identifier);
+	auto callable = std::make_shared<Function>(callableBody);
+	callable->SetCallableName(identifier->GetIdentifier());
 	callable->SetClosure(GetCurrentSymbolTable());
 
+	/*
 	callable->SetParameters(parameters);
+	*/
 	callable->SetArity(parameters.size());
 
-	GetCurrentSymbolTable()->Declare({identifier, callable});
+	GetCurrentSymbolTable()->Declare(identifier->GetIdentifier(), callable);
 }
 
 void interpreter_visitor::Visit(ast::ParameterPtr par) { throw std::runtime_error("Unimplemented"); }
@@ -521,41 +362,44 @@ void interpreter_visitor::Visit(ast::ReturnPtr r)
 	if (returnExression)
 	{
 		returnExression->AcceptVisitor(this);
-		throw static_cast<BaseValuePtr>(PopValue());
+		throw static_cast<DynamicValueBasePtr>(PopValue());
 	}
 
-	throw static_cast<BaseValuePtr>(std::make_shared<NullObject>());
+	throw static_cast<DynamicValueBasePtr>(std::make_shared<NullObject>());
 }
 
 void interpreter_visitor::Visit(ast::ClassDeclarationPtr c)
 {
-	auto &identifier = c->GetIdentifier()->GetIdentifier();
-	auto klass = std::make_shared<Class>(identifier);
+	auto &identifier = c->GetIdentifier();
+	auto klass = std::make_shared<DynamicClass>(identifier->GetIdentifier());
 
-	GetCurrentSymbolTable()->Declare({identifier, klass});
+	GetCurrentSymbolTable()->Declare(identifier->GetIdentifier(), klass);
 
 	for (auto &m : c->GetMethods())
 	{
-		auto callable = std::make_shared<Function>();
-		callable->SetCallableBody(m->GetFunctionBody());
-		callable->SetCallableName(m->GetIdentifier()->GetIdentifier());
-		callable->SetClosure(GetCurrentSymbolTable());
-
+		auto identifier = m->GetIdentifier();
 		auto parameters = m->GetParameters();
-		callable->SetParameters(parameters);
+		auto body = m->GetFunctionBody();
+		auto callableBody = std::make_shared<ScriptCallableBody>(identifier, body, parameters);
+
+		auto callable = std::make_shared<Function>(callableBody);
+		callable->SetClosure(GetCurrentSymbolTable());
 		callable->SetArity(parameters.size());
 
-		klass->AddMethod(m->GetIdentifier()->GetIdentifier(), callable);
+		// klass->AddMethod(m->GetIdentifier()->GetIdentifier(), callable);
 	}
 }
 
 void interpreter_visitor::Visit(ast::AnonymousMethodPtr a)
 {
+	/*
 	a->GetInstance()->AcceptVisitor(this);
 	auto instance = std::dynamic_pointer_cast<Instance>(PopValue());
 
-	auto callable = std::make_shared<Function>();
-	callable->SetCallableBody(a->GetBody());
+	auto body = a->GetBody();
+	auto callableBody = std::make_shared<ScriptCallableBody>(nullptr, body, {});
+
+	auto callable = std::make_shared<Function>(callableBody);
 	callable->SetCallableName("AnonymousMethod");
 	callable->SetClosure(GetCurrentSymbolTable());
 	callable->SetArity(0);
@@ -564,34 +408,35 @@ void interpreter_visitor::Visit(ast::AnonymousMethodPtr a)
 	auto prevSymbolTable = GetCurrentSymbolTable();
 
 	EnterFunction(callable);
-	std::vector<BaseValuePtr> args;
+	std::vector<DynamicValueBasePtr> args;
 	try
 	{
-		callable->Call(this, args);
+	    callable->Call(this, args);
 	}
-	catch (BaseValuePtr &f)
+	catch (DynamicValueBasePtr &f)
 	{
-		ExitFunction(prevSymbolTable);
-		PushValue(f);
-		return;
+	    ExitFunction(prevSymbolTable);
+	    PushValue(f);
+	    return;
 	}
 	ExitFunction(prevSymbolTable);
 
 	// By default an anonymous method returns the instance
 	PushValue(instance);
+	*/
 }
 
 void interpreter_visitor::Visit(ast::GetExpressionPtr e)
 {
 	e->GetLhs()->AcceptVisitor(this);
-	auto lhs = std::dynamic_pointer_cast<Instance>(PopValue());
+	auto lhs = std::dynamic_pointer_cast<DynamicInstance>(PopValue());
 	auto identifier = e->GetIdentifier()->GetIdentifier();
 
 	auto value = lhs->GetMember(identifier);
 	auto method = std::dynamic_pointer_cast<Function>(value);
 	if (method)
 	{
-		PushValue(lhs->Bind(method, m_globals));
+		PushValue(lhs->Bind(method->GetCallableBody(), m_globals));
 	}
 	else
 	{
@@ -602,12 +447,12 @@ void interpreter_visitor::Visit(ast::GetExpressionPtr e)
 void interpreter_visitor::Visit(ast::SetExpressionPtr e)
 {
 	e->GetLhs()->AcceptVisitor(this);
-	auto lhs = std::dynamic_pointer_cast<Instance>(PopValue());
+	auto lhs = std::dynamic_pointer_cast<DynamicInstance>(PopValue());
 	auto identifier = e->GetIdentifier()->GetIdentifier();
 	e->GetRhs()->AcceptVisitor(this);
 	auto rhs = PopValue();
 
-	lhs->GetLocalSymbolTable()->Declare({identifier, rhs});
+	lhs->GetInstanceValueTable()->Declare(identifier, rhs);
 	PushValue(rhs);
 }
 
@@ -619,12 +464,12 @@ void interpreter_visitor::Visit(ast::ProgramPtr p)
 	}
 }
 
-void interpreter_visitor::PushValue(const BaseValuePtr &v) { m_values.push(v); }
+void interpreter_visitor::PushValue(const DynamicValueBasePtr &v) { m_values.push(v); }
 
-BaseValuePtr interpreter_visitor::PopValue()
+DynamicValueBasePtr interpreter_visitor::PopValue()
 {
 	m_lastValue = m_values.top();
 	m_values.pop();
 	return m_lastValue;
 }
-}  // namespace sscript
+}  // namespace selector

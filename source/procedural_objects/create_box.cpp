@@ -17,9 +17,9 @@ const char* CreateBoxGeometry::name = "CreateBoxGeometry";
 CreateBoxGeometry::CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-	SetParameter("xSize", 0.0f);
-	SetParameter("ySize", 0.0f);
-	SetParameter("zSize", 0.0f);
+	RegisterMember("xSize", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("ySize", std::make_shared<FloatValue>(0.0f));
+	RegisterMember("zSize", std::make_shared<FloatValue>(0.0f));
 
 	CreateOutputInterface(outputGeometry);
 }
@@ -30,9 +30,9 @@ void CreateBoxGeometry::Execute()
 {
 	START_PROFILE;
 
-	float xSize = GetParameterAs<float>("xSize");
-	float ySize = GetParameterAs<float>("ySize");
-	float zSize = GetParameterAs<float>("zSize");
+	float xSize = get_parameter_as<float>(GetMember("xSize"));
+	float ySize = get_parameter_as<float>(GetMember("ySize"));
+	float zSize = get_parameter_as<float>(GetMember("zSize"));
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
