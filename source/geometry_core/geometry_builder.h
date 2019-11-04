@@ -112,7 +112,7 @@ public:
 
 			auto currentEdge = m_geometry->GetOutEdge(face.m_splitPoints[2]);
 
-			for (auto i = 3; i < m_faceIndices.size(); ++i)
+			for (auto i = 3u; i < m_faceIndices.size(); ++i)
 			{
 				LOG_TRACE(GeometryCore, " Going to split edge %d", currentEdge);
 

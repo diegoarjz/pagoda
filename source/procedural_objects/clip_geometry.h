@@ -18,6 +18,6 @@ public:
 
 	void Execute() override;
 };
-};  // namespace selector
+}  // namespace selector
 
 #endif

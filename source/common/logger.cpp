@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <stdarg.h>
 
 namespace selector
 {
