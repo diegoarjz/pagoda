@@ -7,6 +7,8 @@
 #include <boost/phoenix/phoenix.hpp>
 #include <boost/spirit/include/qi.hpp>
 
+#include <vector>
+
 namespace selector
 {
 template<class Iterator>

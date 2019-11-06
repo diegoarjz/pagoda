@@ -5,6 +5,8 @@
 
 #include <string>
 #include <variant>
+#include <vector>
+#include <memory>
 
 namespace selector
 {
@@ -57,7 +59,7 @@ T get_parameter_as(const Parameter &p)
 {
 	parameter_getter<T> getter;
 	return std::visit(getter, p);
-};
+}
 
 }  // namespace selector
 

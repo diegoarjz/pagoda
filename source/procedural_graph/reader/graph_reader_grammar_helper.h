@@ -2,6 +2,7 @@
 #define SELECTOR_PROCEDURAL_GRAPH_GRAPH_READER_GRAMMAR_HELPER_H_
 
 #include <memory>
+#include <vector>
 
 namespace selector
 {

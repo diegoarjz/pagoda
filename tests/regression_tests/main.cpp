@@ -84,20 +84,20 @@ boost::filesystem::path RegressionTest::s_testFilesDirectory = "";
 #define REGRESSION_TEST(NAME, ...) \
 	TEST(RegressionTestCase, NAME) { RegressionTest(#NAME, {__VA_ARGS__}); }
 
-REGRESSION_TEST(create_rect, "geometry.obj");
-REGRESSION_TEST(create_box, "geometry.obj");
-REGRESSION_TEST(export_geometry, "geometry.obj");
-REGRESSION_TEST(expression, "geometry.obj");
-REGRESSION_TEST(extrusion, "geometry.obj");
-REGRESSION_TEST(parameter_definition, "geometry.obj");
-REGRESSION_TEST(parameter_overwrite, "geometry.obj");
-REGRESSION_TEST(parameter_renaming, "geometry.obj");
-REGRESSION_TEST(clip_geometry, "front.obj", "back.obj", "scope0.obj", "scope1.obj");
-REGRESSION_TEST(triangulate_geometry, "geometry.obj");
+REGRESSION_TEST(create_rect, "geometry.obj")
+REGRESSION_TEST(create_box, "geometry.obj")
+REGRESSION_TEST(export_geometry, "geometry.obj")
+REGRESSION_TEST(expression, "geometry.obj")
+REGRESSION_TEST(extrusion, "geometry.obj")
+REGRESSION_TEST(parameter_definition, "geometry.obj")
+REGRESSION_TEST(parameter_overwrite, "geometry.obj")
+REGRESSION_TEST(parameter_renaming, "geometry.obj")
+REGRESSION_TEST(clip_geometry, "front.obj", "back.obj", "scope0.obj", "scope1.obj")
+REGRESSION_TEST(triangulate_geometry, "geometry.obj")
 REGRESSION_TEST(repeat_split,
 "geometry_0.obj", "geometry_11.obj","geometry_14.obj","geometry_17.obj","geometry_2.obj", "geometry_22.obj","geometry_25.obj","geometry_28.obj","geometry_30.obj","geometry_5.obj", "geometry_8.obj",
 "geometry_1.obj", "geometry_12.obj","geometry_15.obj","geometry_18.obj","geometry_20.obj","geometry_23.obj","geometry_26.obj","geometry_29.obj","geometry_31.obj","geometry_6.obj", "geometry_9.obj",
-"geometry_10.obj","geometry_13.obj","geometry_16.obj","geometry_19.obj","geometry_21.obj","geometry_24.obj","geometry_27.obj","geometry_3.obj", "geometry_4.obj", "geometry_7.obj");
+"geometry_10.obj","geometry_13.obj","geometry_16.obj","geometry_19.obj","geometry_21.obj","geometry_24.obj","geometry_27.obj","geometry_3.obj", "geometry_4.obj", "geometry_7.obj")
 
 int main(int argc, char* argv[])
 {
