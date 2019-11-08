@@ -11,6 +11,16 @@
 
 namespace selector
 {
+template<class IndexType>
+class IndexedDeletedException : public std::runtime_error
+{
+public:
+	IndexedDeletedException(const IndexType& i)
+	    : std::runtime_error("Tried to access deleted index " + std::to_string(i))
+	{
+	}
+};
+
 template<class IndexType, class ValueType>
 class IndexedContainer
 {
@@ -28,18 +38,34 @@ public:
 
 	using ContainerType = std::vector<ValueType>;
 
-	IndexedContainer(const ValueType& invalidValue) : m_nextIndex(0), m_count(0), m_invalidValue(invalidValue) {}
+	IndexedContainer() : m_nextIndex(0), m_count(0) {}
 
 	ValueType& Get(const IndexType& index)
 	{
 		START_PROFILE;
+        if (!m_validIndex[index])
+        {
+            throw IndexedDeletedException(index);
+        }
 		return m_container.at(index);
 	}
 
 	const ValueType& Get(const IndexType& index) const
 	{
 		START_PROFILE;
+        if (!m_validIndex[index])
+        {
+            throw IndexedDeletedException(index);
+        }
 		return m_container.at(index);
+	}
+
+	template<typename... Args>
+	IndexValuePair CreateAndGet(Args... args)
+	{
+		START_PROFILE;
+		auto newIndex = Create(args...);
+		return IndexValuePair{newIndex, Get(newIndex)};
 	}
 
 	template<typename... Args>
@@ -69,10 +95,10 @@ public:
 			return;
 		}
 		--m_count;
-		m_container[index] = m_invalidValue;
+		m_validIndex[index] = false;
 	}
 
-	bool HasIndex(const IndexType& index) { return m_container.size() > index && m_container[index] != m_invalidValue; }
+	bool HasIndex(const IndexType& index) { return m_container.size() > index && m_validIndex[index]; }
 
 	std::size_t Count() const { return m_count; }
 
@@ -84,7 +110,10 @@ public:
 		{
 		}
 
-		IndexValuePair operator*() { return IndexValuePair{m_currentIndex, m_container.m_container.at(m_currentIndex)}; }
+		IndexValuePair operator*()
+		{
+			return IndexValuePair{m_currentIndex, m_container.m_container.at(m_currentIndex)};
+		}
 
 		iterator& operator++()
 		{
@@ -107,7 +136,7 @@ public:
 		{
 			for (auto i = index; i < m_container.m_container.size(); ++i)
 			{
-				if (m_container.m_container[i] != m_container.m_invalidValue)
+				if (m_container.m_validIndex[i])
 				{
 					return i;
 				}
@@ -115,7 +144,7 @@ public:
 			return m_container.m_container.size();
 		}
 
-        IndexedContainer_t &m_container;
+		IndexedContainer_t& m_container;
 		std::size_t m_currentIndex;
 	};
 
@@ -127,16 +156,18 @@ private:
 	{
 		if (m_container.size() <= index)
 		{
-			m_container.resize(index * 2 + 1, ValueType(m_invalidValue));
+			m_container.resize(index * 2 + 1);
+			m_validIndex.resize(index * 2 + 1);
 		}
 		++m_count;
 		m_container[index] = v;
+        m_validIndex[index] = true;
 		return index;
 	}
 
 	IndexType CreateIndex()
 	{
-		while (m_nextIndex < m_container.size() && m_container[m_nextIndex] != m_invalidValue)
+		while (m_nextIndex < m_container.size() && m_validIndex[m_nextIndex])
 		{
 			++m_nextIndex;
 		}
@@ -145,8 +176,8 @@ private:
 	IndexType m_nextIndex;
 
 	ContainerType m_container;
+	std::vector<bool> m_validIndex;
 	std::size_t m_count;
-	ValueType m_invalidValue;
 };
 
 template<class IndexType, class ValueType>

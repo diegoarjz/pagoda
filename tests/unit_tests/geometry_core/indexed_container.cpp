@@ -24,23 +24,35 @@ const Value Value::s_invalidValue(std::numeric_limits<std::size_t>::max());
 
 TEST(IndexedContainerTest, when_creating_values_should_return_incremental_indices)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	EXPECT_EQ(c.Create(1), 0);
 	EXPECT_EQ(c.Create(1), 1);
 }
 
 TEST(IndexedContainerTest, when_creating_values_should_store_the_values)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
     c.Create(1);
     c.Create(2);
 	EXPECT_EQ(c.Get(0).m_value, 1);
 	EXPECT_EQ(c.Get(1).m_value, 2);
 }
 
+TEST(IndexedContainerTest, when_creating_and_getting_should_return_the_index_and_value)
+{
+	IndexedContainer<std::size_t, Value> c;
+    auto e1 = c.CreateAndGet(1);
+    auto e2 = c.CreateAndGet(2);
+
+    EXPECT_EQ(e1.m_index, 0);
+    EXPECT_EQ(e1.m_value, 1);
+    EXPECT_EQ(e2.m_index, 1);
+    EXPECT_EQ(e2.m_value, 2);
+}
+
 TEST(IndexedContainerTest, when_checking_if_has_index_should_check_for_existence)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.Create(2);
 
@@ -49,17 +61,25 @@ TEST(IndexedContainerTest, when_checking_if_has_index_should_check_for_existence
 	EXPECT_FALSE(c.HasIndex(2));
 }
 
-TEST(IndexedContainerTest, when_deleting_an_index_should_set_its_value_to_invalid)
+TEST(IndexedContainerTest, when_accessing_a_deleted_index_should_throw)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.Delete(0);
-	EXPECT_EQ(c.Get(0), Value::s_invalidValue);
+    try
+    {
+        c.Get(0);
+    }
+    catch (IndexedDeletedException<std::size_t> &e)
+    {
+        return;
+    }
+    FAIL() << "Should have thrown";
 }
 
 TEST(IndexedContainerTest, when_checking_if_has_index_of_a_deleted_index_should_return_false)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.Create(2);
 	c.Delete(0);
@@ -69,7 +89,7 @@ TEST(IndexedContainerTest, when_checking_if_has_index_of_a_deleted_index_should_
 
 TEST(IndexedContainerTest, when_getting_or_creating_should_create_if_doesnt_exist)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	auto value = c.GetOrCreate(2, 123);
 	EXPECT_EQ(value.m_value, 123);
@@ -77,7 +97,7 @@ TEST(IndexedContainerTest, when_getting_or_creating_should_create_if_doesnt_exis
 
 TEST(IndexedContainerTest, when_creating_a_new_element_after_getting_or_creating_should_use_the_next_available_index)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.GetOrCreate(2, 123);
 	auto index = c.Create(321);
@@ -88,7 +108,7 @@ TEST(IndexedContainerTest, when_creating_a_new_element_after_getting_or_creating
 
 TEST(IndexedContainerTest, when_getting_the_count_of_elements_should_not_take_into_account_the_deleted_indices)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.Create(2);
 	c.Create(3);
@@ -99,7 +119,7 @@ TEST(IndexedContainerTest, when_getting_the_count_of_elements_should_not_take_in
 
 TEST(IndexedContainerTest, when_iterating_should_iterate_indices_in_order)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.Create(2);
 	c.Create(3);
@@ -115,7 +135,7 @@ TEST(IndexedContainerTest, when_iterating_should_iterate_indices_in_order)
 
 TEST(IndexedContainerTest, when_iterating_should_skip_the_deleted_indices)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.Create(2);
 	c.Create(3);
@@ -132,7 +152,7 @@ TEST(IndexedContainerTest, when_iterating_should_skip_the_deleted_indices)
 
 TEST(IndexedContainerTest, when_getting_an_element_should_be_able_to_change_the_value)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	auto index = c.Create(1);
     auto& value = c.Get(index);
     value.m_value = 123;
@@ -141,7 +161,7 @@ TEST(IndexedContainerTest, when_getting_an_element_should_be_able_to_change_the_
 
 TEST(IndexedContainerTest, when_changing_values_through_an_iterator_should_change_the_stored_value)
 {
-	IndexedContainer<std::size_t, Value> c(Value::s_invalidValue);
+	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.Create(2);
 
