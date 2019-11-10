@@ -150,6 +150,21 @@ TEST(IndexedContainerTest, when_iterating_should_skip_the_deleted_indices)
 	}
 }
 
+TEST(IndexedContainerTest, when_iterating_should_skip_the_invalid_indices)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Create(2);
+
+    auto i = 0u;
+    for (const auto el : c)
+    {
+        EXPECT_EQ(el.m_index, i);
+        EXPECT_EQ(el.m_value.m_value, i + 1);
+        ++i;
+    }
+}
+
 TEST(IndexedContainerTest, when_getting_an_element_should_be_able_to_change_the_value)
 {
 	IndexedContainer<std::size_t, Value> c;

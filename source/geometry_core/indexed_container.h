@@ -43,6 +43,7 @@ public:
 	ValueType& Get(const IndexType& index)
 	{
 		START_PROFILE;
+        DBG_ASSERT(index < m_container.size());
         if (!m_validIndex[index])
         {
             throw IndexedDeletedException(index);
@@ -53,6 +54,7 @@ public:
 	const ValueType& Get(const IndexType& index) const
 	{
 		START_PROFILE;
+        DBG_ASSERT(index < m_container.size());
         if (!m_validIndex[index])
         {
             throw IndexedDeletedException(index);
@@ -65,7 +67,7 @@ public:
 	{
 		START_PROFILE;
 		auto newIndex = Create(args...);
-		return IndexValuePair{newIndex, Get(newIndex)};
+		return IndexValuePair{static_cast<IndexType>(newIndex), Get(newIndex)};
 	}
 
 	template<typename... Args>
@@ -112,7 +114,7 @@ public:
 
 		IndexValuePair operator*()
 		{
-			return IndexValuePair{m_currentIndex, m_container.m_container.at(m_currentIndex)};
+			return IndexValuePair{static_cast<IndexType>(m_currentIndex), m_container.m_container.at(m_currentIndex)};
 		}
 
 		iterator& operator++()
@@ -159,6 +161,7 @@ private:
 			m_container.resize(index * 2 + 1);
 			m_validIndex.resize(index * 2 + 1);
 		}
+        DBG_ASSERT(index < m_container.size());
 		++m_count;
 		m_container[index] = v;
         m_validIndex[index] = true;
@@ -173,8 +176,8 @@ private:
 		}
 		return m_nextIndex;
 	}
-	IndexType m_nextIndex;
 
+	IndexType m_nextIndex;
 	ContainerType m_container;
 	std::vector<bool> m_validIndex;
 	std::size_t m_count;

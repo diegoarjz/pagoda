@@ -1,8 +1,8 @@
 #include "logger.h"
 
+#include <stdarg.h>
 #include <fstream>
 #include <iostream>
-#include <stdarg.h>
 
 namespace selector
 {
@@ -18,12 +18,12 @@ const bool Logger::trace_enabled[static_cast<uint32_t>(Logger::TraceLogs::Max)] 
     false,  // Core,
     false,  // Common,
     false,  // MathLib,
-    false,  // GeometryCore,
+    true,   // GeometryCore,
     true,   // GeometryOperations,
     false,  // Parameter,
     false,  // ProceduralGraph,
     false,  // ProceduralGraphReader,
-    true,   // ProceduralObjects,
+    false,  // ProceduralObjects,
 };
 
 Logger *Logger::trace()
