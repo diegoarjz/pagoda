@@ -3,7 +3,6 @@ set(test_srcs
     "test_utils.cpp"
     "common/profiler.cpp"
     "common/range.cpp"
-    "common/const_str.cpp"
     "math_lib/vec_base.cpp"
     "math_lib/matrix_base.cpp"
     "math_lib/line_3d.cpp"

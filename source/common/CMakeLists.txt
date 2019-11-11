@@ -1,7 +1,6 @@
 set(COMMON_SRCS
     "assertions.cpp"
     "assertions.h"
-    "const_str.h"
     "factory.h"
     "file_util.cpp"
     "file_util.h"
