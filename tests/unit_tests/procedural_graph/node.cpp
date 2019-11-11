@@ -40,17 +40,3 @@ TEST_F(NodeTest, when_getting_node_name_after_construction_should_return_empty_n
 {
 	EXPECT_EQ(this->node->GetName(), "");
 }
-
-TEST_F(NodeTest, when_setting_expression_variables_should_set_the_variables_in_expressions)
-{
-	FAIL();
-	/*
-	auto context = std::make_shared<Context>("a");
-	auto expr = Expression::CreateExpression("par * 2;");
-	context->SetParameter("par1", expr);
-	context->SetParameter("par", std::make_shared<FloatValue>(3.0f));
-	node->SetParameterContext(context);
-	node->SetExpressionVariables();
-	ASSERT_EQ(expr->GetAsFloat(), 6.0f);
-	*/
-}

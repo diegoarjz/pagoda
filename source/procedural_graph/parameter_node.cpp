@@ -20,11 +20,11 @@ void ParameterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 {
 	START_PROFILE;
 
-	for (const auto &parameter : GetMembers())
+    for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter)
 	{
 		for (const auto &outNode : outNodes)
 		{
-			outNode->SetMember(parameter.first, parameter.second);
+			outNode->RegisterOrSetMember(parIter->first, parIter->second.m_value);
 		}
 	}
 }

@@ -17,8 +17,11 @@ public:
 
 	void RegisterMember(const std::string &name, DynamicValueBasePtr v);
 	void SetMember(const std::string &name, DynamicValueBasePtr v);
+    void RegisterOrSetMember(const std::string &name, DynamicValueBasePtr v);
 	DynamicValueBasePtr GetMember(const std::string &name);
-	std::unordered_map<std::string, DynamicValueBasePtr> GetMembers();
+
+    DynamicValueTable::iterator GetMembersBegin();
+    DynamicValueTable::iterator GetMembersEnd();
 
 private:
 	DynamicValueTable m_memberTable;

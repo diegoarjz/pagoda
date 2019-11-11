@@ -4,6 +4,8 @@
 #include "../value_visitor.h"
 #include "has_operators.h"
 
+#include "../expression.h"
+
 namespace selector
 {
 template<class LHS, class RHS>

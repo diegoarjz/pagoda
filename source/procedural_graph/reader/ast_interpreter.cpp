@@ -5,6 +5,7 @@
 #include "node_definition_node.h"
 #include "node_link_node.h"
 
+#include "dynamic_value/expression.h"
 #include "dynamic_value/float_value.h"
 #include "dynamic_value/integer_value.h"
 #include "dynamic_value/string_value.h"

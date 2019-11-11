@@ -12,7 +12,7 @@
 #include <dynamic_value/string_value.h>
 #include <dynamic_value/type_info.h>
 #include <dynamic_value/vector3.h>
-#include <parameter/expression.h>
+#include <dynamic_value/expression.h>
 
 #include <gtest/gtest.h>
 

@@ -1,25 +1,23 @@
 #pragma once
 
+#include "expression.h"
+#include "boolean_value.h"
+#include "dynamic_class.h"
+#include "dynamic_instance.h"
 #include "dynamic_value_base.h"
+#include "float_value.h"
+#include "function.h"
+#include "integer_value.h"
+#include "null_object_value.h"
+#include "string_value.h"
+#include "type_info.h"
+#include "vector3.h"
 
 #include <stdexcept>
 #include <type_traits>
 
 namespace selector
 {
-class DynamicValueBase;
-class Boolean;
-class FloatValue;
-class Integer;
-class String;
-class NullObject;
-class TypeInfo;
-class Vector3;
-class Function;
-class DynamicClass;
-class DynamicInstance;
-class Expression;
-
 template<typename R>
 struct ValueVisitor
 {

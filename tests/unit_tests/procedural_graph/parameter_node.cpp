@@ -1,5 +1,6 @@
 #include <parameter/parameter.h>
 #include <procedural_graph/parameter_node.h>
+#include <dynamic_value/get_value_as.h>
 
 #include <gtest/gtest.h>
 
@@ -7,48 +8,31 @@ using namespace selector;
 
 TEST(ParameterNode, when_executing_a_parameter_node_should_propagate_the_parameters_to_its_outnodes)
 {
-	FAIL();
-	/*
-	auto p = std::make_shared<ParameterNode>();
-	p->SetParameterContext(std::make_shared<Context>("ctx"));
-	NodeSet<Node> outNodes{std::make_shared<ParameterNode>(), std::make_shared<ParameterNode>()};
-	NodeSet<Node> emptyNodeSet;
+    auto p = std::make_shared<ParameterNode>();
+    NodeSet<Node> outNodes{std::make_shared<ParameterNode>(), std::make_shared<ParameterNode>()};
+    NodeSet<Node> emptyNodeSet;
 
-	for (auto &n : outNodes)
-	{
-	    n->SetParameterContext(std::make_shared<Context>("ctx"));
-	}
+    p->RegisterMember("a", std::make_shared<FloatValue>(123.0f));
+    p->Execute(emptyNodeSet, outNodes);
 
-	p->GetParameterContext()->SetParameter("a", std::make_shared<FloatValue>(123.0f));
-	p->GetParameterContext()->SetParameter("b", std::make_shared<FloatValue>(0.0f));
-
-	p->Execute(emptyNodeSet, outNodes);
-
-	for (auto &n : outNodes)
-	{
-	    EXPECT_EQ(n->GetParameterContext()->GetParameterAs<float>("a"), 123.0f);
-	    EXPECT_EQ(n->GetParameterContext()->GetParameterAs<float>("b"), 0.0f);
-	}
-	*/
+    for (auto &n : outNodes)
+    {
+        EXPECT_EQ(get_value_as<float>(*(n->GetMember("a"))), 123.0f);
+    }
 }
 
 TEST(ParameterNode, when_executing_a_parameter_node_should_overwrite_parameters_in_out_nodes)
 {
-	FAIL();
-	/*
 	auto p = std::make_shared<ParameterNode>();
-	p->SetParameterContext(std::make_shared<Context>("ctx"));
-	p->GetParameterContext()->SetParameter("a", std::make_shared<FloatValue>(123.0f));
+    p->RegisterMember("a", std::make_shared<FloatValue>(123.0f));
 
-	auto p2 = std::make_shared<ParameterNode>();
-	p2->SetParameterContext(std::make_shared<Context>("ctx"));
-	p2->GetParameterContext()->SetParameter("a", std::make_shared<FloatValue>(0.0f));
+    auto p2 = std::make_shared<ParameterNode>();
+    p2->RegisterMember("a", std::make_shared<FloatValue>(0.0f));
 
-	NodeSet<Node> outNodes{p2};
-	NodeSet<Node> emptyNodeSet;
+    NodeSet<Node> emptyNodeSet;
+    NodeSet<Node> outNodes{p2};
 
-	p->Execute(emptyNodeSet, outNodes);
+    p->Execute(emptyNodeSet, outNodes);
 
-	EXPECT_EQ(p2->GetParameterContext()->GetParameterAs<float>("a"), 123.0f);
-	*/
+    EXPECT_EQ(get_value_as<float>(*(p2->GetMember("a"))), 123.0f);
 }

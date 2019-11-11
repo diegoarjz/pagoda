@@ -1,6 +1,4 @@
 set(PARAMETER_SRCS
-    "expression.cpp"
-    "expression.h"
     "parameter.cpp"
     "parameter.h"
     "parameter_exception.cpp"
@@ -12,7 +10,6 @@ set(PARAMETER_SRCS
 )
 
 set(PARAMETER_PUBLIC_HEADERS
-    "expression.h"
     "parameter.h"
     "parameter_exception.h"
     "variable.h"

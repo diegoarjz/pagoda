@@ -1,24 +1,24 @@
 #include "expression.h"
 
-#include "../dynamic_value/boolean_value.h"
-#include "../dynamic_value/dynamic_class.h"
-#include "../dynamic_value/dynamic_instance.h"
-#include "../dynamic_value/dynamic_value_table.h"
-#include "../dynamic_value/float_value.h"
-#include "../dynamic_value/function.h"
-#include "../dynamic_value/integer_value.h"
-#include "../dynamic_value/null_object_value.h"
-#include "../dynamic_value/string_value.h"
-#include "../dynamic_value/value_not_found.h"
-#include "../dynamic_value/value_visitor.h"
+#include "boolean_value.h"
+#include "dynamic_class.h"
+#include "dynamic_instance.h"
+#include "dynamic_value_table.h"
+#include "float_value.h"
+#include "function.h"
+#include "integer_value.h"
+#include "null_object_value.h"
+#include "string_value.h"
+#include "value_not_found.h"
+#include "value_visitor.h"
 
 #include "selscript/intermediate/ast.h"
 #include "selscript/intermediate/ast_visitor.h"
 #include "selscript/interpreter/interpreter.h"
 #include "selscript/parser/parser.h"
 
+#include "../parameter/parameter_exception.h"
 #include "common/profiler.h"
-#include "parameter_exception.h"
 
 #include <unordered_map>
 
@@ -186,13 +186,27 @@ public:
 	uint32_t m_getExpressionCount;
 };
 
+struct dependent_expression_adder : public ValueVisitor<void>
+{
+	dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
+
+	void operator()(Expression &e) { e.AddDependentExpression(m_expression); }
+
+	template<typename T>
+	void operator()(const T &)
+	{
+	}
+
+	ExpressionPtr m_expression;
+};
+
 class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
 {
 public:
 	Impl(ast::ProgramPtr &&program) : m_expression(program) {}
 	~Impl() {}
 
-	void Evaluate()
+	DynamicValueBasePtr Evaluate()
 	{
 		START_PROFILE;
 
@@ -225,11 +239,7 @@ public:
 					currentSymbolTable = nextInstance->GetInstanceValueTable();
 				}
 
-				throw std::runtime_error("Unimplemented");
-				/*
-				currentSymbolTable->Declare(*identifierIter,
-				                            std::get<0>(var.second));  // std::visit(converter, var.second)});
-				                            */
+				currentSymbolTable->Declare(*identifierIter, EvaluateIfExpression(var.second));
 			}
 			interpreter.PushExternalSymbols(variables);
 
@@ -239,30 +249,29 @@ public:
 			// TODO: this would not be needed if ExpressionInterpreter wasn't a singleton
 			interpreter.PopExternalSymbols();
 		}
+
+		return m_lastComputedValue;
 	}
+
+    DynamicValueBasePtr EvaluateIfExpression(const DynamicValueBasePtr &d)
+    {
+        ExpressionPtr e = std::dynamic_pointer_cast<Expression>(d);
+        if (e != nullptr)
+        {
+            return EvaluateIfExpression(e->Evaluate());
+        }
+        return d;
+    }
 
 	void SetVariableValue(const Variable &variableName, DynamicValueBasePtr value)
 	{
 		START_PROFILE;
-		throw std::runtime_error("Unimplemented");
-
-		/*
-		struct dependent_expression_adder
-		{
-		    dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
-
-		    void operator()(const DynamicValueBasePtr &) {}
-		    void operator()(const ExpressionPtr &e) { e->AddDependentExpression(m_expression); }
-
-		    ExpressionPtr m_expression;
-		};
 
 		dependent_expression_adder adder(m_expressionInterface);
-		std::visit(adder, value);
+		apply_visitor(adder, *value);
 
 		m_variableValues[variableName] = value;
 		SetDirty();
-		*/
 	}
 
 	void SetVariableValue(const std::string &variableName, DynamicValueBasePtr value)
@@ -344,5 +353,7 @@ const std::vector<std::weak_ptr<Expression>> Expression::GetDependentExpressions
 std::string Expression::ToString() const { return m_implementation->ToString(); }
 
 void Expression::AcceptVisitor(ValueVisitorBase &visitor) { visitor.Visit(*this); }
+
+DynamicValueBasePtr Expression::Evaluate() { return m_implementation->Evaluate(); }
 }  // namespace selector
 

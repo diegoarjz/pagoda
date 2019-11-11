@@ -2,7 +2,7 @@
 
 #include "binding/native_value_name.h"
 
-#include "../parameter/expression.h"
+#include "expression.h"
 #include "boolean_value.h"
 #include "dynamic_class.h"
 #include "dynamic_instance.h"

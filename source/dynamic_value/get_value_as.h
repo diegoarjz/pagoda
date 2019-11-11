@@ -3,19 +3,7 @@
 #include "binding/can_cast_to_native.h"
 #include "binding/native_value_name.h"
 
-#include "../parameter/expression.h"
-#include "boolean_value.h"
-#include "dynamic_class.h"
-#include "dynamic_instance.h"
-#include "dynamic_value_base.h"
-#include "float_value.h"
-#include "function.h"
-#include "integer_value.h"
-#include "null_object_value.h"
-#include "string_value.h"
-#include "type_info.h"
 #include "value_visitor.h"
-#include "vector3.h"
 
 namespace selector
 {
@@ -38,6 +26,12 @@ template<class T>
 class convert_to_native_visitor : public ValueVisitor<typename std::remove_reference<T>::type>
 {
 public:
+    T operator()(Expression &e)
+    {
+        auto evaluated = e.Evaluate();
+        return apply_visitor(*this, *evaluated);
+    }
+
 	template<typename V>
 	typename std::enable_if<can_cast_to_native<V, T>::value, T>::type operator()(V& value)
 	{

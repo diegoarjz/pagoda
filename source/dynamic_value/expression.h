@@ -1,10 +1,9 @@
 #ifndef SELECTOR_PARAMETER_EXPRESSION_H_
 #define SELECTOR_PARAMETER_EXPRESSION_H_
 
-#include "parameter.h"
-#include "variable.h"
+#include "../parameter/variable.h"
 
-#include "../dynamic_value/dynamic_value_base.h"
+#include "dynamic_value_base.h"
 
 #include <memory>
 #include <string>
@@ -73,6 +72,8 @@ public:
 	std::string ToString() const override;
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
+
+    DynamicValueBasePtr Evaluate();
 
 private:
 	class Impl;
