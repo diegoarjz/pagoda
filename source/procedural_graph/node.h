@@ -1,8 +1,7 @@
 #ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 #define SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 
-#include "../dynamic_value/class_base.h"
-#include "../dynamic_value/dynamic_value_base.h"
+#include "dynamic_value/builtin_class.h"
 #include "common/factory.h"
 #include "procedural_objects/procedural_operation.h"
 
@@ -23,7 +22,7 @@ using NodeSet = std::unordered_set<std::shared_ptr<Node>>;
  * Each subclass of \c Node is responsible for implementing an execution logic by
  * overriding the Node::Execute() method.
  */
-class Node : public DynamicValueBase, public ClassBase
+class Node : public BuiltinClass
 {
 public:
 	static const TypeInfoPtr s_typeInfo;

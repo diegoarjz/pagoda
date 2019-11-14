@@ -17,20 +17,22 @@ CreateRectGeometry::CreateRectGeometry(ProceduralObjectSystemPtr objectSystem) :
 {
 	START_PROFILE;
 
-	RegisterMember("width", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("height", std::make_shared<FloatValue>(0.0f));
+    RegisterValues({
+	    {"width", std::make_shared<FloatValue>(0.0f)},
+	    {"height", std::make_shared<FloatValue>(0.0f)}
+    });
 
 	CreateOutputInterface(output_geometry);
 }
 
 CreateRectGeometry::~CreateRectGeometry() {}
 
-void CreateRectGeometry::Execute()
+void CreateRectGeometry::DoWork()
 {
 	START_PROFILE;
 
-	float width = get_parameter_as<float>(GetMember("width"));
-	float height = get_parameter_as<float>(GetMember("height"));
+	float width = get_value_as<float>(*GetValue("width"));
+	float height = get_value_as<float>(*GetValue("height"));
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();

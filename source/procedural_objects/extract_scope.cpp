@@ -25,7 +25,7 @@ ExtractScope::ExtractScope(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 
 ExtractScope::~ExtractScope() {}
 
-void ExtractScope::Execute()
+void ExtractScope::DoWork()
 {
 	START_PROFILE;
 

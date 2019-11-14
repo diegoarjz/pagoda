@@ -16,7 +16,7 @@ public:
 	ClipGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~ClipGeometry();
 
-	void Execute() override;
+	void DoWork() override;
 };
 };  // namespace selector
 

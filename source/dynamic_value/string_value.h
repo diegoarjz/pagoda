@@ -37,6 +37,7 @@ public:
 
 	String operator+(const String& s) const;
 	String operator*(const Integer& i) const;
+	String operator+(const Integer& i) const;
 
 	bool operator==(const String& s) const;
 	bool operator!=(const String& s) const;

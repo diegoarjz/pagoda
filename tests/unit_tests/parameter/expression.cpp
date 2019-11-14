@@ -24,18 +24,6 @@ TEST_F(ExpressionTest, when_creating_an_expression_should_be_able_to_resolve_var
 	}
 }
 
-TEST_F(ExpressionTest, when_resolving_variables_should_be_able_to_get_compound_variables)
-{
-	auto expression = Expression::CreateExpression("a.b.c + d.e;");
-	auto variables = expression->GetVariables();
-	ASSERT_EQ(variables.size(), 2);
-	std::list<std::string> variableNames;
-	std::transform(variables.begin(), variables.end(), std::back_inserter(variableNames),
-	               [](const Variable &v) { return v.ToString(); });
-	EXPECT_NE(std::find(variableNames.begin(), variableNames.end(), "a.b.c"), variableNames.end());
-	EXPECT_NE(std::find(variableNames.begin(), variableNames.end(), "d.e"), variableNames.end());
-}
-
 TEST_F(ExpressionTest, when_evaluating_an_expression_should_be_able_to_evaluate_to_floats)
 {
 	auto expression = Expression::CreateExpression("1.0 + 2.0;");

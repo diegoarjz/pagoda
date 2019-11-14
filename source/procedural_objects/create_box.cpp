@@ -17,22 +17,24 @@ const char* CreateBoxGeometry::name = "CreateBoxGeometry";
 CreateBoxGeometry::CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-	RegisterMember("xSize", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("ySize", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("zSize", std::make_shared<FloatValue>(0.0f));
+    RegisterValues({
+	    {"xSize", std::make_shared<FloatValue>(0.0f)},
+	    {"ySize", std::make_shared<FloatValue>(0.0f)},
+	    {"zSize", std::make_shared<FloatValue>(0.0f)}
+    });
 
 	CreateOutputInterface(outputGeometry);
 }
 
 CreateBoxGeometry::~CreateBoxGeometry() {}
 
-void CreateBoxGeometry::Execute()
+void CreateBoxGeometry::DoWork()
 {
 	START_PROFILE;
 
-	float xSize = get_parameter_as<float>(GetMember("xSize"));
-	float ySize = get_parameter_as<float>(GetMember("ySize"));
-	float zSize = get_parameter_as<float>(GetMember("zSize"));
+	float xSize = get_value_as<float>(*GetValue("xSize"));
+	float ySize = get_value_as<float>(*GetValue("ySize"));
+	float zSize = get_value_as<float>(*GetValue("zSize"));
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();

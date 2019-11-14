@@ -1,5 +1,6 @@
 #include "operation_node.h"
 
+#include "dynamic_value/value_not_found.h"
 #include "graph.h"
 #include "input_interface_node.h"
 #include "node.h"
@@ -25,7 +26,7 @@ void OperationNode::SetConstructionArguments(
 		// TODO: throw
 	}
 
-	auto operation = m_operationFactory->Create(get_parameter_as<std::string>(operationIter->second));
+	auto operation = m_operationFactory->Create(get_value_as<std::string>(*operationIter->second));
 	if (operation == nullptr)
 	{
 		// TODO: throw
@@ -34,7 +35,11 @@ void OperationNode::SetConstructionArguments(
 	SetOperation(operation);
 }
 
-void OperationNode::SetOperation(ProceduralOperationPtr operation) { m_operation = operation; }
+void OperationNode::SetOperation(ProceduralOperationPtr operation)
+{
+	m_operation = operation;
+	RegisterOrSetMember("op", m_operation);
+}
 
 void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
 {
@@ -52,15 +57,20 @@ void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 		}
 	}
 
-	throw std::runtime_error("Unimplemented");
-	/*
-	const auto &operationParameters = m_operation->GetParameterNameList();
-	for (const auto &parameterName : operationParameters)
+	for (auto parIter = m_operation->GetMembersBegin(); parIter != m_operation->GetMembersEnd(); ++parIter)
 	{
-	    m_operation->SetMember(parameterName, GetMember(parameterName));
+		try
+		{
+			auto nodeParameter = GetMember(parIter->first);
+			m_operation->SetMember(parIter->first, GetMember(parIter->first));
+		}
+		catch (ValueNotFoundException &e)
+		{
+			LOG_TRACE(ProceduralGraph, "Operation parameter %s not found in Node %s", parIter->first.c_str(),
+			          GetName().c_str());
+		}
 	}
-	*/
-	// paramContext->SetParameter("op", m_operation);
+
 	// paramContext->UpdateExpressions();
 
 	m_operation->Execute();

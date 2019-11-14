@@ -5,6 +5,7 @@
 #include "function.h"
 #include "icallable_body.h"
 #include "type_info.h"
+#include "value_not_found.h"
 #include "value_visitor.h"
 
 namespace selector
@@ -12,7 +13,9 @@ namespace selector
 const TypeInfoPtr DynamicInstance::s_typeInfo = std::make_shared<TypeInfo>("DynamicInstance");
 
 DynamicInstance::DynamicInstance(DynamicClassPtr klass)
-    : DynamicValueBase(std::make_shared<TypeInfo>(klass->GetClassName())), m_class(klass)
+    : DynamicValueBase(std::make_shared<TypeInfo>(klass->GetClassName())),
+      ClassBase(klass->GetClassName()),
+      m_class(klass)
 {
 }
 
@@ -22,24 +25,16 @@ std::string DynamicInstance::ToString() const { return "<Instance:" + m_class->G
 
 void DynamicInstance::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
 
-std::shared_ptr<DynamicValueTable> DynamicInstance::GetInstanceValueTable()
-{
-	if (!m_valueTable)
-	{
-		m_valueTable = std::make_shared<DynamicValueTable>(m_class->GetClassName());
-		m_valueTable->Declare("this", shared_from_this());
-	}
-
-	return m_valueTable;
-}
-
-std::shared_ptr<DynamicValueBase> DynamicInstance::GetMember(const std::string& memberName)
-{
-	return GetInstanceValueTable()->Get(memberName);
-}
-
 FunctionPtr DynamicInstance::Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals)
 {
+	try
+	{
+		m_memberTable->Get("this");
+	}
+	catch (ValueNotFoundException&)
+	{
+		m_memberTable->Declare("this", shared_from_this());
+	}
 	auto boundMethod = std::make_shared<Function>(callable);
 	auto closure = GetInstanceValueTable();
 	closure->SetParent(globals);

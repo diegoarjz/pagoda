@@ -15,7 +15,7 @@ public:
 	ExtractScope(ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractScope();
 
-	void Execute() override;
+	void DoWork() override;
 };
 }  // namespace selector
 #endif

@@ -4,6 +4,7 @@
 #include "../../dynamic_value/binding/make_free_function.h"
 #include "../../dynamic_value/binding/unary_ops.h"
 #include "../../dynamic_value/boolean_value.h"
+#include "../../dynamic_value/class_base.h"
 #include "../../dynamic_value/dynamic_class.h"
 #include "../../dynamic_value/dynamic_instance.h"
 #include "../../dynamic_value/dynamic_value_base.h"
@@ -429,7 +430,7 @@ void interpreter_visitor::Visit(ast::AnonymousMethodPtr a)
 void interpreter_visitor::Visit(ast::GetExpressionPtr e)
 {
 	e->GetLhs()->AcceptVisitor(this);
-	auto lhs = std::dynamic_pointer_cast<DynamicInstance>(PopValue());
+	auto lhs = std::dynamic_pointer_cast<ClassBase>(PopValue());
 	auto identifier = e->GetIdentifier()->GetIdentifier();
 
 	auto value = lhs->GetMember(identifier);
@@ -447,7 +448,7 @@ void interpreter_visitor::Visit(ast::GetExpressionPtr e)
 void interpreter_visitor::Visit(ast::SetExpressionPtr e)
 {
 	e->GetLhs()->AcceptVisitor(this);
-	auto lhs = std::dynamic_pointer_cast<DynamicInstance>(PopValue());
+	auto lhs = std::dynamic_pointer_cast<ClassBase>(PopValue());
 	auto identifier = e->GetIdentifier()->GetIdentifier();
 	e->GetRhs()->AcceptVisitor(this);
 	auto rhs = PopValue();

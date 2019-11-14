@@ -13,6 +13,8 @@
 #include "type_info.h"
 #include "vector3.h"
 
+#include "procedural_objects/procedural_operation.h"
+
 #include <stdexcept>
 #include <type_traits>
 
@@ -38,6 +40,7 @@ public:
 	virtual void Visit(DynamicClass&) = 0;
 	virtual void Visit(DynamicInstance&) = 0;
 	virtual void Visit(Expression&) = 0;
+	virtual void Visit(ProceduralOperation&) = 0;
 };
 
 template<typename R, class V>
@@ -57,6 +60,7 @@ public:
 	void Visit(DynamicClass& c) override { m_returnValue = m_visitor(c); }
 	void Visit(DynamicInstance& i) override { m_returnValue = m_visitor(i); }
 	void Visit(Expression& e) override { m_returnValue = m_visitor(e); }
+	void Visit(ProceduralOperation& p) override { m_returnValue = m_visitor(p); }
 
 	R get_return_value() { return m_returnValue; }
 
@@ -81,6 +85,7 @@ public:
 	void Visit(DynamicClass& c) override { m_visitor(c); }
 	void Visit(DynamicInstance& i) override { m_visitor(i); }
 	void Visit(Expression& e) override { m_visitor(e); }
+	void Visit(ProceduralOperation& p) override { m_visitor(p); }
 
 	void get_return_value() {}
 

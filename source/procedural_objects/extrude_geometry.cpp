@@ -26,12 +26,12 @@ ExtrudeGeometry::ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem) : Proce
 	CreateInputInterface(input_geometry);
 	CreateOutputInterface(output_geometry);
 
-	RegisterMember("extrusion_amount", std::make_shared<FloatValue>(0.0f));
+	RegisterValues({{"extrusion_amount", std::make_shared<FloatValue>(0.0f)}});
 }
 
 ExtrudeGeometry::~ExtrudeGeometry() {}
 
-void ExtrudeGeometry::Execute()
+void ExtrudeGeometry::DoWork()
 {
 	START_PROFILE;
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
@@ -40,8 +40,9 @@ void ExtrudeGeometry::Execute()
 	while (HasInput(input_geometry))
 	{
 		ProceduralObjectPtr in_object = GetInputProceduralObject(input_geometry);
+        UpdateValue("extrusion_amount");
 
-		float extrusion_amount = get_parameter_as<float>(GetMember("extrusion_amount"));
+		float extrusion_amount = get_value_as<float>(*GetValue("extrusion_amount"));
 		Extrusion<Geometry> extrude(extrusion_amount);
 
 		// Geometry

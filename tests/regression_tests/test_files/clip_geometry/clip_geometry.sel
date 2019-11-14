@@ -38,7 +38,7 @@ extract_scope_out = OutputInterface(interface: "out", offset: 0)
 extract_scope_in -> extract_scope -> extract_scope_out;
 
 export_scope_in = InputInterface(interface: "in", offset: 0)
-export_scope = Operation(operation: "ExportGeometry") { path: $< "scope" + count + ".obj"; >$ }
+export_scope = Operation(operation: "ExportGeometry") { path: $< "scope" + op.count + ".obj"; >$ }
 
 front_geometry -> extract_scope_in;
 back_geometry -> extract_scope_in;

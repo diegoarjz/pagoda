@@ -5,6 +5,7 @@
 #include "node_set_visitor.h"
 #include "output_interface_node.h"
 #include "parameter/parameter.h"
+#include "dynamic_value/get_value_as.h"
 
 #include <procedural_objects/procedural_operation.h>
 
@@ -25,11 +26,11 @@ void InputInterfaceNode::SetConstructionArguments(
 	}
 	auto offsetIter = constructionArgs.find("offset");
 
-	auto interfaceName = get_parameter_as<std::string>(interfaceNameIter->second);
+	auto interfaceName = get_value_as<std::string>(*(interfaceNameIter->second));
 	uint16_t offset = 0;
 	if (offsetIter != std::end(constructionArgs))
 	{
-		offset = static_cast<uint16_t>(get_parameter_as<float>(offsetIter->second));
+		offset = static_cast<uint16_t>(get_value_as<float>(*offsetIter->second));
 	}
 	SetInterfaceName(InterfaceName(interfaceName, offset));
 }

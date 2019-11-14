@@ -39,6 +39,12 @@ target_link_libraries(
     PRIVATE
 )
 
+set_target_properties(
+    selscript_parser
+    PROPERTIES
+        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
+)
+
 include(GNUInstallDirs)
 install(TARGETS selscript_parser
     EXPORT selscript_parser-export

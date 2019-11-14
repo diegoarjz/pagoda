@@ -1,14 +1,15 @@
 #include "node.h"
 
-#include "../dynamic_value/type_info.h"
 #include "common/assertions.h"
+#include "dynamic_value/type_info.h"
+#include "dynamic_value/value_not_found.h"
 #include "parameter/parameter.h"
 
 namespace selector
 {
 const TypeInfoPtr Node::s_typeInfo = std::make_shared<TypeInfo>("Node");
 
-Node::Node() : DynamicValueBase(s_typeInfo), ClassBase("Node"), m_nodeName(""), m_nodeId(0) {}
+Node::Node() : BuiltinClass(s_typeInfo), m_nodeName(""), m_nodeId(0) {}
 Node::~Node() {}
 
 uint32_t Node::GetId() const { return m_nodeId; }
@@ -25,7 +26,30 @@ void Node::SetExecutionArguments(const std::unordered_map<std::string, DynamicVa
 	}
 }
 
-void Node::SetExpressionVariables() { throw std::runtime_error("Unimplemented"); /*m_context->UpdateExpressions();*/ }
+void Node::SetExpressionVariables()
+{
+	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter)
+	{
+		ExpressionPtr e = std::dynamic_pointer_cast<Expression>(parIter->second.m_value);
+		if (e != nullptr)
+		{
+			for (const auto &var : e->GetVariables())
+			{
+				try
+				{
+					auto variableIdentifiers = var.GetIdentifiers();
+					DynamicValueBasePtr nodeParameter = GetMember(variableIdentifiers.front());
+					e->SetVariableValue(variableIdentifiers.front(), nodeParameter);
+				}
+				catch (ValueNotFoundException &e)
+				{
+					LOG_TRACE(ProceduralGraph, "Operation parameter %s not found in Node %s", parIter->first.c_str(),
+					          GetName().c_str());
+				}
+			}
+		}
+	}
+}
 
 std::string Node::ToString() const { return "<Node>"; }
 

@@ -32,6 +32,8 @@ String String::operator*(const Integer& i) const
 	}
 	return String(s);
 }
+String String::operator+(const Integer& i) const { return String(m_value + std::to_string(static_cast<int>(i))); }
+
 bool String::operator==(const String& s) const { return m_value == s.m_value; }
 bool String::operator!=(const String& s) const { return m_value != s.m_value; }
 

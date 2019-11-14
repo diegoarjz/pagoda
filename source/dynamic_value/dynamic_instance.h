@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dynamic_value_base.h"
+#include "class_base.h"
 
 namespace selector
 {
@@ -20,7 +21,7 @@ class DynamicValueTable;
 /**
  * Represents a dynamic instance that can be created in selscript.
  */
-class DynamicInstance : public DynamicValueBase
+class DynamicInstance : public DynamicValueBase, public ClassBase
 {
 public:
 	static const TypeInfoPtr s_typeInfo;
@@ -31,15 +32,11 @@ public:
 	std::string ToString() const override;
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
-
-	FunctionPtr Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals = nullptr);
-	std::shared_ptr<DynamicValueTable> GetInstanceValueTable();
-
-	std::shared_ptr<DynamicValueBase> GetMember(const std::string& memberName);
+	FunctionPtr Bind(std::shared_ptr<ICallableBody> callable,
+	                 std::shared_ptr<DynamicValueTable> globals = nullptr) override;
 
 private:
 	DynamicClassPtr m_class;
-	std::shared_ptr<DynamicValueTable> m_valueTable;
 };
 
 using DynamicInstancePtr = std::shared_ptr<DynamicInstance>;

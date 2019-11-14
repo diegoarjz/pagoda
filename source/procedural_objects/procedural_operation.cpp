@@ -12,8 +12,13 @@ namespace selector
 const TypeInfoPtr ProceduralOperation::s_typeInfo = std::make_shared<TypeInfo>("ProceduralOperation");
 
 ProceduralOperation::ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem)
-    : DynamicValueBase(s_typeInfo), ClassBase("ProceduralOperation"), m_proceduralObjectSystem(proceduralObjectSystem)
+    : BuiltinClass(s_typeInfo), m_proceduralObjectSystem(proceduralObjectSystem)
 {
+}
+
+void ProceduralOperation::Execute()
+{
+    DoWork();
 }
 
 bool ProceduralOperation::PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object)
@@ -27,11 +32,6 @@ bool ProceduralOperation::PushProceduralObject(InterfaceName interface, Procedur
 	}
 
 	if (!input_interface->second->Accepts(procedural_object))
-	{
-		return false;
-	}
-
-	if (!ValidateProceduralObject(interface, procedural_object))
 	{
 		return false;
 	}
@@ -75,7 +75,7 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::GetInputProceduralObject(
 	START_PROFILE;
 
 	auto object = input_interfaces[interfaceName]->GetAndPopProceduralObject();
-	// m_parameterContext->SetParameter(interfaceName.ToString(), object);
+    RegisterOrSetMember(interfaceName.ToString(), object);
 
 	return object;
 }
@@ -101,6 +101,28 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 
 std::string ProceduralOperation::ToString() const { return "<ProceduralOperation>"; }
 
-void ProceduralOperation::AcceptVisitor(ValueVisitorBase& visitor) { throw std::runtime_error("Unimplemented"); }
+void ProceduralOperation::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
+
+void ProceduralOperation::RegisterValues(const std::unordered_map<std::string, DynamicValueBasePtr> &values)
+{
+    for (const auto& v : values)
+    {
+        RegisterMember(v.first, v.second);
+    }
+}
+
+void ProceduralOperation::UpdateValue(const std::string& valueName)
+{
+	auto expression = std::dynamic_pointer_cast<Expression>(GetValue(valueName));
+    if (expression)
+    {
+        expression->SetDirty();
+    }
+}
+
+DynamicValueBasePtr ProceduralOperation::GetValue(const std::string& valueName)
+{
+    return GetMember(valueName);
+}
 
 }  // namespace selector

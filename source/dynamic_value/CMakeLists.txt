@@ -1,6 +1,8 @@
 set(DYNAMIC_VALUE_SRCS
     "dynamic_value_base.h"
     "dynamic_value_base.cpp"
+    "builtin_class.h"
+    "builtin_class.cpp"
     "type_info.h"
     "type_info.cpp"
     "float_value.h"
@@ -37,6 +39,7 @@ set(DYNAMIC_VALUE_SRCS
 
 set(COMMON_PUBLIC_HEADERS
     "dynamic_value_base.h"
+    "builtin_class.h"
     "type_info.h"
     "float_value.h"
     "expression.h"

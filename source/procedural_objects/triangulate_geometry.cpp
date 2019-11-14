@@ -30,7 +30,7 @@ TriangulateGeometry::TriangulateGeometry(ProceduralObjectSystemPtr objectSystem)
 
 TriangulateGeometry::~TriangulateGeometry() {}
 
-void TriangulateGeometry::Execute()
+void TriangulateGeometry::DoWork()
 {
 	START_PROFILE;
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();

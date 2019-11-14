@@ -14,7 +14,7 @@ public:
 	CreateRectGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateRectGeometry();
 
-	void Execute() override;
+	void DoWork() override;
 };  // class CreateSquareGeometry
 
 }  // namespace selector

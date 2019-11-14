@@ -14,7 +14,7 @@ public:
 	ExportGeometry(ProceduralObjectSystemPtr objectSystem);
 	~ExportGeometry();
 
-	void Execute() override;
+	void DoWork() override;
 };
 }  // namespace selector
 

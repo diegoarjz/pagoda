@@ -218,28 +218,7 @@ public:
 			for (auto &var : m_variableValues)
 			{
 				const std::list<std::string> &variableIdentifiers = var.first.GetIdentifiers();
-
-				auto identifierIter = variableIdentifiers.begin();
-				auto currentSymbolTable = variables;
-
-				for (std::size_t i = 1; i < variableIdentifiers.size(); ++i, ++identifierIter)
-				{
-					DynamicValueBasePtr entry;
-					try
-					{
-						entry = currentSymbolTable->Get(*identifierIter);
-					}
-					catch (ValueNotFoundException &e)
-					{
-						currentSymbolTable->Declare(*identifierIter, ExpressionInterpreter::MakeParameterInstance());
-						entry = currentSymbolTable->Get(*identifierIter);
-					}
-
-					std::shared_ptr<DynamicInstance> nextInstance = std::dynamic_pointer_cast<DynamicInstance>(entry);
-					currentSymbolTable = nextInstance->GetInstanceValueTable();
-				}
-
-				currentSymbolTable->Declare(*identifierIter, EvaluateIfExpression(var.second));
+				variables->Declare(variableIdentifiers.front(), EvaluateIfExpression(var.second));
 			}
 			interpreter.PushExternalSymbols(variables);
 
@@ -253,15 +232,15 @@ public:
 		return m_lastComputedValue;
 	}
 
-    DynamicValueBasePtr EvaluateIfExpression(const DynamicValueBasePtr &d)
-    {
-        ExpressionPtr e = std::dynamic_pointer_cast<Expression>(d);
-        if (e != nullptr)
-        {
-            return EvaluateIfExpression(e->Evaluate());
-        }
-        return d;
-    }
+	DynamicValueBasePtr EvaluateIfExpression(const DynamicValueBasePtr &d)
+	{
+		ExpressionPtr e = std::dynamic_pointer_cast<Expression>(d);
+		if (e != nullptr)
+		{
+			return EvaluateIfExpression(e->Evaluate());
+		}
+		return d;
+	}
 
 	void SetVariableValue(const Variable &variableName, DynamicValueBasePtr value)
 	{
@@ -315,9 +294,11 @@ std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expr
 
 	ExpressionValidator validator;
 	expression->m_implementation->m_expression->AcceptVisitor(&validator);
-	std::copy(
-	    validator.m_symbols.begin(), validator.m_symbols.end(),
-	    std::inserter(expression->m_implementation->m_variables, expression->m_implementation->m_variables.end()));
+
+	for (const auto &v : validator.m_symbols)
+	{
+		expression->m_implementation->m_variables.insert(v);
+	}
 
 	return expression;
 }

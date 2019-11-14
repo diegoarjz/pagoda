@@ -47,6 +47,8 @@ public:
 
 	DynamicValueBasePtr Call(const std::vector<DynamicValueBasePtr>& args) override;
 
+	FunctionPtr Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals = nullptr) override;
+
 private:
 	std::string m_className;
 	std::size_t m_arity;

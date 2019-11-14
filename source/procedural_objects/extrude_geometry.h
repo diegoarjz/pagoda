@@ -15,7 +15,7 @@ public:
 	ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtrudeGeometry();
 
-	void Execute() override;
+	void DoWork() override;
 };  // class ExtrudeGEometry
 
 }  // namespace selector

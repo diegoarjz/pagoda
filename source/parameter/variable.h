@@ -33,6 +33,8 @@ public:
 	 */
 	explicit Variable(const std::list<std::string> &identifiers);
 
+    Variable(const Variable& v);
+
 	~Variable();
 
 	/**

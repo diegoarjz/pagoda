@@ -4,7 +4,7 @@ namespace selector
 {
 const TypeInfoPtr ProceduralObject::s_typeInfo = std::make_shared<TypeInfo>("ProceduralObject");
 
-ProceduralObject::ProceduralObject() : DynamicValueBase(s_typeInfo), ClassBase("ProceduralObject") {}
+ProceduralObject::ProceduralObject() : BuiltinClass(s_typeInfo) {}
 
 ProceduralObject::~ProceduralObject() {}
 

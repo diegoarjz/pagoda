@@ -16,7 +16,7 @@ public:
 	TriangulateGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~TriangulateGeometry();
 
-	void Execute() override;
+	void DoWork() override;
 };
 }  // namespace selector
 

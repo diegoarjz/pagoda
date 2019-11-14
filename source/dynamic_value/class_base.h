@@ -4,8 +4,13 @@
 
 namespace selector
 {
+class ICallableBody;
+
 class DynamicValueBase;
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
+
+class Function;
+using FunctionPtr = std::shared_ptr<Function>;
 
 /**
  * Implements common functionality for classes.
@@ -17,13 +22,17 @@ public:
 
 	void RegisterMember(const std::string &name, DynamicValueBasePtr v);
 	void SetMember(const std::string &name, DynamicValueBasePtr v);
-    void RegisterOrSetMember(const std::string &name, DynamicValueBasePtr v);
+	void RegisterOrSetMember(const std::string &name, DynamicValueBasePtr v);
 	DynamicValueBasePtr GetMember(const std::string &name);
+    std::shared_ptr<DynamicValueTable> GetInstanceValueTable();
 
-    DynamicValueTable::iterator GetMembersBegin();
-    DynamicValueTable::iterator GetMembersEnd();
+	DynamicValueTable::iterator GetMembersBegin();
+	DynamicValueTable::iterator GetMembersEnd();
 
-private:
-	DynamicValueTable m_memberTable;
+	virtual FunctionPtr Bind(std::shared_ptr<ICallableBody> callable,
+	                         std::shared_ptr<DynamicValueTable> globals = nullptr) = 0;
+
+protected:
+    std::shared_ptr<DynamicValueTable> m_memberTable;
 };
 }  // namespace selector

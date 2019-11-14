@@ -23,17 +23,19 @@ ClipGeometry::ClipGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 	CreateOutputInterface(frontGeometry);
 	CreateOutputInterface(backGeometry);
 
-	RegisterMember("normal_x", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("normal_y", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("normal_z", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("position_x", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("position_y", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("position_z", std::make_shared<FloatValue>(0.0f));
+	RegisterValues({
+	    {"normal_x", std::make_shared<FloatValue>(0.0f)},
+	    {"normal_y", std::make_shared<FloatValue>(0.0f)},
+	    {"normal_z", std::make_shared<FloatValue>(0.0f)},
+	    {"position_x", std::make_shared<FloatValue>(0.0f)},
+	    {"position_y", std::make_shared<FloatValue>(0.0f)},
+	    {"position_z", std::make_shared<FloatValue>(0.0f)}
+    });
 }
 
 ClipGeometry::~ClipGeometry() {}
 
-void ClipGeometry::Execute()
+void ClipGeometry::DoWork()
 {
 	START_PROFILE;
 
@@ -43,18 +45,25 @@ void ClipGeometry::Execute()
 	while (HasInput(inputGeometry))
 	{
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
+		UpdateValue("position_x");
+		UpdateValue("position_y");
+		UpdateValue("position_z");
+		UpdateValue("normal_x");
+		UpdateValue("normal_y");
+		UpdateValue("normal_z");
+
 		// clang-format off
 		Clip<Geometry> clip(
 		    Plane<float>::FromPointAndNormal(
             {
-                get_parameter_as<float>(GetMember("position_x")),
-                get_parameter_as<float>(GetMember("position_y")),
-                get_parameter_as<float>(GetMember("position_z"))
+                get_value_as<float>(*GetValue("position_x")),
+                get_value_as<float>(*GetValue("position_y")),
+                get_value_as<float>(*GetValue("position_z"))
             },
             {
-                get_parameter_as<float>(GetMember("normal_x")),
-                get_parameter_as<float>(GetMember("normal_y")),
-                get_parameter_as<float>(GetMember("normal_z"))
+                get_value_as<float>(*GetValue("normal_x")),
+                get_value_as<float>(*GetValue("normal_y")),
+                get_value_as<float>(*GetValue("normal_z"))
             }));
 		// clang-format on
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "class_base.h"
+#include "builtin_class.h"
 #include "dynamic_value_base.h"
 
 #include "math_lib/vec_base.h"
@@ -11,7 +11,7 @@ class FloatValue;
 using FloatValuePtr = std::shared_ptr<FloatValue>;
 class Integer;
 
-class Vector3 : public DynamicValueBase, public ClassBase
+class Vector3 : public BuiltinClass
 {
 public:
 	static const TypeInfoPtr s_typeInfo;

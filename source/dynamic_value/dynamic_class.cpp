@@ -58,12 +58,17 @@ DynamicValueBasePtr DynamicClass::Call(const std::vector<DynamicValueBasePtr>& a
 		// Bind the constructor body to the instance and call the bound constructor
 		auto boundConstructor = instance->Bind(m_callableBody);
 		boundConstructor->Call(args);
-		// m_callableBody->Call(args);
 	}
 	catch (DynamicValueBasePtr& returnValue)
 	{
 	}
 	return instance;
+}
+
+FunctionPtr DynamicClass::Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals)
+{
+	std::runtime_error("Unimplemented");
+    return nullptr;
 }
 
 }  // namespace selector

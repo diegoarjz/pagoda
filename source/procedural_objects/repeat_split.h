@@ -19,7 +19,7 @@ public:
 	RepeatSplit(ProceduralObjectSystemPtr objectSystem);
 	virtual ~RepeatSplit();
 
-	void Execute() override;
+	void DoWork() override;
 
 private:
 	std::vector<Plane<float>> CreatePlanes(const Scope &scope, const float &size, const std::string &axis, bool adjust);

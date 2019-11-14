@@ -1,8 +1,7 @@
 #ifndef SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 #define SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 
-#include "../dynamic_value/class_base.h"
-#include "../dynamic_value/dynamic_value_base.h"
+#include "dynamic_value/builtin_class.h"
 #include "common/factory.h"
 #include "procedural_component.h"
 #include "procedural_operation_object_interface.h"
@@ -30,8 +29,7 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
  * input and output procedural objects.
  */
 class ProceduralOperation : public std::enable_shared_from_this<ProceduralOperation>,
-                            public DynamicValueBase,
-                            public ClassBase
+                            public BuiltinClass
 {
 public:
 	static const TypeInfoPtr s_typeInfo;
@@ -41,10 +39,8 @@ public:
 
 	/**
 	 * Executes the \c ProceduralOperation.
-	 *
-	 * Sub classes must implement this.
 	 */
-	virtual void Execute() = 0;
+	void Execute();
 
 	/**
 	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
@@ -55,16 +51,30 @@ public:
 	 */
 	ProceduralObjectPtr PopProceduralObject(const InterfaceName& interface) const;
 
-	virtual bool ValidateProceduralObject(const InterfaceName& interface, ProceduralObjectPtr proceduralObject)
-	{
-		return true;
-	}
-
 	std::string ToString() const override;
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
 protected:
+
+    /**
+     * Performs the operation work.
+     */
+    virtual void DoWork() = 0;
+
+    /**
+     * Registers the \c DynamicValueBase objects that will be used during the execution.
+     */
+    void RegisterValues(const std::unordered_map<std::string, DynamicValueBasePtr> &values);
+    /**
+     * Updates the value of the \c DynamicValueBase with the \p valueName if it is an expression.
+     */
+    void UpdateValue(const std::string& valueName);
+    /**
+     * Returns the value of the \c DynamicValueBase with the \p valueName.
+     */
+    DynamicValueBasePtr GetValue(const std::string& valueName);
+
 	void CreateInputInterface(const InterfaceName& interfaceName);
 	void CreateOutputInterface(const InterfaceName& interfaceName);
 	std::shared_ptr<ProceduralObject> GetInputProceduralObject(const InterfaceName& interfaceName);

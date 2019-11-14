@@ -1,5 +1,6 @@
 #include "export_geometry.h"
 
+#include "dynamic_value/set_value_from.h"
 #include "geometry_core/geometry_exporter.h"
 
 #include "geometry_component.h"
@@ -17,21 +18,25 @@ ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem) : Procedu
 {
 	CreateInputInterface(inputGeometry);
 
-	RegisterMember("path", std::make_shared<String>("geometry.obj"));
+    RegisterValues({
+        {"path", std::make_shared<String>("geometry.obj")},
+        {"count", std::make_shared<Integer>(0)}
+    });
 }
 
 ExportGeometry::~ExportGeometry() {}
 
-void ExportGeometry::Execute()
+void ExportGeometry::DoWork()
 {
 	START_PROFILE;
 
-	uint32_t objectCount = 0;
+	int objectCount = 0;
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	while (HasInput(inputGeometry))
 	{
-		SetMember("count", std::make_shared<Integer>(static_cast<int>(objectCount)));
+		set_value_from<int>(*GetValue("count"), objectCount);
+        UpdateValue("path");
 
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 
@@ -39,7 +44,7 @@ void ExportGeometry::Execute()
 		auto geometry = geometryComponent->GetGeometry();
 		selector::ObjExporter<Geometry> exporter(geometry);
 
-		std::string outputPath = get_parameter_as<std::string>(GetMember("path"));
+		std::string outputPath = get_value_as<std::string>(*GetValue("path"));
 		std::ofstream out_file(outputPath.c_str());
 		exporter.Export(out_file);
 		out_file.close();

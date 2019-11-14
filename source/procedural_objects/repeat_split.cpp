@@ -24,14 +24,16 @@ RepeatSplit::RepeatSplit(ProceduralObjectSystemPtr objectSystem) : ProceduralOpe
 	CreateInputInterface(inputGeometry);
 	CreateOutputInterface(outputGeometry);
 
-	RegisterMember("size", std::make_shared<FloatValue>(0.0f));
-	RegisterMember("axis", std::make_shared<String>("x"));
-	RegisterMember("adjust", std::make_shared<Boolean>(false));
+    RegisterValues({
+	    {"size", std::make_shared<FloatValue>(0.0f)},
+	    {"axis", std::make_shared<String>("x")},
+	    {"adjust", std::make_shared<Boolean>(false)}
+    });
 }
 
 RepeatSplit::~RepeatSplit() {}
 
-void RepeatSplit::Execute()
+void RepeatSplit::DoWork()
 {
 	START_PROFILE;
 
@@ -41,15 +43,20 @@ void RepeatSplit::Execute()
 	while (HasInput(inputGeometry))
 	{
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
+
+        UpdateValue("size");
+        UpdateValue("axis");
+        UpdateValue("adjust");
+
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		auto inScope = inGeometryComponent->GetScope();
 
-		auto size = get_parameter_as<float>(GetMember("size"));
-		auto axis = get_parameter_as<std::string>(GetMember("axis"));
-		auto adjust = get_parameter_as<bool>(GetMember("adjust"));
-		PlaneSplits<Geometry> planeSplit(CreatePlanes(inScope, size, axis, adjust));
+		auto size = get_value_as<float>(*GetValue("size"));
+		auto axis = get_value_as<std::string>(*GetValue("axis"));
+		auto adjust = get_value_as<std::string>(*GetValue("adjust"));
+		PlaneSplits<Geometry> planeSplit(CreatePlanes(inScope, size, axis, adjust == "true"));
 
 		std::vector<GeometryPtr> splitGeometries;
 

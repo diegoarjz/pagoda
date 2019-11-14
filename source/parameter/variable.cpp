@@ -24,6 +24,11 @@ Variable::Variable(const std::list<std::string> &identifiers) : m_identifiers(id
 	DBG_ASSERT_MSG(identifiers.size() > 0, "Need at least one identifier for a variable");
 }
 
+Variable::Variable(const Variable& v)
+{
+    m_identifiers = v.m_identifiers;
+}
+
 Variable::~Variable() {}
 
 const std::list<std::string> &Variable::GetIdentifiers() const { return m_identifiers; }

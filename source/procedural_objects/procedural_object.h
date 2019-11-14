@@ -1,7 +1,7 @@
 #ifndef SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 #define SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 
-#include "dynamic_value/class_base.h"
+#include "dynamic_value/builtin_class.h"
 #include "geometry_core/geometry.h"
 #include "parameter/parameter.h"
 #include "procedural_component.h"
@@ -21,8 +21,7 @@ class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
 class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>,
-                         public DynamicValueBase,
-                         public ClassBase
+                         public BuiltinClass
 {
 public:
 	static const TypeInfoPtr s_typeInfo;

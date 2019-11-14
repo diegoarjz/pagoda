@@ -14,7 +14,7 @@ public:
 	CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateBoxGeometry();
 
-	void Execute() override;
+	void DoWork() override;
 };
 }  // namespace selector
 #endif

@@ -17,15 +17,15 @@ namespace selector
  * Note: This should always be used to grab the underlying value of a \c DynamicValueBasePtr as the \c
  * DynamicValueBasePtr implementation is more than likely to be modified. This amortizes the API changes.
  */
+/*
 template<class T>
 T get_parameter_as(const DynamicValueBasePtr &p)
 {
-	throw std::runtime_error("Unimplemented");
-	/*
-	parameter_getter<T> getter;
-	return std::visit(getter, p);
-	*/
+throw std::runtime_error("Unimplemented");
+parameter_getter<T> getter;
+return std::visit(getter, p);
 };
+*/
 
 }  // namespace selector
 

@@ -13,18 +13,11 @@ namespace selector
 {
 const TypeInfoPtr Vector3::s_typeInfo = std::make_shared<TypeInfo>("Vector3");
 
-Vector3::Vector3() : DynamicValueBase(s_typeInfo), ClassBase(s_typeInfo->GetTypeName()) { RegisterMembers(); }
+Vector3::Vector3() : BuiltinClass(s_typeInfo) { RegisterMembers(); }
 
-Vector3::Vector3(const Vec3F& v) : DynamicValueBase(s_typeInfo), ClassBase(s_typeInfo->GetTypeName()), m_nativeVector(v)
-{
-	RegisterMembers();
-}
+Vector3::Vector3(const Vec3F& v) : BuiltinClass(s_typeInfo), m_nativeVector(v) { RegisterMembers(); }
 
-Vector3::Vector3(const Vector3& v)
-    : DynamicValueBase(s_typeInfo), ClassBase(s_typeInfo->GetTypeName()), m_nativeVector(v.m_nativeVector)
-{
-	RegisterMembers();
-}
+Vector3::Vector3(const Vector3& v) : BuiltinClass(s_typeInfo), m_nativeVector(v.m_nativeVector) { RegisterMembers(); }
 
 Vector3::~Vector3() {}
 

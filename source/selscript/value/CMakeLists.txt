@@ -34,6 +34,12 @@ target_compile_options(
         -pedantic-errors
 )
 
+set_target_properties(
+    selscript_value
+    PROPERTIES
+        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
+)
+
 include(GNUInstallDirs)
 install(TARGETS selscript_value
     EXPORT selscript_value-export
