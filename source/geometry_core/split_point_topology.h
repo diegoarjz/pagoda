@@ -87,10 +87,10 @@ private:
 		Index_t m_splitPoint;  ///< A \c SplitPoint for this \c Face.
 	};
 
-	using PointContainer_t = AssociativeIndexedContainer<Index_t, Point>;
-	using SplitPointContainer_t = AssociativeIndexedContainer<Index_t, SplitPoint>;
-	using EdgeContainer_t = AssociativeIndexedContainer<Index_t, Edge>;
-	using FaceContainer_t = AssociativeIndexedContainer<Index_t, Face>;
+	using PointContainer_t = IndexedContainer<Index_t, Point>;
+	using SplitPointContainer_t = IndexedContainer<Index_t, SplitPoint>;
+	using EdgeContainer_t = IndexedContainer<Index_t, Edge>;
+	using FaceContainer_t = IndexedContainer<Index_t, Face>;
 
 public:
 	/**
@@ -359,9 +359,9 @@ public:
 	public:
 		Iterator(const typename ContainerType::iterator &iter) : m_currentIterator(iter) {}
 
-		HandleType operator*() { return HandleType(m_currentIterator->first); }
+		HandleType operator*() { return HandleType((*m_currentIterator).m_index); }
 
-		HandleType operator->() { return HandleType(m_currentIterator->first); }
+		HandleType operator->() { return HandleType((*m_currentIterator).m_index); }
 
 		Iterator &operator++()
 		{
@@ -628,16 +628,24 @@ public:
 
 private:
 	template<int size>
-	using IndexPointPairArray_t = std::array<PointContainer_t::IndexValuePair_t, size>;
+	using IndexPointPairArray_t = std::array<PointContainer_t::IndexValuePair, size>;
 	template<int size>
-	using IndexSplitPointPairArray_t = std::array<SplitPointContainer_t::IndexValuePair_t, size>;
+	using IndexSplitPointPairArray_t = std::array<SplitPointContainer_t::IndexValuePair, size>;
 	template<int size>
-	using IndexEdgePairArray_t = std::array<EdgeContainer_t::IndexValuePair_t, size>;
+	using IndexEdgePairArray_t = std::array<EdgeContainer_t::IndexValuePair, size>;
 	template<int size>
-	using IndexFacePairArray_t = std::array<FaceContainer_t::IndexValuePair_t, size>;
+	using IndexFacePairArray_t = std::array<FaceContainer_t::IndexValuePair, size>;
+	template<int size>
+	using PointHandleArray_t = std::array<PointHandle, size>;
+	template<int size>
+	using SplitPointHandleArray_t = std::array<SplitPointHandle, size>;
+	template<int size>
+	using EdgeHandleArray_t = std::array<EdgeHandle, size>;
+	template<int size>
+	using FaceHandleArray_t = std::array<FaceHandle, size>;
 
-	CreateFaceResult CreateFace(const IndexPointPairArray_t<3> &points,
-	                            const IndexSplitPointPairArray_t<3> &splitPoints, const IndexEdgePairArray_t<3> &edges);
+    CreateFaceResult CreateFace(const PointHandleArray_t<3> &points, const SplitPointHandleArray_t<3> &splitPoints,
+                                const EdgeHandleArray_t<3> &edges);
 
 	void SetOutgoingEdge(SplitPoint &splitPoint, Edge &edge, const SplitPointHandle &s, const EdgeHandle &e);
 	void SetIncomingEdge(SplitPoint &splitPoint, Edge &edge, const SplitPointHandle &s, const EdgeHandle &e);

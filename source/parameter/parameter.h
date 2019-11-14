@@ -8,24 +8,11 @@
 
 #include <string>
 #include <variant>
+#include <vector>
+#include <memory>
 
 namespace selector
 {
-/**
- * Returns the underlying value for a \c DynamicValueBasePtr.
- * If the \c DynamicValueBasePtr is an \c Expression, then it is evaluated and cast to the underlying type.
- * Note: This should always be used to grab the underlying value of a \c DynamicValueBasePtr as the \c
- * DynamicValueBasePtr implementation is more than likely to be modified. This amortizes the API changes.
- */
-/*
-template<class T>
-T get_parameter_as(const DynamicValueBasePtr &p)
-{
-throw std::runtime_error("Unimplemented");
-parameter_getter<T> getter;
-return std::visit(getter, p);
-};
-*/
 
 }  // namespace selector
 

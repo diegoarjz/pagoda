@@ -40,7 +40,7 @@ public:
 		std::unordered_map<Index_t, Index_t> pointsToBuilderIndex;
 
 		std::unordered_set<Index_t> facesToDelete;
-		for (auto fIter = front->FacesBegin(); fIter != facesEnd; ++fIter)
+		for (auto fIter = front->FacesBegin(); fIter != front->FacesEnd(); ++fIter)
 		{
 			if (m_faceSide[*fIter] == Plane<float>::PlaneSide::Back)
 			{

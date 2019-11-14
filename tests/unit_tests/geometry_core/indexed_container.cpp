@@ -2,97 +2,191 @@
 #include <math_lib/vec_base.h>
 
 #include <list>
+#include <iostream>
 
 #include <gtest/gtest.h>
 
 using namespace selector;
 
-template<class T>
-class IndexedContainerTest : public ::testing::Test
+class Value
 {
+public:
+    static const Value s_invalidValue;
+
+	Value() : m_value(s_invalidValue.m_value) {}
+	Value(const std::size_t &v) : m_value(v) {}
+	std::size_t m_value;
+
+    bool operator==(const Value &o) const { return m_value == o.m_value; }
+    bool operator!=(const Value &o) const { return m_value != o.m_value; }
 };
+const Value Value::s_invalidValue(std::numeric_limits<std::size_t>::max());
 
-typedef ::testing::Types<IndexedContainer<uint32_t, Vec3F>, AssociativeIndexedContainer<uint32_t, Vec3F>>
-    IndexedContainerTypes;
-
-TYPED_TEST_SUITE(IndexedContainerTest, IndexedContainerTypes);
-
-TYPED_TEST(IndexedContainerTest, when_creating_should_return_incremental_indices)
+TEST(IndexedContainerTest, when_creating_values_should_return_incremental_indices)
 {
-	TypeParam c;
-
-	EXPECT_EQ(c.Create(0, 0, 0), 0);
-	EXPECT_EQ(c.Create(0, 0, 0), 1);
-	EXPECT_EQ(c.Create(0, 0, 0), 2);
+	IndexedContainer<std::size_t, Value> c;
+	EXPECT_EQ(c.Create(1), 0);
+	EXPECT_EQ(c.Create(1), 1);
 }
 
-TYPED_TEST(IndexedContainerTest, when_getting_based_on_index_should_return_correct_element)
+TEST(IndexedContainerTest, when_creating_values_should_store_the_values)
 {
-	TypeParam c;
-
-	uint32_t index = c.Create(1, 2, 3);
-	uint32_t index2 = c.Create(3, 2, 1);
-
-	EXPECT_EQ(c.Get(index), Vec3F(1, 2, 3));
-	EXPECT_EQ(c.Get(index2), Vec3F(3, 2, 1));
+	IndexedContainer<std::size_t, Value> c;
+    c.Create(1);
+    c.Create(2);
+	EXPECT_EQ(c.Get(0).m_value, 1);
+	EXPECT_EQ(c.Get(1).m_value, 2);
 }
 
-TYPED_TEST(IndexedContainerTest, when_getting_based_on_index_should_return_by_value)
+TEST(IndexedContainerTest, when_creating_and_getting_should_return_the_index_and_value)
 {
-	TypeParam c;
+	IndexedContainer<std::size_t, Value> c;
+    auto e1 = c.CreateAndGet(1);
+    auto e2 = c.CreateAndGet(2);
 
-	uint32_t index = c.Create(1, 2, 3);
-
-	Vec3F &value = c.Get(index);
-	EXPECT_EQ(value, Vec3F(1, 2, 3));
+    EXPECT_EQ(e1.m_index, 0);
+    EXPECT_EQ(e1.m_value, 1);
+    EXPECT_EQ(e2.m_index, 1);
+    EXPECT_EQ(e2.m_value, 2);
 }
 
-TYPED_TEST(IndexedContainerTest, when_changing_value_of_element_retrieved_by_index_should_updated_value_in_container)
+TEST(IndexedContainerTest, when_checking_if_has_index_should_check_for_existence)
 {
-	TypeParam c;
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Create(2);
 
-	uint32_t index = c.Create(1, 2, 3);
-	c.Get(index)[0] = 4;
-	EXPECT_EQ(c.Get(index), Vec3F(4, 2, 3));
+	EXPECT_TRUE(c.HasIndex(0));
+	EXPECT_TRUE(c.HasIndex(1));
+	EXPECT_FALSE(c.HasIndex(2));
 }
 
-TEST(IndexedContainerIteratorTest, when_iterating_should_visit_all_values)
+TEST(IndexedContainerTest, when_accessing_a_deleted_index_should_throw)
 {
-	IndexedContainer<uint32_t, uint32_t> c;
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Delete(0);
+    try
+    {
+        c.Get(0);
+    }
+    catch (IndexedDeletedException<std::size_t> &e)
+    {
+        return;
+    }
+    FAIL() << "Should have thrown";
+}
 
-	std::list<uint32_t> values{0, 1, 2, 3};
+TEST(IndexedContainerTest, when_checking_if_has_index_of_a_deleted_index_should_return_false)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Create(2);
+	c.Delete(0);
+	EXPECT_FALSE(c.HasIndex(0));
+	EXPECT_TRUE(c.HasIndex(1));
+}
 
-	for (auto v : values)
+TEST(IndexedContainerTest, when_getting_or_creating_should_create_if_doesnt_exist)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	auto value = c.GetOrCreate(2, 123);
+	EXPECT_EQ(value.m_value, 123);
+}
+
+TEST(IndexedContainerTest, when_creating_a_new_element_after_getting_or_creating_should_use_the_next_available_index)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.GetOrCreate(2, 123);
+	auto index = c.Create(321);
+    auto value = c.Get(index);
+	EXPECT_EQ(index, 1);
+	EXPECT_EQ(value, 321);
+}
+
+TEST(IndexedContainerTest, when_getting_the_count_of_elements_should_not_take_into_account_the_deleted_indices)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Create(2);
+	c.Create(3);
+	c.Delete(0);
+
+	EXPECT_EQ(c.Count(), 2);
+}
+
+TEST(IndexedContainerTest, when_iterating_should_iterate_indices_in_order)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Create(2);
+	c.Create(3);
+
+	auto i = 0u;
+	for (const auto &el : c)
 	{
-		c.Create(v);
+		EXPECT_EQ(el.m_index, i);
+		EXPECT_EQ(el.m_value.m_value, i + 1);
+		++i;
+	}
+}
+
+TEST(IndexedContainerTest, when_iterating_should_skip_the_deleted_indices)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Create(2);
+	c.Create(3);
+	c.Delete(0);
+
+	auto i = 1u;  // index 0 has been deleted
+	for (const auto el : c)
+	{
+		EXPECT_EQ(el.m_index, i);
+		EXPECT_EQ(el.m_value.m_value, i + 1);
+		++i;
+	}
+}
+
+TEST(IndexedContainerTest, when_iterating_should_skip_the_invalid_indices)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Create(2);
+
+    auto i = 0u;
+    for (const auto el : c)
+    {
+        EXPECT_EQ(el.m_index, i);
+        EXPECT_EQ(el.m_value.m_value, i + 1);
+        ++i;
+    }
+}
+
+TEST(IndexedContainerTest, when_getting_an_element_should_be_able_to_change_the_value)
+{
+	IndexedContainer<std::size_t, Value> c;
+	auto index = c.Create(1);
+    auto& value = c.Get(index);
+    value.m_value = 123;
+    EXPECT_EQ(c.Get(0).m_value, 123);
+}
+
+TEST(IndexedContainerTest, when_changing_values_through_an_iterator_should_change_the_stored_value)
+{
+	IndexedContainer<std::size_t, Value> c;
+	c.Create(1);
+	c.Create(2);
+
+	for (const auto &el : c)
+	{
+        el.m_value = 0;
 	}
 
-	for (auto &v : c)
-	{
-		ASSERT_NE(std::find(values.begin(), values.end(), v), std::end(values));
-		values.remove(v);
-	}
-
-	ASSERT_EQ(values.size(), 0);
-}
-
-TEST(IndexedContainerIteratorTest, when_iterating_indices_should_visit_all_indices)
-{
-	IndexedContainer<uint32_t, uint32_t> c;
-
-	std::list<uint32_t> values{0, 1, 2, 3};
-
-	for (auto v : values)
-	{
-		c.Create(v);
-	}
-
-	size_t i = 0;
-	for (auto iter = c.index_begin(); iter != c.index_end(); ++iter)
-	{
-		EXPECT_EQ(*iter, i++);
-	}
-	EXPECT_EQ(i, 4);
+    EXPECT_EQ(c.Get(0).m_value, 0);
+    EXPECT_EQ(c.Get(1).m_value, 0);
 }
 
 TEST(AssociativeIndexedContainersTest, when_iterating_should_visit_all_values)

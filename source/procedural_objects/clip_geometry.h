@@ -18,6 +18,6 @@ public:
 
 	void DoWork() override;
 };
-};  // namespace selector
+}  // namespace selector
 
 #endif
