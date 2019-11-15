@@ -1,0 +1,48 @@
+box = Operation(operation: "CreateBoxGeometry") {
+    xSize: 10, ySize: 10, zSize: 10
+}
+box_out = OutputInterface(interface: "out", offset: 0)
+box -> box_out;
+
+lower_clip_in = InputInterface(interface: "in", offset: 0)
+lower_clip = Operation(operation: "ClipGeometry") {
+    position_x: 0, position_y: 0, position_z: 0,
+    normal_x: 0.5, normal_y: 1, normal_z: 0
+}
+lower_clip_back = OutputInterface(interface: "back", offset: 0)
+lower_clip_front = OutputInterface(interface: "front", offset: 0)
+lower_clip_in -> lower_clip -> lower_clip_back;
+lower_clip -> lower_clip_front;
+
+upper_clip_in = InputInterface(interface: "in", offset: 0)
+upper_clip = Operation(operation: "ClipGeometry") {
+    position_x: 0, position_y: 3.3, position_z: 0,
+    normal_x: 0, normal_y: 1, normal_z: 0
+}
+upper_clip_back = OutputInterface(interface: "back", offset: 0)
+upper_clip_front = OutputInterface(interface: "front", offset: 0)
+upper_clip_in -> upper_clip -> upper_clip_back;
+upper_clip -> upper_clip_front;
+
+first_extrusion_in = InputInterface(interface: "in", offset: 0)
+first_extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 2}
+first_extrusion_out = OutputInterface(interface: "out", offset: 0)
+first_extrusion_in -> first_extrusion -> first_extrusion_out;
+
+second_extrusion_in = InputInterface(interface: "in", offset: 0)
+second_extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 1}
+second_extrusion_out = OutputInterface(interface: "out", offset: 0)
+second_extrusion_in -> second_extrusion -> second_extrusion_out;
+
+export_in = InputInterface(interface: "in", offset: 0)
+export = Operation(operation: "ExportGeometry") { path: $< "geometry" + op.count + ".obj"; >$ }
+export_in -> export;
+
+box_out -> lower_clip_in;
+lower_clip_front -> first_extrusion_in;
+first_extrusion_out -> upper_clip_in;
+upper_clip_front -> second_extrusion_in;
+
+lower_clip_back -> export_in;
+upper_clip_back -> export_in;
+second_extrusion_out -> export_in;

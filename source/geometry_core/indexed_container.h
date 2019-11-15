@@ -18,6 +18,7 @@ public:
 	IndexedDeletedException(const IndexType& i)
 	    : std::runtime_error("Tried to access deleted index " + std::to_string(i))
 	{
+		DBG_ASSERT(false);
 	}
 };
 
@@ -43,22 +44,22 @@ public:
 	ValueType& Get(const IndexType& index)
 	{
 		START_PROFILE;
-        DBG_ASSERT(index < m_container.size());
-        if (!m_validIndex[index])
-        {
-            throw IndexedDeletedException(index);
-        }
+		DBG_ASSERT(index < m_container.size());
+		if (!m_validIndex[index])
+		{
+			throw IndexedDeletedException(index);
+		}
 		return m_container.at(index);
 	}
 
 	const ValueType& Get(const IndexType& index) const
 	{
 		START_PROFILE;
-        DBG_ASSERT(index < m_container.size());
-        if (!m_validIndex[index])
-        {
-            throw IndexedDeletedException(index);
-        }
+		DBG_ASSERT(index < m_container.size());
+		if (!m_validIndex[index])
+		{
+			throw IndexedDeletedException(index);
+		}
 		return m_container.at(index);
 	}
 
@@ -161,10 +162,10 @@ private:
 			m_container.resize(index * 2 + 1);
 			m_validIndex.resize(index * 2 + 1);
 		}
-        DBG_ASSERT(index < m_container.size());
+		DBG_ASSERT(index < m_container.size());
 		++m_count;
 		m_container[index] = v;
-        m_validIndex[index] = true;
+		m_validIndex[index] = true;
 		return index;
 	}
 
