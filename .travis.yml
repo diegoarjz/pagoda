@@ -34,4 +34,6 @@ before_script:
 script:
   - cmake --build .
   - ./tests/unit_tests/unit_tests
+  - ./tests/selscript/selscript_tests
+  #- ./tests/regression_tests/regression_tests
 

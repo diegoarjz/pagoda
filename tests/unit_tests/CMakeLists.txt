@@ -98,9 +98,9 @@ target_link_libraries(
         Boost::chrono
         Boost::system
         Boost::filesystem
-        pthread
         gmock
         gtest
+        pthread
 )
 
 file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
