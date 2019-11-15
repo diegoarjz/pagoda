@@ -2,7 +2,7 @@ language:
   - cpp
 
 compiler:
-  - gcc
+  #- gcc
   - clang
 
 dist: xenial
@@ -33,5 +33,5 @@ before_script:
 
 script:
   - cmake --build .
-  - ./test/unit_tests/unit_tests
+  - ./tests/unit_tests/unit_tests
 
