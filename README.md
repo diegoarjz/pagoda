@@ -16,10 +16,8 @@ Before building selector, you need to install the
 [Boost](https://www.boost.org) libraries. Instructions on how to do so can be
 found on its website.
 
-Selector also uses [SelScript](https://github.com/diegoarjz/selscript) as its
-expression and scripting language and needs [Google
-Test](https://github.com/google/googletest). However, these dependencies are
-built for you automatically.
+Selector also needs [Google Test](https://github.com/google/googletest).
+However, this dependency is built for you automatically.
 
 Once you have installed [Boost](https://www.boost.org) execute the following
 commands in the terminal:
@@ -75,7 +73,8 @@ construction arguments). Because all nodes can contain parameters (influencing
 the node's execution) you specify these inside the curly brackets (the
 execution parameters).
 
-Nodes can be assigned to names which are then used to create links between nodes.
+Nodes can be assigned to names which are then used to create links between
+nodes.
 
 So, for example, in the first line, you create an _Operation_ node whose
 operation is a _CreateRectGeometry_. When the node is executed the execution
@@ -85,7 +84,9 @@ On the second line, an _OutputInterface_ node is created. Since the
 _OutputInterface_ nodes don't require execution parameters the curly brackets
 were omitted. The third line links both nodes.
 
-Similarly, lines four to six create an Operation node to export the geometry and its input interface. The final line links the output of the create_rect operation and the export geometry.
+Similarly, lines four to six create an Operation node to export the geometry
+and its input interface. The final line links the output of the create_rect
+operation and the export geometry.
 
 To execute this node you can run the following on the command line:
 
