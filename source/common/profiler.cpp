@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <list>
@@ -123,10 +124,10 @@ void ConsoleProfilerLogger::Log(std::size_t nLines)
 	sorted_by_time.sort([](const Entry& lhs, const Entry& rhs) { return lhs.m_time > rhs.m_time; });
 
 	std::array<std::size_t, 5> columnsMaxSize;
-    for (auto i = 0u; i < 5; ++i)
-    {
-        columnsMaxSize[i] = 0;
-    }
+	for (auto i = 0u; i < 5; ++i)
+	{
+		columnsMaxSize[i] = 0;
+	}
 
 	std::size_t count = 0;
 	for (const auto& e : sorted_by_time)
