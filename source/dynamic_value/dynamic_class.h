@@ -58,4 +58,4 @@ private:
 };
 
 using DynamicClassPtr = std::shared_ptr<DynamicClass>;
-};  // namespace selector
+}  // namespace selector

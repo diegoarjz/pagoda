@@ -26,7 +26,7 @@ String String::operator+(const String& s) const { return String(m_value + s.m_va
 String String::operator*(const Integer& i) const
 {
 	std::string s;
-	for (auto c = 0u; c < static_cast<int>(i); ++c)
+	for (auto c = 0; c < static_cast<int>(i); ++c)
 	{
 		s += m_value;
 	}

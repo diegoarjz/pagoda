@@ -18,7 +18,7 @@ public:
 	/// Type indicating a range between two positions within the graph format string.
 	using NodeRange_t = std::pair<Offset_t, Offset_t>;
 
-	AstNode() = default;
+	AstNode();
 	AstNode(const AstNode &) = delete;
 	AstNode &operator=(const AstNode &) = delete;
 
