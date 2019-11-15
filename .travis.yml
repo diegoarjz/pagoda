@@ -1,24 +1,37 @@
-dist: xenial
-language: cpp
+language:
+  - cpp
+
 compiler:
-    - clang
+  - gcc
+  - clang
+
+dist: xenial
+
 addons:
-    apt:
-        packages:
-            - libboost-all-dev
-            - libstdc++-7-dev
-            - clang-7.0
-env:
-    - CC=clang CXX=clang++ CXXFLAGS="-stdlib=libc++" LDFLAGS="-stdlib=libc++"
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libboost-all-dev
+
 before_install:
-    - sudo apt-get -qq update
-    - sudo apt-get install -y libgtest-dev
+  # C++14, even C++17
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+
+install:
+  # C++14, even C++17
+  - sudo apt-get install -qq g++-7
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
+  - sudo apt-get install libboost-all-dev
+
 before_script:
-    - git submodule update --init --recursive
-    - mkdir build
-    - cd build
-    - cmake -DCMAKE_EXE_LINKER_FLAGS="-stdlib=libc++" ..
+  - git submodule update --init --recursive
+  - mkdir build
+  - cd build
+  - cmake ..
+
 script:
-    - cmake --build .
-    - ./test/unit_tests/unit_tests
+  - cmake --build .
+  - ./test/unit_tests/unit_tests
 
