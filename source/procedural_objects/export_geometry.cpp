@@ -1,5 +1,6 @@
 #include "export_geometry.h"
 
+#include "dynamic_value/get_value_as.h"
 #include "dynamic_value/set_value_from.h"
 #include "geometry_core/geometry_exporter.h"
 

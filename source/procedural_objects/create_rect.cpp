@@ -1,10 +1,11 @@
 #include "create_rect.h"
 
+#include "dynamic_value/float_value.h"
+#include "dynamic_value/get_value_as.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
-#include "parameter/parameter.h"
 #include "procedural_component.h"
 #include "procedural_object_system.h"
 

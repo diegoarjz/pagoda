@@ -1,4 +1,3 @@
-#include <parameter/parameter.h>
 #include <procedural_graph/parameter_node.h>
 #include <dynamic_value/get_value_as.h>
 

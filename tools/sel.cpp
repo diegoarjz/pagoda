@@ -2,7 +2,6 @@
 #include <common/logger.h>
 #include <common/profiler.h>
 #include <geometry_core/geometry_exporter.h>
-#include <parameter/parameter.h>
 #include <procedural_graph/default_scheduler.h>
 #include <procedural_graph/graph_dot_exporter.h>
 #include <procedural_graph/input_interface_node.h>

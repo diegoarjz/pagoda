@@ -9,7 +9,6 @@
 #include <geometry_core/geometry_builder.h>
 #include <geometry_operations/create_rect.h>
 #include <geometry_operations/extrusion.h>
-#include <parameter/parameter.h>
 
 namespace selector
 {

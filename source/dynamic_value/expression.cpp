@@ -17,7 +17,6 @@
 #include "selscript/interpreter/interpreter.h"
 #include "selscript/parser/parser.h"
 
-#include "../parameter/parameter_exception.h"
 #include "common/profiler.h"
 
 #include <unordered_map>

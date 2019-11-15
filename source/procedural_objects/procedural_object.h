@@ -3,7 +3,6 @@
 
 #include "dynamic_value/builtin_class.h"
 #include "geometry_core/geometry.h"
-#include "parameter/parameter.h"
 #include "procedural_component.h"
 
 #include <bitset>

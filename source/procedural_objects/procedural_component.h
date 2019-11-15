@@ -14,10 +14,10 @@ class ProceduralComponent
 public:
 	virtual ~ProceduralComponent(){};
 
-	void SetParentObject(ProceduralObjectPtr parent) { parent_object = parent; }
-	ProceduralObjectPtr GetParentObject() { return parent_object.lock(); }
+	void SetParentObject(ProceduralObjectPtr parent);
+	ProceduralObjectPtr GetParentObject();
 
-    virtual std::string GetType() const = 0;
+	virtual std::string GetType() const = 0;
 
 protected:
 	ProceduralComponent(){};

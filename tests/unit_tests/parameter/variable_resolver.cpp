@@ -1,4 +1,3 @@
-#include <parameter/parameter.h>
 #include <parameter/variable.h>
 #include <parameter/variable_resolver.h>
 

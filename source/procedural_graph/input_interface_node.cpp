@@ -4,7 +4,6 @@
 #include "node.h"
 #include "node_set_visitor.h"
 #include "output_interface_node.h"
-#include "parameter/parameter.h"
 #include "dynamic_value/get_value_as.h"
 
 #include <procedural_objects/procedural_operation.h>

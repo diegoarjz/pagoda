@@ -5,7 +5,6 @@
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
-#include "parameter/parameter.h"
 #include "procedural_component.h"
 #include "procedural_object_system.h"
 

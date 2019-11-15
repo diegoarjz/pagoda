@@ -1,8 +1,4 @@
 set(PARAMETER_SRCS
-    "parameter.cpp"
-    "parameter.h"
-    "parameter_exception.cpp"
-    "parameter_exception.h"
     "variable.cpp"
     "variable.h"
     "variable_resolver.cpp"
@@ -10,8 +6,6 @@ set(PARAMETER_SRCS
 )
 
 set(PARAMETER_PUBLIC_HEADERS
-    "parameter.h"
-    "parameter_exception.h"
     "variable.h"
     "variable_resolver.h"
 )

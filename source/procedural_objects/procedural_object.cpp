@@ -1,5 +1,7 @@
 #include "procedural_object.h"
 
+#include "dynamic_value/type_info.h"
+
 namespace selector
 {
 const TypeInfoPtr ProceduralObject::s_typeInfo = std::make_shared<TypeInfo>("ProceduralObject");

@@ -1,7 +1,6 @@
 #ifndef SELECTOR_PARAMETER_VARIABLE_RESOLVER_H_
 #define SELECTOR_PARAMETER_VARIABLE_RESOLVER_H_
 
-#include "parameter.h"
 #include "variable.h"
 
 namespace selector

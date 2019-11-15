@@ -4,6 +4,7 @@
 
 #include "common/assertions.h"
 #include "procedural_object.h"
+#include "dynamic_value/value_visitor.h"
 
 #include "../selector.h"
 

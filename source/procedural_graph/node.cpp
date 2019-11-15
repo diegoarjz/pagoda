@@ -3,7 +3,7 @@
 #include "common/assertions.h"
 #include "dynamic_value/type_info.h"
 #include "dynamic_value/value_not_found.h"
-#include "parameter/parameter.h"
+#include "dynamic_value/expression.h"
 
 namespace selector
 {

@@ -3,6 +3,7 @@
 #include "dynamic_value/boolean_value.h"
 #include "dynamic_value/float_value.h"
 #include "dynamic_value/string_value.h"
+#include "dynamic_value/get_value_as.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
