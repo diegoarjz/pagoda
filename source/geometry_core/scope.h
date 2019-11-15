@@ -6,6 +6,7 @@
 #include <math_lib/vec_base.h>
 
 #include <array>
+#include <memory>
 
 namespace selector
 {
