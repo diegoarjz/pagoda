@@ -42,12 +42,12 @@ TEST(IndexedContainerTest, when_creating_and_getting_should_return_the_index_and
 {
 	IndexedContainer<std::size_t, Value> c;
     auto e1 = c.CreateAndGet(1);
-    auto e2 = c.CreateAndGet(2);
-
     EXPECT_EQ(e1.m_index, 0);
-    EXPECT_EQ(e1.m_value, 1);
+    EXPECT_EQ(e1.m_value.m_value, 1);
+
+    auto e2 = c.CreateAndGet(2);
     EXPECT_EQ(e2.m_index, 1);
-    EXPECT_EQ(e2.m_value, 2);
+    EXPECT_EQ(e2.m_value.m_value, 2);
 }
 
 TEST(IndexedContainerTest, when_checking_if_has_index_should_check_for_existence)

@@ -3,6 +3,8 @@
 
 #include "variable.h"
 
+#include <memory>
+
 namespace selector
 {
 class DynamicValueBase;

@@ -2,6 +2,10 @@
 
 namespace selector
 {
+AstNode::AstNode() : AstNode(0,0)
+{
+}
+
 AstNode::AstNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset)
     : m_startOffset(startOffset), m_endOffset(endOffset)
 {

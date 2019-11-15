@@ -4,6 +4,8 @@
 #include "../intermediate/ast.h"
 #include "../intermediate/parameter.h"
 
+#include <memory>
+
 namespace selector
 {
 class ScriptCallableBody : public ICallableBody

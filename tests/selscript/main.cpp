@@ -53,9 +53,9 @@ boost::filesystem::path RegressionTest::s_testFilesDirectory = "";
 		r.Match(EXPECTED);                    \
 	}
 
-REGRESSION_TEST(FloatOperations, "(1.0 + 2.0 * 2.0) / 2.0;", std::make_shared<FloatValue>(2.5f));
-REGRESSION_TEST(IntegerOperations, "(1 + 2 * 2) / 2;", std::make_shared<Integer>(2));
-REGRESSION_TEST(StringOperations, " \"abc\" + 2 * \"123\";", std::make_shared<String>("abc123123"));
+REGRESSION_TEST(FloatOperations, "(1.0 + 2.0 * 2.0) / 2.0;", std::make_shared<FloatValue>(2.5f))
+REGRESSION_TEST(IntegerOperations, "(1 + 2 * 2) / 2;", std::make_shared<Integer>(2))
+REGRESSION_TEST(StringOperations, " \"abc\" + 2 * \"123\";", std::make_shared<String>("abc123123"))
 
 int main(int argc, char* argv[])
 {

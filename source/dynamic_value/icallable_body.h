@@ -1,6 +1,9 @@
 #pragma once
 
+#include "dynamic_value_base.h"
+
 #include <vector>
+#include <memory>
 
 namespace selector
 {
