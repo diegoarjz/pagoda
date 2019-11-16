@@ -15,6 +15,7 @@
 #include <procedural_objects/create_box.h>
 #include <procedural_objects/create_rect.h>
 #include <procedural_objects/export_geometry.h>
+#include <procedural_objects/extract_faces.h>
 #include <procedural_objects/extract_scope.h>
 #include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/geometry_system.h>
@@ -62,6 +63,8 @@ public:
 		                             [this]() { return std::make_shared<ClipGeometry>(m_proceduralObjectSystem); });
 		m_operationFactory->Register("RepeatSplit",
 		                             [this]() { return std::make_shared<RepeatSplit>(m_proceduralObjectSystem); });
+		m_operationFactory->Register("ExtractFaces",
+		                             [this]() { return std::make_shared<ExtractFaces>(m_proceduralObjectSystem); });
 	}
 
 	~Impl()
