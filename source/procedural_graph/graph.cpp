@@ -5,6 +5,7 @@
 #include "default_scheduler.h"
 #include "node.h"
 #include "node_factory.h"
+#include "unknown_node_type.h"
 
 #include <array>
 
@@ -172,6 +173,10 @@ public:
 	NodePtr CreateNode(const std::string &nodeType)
 	{
 		auto node = m_nodeFactory->Create(nodeType);
+		if (node == nullptr)
+		{
+			throw UnknownNodeTypeException(nodeType);
+		}
 		AddNode(node);
 		return node;
 	}

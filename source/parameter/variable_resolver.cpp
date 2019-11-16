@@ -20,7 +20,7 @@ DynamicValueBasePtr VariableResolver::Resolve(DynamicValueBasePtr parameterizabl
 
 	return std::get<IParameterizablePtr>(currentParameter)->GetParameter(*identifierIter);
 	*/
-	//throw std::runtime_error("Unimplemented");
+	// throw std::runtime_error("Unimplemented");
 	return nullptr;
 }
 }  // namespace selector

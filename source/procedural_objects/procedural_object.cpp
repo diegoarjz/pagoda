@@ -12,5 +12,5 @@ ProceduralObject::~ProceduralObject() {}
 
 std::string ProceduralObject::ToString() const { return "<ProceduralObject>"; }
 
-void ProceduralObject::AcceptVisitor(ValueVisitorBase& visitor) { throw std::runtime_error("Unimplemented"); }
+void ProceduralObject::AcceptVisitor(ValueVisitorBase& visitor) { throw Exception("Unimplemented"); }
 }  // namespace selector

@@ -2,11 +2,11 @@
 
 #include "binding/native_value_name.h"
 
-#include "expression.h"
 #include "boolean_value.h"
 #include "dynamic_class.h"
 #include "dynamic_instance.h"
 #include "dynamic_value_base.h"
+#include "expression.h"
 #include "float_value.h"
 #include "function.h"
 #include "integer_value.h"
@@ -16,18 +16,20 @@
 #include "value_visitor.h"
 #include "vector3.h"
 
+#include "common/exception.h"
+
 namespace selector
 {
 /**
  * Exception to be thrown when it is impossible to cast a \c DynamicValueBase to a native type.
  */
 template<class T, typename N>
-class UnableToAssignFromNative : public std::runtime_error
+class UnableToAssignFromNative : public Exception
 {
 public:
 	UnableToAssignFromNative()
-	    : std::runtime_error("Unable to assign native value of type " + native_value_name<N>::GetName() +
-	                         " to dynamic value of type " + T::s_typeInfo->GetTypeName())
+	    : Exception("Unable to assign native value of type " + native_value_name<N>::GetName() +
+	                " to dynamic value of type " + T::s_typeInfo->GetTypeName())
 	{
 	}
 	virtual ~UnableToAssignFromNative() {}

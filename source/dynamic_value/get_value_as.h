@@ -5,18 +5,20 @@
 
 #include "value_visitor.h"
 
+#include "common/exception.h"
+
 namespace selector
 {
 /**
  * Exception to be thrown when it is impossible to cast a \c DynamicValueBase to a native type.
  */
 template<class T, typename N>
-class UnableToCastToNative : public std::runtime_error
+class UnableToCastToNative : public Exception
 {
 public:
 	UnableToCastToNative()
-	    : std::runtime_error("Unable to cast dynamic value of type " + T::s_typeInfo->GetTypeName() +
-	                         " to native type " + native_value_name<N>::GetName())
+	    : Exception("Unable to cast dynamic value of type " + T::s_typeInfo->GetTypeName() + " to native type " +
+	                native_value_name<N>::GetName())
 	{
 	}
 	virtual ~UnableToCastToNative() {}
@@ -26,11 +28,11 @@ template<class T>
 class convert_to_native_visitor : public ValueVisitor<typename std::remove_reference<T>::type>
 {
 public:
-    T operator()(Expression &e)
-    {
-        auto evaluated = e.Evaluate();
-        return apply_visitor(*this, *evaluated);
-    }
+	T operator()(Expression& e)
+	{
+		auto evaluated = e.Evaluate();
+		return apply_visitor(*this, *evaluated);
+	}
 
 	template<typename V>
 	typename std::enable_if<can_cast_to_native<V, T>::value, T>::type operator()(V& value)

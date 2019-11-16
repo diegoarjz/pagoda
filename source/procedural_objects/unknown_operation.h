@@ -2,14 +2,14 @@
 
 #include "common/exception.h"
 
-#include <stdexcept>
 #include <string>
 
 namespace selector
 {
-class ValueNotFoundException : public Exception
+class UnknownOperation : public Exception
 {
 public:
-	ValueNotFoundException(const std::string &name);
+	UnknownOperation(const std::string operationName);
 };
 }  // namespace selector
+

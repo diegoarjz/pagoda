@@ -1,10 +1,11 @@
 #pragma once
 
-#include "expression.h"
 #include "boolean_value.h"
+#include "common/exception.h"
 #include "dynamic_class.h"
 #include "dynamic_instance.h"
 #include "dynamic_value_base.h"
+#include "expression.h"
 #include "float_value.h"
 #include "function.h"
 #include "integer_value.h"
@@ -109,7 +110,7 @@ public:
 	template<typename V>
 	T& operator()(V&)
 	{
-		throw std::runtime_error("Unable");
+		throw Exception("Unable to apply the value type visitor.");
 	}
 };
 

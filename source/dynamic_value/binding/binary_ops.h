@@ -6,15 +6,17 @@
 
 #include "../expression.h"
 
+#include "common/exception.h"
+
 namespace selector
 {
 template<class LHS, class RHS>
-class UndefinedBinaryOperator : public std::runtime_error
+class UndefinedBinaryOperator : public Exception
 {
 public:
 	UndefinedBinaryOperator(const std::string &op)
-	    : std::runtime_error("Undefined " + op + " operator between " + LHS::s_typeInfo->GetTypeName() + " and " +
-	                         RHS::s_typeInfo->GetTypeName())
+	    : Exception("Undefined " + op + " operator between " + LHS::s_typeInfo->GetTypeName() + " and " +
+	                RHS::s_typeInfo->GetTypeName())
 	{
 	}
 };

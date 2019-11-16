@@ -2,14 +2,13 @@
 
 #include "common/exception.h"
 
-#include <stdexcept>
 #include <string>
 
 namespace selector
 {
-class ValueNotFoundException : public Exception
+class UnknownNodeTypeException : public Exception
 {
 public:
-	ValueNotFoundException(const std::string &name);
+	UnknownNodeTypeException(const std::string &nodeType);
 };
 }  // namespace selector

@@ -1,15 +1,17 @@
 #pragma once
 
+#include "common/exception.h"
+
+#include <memory>
 #include <stdexcept>
 #include <string>
-#include <memory>
 
 namespace selector
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
-class UndefinedBinaryOperatorException : public std::runtime_error
+class UndefinedBinaryOperatorException : public Exception
 {
 public:
 	UndefinedBinaryOperatorException(const std::string &op, const TypeInfoPtr &lhsType, const TypeInfoPtr &rhsType);
@@ -24,7 +26,7 @@ private:
 	const TypeInfoPtr &m_rhsType;
 };
 
-class UndefinedUnaryOperatorException : public std::runtime_error
+class UndefinedUnaryOperatorException : public Exception
 {
 public:
 	UndefinedUnaryOperatorException(const std::string &op, const TypeInfoPtr &operand);

@@ -1,5 +1,7 @@
 set(PROCEDURAL_GRAPH_SRCS
     "breadth_first_node_visitor.h"
+    "construction_argument_not_found.cpp"
+    "construction_argument_not_found.h"
     "default_scheduler.cpp"
     "default_scheduler.h"
     "execution_queue.cpp"
@@ -27,10 +29,13 @@ set(PROCEDURAL_GRAPH_SRCS
     "reader.cpp"
     "reader.h"
     "scheduler.h"
+    "unknown_node_type.cpp"
+    "unknown_node_type.h"
 )
 
 set(PROCEDURAL_GRAPH_PUBLIC_HEADERS
     "breadth_first_node_visitor.h"
+    "construction_argument_not_found.h"
     "default_scheduler.h"
     "execution_queue.h"
     "graph.h"
@@ -47,6 +52,7 @@ set(PROCEDURAL_GRAPH_PUBLIC_HEADERS
     "parse_result.h"
     "reader.h"
     "scheduler.h"
+    "unknown_node_type.h"
 )
 
 add_subdirectory(reader)

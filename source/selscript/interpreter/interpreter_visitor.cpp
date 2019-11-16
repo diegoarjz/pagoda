@@ -23,6 +23,8 @@
 
 #include "../value/script_callable_body.h"
 
+#include "common/exception.h"
+
 namespace selector
 {
 // clang-format off
@@ -316,7 +318,7 @@ void interpreter_visitor::Visit(ast::CallPtr c)
 
 	if (!callee->IsVariadic() && callee->GetArity() != args.size())
 	{
-		throw std::runtime_error("Wrong arity");
+		throw Exception("Wrong arity");
 	}
 
 	auto prevSymbolTable = GetCurrentSymbolTable();
@@ -355,7 +357,7 @@ void interpreter_visitor::Visit(ast::FunctionDeclarationPtr func)
 	GetCurrentSymbolTable()->Declare(identifier->GetIdentifier(), callable);
 }
 
-void interpreter_visitor::Visit(ast::ParameterPtr par) { throw std::runtime_error("Unimplemented"); }
+void interpreter_visitor::Visit(ast::ParameterPtr par) { throw Exception("Unimplemented"); }
 
 void interpreter_visitor::Visit(ast::ReturnPtr r)
 {

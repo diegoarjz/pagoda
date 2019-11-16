@@ -2,6 +2,7 @@
 
 #include "../get_value_as.h"
 #include "can_cast_to_native.h"
+#include "common/exception.h"
 #include "type_name.h"
 
 #include <memory>
@@ -13,12 +14,10 @@ namespace selector
  * Exception thrown if a cast is impossible.
  */
 template<class T, class C>
-class UnableToCast : public std::runtime_error
+class UnableToCast : public Exception
 {
 public:
-	UnableToCast() : std::runtime_error("Unable to cast " + type_name<T>::GetName() + " to " + type_name<C>::GetName())
-	{
-	}
+	UnableToCast() : Exception("Unable to cast " + type_name<T>::GetName() + " to " + type_name<C>::GetName()) {}
 };
 
 /**

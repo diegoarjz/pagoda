@@ -1,10 +1,11 @@
 #include "input_interface_node.h"
 
+#include "construction_argument_not_found.h"
+#include "dynamic_value/get_value_as.h"
 #include "graph.h"
 #include "node.h"
 #include "node_set_visitor.h"
 #include "output_interface_node.h"
-#include "dynamic_value/get_value_as.h"
 
 #include <procedural_objects/procedural_operation.h>
 
@@ -21,7 +22,7 @@ void InputInterfaceNode::SetConstructionArguments(
 	auto interfaceNameIter = constructionArgs.find("interface");
 	if (interfaceNameIter == std::end(constructionArgs))
 	{
-		// TODO: throw
+		throw ConstructionArgumentNotFound(GetName(), GetId(), "interface");
 	}
 	auto offsetIter = constructionArgs.find("offset");
 

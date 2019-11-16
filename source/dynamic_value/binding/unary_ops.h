@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common/exception.h"
+
 #include "../dynamic_value_base.h"
 #include "../value_visitor.h"
 #include "has_operators.h"
@@ -10,13 +12,10 @@ namespace selector
  * Exception thrown when the negate operator is undefined for a \c DynamicValueBase.
  */
 template<class T>
-class UndefinedNegateOperator : public std::runtime_error
+class UndefinedNegateOperator : public Exception
 {
 public:
-	UndefinedNegateOperator()
-	    : std::runtime_error("Undefined negate operator for " + T::s_typeInfo->GetTypeName() + " type")
-	{
-	}
+	UndefinedNegateOperator() : Exception("Undefined negate operator for " + T::s_typeInfo->GetTypeName() + " type") {}
 };
 
 /**
@@ -41,13 +40,10 @@ struct negate
  * Exception thrown when the minus operator is undefined for a \c DynamicValueBase.
  */
 template<class T>
-class UndefinedMinusOperator : public std::runtime_error
+class UndefinedMinusOperator : public Exception
 {
 public:
-	UndefinedMinusOperator()
-	    : std::runtime_error("Undefined minus operator for " + T::s_typeInfo->GetTypeName() + " type")
-	{
-	}
+	UndefinedMinusOperator() : Exception("Undefined minus operator for " + T::s_typeInfo->GetTypeName() + " type") {}
 };
 
 /**

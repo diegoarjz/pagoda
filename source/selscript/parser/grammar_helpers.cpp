@@ -1,5 +1,7 @@
 #include "grammar_helpers.h"
 
+#include "common/exception.h"
+
 #include <memory>
 
 namespace selector
@@ -33,7 +35,7 @@ ast::UnaryPtr make_unary_op(char op, const ast::ExpressionPtr &rhs)
 		case '-':
 			return std::make_shared<ast::Unary>(ast::Unary::types::Min, rhs);
 	}
-	throw std::runtime_error("Invalid operator");
+	throw Exception("Invalid operator");
 }
 
 ast::ArithmeticOpPtr make_arithmetic_op(char op, const ast::ExpressionPtr &lhs, const ast::ExpressionPtr &rhs)
@@ -49,7 +51,7 @@ ast::ArithmeticOpPtr make_arithmetic_op(char op, const ast::ExpressionPtr &lhs, 
 		case '/':
 			return std::make_shared<ast::ArithmeticOp>(ast::ArithmeticOp::types::Div, lhs, rhs);
 	}
-	throw std::runtime_error("Invalid operator");
+	throw Exception("Invalid operator");
 }
 
 ast::ComparisonOpPtr make_comparison_op(const std::string &op, const ast::ExpressionPtr &lhs,
@@ -79,7 +81,7 @@ ast::ComparisonOpPtr make_comparison_op(const std::string &op, const ast::Expres
 	{
 		return std::make_shared<ast::ComparisonOp>(ast::ComparisonOp::types::Lte, lhs, rhs);
 	}
-	throw std::runtime_error("Invalid operator");
+	throw Exception("Invalid operator");
 }
 
 ast::LogicOpPtr make_logic_op(const std::string &op, const ast::ExpressionPtr &lhs, const ast::ExpressionPtr &rhs)
@@ -92,7 +94,7 @@ ast::LogicOpPtr make_logic_op(const std::string &op, const ast::ExpressionPtr &l
 	{
 		return std::make_shared<ast::LogicOp>(ast::LogicOp::types::Or, lhs, rhs);
 	}
-	throw std::runtime_error("Invalid operator");
+	throw Exception("Invalid operator");
 }
 
 ast::ExpressionPtr make_expression(const ast::ExpressionPtr &expression) { return expression; }

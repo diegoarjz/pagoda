@@ -32,20 +32,17 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 		case NamedArgument::ArgumentType::String:
 		{
 			param = std::make_shared<String>(namedArgument->GetArgumentValue());
-			// param = namedArgument->GetArgumentValue();
 			break;
 		}
 		case NamedArgument::ArgumentType::Float:
 		{
 			param =
 			    std::make_shared<FloatValue>(static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str())));
-			// param = static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str()));
 			break;
 		}
 		case NamedArgument::ArgumentType::Integer:
 		{
 			param = std::make_shared<Integer>(static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str())));
-			// param = static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str()));
 			break;
 		}
 		case NamedArgument::ArgumentType::Expression:

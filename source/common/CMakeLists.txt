@@ -1,6 +1,8 @@
 set(COMMON_SRCS
     "assertions.cpp"
     "assertions.h"
+    "exception.h"
+    "exception.cpp"
     "factory.h"
     "file_util.cpp"
     "file_util.h"
@@ -22,6 +24,7 @@ set(COMMON_SRCS
 
 set(COMMON_PUBLIC_HEADERS
     "assertions.h"
+    "exception.h"
     "const_str.h"
     "factory.h"
     "file_util.h"

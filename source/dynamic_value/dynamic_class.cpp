@@ -1,5 +1,6 @@
 #include "dynamic_class.h"
 
+#include "callable_body_not_set.h"
 #include "dynamic_instance.h"
 #include "function.h"
 #include "icallable_body.h"
@@ -49,7 +50,7 @@ DynamicValueBasePtr DynamicClass::Call(const std::vector<DynamicValueBasePtr>& a
 {
 	if (!m_callableBody)
 	{
-		throw std::runtime_error("Constructor callable body not set in " + ToString());
+		throw CallableBodyNotSet(ToString());
 	}
 
 	auto instance = std::make_shared<DynamicInstance>(std::dynamic_pointer_cast<DynamicClass>(shared_from_this()));
@@ -67,8 +68,8 @@ DynamicValueBasePtr DynamicClass::Call(const std::vector<DynamicValueBasePtr>& a
 
 FunctionPtr DynamicClass::Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals)
 {
-	std::runtime_error("Unimplemented");
-    return nullptr;
+	Exception("Unimplemented");
+	return nullptr;
 }
 
 }  // namespace selector

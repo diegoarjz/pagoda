@@ -1,9 +1,10 @@
 #ifndef SELECTOR_GEOMETRY_CORE_INDEXED_CONTAINTER_H_
 #define SELECTOR_GEOMETRY_CORE_INDEXED_CONTAINTER_H_
 
-#include <common/assertions.h>
-#include <common/profiler.h>
-#include <common/range.h>
+#include "common/assertions.h"
+#include "common/exception.h"
+#include "common/profiler.h"
+#include "common/range.h"
 
 #include <unordered_map>
 
@@ -12,14 +13,10 @@
 namespace selector
 {
 template<class IndexType>
-class IndexedDeletedException : public std::runtime_error
+class IndexedDeletedException : public Exception
 {
 public:
-	IndexedDeletedException(const IndexType& i)
-	    : std::runtime_error("Tried to access deleted index " + std::to_string(i))
-	{
-		DBG_ASSERT(false);
-	}
+	IndexedDeletedException(const IndexType& i) : Exception("Tried to access deleted index " + std::to_string(i)) {}
 };
 
 template<class IndexType, class ValueType>

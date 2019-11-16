@@ -1,7 +1,8 @@
 #include "operation_node.h"
 
-#include "dynamic_value/value_not_found.h"
+#include "construction_argument_not_found.h"
 #include "dynamic_value/get_value_as.h"
+#include "dynamic_value/value_not_found.h"
 #include "graph.h"
 #include "input_interface_node.h"
 #include "node.h"
@@ -9,6 +10,7 @@
 
 #include "procedural_objects/operation_factory.h"
 #include "procedural_objects/procedural_operation.h"
+#include "procedural_objects/unknown_operation.h"
 
 namespace selector
 {
@@ -23,13 +25,13 @@ void OperationNode::SetConstructionArguments(
 	auto operationIter = constructionArgs.find("operation");
 	if (operationIter == std::end(constructionArgs))
 	{
-		// TODO: throw
+		throw ConstructionArgumentNotFound(GetName(), GetId(), "operation");
 	}
 
 	auto operation = m_operationFactory->Create(get_value_as<std::string>(*operationIter->second));
 	if (operation == nullptr)
 	{
-		// TODO: throw
+		throw UnknownOperation(get_value_as<std::string>(*operationIter->second));
 	}
 
 	SetOperation(operation);

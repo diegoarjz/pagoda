@@ -1,3 +1,4 @@
+#include <common/exception.h>
 #include <common/file_util.h>
 #include <common/logger.h>
 #include <common/profiler.h>
@@ -19,7 +20,6 @@
 #include <procedural_objects/create_rect.h>
 #include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/triangulate_geometry.h>
-
 #include <selector.h>
 
 #include <boost/program_options.hpp>
@@ -71,21 +71,28 @@ int main(int argc, char* argv[])
 
 	if (file_path.size() > 0)
 	{
-		std::shared_ptr<Graph> graph = ReadGraphFromFile(selector, file_path);
-		if (graph == nullptr)
+		try
 		{
-			LOG_FATAL("Unable read a graph file (%s)", file_path.c_str());
-			return 1;
-		}
+			std::shared_ptr<Graph> graph = ReadGraphFromFile(selector, file_path);
+			if (graph == nullptr)
+			{
+				LOG_FATAL("Unable read a graph file (%s)", file_path.c_str());
+				return 1;
+			}
 
-		if (dot_file.size() > 0)
-		{
-			WriteDotFile(graph, dot_file);
-		}
+			if (dot_file.size() > 0)
+			{
+				WriteDotFile(graph, dot_file);
+			}
 
-		if (vm.count("execute"))
+			if (vm.count("execute"))
+			{
+				ExecuteGraph(graph);
+			}
+		}
+		catch (const Exception& e)
 		{
-			ExecuteGraph(graph);
+			LOG_FATAL("Exception: %s", e.What().c_str());
 		}
 	}
 

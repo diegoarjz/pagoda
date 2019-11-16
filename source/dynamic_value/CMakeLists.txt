@@ -1,4 +1,6 @@
 set(DYNAMIC_VALUE_SRCS
+    "callable_body_not_set.h"
+    "callable_body_not_set.cpp"
     "dynamic_value_base.h"
     "dynamic_value_base.cpp"
     "builtin_class.h"
@@ -38,6 +40,7 @@ set(DYNAMIC_VALUE_SRCS
 )
 
 set(COMMON_PUBLIC_HEADERS
+    "callable_body_not_set.h"
     "dynamic_value_base.h"
     "builtin_class.h"
     "type_info.h"
