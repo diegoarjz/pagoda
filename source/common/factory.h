@@ -30,7 +30,7 @@ public:
 		auto iter = methods.find(name);
 		if (iter == std::end(methods))
 		{
-			LOG_TRACE(Common, " Element type not found. Returning nullptr.");
+			LOG_TRACE(Common, " Element of type %s not found. Returning nullptr.", name.c_str());
 			return nullptr;
 		}
 		return iter->second();
