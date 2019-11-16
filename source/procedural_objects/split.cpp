@@ -120,7 +120,7 @@ void Split::DoWork()
 		std::vector<GeometryPtr> splitGeometries;
 		planeSplit.Execute(inGeometry, splitGeometries);
 
-		for (auto i = 0u; i < splitCount && i < splitGeometries.size(); ++i)
+		for (auto i = 0u; i < static_cast<uint32_t>(splitCount) && i < splitGeometries.size(); ++i)
 		{
 			auto outProceduralObject = CreateOutputProceduralObject(outInterfaces[i]);
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outProceduralObject);
