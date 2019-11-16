@@ -56,7 +56,7 @@ public:
 		FaceBuilder(GeometryBuilder *builder, std::shared_ptr<Geometry> &geom, uint32_t numPoints = 0)
 		    : m_builder(builder), m_geometry(geom)
 		{
-			LOG_TRACE(GeometryCore, "Created FaceBuilder with %d points", numPoints);
+			LOG_TRACE(GeometryCore, "Created FaceBuilder with " << numPoints << " points");
 			if (numPoints > 0)
 			{
 				m_faceIndices.reserve(numPoints);
@@ -69,7 +69,7 @@ public:
 		 */
 		void AddIndex(const Index_t &index)
 		{
-			LOG_TRACE(GeometryCore, "Adding index %d to face builder.", index);
+			LOG_TRACE(GeometryCore, "Adding index " << index << " to face builder.");
 			DBG_ASSERT_MSG(m_faceIndices.size() < m_faceIndices.capacity(),
 			               "Trying to add a vertex index past the end");
 
@@ -95,9 +95,9 @@ public:
 			LOG_TRACE(GeometryCore, "Closing face");
 			for (const auto &i : m_faceIndices)
 			{
-				LOG_TRACE(GeometryCore, " Face Point Index: %d. Topology Point Index: %d. Position: (%f, %f, %f).", i,
-				          m_builder->m_pointData.Get(i).m_index, m_builder->m_pointData.Get(i).m_position[0],
-				          m_builder->m_pointData.Get(i).m_position[1], m_builder->m_pointData.Get(i).m_position[2]);
+				LOG_TRACE(GeometryCore, " Face Point Index: "
+				                            << i << ". Topology Point Index: " << m_builder->m_pointData.Get(i).m_index
+				                            << " . Position: " << m_builder->m_pointData.Get(i).m_position);
 			}
 
 			auto face = m_geometry->CreateFace(m_builder->m_pointData.Get(m_faceIndices[0]).m_index,
@@ -114,7 +114,7 @@ public:
 
 			for (auto i = 3u; i < m_faceIndices.size(); ++i)
 			{
-				LOG_TRACE(GeometryCore, " Going to split edge %d", currentEdge);
+				LOG_TRACE(GeometryCore, " Going to split edge " << currentEdge);
 
 				auto &pointData = m_builder->m_pointData.Get(m_faceIndices[i]);
 				if (pointData.m_index == Geometry::s_invalidIndex)
@@ -125,7 +125,7 @@ public:
 				}
 				else
 				{
-					LOG_TRACE(GeometryCore, " Reusing previous point %d", pointData.m_index);
+					LOG_TRACE(GeometryCore, " Reusing previous point " << pointData.m_index);
 					m_geometry->SplitEdge(currentEdge, pointData.m_index);
 				}
 				m_geometry->SetPosition(pointData.m_index, pointData.m_position);
@@ -202,7 +202,7 @@ public:
 	Index_t AddPoint(const PositionType &pos)
 	{
 		START_PROFILE;
-		LOG_TRACE(GeometryCore, "Adding point with position (%f, %f, %f) to geometry builder", pos[0], pos[1], pos[2]);
+		LOG_TRACE(GeometryCore, "Adding point with position " << pos << " to geometry builder");
 
 		return m_pointData.Create(PointData(pos));
 	}

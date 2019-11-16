@@ -80,10 +80,9 @@ public:
 
 	GraphPtr CreateGraphFromFile(const std::string &filePath)
 	{
-		LOG_TRACE(Core, "Creating Graph From File: %s", filePath.c_str());
+		LOG_TRACE(Core, "Creating Graph From File: " << filePath.c_str());
 		GraphReader reader(GetNodeFactory());
 		GraphPtr graph = reader.Read(FileUtil::LoadFileToString(filePath));
-		LOG_TRACE(Core, "graph: 0x%x", graph.get());
 		return graph;
 	}
 

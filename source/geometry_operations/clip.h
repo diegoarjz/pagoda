@@ -23,7 +23,7 @@ public:
 	void Execute(GeometryPtr geometryIn, GeometryPtr front, GeometryPtr back)
 	{
 		START_PROFILE;
-		LOG_TRACE(GeometryOperations, "Clip with plane %s.", to_string(m_plane).c_str());
+		LOG_TRACE(GeometryOperations, "Clip with plane " << to_string(m_plane));
 
 		*front = *geometryIn;
 
@@ -44,7 +44,7 @@ public:
 		{
 			if (m_faceSide[*fIter] == Plane<float>::PlaneSide::Back)
 			{
-				LOG_TRACE(GeometryOperations, "Face %d is behind the plane", *fIter);
+				LOG_TRACE(GeometryOperations, "Face " << *fIter << " is behind the plane");
 				facesToDelete.insert(*fIter);
 
 				auto faceBuilder = builder.StartFace();
@@ -97,8 +97,8 @@ private:
 
 		for (const auto &e : splitFaceEdges)
 		{
-			LOG_TRACE(GeometryOperations, "Splitting face %d from edge %d to edge %d", face, std::get<0>(e),
-			          std::get<1>(e));
+			LOG_TRACE(GeometryOperations,
+			          "Splitting face " << face << " from edge " << std::get<0>(e) << " to edge " << std::get<1>(e));
 			auto newFace = geometry->SplitFace(face, std::get<0>(e), std::get<1>(e));
 			if (CheckFaceSide(geometry, newFace) == Plane<float>::PlaneSide::Front)
 			{
@@ -125,7 +125,7 @@ private:
 				break;
 			}
 		}
-		LOG_TRACE(GeometryOperations, "Face %d is %s", face, to_string<float>(planeSide).c_str());
+		LOG_TRACE(GeometryOperations, "Face " << face << " is " << to_string<float>(planeSide));
 		return planeSide;
 	}
 
@@ -139,8 +139,8 @@ private:
 			auto pos = geometry->GetPosition(*pIter);
 			auto planeSide = m_plane.GetPlaneSide(pos);
 			m_pointsSide[*pIter] = planeSide;
-			LOG_TRACE(GeometryOperations, "Point %d (%f, %f, %f) is %s Plane", *pIter, pos[0], pos[1], pos[2],
-			          to_string<float>(planeSide).c_str());
+			LOG_TRACE(GeometryOperations, "Point " << *pIter << " " << pos << " is " << to_string<float>(planeSide)
+			                                       << " Plane" << to_string<float>(planeSide).c_str());
 		}
 	}
 
@@ -158,20 +158,21 @@ private:
 
 			if (!SameSide(sourcePoint, destPoint))
 			{
-				LOG_TRACE(GeometryOperations, "Points %d (%s) and %d (%s) are on different sides", sourcePoint,
-				          to_string<float>(m_pointsSide[sourcePoint]).c_str(), destPoint,
-				          to_string<float>(m_pointsSide[destPoint]).c_str());
+				LOG_TRACE(GeometryOperations,
+				          "Points " << sourcePoint << " (" << to_string<float>(m_pointsSide[sourcePoint]) << " ) and "
+				                    << destPoint << " (" << to_string<float>(m_pointsSide[destPoint])
+				                    << ") are on different sides");
 				auto sourcePos = geometry->GetPosition(sourcePoint);
 				auto destPos = geometry->GetPosition(destPoint);
 
-				LOG_TRACE(GeometryOperations, " Source Position: %s", to_string(sourcePos).c_str());
-				LOG_TRACE(GeometryOperations, " Destination Position: %s", to_string(destPos).c_str());
+				LOG_TRACE(GeometryOperations, " Source Position: " << to_string(sourcePos));
+				LOG_TRACE(GeometryOperations, " Destination Position: " << to_string(destPos));
 
 				auto line = Line3D<float>::FromTwoPoints(sourcePos, destPos);
 				auto edgeIntersection = intersection(m_plane, line);
 
-				LOG_TRACE(GeometryOperations, " Intersection with plane: %s",
-				          to_string(edgeIntersection.m_intersection).c_str());
+				LOG_TRACE(GeometryOperations,
+				          " Intersection with plane: " << to_string(edgeIntersection.m_intersection));
 
 				auto edgesBetweenPoints = geometry->GetEdges(sourcePoint, destPoint);
 				for (const auto &e : edgesBetweenPoints)
@@ -193,7 +194,7 @@ private:
 			m_newEdges.insert(newEdge);
 			auto newPoint = geometry->GetPoint(splitPoint);
 			geometry->SetPosition(newPoint, e.second);
-			LOG_TRACE(GeometryOperations, "Edge %d is a new edge", newEdge);
+			LOG_TRACE(GeometryOperations, "Edge " << newEdge << " is a new edge");
 		}
 	}
 

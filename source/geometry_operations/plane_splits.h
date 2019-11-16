@@ -20,11 +20,11 @@ public:
 	void Execute(GeometryPtr geometryIn, Container &outGeometries)
 	{
 		START_PROFILE;
-		LOG_TRACE(GeometryOperations, "Plane Splits with %d planes", m_planes.size());
+		LOG_TRACE(GeometryOperations, "Plane Splits with " << m_planes.size() << " planes");
 #ifdef DEBUG
 		for (const auto &p : m_planes)
 		{
-			LOG_TRACE(GeometryOperations, " Plane %s", to_string(p).c_str());
+			LOG_TRACE(GeometryOperations, " Plane " << to_string(p));
 		}
 #endif
 

@@ -40,6 +40,8 @@ int main(int argc, char* argv[])
 {
 	po::variables_map vm;
 
+	LOG_TRACE(Common, "testing log trace " << 123 << " abc");
+
 	Selector selector;
 
 	if (!ParseCommandLine(argc, argv, &vm))
@@ -76,7 +78,7 @@ int main(int argc, char* argv[])
 			std::shared_ptr<Graph> graph = ReadGraphFromFile(selector, file_path);
 			if (graph == nullptr)
 			{
-				LOG_FATAL("Unable read a graph file (%s)", file_path.c_str());
+				LOG_FATAL("Unable read a graph file (" << file_path << ")");
 				return 1;
 			}
 
@@ -92,7 +94,7 @@ int main(int argc, char* argv[])
 		}
 		catch (const Exception& e)
 		{
-			LOG_FATAL("Exception: %s", e.What().c_str());
+			LOG_FATAL("Exception: " << e.What());
 		}
 	}
 

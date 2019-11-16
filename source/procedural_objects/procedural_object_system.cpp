@@ -11,10 +11,7 @@ namespace selector
 {
 ProceduralObjectSystem::ProceduralObjectSystem() { LOG_TRACE(Core, "Creating ProceduralObjectSystem"); }
 
-ProceduralObjectSystem::~ProceduralObjectSystem()
-{
-	LOG_TRACE(Core, "Destroying ProceduralObjectSystem");
-}
+ProceduralObjectSystem::~ProceduralObjectSystem() { LOG_TRACE(Core, "Destroying ProceduralObjectSystem"); }
 
 std::shared_ptr<ProceduralObject> ProceduralObjectSystem::CreateProceduralObject()
 {
@@ -30,7 +27,7 @@ bool ProceduralObjectSystem::RegisterProceduralComponentSystem(std::shared_ptr<P
 {
 	START_PROFILE;
 
-	LOG_TRACE(Core, "Registering ProceduralComponentSystem with %s name.", system->GetComponentSystemTypeName().c_str());
+	LOG_TRACE(Core, "Registering ProceduralComponentSystem with name " << system->GetComponentSystemTypeName().c_str());
 	auto system_type = system->GetComponentSystemTypeName();
 
 	if (m_proceduralComponentSystems.find(system_type) != std::end(m_proceduralComponentSystems))
@@ -84,10 +81,10 @@ void ProceduralObjectSystem::KillProceduralObject(std::shared_ptr<ProceduralObje
 		return;
 	}
 
-    for (auto &system : m_proceduralComponentSystems)
-    {
-        system.second->KillProceduralComponent(proceduralObject);
-    }
+	for (auto& system : m_proceduralComponentSystems)
+	{
+		system.second->KillProceduralComponent(proceduralObject);
+	}
 
 	m_proceduralObjects.erase(proceduralObject);
 }

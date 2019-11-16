@@ -26,7 +26,7 @@ public:
 	void Execute(GeometryPtr geometryOut)
 	{
 		START_PROFILE;
-		LOG_TRACE(GeometryOperations, "CreateRect. Width: %f Height: %f", m_width, m_height);
+		LOG_TRACE(GeometryOperations, "CreateRect. Width: " << m_width << " Height: " << m_height);
 
 		Vec3F center(0, 0, 0);
 		Vec3F width_direction(1, 0, 0);

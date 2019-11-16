@@ -36,11 +36,11 @@ public:
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
 	{
 		START_PROFILE;
-		LOG_TRACE(GeometryOperations, "Extrusion. Amount: %f", m_extrusionAMount);
+		LOG_TRACE(GeometryOperations, "Extrusion. Amount: " << m_extrusionAMount);
 
 		GeometryBuilderT<Geometry> builder(geometryOut);
 
-        std::unordered_map<Index_t, Index_t> pointsMap;
+		std::unordered_map<Index_t, Index_t> pointsMap;
 
 		auto inNumPoints = geometryIn->GetPointCount();
 		std::vector<Vec3F> inVertices;

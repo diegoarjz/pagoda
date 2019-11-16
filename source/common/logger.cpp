@@ -16,10 +16,10 @@ std::list<typename Logger::LogFile> Logger::sLogFiles;
 
 const bool Logger::trace_enabled[static_cast<uint32_t>(Logger::TraceLogs::Max)] = {
     false,  // Core,
-    false,  // Common,
+    true,   // Common,
     false,  // MathLib,
-    true,   // GeometryCore,
-    true,   // GeometryOperations,
+    false,  // GeometryCore,
+    false,  // GeometryOperations,
     false,  // Parameter,
     false,  // ProceduralGraph,
     false,  // ProceduralGraphReader,
@@ -128,6 +128,13 @@ void Logger::Log(const char *message, ...)
 		va_end(args);
 
 		Write(final_message);
+	}
+}
+void Logger::Log(const std::string &message)
+{
+	if (m_enabled)
+	{
+		Write(message.c_str());
 	}
 }
 

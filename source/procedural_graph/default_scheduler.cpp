@@ -29,8 +29,8 @@ bool DefaultScheduler::Step()
 	}
 	catch (...)
 	{
-		LOG_FATAL("Unknown exception caught while executing Node %s(%d)", nextNode->GetName().c_str(),
-		          nextNode->GetId());
+		LOG_FATAL("Unknown exception caught while executing Node " << nextNode->GetName() << "(" << nextNode->GetId()
+		                                                           << ")");
 		throw;
 	}
 

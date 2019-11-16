@@ -2,8 +2,8 @@
 
 #include "dynamic_value/boolean_value.h"
 #include "dynamic_value/float_value.h"
-#include "dynamic_value/string_value.h"
 #include "dynamic_value/get_value_as.h"
+#include "dynamic_value/string_value.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
@@ -25,11 +25,9 @@ RepeatSplit::RepeatSplit(ProceduralObjectSystemPtr objectSystem) : ProceduralOpe
 	CreateInputInterface(inputGeometry);
 	CreateOutputInterface(outputGeometry);
 
-    RegisterValues({
-	    {"size", std::make_shared<FloatValue>(0.0f)},
-	    {"axis", std::make_shared<String>("x")},
-	    {"adjust", std::make_shared<Boolean>(false)}
-    });
+	RegisterValues({{"size", std::make_shared<FloatValue>(0.0f)},
+	                {"axis", std::make_shared<String>("x")},
+	                {"adjust", std::make_shared<Boolean>(false)}});
 }
 
 RepeatSplit::~RepeatSplit() {}
@@ -45,9 +43,9 @@ void RepeatSplit::DoWork()
 	{
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 
-        UpdateValue("size");
-        UpdateValue("axis");
-        UpdateValue("adjust");
+		UpdateValue("size");
+		UpdateValue("axis");
+		UpdateValue("adjust");
 
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
@@ -83,7 +81,7 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const fl
 	CRITICAL_ASSERT_MSG(axis == "x" || axis == "y" || axis == "z", "Axis must be one of x, y, or z");
 
 	LOG_TRACE(ProceduralObjects, "Creating repeat split planes.");
-	LOG_TRACE(ProceduralObjects, " size: %f, axis: %s, adjust: %d", size, axis.c_str(), adjust);
+	LOG_TRACE(ProceduralObjects, " size: " << size << " , axis: " << axis << ", adjust: " << adjust);
 
 	auto scopeAxis = scope.GetAxis(axis);
 	Plane<float> scopePlane;
@@ -116,12 +114,12 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const fl
 	scopeAxis = -1 * scopeAxis;
 	auto currentPoint = scopePlane.GetPoint() + translationVector;
 
-	LOG_TRACE(ProceduralObjects, " scopeAxis: %s, planeDistance: %f, numPlanes: %d", to_string(scopeAxis).c_str(),
-	          planeDistance, numPlanes);
+	LOG_TRACE(ProceduralObjects,
+	          " scopeAxis: " << scopeAxis << ", planeDistance: " << planeDistance << ", numPlanes: " << numPlanes);
 	for (uint32_t i = 0; i < numPlanes; ++i)
 	{
 		auto plane = Plane<float>::FromPointAndNormal(currentPoint, scopeAxis);
-		LOG_TRACE(ProceduralObjects, " Split Plane: %s", to_string(plane).c_str());
+		LOG_TRACE(ProceduralObjects, " Split Plane: " << plane);
 		planes.push_back(plane);
 		currentPoint = currentPoint + translationVector;
 	}

@@ -43,7 +43,7 @@ public:
 #ifdef DEBUG
 		for (auto i = 0u; i < 8; ++i)
 		{
-			LOG_TRACE(GeometryOperations, " Point: %s", to_string(m_points[i]).c_str());
+			LOG_TRACE(GeometryOperations, " Point: " << to_string(m_points[i]));
 		}
 #endif
 

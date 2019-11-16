@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <list>
 #include <memory>
+#include <sstream>
 #include <string>
 
 namespace selector
@@ -46,6 +47,7 @@ public:
 	virtual ~Logger();
 
 	void Log(const char *message, ...);
+	void Log(const std::string &message);
 	virtual void Write(const char *message);
 
 	static void Shutdown();
@@ -78,17 +80,44 @@ private:
 
 };  // class Logger
 
-#define LOG_TRACE(TRACE, message, ...)                                        \
+#define LOG_TRACE(TRACE, message)                                             \
 	if (selector::Logger::IsTraceEnabled(selector::Logger::TraceLogs::TRACE)) \
 	{                                                                         \
-		selector::Logger::trace()->Log(#TRACE ": " message, ##__VA_ARGS__);   \
+		std::stringstream _logger_ss_;                                        \
+		_logger_ss_ << #TRACE ": " << message;                                \
+		selector::Logger::trace()->Log(_logger_ss_.str());                    \
 	}
 
-#define LOG_DEBUG(message, ...) selector::Logger::debug()->Log("Debug: " message, ##__VA_ARGS__)
-#define LOG_INFO(message, ...) selector::Logger::info()->Log("Info: " message, ##__VA_ARGS__)
-#define LOG_WARNING(message, ...) selector::Logger::warning()->Log("Warning: " message, ##__VA_ARGS__)
-#define LOG_ERROR(message, ...) selector::Logger::error()->Log("Error: " message, ##__VA_ARGS__)
-#define LOG_FATAL(message, ...) selector::Logger::fatal()->Log("Fatal: " message, ##__VA_ARGS__)
+#define LOG_DEBUG(message)                                 \
+	{                                                      \
+		std::stringstream _logger_ss_;                     \
+		_logger_ss_ << "Debug: " << message;               \
+		selector::Logger::debug()->Log(_logger_ss_.str()); \
+	}
+#define LOG_INFO(message)                                  \
+	{                                                      \
+		std::stringstream _logger_ss_;                     \
+		_logger_ss_ << "Info: " << message;                \
+		selector::Logger::debug()->Log(_logger_ss_.str()); \
+	}
+#define LOG_WARNING(message)                               \
+	{                                                      \
+		std::stringstream _logger_ss_;                     \
+		_logger_ss_ << "Warning: " << message;             \
+		selector::Logger::debug()->Log(_logger_ss_.str()); \
+	}
+#define LOG_ERROR(message)                                 \
+	{                                                      \
+		std::stringstream _logger_ss_;                     \
+		_logger_ss_ << "Error: " << message;               \
+		selector::Logger::debug()->Log(_logger_ss_.str()); \
+	}
+#define LOG_FATAL(message)                                 \
+	{                                                      \
+		std::stringstream _logger_ss_;                     \
+		_logger_ss_ << "Fatal: " << message;               \
+		selector::Logger::debug()->Log(_logger_ss_.str()); \
+	}
 
 }  // namespace selector
 #endif

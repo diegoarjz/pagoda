@@ -43,8 +43,8 @@ void Node::SetExpressionVariables()
 				}
 				catch (ValueNotFoundException &e)
 				{
-					LOG_TRACE(ProceduralGraph, "Operation parameter %s not found in Node %s", parIter->first.c_str(),
-					          GetName().c_str());
+					LOG_TRACE(ProceduralGraph,
+					          "Operation parameter " << parIter->first << " not found in Node " << GetName());
 				}
 			}
 		}

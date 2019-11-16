@@ -18,19 +18,19 @@ public:
 	using PointerType_t = std::shared_ptr<ObjectType>;
 	using FactoryMethod_t = std::function<PointerType_t(void)>;
 
-	Factory(const std::string& name) : m_name(name) { LOG_TRACE(Common, "Factory %s created", name.c_str()); }
+	Factory(const std::string& name) : m_name(name) { LOG_TRACE(Common, "Factory " << name << " created"); }
 
 	virtual ~Factory() {}
 
 	PointerType_t Create(const std::string& name)
 	{
-		LOG_TRACE(Common, "Factory %s creating object of type %s", m_name.c_str(), name.c_str());
+		LOG_TRACE(Common, "Factory " << m_name << " creating object of type " << name)
 
 		auto methods = factoryMethods();
 		auto iter = methods.find(name);
 		if (iter == std::end(methods))
 		{
-			LOG_TRACE(Common, " Element of type %s not found. Returning nullptr.", name.c_str());
+			LOG_TRACE(Common, " Element of type " << name << " not found. Returning nullptr.");
 			return nullptr;
 		}
 		return iter->second();
@@ -52,7 +52,7 @@ public:
 
 	void Register(const std::string& name, const FactoryMethod_t& method)
 	{
-		LOG_TRACE(Common, "Registering type %s with %s factory", name.c_str(), m_name.c_str());
+		LOG_TRACE(Common, "Registering type " << name << " with " << m_name << " factory");
 
 		factoryMethods()[name] = method;
 	}
