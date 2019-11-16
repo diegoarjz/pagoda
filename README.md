@@ -38,7 +38,7 @@ $ git clone https://github.com/diegarjz/selector.git selector
 $ cd selector
 $ mkdir build
 $ cd build
-$ cmake ..
+$ cmake .. -DCMAKE_BUILD_TYPE=Release
 $ make && make test && make install
 ```
 
