@@ -21,6 +21,7 @@
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
 #include <procedural_objects/repeat_split.h>
+#include <procedural_objects/split.h>
 #include <procedural_objects/triangulate_geometry.h>
 
 namespace selector
@@ -65,6 +66,7 @@ public:
 		                             [this]() { return std::make_shared<RepeatSplit>(m_proceduralObjectSystem); });
 		m_operationFactory->Register("ExtractFaces",
 		                             [this]() { return std::make_shared<ExtractFaces>(m_proceduralObjectSystem); });
+		m_operationFactory->Register("Split", [this]() { return std::make_shared<Split>(m_proceduralObjectSystem); });
 	}
 
 	~Impl()
