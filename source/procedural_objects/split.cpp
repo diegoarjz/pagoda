@@ -71,7 +71,7 @@ std::vector<Plane<float>> createPlanes(const Scope &scope, const std::vector<flo
 	auto translationVector = scopeAxis;
 	scopeAxis = -1 * scopeAxis;
 
-	for (auto i = 1; i < sizes.size() && currentDistance < scopeSize; ++i)
+	for (auto i = 1u; i < sizes.size() && currentDistance < scopeSize; ++i)
 	{
 		auto currentPoint = scopePlane.GetPoint() + currentDistance * translationVector;
 		planes.push_back(Plane<float>::FromPointAndNormal(currentPoint, scopeAxis));
@@ -120,7 +120,7 @@ void Split::DoWork()
 		std::vector<GeometryPtr> splitGeometries;
 		planeSplit.Execute(inGeometry, splitGeometries);
 
-		for (auto i = 0; i < splitCount && i < splitGeometries.size(); ++i)
+		for (auto i = 0u; i < splitCount && i < splitGeometries.size(); ++i)
 		{
 			auto outProceduralObject = CreateOutputProceduralObject(outInterfaces[i]);
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outProceduralObject);

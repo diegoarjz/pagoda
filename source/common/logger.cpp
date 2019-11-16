@@ -16,7 +16,7 @@ std::list<typename Logger::LogFile> Logger::sLogFiles;
 
 const bool Logger::trace_enabled[static_cast<uint32_t>(Logger::TraceLogs::Max)] = {
     false,  // Core,
-    true,   // Common,
+    false,  // Common,
     false,  // MathLib,
     false,  // GeometryCore,
     false,  // GeometryOperations,
