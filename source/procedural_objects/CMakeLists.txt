@@ -39,6 +39,8 @@ set(PROCEDURAL_OBJECTS_SRCS
     "procedural_operation_object_interface.h"
     "repeat_split.cpp"
     "repeat_split.h"
+    "split.cpp"
+    "split.h"
     "triangulate_geometry.cpp"
     "triangulate_geometry.h"
     "unknown_operation.cpp"
@@ -67,6 +69,7 @@ set(PROCEDURAL_OBJECTS_PUBLIC_HEADERS
     "procedural_operation.h"
     "procedural_operation_object_interface.h"
     "repeat_split.h"
+    "split.h"
     "triangulate_geometry.h"
     "unknown_operation.h"
 )

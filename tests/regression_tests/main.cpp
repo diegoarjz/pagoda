@@ -101,7 +101,9 @@ REGRESSION_TEST(repeat_split, "geometry_0.obj", "geometry_11.obj", "geometry_14.
                 "geometry_31.obj", "geometry_6.obj", "geometry_9.obj", "geometry_10.obj", "geometry_13.obj",
                 "geometry_16.obj", "geometry_19.obj", "geometry_21.obj", "geometry_24.obj", "geometry_27.obj",
                 "geometry_3.obj", "geometry_4.obj", "geometry_7.obj")
-REGRESSION_TEST(extract_faces, "geometry0.obj", "geometry1.obj", "geometry2.obj", "geometry3.obj", "geometry4.obj", "geometry5.obj")
+REGRESSION_TEST(extract_faces, "geometry0.obj", "geometry1.obj", "geometry2.obj", "geometry3.obj", "geometry4.obj",
+                "geometry5.obj")
+REGRESSION_TEST(split, "geometry0.obj", "geometry1.obj", "geometry2.obj")
 REGRESSION_TEST(banner, "geometry0.obj", "geometry1.obj", "geometry2.obj")
 
 int main(int argc, char* argv[])
