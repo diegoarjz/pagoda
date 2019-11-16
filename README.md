@@ -8,7 +8,9 @@
 
 # What is Selector
 
-![banner](https://user-images.githubusercontent.com/6498824/68996565-8d2d6a80-0893-11ea-89d7-fd089935a9a8.png)
+![banner](https://user-images.githubusercontent.com/6498824/68999381-481b2f80-08b7-11ea-8259-05bbc2b0a454.png)
+
+![graph](https://user-images.githubusercontent.com/6498824/68999389-5bc69600-08b7-11ea-93f0-c16b6dabc04a.png)
 
 
 The goal of Selector is to be a procedural modelling framework aimed at
