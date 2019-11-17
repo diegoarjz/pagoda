@@ -127,6 +127,19 @@ std::ostream &operator<<(std::ostream &o, const MatrixBase<NumCols, NumRows, Rep
 using Mat2x2F = MatrixBase<2, 2, float>;
 using Mat3x3F = MatrixBase<3, 3, float>;
 using Mat4x4F = MatrixBase<4, 4, float>;
+
+template<typename T>
+MatrixBase<4, 4, T> translate_matrix(const T &x, const T &y, const T &z)
+{
+	MatrixBase<4, 4, T> mat;
+	mat.SetRow(0, typename MatrixBase<4, 4, T>::ColumnType(1, 0, 0, x));
+	mat.SetRow(1, typename MatrixBase<4, 4, T>::ColumnType(0, 1, 0, y));
+	mat.SetRow(2, typename MatrixBase<4, 4, T>::ColumnType(0, 0, 1, z));
+	mat.SetRow(3, typename MatrixBase<4, 4, T>::ColumnType(0, 0, 0, 1));
+
+	return mat;
+}
+
 }  // namespace selector
 
 #include "matrix_arithmetic.h"

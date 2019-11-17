@@ -159,3 +159,12 @@ TEST(MatrixBase, when_right_multiplying_a_vector_with_a_matrix_should_produce_co
 
 	ASSERT_EQ(r, Vec2F(3, 7));
 }
+
+TEST(MatrixBase, when_right_multiplying_a_vector_with_a_translation_matrix_should_translate_the_vector)
+{
+	Mat4x4F m = translate_matrix<float>(1, 2, 3);
+	Vec4F p(-5.0, -5.0, -2.5, 1.0);
+
+	auto r = m * p;
+	EXPECT_EQ(r, Vec4F(-4.0f, -3.0f, 0.5f, 1.0f));
+}
