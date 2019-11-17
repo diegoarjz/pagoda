@@ -94,6 +94,7 @@ REGRESSION_TEST(parameter_overwrite, "geometry.obj")
 REGRESSION_TEST(parameter_renaming, "geometry.obj")
 REGRESSION_TEST(clip_geometry, "front.obj", "back.obj", "scope0.obj", "scope1.obj")
 REGRESSION_TEST(triangulate_geometry, "geometry.obj")
+REGRESSION_TEST(translate, "geometry.obj")
 REGRESSION_TEST(repeat_split, "geometry_0.obj", "geometry_11.obj", "geometry_14.obj", "geometry_17.obj",
                 "geometry_2.obj", "geometry_22.obj", "geometry_25.obj", "geometry_28.obj", "geometry_30.obj",
                 "geometry_5.obj", "geometry_8.obj", "geometry_1.obj", "geometry_12.obj", "geometry_15.obj",
@@ -104,6 +105,7 @@ REGRESSION_TEST(repeat_split, "geometry_0.obj", "geometry_11.obj", "geometry_14.
 REGRESSION_TEST(extract_faces, "geometry0.obj", "geometry1.obj", "geometry2.obj", "geometry3.obj", "geometry4.obj",
                 "geometry5.obj")
 REGRESSION_TEST(split, "geometry0.obj", "geometry1.obj", "geometry2.obj")
+/*
 REGRESSION_TEST(banner, "geometry0.obj", "geometry107.obj", "geometry18.obj", "geometry27.obj", "geometry36.obj",
                 "geometry45.obj", "geometry54.obj", "geometry63.obj", "geometry72.obj", "geometry81.obj",
                 "geometry90.obj", "geometry1.obj", "geometry108.obj", "geometry19.obj", "geometry28.obj",
@@ -126,6 +128,7 @@ REGRESSION_TEST(banner, "geometry0.obj", "geometry107.obj", "geometry18.obj", "g
                 "geometry70.obj", "geometry8.obj", "geometry89.obj", "geometry98.obj", "geometry106.obj",
                 "geometry17.obj", "geometry26.obj", "geometry35.obj", "geometry44.obj", "geometry53.obj",
                 "geometry62.obj", "geometry71.obj", "geometry80.obj", "geometry9.obj", "geometry99.obj")
+                */
 
 int main(int argc, char* argv[])
 {

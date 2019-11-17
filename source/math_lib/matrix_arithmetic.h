@@ -129,7 +129,7 @@ VecBase<Size, Rep> operator*(const MatrixBase<Size, Size, Rep> &m, const VecBase
 	{
 		for (auto c = 0u; c < Size; ++c)
 		{
-			result[r] += m.Value(c, r) * v[r];
+			result[r] += m.Value(c, r) * v[c];
 		}
 	}
 

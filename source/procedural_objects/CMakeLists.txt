@@ -41,6 +41,8 @@ set(PROCEDURAL_OBJECTS_SRCS
     "repeat_split.h"
     "split.cpp"
     "split.h"
+    "translate.cpp"
+    "translate.h"
     "triangulate_geometry.cpp"
     "triangulate_geometry.h"
     "unknown_operation.cpp"
@@ -70,6 +72,7 @@ set(PROCEDURAL_OBJECTS_PUBLIC_HEADERS
     "procedural_operation_object_interface.h"
     "repeat_split.h"
     "split.h"
+    "translate.h"
     "triangulate_geometry.h"
     "unknown_operation.h"
 )
