@@ -140,6 +140,12 @@ MatrixBase<4, 4, T> translate_matrix(const T &x, const T &y, const T &z)
 	return mat;
 }
 
+template<typename T>
+MatrixBase<4, 4, T> translate_matrix(VecBase<3, T> vec)
+{
+	return translate_matrix(vec.X(), vec.Y(), vec.Z());
+}
+
 }  // namespace selector
 
 #include "matrix_arithmetic.h"

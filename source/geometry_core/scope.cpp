@@ -89,4 +89,16 @@ std::array<Vec3F, 8> Scope::GetWorldPoints() const
 	}
 	return boxPoints;
 }
+
+Vec3F Scope::GetLocalVector(const Vec3F &worldVector) const
+{
+	return Vec3F(dot_product(GetXAxis(), worldVector), dot_product(GetYAxis(), worldVector),
+	             dot_product(GetZAxis(), worldVector));
+}
+
+Vec3F Scope::GetWorldVector(const Vec3F &localVector) const
+{
+	return GetXAxis() * localVector.X() + GetYAxis() * localVector.Y() + GetZAxis() * localVector.Z();
+}
+
 }  // namespace selector
