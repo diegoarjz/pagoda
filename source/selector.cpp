@@ -21,6 +21,7 @@
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
 #include <procedural_objects/repeat_split.h>
+#include <procedural_objects/scale.h>
 #include <procedural_objects/split.h>
 #include <procedural_objects/translate.h>
 #include <procedural_objects/triangulate_geometry.h>
@@ -70,6 +71,7 @@ public:
 		m_operationFactory->Register("Translate",
 		                             [this]() { return std::make_shared<Translate>(m_proceduralObjectSystem); });
 		m_operationFactory->Register("Split", [this]() { return std::make_shared<Split>(m_proceduralObjectSystem); });
+		m_operationFactory->Register("Scale", [this]() { return std::make_shared<Scale>(m_proceduralObjectSystem); });
 	}
 
 	~Impl()

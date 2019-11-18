@@ -79,6 +79,9 @@ public:
 	Vec3F GetLocalVector(const Vec3F &worldVector) const;
 	Vec3F GetWorldVector(const Vec3F &localVector) const;
 
+	Vec3F GetCenterPointInWorld() const;
+	Vec3F GetCenterPointInLocal() const;
+
 	template<class Geometry>
 	static Scope FromGeometryAndConstrainedRotation(const std::shared_ptr<Geometry> geom, const Mat3x3F &rotation)
 	{

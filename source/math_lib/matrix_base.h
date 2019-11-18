@@ -146,6 +146,24 @@ MatrixBase<4, 4, T> translate_matrix(VecBase<3, T> vec)
 	return translate_matrix(vec.X(), vec.Y(), vec.Z());
 }
 
+template<typename T>
+MatrixBase<4, 4, T> scale_matrix(const T &x, const T &y, const T &z)
+{
+	MatrixBase<4, 4, T> mat;
+	mat.SetRow(0, typename MatrixBase<4, 4, T>::ColumnType(x, 0, 0, 0));
+	mat.SetRow(1, typename MatrixBase<4, 4, T>::ColumnType(0, y, 0, 0));
+	mat.SetRow(2, typename MatrixBase<4, 4, T>::ColumnType(0, 0, z, 0));
+	mat.SetRow(3, typename MatrixBase<4, 4, T>::ColumnType(0, 0, 0, 1));
+
+	return mat;
+}
+
+template<typename T>
+MatrixBase<4, 4, T> scale_matrix(VecBase<3, T> vec)
+{
+	return scale_matrix(vec.X(), vec.Y(), vec.Z());
+}
+
 }  // namespace selector
 
 #include "matrix_arithmetic.h"

@@ -101,4 +101,10 @@ Vec3F Scope::GetWorldVector(const Vec3F &localVector) const
 	return GetXAxis() * localVector.X() + GetYAxis() * localVector.Y() + GetZAxis() * localVector.Z();
 }
 
+Vec3F Scope::GetCenterPointInWorld() const { return LocalPointInWorld(GetCenterPointInLocal()); }
+
+Vec3F Scope::GetCenterPointInLocal() const
+{
+	return 0.5f * (GetLocalPoint(BoxPoints::LowerBottomLeft) + GetLocalPoint(BoxPoints::HigherTopRight));
+}
 }  // namespace selector
