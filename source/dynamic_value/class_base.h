@@ -24,7 +24,7 @@ public:
 	void SetMember(const std::string &name, DynamicValueBasePtr v);
 	void RegisterOrSetMember(const std::string &name, DynamicValueBasePtr v);
 	DynamicValueBasePtr GetMember(const std::string &name);
-    std::shared_ptr<DynamicValueTable> GetInstanceValueTable();
+	std::shared_ptr<DynamicValueTable> GetInstanceValueTable();
 
 	DynamicValueTable::iterator GetMembersBegin();
 	DynamicValueTable::iterator GetMembersEnd();
@@ -33,6 +33,6 @@ public:
 	                         std::shared_ptr<DynamicValueTable> globals = nullptr) = 0;
 
 protected:
-    std::shared_ptr<DynamicValueTable> m_memberTable;
+	std::shared_ptr<DynamicValueTable> m_memberTable;
 };
 }  // namespace selector

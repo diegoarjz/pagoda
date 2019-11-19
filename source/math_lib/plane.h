@@ -115,6 +115,9 @@ public:
 		return dot > Rep(0) ? PlaneSide::Front : PlaneSide::Back;
 	}
 
+	bool operator==(const Plane<Rep> &o) const { return m_normal == o.m_normal && m_distance == o.m_distance; }
+	bool operator!=(const Plane<Rep> &o) const { return !(*this == o); }
+
 private:
 	VectorType m_normal;  ///< Plane Normal
 	Rep m_distance;       ///< Distance to origin

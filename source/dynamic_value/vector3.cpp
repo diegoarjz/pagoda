@@ -8,6 +8,7 @@
 
 #include "binding/make_member_function.h"
 #include "member_function_callable_body.h"
+#include "register_member_function.h"
 
 namespace selector
 {
@@ -52,17 +53,8 @@ FloatValuePtr Vector3::GetZ() { return std::make_shared<FloatValue>(m_nativeVect
 
 void Vector3::RegisterMembers()
 {
-	RegisterMember("GetX",
-	               std::make_shared<Function>(
-	                   std::make_shared<MemberFunctionCallableBody<Vector3, std::function<FloatValuePtr(Vector3*)>>>(
-	                       *this, make_member_function(&Vector3::GetX))));
-	RegisterMember("GetY",
-	               std::make_shared<Function>(
-	                   std::make_shared<MemberFunctionCallableBody<Vector3, std::function<FloatValuePtr(Vector3*)>>>(
-	                       *this, make_member_function(&Vector3::GetY))));
-	RegisterMember("GetZ",
-	               std::make_shared<Function>(
-	                   std::make_shared<MemberFunctionCallableBody<Vector3, std::function<FloatValuePtr(Vector3*)>>>(
-	                       *this, make_member_function(&Vector3::GetZ))));
+	RegisterMemberFunction(this, "GetX", make_member_function(&Vector3::GetX));
+	RegisterMemberFunction(this, "GetY", make_member_function(&Vector3::GetY));
+	RegisterMemberFunction(this, "GetZ", make_member_function(&Vector3::GetZ));
 }
 }  // namespace selector
