@@ -13,6 +13,12 @@ namespace selector
 {
 const TypeInfoPtr DynamicPlane::s_typeInfo = std::make_shared<TypeInfo>("Plane");
 
+std::shared_ptr<DynamicPlane> DynamicPlane::DynamicConstructor(const std::vector<DynamicValueBasePtr>& args)
+{
+	return std::make_shared<DynamicPlane>(std::dynamic_pointer_cast<Vector3>(args[0]),
+	                                      std::dynamic_pointer_cast<Vector3>(args[1]));
+}
+
 DynamicPlane::DynamicPlane() : BuiltinClass(s_typeInfo) { RegisterMembers(); }
 
 DynamicPlane::DynamicPlane(const Plane<float>& plane) : BuiltinClass(s_typeInfo), m_nativePlane(plane)

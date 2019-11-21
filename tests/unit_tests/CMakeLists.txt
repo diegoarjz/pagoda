@@ -48,6 +48,7 @@ set(test_srcs
     "procedural_graph/graph_reader_grammar.cpp"
     "procedural_graph/parameter_node.cpp"
     "procedural_graph/graph_reader_ast.cpp"
+    "selscript/grammar.cpp"
     )
 
 add_executable(unit_tests ${test_srcs})

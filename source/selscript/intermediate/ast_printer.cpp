@@ -99,7 +99,7 @@ void AstPrinter::Visit(ast::AssignmentPtr a)
 void AstPrinter::Visit(ast::ExpressionStatementPtr e)
 {
 	indent();
-	std::cout << indentation() << "<Expression>" << std::endl;
+	std::cout << indentation() << "<ExpressionStatement>" << std::endl;
 	e->GetExpression()->AcceptVisitor(this);
 	deindent();
 }

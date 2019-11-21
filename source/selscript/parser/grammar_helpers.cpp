@@ -6,9 +6,15 @@
 
 namespace selector
 {
-ast::IdentifierPtr make_identifier(const std::vector<char> &identifier)
+ast::IdentifierPtr make_identifier(const std::vector<char> &identifier, const std::vector<char> &identifier2)
 {
-	return std::make_shared<ast::Identifier>(identifier);
+    std::vector<char> concatIdentifiers = identifier;
+    concatIdentifiers.reserve(identifier.size() + identifier2.size());
+    for (auto c : identifier2)
+    {
+        concatIdentifiers.push_back(c);
+    }
+	return std::make_shared<ast::Identifier>(concatIdentifiers);
 }
 
 ast::FloatPtr make_float(const float &f) { return std::make_shared<ast::Float>(f); }

@@ -48,7 +48,7 @@ struct grammar : boost::spirit::qi::grammar<Iterator, ast::ProgramPtr(), boost::
 		kw_return = kw("return");
 		kw_class = kw("class");
 
-		identifier = lexeme[(+(char_('_') | alpha) >> *(alnum | char_('_')))[_val = bind(make_identifier, qi::_1)]];
+		identifier = lexeme[(+(char_('_') | alpha) >> *(alnum | char_('_')))[_val = bind(make_identifier, qi::_1, qi::_2)]];
 		number = Integer | Float;
 		Float = float_[_val = bind(make_float, qi::_1)];
 		Integer = int_[_val = bind(make_int, qi::_1)] >> !float_;

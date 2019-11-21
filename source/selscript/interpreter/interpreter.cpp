@@ -1,17 +1,33 @@
 #include "interpreter.h"
 
-#include "../../dynamic_value/dynamic_value_table.h"
-#include "../../dynamic_value/value_not_found.h"
+#include "dynamic_value/binding/make_free_function.h"
+#include "dynamic_value/dynamic_value_table.h"
+#include "dynamic_value/free_function_callable_body.h"
+#include "dynamic_value/value_not_found.h"
+#include "dynamic_value/vector3.h"
+#include "dynamic_value/dynamic_plane.h"
 #include "interpreter_visitor.h"
 
 #include <stack>
 
 namespace selector
 {
+template<class T>
+std::shared_ptr<T> constructor_wrapper(const std::vector<DynamicValueBasePtr> &args)
+{
+	auto instance = T::DynamicConstructor(args);
+	return instance;
+}
+
 class Interpreter::Impl
 {
 public:
-	Impl() {}
+	Impl()
+	{
+		RegisterBuiltinClass<Vector3>();
+		RegisterBuiltinClass<DynamicPlane>();
+	}
+
 	~Impl() {}
 
 	bool Interpret(const ast::ProgramPtr &program)
@@ -63,6 +79,20 @@ public:
 	}
 
 	DynamicValueBasePtr GetLastEvaluatedExpression() const { return m_visitor.GetLastEvaluatedExpression(); }
+
+	template<class T>
+	void RegisterBuiltinClass()
+	{
+		using ConstructorFunc_t = std::function<std::shared_ptr<T>(const std::vector<DynamicValueBasePtr> &)>;
+		using FreeFunctionCallableBody_t = FreeFunctionCallableBody<ConstructorFunc_t>;
+		std::shared_ptr<FreeFunctionCallableBody_t> constructor =
+		    std::make_shared<FreeFunctionCallableBody_t>(constructor_wrapper<T>);
+		std::shared_ptr<Function> constructorFunction = std::make_shared<Function>(constructor);
+
+		constructorFunction->SetVariadic(true);
+
+		m_visitor.GetCurrentSymbolTable()->Declare(T::s_typeInfo->GetTypeName(), constructorFunction);
+	}
 
 private:
 	std::stack<std::shared_ptr<DynamicValueTable>> m_externalSymbols;

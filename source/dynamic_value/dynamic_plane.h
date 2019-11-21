@@ -18,6 +18,8 @@ class DynamicPlane : public BuiltinClass
 public:
 	static const TypeInfoPtr s_typeInfo;
 
+    static std::shared_ptr<DynamicPlane> DynamicConstructor(const std::vector<DynamicValueBasePtr>& args);
+
 	DynamicPlane();
 	DynamicPlane(const Plane<float>& plane);
 	DynamicPlane(Vector3Ptr point, Vector3Ptr normal);
