@@ -26,14 +26,6 @@ ClipGeometry::ClipGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 	CreateOutputInterface(backGeometry);
 
 	RegisterValues({{"plane", std::make_shared<DynamicPlane>()}});
-	/*
-	        {"normal_x", std::make_shared<FloatValue>(0.0f)},
-	        {"normal_y", std::make_shared<FloatValue>(0.0f)},
-	        {"normal_z", std::make_shared<FloatValue>(0.0f)},
-	        {"position_x", std::make_shared<FloatValue>(0.0f)},
-	        {"position_y", std::make_shared<FloatValue>(0.0f)},
-	        {"position_z", std::make_shared<FloatValue>(0.0f)}});
-	        */
 }
 
 ClipGeometry::~ClipGeometry() {}
@@ -49,31 +41,8 @@ void ClipGeometry::DoWork()
 	{
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 		UpdateValue("plane");
-		/*
-		UpdateValue("position_x");
-		UpdateValue("position_y");
-		UpdateValue("position_z");
-		UpdateValue("normal_x");
-		UpdateValue("normal_y");
-		UpdateValue("normal_z");
-		*/
 
-		// clang-format off
 		Clip<Geometry> clip(get_value_as<Plane<float>>(*GetValue("plane")));
-        /*
-		    Plane<float>::FromPointAndNormal(
-            {
-                get_value_as<float>(*GetValue("position_x")),
-                get_value_as<float>(*GetValue("position_y")),
-                get_value_as<float>(*GetValue("position_z"))
-            },
-            {
-                get_value_as<float>(*GetValue("normal_x")),
-                get_value_as<float>(*GetValue("normal_y")),
-                get_value_as<float>(*GetValue("normal_z"))
-            }));
-            */
-		// clang-format on
 
 		// Geometry
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
