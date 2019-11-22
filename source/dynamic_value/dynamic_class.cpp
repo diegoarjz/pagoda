@@ -8,6 +8,8 @@
 #include "type_info.h"
 #include "value_visitor.h"
 
+#include "common/unimplemented.h"
+
 namespace selector
 {
 const TypeInfoPtr DynamicClass::typeInfo = std::make_shared<TypeInfo>("DynamicClass");
@@ -68,8 +70,7 @@ DynamicValueBasePtr DynamicClass::Call(const std::vector<DynamicValueBasePtr>& a
 
 FunctionPtr DynamicClass::Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals)
 {
-	Exception("Unimplemented");
-	return nullptr;
+	UNIMPLEMENTED;
 }
 
 }  // namespace selector

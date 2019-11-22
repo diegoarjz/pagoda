@@ -1,0 +1,34 @@
+<Program>
+ <VarDecl>
+  <Identifier:v>
+  <Call>
+   <Identifier:Vector3>
+   <Integer:1>
+   <Integer:2>
+   <Integer:3>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:X: >
+   <Call>
+    <GetExpression>
+     <Identifier:v>
+     <Identifier:GetX>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:Y: >
+   <Call>
+    <GetExpression>
+     <Identifier:v>
+     <Identifier:GetY>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:Z: >
+   <Call>
+    <GetExpression>
+     <Identifier:v>
+     <Identifier:GetZ>
+ <ExpressionStatement>
+  <Identifier:v>

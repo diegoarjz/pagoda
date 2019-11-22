@@ -1,0 +1,15 @@
+var p = Plane(Vector3(0,0,0), Vector3(1,0,0));
+
+var point = p.GetPoint();
+print("point: ", point.GetX(), " ", point.GetY(), " ", point.GetZ());
+var point2 = p.GetPoint2();
+print("point2: ", point2.GetX(), " ", point2.GetY(), " ", point2.GetZ());
+var normal = p.GetNormal();
+print("normal: ", normal.GetX(), " ", normal.GetY(), " ", normal.GetZ());
+var vector = p.GetVector();
+print("vector: ", vector.GetX(), " ", vector.GetY(), " ", vector.GetZ());
+var vector2 = p.GetVector2();
+print("vector2: ", vector2.GetX(), " ", vector2.GetY(), " ", vector2.GetZ());
+print("Dist to Origin: ", p.GetDistanceToOrigin());
+
+p;

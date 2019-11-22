@@ -1,0 +1,145 @@
+<Program>
+ <VarDecl>
+  <Identifier:p>
+  <Call>
+   <Identifier:Plane>
+   <Call>
+    <Identifier:Vector3>
+    <Integer:0>
+    <Integer:0>
+    <Integer:0>
+   <Call>
+    <Identifier:Vector3>
+    <Integer:1>
+    <Integer:0>
+    <Integer:0>
+ <VarDecl>
+  <Identifier:point>
+  <Call>
+   <GetExpression>
+    <Identifier:p>
+    <Identifier:GetPoint>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:point: >
+   <Call>
+    <GetExpression>
+     <Identifier:point>
+     <Identifier:GetX>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:point>
+     <Identifier:GetY>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:point>
+     <Identifier:GetZ>
+ <VarDecl>
+  <Identifier:point2>
+  <Call>
+   <GetExpression>
+    <Identifier:p>
+    <Identifier:GetPoint2>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:point2: >
+   <Call>
+    <GetExpression>
+     <Identifier:point2>
+     <Identifier:GetX>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:point2>
+     <Identifier:GetY>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:point2>
+     <Identifier:GetZ>
+ <VarDecl>
+  <Identifier:normal>
+  <Call>
+   <GetExpression>
+    <Identifier:p>
+    <Identifier:GetNormal>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:normal: >
+   <Call>
+    <GetExpression>
+     <Identifier:normal>
+     <Identifier:GetX>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:normal>
+     <Identifier:GetY>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:normal>
+     <Identifier:GetZ>
+ <VarDecl>
+  <Identifier:vector>
+  <Call>
+   <GetExpression>
+    <Identifier:p>
+    <Identifier:GetVector>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:vector: >
+   <Call>
+    <GetExpression>
+     <Identifier:vector>
+     <Identifier:GetX>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:vector>
+     <Identifier:GetY>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:vector>
+     <Identifier:GetZ>
+ <VarDecl>
+  <Identifier:vector2>
+  <Call>
+   <GetExpression>
+    <Identifier:p>
+    <Identifier:GetVector2>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:vector2: >
+   <Call>
+    <GetExpression>
+     <Identifier:vector2>
+     <Identifier:GetX>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:vector2>
+     <Identifier:GetY>
+   <String: >
+   <Call>
+    <GetExpression>
+     <Identifier:vector2>
+     <Identifier:GetZ>
+ <ExpressionStatement>
+  <Call>
+   <Identifier:print>
+   <String:Dist to Origin: >
+   <Call>
+    <GetExpression>
+     <Identifier:p>
+     <Identifier:GetDistanceToOrigin>
+ <ExpressionStatement>
+  <Identifier:p>
