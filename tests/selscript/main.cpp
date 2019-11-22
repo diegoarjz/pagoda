@@ -111,7 +111,7 @@ REGRESSION_TEST(float_operations, std::make_shared<FloatValue>(2.5f))
 REGRESSION_TEST(integer_operations, std::make_shared<Integer>(2))
 REGRESSION_TEST(string_operations, std::make_shared<String>("abc123123"))
 
-REGRESSION_TEST(vector, std::make_shared<Vector3>(Vec3F(1, 2, 3)));
+REGRESSION_TEST(vector, std::make_shared<Vector3>(Vec3F(1, 2, 3)))
 REGRESSION_TEST(plane, std::make_shared<DynamicPlane>(Plane<float>::FromPointAndNormal({0, 0, 0}, {1, 0, 0})))
 
 int main(int argc, char* argv[])
