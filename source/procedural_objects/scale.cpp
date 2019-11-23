@@ -1,4 +1,4 @@
-#include "translate.h"
+#include "scale.h"
 
 #include "dynamic_value/boolean_value.h"
 #include "dynamic_value/float_value.h"
@@ -14,10 +14,10 @@
 
 namespace selector
 {
-const InterfaceName Translate::s_inputGeometry("in", 0);
-const InterfaceName Translate::s_outputGeometry("out", 0);
+const InterfaceName Scale::s_inputGeometry("in", 0);
+const InterfaceName Scale::s_outputGeometry("out", 0);
 
-Translate::Translate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+Scale::Scale(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	CreateInputInterface(s_inputGeometry);
 	CreateOutputInterface(s_outputGeometry);
@@ -25,11 +25,11 @@ Translate::Translate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperati
 	RegisterValues({{"x", std::make_shared<FloatValue>(0.0f)},
 	                {"y", std::make_shared<FloatValue>(0.0f)},
 	                {"z", std::make_shared<FloatValue>(0.0f)},
-	                {"world", std::make_shared<Boolean>(false)}});
+	                {"pivotal_point", std::make_shared<String>("scope_center")}});
 }
-Translate::~Translate() {}
+Scale::~Scale() {}
 
-void Translate::DoWork()
+void Scale::DoWork()
 {
 	START_PROFILE;
 
@@ -51,21 +51,29 @@ void Translate::DoWork()
 		UpdateValue("x");
 		UpdateValue("y");
 		UpdateValue("z");
-		UpdateValue("world");
+		UpdateValue("pivotal_point");
 
 		auto x = get_value_as<float>(*GetValue("x"));
 		auto y = get_value_as<float>(*GetValue("y"));
 		auto z = get_value_as<float>(*GetValue("z"));
-		auto inWorldCoordinates = get_value_as<std::string>(*GetValue("world")) == "true";
+		auto pivotalPointName = get_value_as<std::string>(*GetValue("pivotal_point"));
+
 		Mat4x4F matrix;
-		if (inWorldCoordinates)
+		if (pivotalPointName == "scope_center")
 		{
-			matrix = translate_matrix(x, y, z);
+			Vec3F pivotalPoint = inScope.GetCenterPointInWorld();
+			matrix = translate_matrix(pivotalPoint) * scale_matrix(x, y, z) * translate_matrix(-1 * pivotalPoint);
 		}
-		else
+		else if (pivotalPointName == "scope_origin")
 		{
-			matrix = translate_matrix(inScope.GetLocalVector(Vec3F(x, y, z)));
+			Vec3F pivotalPoint = inScope.GetWorldPoint(Scope::BoxPoints::LowerBottomLeft);
+			matrix = translate_matrix(pivotalPoint) * scale_matrix(x, y, z) * translate_matrix(-1 * pivotalPoint);
 		}
+		else if (pivotalPointName == "world_origin")
+		{
+			matrix = scale_matrix(x, y, z);
+		}
+
 		MatrixTransform<Geometry> transform(matrix);
 
 		transform.Execute(inGeometry, outGeometry);
@@ -78,3 +86,4 @@ void Translate::DoWork()
 	}
 }
 }  // namespace selector
+

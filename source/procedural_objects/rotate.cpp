@@ -1,4 +1,7 @@
-#include "translate.h"
+#include "rotate.h"
+
+#include "math_lib/degrees.h"
+#include "math_lib/radians.h"
 
 #include "dynamic_value/boolean_value.h"
 #include "dynamic_value/float_value.h"
@@ -14,10 +17,10 @@
 
 namespace selector
 {
-const InterfaceName Translate::s_inputGeometry("in", 0);
-const InterfaceName Translate::s_outputGeometry("out", 0);
+const InterfaceName Rotate::s_inputGeometry("in", 0);
+const InterfaceName Rotate::s_outputGeometry("out", 0);
 
-Translate::Translate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+Rotate::Rotate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	CreateInputInterface(s_inputGeometry);
 	CreateOutputInterface(s_outputGeometry);
@@ -25,11 +28,13 @@ Translate::Translate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperati
 	RegisterValues({{"x", std::make_shared<FloatValue>(0.0f)},
 	                {"y", std::make_shared<FloatValue>(0.0f)},
 	                {"z", std::make_shared<FloatValue>(0.0f)},
+	                {"rotation_order", std::make_shared<String>("xyz")},
 	                {"world", std::make_shared<Boolean>(false)}});
 }
-Translate::~Translate() {}
 
-void Translate::DoWork()
+Rotate::~Rotate() {}
+
+void Rotate::DoWork()
 {
 	START_PROFILE;
 
@@ -51,26 +56,49 @@ void Translate::DoWork()
 		UpdateValue("x");
 		UpdateValue("y");
 		UpdateValue("z");
+		UpdateValue("rotation_order");
 		UpdateValue("world");
 
-		auto x = get_value_as<float>(*GetValue("x"));
-		auto y = get_value_as<float>(*GetValue("y"));
-		auto z = get_value_as<float>(*GetValue("z"));
-		auto inWorldCoordinates = get_value_as<std::string>(*GetValue("world")) == "true";
-		Mat4x4F matrix;
-		if (inWorldCoordinates)
+		auto x = Degrees<float>(get_value_as<float>(*GetValue("x")));
+		auto y = Degrees<float>(get_value_as<float>(*GetValue("y")));
+		auto z = Degrees<float>(get_value_as<float>(*GetValue("z")));
+		auto rotationOrder = get_value_as<std::string>(*GetValue("rotation_order"));
+		auto world = get_value_as<std::string>(*GetValue("world")) == "true";
+
+		Mat4x4F matrix(1);
+		if (world)
 		{
-			matrix = translate_matrix(x, y, z);
+			matrix = Mat4x4F(inScope.GetRotation());
 		}
-		else
+
+		for (std::size_t i = rotationOrder.size(); i > 0; --i)
 		{
-			matrix = translate_matrix(inScope.GetLocalVector(Vec3F(x, y, z)));
+			char order = rotationOrder[i - 1];
+			switch (order)
+			{
+				case 'x':
+					matrix = matrix * rotate_x_matrix(Radians(x));
+					break;
+				case 'y':
+					matrix = matrix * rotate_y_matrix(Radians(y));
+					break;
+				case 'z':
+					matrix = matrix * rotate_z_matrix(Radians(z));
+					break;
+				default:
+					throw Exception("Invalid rotation order " + std::string(1, order));
+			}
 		}
+
+		if (world)
+		{
+			matrix = matrix * Mat4x4F(inScope.GetInverseRotation());
+		}
+
 		MatrixTransform<Geometry> transform(matrix);
-
 		transform.Execute(inGeometry, outGeometry);
-
-		outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(outGeometry, inScope.GetRotation()));
+		outGeometryComponent->SetScope(
+		    Scope::FromGeometryAndConstrainedRotation(outGeometry, Mat3x3F(matrix) * inScope.GetRotation()));
 
 		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);

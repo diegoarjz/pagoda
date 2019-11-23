@@ -3,6 +3,7 @@
 #include "math_lib/cross_product.h"
 #include "math_lib/length.h"
 #include "math_lib/normalize.h"
+#include "math_lib/transpose.h"
 
 namespace selector
 {
@@ -40,6 +41,8 @@ void Scope::SetSize(const Vec3F &size) { m_size = size; }
 Mat3x3F Scope::GetRotation() const { return m_rotation; }
 
 void Scope::SetRotation(const Mat3x3F &rotation) { m_rotation = rotation; }
+
+Mat3x3F Scope::GetInverseRotation() const { return transposed(m_rotation); }
 
 Vec3F Scope::GetXAxis() const { return m_rotation.Col(0); }
 Vec3F Scope::GetYAxis() const { return m_rotation.Col(1); }
@@ -88,5 +91,23 @@ std::array<Vec3F, 8> Scope::GetWorldPoints() const
 		boxPoints[i] = GetWorldPoint(static_cast<BoxPoints>(i));
 	}
 	return boxPoints;
+}
+
+Vec3F Scope::GetLocalVector(const Vec3F &worldVector) const
+{
+	return Vec3F(dot_product(GetXAxis(), worldVector), dot_product(GetYAxis(), worldVector),
+	             dot_product(GetZAxis(), worldVector));
+}
+
+Vec3F Scope::GetWorldVector(const Vec3F &localVector) const
+{
+	return GetXAxis() * localVector.X() + GetYAxis() * localVector.Y() + GetZAxis() * localVector.Z();
+}
+
+Vec3F Scope::GetCenterPointInWorld() const { return LocalPointInWorld(GetCenterPointInLocal()); }
+
+Vec3F Scope::GetCenterPointInLocal() const
+{
+	return 0.5f * (GetLocalPoint(BoxPoints::LowerBottomLeft) + GetLocalPoint(BoxPoints::HigherTopRight));
 }
 }  // namespace selector
