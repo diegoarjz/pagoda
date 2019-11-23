@@ -10,6 +10,9 @@
 
 namespace selector
 {
+/**
+ * Represents an oriented bounding box to be used as a local frame of coordinates for geometries.
+ */
 class Scope
 {
 public:
@@ -59,6 +62,7 @@ public:
 	void SetSize(const Vec3F &size);
 	Mat3x3F GetRotation() const;
 	void SetRotation(const Mat3x3F &rotation);
+	Mat3x3F GetInverseRotation() const;
 
 	Vec3F GetXAxis() const;
 	Vec3F GetYAxis() const;
@@ -73,6 +77,11 @@ public:
 	Vec3F GetLocalPoint(const BoxPoints &p) const;
 	Vec3F GetWorldPoint(const BoxPoints &p) const;
 	std::array<Vec3F, 8> GetWorldPoints() const;
+	Vec3F GetLocalVector(const Vec3F &worldVector) const;
+	Vec3F GetWorldVector(const Vec3F &localVector) const;
+
+	Vec3F GetCenterPointInWorld() const;
+	Vec3F GetCenterPointInLocal() const;
 
 	template<class Geometry>
 	static Scope FromGeometryAndConstrainedRotation(const std::shared_ptr<Geometry> geom, const Mat3x3F &rotation)

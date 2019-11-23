@@ -1,5 +1,6 @@
 set(MATH_LIB_SRCS
     "cross_product.h"
+    "degrees.h"
     "dot_product.h"
     "intersection.h"
     "length.h"
@@ -12,12 +13,15 @@ set(MATH_LIB_SRCS
     "orthogonal.h"
     "plane.h"
     "projection.h"
+    "radians.h"
+    "transpose.h"
     "vec_arithmetic.h"
     "vec_base.h"
 )
 
 set(MATH_LIB_PUBLIC_HEADERS
     "cross_product.h"
+    "degrees.h"
     "dot_product.h"
     "intersection.h"
     "length.h"
@@ -30,6 +34,8 @@ set(MATH_LIB_PUBLIC_HEADERS
     "orthogonal.h"
     "plane.h"
     "projection.h"
+    "radians.h"
+    "transpose.h"
     "vec_arithmetic.h"
     "vec_base.h"
 )

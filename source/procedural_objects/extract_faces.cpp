@@ -1,0 +1,60 @@
+#include "extract_faces.h"
+
+#include "common/profiler.h"
+#include "geometry_operations/explode_to_faces.h"
+
+#include "geometry_component.h"
+#include "geometry_system.h"
+#include "hierarchical_component.h"
+#include "hierarchical_system.h"
+#include "procedural_object_system.h"
+
+namespace selector
+{
+const InterfaceName ExtractFaces::s_inputGeometry("in", 0);
+const InterfaceName ExtractFaces::s_outputGeometry("out", 0);
+
+ExtractFaces::ExtractFaces(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+{
+	START_PROFILE;
+
+	CreateInputInterface(s_inputGeometry);
+	CreateOutputInterface(s_outputGeometry);
+}
+
+ExtractFaces::~ExtractFaces() {}
+
+void ExtractFaces::DoWork()
+{
+	START_PROFILE;
+
+	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
+
+	ExplodeToFaces<Geometry> explodeToFaces;
+	while (HasInput(s_inputGeometry))
+	{
+		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
+
+		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
+
+		auto inGeometry = inGeometryComponent->GetGeometry();
+		std::vector<GeometryPtr> explodedFaces;
+		explodeToFaces.Execute(inGeometry, explodedFaces);
+
+		for (auto &g : explodedFaces)
+		{
+			auto outObject = CreateOutputProceduralObject(s_outputGeometry);
+			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+			auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
+
+			outGeometryComponent->SetGeometry(g);
+			outGeometryComponent->SetScope(
+			    Scope::FromGeometryAndConstrainedRotation(g, inGeometryComponent->GetScope().GetRotation()));
+
+			hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
+		}
+	}
+}
+}  // namespace selector

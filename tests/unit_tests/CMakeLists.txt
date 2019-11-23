@@ -21,6 +21,7 @@ set(test_srcs
     "math_lib/matrix_base.cpp"
     "math_lib/line_3d.cpp"
     "math_lib/line_segment_3d.cpp"
+    "math_lib/math_utils.cpp"
     "math_lib/plane.cpp"
     "math_lib/projection.cpp"
     "math_lib/orthogonal.cpp"

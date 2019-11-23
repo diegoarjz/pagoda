@@ -40,8 +40,6 @@ int main(int argc, char* argv[])
 {
 	po::variables_map vm;
 
-	LOG_TRACE(Common, "testing log trace " << 123 << " abc");
-
 	Selector selector;
 
 	if (!ParseCommandLine(argc, argv, &vm))

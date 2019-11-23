@@ -1,5 +1,6 @@
 #include "ast_interpreter.h"
 
+#include "common/exception.h"
 #include "graph_definition_node.h"
 #include "named_argument.h"
 #include "node_definition_node.h"
@@ -95,7 +96,7 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 
 		if (prevNode == std::end(m_nodeTable) || currNode == std::end(m_nodeTable))
 		{
-			// THROW
+			throw Exception("Node not found while linking " + prevNode->first + " to " + currNode->first);
 		}
 
 		m_graph->CreateEdge(prevNode->second, currNode->second);
