@@ -4,6 +4,7 @@
 #include "common/exception.h"
 #include "dynamic_class.h"
 #include "dynamic_instance.h"
+#include "dynamic_plane.h"
 #include "dynamic_value_base.h"
 #include "expression.h"
 #include "float_value.h"
@@ -37,6 +38,7 @@ public:
 	virtual void Visit(NullObject&) = 0;
 	virtual void Visit(TypeInfo&) = 0;
 	virtual void Visit(Vector3&) = 0;
+	virtual void Visit(DynamicPlane&) = 0;
 	virtual void Visit(Function&) = 0;
 	virtual void Visit(DynamicClass&) = 0;
 	virtual void Visit(DynamicInstance&) = 0;
@@ -57,6 +59,7 @@ public:
 	void Visit(NullObject& n) override { m_returnValue = m_visitor(n); }
 	void Visit(TypeInfo& t) override { m_returnValue = m_visitor(t); }
 	void Visit(Vector3& v) override { m_returnValue = m_visitor(v); }
+	void Visit(DynamicPlane& p) override { m_returnValue = m_visitor(p); }
 	void Visit(Function& f) override { m_returnValue = m_visitor(f); }
 	void Visit(DynamicClass& c) override { m_returnValue = m_visitor(c); }
 	void Visit(DynamicInstance& i) override { m_returnValue = m_visitor(i); }
@@ -82,6 +85,7 @@ public:
 	void Visit(NullObject& n) override { m_visitor(n); }
 	void Visit(TypeInfo& t) override { m_visitor(t); }
 	void Visit(Vector3& v) override { m_visitor(v); }
+	void Visit(DynamicPlane& p) override { m_visitor(p); }
 	void Visit(Function& f) override { m_visitor(f); }
 	void Visit(DynamicClass& c) override { m_visitor(c); }
 	void Visit(DynamicInstance& i) override { m_visitor(i); }

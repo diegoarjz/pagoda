@@ -9,7 +9,7 @@
 
 namespace selector
 {
-ast::IdentifierPtr make_identifier(const std::vector<char> &identifier);
+ast::IdentifierPtr make_identifier(const std::vector<char> &identifier, const std::vector<char> &identifier2);
 
 ast::FloatPtr make_float(const float &f);
 

@@ -54,6 +54,6 @@ target_link_libraries(
         pthread
 )
 
-#file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_test(NAME selscript_tests COMMAND selscript_tests)

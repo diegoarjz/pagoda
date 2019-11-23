@@ -16,6 +16,8 @@ set(COMMON_SRCS
     "range.h"
     "statistics.cpp"
     "statistics.h"
+    "unimplemented.cpp"
+    "unimplemented.h"
     "utils.cpp"
     "utils.h"
     "version.cpp"
@@ -34,6 +36,7 @@ set(COMMON_PUBLIC_HEADERS
     "pugixml.hpp"
     "range.h"
     "statistics.h"
+    "unimplemented.h"
     "utils.h"
     "version.h"
 )

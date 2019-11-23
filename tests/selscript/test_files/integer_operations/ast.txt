@@ -1,0 +1,9 @@
+<Program>
+ <ExpressionStatement>
+  <ArithmeticOp:/>
+   <ArithmeticOp:+>
+    <Integer:1>
+    <ArithmeticOp:*>
+     <Integer:2>
+     <Integer:2>
+   <Integer:2>

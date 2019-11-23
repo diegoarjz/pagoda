@@ -5,13 +5,21 @@
 #include "math_lib/vec_arithmetic.h"
 #include "type_info.h"
 #include "value_visitor.h"
+#include "get_value_as.h"
 
 #include "binding/make_member_function.h"
 #include "member_function_callable_body.h"
+#include "register_member_function.h"
 
 namespace selector
 {
 const TypeInfoPtr Vector3::s_typeInfo = std::make_shared<TypeInfo>("Vector3");
+
+std::shared_ptr<Vector3> Vector3::DynamicConstructor(const std::vector<DynamicValueBasePtr>& args)
+{
+	return std::make_shared<Vector3>(
+	    Vec3F(get_value_as<float>(*args[0]), get_value_as<float>(*args[1]), get_value_as<float>(*args[2])));
+}
 
 Vector3::Vector3() : BuiltinClass(s_typeInfo) { RegisterMembers(); }
 
@@ -52,17 +60,8 @@ FloatValuePtr Vector3::GetZ() { return std::make_shared<FloatValue>(m_nativeVect
 
 void Vector3::RegisterMembers()
 {
-	RegisterMember("GetX",
-	               std::make_shared<Function>(
-	                   std::make_shared<MemberFunctionCallableBody<Vector3, std::function<FloatValuePtr(Vector3*)>>>(
-	                       *this, make_member_function(&Vector3::GetX))));
-	RegisterMember("GetY",
-	               std::make_shared<Function>(
-	                   std::make_shared<MemberFunctionCallableBody<Vector3, std::function<FloatValuePtr(Vector3*)>>>(
-	                       *this, make_member_function(&Vector3::GetY))));
-	RegisterMember("GetZ",
-	               std::make_shared<Function>(
-	                   std::make_shared<MemberFunctionCallableBody<Vector3, std::function<FloatValuePtr(Vector3*)>>>(
-	                       *this, make_member_function(&Vector3::GetZ))));
+	RegisterMemberFunction(this, "GetX", make_member_function(&Vector3::GetX));
+	RegisterMemberFunction(this, "GetY", make_member_function(&Vector3::GetY));
+	RegisterMemberFunction(this, "GetZ", make_member_function(&Vector3::GetZ));
 }
 }  // namespace selector

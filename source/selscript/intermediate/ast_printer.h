@@ -3,12 +3,14 @@
 #include "ast.h"
 #include "ast_visitor.h"
 
+#include <ostream>
+
 namespace selector
 {
 class AstPrinter : public AstVisitor
 {
 public:
-	AstPrinter();
+	AstPrinter(std::ostream &out);
 
 	void Visit(ast::AnonymousMethodPtr) override;
 	void Visit(ast::ArithmeticOpPtr) override;
@@ -40,7 +42,7 @@ private:
 	void indent();
 	std::string indentation();
 	void deindent();
-
 	uint32_t m_indentation;
+	std::ostream &m_outStream;
 };
 }  // namespace selector

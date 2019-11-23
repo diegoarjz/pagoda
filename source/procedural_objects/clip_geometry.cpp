@@ -1,7 +1,7 @@
 #include "clip_geometry.h"
 
-#include "dynamic_value/get_value_as.h"
 #include "dynamic_value/float_value.h"
+#include "dynamic_value/get_value_as.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
@@ -25,14 +25,7 @@ ClipGeometry::ClipGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 	CreateOutputInterface(frontGeometry);
 	CreateOutputInterface(backGeometry);
 
-	RegisterValues({
-	    {"normal_x", std::make_shared<FloatValue>(0.0f)},
-	    {"normal_y", std::make_shared<FloatValue>(0.0f)},
-	    {"normal_z", std::make_shared<FloatValue>(0.0f)},
-	    {"position_x", std::make_shared<FloatValue>(0.0f)},
-	    {"position_y", std::make_shared<FloatValue>(0.0f)},
-	    {"position_z", std::make_shared<FloatValue>(0.0f)}
-    });
+	RegisterValues({{"plane", std::make_shared<DynamicPlane>()}});
 }
 
 ClipGeometry::~ClipGeometry() {}
@@ -47,27 +40,9 @@ void ClipGeometry::DoWork()
 	while (HasInput(inputGeometry))
 	{
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
-		UpdateValue("position_x");
-		UpdateValue("position_y");
-		UpdateValue("position_z");
-		UpdateValue("normal_x");
-		UpdateValue("normal_y");
-		UpdateValue("normal_z");
+		UpdateValue("plane");
 
-		// clang-format off
-		Clip<Geometry> clip(
-		    Plane<float>::FromPointAndNormal(
-            {
-                get_value_as<float>(*GetValue("position_x")),
-                get_value_as<float>(*GetValue("position_y")),
-                get_value_as<float>(*GetValue("position_z"))
-            },
-            {
-                get_value_as<float>(*GetValue("normal_x")),
-                get_value_as<float>(*GetValue("normal_y")),
-                get_value_as<float>(*GetValue("normal_z"))
-            }));
-		// clang-format on
+		Clip<Geometry> clip(get_value_as<Plane<float>>(*GetValue("plane")));
 
 		// Geometry
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);

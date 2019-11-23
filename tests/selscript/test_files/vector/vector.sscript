@@ -1,0 +1,5 @@
+var v = Vector3(1,2,3);
+print("X: ", v.GetX());
+print("Y: ", v.GetY());
+print("Z: ", v.GetZ());
+v;

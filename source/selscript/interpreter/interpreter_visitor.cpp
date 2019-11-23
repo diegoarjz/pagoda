@@ -34,15 +34,6 @@ namespace selector
 interpreter_visitor::interpreter_visitor()
     : m_globals(std::make_shared<DynamicValueTable>("Global")), m_symbolTable(m_globals)
 {
-	// m_globals->Declare(MAKE_BUILTIN_CALLABLE(print));
-	// m_globals->Declare(MAKE_BUILTIN_CALLABLE(type));
-	// m_globals->Declare(MAKE_BUILTIN_CALLABLE(time));
-	/*
-	m_globals->Declare("Integer", Integer::s_typeInfo);
-	m_globals->Declare("Boolean", Boolean::s_typeInfo);
-	m_globals->Declare("Float", FloatValue::s_typeInfo);
-	m_globals->Declare("String", String::s_typeInfo);
-	*/
 }
 
 interpreter_visitor::~interpreter_visitor() {}
@@ -323,19 +314,8 @@ void interpreter_visitor::Visit(ast::CallPtr c)
 
 	auto prevSymbolTable = GetCurrentSymbolTable();
 	EnterFunction(callee);
-	try
-	{
-		callee->Call(args);
-	}
-	catch (DynamicValueBasePtr &f)
-	{
-		ExitFunction(prevSymbolTable);
-		PushValue(f);
-		return;
-	}
-
+	PushValue(callee->Call(args));
 	ExitFunction(prevSymbolTable);
-	PushValue(std::make_shared<NullObject>());
 }
 
 void interpreter_visitor::Visit(ast::FunctionDeclarationPtr func)

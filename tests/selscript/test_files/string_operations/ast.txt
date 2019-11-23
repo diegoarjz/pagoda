@@ -1,0 +1,7 @@
+<Program>
+ <ExpressionStatement>
+  <ArithmeticOp:+>
+   <String:abc>
+   <ArithmeticOp:*>
+    <Integer:2>
+    <String:123>

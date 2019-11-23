@@ -1,48 +1,103 @@
-box = Operation(operation: "CreateBoxGeometry") {
-    xSize: 10, ySize: 10, zSize: 10
+facade = Operation(operation: "CreateRectGeometry") {
+    width: 30, height: 20
 }
-box_out = OutputInterface(interface: "out", offset: 0)
-box -> box_out;
+facade_out = OutputInterface(interface: "out", offset: 0)
+facade -> facade_out;
 
-lower_clip_in = InputInterface(interface: "in", offset: 0)
-lower_clip = Operation(operation: "ClipGeometry") {
-    position_x: 0, position_y: 0, position_z: 0,
-    normal_x: 0.5, normal_y: 1, normal_z: 0
+facade_extrusion_in = InputInterface(interface: "in", offset: 0)
+facade_extrusion = Operation(operation: "ExtrudeGeometry") {
+    extrusion_amount: -5
 }
-lower_clip_back = OutputInterface(interface: "back", offset: 0)
-lower_clip_front = OutputInterface(interface: "front", offset: 0)
-lower_clip_in -> lower_clip -> lower_clip_back;
-lower_clip -> lower_clip_front;
+facade_extrusion_out = OutputInterface(interface: "out", offset: 0)
+facade_extrusion_in -> facade_extrusion -> facade_extrusion_out;
+facade_out -> facade_extrusion_in;
 
-upper_clip_in = InputInterface(interface: "in", offset: 0)
-upper_clip = Operation(operation: "ClipGeometry") {
-    position_x: 0, position_y: 3.3, position_z: 0,
-    normal_x: 0, normal_y: 1, normal_z: 0
+first_floor_in = InputInterface(interface: "in", offset: 0)
+first_floor = Operation(operation: "Split") {
+    axis: "y",
+    split_count: 3,
+    split_1: 3,
+    split_2: 15,
+    split_3: 2
 }
-upper_clip_back = OutputInterface(interface: "back", offset: 0)
-upper_clip_front = OutputInterface(interface: "front", offset: 0)
-upper_clip_in -> upper_clip -> upper_clip_back;
-upper_clip -> upper_clip_front;
+first_floor_1 = OutputInterface(interface: "split_1", offset: 0)
+first_floor_2 = OutputInterface(interface: "split_2", offset: 0)
+first_floor_3 = OutputInterface(interface: "split_3", offset: 0)
+first_floor_in -> first_floor;
+first_floor -> first_floor_1;
+first_floor -> first_floor_2;
+first_floor -> first_floor_3;
 
-first_extrusion_in = InputInterface(interface: "in", offset: 0)
-first_extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 2}
-first_extrusion_out = OutputInterface(interface: "out", offset: 0)
-first_extrusion_in -> first_extrusion -> first_extrusion_out;
 
-second_extrusion_in = InputInterface(interface: "in", offset: 0)
-second_extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 1}
-second_extrusion_out = OutputInterface(interface: "out", offset: 0)
-second_extrusion_in -> second_extrusion -> second_extrusion_out;
+first_floor_split_in = InputInterface(interface: "in", offset:0)
+first_floor_split = Operation(operation: "Split") {
+    axis: "x",
+    split_count: 3,
+    split_1: 13,
+    split_2: 4,
+    split_3: 13
+}
+first_floor_split_1 = OutputInterface(interface: "split_1", offset: 0)
+first_floor_split_2 = OutputInterface(interface: "split_2", offset: 0)
+first_floor_split_3 = OutputInterface(interface: "split_3", offset: 0)
 
-export_in = InputInterface(interface: "in", offset: 0)
-export = Operation(operation: "ExportGeometry") { path: $< "geometry" + op.count + ".obj"; >$ }
-export_in -> export;
+first_floor_split_in -> first_floor_split;
+first_floor_split -> first_floor_split_1;
+first_floor_split -> first_floor_split_2;
+first_floor_split -> first_floor_split_3;
 
-box_out -> lower_clip_in;
-lower_clip_front -> first_extrusion_in;
-first_extrusion_out -> upper_clip_in;
-upper_clip_front -> second_extrusion_in;
+door_in = InputInterface(interface: "in", offset: 0)
+door = Operation(operation: "ExtrudeGeometry") {
+    extrusion_amount: 0.5
+}
+door_out = OutputInterface(interface: "out", offset: 0)
+door_in -> door -> door_out;
 
-lower_clip_back -> export_in;
-upper_clip_back -> export_in;
-second_extrusion_out -> export_in;
+
+middle_floors_in = InputInterface(interface: "in", offset: 0)
+middle_floors = Operation(operation: "RepeatSplit") {
+    size: 2,
+    axis: "y",
+    adjust: "true"
+}
+middle_floors_out = OutputInterface(interface: "out", offset: 0)
+middle_floors_in -> middle_floors -> middle_floors_out;
+
+
+middle_floors_tiles_in = InputInterface(interface: "in", offset: 0)
+middle_floors_tiles = Operation(operation: "RepeatSplit") {
+    size: 2,
+    axis: "x",
+    adjust: "true"
+}
+middle_floors_tiles_out = OutputInterface(interface: "out", offset: 0)
+middle_floors_tiles_in -> middle_floors_tiles -> middle_floors_tiles_out;
+
+
+top_floor_extrude_in = InputInterface(interface: "in", offset:0)
+top_floor_extrude = Operation(operation: "ExtrudeGeometry") {
+    extrusion_amount: 0.5
+}
+top_floor_extrude_out = OutputInterface(interface: "out", offset: 0)
+top_floor_extrude_in -> top_floor_extrude -> top_floor_extrude_out;
+
+export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry = Operation(operation: "ExportGeometry") {
+    path: $< "geometry" + op.count + ".obj"; >$
+}
+export_geometry_in -> export_geometry;
+
+
+facade_out -> first_floor_in;
+first_floor_1 -> first_floor_split_in;
+first_floor_2 -> middle_floors_in;
+middle_floors_out -> middle_floors_tiles_in;
+first_floor_3 -> top_floor_extrude_in;
+
+first_floor_split_1 -> export_geometry_in;
+first_floor_split_2 -> door_in;
+door_out -> export_geometry_in;
+first_floor_split_3 -> export_geometry_in;
+middle_floors_tiles_out -> export_geometry_in;
+top_floor_extrude_out -> export_geometry_in;
+facade_extrusion_out -> export_geometry_in;

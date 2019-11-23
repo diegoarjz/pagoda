@@ -1,6 +1,7 @@
 set(GEOMETRY_OPERATIONS_SRCS
     "create_box.h"
     "create_rect.h"
+    "explode_to_faces.h"
     "extrusion.h"
     "extrusion_profile.h"
     "plane_splits.h"
@@ -9,6 +10,7 @@ set(GEOMETRY_OPERATIONS_SRCS
 
 set(GEOMETRY_OPERATIONS_PUBLIC_HEADERS
     "create_box.h"
+    "explode_to_faces.h"
     "create_rect.h"
     "extrusion.h"
     "extrusion_profile.h"

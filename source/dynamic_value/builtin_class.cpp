@@ -1,8 +1,10 @@
 #include "builtin_class.h"
 
+#include "function.h"
 #include "type_info.h"
 
 #include "common/exception.h"
+#include "common/unimplemented.h"
 
 namespace selector
 {
@@ -12,6 +14,8 @@ BuiltinClass::BuiltinClass(const TypeInfoPtr& typeInfo) : DynamicValueBase(typeI
 
 FunctionPtr BuiltinClass::Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals)
 {
-	throw Exception("Unimplemented");
+	auto boundMethod = std::make_shared<Function>(callable);
+	boundMethod->SetVariadic(true);
+	return boundMethod;
 }
 }  // namespace selector

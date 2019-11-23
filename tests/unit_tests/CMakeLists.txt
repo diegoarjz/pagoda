@@ -3,6 +3,7 @@ set(test_srcs
     "dynamic_value/base_dynamic_values.cpp"
     "dynamic_value/free_function_callable_body.cpp"
     "dynamic_value/vector.cpp"
+    "dynamic_value/dynamic_plane.cpp"
     "dynamic_value/make_free_function.cpp"
     "dynamic_value/make_member_function.cpp"
     "dynamic_value/call_free_function.cpp"
@@ -20,6 +21,7 @@ set(test_srcs
     "math_lib/matrix_base.cpp"
     "math_lib/line_3d.cpp"
     "math_lib/line_segment_3d.cpp"
+    "math_lib/math_utils.cpp"
     "math_lib/plane.cpp"
     "math_lib/projection.cpp"
     "math_lib/orthogonal.cpp"
@@ -36,7 +38,6 @@ set(test_srcs
     "geometry_operations/triangulate.cpp"
     "parameter/expression.cpp"
     "parameter/variable.cpp"
-    #"parameter/variable_resolver.cpp"
     "procedural_objects/procedural_object.cpp"
     "procedural_objects/procedural_object_interface.cpp"
     "procedural_objects/geometry_system.cpp"
@@ -48,6 +49,7 @@ set(test_srcs
     "procedural_graph/graph_reader_grammar.cpp"
     "procedural_graph/parameter_node.cpp"
     "procedural_graph/graph_reader_ast.cpp"
+    "selscript/grammar.cpp"
     )
 
 add_executable(unit_tests ${test_srcs})

@@ -9,8 +9,7 @@ extrusion_out = OutputInterface(interface: "out", offset: 0)
 
 clip_geometry_in = InputInterface(interface: "in", offset: 0)
 clip_geometry = Operation(operation: "ClipGeometry") {
-    position_x: 0, position_y: 0, position_z: 4,
-    normal_x: 1, normal_y: 2, normal_z: 3
+    plane: $< Plane(Vector3(0, 0, 4), Vector3(1, 2, 3)); >$
 }
 front_geometry = OutputInterface(interface: "front", offset: 0)
 back_geometry = OutputInterface(interface: "back", offset: 0)
