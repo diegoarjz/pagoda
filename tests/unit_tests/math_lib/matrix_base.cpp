@@ -1,4 +1,5 @@
 #include <math_lib/matrix_base.h>
+#include <math_lib/transpose.h>
 
 #include <gtest/gtest.h>
 
@@ -35,6 +36,32 @@ TEST(MatrixBase, when_constructing_with_diagonal_constructor_should_set_diagonal
 			}
 		}
 	}
+}
+
+TEST(MatrixBase, when_constructing_from_a_smaller_matrix_should_copy_with_a_diagonal)
+{
+	MatrixBase<2, 2, float> m2x2;
+	m2x2.SetRow(0, Vec2F(1, 2));
+	m2x2.SetRow(1, Vec2F(3, 4));
+	MatrixBase<3, 3, float> m3x3(m2x2);
+	MatrixBase<3, 3, float> expected;
+	expected.SetRow(0, Vec3F(1, 2, 0));
+	expected.SetRow(1, Vec3F(3, 4, 0));
+	expected.SetRow(2, Vec3F(0, 0, 1));
+	EXPECT_EQ(m3x3, expected);
+}
+
+TEST(MatrixBase, when_constructing_from_a_larger_matrix_should_copy_the_upper_left_block)
+{
+	MatrixBase<3, 3, float> m3x3;
+	m3x3.SetRow(0, Vec3F(1, 2, 3));
+	m3x3.SetRow(1, Vec3F(4, 5, 6));
+	m3x3.SetRow(2, Vec3F(7, 8, 9));
+	MatrixBase<2, 2, float> m2x2(m3x3);
+	MatrixBase<2, 2, float> expected;
+	expected.SetRow(0, Vec2F(1, 2));
+	expected.SetRow(1, Vec2F(4, 5));
+	EXPECT_EQ(m2x2, expected);
 }
 
 TEST(MatrixBase, when_using_setters_should_update_values_accordingly)
@@ -167,4 +194,16 @@ TEST(MatrixBase, when_right_multiplying_a_vector_with_a_translation_matrix_shoul
 
 	auto r = m * p;
 	EXPECT_EQ(r, Vec4F(-4.0f, -3.0f, 0.5f, 1.0f));
+}
+
+TEST(MatrixBase, when_transposing_a_matrix_should_swap_rows_with_columns)
+{
+	Mat2x2F m;
+	m.SetRow(0, Vec2F(1, 2));
+	m.SetRow(1, Vec2F(3, 4));
+	m = transpose(m);
+	Mat2x2F expected;
+	expected.SetRow(0, Vec2F(1, 3));
+	expected.SetRow(1, Vec2F(2, 4));
+	EXPECT_EQ(m, expected);
 }

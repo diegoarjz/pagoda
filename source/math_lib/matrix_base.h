@@ -4,7 +4,11 @@
 #include <common/assertions.h>
 #include <common/profiler.h>
 
+#include "radians.h"
 #include "vec_base.h"
+
+#include <cmath>
+#include <cstring>
 
 namespace selector
 {
@@ -39,6 +43,39 @@ public:
 			for (auto c = 0; c < NumCols; ++c)
 			{
 				m_elems[r * NumCols + c] = (r == c ? diagonal : 0);
+			}
+		}
+	}
+
+	explicit MatrixBase(const MatrixBase<NumCols - 1, NumRows - 1, Rep> &m)
+	{
+		START_PROFILE;
+		for (auto r = 0; r < NumRows - 1; ++r)
+		{
+			for (auto c = 0; c < NumCols - 1; ++c)
+			{
+				m_elems[r * NumCols + c] = m.Value(c, r);
+			}
+		}
+		for (auto r = 0; r < NumRows; ++r)
+		{
+			m_elems[r * NumCols + NumCols - 1] = 0;
+		}
+		for (auto c = 0; c < NumCols; ++c)
+		{
+			m_elems[(NumRows - 1) * NumCols + c] = 0;
+		}
+		m_elems[NumRows * NumCols - 1] = 1;
+	}
+
+	explicit MatrixBase(const MatrixBase<NumCols + 1, NumRows + 1, Rep> &m)
+	{
+		START_PROFILE;
+		for (auto r = 0; r < NumRows; ++r)
+		{
+			for (auto c = 0; c < NumCols; ++c)
+			{
+				m_elems[r * NumCols + c] = m.Value(c, r);
 			}
 		}
 	}
@@ -109,6 +146,13 @@ public:
 		return m_elems[col + row * NumCols];
 	}
 
+	bool operator==(const MatrixBase<NumCols, NumRows, Rep> &m) const
+	{
+		return std::memcmp(m_elems, m.m_elems, NumCols * NumRows * sizeof(Rep)) == 0;
+	}
+
+	bool operator!=(const MatrixBase<NumCols, NumRows, Rep> &m) const { return !(*this == m); }
+
 private:
 	Rep m_elems[NumCols * NumRows];
 };  // class MatrixBase
@@ -162,6 +206,51 @@ template<typename T>
 MatrixBase<4, 4, T> scale_matrix(VecBase<3, T> vec)
 {
 	return scale_matrix(vec.X(), vec.Y(), vec.Z());
+}
+
+template<typename T>
+MatrixBase<4, 4, T> rotate_x_matrix(const Radians<T> &radians)
+{
+	T s = std::sin(static_cast<T>(radians));
+	T c = std::cos(static_cast<T>(radians));
+
+	MatrixBase<4, 4, T> mat;
+	mat.SetRow(0, typename MatrixBase<4, 4, T>::ColumnType(1, 0, 0, 0));
+	mat.SetRow(1, typename MatrixBase<4, 4, T>::ColumnType(0, c, -s, 0));
+	mat.SetRow(2, typename MatrixBase<4, 4, T>::ColumnType(0, s, c, 0));
+	mat.SetRow(3, typename MatrixBase<4, 4, T>::ColumnType(0, 0, 0, 1));
+
+	return mat;
+}
+
+template<typename T>
+MatrixBase<4, 4, T> rotate_y_matrix(const Radians<T> &radians)
+{
+	T s = std::sin(static_cast<T>(radians));
+	T c = std::cos(static_cast<T>(radians));
+
+	MatrixBase<4, 4, T> mat;
+	mat.SetRow(0, typename MatrixBase<4, 4, T>::ColumnType(c, 0, s, 0));
+	mat.SetRow(1, typename MatrixBase<4, 4, T>::ColumnType(0, 1, 0, 0));
+	mat.SetRow(2, typename MatrixBase<4, 4, T>::ColumnType(-s, 0, c, 0));
+	mat.SetRow(3, typename MatrixBase<4, 4, T>::ColumnType(0, 0, 0, 1));
+
+	return mat;
+}
+
+template<typename T>
+MatrixBase<4, 4, T> rotate_z_matrix(const Radians<T> &radians)
+{
+	T s = std::sin(static_cast<T>(radians));
+	T c = std::cos(static_cast<T>(radians));
+
+	MatrixBase<4, 4, T> mat;
+	mat.SetRow(0, typename MatrixBase<4, 4, T>::ColumnType(c, -s, 0, 0));
+	mat.SetRow(1, typename MatrixBase<4, 4, T>::ColumnType(s, c, 0, 0));
+	mat.SetRow(2, typename MatrixBase<4, 4, T>::ColumnType(0, 0, 1, 0));
+	mat.SetRow(3, typename MatrixBase<4, 4, T>::ColumnType(0, 0, 0, 1));
+
+	return mat;
 }
 
 }  // namespace selector

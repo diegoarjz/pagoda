@@ -3,6 +3,7 @@
 #include "math_lib/cross_product.h"
 #include "math_lib/length.h"
 #include "math_lib/normalize.h"
+#include "math_lib/transpose.h"
 
 namespace selector
 {
@@ -40,6 +41,8 @@ void Scope::SetSize(const Vec3F &size) { m_size = size; }
 Mat3x3F Scope::GetRotation() const { return m_rotation; }
 
 void Scope::SetRotation(const Mat3x3F &rotation) { m_rotation = rotation; }
+
+Mat3x3F Scope::GetInverseRotation() const { return transposed(m_rotation); }
 
 Vec3F Scope::GetXAxis() const { return m_rotation.Col(0); }
 Vec3F Scope::GetYAxis() const { return m_rotation.Col(1); }

@@ -62,6 +62,7 @@ public:
 	void SetSize(const Vec3F &size);
 	Mat3x3F GetRotation() const;
 	void SetRotation(const Mat3x3F &rotation);
+	Mat3x3F GetInverseRotation() const;
 
 	Vec3F GetXAxis() const;
 	Vec3F GetYAxis() const;
