@@ -19,11 +19,11 @@ const bool Logger::trace_enabled[static_cast<uint32_t>(Logger::TraceLogs::Max)] 
     false,  // Common,
     false,  // MathLib,
     false,  // GeometryCore,
-    false,  // GeometryOperations,
+    true,   // GeometryOperations,
     false,  // Parameter,
     false,  // ProceduralGraph,
     false,  // ProceduralGraphReader,
-    false,  // ProceduralObjects,
+    true,   // ProceduralObjects,
 };
 
 Logger *Logger::trace()

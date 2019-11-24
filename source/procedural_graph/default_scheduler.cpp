@@ -1,7 +1,8 @@
 #include "default_scheduler.h"
 
-#include "../common/profiler.h"
 #include "breadth_first_node_visitor.h"
+#include "common/exception.h"
+#include "common/profiler.h"
 
 namespace selector
 {
@@ -26,6 +27,11 @@ bool DefaultScheduler::Step()
 	try
 	{
 		nextNode->Execute(inNodes, outNodes);
+	}
+	catch (Exception &e)
+	{
+		LOG_ERROR("Exception caught while executing Node " << nextNode->GetName() << "(" << nextNode->GetId() << ")");
+		LOG_ERROR(e.What());
 	}
 	catch (...)
 	{

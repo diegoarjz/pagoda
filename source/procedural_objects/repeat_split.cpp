@@ -3,6 +3,7 @@
 #include "dynamic_value/boolean_value.h"
 #include "dynamic_value/float_value.h"
 #include "dynamic_value/get_value_as.h"
+#include "dynamic_value/integer_value.h"
 #include "dynamic_value/string_value.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
@@ -61,9 +62,11 @@ void RepeatSplit::DoWork()
 
 		planeSplit.Execute(inGeometry, splitGeometries);
 
+		int32_t createdObjectCount = 1;
 		for (auto& g : splitGeometries)
 		{
 			auto outProceduralObject = CreateOutputProceduralObject(outputGeometry);
+			outProceduralObject->RegisterOrSetMember("index", std::make_shared<Integer>(createdObjectCount++));
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outProceduralObject);
 			auto outHierarchicalComponent =
 			    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outProceduralObject);
