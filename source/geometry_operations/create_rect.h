@@ -6,6 +6,9 @@
 #include <geometry_core/geometry_builder.h>
 #include <geometry_core/geometry_sizes.h>
 
+#include "math_lib/dot_product.h"
+#include "math_lib/normalize.h"
+
 namespace selector
 {
 template<class G>
@@ -16,9 +19,12 @@ private:
 	using GeometryPtr = std::shared_ptr<Geometry>;
 
 public:
-	CreateRect(const float &width, const float &height) : m_width(width), m_height(height)
+	CreateRect(const float &width, const float &height, const Vec3F &xAxis = {1, 0, 0}, const Vec3F &yAxis = {0, 1, 0})
+	    : m_width(width), m_height(height), m_xAxis(normalized(xAxis)), m_yAxis(normalized(yAxis))
 	{
 		DBG_ASSERT_MSG(width != 0 && height != 0, "Can't create a rect with zero width or height");
+		DBG_ASSERT_MSG(squared_length(xAxis) > 0 && squared_length(yAxis) > 0,
+		               "Can't create a rect with a zero length axis");
 	}
 
 	GeometrySizes ResultSize() const { return GeometrySizes(4, 4, 1); }
@@ -29,8 +35,6 @@ public:
 		LOG_TRACE(GeometryOperations, "CreateRect. Width: " << m_width << " Height: " << m_height);
 
 		Vec3F center(0, 0, 0);
-		Vec3F width_direction(1, 0, 0);
-		Vec3F height_direction(0, 1, 0);
 		auto half_width = 0.5 * m_width;
 		auto half_height = 0.5 * m_height;
 
@@ -38,16 +42,18 @@ public:
 
 		auto face = builder.StartFace(4);
 
-		face.AddIndex(builder.AddPoint(center - half_width * width_direction - half_height * height_direction));
-		face.AddIndex(builder.AddPoint(center + half_width * width_direction - half_height * height_direction));
-		face.AddIndex(builder.AddPoint(center + half_width * width_direction + half_height * height_direction));
-		face.AddIndex(builder.AddPoint(center - half_width * width_direction + half_height * height_direction));
+		face.AddIndex(builder.AddPoint(center - half_width * m_xAxis - half_height * m_yAxis));
+		face.AddIndex(builder.AddPoint(center + half_width * m_xAxis - half_height * m_yAxis));
+		face.AddIndex(builder.AddPoint(center + half_width * m_xAxis + half_height * m_yAxis));
+		face.AddIndex(builder.AddPoint(center - half_width * m_xAxis + half_height * m_yAxis));
 		face.CloseFace();
 	}
 
 private:
 	float m_width;
 	float m_height;
+	Vec3F m_xAxis;
+	Vec3F m_yAxis;
 };  // class CreateRect
 }  // namespace selector
 

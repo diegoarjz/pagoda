@@ -84,7 +84,7 @@ boost::filesystem::path RegressionTest::s_testFilesDirectory = "";
 #define REGRESSION_TEST(NAME, ...) \
 	TEST(RegressionTestCase, NAME) { RegressionTest(#NAME, {__VA_ARGS__}); }
 
-REGRESSION_TEST(create_rect, "geometry.obj")
+REGRESSION_TEST(create_rect, "rect_x.obj", "rect_y.obj", "rect_z.obj")
 REGRESSION_TEST(create_box, "geometry.obj")
 REGRESSION_TEST(export_geometry, "geometry.obj")
 REGRESSION_TEST(expression, "geometry.obj")
