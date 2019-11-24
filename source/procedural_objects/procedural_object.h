@@ -19,8 +19,7 @@ using ContextPtr = std::shared_ptr<Context>;
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
-class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>,
-                         public BuiltinClass
+class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>, public BuiltinClass
 {
 public:
 	static const TypeInfoPtr s_typeInfo;
@@ -32,9 +31,7 @@ public:
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
-private:
-	ContextPtr m_context;  ///< The parameter \c Context for this \c ProceduralObject
-};                         // class ProceduralObject
+};  // class ProceduralObject
 
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 using ProceduralObjectWeakPtr = std::weak_ptr<ProceduralObject>;

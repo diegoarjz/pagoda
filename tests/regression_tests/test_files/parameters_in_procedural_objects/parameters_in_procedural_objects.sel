@@ -1,0 +1,26 @@
+create_rect = Operation(operation: "CreateRectGeometry") {
+    width: 50, height: 10
+}
+create_rect_out = OutputInterface(interface: "out", offset:0)
+create_rect -> create_rect_out;
+
+repeat_split_in = InputInterface(interface: "in", offset: 0)
+repeat_split = Operation(operation: "RepeatSplit") { size: 5, adjust: "true", axis: "x" }
+repeat_split_out = OutputInterface(interface: "out", offset: 0)
+repeat_split_in -> repeat_split -> repeat_split_out;
+
+extrude_in = InputInterface(interface: "in", offset: 0)
+extrude = Operation(operation: "ExtrudeGeometry") {extrusion_amount: $< op.in0.index; >$}
+extrude_out = OutputInterface(interface: "out", offset: 0)
+extrude_in -> extrude -> extrude_out;
+
+export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry = Operation(operation: "ExportGeometry") {
+    path: $< "geometry_" + op.count + ".obj"; >$
+}
+export_geometry_in -> export_geometry;
+
+create_rect_out -> repeat_split_in;
+repeat_split_out -> extrude_in;
+extrude_out -> export_geometry_in;
+

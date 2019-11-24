@@ -72,8 +72,6 @@ void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 		}
 	}
 
-	// paramContext->UpdateExpressions();
-
 	m_operation->Execute();
 }
 

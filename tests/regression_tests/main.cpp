@@ -107,6 +107,9 @@ REGRESSION_TEST(extract_faces, "geometry0.obj", "geometry1.obj", "geometry2.obj"
 REGRESSION_TEST(split, "geometry0.obj", "geometry1.obj", "geometry2.obj")
 REGRESSION_TEST(scale, "geometry_scope_center.obj", "geometry_scope_origin.obj", "geometry_world_origin.obj")
 REGRESSION_TEST(rotate, "geometry.obj")
+REGRESSION_TEST(parameters_in_procedural_objects, "geometry_0.obj", "geometry_1.obj", "geometry_2.obj",
+                "geometry_3.obj", "geometry_4.obj", "geometry_5.obj", "geometry_6.obj", "geometry_7.obj",
+                "geometry_8.obj", "geometry_9.obj");
 /*
 REGRESSION_TEST(banner, "geometry0.obj", "geometry107.obj", "geometry18.obj", "geometry27.obj", "geometry36.obj",
                 "geometry45.obj", "geometry54.obj", "geometry63.obj", "geometry72.obj", "geometry81.obj",
