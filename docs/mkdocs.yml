@@ -1,0 +1,8 @@
+site_name: Selector
+nav:
+    - Home: index.md
+    - User Guide:
+        - 'Procedural Objects' : 'objects/objects.md'
+        - 'Operations' : 'operations/operations.md'
+        - 'Graph' : 'graph/graph.md'
+    - About: about.md
