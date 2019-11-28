@@ -17,7 +17,7 @@ public:
 	static const char *name;
 
 	ParameterNode();
-	~ParameterNode();
+	virtual ~ParameterNode();
 
 	void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &) override;
 	void AcceptNodeVisitor(NodeVisitor *visitor) override;

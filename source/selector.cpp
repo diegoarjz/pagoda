@@ -10,6 +10,7 @@
 #include <procedural_graph/output_interface_node.h>
 #include <procedural_graph/parameter_node.h>
 #include <procedural_graph/reader.h>
+#include <procedural_graph/router_node.h>
 
 #include <procedural_objects/clip_geometry.h>
 #include <procedural_objects/create_box.h>
@@ -48,6 +49,7 @@ public:
 		m_nodeFactory->Register("OutputInterface", []() { return std::make_shared<OutputInterfaceNode>(); });
 		m_nodeFactory->Register("Parameter", []() { return std::make_shared<ParameterNode>(); });
 		m_nodeFactory->Register("Operation", [this]() { return std::make_shared<OperationNode>(m_operationFactory); });
+		m_nodeFactory->Register("Router", []() { return std::make_shared<RouterNode>(); });
 
 		// Register Operations
 		m_operationFactory->Register(

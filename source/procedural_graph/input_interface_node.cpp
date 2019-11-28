@@ -79,6 +79,8 @@ public:
 
 	void Visit(std::shared_ptr<ParameterNode> n) override { throw UnsupportedNodeLink("input", "ParameterNode"); }
 
+	void Visit(std::shared_ptr<RouterNode> n) override { throw UnsupportedNodeLink("input", "RouterNode"); }
+
 	const InterfaceName& m_interfaceName;
 	std::list<ProceduralObjectPtr>& m_proceduralObjects;
 };

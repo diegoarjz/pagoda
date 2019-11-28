@@ -77,6 +77,8 @@ public:
 
 	void Visit(std::shared_ptr<ParameterNode> n) override { throw UnsupportedNodeLink("output", "ParameterNode"); }
 
+	void Visit(std::shared_ptr<RouterNode> n) override { throw UnsupportedNodeLink("input", "RouterNode"); }
+
 	ProceduralOperationPtr m_operation;
 };
 }  // namespace

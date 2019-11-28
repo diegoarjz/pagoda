@@ -58,8 +58,24 @@ Vec3F Scope::GetAxis(const std::string &axisName) const
 	{
 		return GetYAxis();
 	}
-	CRITICAL_ASSERT_MSG(axisName == "z", "Axis name must be one of x, y or z");
+	CRITICAL_ASSERT_MSG(axisName == "z", "Axis name must be one of x, y or z.");
 	return GetZAxis();
+}
+
+Vec3F Scope::GetAxis(char axisName) const
+{
+	switch (axisName)
+	{
+		case 'x':
+			return GetXAxis();
+		case 'y':
+			return GetYAxis();
+		case 'z':
+			return GetZAxis();
+		default:
+			CRITICAL_ASSERT_MSG(false, "Axis must be one of x, y or z.");
+	}
+	return Vec3F();
 }
 
 Plane<float> Scope::GetXYPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetZAxis()); }
