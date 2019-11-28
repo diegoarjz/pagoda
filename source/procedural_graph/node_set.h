@@ -2,12 +2,20 @@
 #define SELECTOR_PROCEDURAL_GRAPH_NODE_SET_H_
 
 #include <memory>
-#include <unordered_set>
+#include <set>
 
 namespace selector
 {
+class Node;
+using NodePtr = std::shared_ptr<Node>;
+
+struct NodePtrCompare
+{
+	bool operator()(const NodePtr &lhs, const NodePtr &rhs) const;
+};
+
 template<class NodeT>
-using NodeSet = std::unordered_set<std::shared_ptr<NodeT>>;
+using NodeSet = std::set<std::shared_ptr<NodeT>, NodePtrCompare>;
 }  // namespace selector
 
 #endif

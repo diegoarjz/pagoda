@@ -28,7 +28,9 @@ public:
 
 	void SetInterfaceName(const InterfaceName& name);
 	const InterfaceName& GetInterfaceName() const;
-	const std::list<ProceduralObjectPtr> GetProceduralObjects() const { return m_proceduralObjects; }
+	const std::list<ProceduralObjectPtr>& GetProceduralObjects() const { return m_proceduralObjects; }
+	void AddProceduralObject(ProceduralObjectPtr object);
+	void AcceptNodeVisitor(NodeVisitor* visitor) override;
 
 private:
 	InterfaceName m_interfaceName;

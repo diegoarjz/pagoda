@@ -1,20 +1,20 @@
 #ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 #define SELECTOR_PROCEDURAL_GRAPH_NODE_H_
 
-#include "dynamic_value/builtin_class.h"
 #include "common/factory.h"
+#include "dynamic_value/builtin_class.h"
+#include "node_set.h"
 #include "procedural_objects/procedural_operation.h"
 
 #include <memory>
-#include <unordered_set>
+#include <set>
 
 namespace selector
 {
 class Node;
 using NodePtr = std::shared_ptr<Node>;
 
-template<class Node>
-using NodeSet = std::unordered_set<std::shared_ptr<Node>>;
+class NodeVisitor;
 
 /**
  * Represents a \c Node in a \c Graph.
@@ -67,6 +67,11 @@ public:
 	 * Values are fetched from the \c Node's parameter \c Context.
 	 */
 	virtual void SetExpressionVariables();
+
+	/**
+	 * Accepts a \c NodeVisitor.
+	 */
+	virtual void AcceptNodeVisitor(NodeVisitor *visitor) = 0;
 
 	/**
 	 * Executes some operation in the procedural graph.

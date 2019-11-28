@@ -35,7 +35,6 @@ private:
 
 	std::unordered_map<std::string, NodePtr> m_nodeTable;
 	std::unordered_map<std::string, DynamicValueBasePtr> m_currentNamedParameters;
-	uint32_t m_nextNodeId;
 };
 }  // namespace selector
 #endif

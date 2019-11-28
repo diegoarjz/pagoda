@@ -1,17 +1,17 @@
 #ifndef SELECTOR_PROCEDURAL_GRAPH_BREADTH_FIRST_NODE_VISITOR_H_
 #define SELECTOR_PROCEDURAL_GRAPH_BREADTH_FIRST_NODE_VISITOR_H_
 
-#include "node_visitor.h"
+#include "graph_node_visitor.h"
 
 #include <queue>
 
 namespace selector
 {
 template<class Delegate_t>
-class BreadthFirstNodeVisitor : public NodeVisitor<Delegate_t>
+class BreadthFirstNodeVisitor : public GraphNodeVisitor<Delegate_t>
 {
 public:
-	BreadthFirstNodeVisitor(Graph& graph, Delegate_t &delegate) : NodeVisitor<Delegate_t>(graph, delegate) {}
+	BreadthFirstNodeVisitor(Graph &graph, Delegate_t &delegate) : GraphNodeVisitor<Delegate_t>(graph, delegate) {}
 
 	void Visit() override
 	{

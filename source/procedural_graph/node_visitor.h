@@ -1,31 +1,20 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_VISITOR
-#define SELECTOR_PROCEDURAL_GRAPH_NODE_VISITOR
+#pragma once
 
-#include "graph.h"
-#include "node.h"
+#include <memory>
 
 namespace selector
 {
-template<class Delegate_t>
+class OperationNode;
+class InputInterfaceNode;
+class OutputInterfaceNode;
+class ParameterNode;
+
 class NodeVisitor
 {
 public:
-	NodeVisitor(Graph& graph, Delegate_t &delegate) : m_graph(graph), m_delegate(delegate) {}
-
-	virtual void Visit()
-	{
-		for (auto &n : m_graph.GetGraphNodes())
-		{
-			m_delegate(n);
-		}
-	}
-
-	const Graph& GetGraph() const { return m_graph; }
-
-protected:
-	Graph& m_graph;
-	Delegate_t &m_delegate;
+	virtual void Visit(std::shared_ptr<OperationNode> n) = 0;
+	virtual void Visit(std::shared_ptr<InputInterfaceNode> n) = 0;
+	virtual void Visit(std::shared_ptr<OutputInterfaceNode> n) = 0;
+	virtual void Visit(std::shared_ptr<ParameterNode> n) = 0;
 };
 }  // namespace selector
-
-#endif

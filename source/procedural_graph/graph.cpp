@@ -24,12 +24,12 @@ private:
 	using AdjacencyContainer = std::unordered_map<NodeWeakPtr, Adjacency, NodeWeakPtrHasher, NodeWeakPtrEqual>;
 
 public:
-	Impl(NodeFactoryPtr nodeFactory, Graph *graph) : m_graph(graph), m_nodeFactory(nodeFactory) {}
+	Impl(NodeFactoryPtr nodeFactory, Graph *graph) : m_nextNodeId(0), m_graph(graph), m_nodeFactory(nodeFactory) {}
 
 	void AddNode(NodePtr node)
 	{
-		m_nodes.insert(node);
 		node->SetId(m_nextNodeId++);
+		m_nodes.insert(node);
 		m_adjacencies[node] = Adjacency{};
 
 		m_inputNodes.insert(node);

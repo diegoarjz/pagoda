@@ -28,6 +28,8 @@ public:
 	void Execute(const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;
 	void SetInterfaceName(const InterfaceName& interfaceName);
 	const InterfaceName& GetInterfaceName() const;
+	void AddProceduralObject(ProceduralObjectPtr object);
+	void AcceptNodeVisitor(NodeVisitor* visitor) override;
 
 	const std::list<ProceduralObjectPtr>& GetProceduralObjects() const { return m_proceduralObjects; }
 

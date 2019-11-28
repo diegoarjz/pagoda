@@ -1,7 +1,10 @@
 #include "parameter_node.h"
 
 #include "common/assertions.h"
+#include "common/logger.h"
 #include "common/profiler.h"
+
+#include "node_visitor.h"
 
 namespace selector
 {
@@ -16,11 +19,17 @@ void ParameterNode::SetConstructionArguments(
 {
 }
 
+void ParameterNode::AcceptNodeVisitor(NodeVisitor *visitor)
+{
+	visitor->Visit(std::dynamic_pointer_cast<ParameterNode>(shared_from_this()));
+}
+
 void ParameterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
 {
 	START_PROFILE;
+	LOG_TRACE(ProceduralGraph, "Executing ParameterNode " << GetName() << "(" << GetId() << ")");
 
-    for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter)
+	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter)
 	{
 		for (const auto &outNode : outNodes)
 		{

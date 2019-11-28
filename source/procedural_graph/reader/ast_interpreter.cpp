@@ -15,7 +15,7 @@
 
 namespace selector
 {
-AstInterpreter::AstInterpreter(GraphPtr graph) : m_graph(graph), m_nextNodeId(0) {}
+AstInterpreter::AstInterpreter(GraphPtr graph) : m_graph(graph) {}
 
 void AstInterpreter::Visit(GraphDefinitionNode *graphDefinition)
 {
@@ -68,7 +68,6 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	}
 
 	auto node = m_graph->CreateNode(nodeDefinition->GetNodeType());
-	node->SetId(m_nextNodeId++);
 	node->SetName(nodeDefinition->GetNodeName());
 	node->SetConstructionArguments(m_currentNamedParameters);
 

@@ -1,7 +1,7 @@
 #include <procedural_graph/breadth_first_node_visitor.h>
 #include <procedural_graph/graph.h>
+#include <procedural_graph/graph_node_visitor.h>
 #include <procedural_graph/node.h>
-#include <procedural_graph/node_visitor.h>
 #include <procedural_graph/operation_node.h>
 
 #include <selector.h>
@@ -23,7 +23,7 @@ class NodeVisitorTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-        m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
+		m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
@@ -34,13 +34,13 @@ protected:
 
 	GraphPtr m_graph;
 	std::vector<NodePtr> m_nodes;
-    Selector m_selector;
+	Selector m_selector;
 };
 
 TEST_F(NodeVisitorTest, when_visiting_should_call_the_delegate_for_each_node)
 {
 	Delegate d;
-	NodeVisitor visitor(*m_graph, d);
+	GraphNodeVisitor visitor(*m_graph, d);
 	visitor.Visit();
 	for (auto n : m_nodes)
 	{
@@ -53,7 +53,7 @@ class BreadthFirstNodeVisitorTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-        m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
+		m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
@@ -65,13 +65,13 @@ protected:
 
 	GraphPtr m_graph;
 	std::vector<NodePtr> m_nodes;
-    Selector m_selector;
+	Selector m_selector;
 };
 
 TEST_F(BreadthFirstNodeVisitorTest, when_visiting_should_call_the_delegate_for_each_node)
 {
 	Delegate d;
-	NodeVisitor visitor(*m_graph, d);
+	GraphNodeVisitor visitor(*m_graph, d);
 	visitor.Visit();
 	for (auto n : m_nodes)
 	{
@@ -83,16 +83,15 @@ TEST_F(BreadthFirstNodeVisitorTest, when_visiting_should_visit_the_nodes_in_brea
 {
 	Delegate d;
 	/*
-	 * We're going to abuse the Node ids and use it as the depth level
 	 * a -> b -> c
 	 * a -> d
 	 * e
 	 */
-	m_nodes[0]->SetId(0);
-	m_nodes[1]->SetId(1);
-	m_nodes[2]->SetId(2);
-	m_nodes[3]->SetId(1);
-	m_nodes[4]->SetId(0);
+	m_nodes[0]->SetName("a");
+	m_nodes[1]->SetName("b");
+	m_nodes[2]->SetName("c");
+	m_nodes[3]->SetName("d");
+	m_nodes[4]->SetName("e");
 	m_graph->CreateEdge(m_nodes[0], m_nodes[1]);
 	m_graph->CreateEdge(m_nodes[1], m_nodes[2]);
 	m_graph->CreateEdge(m_nodes[0], m_nodes[3]);
@@ -100,9 +99,9 @@ TEST_F(BreadthFirstNodeVisitorTest, when_visiting_should_visit_the_nodes_in_brea
 	BreadthFirstNodeVisitor v(*m_graph, d);
 	v.Visit();
 
-	EXPECT_EQ(d.m_visitedNodes[0]->GetId(), 0);
-	EXPECT_EQ(d.m_visitedNodes[1]->GetId(), 0);
-	EXPECT_EQ(d.m_visitedNodes[2]->GetId(), 1);
-	EXPECT_EQ(d.m_visitedNodes[3]->GetId(), 1);
-	EXPECT_EQ(d.m_visitedNodes[4]->GetId(), 2);
+	EXPECT_EQ(d.m_visitedNodes[0]->GetName(), "a");
+	EXPECT_EQ(d.m_visitedNodes[1]->GetName(), "e");
+	EXPECT_EQ(d.m_visitedNodes[2]->GetName(), "b");
+	EXPECT_EQ(d.m_visitedNodes[3]->GetName(), "d");
+	EXPECT_EQ(d.m_visitedNodes[4]->GetName(), "c");
 }

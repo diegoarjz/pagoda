@@ -24,6 +24,7 @@ public:
 	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
 	void SetOperation(ProceduralOperationPtr operation);
 	ProceduralOperationPtr GetOperation() const { return m_operation; }
+	void AcceptNodeVisitor(NodeVisitor *visitor) override;
 
 private:
 	ProceduralOperationPtr m_operation;

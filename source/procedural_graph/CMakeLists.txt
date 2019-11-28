@@ -17,6 +17,7 @@ set(PROCEDURAL_GRAPH_SRCS
     "node_factory.cpp"
     "node_factory.h"
     "node_set.h"
+    "node_set.cpp"
     "node_set_visitor.h"
     "node_visitor.h"
     "operation_node.cpp"
@@ -31,6 +32,8 @@ set(PROCEDURAL_GRAPH_SRCS
     "scheduler.h"
     "unknown_node_type.cpp"
     "unknown_node_type.h"
+    "unsupported_node_link.cpp"
+    "unsupported_node_link.h"
 )
 
 set(PROCEDURAL_GRAPH_PUBLIC_HEADERS
@@ -53,6 +56,7 @@ set(PROCEDURAL_GRAPH_PUBLIC_HEADERS
     "reader.h"
     "scheduler.h"
     "unknown_node_type.h"
+    "unsupported_node_link.h"
 )
 
 add_subdirectory(reader)

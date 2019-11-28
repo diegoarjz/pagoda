@@ -7,6 +7,9 @@
 #include "input_interface_node.h"
 #include "node.h"
 #include "node_set_visitor.h"
+#include "node_visitor.h"
+#include "output_interface_node.h"
+#include "unsupported_node_link.h"
 
 #include "procedural_objects/operation_factory.h"
 #include "procedural_objects/procedural_operation.h"
@@ -43,22 +46,44 @@ void OperationNode::SetOperation(ProceduralOperationPtr operation)
 	RegisterOrSetMember("op", m_operation);
 }
 
-void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
+void OperationNode::AcceptNodeVisitor(NodeVisitor *visitor)
 {
-	NodeSet<InputInterfaceNode> inputInterfaceNodes;
-	node_type_filter<InputInterfaceNode>(inNodes, inputInterfaceNodes);
+	visitor->Visit(std::dynamic_pointer_cast<OperationNode>(shared_from_this()));
+}
 
-	for (auto inInterface : inputInterfaceNodes)
+namespace
+{
+class out_visitor : public NodeVisitor
+{
+public:
+	out_visitor(ProceduralOperationPtr operation) : m_operation(operation) {}
+
+	void Visit(std::shared_ptr<OperationNode> n) override { throw UnsupportedNodeLink("output", "OperationNode"); }
+
+	void Visit(std::shared_ptr<InputInterfaceNode> n) override
 	{
-		auto proceduralObjects = inInterface->GetProceduralObjects();
-		auto interfaceName = inInterface->GetInterfaceName();
+		throw UnsupportedNodeLink("output", "InputInterfaceNode");
+	}
 
-		for (ProceduralObjectPtr o : proceduralObjects)
+	void Visit(std::shared_ptr<OutputInterfaceNode> n) override
+	{
+		auto interface = n->GetInterfaceName();
+		ProceduralObjectPtr object = nullptr;
+		while ((object = m_operation->PopProceduralObject(interface)) != nullptr)
 		{
-			m_operation->PushProceduralObject(interfaceName, o);
+			n->AddProceduralObject(object);
 		}
 	}
 
+	void Visit(std::shared_ptr<ParameterNode> n) override { throw UnsupportedNodeLink("output", "ParameterNode"); }
+
+	ProceduralOperationPtr m_operation;
+};
+}  // namespace
+
+void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
+{
+	LOG_TRACE(ProceduralGraph, "Executing OperationNode " << GetName() << "(" << GetId() << ")");
 	for (auto parIter = m_operation->GetMembersBegin(); parIter != m_operation->GetMembersEnd(); ++parIter)
 	{
 		try
@@ -73,6 +98,12 @@ void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 	}
 
 	m_operation->Execute();
+
+	out_visitor v(m_operation);
+	for (auto n : outNodes)
+	{
+		n->AcceptNodeVisitor(&v);
+	}
 }
 
 }  // namespace selector

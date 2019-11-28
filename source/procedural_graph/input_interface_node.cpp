@@ -5,7 +5,10 @@
 #include "graph.h"
 #include "node.h"
 #include "node_set_visitor.h"
+#include "node_visitor.h"
+#include "operation_node.h"
 #include "output_interface_node.h"
+#include "unsupported_node_link.h"
 
 #include <procedural_objects/procedural_operation.h>
 
@@ -38,18 +41,58 @@ void InputInterfaceNode::SetConstructionArguments(
 void InputInterfaceNode::SetInterfaceName(const InterfaceName& interfaceName) { m_interfaceName = interfaceName; }
 const InterfaceName& InputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
 
+void InputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object) { m_proceduralObjects.push_back(object); }
+
+void InputInterfaceNode::AcceptNodeVisitor(NodeVisitor* visitor)
+{
+	visitor->Visit(std::dynamic_pointer_cast<InputInterfaceNode>(shared_from_this()));
+}
+
+namespace
+{
+class out_visitor : public NodeVisitor
+{
+public:
+	out_visitor(const InterfaceName& name, std::list<ProceduralObjectPtr>& objects)
+	    : m_interfaceName(name), m_proceduralObjects(objects)
+	{
+	}
+
+	void Visit(std::shared_ptr<OperationNode> n) override
+	{
+		ProceduralOperationPtr op = n->GetOperation();
+		for (auto object : m_proceduralObjects)
+		{
+			op->PushProceduralObject(m_interfaceName, object);
+		}
+	}
+
+	void Visit(std::shared_ptr<InputInterfaceNode> n) override
+	{
+		throw UnsupportedNodeLink("input", "InputInterfaceNode");
+	}
+
+	void Visit(std::shared_ptr<OutputInterfaceNode> n) override
+	{
+		throw UnsupportedNodeLink("input", "OutputInterfaceNode");
+	}
+
+	void Visit(std::shared_ptr<ParameterNode> n) override { throw UnsupportedNodeLink("input", "ParameterNode"); }
+
+	const InterfaceName& m_interfaceName;
+	std::list<ProceduralObjectPtr>& m_proceduralObjects;
+};
+}  // namespace
+
 void InputInterfaceNode::Execute(const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes)
 {
 	START_PROFILE;
+	LOG_TRACE(ProceduralGraph, "Executing InputInterfaceNode " << GetName() << "(" << GetId() << ")");
 
-	m_proceduralObjects.clear();
-	NodeSet<OutputInterfaceNode> outputInterfaceNodes;
-	node_type_filter<OutputInterfaceNode>(inNodes, outputInterfaceNodes);
-
-	for (auto outNode : outputInterfaceNodes)
+	out_visitor v(m_interfaceName, m_proceduralObjects);
+	for (auto& i : outNodes)
 	{
-		auto outNodeObjects = outNode->GetProceduralObjects();
-		m_proceduralObjects.insert(std::end(m_proceduralObjects), std::begin(outNodeObjects), std::end(outNodeObjects));
+		i->AcceptNodeVisitor(&v);
 	}
 }
 }  // namespace selector

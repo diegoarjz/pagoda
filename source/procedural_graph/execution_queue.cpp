@@ -21,8 +21,15 @@ public:
 		{
 			m_orderedNodes.push_back(seenNode);
 		}
-		std::sort(m_orderedNodes.begin(), m_orderedNodes.end(),
-		          [this](NodePtr a, NodePtr b) { return this->m_nodeDepths[a] < this->m_nodeDepths[b]; });
+		std::sort(m_orderedNodes.begin(), m_orderedNodes.end(), [this](NodePtr a, NodePtr b) {
+			auto aDepth = this->m_nodeDepths[a];
+			auto bDepth = this->m_nodeDepths[b];
+			if (aDepth == bDepth)
+			{
+				return a->GetId() < b->GetId();
+			}
+			return aDepth < bDepth;
+		});
 		Reset();
 	}
 
