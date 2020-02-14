@@ -8,7 +8,7 @@ namespace selector
 {
 bool NodePtrCompare::operator()(const NodePtr &lhs, const NodePtr &rhs) const
 {
-	DBG_ASSERT_MSG(lhs->GetId() != rhs->GetId() || lhs != rhs);
+	DBG_ASSERT(lhs->GetId() != rhs->GetId() || lhs != rhs);
 	return lhs->GetId() < rhs->GetId();
 }
 }  // namespace selector
