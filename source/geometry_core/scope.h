@@ -5,6 +5,8 @@
 #include <math_lib/plane.h>
 #include <math_lib/vec_base.h>
 
+#include <math_lib/cross_product.h>
+
 #include <array>
 #include <memory>
 
@@ -122,6 +124,30 @@ public:
 		s.SetSize(size);
 
 		return s;
+	}
+
+	template<class Geometry>
+	static Scope FromGeometry(const std::shared_ptr<Geometry> geom)
+	{
+		auto pIter = geom->PointsBegin();
+		auto p0 = geom->GetPosition(*pIter);
+		pIter++;
+		auto p1 = geom->GetPosition(*pIter);
+		pIter++;
+		auto p2 = geom->GetPosition(*pIter);
+		pIter++;
+
+		auto xAxis = normalized(p1 - p0);
+		auto yAxis = p2 - p1;
+		auto zAxis = normalized(cross_product(xAxis, yAxis));
+		yAxis = normalized(cross_product(zAxis, xAxis));
+
+		Mat3x3F rotation;
+		rotation.SetCol(0, xAxis);
+		rotation.SetCol(1, yAxis);
+		rotation.SetCol(2, zAxis);
+
+		return Scope::FromGeometryAndConstrainedRotation(geom, rotation);
 	}
 
 private:

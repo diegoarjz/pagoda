@@ -23,6 +23,8 @@ ScopeAxisDirectionPredicate::ScopeAxisDirectionPredicate(ProceduralObjectSystemP
 	m_geometrySystem = objectSystem->GetComponentSystem<GeometrySystem>();
 }
 
+ScopeAxisDirectionPredicate::~ScopeAxisDirectionPredicate() {}
+
 bool ScopeAxisDirectionPredicate::operator()(const ProceduralObjectPtr object)
 {
 	auto geometryComponent = m_geometrySystem->GetComponentAs<GeometryComponent>(object);

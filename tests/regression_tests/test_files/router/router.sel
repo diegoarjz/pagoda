@@ -1,0 +1,71 @@
+create_box = Operation(operation: "CreateBoxGeometry") {
+    xSize: 10, ySize: 10, zSize: 5
+}
+create_box_out = OutputInterface(interface: "out", offset: 0)
+create_box -> create_box_out;
+
+extract_faces_in = InputInterface(interface: "in", offset: 0)
+extract_faces = Operation(operation: "ExtractFaces") {}
+extract_faces_out = OutputInterface(interface: "out", offset: 0)
+extract_faces_in -> extract_faces -> extract_faces_out;
+
+router = Router() {
+    export_up_in: "up",
+    export_down_in: "down",
+    export_left_in: "left",
+    export_right_in: "right",
+    export_front_in: "front",
+    export_back_in: "back"
+}
+
+export_up_in = InputInterface(interface: "in", offset: 0)
+export_up = Operation(operation: "ExportGeometry") {
+    path: $< "up" + op.count + ".obj"; >$
+}
+export_up_in -> export_up;
+
+export_down_in = InputInterface(interface: "in", offset: 0)
+export_down = Operation(operation: "ExportGeometry") {
+    path: $< "down" + op.count + ".obj"; >$
+}
+export_down_in -> export_down;
+
+export_left_in = InputInterface(interface: "in", offset: 0)
+export_left = Operation(operation: "ExportGeometry") {
+    path: $< "left" + op.count + ".obj"; >$
+}
+export_left_in -> export_left;
+
+export_right_in = InputInterface(interface: "in", offset: 0)
+export_right = Operation(operation: "ExportGeometry") {
+    path: $< "right" + op.count + ".obj"; >$
+}
+export_right_in -> export_right;
+
+export_front_in = InputInterface(interface: "in", offset: 0)
+export_front = Operation(operation: "ExportGeometry") {
+    path: $< "front" + op.count + ".obj"; >$
+}
+export_front_in -> export_front;
+
+export_back_in = InputInterface(interface: "in", offset: 0)
+export_back = Operation(operation: "ExportGeometry") {
+    path: $< "back" + op.count + ".obj"; >$
+}
+export_back_in -> export_back;
+
+export_none_in = InputInterface(interface: "in", offset: 0)
+export_none = Operation(operation: "ExportGeometry") {
+    path: $< "none" + op.count + ".obj"; >$
+}
+export_none_in -> export_none;
+
+create_box_out -> extract_faces_in;
+extract_faces_out -> router;
+router -> export_up_in;
+router -> export_down_in;
+router -> export_left_in;
+router -> export_right_in;
+router -> export_front_in;
+router -> export_back_in;
+router -> export_none_in;

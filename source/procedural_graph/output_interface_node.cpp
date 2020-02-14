@@ -8,6 +8,7 @@
 #include "node_set_visitor.h"
 #include "node_visitor.h"
 #include "operation_node.h"
+#include "router_node.h"
 #include "unsupported_node_link.h"
 
 #include <procedural_objects/procedural_operation.h>
@@ -72,7 +73,13 @@ public:
 
 	void Visit(std::shared_ptr<ParameterNode> n) override { throw UnsupportedNodeLink("input", "ParameterNode"); }
 
-	void Visit(std::shared_ptr<RouterNode> n) override { throw UnsupportedNodeLink("input", "RouterNode"); }
+	void Visit(std::shared_ptr<RouterNode> n) override
+	{
+		for (auto o : m_proceduralObjects)
+		{
+			n->AddProceduralObject(o);
+		}
+	}
 
 	std::list<ProceduralObjectPtr>& m_proceduralObjects;
 };

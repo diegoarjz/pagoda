@@ -1,9 +1,7 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECT_SYSTEM_H_
-#define SELECTOR_PROCEDURAL_OBJECT_SYSTEM_H_
+#pragma once
 
 #include "common/assertions.h"
 #include "common/profiler.h"
-#include "procedural_object_mask.h"
 
 #include <memory>
 #include <unordered_map>
@@ -74,4 +72,3 @@ using ProceduralObjectSystemWeakPtr = std::weak_ptr<ProceduralObjectSystem>;
 
 }  // namespace selector
 
-#endif

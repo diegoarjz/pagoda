@@ -50,8 +50,7 @@ void ExtractFaces::DoWork()
 			auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
 
 			outGeometryComponent->SetGeometry(g);
-			outGeometryComponent->SetScope(
-			    Scope::FromGeometryAndConstrainedRotation(g, inGeometryComponent->GetScope().GetRotation()));
+			outGeometryComponent->SetScope(Scope::FromGeometry(g));
 
 			hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 		}

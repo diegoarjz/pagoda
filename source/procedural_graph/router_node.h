@@ -8,13 +8,15 @@ namespace selector
 {
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
+class ProceduralObjectPredicateRegistry;
+using ProceduralObjectPredicateRegistryPtr = std::shared_ptr<ProceduralObjectPredicateRegistry>;
 
 class RouterNode : public Node
 {
 public:
 	static const char *name;
 
-	RouterNode();
+	RouterNode(ProceduralObjectPredicateRegistryPtr predicateRegistry);
 	virtual ~RouterNode();
 
 	void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &) override;
@@ -25,5 +27,6 @@ public:
 
 private:
 	std::list<ProceduralObjectPtr> m_proceduralObjects;
+	ProceduralObjectPredicateRegistryPtr m_predicateRegistry;
 };
 }  // namespace selector

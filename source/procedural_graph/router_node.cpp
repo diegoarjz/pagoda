@@ -3,9 +3,14 @@
 #include "common/assertions.h"
 #include "common/logger.h"
 #include "common/profiler.h"
+#include "dynamic_value/string_value.h"
+#include "dynamic_value/type_info.h"
 #include "input_interface_node.h"
 #include "node_visitor.h"
 #include "unsupported_node_link.h"
+
+#include "procedural_objects/procedural_object_predicate.h"
+#include "procedural_objects/procedural_object_predicate_registry.h"
 
 #include "node_visitor.h"
 
@@ -13,7 +18,9 @@ namespace selector
 {
 const char *RouterNode::name = "Router";
 
-RouterNode::RouterNode() {}
+RouterNode::RouterNode(ProceduralObjectPredicateRegistryPtr predicateRegistry) : m_predicateRegistry(predicateRegistry)
+{
+}
 RouterNode::~RouterNode() {}
 
 void RouterNode::SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &) {}
@@ -30,8 +37,9 @@ namespace
 class out_visitor : public NodeVisitor
 {
 public:
-	out_visitor(std::list<ProceduralObjectPtr> &objects, std::shared_ptr<DynamicValueTable> &table)
-	    : m_proceduralObjects(objects), m_nodeMemberTable(table)
+	out_visitor(ProceduralObjectPredicateRegistryPtr predicateRegistry, std::list<ProceduralObjectPtr> &objects,
+	            std::shared_ptr<DynamicValueTable> &table)
+	    : m_predicateRegistry(predicateRegistry), m_proceduralObjects(objects), m_nodeMemberTable(table)
 	{
 	}
 
@@ -43,6 +51,25 @@ public:
 		try
 		{
 			auto memberParameter = m_nodeMemberTable->Get(nodeName);
+			if (memberParameter->GetTypeInfo() == String::s_typeInfo)
+			{
+				auto asString = std::dynamic_pointer_cast<String>(memberParameter);
+				auto pred = m_predicateRegistry->Get(asString->ToString());
+
+				if (pred == nullptr)
+				{
+					LOG_ERROR("Predicate with name " << asString->ToString() << " not found");
+					return;
+				}
+
+				for (auto o : m_proceduralObjects)
+				{
+					if ((*pred)(o))
+					{
+						n->AddProceduralObject(o);
+					}
+				}
+			}
 		}
 		catch (...)
 		{
@@ -60,6 +87,7 @@ public:
 
 	void Visit(std::shared_ptr<RouterNode> n) override { throw UnsupportedNodeLink("input", "RouterNode"); }
 
+	ProceduralObjectPredicateRegistryPtr m_predicateRegistry;
 	std::list<ProceduralObjectPtr> &m_proceduralObjects;
 	std::shared_ptr<DynamicValueTable> m_nodeMemberTable;
 };
@@ -70,7 +98,7 @@ void RouterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outN
 	START_PROFILE;
 	LOG_TRACE(ProceduralGraph, "Executing RouterNode " << GetName() << "(" << GetId() << ")");
 
-	out_visitor v(m_proceduralObjects, m_memberTable);
+	out_visitor v(m_predicateRegistry, m_proceduralObjects, m_memberTable);
 	for (auto &i : outNodes)
 	{
 		i->AcceptNodeVisitor(&v);

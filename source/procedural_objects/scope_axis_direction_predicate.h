@@ -18,6 +18,8 @@ public:
 	ScopeAxisDirectionPredicate(ProceduralObjectSystemPtr objectSystem, char scopeAxis, const Vec3F& direction,
 	                            const Degrees<float>& tolerance = Degrees<float>(0.0f));
 
+	virtual ~ScopeAxisDirectionPredicate();
+
 	/**
 	 * Returns true if the given axis of the \p object's \c Scope is facing the specified direction.
 	 */
