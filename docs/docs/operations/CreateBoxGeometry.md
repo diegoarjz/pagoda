@@ -35,5 +35,5 @@ None
 create_box = Operation(operation: "CreateBoxGeometry") {
     xSize: 10, ySize: 10, zSize: 5
 }
-create_box_out = OutputInterface(interface: "out", offset: 0)
+create_box_out = OutputInterface(interface: "out")
 ```

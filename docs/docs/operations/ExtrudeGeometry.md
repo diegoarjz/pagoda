@@ -32,7 +32,7 @@ None
 ## Usage Example
 
 ```
-extrusion_in = InputInterface(interface: "in", offset: 0)
+extrusion_in = InputInterface(interface: "in")
 extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
-extrusion_out = OutputInterface(interface: "out", offset: 0)
+extrusion_out = OutputInterface(interface: "out")
 ```

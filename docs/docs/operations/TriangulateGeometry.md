@@ -29,8 +29,8 @@ None
 ## Usage Example
 
 ```
-triangulate_geometry_in = InputInterface(interface: "in", offset: 0)
+triangulate_geometry_in = InputInterface(interface: "in")
 triangulate_geometry = Operation(operation: "TriangulateGeometry")
-triangulate_geometry_out = OutputInterface(interface: "out", offset: 0)
+triangulate_geometry_out = OutputInterface(interface: "out")
 ```
 

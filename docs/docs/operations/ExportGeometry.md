@@ -33,7 +33,7 @@ None
 ## Usage Example
 
 ```
-export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
     path: $< "geometry" + op.count + ".obj"; >$
 }

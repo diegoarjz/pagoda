@@ -33,12 +33,12 @@ None
 ## Usage Example
 
 ```
-clip_geometry_in = InputInterface(interface: "in", offset: 0)
+clip_geometry_in = InputInterface(interface: "in")
 clip_geometry = Operation(operation: "ClipGeometry") {
     plane: $< Plane(Vector3(0, 0, 4), Vector3(1, 2, 3)); >$
 }
-front_geometry = OutputInterface(interface: "front", offset: 0)
-back_geometry = OutputInterface(interface: "back", offset: 0)
+front_geometry = OutputInterface(interface: "front")
+back_geometry = OutputInterface(interface: "back")
 
 ```
 

@@ -7,9 +7,9 @@ Parameter names must correspond to downstream nodes and its values are predicate
 ## Example usage
 
 ```
-extract_faces_in = InputInterface(interface: "in", offset: 0)
+extract_faces_in = InputInterface(interface: "in")
 extract_faces = Operation(operation: "ExtractFaces")
-extract_faces_out = OutputInterface(interface: "out", offset: 0)
+extract_faces_out = OutputInterface(interface: "out")
 extract_faces_in -> extract_faces -> extract_faces_out;
 
 top_extrusion_in = ...

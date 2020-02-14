@@ -67,10 +67,10 @@ This is illustrated in the following snippet:
 
 ```
 create_rect = Operation(operation: "CreateRectGeometry") { width: 10, height: 10 }
-create_rect_out = OutputInterface(interface: "out", offset: 0)
+create_rect_out = OutputInterface(interface: "out")
 create_rect -> create_rect_out;
 
-export_in = InputInterface(interface: "in", offset: 0)
+export_in = InputInterface(interface: "in")
 export = Operation(operation: "ExportGeometry") { path: "rect.geom" }
 export_in -> export;
 

@@ -35,10 +35,10 @@ None
 ## Usage Example
 
 ```
-scale_scope_center_in = InputInterface(interface: "in", offset: 0)
+scale_scope_center_in = InputInterface(interface: "in")
 scale_scope_center = Operation(operation: "Scale") {
     x: 0.1, y: 0.1, z: 0.1, pivotal_point: "scope_center"
 }
-scale_scope_center_out = OutputInterface(interface: "out", offset: 0)
+scale_scope_center_out = OutputInterface(interface: "out")
 scale_scope_center_in -> scale_scope_center -> scale_scope_center_out;
 ```

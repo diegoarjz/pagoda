@@ -35,8 +35,8 @@ None
 ## Usage Example
 
 ```
-repeat_split_in = InputInterface(interface: "in", offset: 0)
+repeat_split_in = InputInterface(interface: "in")
 repeat_split = Operation(operation: "RepeatSplit") { size: 5, adjust: "false", axis: "x" }
-repeat_split_out = OutputInterface(interface: "out", offset: 0)
+repeat_split_out = OutputInterface(interface: "out")
 repeat_split_in -> repeat_split -> repeat_split_out;
 ```

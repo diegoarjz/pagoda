@@ -39,7 +39,7 @@ translate_in = InputInterface(interface: "in", offset:0)
 translate = Operation(operation: "Translate") {
     x: 1, y: 2, z: 3, world: "true"
 }
-translate_out = OutputInterface(interface: "out", offset: 0)
+translate_out = OutputInterface(interface: "out")
 translate_in -> translate -> translate_out;
 ```
 

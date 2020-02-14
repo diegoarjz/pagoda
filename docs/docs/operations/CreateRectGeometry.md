@@ -36,7 +36,7 @@ None
 create_rect = Operation(operation: "CreateRectGeometry") {
     width: 10, height: 10, plane: "x"
 }
-create_rect_out = OutputInterface(interface: "out", offset: 0)
+create_rect_out = OutputInterface(interface: "out")
 
 create_rect -> create_rect_out;
 ```

@@ -37,7 +37,7 @@ None
 
 
 ```
-split_in = InputInterface(interface: "in", offset: 0)
+split_in = InputInterface(interface: "in")
 split = Operation(operation: "Split") {
     axis: "x",
     split_count: 3,
@@ -45,9 +45,9 @@ split = Operation(operation: "Split") {
     split_2: 3,
     split_3: 6
 }
-split_out_1 = OutputInterface(interface: "split_1", offset: 0)
-split_out_2 = OutputInterface(interface: "split_2", offset: 0)
-split_out_3 = OutputInterface(interface: "split_3", offset: 0)
+split_out_1 = OutputInterface(interface: "split_1")
+split_out_2 = OutputInterface(interface: "split_2")
+split_out_3 = OutputInterface(interface: "split_3")
 
 ```
 

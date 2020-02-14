@@ -29,9 +29,9 @@ None
 ## Usage Example
 
 ```
-extract_scope_in = InputInterface(interface: "in", offset: 0)
+extract_scope_in = InputInterface(interface: "in")
 extract_scope = Operation(operation: "ExtractScope")
-extract_scope_out = OutputInterface(interface: "out", offset: 0)
+extract_scope_out = OutputInterface(interface: "out")
 
 extract_scope_in -> extract_scope -> extract_scope_out;
 ```
