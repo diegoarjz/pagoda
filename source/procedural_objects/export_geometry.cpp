@@ -13,16 +13,13 @@
 namespace selector
 {
 const char* ExportGeometry::name = "ExportGeometry";
-const InterfaceName ExportGeometry::inputGeometry = InterfaceName("in", 0);
+const std::string ExportGeometry::inputGeometry("in");
 
 ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	CreateInputInterface(inputGeometry);
 
-    RegisterValues({
-        {"path", std::make_shared<String>("geometry.obj")},
-        {"count", std::make_shared<Integer>(0)}
-    });
+	RegisterValues({{"path", std::make_shared<String>("geometry.obj")}, {"count", std::make_shared<Integer>(0)}});
 }
 
 ExportGeometry::~ExportGeometry() {}
@@ -37,7 +34,7 @@ void ExportGeometry::DoWork()
 	while (HasInput(inputGeometry))
 	{
 		set_value_from<int>(*GetValue("count"), objectCount);
-        UpdateValue("path");
+		UpdateValue("path");
 
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 

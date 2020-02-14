@@ -11,7 +11,7 @@
 
 namespace selector
 {
-const InterfaceName CreateRectGeometry::output_geometry("out", 0);
+const std::string CreateRectGeometry::output_geometry("out");
 const char* CreateRectGeometry::name = "CreateRectGeometry";
 
 CreateRectGeometry::CreateRectGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)

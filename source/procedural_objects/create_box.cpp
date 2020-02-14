@@ -11,17 +11,15 @@
 
 namespace selector
 {
-const InterfaceName CreateBoxGeometry::outputGeometry("out", 0);
+const std::string CreateBoxGeometry::outputGeometry("out");
 const char* CreateBoxGeometry::name = "CreateBoxGeometry";
 
 CreateBoxGeometry::CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-    RegisterValues({
-	    {"xSize", std::make_shared<FloatValue>(0.0f)},
-	    {"ySize", std::make_shared<FloatValue>(0.0f)},
-	    {"zSize", std::make_shared<FloatValue>(0.0f)}
-    });
+	RegisterValues({{"xSize", std::make_shared<FloatValue>(0.0f)},
+	                {"ySize", std::make_shared<FloatValue>(0.0f)},
+	                {"zSize", std::make_shared<FloatValue>(0.0f)}});
 
 	CreateOutputInterface(outputGeometry);
 }

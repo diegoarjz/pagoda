@@ -1,8 +1,8 @@
 #ifndef SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 #define SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 
-#include "dynamic_value/builtin_class.h"
 #include "common/factory.h"
+#include "dynamic_value/builtin_class.h"
 #include "procedural_component.h"
 #include "procedural_operation_object_interface.h"
 
@@ -28,8 +28,7 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
  * Has input and output \c ProceduralOperationObjectInterface which is used to pass
  * input and output procedural objects.
  */
-class ProceduralOperation : public std::enable_shared_from_this<ProceduralOperation>,
-                            public BuiltinClass
+class ProceduralOperation : public std::enable_shared_from_this<ProceduralOperation>, public BuiltinClass
 {
 public:
 	static const TypeInfoPtr s_typeInfo;
@@ -45,46 +44,44 @@ public:
 	/**
 	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
 	 */
-	bool PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object);
+	bool PushProceduralObject(const std::string& interface, ProceduralObjectPtr procedural_object);
 	/**
 	 * Pops a \c ProceduralObject from the output interface with the given \p interface
 	 */
-	ProceduralObjectPtr PopProceduralObject(const InterfaceName& interface) const;
+	ProceduralObjectPtr PopProceduralObject(const std::string& interface) const;
 
 	std::string ToString() const override;
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
 protected:
+	/**
+	 * Performs the operation work.
+	 */
+	virtual void DoWork() = 0;
 
-    /**
-     * Performs the operation work.
-     */
-    virtual void DoWork() = 0;
+	/**
+	 * Registers the \c DynamicValueBase objects that will be used during the execution.
+	 */
+	void RegisterValues(const std::unordered_map<std::string, DynamicValueBasePtr>& values);
+	/**
+	 * Updates the value of the \c DynamicValueBase with the \p valueName if it is an expression.
+	 */
+	void UpdateValue(const std::string& valueName);
+	/**
+	 * Returns the value of the \c DynamicValueBase with the \p valueName.
+	 */
+	DynamicValueBasePtr GetValue(const std::string& valueName);
 
-    /**
-     * Registers the \c DynamicValueBase objects that will be used during the execution.
-     */
-    void RegisterValues(const std::unordered_map<std::string, DynamicValueBasePtr> &values);
-    /**
-     * Updates the value of the \c DynamicValueBase with the \p valueName if it is an expression.
-     */
-    void UpdateValue(const std::string& valueName);
-    /**
-     * Returns the value of the \c DynamicValueBase with the \p valueName.
-     */
-    DynamicValueBasePtr GetValue(const std::string& valueName);
-
-	void CreateInputInterface(const InterfaceName& interfaceName);
-	void CreateOutputInterface(const InterfaceName& interfaceName);
-	std::shared_ptr<ProceduralObject> GetInputProceduralObject(const InterfaceName& interfaceName);
-	bool HasInput(const InterfaceName& interfaceName) const;
-	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(const InterfaceName& interfaceName);
+	void CreateInputInterface(const std::string& interfaceName);
+	void CreateOutputInterface(const std::string& interfaceName);
+	std::shared_ptr<ProceduralObject> GetInputProceduralObject(const std::string& interfaceName);
+	bool HasInput(const std::string& interfaceName) const;
+	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(const std::string& interfaceName);
 	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 
 private:
-	using InterfaceContainer_t =
-	    std::unordered_map<InterfaceName, std::unique_ptr<ProceduralOperationObjectInterface>, InterfaceNameHasher>;
+	using InterfaceContainer_t = std::unordered_map<std::string, std::unique_ptr<ProceduralOperationObjectInterface>>;
 
 	InterfaceContainer_t input_interfaces;
 	InterfaceContainer_t output_interfaces;

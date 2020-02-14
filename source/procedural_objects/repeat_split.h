@@ -12,8 +12,8 @@ class Scope;
 class RepeatSplit : public ProceduralOperation
 {
 public:
-	static const InterfaceName inputGeometry;
-	static const InterfaceName outputGeometry;
+	static const std::string inputGeometry;
+	static const std::string outputGeometry;
 	static const char *name;
 
 	RepeatSplit(ProceduralObjectSystemPtr objectSystem);

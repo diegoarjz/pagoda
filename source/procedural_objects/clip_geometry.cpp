@@ -12,9 +12,9 @@
 
 namespace selector
 {
-const InterfaceName ClipGeometry::inputGeometry("in", 0);
-const InterfaceName ClipGeometry::frontGeometry("front", 0);
-const InterfaceName ClipGeometry::backGeometry("back", 0);
+const std::string ClipGeometry::inputGeometry("in");
+const std::string ClipGeometry::frontGeometry("front");
+const std::string ClipGeometry::backGeometry("back");
 const char* ClipGeometry::name = "ClipGeometry";
 
 ClipGeometry::ClipGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)

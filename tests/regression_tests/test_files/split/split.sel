@@ -1,10 +1,10 @@
 create_box = Operation(operation: "CreateBoxGeometry") {
     xSize: 10, ySize: 10, zSize: 5
 }
-create_box_out = OutputInterface(interface: "out", offset: 0)
+create_box_out = OutputInterface(interface: "out")
 create_box -> create_box_out;
 
-split_in = InputInterface(interface: "in", offset: 0)
+split_in = InputInterface(interface: "in")
 split = Operation(operation: "Split") {
     axis: "x",
     split_count: 3,
@@ -12,15 +12,15 @@ split = Operation(operation: "Split") {
     split_2: 3,
     split_3: 6
 }
-split_out_1 = OutputInterface(interface: "split_1", offset: 0)
-split_out_2 = OutputInterface(interface: "split_2", offset: 0)
-split_out_3 = OutputInterface(interface: "split_3", offset: 0)
+split_out_1 = OutputInterface(interface: "split_1")
+split_out_2 = OutputInterface(interface: "split_2")
+split_out_3 = OutputInterface(interface: "split_3")
 split_in -> split;
 split -> split_out_1;
 split -> split_out_2;
 split -> split_out_3;
 
-export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
     path: $< "geometry" + op.count + ".obj"; >$
 }

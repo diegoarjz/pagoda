@@ -3,13 +3,13 @@ parameter = Parameter() { amount: 10 }
 create_rect = Operation(operation: "CreateRectGeometry") {
     width: $< amount; >$, height: $< amount / 2; >$
 }
-create_rect_out = OutputInterface(interface: "out", offset: 0)
+create_rect_out = OutputInterface(interface: "out")
 
-extrusion_in = InputInterface(interface: "in", offset: 0)
+extrusion_in = InputInterface(interface: "in")
 extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: $< 2 * amount; >$}
-extrusion_out = OutputInterface(interface: "out", offset: 0)
+extrusion_out = OutputInterface(interface: "out")
 
-export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
     path: "geometry.obj"
 }

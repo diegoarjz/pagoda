@@ -14,8 +14,8 @@
 
 namespace selector
 {
-const InterfaceName Scale::s_inputGeometry("in", 0);
-const InterfaceName Scale::s_outputGeometry("out", 0);
+const std::string Scale::s_inputGeometry("in");
+const std::string Scale::s_outputGeometry("out");
 
 Scale::Scale(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {

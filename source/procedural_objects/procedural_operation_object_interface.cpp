@@ -4,15 +4,11 @@
 
 namespace selector
 {
-ProceduralOperationObjectInterface::ProceduralOperationObjectInterface(const InterfaceName& name)
-    : interface_name(name)
+ProceduralOperationObjectInterface::ProceduralOperationObjectInterface(const std::string& name) : interface_name(name)
 {
 }
 
-bool ProceduralOperationObjectInterface::Accepts(ProceduralObjectPtr procedural_object)
-{
-	return true;
-}
+bool ProceduralOperationObjectInterface::Accepts(ProceduralObjectPtr procedural_object) { return true; }
 
 bool ProceduralOperationObjectInterface::AddProceduralObject(ProceduralObjectPtr procedural_object)
 {

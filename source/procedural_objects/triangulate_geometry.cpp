@@ -16,8 +16,8 @@
 
 namespace selector
 {
-const InterfaceName TriangulateGeometry::sInputGeometry("in", 0);
-const InterfaceName TriangulateGeometry::sOutputGeometry("out", 0);
+const std::string TriangulateGeometry::sInputGeometry("in");
+const std::string TriangulateGeometry::sOutputGeometry("out");
 const char* TriangulateGeometry::name = "TriangulateGeometry";
 
 TriangulateGeometry::TriangulateGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)

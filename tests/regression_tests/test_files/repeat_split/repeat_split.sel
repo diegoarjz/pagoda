@@ -1,29 +1,29 @@
 create_box = Operation(operation: "CreateBoxGeometry") {
     xSize: 20, ySize: 20, zSize: 20
 }
-create_box_out = OutputInterface(interface: "out", offset: 0)
+create_box_out = OutputInterface(interface: "out")
 create_box -> create_box_out;
 
-repeat_split_x_in = InputInterface(interface: "in", offset: 0)
+repeat_split_x_in = InputInterface(interface: "in")
 repeat_split_x = Operation(operation: "RepeatSplit") { size: 5, adjust: "false", axis: "x" }
-repeat_split_x_out = OutputInterface(interface: "out", offset: 0)
+repeat_split_x_out = OutputInterface(interface: "out")
 repeat_split_x_in -> repeat_split_x -> repeat_split_x_out;
 
-repeat_split_y_in = InputInterface(interface: "in", offset: 0)
+repeat_split_y_in = InputInterface(interface: "in")
 repeat_split_y = Operation(operation: "RepeatSplit") { size: 5, adjust: "false", axis: "y" }
-repeat_split_y_out = OutputInterface(interface: "out", offset: 0)
+repeat_split_y_out = OutputInterface(interface: "out")
 repeat_split_y_in -> repeat_split_y -> repeat_split_y_out;
 
-repeat_split_z_in = InputInterface(interface: "in", offset: 0)
+repeat_split_z_in = InputInterface(interface: "in")
 repeat_split_z = Operation(operation: "RepeatSplit") { size: 10, adjust: "false", axis: "z" }
-repeat_split_z_out = OutputInterface(interface: "out", offset: 0)
+repeat_split_z_out = OutputInterface(interface: "out")
 repeat_split_z_in -> repeat_split_z -> repeat_split_z_out;
 
 create_box_out -> repeat_split_x_in;
 repeat_split_x_out -> repeat_split_y_in;
 repeat_split_y_out -> repeat_split_z_in;
 
-export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
     path: $< "geometry_" + op.count + ".obj"; >$
 }

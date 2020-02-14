@@ -1,25 +1,25 @@
 create_rect = Operation(operation: "CreateRectGeometry") {
     width: 10, height: 10
 }
-create_rect_out = OutputInterface(interface: "out", offset: 0)
+create_rect_out = OutputInterface(interface: "out")
 
-extrusion_in = InputInterface(interface: "in", offset: 0)
+extrusion_in = InputInterface(interface: "in")
 extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
-extrusion_out = OutputInterface(interface: "out", offset: 0)
+extrusion_out = OutputInterface(interface: "out")
 
-clip_geometry_in = InputInterface(interface: "in", offset: 0)
+clip_geometry_in = InputInterface(interface: "in")
 clip_geometry = Operation(operation: "ClipGeometry") {
     plane: $< Plane(Vector3(0, 0, 4), Vector3(1, 2, 3)); >$
 }
-front_geometry = OutputInterface(interface: "front", offset: 0)
-back_geometry = OutputInterface(interface: "back", offset: 0)
+front_geometry = OutputInterface(interface: "front")
+back_geometry = OutputInterface(interface: "back")
 
-export_front_geometry_in = InputInterface(interface: "in", offset: 0)
+export_front_geometry_in = InputInterface(interface: "in")
 export_front_geometry = Operation(operation: "ExportGeometry") {
     path: "front.obj"
 }
 
-export_back_geometry_in = InputInterface(interface: "in", offset: 0)
+export_back_geometry_in = InputInterface(interface: "in")
 export_back_geometry = Operation(operation: "ExportGeometry") {
     path: "back.obj"
 }
@@ -31,12 +31,12 @@ clip_geometry -> back_geometry;
 front_geometry -> export_front_geometry_in -> export_front_geometry;
 back_geometry -> export_back_geometry_in -> export_back_geometry;
 
-extract_scope_in = InputInterface(interface: "in", offset: 0)
+extract_scope_in = InputInterface(interface: "in")
 extract_scope = Operation(operation: "ExtractScope")
-extract_scope_out = OutputInterface(interface: "out", offset: 0)
+extract_scope_out = OutputInterface(interface: "out")
 extract_scope_in -> extract_scope -> extract_scope_out;
 
-export_scope_in = InputInterface(interface: "in", offset: 0)
+export_scope_in = InputInterface(interface: "in")
 export_scope = Operation(operation: "ExportGeometry") { path: $< "scope" + op.count + ".obj"; >$ }
 
 front_geometry -> extract_scope_in;

@@ -1,24 +1,24 @@
 create_box = Operation(operation: "CreateBoxGeometry") {
     xSize: 10, ySize: 10, zSize: 5
 }
-create_box_out = OutputInterface(interface: "out", offset: 0)
+create_box_out = OutputInterface(interface: "out")
 create_box -> create_box_out;
 
 rotate_in = InputInterface(interface: "in", offset:0)
 rotate = Operation(operation: "Rotate") {
     x: 45, y: 0, z: 0, rotation_order: "x", world: "true"
 }
-rotate_out = OutputInterface(interface: "out", offset: 0)
+rotate_out = OutputInterface(interface: "out")
 rotate_in -> rotate -> rotate_out;
 
 rotate2_in = InputInterface(interface: "in", offset:0)
 rotate2 = Operation(operation: "Rotate") {
     x: 0, y: 45, z: 0, rotation_order: "y", world: "true"
 }
-rotate2_out = OutputInterface(interface: "out", offset: 0)
+rotate2_out = OutputInterface(interface: "out")
 rotate2_in -> rotate2 -> rotate2_out;
 
-export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
     path: "geometry.obj"
 }

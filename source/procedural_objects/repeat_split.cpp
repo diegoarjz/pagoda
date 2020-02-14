@@ -15,8 +15,8 @@
 
 namespace selector
 {
-const InterfaceName RepeatSplit::inputGeometry("in", 0);
-const InterfaceName RepeatSplit::outputGeometry("out", 0);
+const std::string RepeatSplit::inputGeometry("in");
+const std::string RepeatSplit::outputGeometry("out");
 const char* RepeatSplit::name = "RepeatSplit";
 
 RepeatSplit::RepeatSplit(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)

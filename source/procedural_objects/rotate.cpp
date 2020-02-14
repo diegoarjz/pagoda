@@ -17,8 +17,8 @@
 
 namespace selector
 {
-const InterfaceName Rotate::s_inputGeometry("in", 0);
-const InterfaceName Rotate::s_outputGeometry("out", 0);
+const std::string Rotate::s_inputGeometry("in");
+const std::string Rotate::s_outputGeometry("out");
 
 Rotate::Rotate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {

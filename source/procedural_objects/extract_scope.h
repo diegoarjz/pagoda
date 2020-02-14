@@ -8,8 +8,8 @@ namespace selector
 class ExtractScope : public ProceduralOperation
 {
 public:
-	static const InterfaceName inputGeometry;
-	static const InterfaceName outputGeometry;
+	static const std::string inputGeometry;
+	static const std::string outputGeometry;
 	static const char* name;
 
 	ExtractScope(ProceduralObjectSystemPtr objectSystem);

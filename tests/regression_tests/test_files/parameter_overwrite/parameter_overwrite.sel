@@ -3,12 +3,12 @@ parameter = Parameter() { width: 15 }
 create_rect = Operation(operation: "CreateRectGeometry") {
     width: 0, height: 10
 }
-create_rect_out = OutputInterface(interface: "out", offset: 0)
-extrusion_in = InputInterface(interface: "in", offset: 0)
+create_rect_out = OutputInterface(interface: "out")
+extrusion_in = InputInterface(interface: "in")
 extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
-extrusion_out = OutputInterface(interface: "out", offset: 0)
+extrusion_out = OutputInterface(interface: "out")
 
-export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
     path: "geometry.obj"
 }

@@ -14,7 +14,7 @@
 
 namespace selector
 {
-const InterfaceName Split::s_inputGeometry("in", 0);
+const std::string Split::s_inputGeometry("in");
 
 Split::Split(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
@@ -91,10 +91,10 @@ void Split::DoWork()
 	auto axis = get_value_as<std::string>(*GetValue("axis"));
 	auto splitCount = get_value_as<int>(*GetValue("split_count"));
 
-	std::vector<InterfaceName> outInterfaces;
+	std::vector<std::string> outInterfaces;
 	for (auto i = 1; i <= splitCount; ++i)
 	{
-		InterfaceName outInterface("split_" + std::to_string(i), 0);
+		std::string outInterface("split_" + std::to_string(i));
 		CreateOutputInterface(outInterface);
 		outInterfaces.push_back(outInterface);
 	}

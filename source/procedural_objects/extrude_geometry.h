@@ -9,8 +9,8 @@ class ExtrudeGeometry : public ProceduralOperation
 {
 public:
 	static const char* name;
-	static const InterfaceName input_geometry;
-	static const InterfaceName output_geometry;
+	static const std::string input_geometry;
+	static const std::string output_geometry;
 
 	ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtrudeGeometry();

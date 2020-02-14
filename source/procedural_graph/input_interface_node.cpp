@@ -27,19 +27,13 @@ void InputInterfaceNode::SetConstructionArguments(
 	{
 		throw ConstructionArgumentNotFound(GetName(), GetId(), "interface");
 	}
-	auto offsetIter = constructionArgs.find("offset");
 
 	auto interfaceName = get_value_as<std::string>(*(interfaceNameIter->second));
-	uint16_t offset = 0;
-	if (offsetIter != std::end(constructionArgs))
-	{
-		offset = static_cast<uint16_t>(get_value_as<float>(*offsetIter->second));
-	}
-	SetInterfaceName(InterfaceName(interfaceName, offset));
+	SetInterfaceName(interfaceName);
 }
 
-void InputInterfaceNode::SetInterfaceName(const InterfaceName& interfaceName) { m_interfaceName = interfaceName; }
-const InterfaceName& InputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
+void InputInterfaceNode::SetInterfaceName(const std::string& interfaceName) { m_interfaceName = interfaceName; }
+const std::string& InputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
 
 void InputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object) { m_proceduralObjects.push_back(object); }
 
@@ -53,7 +47,7 @@ namespace
 class out_visitor : public NodeVisitor
 {
 public:
-	out_visitor(const InterfaceName& name, std::list<ProceduralObjectPtr>& objects)
+	out_visitor(const std::string& name, std::list<ProceduralObjectPtr>& objects)
 	    : m_interfaceName(name), m_proceduralObjects(objects)
 	{
 	}
@@ -81,7 +75,7 @@ public:
 
 	void Visit(std::shared_ptr<RouterNode> n) override { throw UnsupportedNodeLink("input", "RouterNode"); }
 
-	const InterfaceName& m_interfaceName;
+	const std::string& m_interfaceName;
 	std::list<ProceduralObjectPtr>& m_proceduralObjects;
 };
 }  // namespace

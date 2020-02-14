@@ -28,19 +28,13 @@ void OutputInterfaceNode::SetConstructionArguments(
 	{
 		throw ConstructionArgumentNotFound(GetName(), GetId(), "interface");
 	}
-	auto offsetIter = constructionArgs.find("offset");
 
 	auto interfaceName = get_value_as<std::string>(*interfaceNameIter->second);
-	uint16_t offset = 0;
-	if (offsetIter != std::end(constructionArgs))
-	{
-		offset = static_cast<uint16_t>(get_value_as<float>(*offsetIter->second));
-	}
-	SetInterfaceName(InterfaceName(interfaceName, offset));
+	SetInterfaceName(interfaceName);
 }
 
-void OutputInterfaceNode::SetInterfaceName(const InterfaceName& name) { m_interfaceName = name; }
-const InterfaceName& OutputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
+void OutputInterfaceNode::SetInterfaceName(const std::string& name) { m_interfaceName = name; }
+const std::string& OutputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
 
 void OutputInterfaceNode::AcceptNodeVisitor(NodeVisitor* visitor)
 {

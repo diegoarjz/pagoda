@@ -1,18 +1,18 @@
 create_rect = Operation(operation: "CreateRectGeometry") {
     width: 10, height: 10
 }
-create_rect_out = OutputInterface(interface: "out", offset: 0)
-extrusion_in = InputInterface(interface: "in", offset: 0)
+create_rect_out = OutputInterface(interface: "out")
+extrusion_in = InputInterface(interface: "in")
 extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
-extrusion_out = OutputInterface(interface: "out", offset: 0)
-export_geometry_in = InputInterface(interface: "in", offset: 0)
+extrusion_out = OutputInterface(interface: "out")
+export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
     path: "geometry.obj"
 }
 
-triangulate_geometry_in = InputInterface(interface: "in", offset: 0)
+triangulate_geometry_in = InputInterface(interface: "in")
 triangulate_geometry = Operation(operation: "TriangulateGeometry")
-triangulate_geometry_out = OutputInterface(interface: "out", offset: 0)
+triangulate_geometry_out = OutputInterface(interface: "out")
 
 create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out -> triangulate_geometry_in;
 triangulate_geometry_in -> triangulate_geometry -> triangulate_geometry_out;

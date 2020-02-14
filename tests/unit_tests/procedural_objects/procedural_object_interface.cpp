@@ -25,7 +25,7 @@ protected:
 
 TEST_F(ProceduralOperationObjectInterfaceTest, test_add_object)
 {
-	ProceduralOperationObjectInterface interface(InterfaceName("", 0));
+	ProceduralOperationObjectInterface interface(std::string(""));
 
 	EXPECT_TRUE(interface.AddProceduralObject(procedural_object));
 	EXPECT_EQ(interface.GetFrontProceduralObject(), procedural_object);
@@ -35,7 +35,7 @@ TEST_F(ProceduralOperationObjectInterfaceTest, test_add_object)
 
 TEST_F(ProceduralOperationObjectInterfaceTest, test_add_and_pop_object)
 {
-	ProceduralOperationObjectInterface interface(InterfaceName("", 0));
+	ProceduralOperationObjectInterface interface(std::string(""));
 
 	EXPECT_TRUE(interface.AddProceduralObject(procedural_object));
 	EXPECT_EQ(interface.GetAndPopProceduralObject(), procedural_object);

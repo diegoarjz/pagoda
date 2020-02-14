@@ -9,7 +9,7 @@ class ExportGeometry : public ProceduralOperation
 {
 public:
 	static const char* name;
-	static const InterfaceName inputGeometry;
+	static const std::string inputGeometry;
 
 	ExportGeometry(ProceduralObjectSystemPtr objectSystem);
 	~ExportGeometry();

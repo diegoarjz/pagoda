@@ -17,8 +17,8 @@
 namespace selector
 {
 const char* ExtrudeGeometry::name = "ExtrudeGeometry";
-const InterfaceName ExtrudeGeometry::input_geometry = InterfaceName("in", 0);
-const InterfaceName ExtrudeGeometry::output_geometry = InterfaceName("out", 0);
+const std::string ExtrudeGeometry::input_geometry("in");
+const std::string ExtrudeGeometry::output_geometry("out");
 
 ExtrudeGeometry::ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
@@ -41,7 +41,7 @@ void ExtrudeGeometry::DoWork()
 	while (HasInput(input_geometry))
 	{
 		ProceduralObjectPtr in_object = GetInputProceduralObject(input_geometry);
-        UpdateValue("extrusion_amount");
+		UpdateValue("extrusion_amount");
 
 		float extrusion_amount = get_value_as<float>(*GetValue("extrusion_amount"));
 		Extrusion<Geometry> extrude(extrusion_amount);

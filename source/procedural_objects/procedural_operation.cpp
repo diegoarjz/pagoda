@@ -3,8 +3,8 @@
 #include "procedural_object_system.h"
 
 #include "common/assertions.h"
-#include "procedural_object.h"
 #include "dynamic_value/value_visitor.h"
+#include "procedural_object.h"
 
 #include "../selector.h"
 
@@ -17,12 +17,9 @@ ProceduralOperation::ProceduralOperation(ProceduralObjectSystemPtr proceduralObj
 {
 }
 
-void ProceduralOperation::Execute()
-{
-    DoWork();
-}
+void ProceduralOperation::Execute() { DoWork(); }
 
-bool ProceduralOperation::PushProceduralObject(InterfaceName interface, ProceduralObjectPtr procedural_object)
+bool ProceduralOperation::PushProceduralObject(const std::string& interface, ProceduralObjectPtr procedural_object)
 {
 	START_PROFILE;
 
@@ -41,7 +38,7 @@ bool ProceduralOperation::PushProceduralObject(InterfaceName interface, Procedur
 	return true;
 }
 
-ProceduralObjectPtr ProceduralOperation::PopProceduralObject(const InterfaceName& interface) const
+ProceduralObjectPtr ProceduralOperation::PopProceduralObject(const std::string& interface) const
 {
 	START_PROFILE;
 
@@ -55,7 +52,7 @@ ProceduralObjectPtr ProceduralOperation::PopProceduralObject(const InterfaceName
 	return output_interface->second->GetAndPopProceduralObject();
 }
 
-void ProceduralOperation::CreateInputInterface(const InterfaceName& interfaceName)
+void ProceduralOperation::CreateInputInterface(const std::string& interfaceName)
 {
 	START_PROFILE;
 
@@ -63,7 +60,7 @@ void ProceduralOperation::CreateInputInterface(const InterfaceName& interfaceNam
 	    std::make_pair(interfaceName, std::make_unique<ProceduralOperationObjectInterface>(interfaceName)));
 }
 
-void ProceduralOperation::CreateOutputInterface(const InterfaceName& interfaceName)
+void ProceduralOperation::CreateOutputInterface(const std::string& interfaceName)
 {
 	START_PROFILE;
 
@@ -71,17 +68,17 @@ void ProceduralOperation::CreateOutputInterface(const InterfaceName& interfaceNa
 	    std::make_pair(interfaceName, std::make_unique<ProceduralOperationObjectInterface>(interfaceName)));
 }
 
-std::shared_ptr<ProceduralObject> ProceduralOperation::GetInputProceduralObject(const InterfaceName& interfaceName)
+std::shared_ptr<ProceduralObject> ProceduralOperation::GetInputProceduralObject(const std::string& interfaceName)
 {
 	START_PROFILE;
 
 	auto object = input_interfaces[interfaceName]->GetAndPopProceduralObject();
-    RegisterOrSetMember(interfaceName.ToString(), object);
+	RegisterOrSetMember(interfaceName, object);
 
 	return object;
 }
 
-bool ProceduralOperation::HasInput(const InterfaceName& interfaceName) const
+bool ProceduralOperation::HasInput(const std::string& interfaceName) const
 {
 	START_PROFILE;
 
@@ -90,7 +87,7 @@ bool ProceduralOperation::HasInput(const InterfaceName& interfaceName) const
 	return input_interfaces.find(interfaceName)->second->HasProceduralObjects();
 }
 
-std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObject(const InterfaceName& interfaceName)
+std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObject(const std::string& interfaceName)
 {
 	START_PROFILE;
 
@@ -104,26 +101,23 @@ std::string ProceduralOperation::ToString() const { return "<ProceduralOperation
 
 void ProceduralOperation::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
 
-void ProceduralOperation::RegisterValues(const std::unordered_map<std::string, DynamicValueBasePtr> &values)
+void ProceduralOperation::RegisterValues(const std::unordered_map<std::string, DynamicValueBasePtr>& values)
 {
-    for (const auto& v : values)
-    {
-        RegisterMember(v.first, v.second);
-    }
+	for (const auto& v : values)
+	{
+		RegisterMember(v.first, v.second);
+	}
 }
 
 void ProceduralOperation::UpdateValue(const std::string& valueName)
 {
 	auto expression = std::dynamic_pointer_cast<Expression>(GetValue(valueName));
-    if (expression)
-    {
-        expression->SetDirty();
-    }
+	if (expression)
+	{
+		expression->SetDirty();
+	}
 }
 
-DynamicValueBasePtr ProceduralOperation::GetValue(const std::string& valueName)
-{
-    return GetMember(valueName);
-}
+DynamicValueBasePtr ProceduralOperation::GetValue(const std::string& valueName) { return GetMember(valueName); }
 
 }  // namespace selector

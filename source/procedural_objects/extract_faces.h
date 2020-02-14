@@ -7,8 +7,8 @@ namespace selector
 class ExtractFaces : public ProceduralOperation
 {
 public:
-	static const InterfaceName s_inputGeometry;
-	static const InterfaceName s_outputGeometry;
+	static const std::string s_inputGeometry;
+	static const std::string s_outputGeometry;
 
 	ExtractFaces(ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractFaces();

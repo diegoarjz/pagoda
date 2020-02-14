@@ -9,8 +9,8 @@ namespace selector
 class TriangulateGeometry : public ProceduralOperation
 {
 public:
-	static const InterfaceName sInputGeometry;
-	static const InterfaceName sOutputGeometry;
+	static const std::string sInputGeometry;
+	static const std::string sOutputGeometry;
 	static const char* name;
 
 	TriangulateGeometry(ProceduralObjectSystemPtr objectSystem);

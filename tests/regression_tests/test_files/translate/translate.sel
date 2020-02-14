@@ -1,17 +1,17 @@
 create_box = Operation(operation: "CreateBoxGeometry") {
     xSize: 10, ySize: 10, zSize: 5
 }
-create_box_out = OutputInterface(interface: "out", offset: 0)
+create_box_out = OutputInterface(interface: "out")
 create_box -> create_box_out;
 
 translate_in = InputInterface(interface: "in", offset:0)
 translate = Operation(operation: "Translate") {
     x: 1, y: 2, z: 3, world: "true"
 }
-translate_out = OutputInterface(interface: "out", offset: 0)
+translate_out = OutputInterface(interface: "out")
 translate_in -> translate -> translate_out;
 
-export_geometry_in = InputInterface(interface: "in", offset: 0)
+export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
     path: "geometry.obj"
 }

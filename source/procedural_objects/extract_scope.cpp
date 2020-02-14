@@ -10,8 +10,8 @@
 
 namespace selector
 {
-const InterfaceName ExtractScope::inputGeometry("in", 0);
-const InterfaceName ExtractScope::outputGeometry("out", 0);
+const std::string ExtractScope::inputGeometry("in");
+const std::string ExtractScope::outputGeometry("out");
 const char* ExtractScope::name = "ExtractScope";
 
 ExtractScope::ExtractScope(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)

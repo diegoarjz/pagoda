@@ -14,8 +14,8 @@
 
 namespace selector
 {
-const InterfaceName Translate::s_inputGeometry("in", 0);
-const InterfaceName Translate::s_outputGeometry("out", 0);
+const std::string Translate::s_inputGeometry("in");
+const std::string Translate::s_outputGeometry("out");
 
 Translate::Translate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {

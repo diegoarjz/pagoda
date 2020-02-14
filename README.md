@@ -111,25 +111,27 @@ You will then have a rect.obj file with the square.
 
 ## Version 0.1
 
-- [ ] Basic maths library
-- [ ] Basic geometry representation
-- [ ] Procedural Object System
-    - [ ] Component System
-    - [ ] Geometry Component
+- [x] Basic maths library
+- [x] Basic geometry representation
+- [x] Procedural Object System
+    - [x] Component System
+    - [x] Geometry Component
 - [ ] Basic geometry operations
-    - [ ] Create Rectangle
-    - [ ] Extrusion
-    - [ ] Split
-    - [ ] Repeat split
-    - [ ] Component split
+    - [x] Create Rectangle
+    - [ ] Create Sphere
+    - [x] Create Box
+    - [x] Extrusion
+    - [x] Split
+    - [x] Repeat split
+    - [x] Extract Faces
     - [ ] Offset
-    - [ ] Rotation
-    - [ ] Translation
-    - [ ] Scale
+    - [x] Rotation
+    - [x] Translation
+    - [x] Scale
     - [ ] Geometry Triangulation
-- [ ] Procedural graph
-    - [ ] Parametrised procedural rules
-    - [ ] Expressions in parameters
-    - [ ] Basic procedural graph reader
-- [ ] Basic geometry exporter
+- [x] Procedural graph
+    - [x] Parametrised procedural rules
+    - [x] Expressions in parameters
+    - [x] Basic procedural graph reader
+- [x] Basic geometry exporter
 

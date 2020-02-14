@@ -8,7 +8,7 @@ namespace selector
 class CreateBoxGeometry : public ProceduralOperation
 {
 public:
-	static const InterfaceName outputGeometry;
+	static const std::string outputGeometry;
 	static const char* name;
 
 	CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem);

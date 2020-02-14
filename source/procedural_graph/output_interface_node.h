@@ -8,7 +8,6 @@
 
 namespace selector
 {
-struct InterfaceName;
 class ProceduralOperation;
 using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
 class ProceduralObject;
@@ -26,14 +25,14 @@ public:
 
 	void Execute(const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;
 
-	void SetInterfaceName(const InterfaceName& name);
-	const InterfaceName& GetInterfaceName() const;
+	void SetInterfaceName(const std::string& name);
+	const std::string& GetInterfaceName() const;
 	const std::list<ProceduralObjectPtr>& GetProceduralObjects() const { return m_proceduralObjects; }
 	void AddProceduralObject(ProceduralObjectPtr object);
 	void AcceptNodeVisitor(NodeVisitor* visitor) override;
 
 private:
-	InterfaceName m_interfaceName;
+	std::string m_interfaceName;
 	std::list<ProceduralObjectPtr> m_proceduralObjects;
 };  // class OutputInterfaceNode
 }  // namespace selector

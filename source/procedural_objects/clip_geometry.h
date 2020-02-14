@@ -8,9 +8,9 @@ namespace selector
 class ClipGeometry : public ProceduralOperation
 {
 public:
-	static const InterfaceName inputGeometry;
-	static const InterfaceName frontGeometry;
-	static const InterfaceName backGeometry;
+	static const std::string inputGeometry;
+	static const std::string frontGeometry;
+	static const std::string backGeometry;
 	static const char* name;
 
 	ClipGeometry(ProceduralObjectSystemPtr objectSystem);

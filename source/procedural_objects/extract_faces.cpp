@@ -11,8 +11,8 @@
 
 namespace selector
 {
-const InterfaceName ExtractFaces::s_inputGeometry("in", 0);
-const InterfaceName ExtractFaces::s_outputGeometry("out", 0);
+const std::string ExtractFaces::s_inputGeometry("in");
+const std::string ExtractFaces::s_outputGeometry("out");
 
 ExtractFaces::ExtractFaces(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {

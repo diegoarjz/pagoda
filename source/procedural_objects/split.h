@@ -7,7 +7,7 @@ namespace selector
 class Split : public ProceduralOperation
 {
 public:
-	static const InterfaceName s_inputGeometry;
+	static const std::string s_inputGeometry;
 
 	Split(ProceduralObjectSystemPtr objectSystem);
 	virtual ~Split();
