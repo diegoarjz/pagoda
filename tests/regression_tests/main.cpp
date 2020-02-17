@@ -104,7 +104,7 @@ REGRESSION_TEST(repeat_split, "geometry_0.obj", "geometry_11.obj", "geometry_14.
                 "geometry_3.obj", "geometry_4.obj", "geometry_7.obj")
 REGRESSION_TEST(extract_faces, "geometry0.obj", "geometry1.obj", "geometry2.obj", "geometry3.obj", "geometry4.obj",
                 "geometry5.obj")
-REGRESSION_TEST(router, "left0.obj", "right0.obj", "front0.obj", "back0.obj", "up0.obj", "down0.obj");
+REGRESSION_TEST(router, "left0.obj", "right0.obj", "front0.obj", "back0.obj", "up0.obj", "down0.obj")
 REGRESSION_TEST(split, "geometry0.obj", "geometry1.obj", "geometry2.obj")
 REGRESSION_TEST(scale, "geometry_scope_center.obj", "geometry_scope_origin.obj", "geometry_world_origin.obj")
 REGRESSION_TEST(rotate, "geometry.obj")
