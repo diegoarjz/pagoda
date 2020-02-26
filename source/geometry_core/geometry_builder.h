@@ -100,9 +100,13 @@ public:
 				                            << " . Position: " << m_builder->m_pointData.Get(i).m_position);
 			}
 
-			auto face = m_geometry->CreateFace(m_builder->m_pointData.Get(m_faceIndices[0]).m_index,
-			                                   m_builder->m_pointData.Get(m_faceIndices[1]).m_index,
-			                                   m_builder->m_pointData.Get(m_faceIndices[2]).m_index);
+			auto pd0 = m_builder->m_pointData.Get(m_faceIndices[0]);
+			auto pd1 = m_builder->m_pointData.Get(m_faceIndices[1]);
+			auto pd2 = m_builder->m_pointData.Get(m_faceIndices[2]);
+			auto normal = cross_product(pd0.m_position - pd1.m_position, pd2.m_position - pd1.m_position);
+
+			auto face = m_geometry->CreateFace(pd0.m_index, pd1.m_index, pd2.m_index);
+			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
 			for (auto i = 0u; i < 3; ++i)
 			{
 				m_builder->m_pointData.Get(m_faceIndices[i]).m_index = m_geometry->GetPoint(face.m_splitPoints[i]);
@@ -130,6 +134,11 @@ public:
 				}
 				m_geometry->SetPosition(pointData.m_index, pointData.m_position);
 				currentEdge = m_geometry->GetNextEdge(currentEdge);
+			}
+
+			for (auto fpIter = m_geometry->FacePointCirculatorBegin(face.m_face); fpIter.IsValid(); ++fpIter)
+			{
+				m_geometry->GetVertexAttributes(*fpIter).m_normal = normal;
 			}
 
 			return face.m_face;

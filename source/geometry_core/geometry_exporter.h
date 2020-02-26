@@ -19,6 +19,8 @@ protected:
 	using IndexType = typename Geometry::Index_t;
 	/// Convenience alias for a Geometry position
 	using PositionType = typename Geometry::PositionType;
+	/// Convenience alias for Vertex Attributes
+	using VertexAttributes = typename Geometry::VertexAttributes;
 
 public:
 	GeometryExporter(GeometryPtr geom) : m_geometry(geom) {}
@@ -28,38 +30,40 @@ public:
 	 */
 	bool Export(std::ostream &outStream)
 	{
-        std::unordered_map<typename Geometry::Index_t, std::size_t> geometryToExportMap;
-        std::size_t pointIndex = 0;
+		std::unordered_map<typename Geometry::Index_t, std::size_t> geometryToExportMap;
+		std::size_t pointIndex = 0;
 
-        StartGeometry(outStream);
+		StartGeometry(outStream);
 
-        for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter)
-        {
-            auto pointHandle = m_geometry->GetPoint(*iter);
-            if (geometryToExportMap.find(pointHandle) == std::end(geometryToExportMap))
-            {
-                geometryToExportMap[pointHandle] = pointIndex++;
-                ExportPoint(outStream, m_geometry->GetPosition(m_geometry->GetPoint(*iter)));
-            }
-        }
+		for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter)
+		{
+			auto pointHandle = m_geometry->GetPoint(*iter);
+			if (geometryToExportMap.find(pointHandle) == std::end(geometryToExportMap))
+			{
+				geometryToExportMap[pointHandle] = pointIndex++;
+				auto point = m_geometry->GetPoint(*iter);
+				ExportPoint(outStream, m_geometry->GetPosition(point), m_geometry->GetVertexAttributes(point));
+			}
+		}
 
-        for (auto faceIter = m_geometry->FacesBegin(); faceIter != m_geometry->FacesEnd(); ++faceIter)
-        {
-            StartFace(outStream);
-            auto circ = m_geometry->FaceSplitPointCirculatorBegin(*faceIter);
-            while (circ)
-            {
-                FaceAddIndex(outStream, geometryToExportMap[m_geometry->GetPoint(*circ)]);
-                ++circ;
-            }
-            EndFace(outStream);
-        }
+		for (auto faceIter = m_geometry->FacesBegin(); faceIter != m_geometry->FacesEnd(); ++faceIter)
+		{
+			StartFace(outStream);
+			auto circ = m_geometry->FaceSplitPointCirculatorBegin(*faceIter);
+			while (circ)
+			{
+				FaceAddIndex(outStream, geometryToExportMap[m_geometry->GetPoint(*circ)]);
+				++circ;
+			}
+			EndFace(outStream);
+		}
 		return true;
 	}
 
 protected:
 	virtual void StartGeometry(std::ostream &outStream) = 0;
-	virtual void ExportPoint(std::ostream &outStream, const PositionType &position) = 0;
+	virtual void ExportPoint(std::ostream &outStream, const PositionType &position,
+	                         const VertexAttributes &vAttributes) = 0;
 	virtual void StartFace(std::ostream &outStream) = 0;
 	virtual void FaceAddIndex(std::ostream &outStream, const IndexType &index) = 0;
 	virtual void EndFace(std::ostream &outStream) = 0;
@@ -83,16 +87,19 @@ public:
 protected:
 	void StartGeometry(std::ostream &outStream) final {}
 
-	void ExportPoint(std::ostream &outStream, const typename GeometryExporter<G>::PositionType &position) final
+	void ExportPoint(std::ostream &outStream, const typename GeometryExporter<G>::PositionType &position,
+	                 const typename GeometryExporter<G>::VertexAttributes &vAttributes) final
 	{
-		outStream << "v " << position[0] << " " << position[1] << " " << position[2] << "\n";
+		outStream << "v " << position.X() << " " << position.Y() << " " << position.Z() << "\n";
+		outStream << "n " << vAttributes.m_normal.X() << " " << vAttributes.m_normal.Y() << " "
+		          << vAttributes.m_normal.Z() << "\n";
 	}
 
 	void StartFace(std::ostream &outStream) final { outStream << "f "; }
 
 	void FaceAddIndex(std::ostream &outStream, const typename GeometryExporter<G>::IndexType &index) final
 	{
-		outStream << (index + 1) << " ";
+		outStream << (index + 1) << "//" << (index + 1) << " ";
 	}
 
 	void EndFace(std::ostream &outStream) final { outStream << "\n"; }
