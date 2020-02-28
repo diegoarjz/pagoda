@@ -24,6 +24,8 @@ public:
 		s_testFilesDirectory = boost::filesystem::path(path).remove_filename();
 	}
 
+	static void SetShouldWriteFiles(const bool& write) { s_writeFiles = write; }
+
 	static boost::filesystem::path GetTestFilesDirectory() { return s_testFilesDirectory; }
 
 	RegressionTest(const std::string& name, const std::vector<std::string>& filesToMatch)
@@ -64,9 +66,16 @@ public:
 	{
 		for (const auto& f : m_filesToMatch)
 		{
-			std::string expectedFile = FileUtil::LoadFileToString(GetExpectedResultFile(f).string());
 			std::string resultFile = FileUtil::LoadFileToString(f);
-			EXPECT_EQ(expectedFile, resultFile);
+			if (s_writeFiles)
+			{
+				FileUtil::WriteStringToFile(GetExpectedResultFile(f).string(), resultFile);
+			}
+			else
+			{
+				std::string expectedFile = FileUtil::LoadFileToString(GetExpectedResultFile(f).string());
+				EXPECT_EQ(expectedFile, resultFile);
+			}
 		}
 	}
 
@@ -78,8 +87,10 @@ private:
 	Selector m_selector;
 
 	static boost::filesystem::path s_testFilesDirectory;
+	static bool s_writeFiles;
 };
 boost::filesystem::path RegressionTest::s_testFilesDirectory = "";
+bool RegressionTest::s_writeFiles = false;
 
 #define REGRESSION_TEST(NAME, ...) \
 	TEST(RegressionTestCase, NAME) { RegressionTest(#NAME, {__VA_ARGS__}); }
@@ -139,6 +150,7 @@ REGRESSION_TEST(banner, "geometry0.obj", "geometry107.obj", "geometry18.obj", "g
 int main(int argc, char* argv[])
 {
 	RegressionTest::SetExecutablePath(argv[0]);
+	RegressionTest::SetShouldWriteFiles(false);
 	::testing::InitGoogleTest(&argc, argv);
 
 	auto returnVal = RUN_ALL_TESTS();
