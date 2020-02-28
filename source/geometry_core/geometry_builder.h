@@ -104,6 +104,10 @@ public:
 			auto pd1 = m_builder->m_pointData.Get(m_faceIndices[1]);
 			auto pd2 = m_builder->m_pointData.Get(m_faceIndices[2]);
 			auto normal = cross_product(pd0.m_position - pd1.m_position, pd2.m_position - pd1.m_position);
+			if (squared_length(normal) != 0)
+			{
+				normal = normalized(normal);
+			}
 
 			auto face = m_geometry->CreateFace(pd0.m_index, pd1.m_index, pd2.m_index);
 			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
