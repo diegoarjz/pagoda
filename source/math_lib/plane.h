@@ -1,12 +1,11 @@
 #ifndef SELECTOR_MATH_LIB_PLANE_H_
 #define SELECTOR_MATH_LIB_PLANE_H_
 
+#include "orthogonal.h"
 #include "vec_base.h"
 
-#include "cross_product.h"
-#include "dot_product.h"
-#include "normalize.h"
-#include "orthogonal.h"
+#include <boost/qvm/vec.hpp>
+#include <boost/qvm/vec_operations.hpp>
 
 namespace selector
 {
@@ -14,13 +13,13 @@ template<class Rep>
 class Plane
 {
 public:
-	using VectorType = VecBase<3, Rep>;
-	using PointType = VecBase<3, Rep>;
+	using VectorType = boost::qvm::vec<Rep, 3>;
+	using PointType = boost::qvm::vec<Rep, 3>;
 
 	/**
 	 * Constructs the xy-plane;
 	 */
-	Plane() : m_normal(0, 0, 1), m_distance(0) {}
+	Plane() : m_normal{0, 0, 1}, m_distance{0} {}
 
 	/**
 	 * Constructs a plane with the \p normal and \p distance.
@@ -32,8 +31,8 @@ public:
 	 */
 	static Plane FromPointAndNormal(const PointType &p, const VectorType &n)
 	{
-		auto normal = normalized(n);
-		auto distanceToOrigin = dot_product(normal, p);
+		auto normal = boost::qvm::normalized(n);
+		auto distanceToOrigin = boost::qvm::dot(normal, p);
 		return Plane(normal, distanceToOrigin);
 	}
 
@@ -44,8 +43,8 @@ public:
 	 */
 	static Plane FromPoints(const PointType &p, const PointType &p1, const PointType &p2)
 	{
-		auto normal = normalized(cross_product(p1 - p, p2 - p));
-		auto distanceToOrigin = dot_product(normal, p);
+		auto normal = boost::qvm::normalized(boost::qvm::cross(p1 - p, p2 - p));
+		auto distanceToOrigin = boost::qvm::dot(normal, p);
 		return Plane(normal, distanceToOrigin);
 	}
 
@@ -55,8 +54,8 @@ public:
 	 */
 	static Plane FromPointAndVectors(const PointType &p, const VectorType &v1, const VectorType &v2)
 	{
-		auto normal = normalized(cross_product(v1, v2));
-		auto distanceToOrigin = dot_product(normal, p);
+		auto normal = boost::qvm::normalized(boost::qvm::cross(v1, v2));
+		auto distanceToOrigin = boost::qvm::dot(normal, p);
 		return Plane(normal, distanceToOrigin);
 	}
 
@@ -75,7 +74,7 @@ public:
 	 * Returns a vector that is orthogonal to the one return by GetNormal() and GetVector().
 	 * The returned vector may not be normalized.
 	 */
-	VectorType GetVector2() const { return cross_product(GetVector(), GetNormal()); }
+	VectorType GetVector2() const { return boost::qvm::cross(GetVector(), GetNormal()); }
 
 	/**
 	 * Returns the distance between the plane and the origin.
@@ -107,7 +106,7 @@ public:
 	 */
 	PlaneSide GetPlaneSide(const VectorType &point)
 	{
-		auto dot = dot_product(GetNormal(), point - GetPoint());
+		auto dot = boost::qvm::dot(GetNormal(), point - GetPoint());
 		if (dot == Rep(0))
 		{
 			return PlaneSide::Contained;

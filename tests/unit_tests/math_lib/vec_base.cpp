@@ -1,10 +1,5 @@
 #include <math_lib/vec_base.h>
 
-#include <math_lib/cross_product.h>
-#include <math_lib/dot_product.h>
-#include <math_lib/length.h>
-#include <math_lib/normalize.h>
-
 #include <iterator>
 
 #include <gtest/gtest.h>
@@ -22,25 +17,16 @@ TEST(VecBase, when_using_default_constructor_should_initizalize_all_elements_to_
 
 TEST(VecBase, when_using_values_constructor_should_initialize_all_elements_accordingly)
 {
-	VecBase<3, float> v(1, 2, 3);
+	VecBase<3, float> v{1, 2, 3};
 
 	EXPECT_EQ(v[0], 1);
 	EXPECT_EQ(v[1], 2);
 	EXPECT_EQ(v[2], 3);
 }
 
-TEST(VecBase, when_using_value_constructor_should_initialize_all_elements_to_value)
-{
-	VecBase<3, float> v(1.23f);
-
-	EXPECT_EQ(v[0], 1.23f);
-	EXPECT_EQ(v[1], 1.23f);
-	EXPECT_EQ(v[2], 1.23f);
-}
-
 TEST(VecBase, when_using_copy_constructor_should_copy_all_elements)
 {
-	VecBase<3, float> rhs(1.0f, 2.0f, 4.2f);
+	VecBase<3, float> rhs{1.0f, 2.0f, 4.2f};
 	VecBase<3, float> lhs = rhs;
 
 	EXPECT_EQ(lhs[0], 1.0f);
@@ -50,8 +36,8 @@ TEST(VecBase, when_using_copy_constructor_should_copy_all_elements)
 
 TEST(VecBase, when_assigning_should_update_all_values)
 {
-	VecBase<3, float> lhs(0, 0, 0);
-	VecBase<3, float> rhs(1, 2, 3);
+	VecBase<3, float> lhs{0, 0, 0};
+	VecBase<3, float> rhs{1, 2, 3};
 
 	lhs = rhs;
 
@@ -62,7 +48,7 @@ TEST(VecBase, when_assigning_should_update_all_values)
 
 TEST(VecBase, when_dereferencing_should_return_an_array)
 {
-	VecBase<3, float> vec(2, 3, 1);
+	VecBase<3, float> vec{2, 3, 1};
 	float *elementPtr = static_cast<float *>(vec);
 
 	float expected[] = {2, 3, 1};
@@ -75,28 +61,28 @@ TEST(VecBase, when_dereferencing_should_return_an_array)
 
 TEST(VecBase, when_adding_two_vectors_should_add_each_component)
 {
-	VecBase<3, float> lhs(4, 4, 4);
-	VecBase<3, float> rhs(1, 2, 3);
+	VecBase<3, float> lhs{4, 4, 4};
+	VecBase<3, float> rhs{1, 2, 3};
 	auto result = lhs + rhs;
-	VecBase<3, float> expected(5, 6, 7);
+	VecBase<3, float> expected{5, 6, 7};
 
 	EXPECT_EQ(result, expected);
 }
 
 TEST(VecBase, when_subtracting_two_vectors_should_subtract_each_component)
 {
-	VecBase<3, float> lhs(4, 4, 4);
-	VecBase<3, float> rhs(1, 2, 3);
+	VecBase<3, float> lhs{4, 4, 4};
+	VecBase<3, float> rhs{1, 2, 3};
 	auto result = lhs - rhs;
-	VecBase<3, float> expected(3, 2, 1);
+	VecBase<3, float> expected{3, 2, 1};
 
 	EXPECT_EQ(result, expected);
 }
 
 TEST(VecBase, when_multiplying_by_a_scalar_should_multiply_all_elements_by_the_scalar)
 {
-	VecBase<3, float> vec(1, 2, 3);
-	VecBase<3, float> expected(2, 4, 6);
+	VecBase<3, float> vec{1, 2, 3};
+	VecBase<3, float> expected{2, 4, 6};
 
 	EXPECT_EQ((2 * vec), expected);
 	EXPECT_EQ((vec * 2), expected);

@@ -18,24 +18,21 @@ using GeometryType = GeometryBase<>;
 class GeometryExporterTest : public SelectorTestFixture<::testing::Test>
 {
 public:
-	void SetUp()
-    {
-        m_geometry = std::make_shared<GeometryType>();
-    }
+	void SetUp() { m_geometry = std::make_shared<GeometryType>(); }
 
 	void TearDown() {}
 
-    std::shared_ptr<GeometryType> m_geometry;
+	std::shared_ptr<GeometryType> m_geometry;
 };
 
 TEST_F(GeometryExporterTest, geometry_exporter_export_obj_one_face)
 {
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 
-	builder.AddPoint(Vec3F(0, 0, 0));
-	builder.AddPoint(Vec3F(1, 0, 0));
-	builder.AddPoint(Vec3F(1, 1, 0));
-	builder.AddPoint(Vec3F(0, 1, 0));
+	builder.AddPoint(Vec3F{0, 0, 0});
+	builder.AddPoint(Vec3F{1, 0, 0});
+	builder.AddPoint(Vec3F{1, 1, 0});
+	builder.AddPoint(Vec3F{0, 1, 0});
 
 	auto face = builder.StartFace(4);
 	face.AddIndex(0);
@@ -48,8 +45,8 @@ TEST_F(GeometryExporterTest, geometry_exporter_export_obj_one_face)
 	std::stringstream ss;
 	exporter.Export(ss);
 
-    MatchFile match(GetCurrentTestFileResultsDirectory() /= "geometry.obj", GetShouldWriteFiles());
-    match.Match(ss.str());
+	MatchFile match(GetCurrentTestFileResultsDirectory() /= "geometry.obj", GetShouldWriteFiles());
+	match.Match(ss.str());
 }
 
 TEST_F(GeometryExporterTest, geometry_exporter_export_cube)
@@ -57,16 +54,16 @@ TEST_F(GeometryExporterTest, geometry_exporter_export_cube)
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 
 	// Bottom face
-	builder.AddPoint(Vec3F(0, 0, 0));
-	builder.AddPoint(Vec3F(1, 0, 0));
-	builder.AddPoint(Vec3F(1, 1, 0));
-	builder.AddPoint(Vec3F(0, 1, 0));
+	builder.AddPoint(Vec3F{0, 0, 0});
+	builder.AddPoint(Vec3F{1, 0, 0});
+	builder.AddPoint(Vec3F{1, 1, 0});
+	builder.AddPoint(Vec3F{0, 1, 0});
 
 	// Top face
-	builder.AddPoint(Vec3F(0, 0, 1));
-	builder.AddPoint(Vec3F(1, 0, 1));
-	builder.AddPoint(Vec3F(1, 1, 1));
-	builder.AddPoint(Vec3F(0, 1, 1));
+	builder.AddPoint(Vec3F{0, 0, 1});
+	builder.AddPoint(Vec3F{1, 0, 1});
+	builder.AddPoint(Vec3F{1, 1, 1});
+	builder.AddPoint(Vec3F{0, 1, 1});
 
 	auto bottomFace = builder.StartFace(4);
 	auto topFace = builder.StartFace(4);
@@ -107,6 +104,6 @@ TEST_F(GeometryExporterTest, geometry_exporter_export_cube)
 
 	std::stringstream ss;
 	exporter.Export(ss);
-    MatchFile match(GetCurrentTestFileResultsDirectory() /= "geometry.obj", GetShouldWriteFiles());
-    match.Match(ss.str());
+	MatchFile match(GetCurrentTestFileResultsDirectory() /= "geometry.obj", GetShouldWriteFiles());
+	match.Match(ss.str());
 }

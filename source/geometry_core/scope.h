@@ -5,7 +5,9 @@
 #include <math_lib/plane.h>
 #include <math_lib/vec_base.h>
 
-#include <math_lib/cross_product.h>
+#include <boost/qvm/map_mat_vec.hpp>
+#include <boost/qvm/swizzle.hpp>
+#include <boost/qvm/vec_operations.hpp>
 
 #include <array>
 #include <memory>
@@ -93,9 +95,9 @@ public:
 		auto pIter = geom->PointsBegin();
 		auto p0 = geom->GetPosition(*pIter);
 		s.SetRotation(rotation);
-		auto xAxis = rotation.Col(0);
-		auto yAxis = rotation.Col(1);
-		auto zAxis = rotation.Col(2);
+		auto xAxis = Vec3F(boost::qvm::col<0>(rotation));
+		auto yAxis = Vec3F(boost::qvm::col<1>(rotation));
+		auto zAxis = Vec3F(boost::qvm::col<2>(rotation));
 
 		float minX = std::numeric_limits<float>::max();
 		float maxX = -std::numeric_limits<float>::max();
@@ -108,9 +110,9 @@ public:
 		for (/**/; pIter != pIterEnd; ++pIter)
 		{
 			auto diff = geom->GetPosition(*pIter) - p0;
-			float xProjection = dot_product(xAxis, diff);
-			float yProjection = dot_product(yAxis, diff);
-			float zProjection = dot_product(zAxis, diff);
+			float xProjection = boost::qvm::dot(xAxis, diff);
+			float yProjection = boost::qvm::dot(yAxis, diff);
+			float zProjection = boost::qvm::dot(zAxis, diff);
 
 			minX = std::min(minX, xProjection);
 			maxX = std::max(maxX, xProjection);
@@ -119,7 +121,7 @@ public:
 			minZ = std::min(minZ, zProjection);
 			maxZ = std::max(maxZ, zProjection);
 		}
-		Vec3F size(maxX - minX, maxY - minY, maxZ - minZ);
+		Vec3F size{maxX - minX, maxY - minY, maxZ - minZ};
 		s.SetPosition(p0 + xAxis * minX + yAxis * minY + zAxis * minZ);
 		s.SetSize(size);
 
@@ -139,13 +141,13 @@ public:
 
 		auto xAxis = normalized(p1 - p0);
 		auto yAxis = p2 - p1;
-		auto zAxis = normalized(cross_product(xAxis, yAxis));
-		yAxis = normalized(cross_product(zAxis, xAxis));
+		auto zAxis = boost::qvm::normalized(boost::qvm::cross(xAxis, yAxis));
+		yAxis = boost::qvm::normalized(boost::qvm::cross(zAxis, xAxis));
 
 		Mat3x3F rotation;
-		rotation.SetCol(0, xAxis);
-		rotation.SetCol(1, yAxis);
-		rotation.SetCol(2, zAxis);
+		boost::qvm::col<0>(rotation) = xAxis;
+		boost::qvm::col<1>(rotation) = yAxis;
+		boost::qvm::col<2>(rotation) = zAxis;
 
 		return Scope::FromGeometryAndConstrainedRotation(geom, rotation);
 	}

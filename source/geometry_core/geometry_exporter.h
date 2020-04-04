@@ -5,6 +5,9 @@
 
 #include "geometry.h"
 
+#include <boost/qvm/vec.hpp>
+#include <boost/qvm/vec_access.hpp>
+
 namespace selector
 {
 template<class G>
@@ -90,9 +93,9 @@ protected:
 	void ExportPoint(std::ostream &outStream, const typename GeometryExporter<G>::PositionType &position,
 	                 const typename GeometryExporter<G>::VertexAttributes &vAttributes) final
 	{
-		outStream << "v " << position.X() << " " << position.Y() << " " << position.Z() << "\n";
-		outStream << "n " << vAttributes.m_normal.X() << " " << vAttributes.m_normal.Y() << " "
-		          << vAttributes.m_normal.Z() << "\n";
+		outStream << "v " << X(position) << " " << Y(position) << " " << Z(position) << "\n";
+		outStream << "n " << X(vAttributes.m_normal) << " " << Y(vAttributes.m_normal) << " " << Z(vAttributes.m_normal)
+		          << "\n";
 	}
 
 	void StartFace(std::ostream &outStream) final { outStream << "f "; }

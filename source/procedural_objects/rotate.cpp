@@ -15,6 +15,9 @@
 
 #include "geometry_operations/matrix_transform.h"
 
+#include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/mat_operations.hpp>
+
 namespace selector
 {
 const std::string Rotate::s_inputGeometry("in");
@@ -65,10 +68,14 @@ void Rotate::DoWork()
 		auto rotationOrder = get_value_as<std::string>(*GetValue("rotation_order"));
 		auto world = get_value_as<std::string>(*GetValue("world")) == "true";
 
-		Mat4x4F matrix(1);
+		Mat4x4F matrix(boost::qvm::diag_mat(Vec4F{1.0f, 1.0f, 1.0f, 1.0f}));
 		if (world)
 		{
-			matrix = Mat4x4F(inScope.GetRotation());
+			auto rot = inScope.GetRotation();
+			boost::qvm::col<0>(matrix) = XYZ0(boost::qvm::col<0>(rot));
+			boost::qvm::col<1>(matrix) = XYZ0(boost::qvm::col<1>(rot));
+			boost::qvm::col<2>(matrix) = XYZ0(boost::qvm::col<2>(rot));
+			boost::qvm::col<3>(matrix) = Vec4F{0, 0, 0, 1};
 		}
 
 		for (std::size_t i = rotationOrder.size(); i > 0; --i)
@@ -77,13 +84,13 @@ void Rotate::DoWork()
 			switch (order)
 			{
 				case 'x':
-					matrix = matrix * rotate_x_matrix(Radians(x));
+					matrix = matrix * boost::qvm::rotx_mat<4>(static_cast<float>(Radians(x)));
 					break;
 				case 'y':
-					matrix = matrix * rotate_y_matrix(Radians(y));
+					matrix = matrix * boost::qvm::roty_mat<4>(static_cast<float>(Radians(y)));
 					break;
 				case 'z':
-					matrix = matrix * rotate_z_matrix(Radians(z));
+					matrix = matrix * boost::qvm::rotz_mat<4>(static_cast<float>(Radians(z)));
 					break;
 				default:
 					throw Exception("Invalid rotation order " + std::string(1, order));
@@ -92,17 +99,27 @@ void Rotate::DoWork()
 
 		if (world)
 		{
-			matrix = matrix * Mat4x4F(inScope.GetInverseRotation());
+			auto rot = inScope.GetInverseRotation();
+			Mat4x4F invRot;
+			boost::qvm::col<0>(invRot) = XYZ0(boost::qvm::col<0>(rot));
+			boost::qvm::col<1>(invRot) = XYZ0(boost::qvm::col<1>(rot));
+			boost::qvm::col<2>(invRot) = XYZ0(boost::qvm::col<2>(rot));
+			boost::qvm::col<3>(invRot) = Vec4F{0, 0, 0, 1};
+			matrix = matrix * invRot;
 		}
 
 		MatrixTransform<Geometry> transform(matrix);
 		transform.Execute(inGeometry, outGeometry);
+		Mat3x3F rot;
+		boost::qvm::col<0>(rot) = XYZ(boost::qvm::col<0>(matrix));
+		boost::qvm::col<1>(rot) = XYZ(boost::qvm::col<1>(matrix));
+		boost::qvm::col<2>(rot) = XYZ(boost::qvm::col<2>(matrix));
 		outGeometryComponent->SetScope(
-		    Scope::FromGeometryAndConstrainedRotation(outGeometry, Mat3x3F(matrix) * inScope.GetRotation()));
+		    Scope::FromGeometryAndConstrainedRotation(outGeometry, rot * inScope.GetRotation()));
 
 		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
 		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
-}
+}  // namespace selector
 }  // namespace selector

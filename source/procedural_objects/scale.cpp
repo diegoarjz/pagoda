@@ -12,6 +12,9 @@
 
 #include "geometry_operations/matrix_transform.h"
 
+#include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/mat_operations.hpp>
+
 namespace selector
 {
 const std::string Scale::s_inputGeometry("in");
@@ -62,16 +65,20 @@ void Scale::DoWork()
 		if (pivotalPointName == "scope_center")
 		{
 			Vec3F pivotalPoint = inScope.GetCenterPointInWorld();
-			matrix = translate_matrix(pivotalPoint) * scale_matrix(x, y, z) * translate_matrix(-1 * pivotalPoint);
+			Mat4x4F translation = boost::qvm::translation_mat(XYZ(pivotalPoint));
+			Mat4x4F scale = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
+			Mat4x4F invTranslation = boost::qvm::translation_mat(XYZ(-pivotalPoint));
+			matrix = translation * scale * invTranslation;
 		}
 		else if (pivotalPointName == "scope_origin")
 		{
 			Vec3F pivotalPoint = inScope.GetWorldPoint(Scope::BoxPoints::LowerBottomLeft);
-			matrix = translate_matrix(pivotalPoint) * scale_matrix(x, y, z) * translate_matrix(-1 * pivotalPoint);
+			matrix = boost::qvm::translation_mat(pivotalPoint) * boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z})) *
+			         boost::qvm::translation_mat(-pivotalPoint);
 		}
 		else if (pivotalPointName == "world_origin")
 		{
-			matrix = scale_matrix(x, y, z);
+			matrix = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
 		}
 
 		MatrixTransform<Geometry> transform(matrix);

@@ -52,17 +52,17 @@ std::vector<Plane<float>> createPlanes(const Scope &scope, const std::vector<flo
 	if (axis == "x")
 	{
 		scopePlane = scope.GetYZPlane();
-		scopeSize = scope.GetSize()[0];
+		scopeSize = X(scope.GetSize());
 	}
 	else if (axis == "y")
 	{
 		scopePlane = scope.GetXZPlane();
-		scopeSize = scope.GetSize()[1];
+		scopeSize = Y(scope.GetSize());
 	}
 	else
 	{
 		scopePlane = scope.GetXYPlane();
-		scopeSize = scope.GetSize()[2];
+		scopeSize = Z(scope.GetSize());
 	}
 
 	std::vector<Plane<float>> planes;

@@ -6,8 +6,7 @@
 #include <geometry_core/geometry_builder.h>
 #include <geometry_core/geometry_sizes.h>
 
-#include "math_lib/dot_product.h"
-#include "math_lib/normalize.h"
+#include <boost/qvm/vec_operations.hpp>
 
 namespace selector
 {
@@ -23,7 +22,7 @@ public:
 	    : m_width(width), m_height(height), m_xAxis(normalized(xAxis)), m_yAxis(normalized(yAxis))
 	{
 		DBG_ASSERT_MSG(width != 0 && height != 0, "Can't create a rect with zero width or height");
-		DBG_ASSERT_MSG(squared_length(xAxis) > 0 && squared_length(yAxis) > 0,
+		DBG_ASSERT_MSG(boost::qvm::mag_sqr(xAxis) > 0 && boost::qvm::mag_sqr(yAxis) > 0,
 		               "Can't create a rect with a zero length axis");
 	}
 
@@ -34,7 +33,7 @@ public:
 		START_PROFILE;
 		LOG_TRACE(GeometryOperations, "CreateRect. Width: " << m_width << " Height: " << m_height);
 
-		Vec3F center(0, 0, 0);
+		Vec3F center{0, 0, 0};
 		auto half_width = 0.5 * m_width;
 		auto half_height = 0.5 * m_height;
 

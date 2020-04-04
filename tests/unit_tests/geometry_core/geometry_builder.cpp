@@ -50,7 +50,7 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 	for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter)
 	{
 		auto position = m_geometry->GetPosition(m_geometry->GetPoint((*iter)));
-		if (position == Vec3F(0, 0, 0))
+		if (position == Vec3F{0, 0, 0})
 		{
 			currentSplitPoint = *iter;
 			break;
@@ -61,31 +61,31 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 
 	for (auto i = 0u; i < 5; ++i)
 	{
-		EXPECT_EQ(m_geometry->GetPosition(m_geometry->GetPoint(currentSplitPoint)), expected[i]);
+		EXPECT_TRUE(m_geometry->GetPosition(m_geometry->GetPoint(currentSplitPoint)) == expected[i]);
 		currentSplitPoint = m_geometry->GetNextSplitPoint(currentSplitPoint);
 	}
 }
 
 TEST_F(GeometryBuilderTest, when_creating_a_face_should_be_able_to_reuse_points)
 {
-    auto builder = std::make_shared<GeometryBuilderT<GeometryType>>(m_geometry);
-    std::array<GeometryType::Index_t, 6> points = {
-        builder->AddPoint({0,0,0}), builder->AddPoint({0,0,1}), builder->AddPoint({0,1,1}), builder->AddPoint({0,1,0}), builder->AddPoint({1,1,1}), builder->AddPoint({1,0,1})
-    };
+	auto builder = std::make_shared<GeometryBuilderT<GeometryType>>(m_geometry);
+	std::array<GeometryType::Index_t, 6> points = {builder->AddPoint({0, 0, 0}), builder->AddPoint({0, 0, 1}),
+	                                               builder->AddPoint({0, 1, 1}), builder->AddPoint({0, 1, 0}),
+	                                               builder->AddPoint({1, 1, 1}), builder->AddPoint({1, 0, 1})};
 
-    auto faceBuilder1 = builder->StartFace(5);
-    faceBuilder1.AddIndex(points[0]);
-    faceBuilder1.AddIndex(points[1]);
-    faceBuilder1.AddIndex(points[2]);
-    faceBuilder1.AddIndex(points[3]);
-    auto faceBuilder2 = builder->StartFace(4);
-    faceBuilder2.AddIndex(points[2]);
-    faceBuilder2.AddIndex(points[4]);
-    faceBuilder2.AddIndex(points[4]);
-    faceBuilder2.AddIndex(points[1]);
+	auto faceBuilder1 = builder->StartFace(5);
+	faceBuilder1.AddIndex(points[0]);
+	faceBuilder1.AddIndex(points[1]);
+	faceBuilder1.AddIndex(points[2]);
+	faceBuilder1.AddIndex(points[3]);
+	auto faceBuilder2 = builder->StartFace(4);
+	faceBuilder2.AddIndex(points[2]);
+	faceBuilder2.AddIndex(points[4]);
+	faceBuilder2.AddIndex(points[4]);
+	faceBuilder2.AddIndex(points[1]);
 
-    faceBuilder1.CloseFace();
-    faceBuilder2.CloseFace();
+	faceBuilder1.CloseFace();
+	faceBuilder2.CloseFace();
 
 	EXPECT_EQ(m_geometry->GetFaceCount(), 2);
 	EXPECT_EQ(m_geometry->GetPointCount(), 6);

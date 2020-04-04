@@ -9,6 +9,8 @@
 #include "procedural_component.h"
 #include "procedural_object_system.h"
 
+#include <boost/qvm/map_vec_mat.hpp>
+
 namespace selector
 {
 const std::string CreateBoxGeometry::outputGeometry("out");
@@ -46,7 +48,8 @@ void CreateBoxGeometry::DoWork()
 	    geometrySystem->CreateComponentAs<GeometryComponent>(object);
 
 	geometry_component->SetGeometry(geometry);
-	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(1)));
+	geometry_component->SetScope(
+	    Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
 
 	std::shared_ptr<HierarchicalComponent> hierarchical_component =
 	    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(object);

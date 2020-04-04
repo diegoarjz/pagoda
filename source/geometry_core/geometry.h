@@ -6,13 +6,12 @@
 #include <common/profiler.h>
 #include <math_lib/vec_base.h>
 
-#include <math_lib/cross_product.h>
-#include <math_lib/normalize.h>
-
 #include <cstdint>
 
 #include "indexed_container.h"
 #include "split_point_topology.h"
+
+#include <boost/qvm/vec_operations.hpp>
 
 #include <memory>
 
@@ -57,7 +56,7 @@ inline typename Geometry::PositionType face_normal(std::shared_ptr<Geometry> geo
 	typename Geometry::PositionType pos1 = geometry->GetPosition(*facePointCirc);
 	++facePointCirc;
 	typename Geometry::PositionType pos2 = geometry->GetPosition(*facePointCirc);
-	return normalized(cross_product(pos2 - pos1, pos0 - pos1));
+	return boost::qvm::normalized(boost::qvm::cross(pos2 - pos1, pos0 - pos1));
 }
 
 template<class Topology = SplitPointTopology, class F = DefaultFaceAttributes, class E = DefaultEdgeAttributes,
@@ -71,15 +70,9 @@ public:
 	using VertexAttributes = V;
 	using PositionType = Vec3F;
 
-	void SetPosition(const Index_t &index, const PositionType &p)
-	{
-		m_vertexPositions.GetOrCreate(index, p) = p;
-	}
+	void SetPosition(const Index_t &index, const PositionType &p) { m_vertexPositions.GetOrCreate(index, p) = p; }
 
-	PositionType &GetPosition(const Index_t &index)
-    {
-        return m_vertexPositions.GetOrCreate(index);
-    }
+	PositionType &GetPosition(const Index_t &index) { return m_vertexPositions.GetOrCreate(index); }
 
 	VertexAttributes &GetVertexAttributes(const Index_t &vertex) { return m_vertexAttributes.GetOrCreate(vertex); }
 	EdgeAttributes &GetEdgeAttributes(const Index_t &edge) { return m_edgeAttributes.GetOrCreate(edge); }

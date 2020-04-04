@@ -94,19 +94,19 @@ public:
 		// Register Predicates
 		{
 			m_predicateRegistry->Register(
-			    "front", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F(1, 0, 0)));
+			    "front", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{1, 0, 0}));
 			m_predicateRegistry->Register(
-			    "back", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F(-1, 0, 0)));
+			    "back", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{-1, 0, 0}));
 
 			m_predicateRegistry->Register(
-			    "up", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F(0, 0, 1)));
+			    "up", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, 0, 1}));
 			m_predicateRegistry->Register(
-			    "down", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F(0, 0, -1)));
+			    "down", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, 0, -1}));
 
 			m_predicateRegistry->Register(
-			    "left", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F(0, 1, 0)));
+			    "left", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, 1, 0}));
 			m_predicateRegistry->Register(
-			    "right", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F(0, -1, 0)));
+			    "right", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, -1, 0}));
 		}
 	}
 

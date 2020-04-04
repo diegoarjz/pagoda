@@ -9,6 +9,8 @@
 #include "procedural_component.h"
 #include "procedural_object_system.h"
 
+#include <boost/qvm/map_vec_mat.hpp>
+
 namespace selector
 {
 const std::string CreateRectGeometry::output_geometry("out");
@@ -40,16 +42,16 @@ void CreateRectGeometry::DoWork()
 	switch (planeName[0])
 	{
 		case 'x':
-			rectXAxis = Vec3F(0, 1, 0);
-			rectYAxis = Vec3F(0, 0, 1);
+			rectXAxis = Vec3F{0, 1, 0};
+			rectYAxis = Vec3F{0, 0, 1};
 			break;
 		case 'y':
-			rectXAxis = Vec3F(1, 0, 0);
-			rectYAxis = Vec3F(0, 0, -1);
+			rectXAxis = Vec3F{1, 0, 0};
+			rectYAxis = Vec3F{0, 0, -1};
 			break;
 		case 'z':
-			rectXAxis = Vec3F(1, 0, 0);
-			rectYAxis = Vec3F(0, 1, 0);
+			rectXAxis = Vec3F{1, 0, 0};
+			rectYAxis = Vec3F{0, 1, 0};
 			break;
 		default:
 			throw Exception("The 'plane' parameter in create rect must be one of 'x', 'y', or 'z'. It was '" +
@@ -68,7 +70,8 @@ void CreateRectGeometry::DoWork()
 	    geometrySystem->CreateComponentAs<GeometryComponent>(object);
 
 	geometry_component->SetGeometry(geometry);
-	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(1)));
+	geometry_component->SetScope(
+	    Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
 
 	std::shared_ptr<HierarchicalComponent> hierarchical_component =
 	    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(object);

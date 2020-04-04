@@ -12,6 +12,9 @@
 
 #include "geometry_operations/matrix_transform.h"
 
+#include <boost/qvm/map_mat_vec.hpp>
+#include <boost/qvm/map_vec_mat.hpp>
+
 namespace selector
 {
 const std::string Translate::s_inputGeometry("in");
@@ -60,11 +63,11 @@ void Translate::DoWork()
 		Mat4x4F matrix;
 		if (inWorldCoordinates)
 		{
-			matrix = translate_matrix(x, y, z);
+			matrix = boost::qvm::translation_mat(Vec3F{x, y, z});
 		}
 		else
 		{
-			matrix = translate_matrix(inScope.GetLocalVector(Vec3F(x, y, z)));
+			matrix = boost::qvm::translation_mat(inScope.GetLocalVector(Vec3F{x, y, z}));
 		}
 		MatrixTransform<Geometry> transform(matrix);
 

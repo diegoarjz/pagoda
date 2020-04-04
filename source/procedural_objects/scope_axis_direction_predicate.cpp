@@ -3,10 +3,10 @@
 #include "geometry_component.h"
 #include "geometry_core/scope.h"
 #include "geometry_system.h"
-#include "math_lib/dot_product.h"
-#include "math_lib/normalize.h"
 #include "math_lib/radians.h"
 #include "procedural_object_system.h"
+
+#include <boost/qvm/vec_operations.hpp>
 
 #include <cmath>
 #include <sstream>
@@ -35,7 +35,7 @@ bool ScopeAxisDirectionPredicate::operator()(const ProceduralObjectPtr object)
 	Scope scope = geometryComponent->GetScope();
 	Vec3F axis = scope.GetAxis(m_scopeAxis);
 
-	auto angle = std::acos(dot_product(axis, m_direction));
+	auto angle = std::acos(boost::qvm::dot(axis, m_direction));
 	if (angle <= static_cast<float>(Radians<float>(m_tolerance)))
 	{
 		return true;

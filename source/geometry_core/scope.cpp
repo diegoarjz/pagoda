@@ -1,13 +1,15 @@
 #include "scope.h"
 
-#include "math_lib/cross_product.h"
-#include "math_lib/length.h"
-#include "math_lib/normalize.h"
 #include "math_lib/transpose.h"
+
+#include <boost/qvm/map_mat_mat.hpp>
+#include <boost/qvm/map_mat_vec.hpp>
+#include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/vec_operations.hpp>
 
 namespace selector
 {
-Scope::Scope() : m_position(0, 0, 0), m_size(0, 0, 0), m_rotation(1) {}
+Scope::Scope() : m_position{0, 0, 0}, m_size{0, 0, 0}, m_rotation(boost::qvm::diag_mat(Vec3F{1, 1, 1})) {}
 
 Scope::Scope(const Vec3F &pos, const Vec3F &size, const Mat3x3F &rot) : m_position(pos), m_size(size), m_rotation(rot)
 {
@@ -21,13 +23,13 @@ Scope::Scope(const std::array<Vec3F, 8> &boxPoints)
 	auto hbl = boxPoints[static_cast<int>(BoxPoints::HigherBottomLeft)];
 	auto xAxis = lbr - origin;
 	auto yAxis = ltl - origin;
-	auto zAxis = cross_product(xAxis, yAxis);
+	auto zAxis = boost::qvm::cross(xAxis, yAxis);
 
 	m_position = origin;
-	m_size = Vec3F(length(xAxis), length(yAxis), length(origin - hbl));
-	m_rotation.SetCol(0, normalized(xAxis));
-	m_rotation.SetCol(1, normalized(yAxis));
-	m_rotation.SetCol(2, normalized(zAxis));
+	m_size = Vec3F{boost::qvm::mag(xAxis), boost::qvm::mag(yAxis), boost::qvm::mag(origin - hbl)};
+	boost::qvm::col<0>(m_rotation) = boost::qvm::normalized(xAxis);
+	boost::qvm::col<1>(m_rotation) = boost::qvm::normalized(yAxis);
+	boost::qvm::col<2>(m_rotation) = boost::qvm::normalized(zAxis);
 }
 
 Vec3F Scope::GetPosition() const { return m_position; }
@@ -42,11 +44,11 @@ Mat3x3F Scope::GetRotation() const { return m_rotation; }
 
 void Scope::SetRotation(const Mat3x3F &rotation) { m_rotation = rotation; }
 
-Mat3x3F Scope::GetInverseRotation() const { return transposed(m_rotation); }
+Mat3x3F Scope::GetInverseRotation() const { return boost::qvm::transposed(m_rotation); }
 
-Vec3F Scope::GetXAxis() const { return m_rotation.Col(0); }
-Vec3F Scope::GetYAxis() const { return m_rotation.Col(1); }
-Vec3F Scope::GetZAxis() const { return m_rotation.Col(2); }
+Vec3F Scope::GetXAxis() const { return boost::qvm::col<0>(m_rotation); }
+Vec3F Scope::GetYAxis() const { return boost::qvm::col<1>(m_rotation); }
+Vec3F Scope::GetZAxis() const { return boost::qvm::col<2>(m_rotation); }
 
 Vec3F Scope::GetAxis(const std::string &axisName) const
 {
@@ -84,16 +86,16 @@ Plane<float> Scope::GetYZPlane() const { return Plane<float>::FromPointAndNormal
 
 Vec3F Scope::LocalPointInWorld(const Vec3F &localPoint) const
 {
-	return m_position + GetXAxis() * localPoint[0] + GetYAxis() * localPoint[1] + GetZAxis() * localPoint[2];
+	return m_position + GetXAxis() * X(localPoint) + GetYAxis() * Y(localPoint) + GetZAxis() * Z(localPoint);
 }
 
 Vec3F Scope::GetLocalPoint(const BoxPoints &p) const
 {
 	uint32_t index = static_cast<uint32_t>(p);
 	Vec3F localPoint;
-	localPoint[0] = ((index & (1 << 0)) != 0 ? m_size[0] : 0);
-	localPoint[1] = ((index & (1 << 1)) != 0 ? m_size[1] : 0);
-	localPoint[2] = ((index & (1 << 2)) != 0 ? m_size[2] : 0);
+	X(localPoint) = ((index & (1 << 0)) != 0 ? X(m_size) : 0);
+	Y(localPoint) = ((index & (1 << 1)) != 0 ? Y(m_size) : 0);
+	Z(localPoint) = ((index & (1 << 2)) != 0 ? Z(m_size) : 0);
 	return localPoint;
 }
 
@@ -111,13 +113,13 @@ std::array<Vec3F, 8> Scope::GetWorldPoints() const
 
 Vec3F Scope::GetLocalVector(const Vec3F &worldVector) const
 {
-	return Vec3F(dot_product(GetXAxis(), worldVector), dot_product(GetYAxis(), worldVector),
-	             dot_product(GetZAxis(), worldVector));
+	return Vec3F{boost::qvm::dot(GetXAxis(), worldVector), boost::qvm::dot(GetYAxis(), worldVector),
+	             boost::qvm::dot(GetZAxis(), worldVector)};
 }
 
 Vec3F Scope::GetWorldVector(const Vec3F &localVector) const
 {
-	return GetXAxis() * localVector.X() + GetYAxis() * localVector.Y() + GetZAxis() * localVector.Z();
+	return GetXAxis() * X(localVector) + GetYAxis() * Y(localVector) + GetZAxis() * Z(localVector);
 }
 
 Vec3F Scope::GetCenterPointInWorld() const { return LocalPointInWorld(GetCenterPointInLocal()); }

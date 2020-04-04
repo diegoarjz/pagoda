@@ -17,19 +17,19 @@ private:
 public:
 	CreateBox(const float &xSize, const float &ySize, const float &zSize)
 	{
-		auto halfXSize = 0.5 * xSize;
-		auto halfYSize = 0.5 * ySize;
-		auto halfZSize = 0.5 * zSize;
+		float halfXSize = 0.5f * xSize;
+		float halfYSize = 0.5f * ySize;
+		float halfZSize = 0.5f * zSize;
 
-		m_points[0] = Vec3F(-halfXSize, -halfYSize, -halfZSize);
-		m_points[1] = Vec3F(halfXSize, -halfYSize, -halfZSize);
-		m_points[2] = Vec3F(-halfXSize, halfYSize, -halfZSize);
-		m_points[3] = Vec3F(halfXSize, halfYSize, -halfZSize);
+		m_points[0] = Vec3F{-halfXSize, -halfYSize, -halfZSize};
+		m_points[1] = Vec3F{halfXSize, -halfYSize, -halfZSize};
+		m_points[2] = Vec3F{-halfXSize, halfYSize, -halfZSize};
+		m_points[3] = Vec3F{halfXSize, halfYSize, -halfZSize};
 
-		m_points[4] = Vec3F(-halfXSize, -halfYSize, halfZSize);
-		m_points[5] = Vec3F(halfXSize, -halfYSize, halfZSize);
-		m_points[6] = Vec3F(-halfXSize, halfYSize, halfZSize);
-		m_points[7] = Vec3F(halfXSize, halfYSize, halfZSize);
+		m_points[4] = Vec3F{-halfXSize, -halfYSize, halfZSize};
+		m_points[5] = Vec3F{halfXSize, -halfYSize, halfZSize};
+		m_points[6] = Vec3F{-halfXSize, halfYSize, halfZSize};
+		m_points[7] = Vec3F{halfXSize, halfYSize, halfZSize};
 	}
 
 	CreateBox(const std::array<Vec3F, 8> &points) : m_points(points) {}

@@ -3,18 +3,21 @@
 
 #include "vec_base.h"
 
+#include <boost/qvm/vec.hpp>
+#include <boost/qvm/vec_operations.hpp>
+
 namespace selector
 {
 template<class Rep>
 class LineSegment3D
 {
 public:
-	using VectorType = VecBase<3, Rep>;
+	using VectorType = boost::qvm::vec<Rep, 3>;
 
 	/**
 	 * Constructs the line segment between (0,0,0) and (1,0,0).
 	 */
-	LineSegment3D() : m_point(0, 0, 0), m_supportVector(1, 0, 0) {}
+	LineSegment3D() : m_point{0, 0, 0}, m_supportVector{1, 0, 0} {}
 
 	/**
 	 * Constructs the line segment between \p p1 and \p p2.

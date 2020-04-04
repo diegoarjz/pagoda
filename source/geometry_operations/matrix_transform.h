@@ -3,6 +3,9 @@
 #include "geometry_core/geometry_builder.h"
 #include "math_lib/matrix_base.h"
 
+#include <boost/qvm/mat_operations.hpp>
+#include <boost/qvm/vec_mat_operations.hpp>
+
 namespace selector
 {
 template<class G>
@@ -27,8 +30,8 @@ public:
 		{
 			auto& pos = geometryOut->GetPosition(*iter);
 			LOG_TRACE(GeometryOperations, "Applying matrix to " << pos);
-			Vec4F finalPos = m_matrix * Vec4F(pos.X(), pos.Y(), pos.Z(), 1.0f);
-			pos = Vec3F(finalPos.X(), finalPos.Y(), finalPos.Z()) / finalPos.W();
+			Vec4F finalPos = m_matrix * XYZ1(pos);
+			pos = XYZ(finalPos) / W(finalPos);
 			LOG_TRACE(GeometryOperations, "Result: " << pos);
 		}
 	}

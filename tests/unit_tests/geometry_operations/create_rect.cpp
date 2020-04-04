@@ -41,7 +41,7 @@ TEST_F(CreateRectTest, create_rect)
 	{
 		for (auto fvCirc = out->FacePointCirculatorBegin(*fIter); fvCirc; ++fvCirc)
 		{
-			EXPECT_EQ(out->GetPosition(*fvCirc), expected[i]);
+			EXPECT_TRUE(out->GetPosition(*fvCirc) == expected[i]);
 			++i;
 		}
 	}
@@ -49,6 +49,6 @@ TEST_F(CreateRectTest, create_rect)
 	ObjExporter<GeometryType> exporter(out);
 	std::stringstream ss;
 	exporter.Export(ss);
-    MatchFile match(GetCurrentTestFileResultsDirectory() /= "geometry.obj", GetShouldWriteFiles());
-    match.Match(ss.str());
+	MatchFile match(GetCurrentTestFileResultsDirectory() /= "geometry.obj", GetShouldWriteFiles());
+	match.Match(ss.str());
 }

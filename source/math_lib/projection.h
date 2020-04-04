@@ -2,9 +2,11 @@
 #define SELECTOR_MATH_LIB_PROJECTION_H_
 
 #include "line_3d.h"
+#include "line_segment_3d.h"
 #include "plane.h"
 
-#include "dot_product.h"
+#include <boost/qvm/vec.hpp>
+#include <boost/qvm/vec_operations.hpp>
 
 namespace selector
 {
@@ -12,9 +14,9 @@ namespace selector
  * Calculates the projection of point \p p onto the line \p l
  */
 template<class Rep>
-VecBase<3, Rep> projection(const VecBase<3, Rep> &p, const Line3D<Rep> &l)
+boost::qvm::vec<Rep, 3> projection(const boost::qvm::vec<Rep, 3> &p, const Line3D<Rep> &l)
 {
-	auto dot = dot_product(p - l.GetPoint(), l.GetSupportVector());
+	auto dot = boost::qvm::dot(p - l.GetPoint(), l.GetSupportVector());
 	return l.GetPoint() + l.GetSupportVector() * dot;
 }
 
@@ -23,9 +25,9 @@ VecBase<3, Rep> projection(const VecBase<3, Rep> &p, const Line3D<Rep> &l)
  * If no orthogonal projection exists from the point to the line segment, then one of the endpoints in \p ls is used.
  */
 template<class Rep>
-VecBase<3, Rep> projection(const VecBase<3, Rep> &p, const LineSegment3D<Rep> &ls)
+boost::qvm::vec<Rep, 3> projection(const boost::qvm::vec<Rep, 3> &p, const LineSegment3D<Rep> &ls)
 {
-	auto dot = dot_product(p - ls.GetSourcePoint(), ls.GetSupportVector());
+	auto dot = boost::qvm::dot(p - ls.GetSourcePoint(), ls.GetSupportVector());
 	if (dot <= 0)
 	{
 		return ls.GetSourcePoint();
@@ -51,10 +53,10 @@ LineSegment3D<Rep> projection(const LineSegment3D<Rep> &ls, const Line3D<Rep> &l
  * Calculates the projection of a point \p p onto the plane \p plane.
  */
 template<class Rep>
-VecBase<3, Rep> projection(const VecBase<3, Rep> &p, const Plane<Rep> &plane)
+boost::qvm::vec<Rep, 3> projection(const boost::qvm::vec<Rep, 3> &p, const Plane<Rep> &plane)
 {
 	auto planeNormal = plane.GetNormal();
-	auto dot = dot_product(plane.GetPoint() - p, planeNormal);
+	auto dot = boost::qvm::dot(plane.GetPoint() - p, planeNormal);
 	return p + dot * planeNormal;
 }
 }  // namespace selector

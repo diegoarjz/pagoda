@@ -6,6 +6,8 @@
 #include "common/profiler.h"
 #include "indexed_container.h"
 
+#include <boost/qvm/vec_operations.hpp>
+
 #include <cstdint>
 #include <memory>
 #include <vector>
@@ -103,8 +105,8 @@ public:
 			auto pd0 = m_builder->m_pointData.Get(m_faceIndices[0]);
 			auto pd1 = m_builder->m_pointData.Get(m_faceIndices[1]);
 			auto pd2 = m_builder->m_pointData.Get(m_faceIndices[2]);
-			auto normal = cross_product(pd0.m_position - pd1.m_position, pd2.m_position - pd1.m_position);
-			if (squared_length(normal) != 0)
+			auto normal = boost::qvm::cross(pd0.m_position - pd1.m_position, pd2.m_position - pd1.m_position);
+			if (boost::qvm::mag_sqr(normal) != 0)
 			{
 				normal = normalized(normal);
 			}
