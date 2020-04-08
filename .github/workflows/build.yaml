@@ -26,14 +26,18 @@ jobs:
                   message(STATUS "Boost Version ${boost_version}")
 
                   # Download and install Boost
-                  file(DOWNLOAD "${boost_url}" "./${boost_file}" SHOW_PROGRESS)
-                  execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvfz "${boost_file}")
+                  file(DOWNLOAD "${boost_url}" "./${boost_file}")
+                  execute_process(COMMAND ${CMAKE_COMMAND}
+                                          -E tar xvfz "${boost_file}"
+                                  OUTPUT_QUIET)
                   execute_process(COMMAND ./bootstrap.sh
                                           --prefix=${boost_prefix}
                                           --with-libraries=${boost_libraries}
-                                  WORKING_DIRECTORY "${boost_dir}")
+                                  WORKING_DIRECTORY "${boost_dir}"
+                                  OUTPUT_QUIET)
                   execute_process(COMMAND ./b2
-                                  WORKING_DIRECTORY "${boost_dir}")
+                                  WORKING_DIRECTORY "${boost_dir}"
+                                  OUTPUT_QUIET)
                   execute_process(COMMAND ./b2 install
                                   WORKING_DIRECTORY "${boost_dir}")
 
