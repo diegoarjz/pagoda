@@ -1,0 +1,19 @@
+name: Build
+on: push
+
+jobs:
+    build:
+        name: build
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v2
+            - name: Configure and Build
+              run: |
+                  mkdir -p build
+                  cd build
+                  cmake ..
+                  make
