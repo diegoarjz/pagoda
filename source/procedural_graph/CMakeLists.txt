@@ -95,7 +95,6 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
-        -pedantic-errors
 )
 
 target_compile_definitions(

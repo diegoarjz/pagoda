@@ -48,9 +48,11 @@ jobs:
                   git submodule update --init --recursive
                   mkdir -p build
                   cd build
-                  cmake --version
-                  ls ${GITHUB_WORKSPACE}/
-                  ls ${GITHUB_WORKSPACE}/third_party/
-                  ls ${GITHUB_WORKSPACE}/third_party/boost
-                  BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake ..
+                  BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. -DCMAKE_BUILD_TYPE=Release
                   make -j2
+            - name: Run tests
+              run: |
+                  cd build
+                  ./tests/unit_tests/unit_tests
+                  ./tests/selscript/selscript_tests
+                  ./tests/regression/regression_tests
