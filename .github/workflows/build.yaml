@@ -17,7 +17,7 @@ jobs:
                   string(REPLACE "." "_" boost_file "boost_${boost_version}")
                   set(boost_dir ${boost_file})
                   set(boost_file "${boost_file}.tar.gz")
-                  set(boost_url  "https://dl.bintray.com/boostorg/release/${boost_version}/source/${boost_file}")
+                  set(boost_url "https://dl.bintray.com/boostorg/release/${boost_version}/source/${boost_file}")
                   set(boost_libraries "chrono,system,program_options,filesystem")
                   set(boost_prefix "${third_party_libs}/boost")
 
@@ -43,5 +43,6 @@ jobs:
               run: |
                   mkdir -p build
                   cd build
-                  BOOST_ROOT="${GITHUB_WORKSPACE}/third_party/boost" cmake ..
+                  echo "Boost: ${GITHUB_WORKSPACE}/third_party/boost"
+                  BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake ..
                   make -j2
