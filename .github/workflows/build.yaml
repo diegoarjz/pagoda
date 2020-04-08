@@ -45,6 +45,7 @@ jobs:
 
             - name: Configure and Build
               run: |
+                  git submodule update --init --recursive
                   mkdir -p build
                   cd build
                   cmake --version
