@@ -48,6 +48,8 @@ jobs:
                   mkdir -p build
                   cd build
                   cmake --version
+                  ls ${GITHUB_WORKSPACE}/
+                  ls ${GITHUB_WORKSPACE}/third_party/
                   ls ${GITHUB_WORKSPACE}/third_party/boost
                   BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake ..
                   make -j2
