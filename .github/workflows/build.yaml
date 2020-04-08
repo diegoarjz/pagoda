@@ -10,26 +10,13 @@ jobs:
                 os: [ubuntu-latest, macos-latest]
         steps:
             - name: Download and Install Dependencies
-              shell: cmake -P {0}
               run: |
-                  set(boost_version "1.72.0")
-                  string(REPLACE "." "_" boost_file "boost_${boost_version}")
-                  set(boost_dir ${boost_file})
-                  set(boost_file "${boost_file}.tar.gz")
-                  set(boost_url  "https://dl.bintray.com/boostorg/release/${boost_version}/source/${boost_file}")
-                  set(boost_libraries "chrono,system,program_options,filesystem")
-
-                  message(STATUS "Boost Version ${boost_version}")
-                  message(STATUS "Boost File ${boost_file}")
-                  message(STATUS "Boost URL ${boost_url}")
-                  message(STATUS "Boost Dir ${boost_dir}")
-
-                  file(DOWNLOAD "${boost_url}" "./${boost_file}" SHOW_PROGRESS)
-                  execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvfz "${boost_file}")
-                  execute_process(COMMAND ./bootstrap.sh --with-libraries=${boost_libraries}
-                                  WORKING_DIRECTORY "${boost_dir}")
-                  execute_process(COMMAND ./b2 WORKING_DIRECTORY "${boost_dir}")
-                  execute_process(COMMAND ./b2 install WORKING_DIRECTORY "${boost_dir}")
+                  wget -O boost_1_72_0.tar.gz https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
+                  tar xvfz boost_1_72_0.tar.gz
+                  cd boost_1_72_0
+                  ./bootstrap --with-libraries=chrono,system,program_options,filesystem
+                  ./b2
+                  sudo ./b2 install
 
             - name: Check out repository
               uses: actions/checkout@v2
