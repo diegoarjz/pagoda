@@ -13,6 +13,8 @@ jobs:
               run: |
                   wget -O boost_1_72_0.tar.gz https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
                   tar xvfz boost_1_72_0.tar.gz
+                  ls
+                  pwd
                   cd boost_1_72_0
                   ./bootstrap --with-libraries=chrono,system,program_options,filesystem
                   ./b2
