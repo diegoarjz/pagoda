@@ -70,7 +70,7 @@ jobs:
                   mkdir -p build
                   cd build
                   BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. -DCMAKE_BUILD_TYPE=Release
-                  make -j2
+                  cmake --build .
 
             - name: Run tests
               run: |
