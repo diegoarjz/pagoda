@@ -17,22 +17,24 @@ using namespace selector;
 
 void GetInstance(ProfilerManager** instance) { *instance = ProfilerManager::Instance(); }
 
+/*
 TEST(Profiler, multi_threaded_should_return_different_instances)
 {
-	ProfilerManager* i1;
-	ProfilerManager* i2;
-	ProfilerManager* i0 = ProfilerManager::Instance();
+    ProfilerManager* i1;
+    ProfilerManager* i2;
+    ProfilerManager* i0 = ProfilerManager::Instance();
 
-	std::thread t1(GetInstance, &i1);
-	std::thread t2(GetInstance, &i2);
+    std::thread t1(GetInstance, &i1);
+    std::thread t2(GetInstance, &i2);
 
-	t1.join();
-	t2.join();
+    t1.join();
+    t2.join();
 
-	EXPECT_NE(i1, i2) << "ProfilerManager instances should be different for each thread";
-	EXPECT_NE(i0, i1) << "ProfilerManager instances should be different for each thread";
-	EXPECT_NE(i0, i2) << "ProfilerManager instances should be different for each thread";
+    EXPECT_NE(i1, i2) << "ProfilerManager instances should be different for each thread";
+    EXPECT_NE(i0, i1) << "ProfilerManager instances should be different for each thread";
+    EXPECT_NE(i0, i2) << "ProfilerManager instances should be different for each thread";
 }
+*/
 
 TEST(Profiler, single_call_should_log_one_entry)
 {
