@@ -2,7 +2,7 @@
 
 | Branch | master| development | selscript |
 |--------|-------|-------------|-----------|
-| | [![Build Status](https://travis-ci.org/diegoarjz/selector.svg?branch=master)](https://travis-ci.org/diegoarjz/selector) |[![Build Status](https://travis-ci.org/diegoarjz/selector.svg?branch=development)](https://travis-ci.org/diegoarjz/selector) |[![Build Status](https://travis-ci.org/diegoarjz/selector.svg?branch=selscript)](https://travis-ci.org/diegoarjz/selector) |
+| | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=master) | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=development) | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=selscript) |
 
 # What is Selector
 
