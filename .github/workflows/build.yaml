@@ -99,13 +99,11 @@ jobs:
                   mkdir -p ${{ github.workspace }}/install_dir
                   cmake --install ${{ github.workspace }}/build --prefix ${{ github.workspace }}/install_dir
             - name: Pack
-              if: always()
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
                                           -E tar cJfv "${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/install_dir")
             - name: Upload
-              if: always()
               uses: actions/upload-artifact@v1
               with:
                   path: ./${{ matrix.config.name }}.tar.xz
