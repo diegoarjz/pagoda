@@ -19,6 +19,11 @@ std::string get_build_number();
  * Returns the date this project was built.
  */
 std::string get_build_date();
+
+/**
+ * Returns a formatted version information string.
+ */
+std::string get_version_information();
 }  // namespace selector
 
 #endif

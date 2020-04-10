@@ -67,9 +67,11 @@ jobs:
                   set CC=${{ matrix.config.cc }}
                   set CXX={{ matrix.config.cxx }}
                   git submodule update --init --recursive
-                  mkdir -p build
-                  cd build
-                  BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. -DCMAKE_BUILD_TYPE=Release
+                  mkdir -p ${{ github.workspace }}/build
+                  cd ${{ github.workspace }}/build
+                  BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. \
+                                                                   -DCMAKE_BUILD_TYPE=Release \
+                                                                   -DSELECTOR_BUILD_NUMBER=${{ github.run_number }}
                   cmake --build .
 
             - name: Run tests
@@ -78,15 +80,32 @@ jobs:
                   ./tests/unit_tests/unit_tests
                   ./tests/selscript/selscript_tests
                   ./tests/regression_tests/regression_tests
-            - name: Pack Regression Tests
+            - name: Pack Regression Test Results
               if: always()
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
                                           -E tar cJfv "${{ matrix.config.name }}-regression_results.tar.xz" "build/regression_results")
-            - name: Upload Artifactes
+            - name: Upload Regression Test Results
               if: always()
               uses: actions/upload-artifact@v1
               with:
                   path: ./${{ matrix.config.name }}-regression_results.tar.xz
                   name: ${{ matrix.config.name }}-regression_results.tar.xz
+
+            - name: Install
+              run: |
+                  mkdir -p ${{ github.workspace }}/install_dir
+                  cmake --install ${{ github.workspace }}/build --prefix ${{ github.workspace }}/install_dir
+            - name: Pack
+              if: always()
+              shell: cmake -P {0}
+              run: |
+                  execute_process(COMMAND ${CMAKE_COMMAND}
+                                          -E tar cJfv "${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/install_dir")
+            - name: Upload
+              if: always()
+              uses: actions/upload-artifact@v1
+              with:
+                  path: ./${{ matrix.config.name }}.tar.xz
+                  name: ${{ matrix.config.name }}.tar.xz

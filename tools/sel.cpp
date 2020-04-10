@@ -2,6 +2,7 @@
 #include <common/file_util.h>
 #include <common/logger.h>
 #include <common/profiler.h>
+#include <common/version.h>
 #include <geometry_core/geometry_exporter.h>
 #include <procedural_graph/default_scheduler.h>
 #include <procedural_graph/graph_dot_exporter.h>
@@ -138,6 +139,7 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
 		// clang-format off
         desc.add_options()
             ("help", "Print help message.")
+            ("version", "Print version information and exit.")
             ("file", po::value<std::string>(), "Input Graph specification file.")
             ("dot", po::value<std::string>(), "Outputs the graph in dot format to the specified file.")
             ("execute", "Executes the graph")
@@ -150,6 +152,12 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
 		if (out_vm->count("help"))
 		{
 			std::cout << "Selector command line tool" << std::endl << desc << std::endl;
+			return false;
+		}
+
+		if (out_vm->count("version"))
+		{
+			std::cout << get_version_information() << std::endl;
 			return false;
 		}
 	}

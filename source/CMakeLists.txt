@@ -66,10 +66,6 @@ target_compile_options(
 target_compile_definitions(
     selector
     PRIVATE
-        -DSELECTOR_VERSION=\"${SELECTOR_VERSION}\"
-        -DSELECTOR_BUILD_NUMBER=\"${SELECTOR_BUILD_NUMBER}\"
-        -DSELECTOR_BUILD_DATE=\"${SELECTOR_BUILD_DATE}\"
-        -DASSERTS_ENABLED=${Selector_ENABLE_ASSERTIONS}
         SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
