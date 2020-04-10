@@ -37,9 +37,9 @@ public:
 		}
 
 		GeometryBuilderT<Geometry> builder(back);
-		std::unordered_map<Index_t, Index_t> pointsToBuilderIndex;
+		std::map<Index_t, Index_t> pointsToBuilderIndex;
 
-		std::unordered_set<Index_t> facesToDelete;
+		std::set<Index_t> facesToDelete;
 		for (auto fIter = front->FacesBegin(); fIter != front->FacesEnd(); ++fIter)
 		{
 			if (m_faceSide[*fIter] == Plane<float>::PlaneSide::Back)
@@ -148,7 +148,7 @@ private:
 	{
 		START_PROFILE;
 
-		std::unordered_map<Index_t, typename Geometry::PositionType> edgesToSplit;
+		std::map<Index_t, typename Geometry::PositionType> edgesToSplit;
 
 		auto edgesEnd = geometry->EdgesEnd();
 		for (auto eIter = geometry->EdgesBegin(); eIter != edgesEnd; ++eIter)
@@ -200,9 +200,9 @@ private:
 
 	bool SameSide(const Index_t &p1, const Index_t &p2) { return m_pointsSide[p1] == m_pointsSide[p2]; }
 
-	std::unordered_set<Index_t> m_newEdges;
-	std::unordered_map<Index_t, Plane<float>::PlaneSide> m_pointsSide;
-	std::unordered_map<Index_t, Plane<float>::PlaneSide> m_faceSide;
+	std::set<Index_t> m_newEdges;
+	std::map<Index_t, Plane<float>::PlaneSide> m_pointsSide;
+	std::map<Index_t, Plane<float>::PlaneSide> m_faceSide;
 	Plane<float> m_plane;
 };
 }  // namespace selector

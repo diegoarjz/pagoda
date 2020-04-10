@@ -77,4 +77,16 @@ jobs:
                   cd build
                   ./tests/unit_tests/unit_tests
                   ./tests/selscript/selscript_tests
-                  #./tests/regression_tests/regression_tests
+                  ./tests/regression_tests/regression_tests
+            - name: Pack Regression Tests
+              if: always()
+              shell: cmake -P {0}
+              run: |
+                  execute_process(COMMAND ${CMAKE_COMMAND}
+                                          -E tar cJfv "${{ matrix.config.name }}-regression_results.tar.xz" "build/regression_results")
+            - name: Upload Artifactes
+              if: always()
+              uses: actions/upload-artifact@v1
+              with:
+                  path: ./${{ matrix.config.name }}-regression_results.tar.xz
+                  name: ${{ matrix.config.name }}-regression_results.tar.xz

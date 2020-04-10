@@ -7,7 +7,7 @@ extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
 extrusion_out = OutputInterface(interface: "out")
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: "regression_results/triangulate/geometry.obj"
+    path: "regression_results/triangulate_geometry/geometry.obj"
 }
 
 triangulate_geometry_in = InputInterface(interface: "in")
