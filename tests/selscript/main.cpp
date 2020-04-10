@@ -36,7 +36,7 @@ public:
 	RegressionTest(const std::string& name) : m_regressionTestName(name)
 	{
 		m_testDir = GetTestFilesDirectory() / "test_files" / name;
-		std::string code = FileUtil::LoadFileToString(GetScriptFile().string());
+		std::string code = file_util::LoadFileToString(GetScriptFile().string());
 		m_program = Parser().Parse(code);
 	}
 
@@ -58,15 +58,15 @@ public:
 		m_program->AcceptVisitor(&printer);
 		if (s_write)
 		{
-			FileUtil::WriteStringToFile(GetASTFile().string(), ss.str());
-			FileUtil::WriteStringToFile(GetStdOutFile().string(), myStdout.str());
-			FileUtil::WriteStringToFile(GetStdErrFile().string(), myStderr.str());
+			file_util::WriteStringToFile(GetASTFile().string(), ss.str());
+			file_util::WriteStringToFile(GetStdOutFile().string(), myStdout.str());
+			file_util::WriteStringToFile(GetStdErrFile().string(), myStderr.str());
 		}
 		else
 		{
-			std::string expectedAst = FileUtil::LoadFileToString(GetASTFile().string());
-			std::string expectedOut = FileUtil::LoadFileToString(GetStdOutFile().string());
-			std::string expectedErr = FileUtil::LoadFileToString(GetStdErrFile().string());
+			std::string expectedAst = file_util::LoadFileToString(GetASTFile().string());
+			std::string expectedOut = file_util::LoadFileToString(GetStdOutFile().string());
+			std::string expectedErr = file_util::LoadFileToString(GetStdErrFile().string());
 
 			EXPECT_EQ(ss.str(), expectedAst);
 			EXPECT_EQ(myStdout.str(), expectedOut);

@@ -16,12 +16,12 @@ back_geometry = OutputInterface(interface: "back")
 
 export_front_geometry_in = InputInterface(interface: "in")
 export_front_geometry = Operation(operation: "ExportGeometry") {
-    path: "front.obj"
+    path: "regression_results/clip_geometry/front.obj"
 }
 
 export_back_geometry_in = InputInterface(interface: "in")
 export_back_geometry = Operation(operation: "ExportGeometry") {
-    path: "back.obj"
+    path: "regression_results/clip_geometry/back.obj"
 }
 
 create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out -> clip_geometry_in -> clip_geometry;
@@ -37,7 +37,7 @@ extract_scope_out = OutputInterface(interface: "out")
 extract_scope_in -> extract_scope -> extract_scope_out;
 
 export_scope_in = InputInterface(interface: "in")
-export_scope = Operation(operation: "ExportGeometry") { path: $< "scope" + op.count + ".obj"; >$ }
+export_scope = Operation(operation: "ExportGeometry") { path: $< "regression_results/clip_geometry/scope" + op.count + ".obj"; >$ }
 
 front_geometry -> extract_scope_in;
 back_geometry -> extract_scope_in;

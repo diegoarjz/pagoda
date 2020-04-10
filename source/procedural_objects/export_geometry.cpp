@@ -8,6 +8,10 @@
 #include "hierarchical_component.h"
 #include "procedural_object_system.h"
 
+#include "common/file_util.h"
+
+#include <boost/filesystem/path.hpp>
+
 #include <fstream>
 
 namespace selector
@@ -43,6 +47,8 @@ void ExportGeometry::DoWork()
 		selector::ObjExporter<Geometry> exporter(geometry);
 
 		std::string outputPath = get_value_as<std::string>(*GetValue("path"));
+		file_util::CreateDirectories(boost::filesystem::path(outputPath).parent_path());
+
 		std::ofstream out_file(outputPath.c_str());
 		exporter.Export(out_file);
 		out_file.close();

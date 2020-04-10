@@ -5,9 +5,11 @@
 #include <fstream>
 #include <iostream>
 
-namespace selector
+namespace selector::file_util
 {
-std::string FileUtil::LoadFileToString(const std::string &filePath)
+std::string LoadFileToString(const boost::filesystem::path &path) { return LoadFileToString(path.string()); }
+
+std::string LoadFileToString(const std::string &filePath)
 {
 	std::string str;
 	std::ifstream file(filePath);
@@ -23,7 +25,12 @@ std::string FileUtil::LoadFileToString(const std::string &filePath)
 	return str;
 }
 
-void FileUtil::WriteStringToFile(const std::string &filePath, const std::string &contents)
+void WriteStringToFile(const boost::filesystem::path &filePath, const std::string &contents)
+{
+	WriteStringToFile(filePath.string(), contents);
+}
+
+void WriteStringToFile(const std::string &filePath, const std::string &contents)
 {
 	std::ofstream file(filePath);
 	if (!file)
@@ -34,4 +41,16 @@ void FileUtil::WriteStringToFile(const std::string &filePath, const std::string 
 	file.close();
 }
 
-}  // namespace selector
+bool CreateDirectories(const std::string &path) { return CreateDirectories(boost::filesystem::path(path)); }
+bool CreateDirectories(const boost::filesystem::path &path)
+{
+	try
+	{
+		return boost::filesystem::create_directories(path);
+	}
+	catch (...)
+	{
+		throw Exception("Unable to create directories");
+	}
+}
+}  // namespace selector::file_util

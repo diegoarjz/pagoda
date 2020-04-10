@@ -10,7 +10,7 @@ extrusion_out = OutputInterface(interface: "out")
 
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: "geometry.obj"
+    path: "regression_results/parameter_overwrite/geometry.obj"
 }
 
 parameter -> create_rect;

@@ -20,43 +20,43 @@ router = Router() {
 
 export_up_in = InputInterface(interface: "in")
 export_up = Operation(operation: "ExportGeometry") {
-    path: $< "up" + op.count + ".obj"; >$
+    path: $< "regression_results/router/up" + op.count + ".obj"; >$
 }
 export_up_in -> export_up;
 
 export_down_in = InputInterface(interface: "in")
 export_down = Operation(operation: "ExportGeometry") {
-    path: $< "down" + op.count + ".obj"; >$
+    path: $< "regression_results/router/down" + op.count + ".obj"; >$
 }
 export_down_in -> export_down;
 
 export_left_in = InputInterface(interface: "in")
 export_left = Operation(operation: "ExportGeometry") {
-    path: $< "left" + op.count + ".obj"; >$
+    path: $< "regression_results/router/left" + op.count + ".obj"; >$
 }
 export_left_in -> export_left;
 
 export_right_in = InputInterface(interface: "in")
 export_right = Operation(operation: "ExportGeometry") {
-    path: $< "right" + op.count + ".obj"; >$
+    path: $< "regression_results/router/right" + op.count + ".obj"; >$
 }
 export_right_in -> export_right;
 
 export_front_in = InputInterface(interface: "in")
 export_front = Operation(operation: "ExportGeometry") {
-    path: $< "front" + op.count + ".obj"; >$
+    path: $< "regression_results/router/front" + op.count + ".obj"; >$
 }
 export_front_in -> export_front;
 
 export_back_in = InputInterface(interface: "in")
 export_back = Operation(operation: "ExportGeometry") {
-    path: $< "back" + op.count + ".obj"; >$
+    path: $< "regression_results/router/back" + op.count + ".obj"; >$
 }
 export_back_in -> export_back;
 
 export_none_in = InputInterface(interface: "in")
 export_none = Operation(operation: "ExportGeometry") {
-    path: $< "none" + op.count + ".obj"; >$
+    path: $< "regression_results/router/none" + op.count + ".obj"; >$
 }
 export_none_in -> export_none;
 

@@ -24,34 +24,35 @@ ExpectAssert::~ExpectAssert()
 
 bool ExpectAssert::Asserted() { return g_asserted; }
 
-MatchFile::MatchFile(const boost::filesystem::path &filePath, bool saveFile) : m_filePath(filePath), m_saveFile(saveFile)
+MatchFile::MatchFile(const boost::filesystem::path &filePath, bool saveFile)
+    : m_filePath(filePath), m_saveFile(saveFile)
 {
-    try
-    {
-        m_fileContents = selector::FileUtil::LoadFileToString(filePath.string());
-    }
-    catch (...)
-    {
-        EXPECT_TRUE(false) << "Could not open file " << filePath.string();
-    }
+	try
+	{
+		m_fileContents = selector::file_util::LoadFileToString(filePath.string());
+	}
+	catch (...)
+	{
+		EXPECT_TRUE(false) << "Could not open file " << filePath.string();
+	}
 }
 
 bool MatchFile::Match(const std::string &in)
 {
-    if (m_saveFile)
-    {
-        selector::FileUtil::WriteStringToFile(m_filePath.string(), in);
-        m_fileContents = in;
-    }
+	if (m_saveFile)
+	{
+		selector::file_util::WriteStringToFile(m_filePath.string(), in);
+		m_fileContents = in;
+	}
 
-    EXPECT_EQ(m_fileContents, in);
-    return m_fileContents == in;
+	EXPECT_EQ(m_fileContents, in);
+	return m_fileContents == in;
 }
 
 void SelectorTestFixtureBase::SetExecutablePath(const std::string &path)
 {
-    s_executablePath = path;
-    s_executableDirectory = s_executablePath.remove_filename();
+	s_executablePath = path;
+	s_executableDirectory = s_executablePath.remove_filename();
 }
 
 boost::filesystem::path SelectorTestFixtureBase::GetExecutablePath() { return s_executablePath; }

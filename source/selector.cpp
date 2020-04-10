@@ -128,7 +128,7 @@ public:
 	{
 		LOG_TRACE(Core, "Creating Graph From File: " << filePath.c_str());
 		GraphReader reader(GetNodeFactory());
-		GraphPtr graph = reader.Read(FileUtil::LoadFileToString(filePath));
+		GraphPtr graph = reader.Read(file_util::LoadFileToString(filePath));
 		return graph;
 	}
 

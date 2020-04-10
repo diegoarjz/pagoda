@@ -25,7 +25,7 @@ repeat_split_y_out -> repeat_split_z_in;
 
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: $< "geometry_" + op.count + ".obj"; >$
+    path: $< "regression_results/repeat_split/geometry_" + op.count + ".obj"; >$
 }
 
 repeat_split_z_out -> export_geometry_in -> export_geometry;

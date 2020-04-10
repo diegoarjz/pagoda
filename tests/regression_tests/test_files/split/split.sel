@@ -22,7 +22,7 @@ split -> split_out_3;
 
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: $< "geometry" + op.count + ".obj"; >$
+    path: $< "regression_results/split/geometry" + op.count + ".obj"; >$
 }
 export_geometry_in -> export_geometry;
 

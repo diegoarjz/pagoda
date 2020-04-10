@@ -44,6 +44,7 @@ target_link_libraries(
     PRIVATE
         selector
         Boost::chrono
+        Boost::filesystem
         Boost::system
         Boost::program_options
 )

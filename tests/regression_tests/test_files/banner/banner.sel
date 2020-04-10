@@ -83,7 +83,7 @@ top_floor_extrude_in -> top_floor_extrude -> top_floor_extrude_out;
 
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: $< "geometry" + op.count + ".obj"; >$
+    path: $< "regression_results/banner/geometry" + op.count + ".obj"; >$
 }
 export_geometry_in -> export_geometry;
 

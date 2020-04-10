@@ -48,19 +48,19 @@ scale_world_origin_in -> scale_world_origin -> scale_world_origin_out;
 
 export_scope_origin_in = InputInterface(interface: "in")
 export_scope_origin = Operation(operation: "ExportGeometry") {
-    path: "geometry_scope_origin.obj"
+    path: "regression_results/scale/geometry_scope_origin.obj"
 }
 export_scope_origin_in -> export_scope_origin;
 
 export_scope_center_in = InputInterface(interface: "in")
 export_scope_center = Operation(operation: "ExportGeometry") {
-    path: "geometry_scope_center.obj"
+    path: "regression_results/scale/geometry_scope_center.obj"
 }
 export_scope_center_in -> export_scope_center;
 
 export_world_origin_in = InputInterface(interface: "in")
 export_world_origin = Operation(operation: "ExportGeometry") {
-    path: "geometry_world_origin.obj"
+    path: "regression_results/scale/geometry_world_origin.obj"
 }
 export_world_origin_in -> export_world_origin;
 

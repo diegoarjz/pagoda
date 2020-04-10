@@ -12,7 +12,7 @@ extract_faces_in -> extract_faces -> extract_faces_out;
 
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: $< "geometry" + op.count + ".obj"; >$
+    path: $< "regression_results/extract_faces/geometry" + op.count + ".obj"; >$
 }
 export_geometry_in -> export_geometry;
 

@@ -13,7 +13,7 @@ translate_in -> translate -> translate_out;
 
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: "geometry.obj"
+    path: "regression_results/translate/geometry.obj"
 }
 export_geometry_in -> export_geometry;
 

@@ -4,7 +4,7 @@ create_box = Operation(operation: "CreateBoxGeometry") {
 create_box_out = OutputInterface(interface: "out")
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: "geometry.obj"
+    path: "regression_results/create_box/geometry.obj"
 }
 
 create_box -> create_box_out -> export_geometry_in -> export_geometry;

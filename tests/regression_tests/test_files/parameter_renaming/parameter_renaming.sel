@@ -5,7 +5,7 @@ create_rect_out = OutputInterface(interface: "out")
 
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: "geometry.obj"
+    path: "regression_results/parameter_renaming/geometry.obj"
 }
 
 parameter -> renaming -> create_rect;

@@ -54,6 +54,14 @@ public:
 		return pathToExpectedFile;
 	}
 
+	boost::filesystem::path GetResultFile(const std::string& f)
+	{
+		boost::filesystem::path p = "regression_results";
+		p /= m_regressionTestName;
+		p /= f;
+		return p;
+	}
+
 	std::shared_ptr<Graph> ReadGraphFromFile(const std::string& filePath)
 	{
 		m_graph = m_selector.CreateGraphFromFile(filePath);
@@ -66,14 +74,14 @@ public:
 	{
 		for (const auto& f : m_filesToMatch)
 		{
-			std::string resultFile = FileUtil::LoadFileToString(f);
+			std::string resultFile = file_util::LoadFileToString(GetResultFile(f));
 			if (s_writeFiles)
 			{
-				FileUtil::WriteStringToFile(GetExpectedResultFile(f).string(), resultFile);
+				file_util::WriteStringToFile(GetExpectedResultFile(f).string(), resultFile);
 			}
 			else
 			{
-				std::string expectedFile = FileUtil::LoadFileToString(GetExpectedResultFile(f).string());
+				std::string expectedFile = file_util::LoadFileToString(GetExpectedResultFile(f).string());
 				EXPECT_EQ(expectedFile, resultFile);
 			}
 		}

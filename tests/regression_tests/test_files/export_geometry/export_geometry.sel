@@ -7,7 +7,7 @@ extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
 extrusion_out = OutputInterface(interface: "out")
 
 export_geometry_in = InputInterface(interface: "in")
-export_geometry = Operation(operation: "ExportGeometry") {path: "geometry.obj"}
+export_geometry = Operation(operation: "ExportGeometry") {path: "regression_results/export_geometry/geometry.obj"}
 export_geometry_in -> export_geometry;
 
 create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out;

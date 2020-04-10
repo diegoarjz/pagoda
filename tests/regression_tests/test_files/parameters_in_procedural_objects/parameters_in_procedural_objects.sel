@@ -16,7 +16,7 @@ extrude_in -> extrude -> extrude_out;
 
 export_geometry_in = InputInterface(interface: "in")
 export_geometry = Operation(operation: "ExportGeometry") {
-    path: $< "geometry_" + op.count + ".obj"; >$
+    path: $< "regression_results/parameters_in_procedural_objects/geometry_" + op.count + ".obj"; >$
 }
 export_geometry_in -> export_geometry;
 

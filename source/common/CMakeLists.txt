@@ -88,6 +88,7 @@ target_compile_definitions(
 target_link_libraries(
     common
     PRIVATE
+        Boost::filesystem
 )
 
 include(GNUInstallDirs)
