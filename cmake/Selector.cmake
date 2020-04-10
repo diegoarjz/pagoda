@@ -47,7 +47,7 @@ execute_process(
 )
 
 set(SELECTOR_INCLUDE_GIT_INFO 1)
-if (${GIT_BRANCH} EQUAL "master")
+if (${GIT_BRANCH} STREQUAL "master")
     set(SELECTOR_INCLUDE_GIT_INFO 0)
 endif()
 
