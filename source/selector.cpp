@@ -15,6 +15,7 @@
 #include <procedural_objects/clip_geometry.h>
 #include <procedural_objects/create_box.h>
 #include <procedural_objects/create_rect.h>
+#include <procedural_objects/create_sphere.h>
 #include <procedural_objects/export_geometry.h>
 #include <procedural_objects/extract_faces.h>
 #include <procedural_objects/extract_scope.h>
@@ -62,6 +63,9 @@ public:
 		{
 			m_operationFactory->Register("CreateRectGeometry", [this]() {
 				return std::make_shared<CreateRectGeometry>(m_proceduralObjectSystem);
+			});
+			m_operationFactory->Register("CreateSphereGeometry", [this]() {
+				return std::make_shared<CreateSphereGeometry>(m_proceduralObjectSystem);
 			});
 			m_operationFactory->Register("CreateBoxGeometry", [this]() {
 				return std::make_shared<CreateBoxGeometry>(m_proceduralObjectSystem);

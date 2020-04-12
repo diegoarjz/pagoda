@@ -105,6 +105,7 @@ bool RegressionTest::s_writeFiles = false;
 
 REGRESSION_TEST(create_rect, "rect_x.obj", "rect_y.obj", "rect_z.obj")
 REGRESSION_TEST(create_box, "geometry.obj")
+REGRESSION_TEST(create_sphere, "sphere.obj")
 REGRESSION_TEST(export_geometry, "geometry.obj")
 REGRESSION_TEST(expression, "geometry.obj")
 REGRESSION_TEST(extrusion, "geometry.obj")
