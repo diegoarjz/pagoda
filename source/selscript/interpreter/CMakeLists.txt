@@ -12,16 +12,10 @@ add_library(selscript_interpreter OBJECT ${INTERPRETER_SOURCES})
 
 target_include_directories(
     selscript_interpreter
-    PUBLIC
+    PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-)
-
-target_link_libraries(
-    selscript_interpreter
-    PUBLIC
-        common
 )
 
 target_compile_features(
@@ -35,6 +29,17 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+)
+
+target_link_libraries(
+    selscript_interpreter
+    PRIVATE
+)
+
+set_target_properties(
+    selscript_interpreter
+    PROPERTIES
+        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 include(GNUInstallDirs)

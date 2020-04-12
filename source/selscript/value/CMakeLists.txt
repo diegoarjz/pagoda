@@ -14,7 +14,7 @@ add_library(selscript_value OBJECT ${VALUE_SOURCES})
 
 target_include_directories(
     selscript_value
-    PUBLIC
+    PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
@@ -24,12 +24,6 @@ target_compile_features(
     selscript_value
     PRIVATE
         cxx_std_17
-)
-
-target_link_libraries(
-    selscript_value
-    PUBLIC
-        common
 )
 
 target_compile_options(

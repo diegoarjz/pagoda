@@ -35,23 +35,26 @@ add_library(procedural_graph_reader OBJECT ${PROCEDURAL_GRAPH_READER_SRCS})
 
 target_include_directories(
     procedural_graph_reader
-    PUBLIC
+    PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}
 )
 
-target_link_libraries(
+set_target_properties(
     procedural_graph_reader
-    PUBLIC
-        common
+    PROPERTIES
+        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 target_compile_features(
     procedural_graph_reader
     PRIVATE
         cxx_std_17
+        cxx_lambdas
+        cxx_constexpr
+        cxx_relaxed_constexpr
 )
 
 target_compile_options(
@@ -59,6 +62,18 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+)
+
+target_compile_definitions(
+    procedural_graph_reader
+    PRIVATE
+        SELECTOR_PROFILER_ACTIVE
+        "$<$<CONFIG:DEBUG>:DEBUG>"
+)
+
+target_link_libraries(
+    procedural_graph_reader
+    PRIVATE
 )
 
 include(GNUInstallDirs)

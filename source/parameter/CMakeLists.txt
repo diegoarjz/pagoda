@@ -14,22 +14,25 @@ add_library(parameter OBJECT ${PARAMETER_SRCS})
 
 target_include_directories(
     parameter
-    PUBLIC
+    PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
+)
+
+set_target_properties(
+    parameter
+    PROPERTIES
+        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 target_compile_features(
     parameter
     PRIVATE
         cxx_std_17
-)
-
-target_link_libraries(
-    parameter
-    PUBLIC
-        common
+        cxx_lambdas
+        cxx_constexpr
+        cxx_relaxed_constexpr
 )
 
 target_compile_options(
@@ -37,6 +40,18 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+)
+
+target_compile_definitions(
+    parameter
+    PRIVATE
+        SELECTOR_PROFILER_ACTIVE
+        "$<$<CONFIG:DEBUG>:DEBUG>"
+)
+
+target_link_libraries(
+    parameter
+    PRIVATE
 )
 
 include(GNUInstallDirs)

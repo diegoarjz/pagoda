@@ -96,23 +96,26 @@ add_library(procedural_objects OBJECT ${PROCEDURAL_OBJECTS_SRCS})
 
 target_include_directories(
     procedural_objects
-    PUBLIC
+    PRIVATE
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}
 )
 
-target_link_libraries(
+set_target_properties(
     procedural_objects
-    PUBLIC
-        common
+    PROPERTIES
+        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 target_compile_features(
     procedural_objects
     PRIVATE
         cxx_std_17
+        cxx_lambdas
+        cxx_constexpr
+        cxx_relaxed_constexpr
 )
 
 target_compile_options(
@@ -120,6 +123,18 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+)
+
+target_compile_definitions(
+    procedural_objects
+    PRIVATE
+        SELECTOR_PROFILER_ACTIVE
+        "$<$<CONFIG:DEBUG>:DEBUG>"
+)
+
+target_link_libraries(
+    procedural_objects
+    PRIVATE
 )
 
 include(GNUInstallDirs)
