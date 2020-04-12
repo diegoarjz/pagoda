@@ -26,26 +26,23 @@ add_library(geometry_core OBJECT ${GEOMETRY_CORE_SRCS})
 
 target_include_directories(
     geometry_core
-    PRIVATE
+    PUBLIC
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}
 )
 
-set_target_properties(
-    geometry_core
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     geometry_core
     PRIVATE
         cxx_std_17
-        cxx_lambdas
-        cxx_constexpr
-        cxx_relaxed_constexpr
+)
+
+target_link_libraries(
+    geometry_core
+    PUBLIC
+        common
 )
 
 target_compile_options(
@@ -53,18 +50,6 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
-)
-
-target_compile_definitions(
-    geometry_core
-    PRIVATE
-        SELECTOR_PROFILER_ACTIVE
-        "$<$<CONFIG:DEBUG>:DEBUG>"
-)
-
-target_link_libraries(
-    geometry_core
-    PRIVATE
 )
 
 include(GNUInstallDirs)

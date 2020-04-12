@@ -41,7 +41,7 @@ set_target_properties(
 
 target_include_directories(
     selector
-    PRIVATE
+    PUBLIC
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
@@ -51,9 +51,6 @@ target_compile_features(
     selector
     PRIVATE
         cxx_std_17
-        cxx_lambdas
-        cxx_constexpr
-        cxx_relaxed_constexpr
 )
 
 target_compile_options(
@@ -61,13 +58,6 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
-)
-
-target_compile_definitions(
-    selector
-    PRIVATE
-        SELECTOR_PROFILER_ACTIVE
-        "$<$<CONFIG:DEBUG>:DEBUG>"
 )
 
 include(GNUInstallDirs)

@@ -1,5 +1,9 @@
 project("Selector" LANGUAGES CXX)
-cmake_minimum_required(VERSION 3.11.0 FATAL_ERROR)
+
+cmake_minimum_required(VERSION 3.11...3.17 FATAL_ERROR)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include("Selector")

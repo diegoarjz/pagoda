@@ -70,26 +70,23 @@ add_library(dynamic_value OBJECT ${DYNAMIC_VALUE_SRCS})
 
 target_include_directories(
     dynamic_value
-    PRIVATE
+    PUBLIC
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}
 )
 
-set_target_properties(
-    dynamic_value
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     dynamic_value
     PRIVATE
         cxx_std_17
-        cxx_lambdas
-        cxx_constexpr
-        cxx_relaxed_constexpr
+)
+
+target_link_libraries(
+    dynamic_value
+    PUBLIC
+        common
 )
 
 target_compile_options(
@@ -97,18 +94,6 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
-)
-
-target_compile_definitions(
-    dynamic_value
-    PRIVATE
-        SELECTOR_PROFILER_ACTIVE
-        "$<$<CONFIG:DEBUG>:DEBUG>"
-)
-
-target_link_libraries(
-    dynamic_value
-    PRIVATE
 )
 
 include(GNUInstallDirs)

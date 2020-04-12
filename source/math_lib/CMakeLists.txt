@@ -36,26 +36,17 @@ add_library(math_lib OBJECT ${MATH_LIB_SRCS})
 
 target_include_directories(
     math_lib
-    PRIVATE
+    PUBLIC
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}
 )
 
-set_target_properties(
-    math_lib
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     math_lib
     PRIVATE
         cxx_std_17
-        cxx_lambdas
-        cxx_constexpr
-        cxx_relaxed_constexpr
 )
 
 target_compile_options(
@@ -65,16 +56,10 @@ target_compile_options(
         -Werror
 )
 
-target_compile_definitions(
-    math_lib
-    PRIVATE
-        SELECTOR_PROFILER_ACTIVE
-        "$<$<CONFIG:DEBUG>:DEBUG>"
-)
-
 target_link_libraries(
     math_lib
-    PRIVATE
+    PUBLIC
+        common
 )
 
 include(GNUInstallDirs)

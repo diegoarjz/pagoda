@@ -25,7 +25,7 @@ add_library(selscript_intermediate OBJECT ${INTERMEDIATE_SOURCES})
 
 target_include_directories(
     selscript_intermediate
-    PRIVATE
+    PUBLIC
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
@@ -37,17 +37,17 @@ target_compile_features(
         cxx_std_17
 )
 
+target_link_libraries(
+    selscript_intermediate
+    PUBLIC
+        common
+)
+
 target_compile_options(
     selscript_intermediate
     PRIVATE
         -Wall
         -Werror
-)
-
-set_target_properties(
-    selscript_intermediate
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 include(GNUInstallDirs)

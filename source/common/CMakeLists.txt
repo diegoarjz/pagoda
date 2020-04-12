@@ -45,11 +45,10 @@ add_library(common OBJECT ${COMMON_SRCS})
 
 target_include_directories(
     common
-    PRIVATE
+    PUBLIC
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
 )
 
 set_target_properties(
@@ -62,9 +61,6 @@ target_compile_features(
     common
     PRIVATE
         cxx_std_17
-        cxx_lambdas
-        cxx_constexpr
-        cxx_relaxed_constexpr
 )
 
 target_compile_options(
@@ -86,6 +82,7 @@ target_compile_definitions(
         -DGIT_COMMIT_AUTHOR=${GIT_COMMIT_AUTHOR}
         -DGIT_COMMIT_SUBJECT=${GIT_COMMIT_SUBJECT}
         -DASSERTS_ENABLED=${Selector_ENABLE_ASSERTIONS}
+    PUBLIC
         SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )

@@ -14,7 +14,7 @@ add_library(selscript_parser OBJECT ${PARSER_SOURCES}
 
 target_include_directories(
     selscript_parser
-    PRIVATE
+    PUBLIC
         $<INSTALL_INTERFACE:selector>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
@@ -26,22 +26,17 @@ target_compile_features(
         cxx_std_17
 )
 
+target_link_libraries(
+    selscript_parser
+    PUBLIC
+        common
+)
+
 target_compile_options(
     selscript_parser
     PRIVATE
         -Wall
         -Werror
-)
-
-target_link_libraries(
-    selscript_parser
-    PRIVATE
-)
-
-set_target_properties(
-    selscript_parser
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 include(GNUInstallDirs)
