@@ -27,16 +27,16 @@ std::string get_version_information()
 	ss << "Selector version " << get_version_string();
 	if (!get_build_number().empty())
 	{
-		ss << std::endl << " Build Number: " << get_build_number();
+		ss << "\n Build Number: " << get_build_number();
 	}
 	if (!get_build_date().empty())
 	{
-		ss << std::endl << " Build Date: " << get_build_date();
+		ss << "\n Build Date: " << get_build_date();
 	}
 
 #if SELECTOR_INCLUDE_GIT_INFO
 	{
-		ss << std::endl << "Git:" << std::endl;
+		ss << "\n\nGit:" << std::endl;
 		ss << " Branch:         " << get_git_branch() << " (" << get_git_commit_hash() << ")" << std::endl;
 		ss << " Commit Author:  " << get_git_commit_author() << std::endl;
 		ss << " Commit Subject: " << get_git_commit_subject() << std::endl;
