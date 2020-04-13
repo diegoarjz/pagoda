@@ -5,6 +5,7 @@ set(GEOMETRY_OPERATIONS_SRCS
     "explode_to_faces.h"
     "extrusion.h"
     "extrusion_profile.h"
+    "face_offset.h"
     "plane_splits.h"
     "triangulate.h"
 )
@@ -16,6 +17,7 @@ set(GEOMETRY_OPERATIONS_PUBLIC_HEADERS
     "create_sphere.h"
     "extrusion.h"
     "extrusion_profile.h"
+    "face_offset.h"
     "plane_splits.h"
     "triangulate.h"
 )

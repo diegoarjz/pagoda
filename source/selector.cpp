@@ -20,6 +20,7 @@
 #include <procedural_objects/extract_faces.h>
 #include <procedural_objects/extract_scope.h>
 #include <procedural_objects/extrude_geometry.h>
+#include <procedural_objects/face_offset.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
 #include <procedural_objects/repeat_split.h>
@@ -76,6 +77,8 @@ public:
 			                             [this]() { return std::make_shared<ExtractScope>(m_proceduralObjectSystem); });
 			m_operationFactory->Register(
 			    "ExtrudeGeometry", [this]() { return std::make_shared<ExtrudeGeometry>(m_proceduralObjectSystem); });
+			m_operationFactory->Register(
+			    "FaceOffset", [this]() { return std::make_shared<FaceOffsetOperation>(m_proceduralObjectSystem); });
 			m_operationFactory->Register("TriangulateGeometry", [this]() {
 				return std::make_shared<TriangulateGeometry>(m_proceduralObjectSystem);
 			});

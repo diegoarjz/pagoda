@@ -1,4 +1,5 @@
 set(MATH_LIB_SRCS
+    "bissectrix.h"
     "degrees.h"
     "intersection.h"
     "length.h"
@@ -16,6 +17,7 @@ set(MATH_LIB_SRCS
 )
 
 set(MATH_LIB_PUBLIC_HEADERS
+    "bissectrix.h"
     "degrees.h"
     "intersection.h"
     "length.h"

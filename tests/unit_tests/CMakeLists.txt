@@ -17,6 +17,7 @@ set(test_srcs
     "test_utils.cpp"
     "common/profiler.cpp"
     "common/range.cpp"
+    "math_lib/bissectrix.cpp"
     "math_lib/line_3d.cpp"
     "math_lib/line_segment_3d.cpp"
     "math_lib/math_utils.cpp"

@@ -122,6 +122,14 @@ REGRESSION_TEST(repeat_split, "geometry_0.obj", "geometry_11.obj", "geometry_14.
                 "geometry_31.obj", "geometry_6.obj", "geometry_9.obj", "geometry_10.obj", "geometry_13.obj",
                 "geometry_16.obj", "geometry_19.obj", "geometry_21.obj", "geometry_24.obj", "geometry_27.obj",
                 "geometry_3.obj", "geometry_4.obj", "geometry_7.obj")
+REGRESSION_TEST(face_offset, "geometry-inner-0.obj", "geometry-outer-14.obj", "geometry-outer-24.obj",
+                "geometry-inner-1.obj", "geometry-outer-15.obj", "geometry-outer-25.obj", "geometry-inner-2.obj",
+                "geometry-outer-16.obj", "geometry-outer-26.obj", "geometry-inner-3.obj", "geometry-outer-17.obj",
+                "geometry-outer-27.obj", "geometry-inner-4.obj", "geometry-outer-18.obj", "geometry-outer-28.obj",
+                "geometry-inner-5.obj", "geometry-outer-19.obj", "geometry-outer-29.obj", "geometry-outer-10.obj",
+                "geometry-outer-20.obj", "geometry-outer-6.obj", "geometry-outer-11.obj", "geometry-outer-21.obj",
+                "geometry-outer-7.obj", "geometry-outer-12.obj", "geometry-outer-22.obj", "geometry-outer-8.obj",
+                "geometry-outer-13.obj", "geometry-outer-23.obj", "geometry-outer-9.obj")
 REGRESSION_TEST(extract_faces, "geometry0.obj", "geometry1.obj", "geometry2.obj", "geometry3.obj", "geometry4.obj",
                 "geometry5.obj")
 REGRESSION_TEST(router, "left0.obj", "right0.obj", "front0.obj", "back0.obj", "up0.obj", "down0.obj")
