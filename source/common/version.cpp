@@ -22,19 +22,18 @@ struct Feature
 
 std::vector<Feature> get_features()
 {
-#define HAS_FEATURE(F, NAME)                      \
-	if (std::string(F) == "ON")                   \
-	{                                             \
-		features.push_back(Feature{NAME, true});  \
-	}                                             \
-	else                                          \
-	{                                             \
-		features.push_back(Feature{NAME, false}); \
-	}
-
-	std::vector<Feature> features;
-	HAS_FEATURE(SELECTOR_PROFILER_ACTIVE, "Profiler")
-	HAS_FEATURE(SELECTOR_ENABLE_ASSERTIONS, "DebugAsserts")
+	std::vector<Feature> features = {
+#ifdef SELECTOR_PROFILER_ACTIVE
+	    {"Profiler", true},
+#else
+	    {"Profiler", false},
+#endif
+#ifdef SELECTOR_ENABLE_ASSERTIONS
+	    {"DebugAsserts", true},
+#else
+	    {"DebugAsserts", false},
+#endif
+	};
 	return features;
 }
 
