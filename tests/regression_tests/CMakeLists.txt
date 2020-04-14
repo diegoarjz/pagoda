@@ -1,5 +1,10 @@
+configure_file(
+    "${PROJECT_SOURCE_DIR}/tests/regression_tests/main.cpp.in"
+    "${PROJECT_BINARY_DIR}/tests/regression_tests/main.cpp"
+)
+
 set(test_srcs
-    "main.cpp"
+    "${CMAKE_CURRENT_BINARY_DIR}/main.cpp"
 )
 
 add_executable(regression_tests ${test_srcs})
@@ -52,7 +57,5 @@ target_link_libraries(
         gtest
         pthread
 )
-
-file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_test(NAME regression_tests COMMAND regression_tests)
