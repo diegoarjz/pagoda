@@ -58,13 +58,13 @@ target_compile_options(
 target_compile_definitions(
     geometry_core
     PRIVATE
-        SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
 
 target_link_libraries(
     geometry_core
     PRIVATE
+        common
 )
 
 include(GNUInstallDirs)

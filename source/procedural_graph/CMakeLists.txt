@@ -100,13 +100,13 @@ target_compile_options(
 target_compile_definitions(
     procedural_graph
     PRIVATE
-        SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
 
 target_link_libraries(
     procedural_graph
     PRIVATE
+        common
 )
 
 include(GNUInstallDirs)

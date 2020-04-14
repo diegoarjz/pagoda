@@ -6,9 +6,5 @@
 
 namespace selector
 {
-bool NodePtrCompare::operator()(const NodePtr &lhs, const NodePtr &rhs) const
-{
-	DBG_ASSERT(lhs->GetId() != rhs->GetId() || lhs != rhs);
-	return lhs->GetId() < rhs->GetId();
-}
+bool NodePtrCompare::operator()(const NodePtr &lhs, const NodePtr &rhs) const { return lhs->GetId() < rhs->GetId(); }
 }  // namespace selector

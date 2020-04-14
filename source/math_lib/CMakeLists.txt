@@ -70,13 +70,13 @@ target_compile_options(
 target_compile_definitions(
     math_lib
     PRIVATE
-        SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
 
 target_link_libraries(
     math_lib
     PRIVATE
+        common
 )
 
 include(GNUInstallDirs)

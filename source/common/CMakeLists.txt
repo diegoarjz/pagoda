@@ -85,10 +85,15 @@ target_compile_definitions(
         -DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\"
         -DGIT_COMMIT_AUTHOR=${GIT_COMMIT_AUTHOR}
         -DGIT_COMMIT_SUBJECT=${GIT_COMMIT_SUBJECT}
-        -DASSERTS_ENABLED=${Selector_ENABLE_ASSERTIONS}
-        SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
+
+if (${SELECTOR_ENABLE_ASSERTIONS})
+    target_compile_options(common PUBLIC -DSELECTOR_ENABLE_ASSERTIONS="${SELECTOR_ENABLE_ASSERTIONS}")
+endif()
+if (${SELECTOR_PROFILER_ACTIVE})
+    target_compile_options(common PUBLIC -DSELECTOR_PROFILER_ACTIVE="${SELECTOR_PROFILER_ACTIVE}")
+endif()
 
 target_link_libraries(
     common

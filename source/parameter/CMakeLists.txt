@@ -45,13 +45,13 @@ target_compile_options(
 target_compile_definitions(
     parameter
     PRIVATE
-        SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
 
 target_link_libraries(
     parameter
     PRIVATE
+        common
 )
 
 include(GNUInstallDirs)

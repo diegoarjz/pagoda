@@ -50,6 +50,12 @@ set_target_properties(
         COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
+target_link_libraries(
+    selscript_intermediate
+    PRIVATE
+        common
+)
+
 include(GNUInstallDirs)
 install(TARGETS selscript_intermediate
     EXPORT selscript_intermediate-export

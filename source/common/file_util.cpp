@@ -1,6 +1,7 @@
 #include "file_util.h"
 
 #include "exception.h"
+#include "logger.h"
 
 #include <fstream>
 #include <iostream>
@@ -44,9 +45,19 @@ void WriteStringToFile(const std::string &filePath, const std::string &contents)
 bool CreateDirectories(const std::string &path) { return CreateDirectories(boost::filesystem::path(path)); }
 bool CreateDirectories(const boost::filesystem::path &path)
 {
+	if (path.empty())
+	{
+		return true;
+	}
+
 	try
 	{
 		return boost::filesystem::create_directories(path);
+	}
+	catch (const boost::filesystem::filesystem_error &e)
+	{
+		LOG_ERROR("File System Error: " << e.what());
+		throw Exception("File System Error. Unable to create directories.");
 	}
 	catch (...)
 	{

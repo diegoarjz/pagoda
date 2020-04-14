@@ -66,7 +66,6 @@ target_compile_options(
 target_compile_definitions(
     selector
     PRIVATE
-        SELECTOR_PROFILER_ACTIVE
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
 

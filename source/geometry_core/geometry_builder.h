@@ -72,7 +72,7 @@ public:
 		void AddIndex(const Index_t &index)
 		{
 			LOG_TRACE(GeometryCore, "Adding index " << index << " to face builder.");
-			DBG_ASSERT_MSG(m_faceIndices.size() < m_faceIndices.capacity(),
+			DBG_ASSERT_MSG(m_faceIndices.size() <= m_faceIndices.capacity(),
 			               "Trying to add a vertex index past the end");
 
 			m_faceIndices.push_back(index);

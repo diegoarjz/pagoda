@@ -34,6 +34,7 @@ target_compile_options(
 target_link_libraries(
     selscript
     PRIVATE
+        common
 )
 
 set_target_properties(

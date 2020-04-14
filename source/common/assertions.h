@@ -57,10 +57,10 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 
 }  // namespace selector
 
-/// Interruptes the execution and tries to step into debugger
+/// Interrupts the execution and tries to step into debugger
 #define HALT asm("int $3")
 
-#ifdef ASSERTS_ENABLED
+#ifdef SELECTOR_ENABLE_ASSERTIONS
 
 /**
  * Assertion that will only be called in DEBUG mode.
