@@ -5,6 +5,7 @@
 #include "reader/graph_reader_grammar.h"
 
 #include "common/assertions.h"
+#include "common/exception.h"
 #include "common/logger.h"
 #include "parse_result.h"
 #include "procedural_graph/node_factory.h"
@@ -35,7 +36,7 @@ struct GraphReader::Impl
 
 		if (!result || begin != end)
 		{
-			std::cout << " found: " << std::string(begin, end);
+			throw Exception("Syntax error while reading graph file. Starting in\n " + std::string(begin, end));
 			m_currentParseResult.status = ParseResult::Status::UnknownError;
 			return nullptr;
 		}
@@ -48,11 +49,14 @@ struct GraphReader::Impl
 	const ParseResult &GetParseResult() const { return m_currentParseResult; }
 
 private:
-    NodeFactoryPtr m_nodeFactory;
+	NodeFactoryPtr m_nodeFactory;
 	ParseResult m_currentParseResult;
 };
 
-GraphReader::GraphReader(NodeFactoryPtr nodeFactory) : m_implementation(std::make_unique<GraphReader::Impl>(nodeFactory)) {}
+GraphReader::GraphReader(NodeFactoryPtr nodeFactory)
+    : m_implementation(std::make_unique<GraphReader::Impl>(nodeFactory))
+{
+}
 GraphReader::~GraphReader() {}
 GraphPtr GraphReader::Read(const std::string &str) { return m_implementation->Read(str); }
 const ParseResult &GraphReader::GetParseResult() const { return m_implementation->GetParseResult(); }

@@ -51,10 +51,6 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 			param = Expression::CreateExpression(namedArgument->GetArgumentValue());
 			break;
 		}
-		default:
-		{
-			// THROW
-		}
 	}
 	m_currentNamedParameters[namedArgument->GetName()] = param;
 }
@@ -95,7 +91,7 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 
 		if (prevNode == std::end(m_nodeTable) || currNode == std::end(m_nodeTable))
 		{
-			throw Exception("Node not found while linking " + prevNode->first + " to " + currNode->first);
+			throw Exception("Node not found while linking '" + (*prevNodeName) + "' to '" + (*currentNodeName) + "'");
 		}
 
 		m_graph->CreateEdge(prevNode->second, currNode->second);
