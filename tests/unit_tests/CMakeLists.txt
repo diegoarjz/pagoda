@@ -32,6 +32,7 @@ set(test_srcs
     "geometry_core/indexed_container.cpp"
     "geometry_core/split_point_topology.cpp"
     "geometry_core/scope.cpp"
+    "geometry_operations/ear_clipping.cpp"
     "geometry_operations/extrusion.cpp"
     "geometry_operations/create_rect.cpp"
     "geometry_operations/triangulate.cpp"

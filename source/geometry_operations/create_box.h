@@ -4,6 +4,7 @@
 #include <common/logger.h>
 #include <geometry_core/geometry.h>
 #include <geometry_core/geometry_builder.h>
+#include <geometry_core/scope.h>
 
 namespace selector
 {

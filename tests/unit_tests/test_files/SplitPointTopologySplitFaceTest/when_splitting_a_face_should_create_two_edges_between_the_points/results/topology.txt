@@ -22,6 +22,6 @@ Edges:
  5: 5 -> 4
 
 Faces:
- 0:   SP: 3
+ 0:   SP: 1
  1:   SP: 2
 

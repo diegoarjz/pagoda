@@ -27,10 +27,10 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 {
 	auto builder = std::make_shared<GeometryBuilderT<GeometryType>>(m_geometry);
 	auto p1 = builder->AddPoint({0, 0, 0});
-	auto p2 = builder->AddPoint({0, 0, 1});
-	auto p3 = builder->AddPoint({0, 0, 2});
-	auto p4 = builder->AddPoint({0, 0, 3});
-	auto p5 = builder->AddPoint({0, 0, 4});
+	auto p2 = builder->AddPoint({1, 0, 0});
+	auto p3 = builder->AddPoint({1, 1, 0});
+	auto p4 = builder->AddPoint({0.5f, 0.5f, 0});
+	auto p5 = builder->AddPoint({0, 1, 0});
 
 	auto faceBuilder = builder->StartFace(5);
 	faceBuilder.AddIndex(p1);
@@ -57,7 +57,8 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 		}
 	}
 
-	std::array<Vec3F, 5> expected = {Vec3F{0, 0, 0}, Vec3F{0, 0, 1}, Vec3F{0, 0, 2}, Vec3F{0, 0, 3}, Vec3F{0, 0, 4}};
+	std::array<Vec3F, 5> expected = {Vec3F{0, 0, 0}, Vec3F{1, 0, 0}, Vec3F{1, 1, 0}, Vec3F{0.5f, 0.5f, 0},
+	                                 Vec3F{0, 1, 0}};
 
 	for (auto i = 0u; i < 5; ++i)
 	{
