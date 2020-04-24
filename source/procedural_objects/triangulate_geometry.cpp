@@ -8,7 +8,7 @@
 #include "hierarchical_system.h"
 #include "procedural_component.h"
 
-#include "geometry_operations/triangulate.h"
+#include "geometry_operations/ear_clipping.h"
 
 #include "../selector.h"
 
@@ -36,7 +36,7 @@ void TriangulateGeometry::DoWork()
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
-	Triangulate<Geometry> triangulate;
+	EarClipping<Geometry> earClipping;
 
 	while (HasInput(sInputGeometry))
 	{
@@ -52,7 +52,7 @@ void TriangulateGeometry::DoWork()
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 		auto outGeometry = std::make_shared<Geometry>();
 
-		triangulate.Execute(inGeometry, outGeometry);
+		earClipping.Execute(inGeometry, outGeometry);
 		outGeometryComponent->SetGeometry(outGeometry);
 		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
 

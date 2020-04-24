@@ -41,8 +41,10 @@ bool MatchFile::Match(const std::string &in)
 {
 	if (m_saveFile)
 	{
+		selector::file_util::CreateDirectories(m_filePath.parent_path());
 		selector::file_util::WriteStringToFile(m_filePath.string(), in);
 		m_fileContents = in;
+		return true;
 	}
 
 	EXPECT_EQ(m_fileContents, in);

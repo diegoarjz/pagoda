@@ -69,9 +69,17 @@ public:
 	}
 
 private:
-	void ClipFace(GeometryPtr geometry, Index_t face)
+	void ClipFace(GeometryPtr geometry, const SplitPointTopology::FaceHandle &face)
 	{
 		START_PROFILE;
+
+#ifdef DEBUG
+		LOG_TRACE(GeometryOperations, "Clipping Face " << face << " with vertices");
+		for (auto fpIter = geometry->FacePointCirculatorBegin(face); fpIter; ++fpIter)
+		{
+			LOG_TRACE(GeometryOperations, " " << geometry->GetPosition(*fpIter));
+		}
+#endif
 
 		std::vector<std::pair<Index_t, Index_t>> splitFaceEdges;
 		std::pair<Index_t, Index_t> currentEdgeToSplit;
@@ -100,14 +108,30 @@ private:
 			LOG_TRACE(GeometryOperations,
 			          "Splitting face " << face << " from edge " << std::get<0>(e) << " to edge " << std::get<1>(e));
 			auto newFace = geometry->SplitFace(face, std::get<0>(e), std::get<1>(e));
-			if (CheckFaceSide(geometry, newFace) == Plane<float>::PlaneSide::Front)
+			auto faceSide = CheckFaceSide(geometry, newFace);
+			m_faceSide[newFace] = faceSide;
+
+#ifdef DEBUG
+			for (const auto &f : {face, newFace})
 			{
-				m_faceSide[newFace] = Plane<float>::PlaneSide::Front;
+				LOG_TRACE(GeometryOperations, "Into face " << f << " with vertices");
+				for (auto fpIter = geometry->FacePointCirculatorBegin(f); fpIter; ++fpIter)
+				{
+					LOG_TRACE(GeometryOperations, " " << geometry->GetPosition(*fpIter));
+				}
+			}
+#endif
+
+			if (faceSide == Plane<float>::PlaneSide::Front)
+			{
 				m_faceSide[face] = Plane<float>::PlaneSide::Back;
 			}
-			else
+			else if (faceSide == Plane<float>::PlaneSide::Back)
 			{
-				m_faceSide[newFace] = Plane<float>::PlaneSide::Back;
+				m_faceSide[face] = Plane<float>::PlaneSide::Front;
+			}
+			else  // Contained
+			{
 				m_faceSide[face] = Plane<float>::PlaneSide::Front;
 			}
 		}
@@ -198,7 +222,14 @@ private:
 		}
 	}
 
-	bool SameSide(const Index_t &p1, const Index_t &p2) { return m_pointsSide[p1] == m_pointsSide[p2]; }
+	bool SameSide(const Index_t &p1, const Index_t &p2)
+	{
+		auto p1Side = m_pointsSide[p1];
+		auto p2Side = m_pointsSide[p2];
+
+		return p1Side == p2Side || p1Side == Plane<float>::PlaneSide::Contained ||
+		       p2Side == Plane<float>::PlaneSide::Contained;
+	}
 
 	std::set<Index_t> m_newEdges;
 	std::map<Index_t, Plane<float>::PlaneSide> m_pointsSide;

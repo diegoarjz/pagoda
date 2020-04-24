@@ -6,6 +6,7 @@
 #include "common/profiler.h"
 #include "indexed_container.h"
 
+#include <boost/qvm/vec_access.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
 #include <cstdint>
@@ -105,11 +106,22 @@ public:
 			auto pd0 = m_builder->m_pointData.Get(m_faceIndices[0]);
 			auto pd1 = m_builder->m_pointData.Get(m_faceIndices[1]);
 			auto pd2 = m_builder->m_pointData.Get(m_faceIndices[2]);
-			auto normal = boost::qvm::cross(pd0.m_position - pd1.m_position, pd2.m_position - pd1.m_position);
-			if (boost::qvm::mag_sqr(normal) != 0)
+
+			Vec3F normal{0, 0, 0};
+			for (auto i = 0; i < m_faceIndices.size(); ++i)
 			{
-				normal = normalized(normal);
+				auto nextIndex = (i + 1) % m_faceIndices.size();
+				auto curr = m_builder->m_pointData.Get(m_faceIndices[i]);
+				auto next = m_builder->m_pointData.Get(m_faceIndices[nextIndex]);
+
+				// Newell's Method
+				X(normal) += (Y(curr.m_position) - Y(next.m_position)) * (Z(curr.m_position) + Z(next.m_position));
+				Y(normal) += (Z(curr.m_position) - Z(next.m_position)) * (X(curr.m_position) + X(next.m_position));
+				Z(normal) += (X(curr.m_position) - X(next.m_position)) * (Y(curr.m_position) + Y(next.m_position));
 			}
+			DBG_ASSERT_MSG(boost::qvm::mag_sqr(normal) > 0,
+			               "The normal's magnitude is 0. Are all face points collinear?");
+			boost::qvm::normalize(normal);
 
 			auto face = m_geometry->CreateFace(pd0.m_index, pd1.m_index, pd2.m_index);
 			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
