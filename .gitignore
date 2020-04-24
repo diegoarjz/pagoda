@@ -4,21 +4,12 @@ compile_commands.json
 # VIM swap files
 *.swp
 
-# Doxygen generated files
+# Generated doc files
 docs/html/
 docs/diagrams/
-
-# Buildsys files
-buildsys/Debug/
-buildsys/Release/
-buildsys/RelWithDebInfo/
-buildsys/MinSizeRel/
-buildsys/.config/
-buildsys/archive/
-buildsys/runs/
-buildsys/data/
-buildsys/*.log
+docs/site/
 
 *.pyc
 *__pycache__*
+
 
