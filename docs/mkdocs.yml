@@ -1,4 +1,8 @@
 site_name: Selector
+theme: windmill
+repo_url: 'https://github.com/diegoarjz/selector/'
+edit_uri: 'edit/master/docs/docs/'
+google_analytics: ['UA-65082977-2', 'auto']
 nav:
     - Home: index.md
     - User Guide:

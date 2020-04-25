@@ -1,8 +1,11 @@
 # Parameter Node
 
-The Parameter node is used to define parameters that can be used in other nodes.
+The Parameter node is used to define parameters that can be used in other
+nodes.
 
-During the execution of a Parameter node, each of its parameters is injected into each of the downstream nodes, overwritting its value if the node already has a parameter with the same name.
+During the execution of a Parameter node, each of its parameters is injected
+into each of the downstream nodes, overwritting its value if the node already
+has a parameter with the same name.
 
 ## Usage Example
 

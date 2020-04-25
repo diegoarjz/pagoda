@@ -1,6 +1,7 @@
 # RepeatSplit
 
-Repeatedly splits the incoming geometries with planes created given a size along a scope's axis.
+Repeatedly splits the incoming geometries with planes created given a size
+along a scope's axis.
 
 ## Input Interfaces
 

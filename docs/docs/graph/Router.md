@@ -1,8 +1,13 @@
 # Router Node
 
-Filters and routes incoming procedural objects based on a set of predicates, routing them to the respective downstream nodes.
+Filters and routes incoming procedural objects based on a set of predicates,
+routing them to the respective downstream nodes.
 
-Parameter names must correspond to downstream nodes and its values are predicate names. So, in the example below, procedural objects that match the <i>up</i> predicate are routed to <i>top_extrusion_in</i> node and those that match the <i>left</i> predicate are routed to the <i>left_extrusion_in</i> node.
+Parameter names must correspond to downstream nodes and its values are
+predicate names. So, in the example below, procedural objects that match the
+<i>up</i> predicate are routed to <i>top_extrusion_in</i> node and those that
+match the <i>left</i> predicate are routed to the <i>left_extrusion_in</i>
+node.
 
 ## Example Usage
 

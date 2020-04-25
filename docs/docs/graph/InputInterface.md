@@ -1,6 +1,8 @@
 # InputInterface Node
 
-The InputInterface node is used to define which input interface on the downstream [Operation Node](/graph/Operation) the procedural objects should be pushed into.
+The InputInterface node is used to define which input interface on the
+downstream [Operation Node](/graph/Operation) the procedural objects should be
+pushed into.
 
 ## Example Usage
 ```

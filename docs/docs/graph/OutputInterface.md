@@ -1,6 +1,7 @@
 # OutputInterface Node
 
-The OutputInterface node is used to extract procedural objects from a specific ouput interface on the upstream [Operation Node](/graph/Operation).
+The OutputInterface node is used to extract procedural objects from a specific
+ouput interface on the upstream [Operation Node](/graph/Operation).
 
 ## Usage Example
 

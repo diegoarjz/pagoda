@@ -9,7 +9,8 @@ face. This geometry takes the space between the original edge, the
 corresponding edge in the inner geometry and the bisecting lines between the
 adjacent edges.
 
-In other words, this operation creates an inner geometry and outer geometries such that the outer geometries create a border of a given amount.
+In other words, this operation creates an inner geometry and outer geometries
+such that the outer geometries create a border of a given amount.
 
 ## Input Interfaces
 

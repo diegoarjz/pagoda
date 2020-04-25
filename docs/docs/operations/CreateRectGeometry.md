@@ -1,6 +1,7 @@
 # CreateRectGeometry
 
-Creates a rectangular geometry in one of the x, y or z planes, centered at the origin.
+Creates a rectangular geometry in one of the x, y or z planes, centered at the
+origin.
 
 ## Input Interfaces
 

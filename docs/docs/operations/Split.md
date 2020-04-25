@@ -1,6 +1,7 @@
 # Split
 
-Splits the incoming geometries with planes created given a series of sizes along a scope's axis.
+Splits the incoming geometries with planes created given a series of sizes
+along a scope's axis.
 
 ## Input Interfaces
 
@@ -16,7 +17,8 @@ Splits the incoming geometries with planes created given a series of sizes along
 
 ## Parameters
 
-Note: the parameters for the Split operation are most likely to change as soon as lists are implemented in selscript.
+Note: the parameters for the Split operation are most likely to change as soon
+as lists are implemented in selscript.
 
 
 | Name        | Type    | Allowed values | Default | Description                                                    |
