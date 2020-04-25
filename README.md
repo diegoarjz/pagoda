@@ -4,12 +4,13 @@
 |--------|-------|-------------|-----------|
 | | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=master) | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=development) | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=selscript) |
 
+You can find Selector's documentation [here](https://diegoarjz.github.io/selector).
+
 # What is Selector
 
 ![banner](https://user-images.githubusercontent.com/6498824/68999381-481b2f80-08b7-11ea-8259-05bbc2b0a454.png)
 
 ![graph](https://user-images.githubusercontent.com/6498824/68999389-5bc69600-08b7-11ea-93f0-c16b6dabc04a.png)
-
 
 The goal of Selector is to be a procedural modelling framework aimed at
 supporting researchers and academics in this field. Therefore, it must be
