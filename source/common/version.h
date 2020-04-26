@@ -24,6 +24,11 @@ std::string get_build_date();
  * Returns a formatted version information string.
  */
 std::string get_version_information();
+
+/**
+ * Checks whether selector was compiled with a given feature.
+ */
+bool has_feature(const std::string &featureName);
 }  // namespace selector
 
 #endif

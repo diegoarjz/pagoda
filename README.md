@@ -117,19 +117,19 @@ You will then have a rect.obj file with the square.
 - [x] Procedural Object System
     - [x] Component System
     - [x] Geometry Component
-- [ ] Basic geometry operations
+- [x] Basic geometry operations
     - [x] Create Rectangle
-    - [ ] Create Sphere
+    - [x] Create Sphere
     - [x] Create Box
     - [x] Extrusion
     - [x] Split
     - [x] Repeat split
     - [x] Extract Faces
-    - [ ] Offset
+    - [x] Offset
     - [x] Rotation
     - [x] Translation
     - [x] Scale
-    - [ ] Geometry Triangulation
+    - [x] Geometry Triangulation
 - [x] Procedural graph
     - [x] Parametrised procedural rules
     - [x] Expressions in parameters

@@ -26,6 +26,7 @@ bool DefaultScheduler::Step()
 	nextNode->SetExpressionVariables();
 	try
 	{
+		LOG_INFO("Executing node '" << nextNode->GetName() << "'");
 		nextNode->Execute(inNodes, outNodes);
 	}
 	catch (Exception &e)

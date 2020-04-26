@@ -3,23 +3,30 @@
 #include <common/logger.h>
 #include <common/profiler.h>
 #include <common/version.h>
+
+#include <dynamic_value/set_value_from.h>
+#include <dynamic_value/value_visitor.h>
+
 #include <geometry_core/geometry_exporter.h>
 #include <procedural_graph/default_scheduler.h>
+#include <procedural_graph/execution_queue.h>
 #include <procedural_graph/graph_dot_exporter.h>
 #include <procedural_graph/input_interface_node.h>
 #include <procedural_graph/node_set_visitor.h>
+#include <procedural_graph/node_visitor.h>
 #include <procedural_graph/operation_node.h>
 #include <procedural_graph/output_interface_node.h>
 #include <procedural_graph/parameter_node.h>
 #include <procedural_graph/parse_result.h>
 #include <procedural_graph/reader.h>
+#include <procedural_graph/router_node.h>
+
+#include <procedural_objects/create_rect.h>
 #include <procedural_objects/export_geometry.h>
+#include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/geometry_component.h>
 #include <procedural_objects/geometry_system.h>
 #include <procedural_objects/hierarchical_system.h>
-
-#include <procedural_objects/create_rect.h>
-#include <procedural_objects/extrude_geometry.h>
 #include <procedural_objects/triangulate_geometry.h>
 #include <selector.h>
 
@@ -27,13 +34,16 @@
 
 #include <fstream>
 #include <iostream>
+#include <regex>
 
 namespace po = boost::program_options;
 using namespace selector;
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
 std::shared_ptr<Graph> ReadGraphFromFile(Selector& selector, const std::string& file_path);
+void SetParameter(const NodeSet<Node>& nodes, const std::string& param);
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path);
+void ListGraph(std::shared_ptr<Graph> graph);
 void ExecuteGraph(std::shared_ptr<Graph> graph);
 void PrintProfile();
 
@@ -81,6 +91,21 @@ int main(int argc, char* argv[])
 				return 1;
 			}
 
+			if (vm.count("param"))
+			{
+				std::vector<std::string> params = vm["param"].as<std::vector<std::string>>();
+				auto nodes = graph->GetGraphNodes();
+				for (const auto& p : params)
+				{
+					SetParameter(nodes, p);
+				}
+			}
+
+			if (vm.count("list"))
+			{
+				ListGraph(graph);
+			}
+
 			if (dot_file.size() > 0)
 			{
 				WriteDotFile(graph, dot_file);
@@ -112,6 +137,98 @@ std::shared_ptr<Graph> ReadGraphFromFile(Selector& selector, const std::string& 
 	return selector.CreateGraphFromFile(file_path);
 }
 
+struct PrintVisitor : NodeVisitor
+{
+	void Visit(std::shared_ptr<OperationNode> n) override { print(n, "OperationNode"); }
+	void Visit(std::shared_ptr<InputInterfaceNode> n) override { print(n, "InputInterfaceNode"); }
+	void Visit(std::shared_ptr<OutputInterfaceNode> n) override { print(n, "OutputInterfaceNode"); }
+	void Visit(std::shared_ptr<ParameterNode> n) override { print(n, "ParameterNode"); }
+	void Visit(std::shared_ptr<RouterNode> n) override { print(n, "RouterNode"); }
+
+	void print(std::shared_ptr<Node> n, const std::string& nodeType)
+	{
+		std::cout << "  - name: " << n->GetName() << std::endl;
+		std::cout << "    id: " << n->GetId() << std::endl;
+		std::cout << "    type: " << nodeType << std::endl;
+		auto parametersEnd = n->GetMembersEnd();
+		std::cout << "    parameters:" << std::endl;
+		for (auto iter = n->GetMembersBegin(); iter != parametersEnd; ++iter)
+		{
+			std::cout << "    - name: " << iter->first << std::endl;
+			std::cout << "      type: " << iter->second.m_value->GetTypeInfo()->GetTypeName() << std::endl;
+			std::cout << "      value: " << iter->second.m_value->ToString() << std::endl;
+		}
+	}
+};
+
+void ListGraph(std::shared_ptr<Graph> graph)
+{
+	ExecutionQueue q(*graph);
+	auto n = q.GetNextNode();
+	std::cout << "nodes:" << std::endl;
+
+	PrintVisitor v;
+	do
+	{
+		n->AcceptNodeVisitor(&v);
+		n = q.GetNextNode();
+	} while (n != nullptr);
+}
+
+struct ParamSetter : ValueVisitorBase
+{
+	ParamSetter(const std::string& v) : m_value(v) {}
+
+	void Visit(Boolean& v) override
+	{
+		if (m_value != "true" || m_value != "false")
+		{
+			throw Exception("Unable to set Boolean parameter from " + m_value + " value.");
+		}
+		set_value_from<bool>(v, m_value == "true");
+	}
+	void Visit(FloatValue& v) override { set_value_from<float>(v, std::atof(m_value.c_str())); }
+	void Visit(Integer& v) override { set_value_from<float>(v, std::atof(m_value.c_str())); }
+	void Visit(String& v) override { set_value_from<std::string>(v, m_value); }
+	void Visit(NullObject& v) override { throw Exception("Cannot set a NullObject."); }
+	void Visit(TypeInfo& v) override { throw Exception("Cannot set a TypeInfo."); }
+	void Visit(Vector3& v) override { throw Exception("Cannot set a Vector3."); }
+	void Visit(DynamicPlane& v) override { throw Exception("Cannot set a DynamicPlane."); }
+	void Visit(Function& v) override { throw Exception("Cannot set a Function."); }
+	void Visit(DynamicClass& v) override { throw Exception("Cannot set a DynamicClass."); }
+	void Visit(DynamicInstance& v) override { throw Exception("Cannot set a DynamicInstance."); }
+	void Visit(Expression& v) override { throw Exception("Cannot set an Expression."); }
+	void Visit(ProceduralOperation& v) override { throw Exception("Cannot set a ProceduralOperation."); }
+
+	std::string m_value;
+};
+
+void SetParameter(const NodeSet<Node>& nodes, const std::string& param)
+{
+	static const std::regex paramRegex("^(.+)\\.(.+)=(.+)$");
+	std::smatch matches;
+	if (std::regex_search(param, matches, paramRegex) && matches.size() > 3)
+	{
+		std::string nodeName = matches.str(1);
+		std::string paramName = matches.str(2);
+		std::string value = matches.str(3);
+		ParamSetter setter(value);
+		for (auto& n : nodes)
+		{
+			if (n->GetName() == nodeName)
+			{
+				LOG_INFO("Overriding parameter '" << paramName << "' in node '" << n->GetName() << "' with value '"
+				                                  << value << "'");
+				n->GetMember(paramName)->AcceptVisitor(setter);
+			}
+		}
+	}
+	else
+	{
+		throw Exception("Invalid parameter definition: '" + param + "'");
+	}
+}
+
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 {
 	std::ofstream outFile(file_path);
@@ -124,6 +241,14 @@ void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 
 void PrintProfile()
 {
+	if (!has_feature("Profiler"))
+	{
+		LOG_WARNING("Selector was compiled without the Profiler feature.");
+		LOG_WARNING(" Please build Selector with '-DSELECTOR_PROFILER_ACTIVE=ON'.");
+		return;
+	}
+
+	std::cout << "Showing profiling data:" << std::endl;
 	ConsoleProfilerLogger consoleLogger(ProfilerManager::Instance());
 	consoleLogger.Log(20);
 }
@@ -143,6 +268,8 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
             ("file", po::value<std::string>(), "Input Graph specification file.")
             ("dot", po::value<std::string>(), "Outputs the graph in dot format to the specified file.")
             ("execute", "Executes the graph")
+            ("list", "Lists all nodes and parameters in a graph")
+            ("param", po::value<std::vector<std::string>>(), "Override a parameter in a node.\nFormat: '<node name>.<param name>=<value>'")
             ("show-profile", "Prints profiling information");
 		// clang-format on
 

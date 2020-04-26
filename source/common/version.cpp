@@ -37,6 +37,18 @@ std::vector<Feature> get_features()
 	return features;
 }
 
+bool has_feature(const std::string &featureName)
+{
+	for (const auto &f : get_features())
+	{
+		if (f.m_name == featureName)
+		{
+			return f.m_enabled;
+		}
+	}
+	return false;
+}
+
 std::string get_version_string() { return SELECTOR_VERSION; }
 
 std::string get_build_number() { return SELECTOR_BUILD_NUMBER; }
