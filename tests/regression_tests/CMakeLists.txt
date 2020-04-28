@@ -22,7 +22,7 @@ target_compile_options(
     PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
 )
 
 target_include_directories(

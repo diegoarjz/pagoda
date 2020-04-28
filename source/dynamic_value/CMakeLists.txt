@@ -90,7 +90,7 @@ target_compile_options(
     dynamic_value
     PRIVATE
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
         $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
