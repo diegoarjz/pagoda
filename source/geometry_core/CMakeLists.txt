@@ -33,12 +33,6 @@ target_include_directories(
         ${SELSCRIPT_INCLUDE_DIR}
 )
 
-set_target_properties(
-    geometry_core
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     geometry_core
     PRIVATE
@@ -53,6 +47,7 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(

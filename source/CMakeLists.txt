@@ -33,12 +33,6 @@ add_library(selector STATIC "${SELECTOR_SOURCES}"
     $<TARGET_OBJECTS:dynamic_value>
 )
 
-set_target_properties(
-    selector
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_include_directories(
     selector
     PRIVATE
@@ -61,6 +55,7 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(

@@ -20,12 +20,6 @@ target_include_directories(
         ${Boost_INCLUDE_DIRS}
 )
 
-set_target_properties(
-    parameter
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     parameter
     PRIVATE
@@ -40,6 +34,7 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(

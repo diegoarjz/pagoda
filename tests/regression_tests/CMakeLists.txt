@@ -9,12 +9,6 @@ set(test_srcs
 
 add_executable(regression_tests ${test_srcs})
 
-set_target_properties(
-    regression_tests
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     regression_tests
     PRIVATE
@@ -26,6 +20,7 @@ target_compile_features(
 target_compile_options(
     regression_tests
     PRIVATE
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
         -Wall
         -Werror
 )

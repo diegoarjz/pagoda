@@ -77,12 +77,6 @@ target_include_directories(
         ${SELSCRIPT_INCLUDE_DIR}
 )
 
-set_target_properties(
-    dynamic_value
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     dynamic_value
     PRIVATE
@@ -97,6 +91,7 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(

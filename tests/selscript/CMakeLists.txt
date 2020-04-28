@@ -4,12 +4,6 @@ set(test_srcs
 
 add_executable(selscript_tests ${test_srcs})
 
-set_target_properties(
-    selscript_tests
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     selscript_tests
     PRIVATE
@@ -23,6 +17,7 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_include_directories(

@@ -1,14 +1,3 @@
-# Default Selector version, build number and date
-if (NOT DEFINED SELECTOR_VERSION)
-    set(SELECTOR_VERSION "developer-version")
-endif()
-
-if (NOT DEFINED SELECTOR_BUILD_NUMBER)
-    set(SELECTOR_BUILD_NUMBER "")
-endif()
-
-string(TIMESTAMP SELECTOR_BUILD_DATE "%d/%m/%Y %H:%M:%S")
-
 execute_process(
   COMMAND git rev-parse --abbrev-ref HEAD
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -40,6 +29,17 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
+# Default Selector version, build number and date
+if (NOT DEFINED SELECTOR_VERSION)
+    set(SELECTOR_VERSION "${CMAKE_PROJECT_VERSION}")
+endif()
+
+if (NOT DEFINED SELECTOR_BUILD_NUMBER)
+    set(SELECTOR_BUILD_NUMBER "0")
+endif()
+
+string(TIMESTAMP SELECTOR_BUILD_DATE "%d/%m/%Y %H:%M:%S")
+
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     option(SELECTOR_PROFILER_ACTIVE "Enable or disable built in profiling" OFF)
     option(SELECTOR_ENABLE_ASSERTIONS "Enable or disable assertions" OFF)
@@ -56,6 +56,8 @@ set(GIT_COMMIT_AUTHOR "\"${GIT_COMMIT_AUTHOR}\"")
 
 set(SELECTOR_INCLUDE_GIT_INFO 0)
 if ("${GIT_BRANCH}" STREQUAL "master")
+    option(SELECTOR_GIT_INFO "Include git information in the version information" OFF)
+elseif("${GIT_BRANCH}" MATCHES "^release-.+")
     option(SELECTOR_GIT_INFO "Include git information in the version information" OFF)
 else()
     option(SELECTOR_GIT_INFO "Include git information in the version information" ON)

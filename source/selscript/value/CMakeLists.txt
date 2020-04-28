@@ -31,12 +31,7 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
-)
-
-set_target_properties(
-    selscript_value
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_link_libraries(

@@ -55,12 +55,6 @@ set(test_srcs
 
 add_executable(unit_tests ${test_srcs})
 
-set_target_properties(
-    unit_tests
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     unit_tests
     PRIVATE
@@ -74,6 +68,7 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_include_directories(

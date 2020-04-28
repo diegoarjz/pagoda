@@ -29,18 +29,13 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_link_libraries(
     selscript
     PRIVATE
         common
-)
-
-set_target_properties(
-    selscript
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 include(GNUInstallDirs)

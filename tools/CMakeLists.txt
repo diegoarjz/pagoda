@@ -15,6 +15,7 @@ target_compile_options(
     PRIVATE
         -Wall
         -Werror
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_include_directories(
@@ -26,12 +27,6 @@ target_include_directories(
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}
-)
-
-set_target_properties(
-    sel
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 target_compile_definitions(
