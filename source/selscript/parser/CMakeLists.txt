@@ -39,20 +39,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS selscript_parser
-    EXPORT selscript_parser-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_parser
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/selscript_parser
-)
-install(FILES ${PARSER_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/selscript/selscript_parser)
-
-install(EXPORT selscript_parser-export
-    FILE
-        ParserTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/selscript/cmake/
-)

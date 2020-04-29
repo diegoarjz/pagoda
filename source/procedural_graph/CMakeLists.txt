@@ -103,22 +103,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS procedural_graph
-    EXPORT procedural_graph-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/procedural_graph
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/procedural_graph
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/procedural_graph)
-
-install(EXPORT procedural_graph-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

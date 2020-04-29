@@ -137,22 +137,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS procedural_objects
-    EXPORT procedural_objects-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/procedural_objects
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/procedural_objects
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/procedural_objects)
-
-install(EXPORT procedural_objects-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

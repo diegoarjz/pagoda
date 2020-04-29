@@ -37,19 +37,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS selscript
-    EXPORT selscript-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/selscript/
-)
-
-install(EXPORT selscript-export
-    FILE
-        SelScriptTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/selscript/cmake/
-)

@@ -73,22 +73,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS math_lib
-    EXPORT math_lib-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/math_lib
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/math_lib
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/math_lib)
-
-install(EXPORT math_lib-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

@@ -96,20 +96,3 @@ target_link_libraries(
         Boost::filesystem
 )
 
-include(GNUInstallDirs)
-install(TARGETS common
-    EXPORT common-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/common
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/common
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/common)
-
-install(EXPORT common-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-

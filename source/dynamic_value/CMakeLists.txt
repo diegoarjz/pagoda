@@ -106,21 +106,3 @@ target_link_libraries(
         common
 )
 
-include(GNUInstallDirs)
-install(TARGETS dynamic_value
-    EXPORT dynamic_value-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/dynamic_value
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/dynamic_value
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/dynamic_value)
-
-install(EXPORT dynamic_value-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

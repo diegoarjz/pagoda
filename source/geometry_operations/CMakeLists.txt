@@ -63,22 +63,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS geometry_operations
-    EXPORT geometry_operations-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/geometry_operations
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/geometry_operations
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/geometry_operations)
-
-install(EXPORT geometry_operations-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

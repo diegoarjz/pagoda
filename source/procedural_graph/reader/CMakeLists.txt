@@ -70,22 +70,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS procedural_graph_reader
-    EXPORT procedural_graph_reader-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/reader/
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/reader
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/reader)
-
-install(EXPORT procedural_graph_reader-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

@@ -48,22 +48,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS parameter
-    EXPORT parameter-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/parameter
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/parameter
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/parameter)
-
-install(EXPORT parameter-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-
