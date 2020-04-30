@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Output Interface Node.
 - Parameter Node.
 - Router Node.
+- Predicates for procedural objects facing a given direction.
 - Create Rect Geometry operation.
 - Create Sphere Geometry operation.
 - Create Box Geometry operation.

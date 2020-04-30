@@ -114,6 +114,8 @@ public:
 			    "left", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, 1, 0}));
 			m_predicateRegistry->Register(
 			    "right", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, -1, 0}));
+			m_predicateRegistry->Register(
+			    "side", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'y', Vec3F{0, 0, 1}));
 		}
 	}
 

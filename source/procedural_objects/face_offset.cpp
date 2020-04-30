@@ -80,7 +80,7 @@ void FaceOffsetOperation::DoWork()
 
 		for (const auto& i : outerGeometries)
 		{
-			ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputInnerGeometry);
+			ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputOuterGeometry);
 			outObject->RegisterOrSetMember("offset_tag", std::make_shared<String>("outer"));
 
 			std::shared_ptr<GeometryComponent> geometryComponent =

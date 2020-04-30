@@ -33,11 +33,12 @@ router -> left_extrusion_in;
 
 ## Available Predicates
 
-| Name  | Description                                                          |
-|-------|----------------------------------------------------------------------|
-| up    | Matches objects whose scope's _z_ axis is pointing towards (0,0,1).  |
-| down  | Matches objects whose scope's _z_ axis is pointing towards (0,0,-1). |
-| left  | Matches objects whose scope's _z_ axis is pointing towards (0,1,0).  |
-| right | Matches objects whose scope's _z_ axis is pointing towards (0,-1,0). |
-| front | Matches objects whose scope's _z_ axis is pointing towards (1,0,0).  |
-| back  | Matches objects whose scope's _z_ axis is pointing towards (-1,0,0). |
+| Name  | Description                                                                     |
+|-------|---------------------------------------------------------------------------------|
+| up    | Matches objects whose scope's _z_ axis is pointing towards (0,0,1).             |
+| down  | Matches objects whose scope's _z_ axis is pointing towards (0,0,-1).            |
+| left  | Matches objects whose scope's _z_ axis is pointing towards (0,1,0).             |
+| right | Matches objects whose scope's _z_ axis is pointing towards (0,-1,0).            |
+| front | Matches objects whose scope's _z_ axis is pointing towards (1,0,0).             |
+| back  | Matches objects whose scope's _z_ axis is pointing towards (-1,0,0).            |
+| side  | Matches objects that would be matched by left, right, front or back predicates. |
