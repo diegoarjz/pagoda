@@ -20,7 +20,7 @@ Clips the incoming geometries agains an arbitrary plane.
 
 | Name  | Type  | Allowed values | Default | Description                                                                                           |
 |-------|-------|----------------|---------|-------------------------------------------------------------------------------------------------------|
-| plane | Plane |                |         | The plane with which to clip the geometries. Currently must be specified from a selscript expression. |
+| plane | Plane |                |         | The plane with which to clip the geometries. Currently must be specified from a pgscript expression. |
 
 ## Exposed Parameters
 

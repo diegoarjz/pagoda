@@ -31,5 +31,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Split operation.
 - Scale operation.
 - Rotate operation.
-- Selscript scripting language.
+- Pgscript scripting language.
 - Geometry implementation with Split Point topology.

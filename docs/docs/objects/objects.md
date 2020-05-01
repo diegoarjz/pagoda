@@ -1,6 +1,6 @@
 # Procedural Objects
 
-To achieve more flexibility Selector implements the concept of *Procedural
+To achieve more flexibility Pagoda implements the concept of *Procedural
 Objects* and *Procedural Components* which is implemented with an [Entity
 Component System](https://en.wikipedia.org/wiki/Entity_component_system)
 architectural pattern. You can, therefore, think of *Procedural Objects* as

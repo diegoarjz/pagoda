@@ -2,9 +2,9 @@
 
 Procedural graphs specify how [procedural objects](/objects/objects) flow
 through the graph's nodes and, therefore, define the rules for procedural
-generation in selector.
+generation in pagoda.
 
-Graphs are created by reading from a graph file in selector's own graph format.
+Graphs are created by reading from a graph file in pagoda's own graph format.
 
 ## Nodes
 
