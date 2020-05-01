@@ -139,6 +139,7 @@ jobs:
         if: contains(github.ref, 'tags/v')
         name: ${{ matrix.config.name }}
         runs-on: ${{ matrix.config.os }}
+        needs: release
         strategy:
             fail-fast: false
             matrix:
@@ -155,7 +156,6 @@ jobs:
                     name: "macOs Latest clang",
                     os: ubuntu-latest,
                   }
-            needs: release
 
         steps:
             - name: Download artifact
