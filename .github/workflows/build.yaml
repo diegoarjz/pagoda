@@ -161,7 +161,7 @@ jobs:
             - name: Download artifact
               uses: actions/download-artifact@v1
               with:
-                  name: ${{ matrix.config.name }}-regression_results.tar.xz
+                  name: ${{ matrix.config.name }}.tar.xz
                   path: ./
 
             - name: Download URL
@@ -181,6 +181,6 @@ jobs:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                 upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
-                asset_path: ./${{ matrix.config.name }}-regression_results.tar.xz
-                asset_name: ${{ matrix.config.name }}-regression_results.tar.xz
+                asset_path: ./${{ matrix.config.name }}.tar.xz
+                asset_name: ${{ matrix.config.name }}.tar.xz
                 asset_content_type: application/x-gtar
