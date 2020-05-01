@@ -79,7 +79,7 @@ jobs:
               run: |
                   cd build
                   ./tests/unit_tests/unit_tests
-                  ./tests/selscript/selscript_tests
+                  ./tests/pgscript/pgscript_tests
                   ./tests/regression_tests/regression_tests
             - name: Pack Regression Test Results
               if: always()

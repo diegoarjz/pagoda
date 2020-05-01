@@ -1,5 +1,5 @@
-#ifndef SELECTOR_SELECTOR_H_
-#define SELECTOR_SELECTOR_H_
+#ifndef PAGODA_PAGODA_H_
+#define PAGODA_PAGODA_H_
 
 #include "procedural_graph/node_factory.h"
 #include "procedural_objects/operation_factory.h"

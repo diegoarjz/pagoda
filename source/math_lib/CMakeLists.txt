@@ -42,7 +42,7 @@ target_include_directories(
         $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
+        ${PGSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_features(
