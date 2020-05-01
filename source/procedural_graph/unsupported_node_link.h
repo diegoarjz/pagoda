@@ -2,11 +2,11 @@
 
 #include "common/exception.h"
 
-namespace selector
+namespace pagoda
 {
 class UnsupportedNodeLink : Exception
 {
 public:
 	UnsupportedNodeLink(const std::string &direction, const std::string nodeType);
 };
-}  // namespace selector
+}  // namespace pagoda

@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Base template call_member_function_helper.
@@ -172,4 +172,4 @@ R call_member_function(C& instance, std::function<R(C*, Args...)> f, const std::
 {
 	return call_member_function_helper<R, C, Args...>::call(instance, f, args);
 }
-}  // namespace selector
+}  // namespace pagoda

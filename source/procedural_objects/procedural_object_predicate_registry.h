@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralObjectPredicate;
 using ProceduralObjectPredicatePtr = std::shared_ptr<ProceduralObjectPredicate>;
@@ -23,4 +23,4 @@ private:
 };
 
 using ProceduralObjectPredicateRegistryPtr = std::shared_ptr<ProceduralObjectPredicateRegistry>;
-}  // namespace selector
+}  // namespace pagoda

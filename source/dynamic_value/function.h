@@ -4,7 +4,7 @@
 #include "icallable.h"
 #include "icallable_body.h"
 
-namespace selector
+namespace pagoda
 {
 class Function : public DynamicValueBase, public ICallable
 {
@@ -42,4 +42,4 @@ private:
 	std::size_t m_arity;
 	bool m_isVariadic;
 };
-}  // namespace selector
+}  // namespace pagoda

@@ -9,7 +9,7 @@
 #include "hierarchical_system.h"
 #include "procedural_object_system.h"
 
-namespace selector
+namespace pagoda
 {
 const std::string ExtractFaces::s_inputGeometry("in");
 const std::string ExtractFaces::s_outputGeometry("out");
@@ -71,4 +71,4 @@ void ExtractFaces::DoWork()
 		}
 	}
 }
-}  // namespace selector
+}  // namespace pagoda

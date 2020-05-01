@@ -5,7 +5,7 @@
 #include "type_info.h"
 #include "value_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr Integer::s_typeInfo = std::make_shared<TypeInfo>("Integer");
 
@@ -62,4 +62,4 @@ bool Integer::operator>(const FloatValue& f) const { return m_value > static_cas
 bool Integer::operator>=(const FloatValue& f) const { return m_value >= static_cast<float>(f); }
 
 void Integer::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
-}  // namespace selector
+}  // namespace pagoda

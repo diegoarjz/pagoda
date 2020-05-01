@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(VecBase, when_using_default_constructor_should_initizalize_all_elements_to_zero)
 {

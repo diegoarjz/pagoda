@@ -1,6 +1,6 @@
 #include "statistics.h"
 
-namespace selector
+namespace pagoda
 {
 StatisticsManager *StatisticsManager::Instance()
 {
@@ -42,4 +42,4 @@ void OneShotProfilerStats::Write(std::ostream &outStream)
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda

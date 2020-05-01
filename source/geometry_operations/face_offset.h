@@ -7,7 +7,7 @@
 
 #include <math_lib/bissectrix.h>
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class FaceOffset
@@ -77,4 +77,4 @@ public:
 private:
 	float m_amount;
 };
-}  // namespace selector
+}  // namespace pagoda

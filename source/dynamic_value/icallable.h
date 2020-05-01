@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 class DynamicValueBase;
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
@@ -27,4 +27,4 @@ public:
 
 	virtual DynamicValueBasePtr Call(const std::vector<DynamicValueBasePtr>& args) = 0;
 };
-}  // namespace selector
+}  // namespace pagoda

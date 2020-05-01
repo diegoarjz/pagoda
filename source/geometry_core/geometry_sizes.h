@@ -1,10 +1,10 @@
 #pragma once
-#ifndef SELECTOR_GEOMETRY_CORE_GEOMETRY_SIZES_H_
-#define SELECTOR_GEOMETRY_CORE_GEOMETRY_SIZES_H_
+#ifndef PAGODA_GEOMETRY_CORE_GEOMETRY_SIZES_H_
+#define PAGODA_GEOMETRY_CORE_GEOMETRY_SIZES_H_
 
 #include <cstdint>
 
-namespace selector
+namespace pagoda
 {
 struct GeometrySizes
 {
@@ -18,6 +18,6 @@ struct GeometrySizes
 	}
 
 };  // struct GeometryDimensions
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

@@ -4,7 +4,7 @@
 #include "type_info.h"
 #include "value_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr FloatValue::s_typeInfo = std::make_shared<TypeInfo>("Float");
 
@@ -57,4 +57,4 @@ bool FloatValue::operator>(const Integer& f) const { return m_value > static_cas
 bool FloatValue::operator>=(const Integer& f) const { return m_value >= static_cast<int>(f); }
 
 void FloatValue::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
-}  // namespace selector
+}  // namespace pagoda

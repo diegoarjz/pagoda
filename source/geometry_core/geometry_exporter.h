@@ -1,5 +1,5 @@
-#ifndef SELECTOR_GEOMETRY_CORE_GEOMETRY_EXPORTER_H_
-#define SELECTOR_GEOMETRY_CORE_GEOMETRY_EXPORTER_H_
+#ifndef PAGODA_GEOMETRY_CORE_GEOMETRY_EXPORTER_H_
+#define PAGODA_GEOMETRY_CORE_GEOMETRY_EXPORTER_H_
 
 #include <ostream>
 
@@ -8,7 +8,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_access.hpp>
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class GeometryExporter
@@ -111,5 +111,5 @@ protected:
 
 };  // class ObjExporter
 
-}  // namespace selector
+}  // namespace pagoda
 #endif

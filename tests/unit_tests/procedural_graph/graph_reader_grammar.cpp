@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 using namespace boost::spirit;
 
 class GraphReaderGrammarTest : public ::testing::Test

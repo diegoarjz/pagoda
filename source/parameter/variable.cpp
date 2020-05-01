@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-namespace selector
+namespace pagoda
 {
 Variable::Variable(const std::string &compoundVariable)
 {
@@ -58,4 +58,4 @@ bool Variable::operator==(const std::string &v) const { return ToString() == v; 
 
 bool Variable::operator!=(const std::string &v) const { return !(*this == v); }
 
-}  // namespace selector
+}  // namespace pagoda

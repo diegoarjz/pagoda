@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_NODE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_NODE_H_
+#define PAGODA_PROCEDURAL_GRAPH_NODE_H_
 
 #include "common/factory.h"
 #include "dynamic_value/builtin_class.h"
@@ -9,7 +9,7 @@
 #include <memory>
 #include <set>
 
-namespace selector
+namespace pagoda
 {
 class Node;
 using NodePtr = std::shared_ptr<Node>;
@@ -109,6 +109,6 @@ struct NodeWeakPtrEqual
 	bool operator()(const NodeWeakPtr &lhs, const NodeWeakPtr &rhs) const { return lhs.lock() == rhs.lock(); }
 };
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

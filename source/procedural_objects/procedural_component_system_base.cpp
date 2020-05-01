@@ -4,7 +4,7 @@
 #include "common/logger.h"
 #include "common/profiler.h"
 
-namespace selector
+namespace pagoda
 {
 ProceduralComponentSystemBase::ProceduralComponentSystemBase(const std::string &name) : m_systemName(name)
 {
@@ -17,4 +17,4 @@ ProceduralComponentSystemBase::~ProceduralComponentSystemBase()
 }
 
 std::string ProceduralComponentSystemBase::GetComponentSystemTypeName() const { return m_systemName; }
-}  // namespace selector
+}  // namespace pagoda

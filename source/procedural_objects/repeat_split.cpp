@@ -13,7 +13,7 @@
 
 #include "geometry_operations/plane_splits.h"
 
-namespace selector
+namespace pagoda
 {
 const std::string RepeatSplit::inputGeometry("in");
 const std::string RepeatSplit::outputGeometry("out");
@@ -129,4 +129,4 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const fl
 
 	return planes;
 }
-}  // namespace selector
+}  // namespace pagoda

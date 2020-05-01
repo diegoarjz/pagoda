@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 class DynamicValueBase;
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
@@ -19,4 +19,4 @@ public:
 	virtual void SetClosure(const std::shared_ptr<DynamicValueTable>&) = 0;
 	virtual const std::shared_ptr<DynamicValueTable>& GetClosure() const = 0;
 };
-}  // namespace selector
+}  // namespace pagoda

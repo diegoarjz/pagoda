@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Modifies the given matrix \p m to be transposed.
@@ -31,4 +31,4 @@ MatrixBase<NumCols, NumRows, Rep> transposed(const MatrixBase<NumCols, NumRows, 
     return copy;
 }
  */
-}  // namespace selector
+}  // namespace pagoda

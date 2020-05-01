@@ -18,7 +18,7 @@
 
 #include "common/exception.h"
 
-namespace selector
+namespace pagoda
 {
 /**
  * Exception to be thrown when it is impossible to cast a \c DynamicValueBase to a native type.
@@ -95,4 +95,4 @@ void set_value_from(DynamicValueBase& v, const typename std::remove_reference<T>
 	convert_from_native_visitor<T> visitor(n);
 	apply_visitor(visitor, v);
 }
-}  // namespace selector
+}  // namespace pagoda

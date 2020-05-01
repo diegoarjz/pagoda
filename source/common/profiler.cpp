@@ -10,7 +10,7 @@
 #include <iostream>
 #include <list>
 
-namespace selector
+namespace pagoda
 {
 ProfilerManager::ProfilerManager() {}
 
@@ -160,4 +160,4 @@ void ConsoleProfilerLogger::Log(std::size_t nLines)
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda

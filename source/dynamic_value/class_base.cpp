@@ -2,7 +2,7 @@
 
 #include "value_not_found.h"
 
-namespace selector
+namespace pagoda
 {
 ClassBase::ClassBase(const std::string &name) : m_memberTable(std::make_shared<DynamicValueTable>(name)) {}
 
@@ -26,4 +26,4 @@ DynamicValueBasePtr ClassBase::GetMember(const std::string &name) { return m_mem
 DynamicValueTable::iterator ClassBase::GetMembersBegin() { return m_memberTable->begin(); }
 DynamicValueTable::iterator ClassBase::GetMembersEnd() { return m_memberTable->end(); }
 std::shared_ptr<DynamicValueTable> ClassBase::GetInstanceValueTable() { return m_memberTable; }
-}  // namespace selector
+}  // namespace pagoda

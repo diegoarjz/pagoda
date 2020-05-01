@@ -4,11 +4,11 @@
 
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class UnknownNodeTypeException : public Exception
 {
 public:
 	UnknownNodeTypeException(const std::string &nodeType);
 };
-}  // namespace selector
+}  // namespace pagoda

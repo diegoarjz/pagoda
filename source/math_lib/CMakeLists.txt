@@ -39,7 +39,7 @@ add_library(math_lib OBJECT ${MATH_LIB_SRCS})
 target_include_directories(
     math_lib
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}

@@ -1,9 +1,9 @@
 #include "procedural_object_predicate.h"
 
-namespace selector
+namespace pagoda
 {
 ProceduralObjectPredicate::ProceduralObjectPredicate(ProceduralObjectSystemPtr objectSystem)
     : m_objectSystem(objectSystem)
 {
 }
-}  // namespace selector
+}  // namespace pagoda

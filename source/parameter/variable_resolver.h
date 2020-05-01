@@ -1,11 +1,11 @@
-#ifndef SELECTOR_PARAMETER_VARIABLE_RESOLVER_H_
-#define SELECTOR_PARAMETER_VARIABLE_RESOLVER_H_
+#ifndef PAGODA_PARAMETER_VARIABLE_RESOLVER_H_
+#define PAGODA_PARAMETER_VARIABLE_RESOLVER_H_
 
 #include "variable.h"
 
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 class DynamicValueBase;
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
@@ -25,6 +25,6 @@ public:
 private:
 	Variable m_variable;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

@@ -6,7 +6,7 @@
 #include "geometry_core/geometry.h"
 #include "geometry_core/geometry_builder.h"
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class ExplodeToFaces
@@ -42,4 +42,4 @@ public:
 		}
 	}
 };
-}  // namespace selector
+}  // namespace pagoda

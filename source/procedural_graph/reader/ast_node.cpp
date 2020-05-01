@@ -1,6 +1,6 @@
 #include "ast_node.h"
 
-namespace selector
+namespace pagoda
 {
 AstNode::AstNode() : AstNode(0,0)
 {
@@ -34,4 +34,4 @@ void AstNode::SetNodeRange(const AstNode::NodeRange_t &range)
 
 AstNode::NodeRange_t AstNode::GetNodeRange() const { return std::make_pair(m_startOffset, m_endOffset); }
 
-}  // namespace selector
+}  // namespace pagoda

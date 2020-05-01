@@ -4,7 +4,7 @@
 
 #include "common/assertions.h"
 
-namespace selector
+namespace pagoda
 {
 bool NodePtrCompare::operator()(const NodePtr &lhs, const NodePtr &rhs) const { return lhs->GetId() < rhs->GetId(); }
-}  // namespace selector
+}  // namespace pagoda

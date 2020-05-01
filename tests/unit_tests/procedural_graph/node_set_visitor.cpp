@@ -3,11 +3,11 @@
 #include <procedural_graph/operation_node.h>
 #include <procedural_graph/output_interface_node.h>
 
-#include <selector.h>
+#include <pagoda.h>
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 class NodeTypeFilterTest : public ::testing::Test
 {
@@ -16,7 +16,7 @@ protected:
 	{
 		m_inputInterfaceNode = std::make_shared<InputInterfaceNode>();
 		m_outputInterfaceNode = std::make_shared<OutputInterfaceNode>();
-		m_operationNode = std::make_shared<OperationNode>(m_selector.GetOperationFactory());
+		m_operationNode = std::make_shared<OperationNode>(m_pagoda.GetOperationFactory());
 
 		m_nodeSet.insert(m_inputInterfaceNode);
 		m_nodeSet.insert(m_outputInterfaceNode);
@@ -27,7 +27,7 @@ protected:
 	std::shared_ptr<OutputInterfaceNode> m_outputInterfaceNode;
 	std::shared_ptr<OperationNode> m_operationNode;
 	NodeSet<Node> m_nodeSet;
-    Selector m_selector;
+    Pagoda m_pagoda;
 };
 
 TEST_F(NodeTypeFilterTest, when_visiting_a_node_set_should_call_visitor_methods_for_different_node_types)

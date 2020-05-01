@@ -8,7 +8,7 @@
 #include "../test_utils.h"
 #include "mock_objects.h"
 
-using namespace selector;
+using namespace pagoda;
 using namespace ::testing;
 
 using GeometryType = GeometryBase<>;

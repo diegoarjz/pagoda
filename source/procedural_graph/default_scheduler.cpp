@@ -4,7 +4,7 @@
 #include "common/exception.h"
 #include "common/profiler.h"
 
-namespace selector
+namespace pagoda
 {
 DefaultScheduler::DefaultScheduler(Graph &graph) : m_graph(graph), m_executionQueue(m_graph) {}
 
@@ -45,4 +45,4 @@ bool DefaultScheduler::Step()
 }
 
 void DefaultScheduler::Finalize() {}
-}  // namespace selector
+}  // namespace pagoda

@@ -3,7 +3,7 @@
 #include <string>
 #include <typeinfo>
 
-namespace selector
+namespace pagoda
 {
 template<typename C>
 struct native_value_name
@@ -25,4 +25,4 @@ const std::string native_value_name<bool>::GetName();
 
 template<>
 const std::string native_value_name<std::string>::GetName();
-}  // namespace selector
+}  // namespace pagoda

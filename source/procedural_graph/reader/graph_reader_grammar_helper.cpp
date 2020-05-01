@@ -6,7 +6,7 @@
 #include "node_definition_node.h"
 #include "node_link_node.h"
 
-namespace selector
+namespace pagoda
 {
 namespace grammar_helpers
 {
@@ -56,4 +56,4 @@ void AddNodeDefinition(GraphDefinitionNodePtr graph, NodeDefinitionNodePtr state
 
 void AddNodeLinks(GraphDefinitionNodePtr graph, NodeLinkNodePtr statement) { graph->AddGraphStatementNode(statement); }
 }  // namespace grammar_helpers
-}  // namespace selector
+}  // namespace pagoda

@@ -12,12 +12,12 @@
 
 #include <iostream>
 
-using namespace selector;
+using namespace pagoda;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;
 
-class EarClippingTest : public SelectorTestFixture<::testing::Test>
+class EarClippingTest : public PagodaTestFixture<::testing::Test>
 {
 public:
 	void SetUp()

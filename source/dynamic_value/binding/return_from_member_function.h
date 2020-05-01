@@ -2,7 +2,7 @@
 
 #include "call_member_function.h"
 
-namespace selector
+namespace pagoda
 {
 /**
  * Calls the member function and throws its return value which must be a \c DynamicValueBasePtr.
@@ -42,4 +42,4 @@ void return_from_member_function(C& instance, std::function<R(C*, Args...)> memb
 {
 	return_from_member_function_helper<R, C, Args...>::call_and_return(instance, member, args);
 }
-}  // namespace selector
+}  // namespace pagoda

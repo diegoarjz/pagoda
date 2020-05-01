@@ -1,9 +1,9 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_CREATE_BOX_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_CREATE_BOX_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_CREATE_BOX_H_
+#define PAGODA_PROCEDURAL_OBJECTS_CREATE_BOX_H_
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class CreateBoxGeometry : public ProceduralOperation
 {
@@ -16,5 +16,5 @@ public:
 
 	void DoWork() override;
 };
-}  // namespace selector
+}  // namespace pagoda
 #endif

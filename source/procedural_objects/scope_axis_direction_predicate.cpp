@@ -11,7 +11,7 @@
 #include <cmath>
 #include <sstream>
 
-namespace selector
+namespace pagoda
 {
 ScopeAxisDirectionPredicate::ScopeAxisDirectionPredicate(ProceduralObjectSystemPtr objectSystem, char scopeAxis,
                                                          const Vec3F& direction, const Degrees<float>& tolerance)
@@ -51,4 +51,4 @@ std::string ScopeAxisDirectionPredicate::ToString()
 	   << " tolerance: " << static_cast<float>(m_tolerance);
 	return ss.str();
 }
-}  // namespace selector
+}  // namespace pagoda

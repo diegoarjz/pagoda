@@ -1,9 +1,9 @@
-#ifndef SELECTOR_COMMON_VERSION_H_
-#define SELECTOR_COMMON_VERSION_H_
+#ifndef PAGODA_COMMON_VERSION_H_
+#define PAGODA_COMMON_VERSION_H_
 
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Returns the current version for the project.
@@ -26,9 +26,9 @@ std::string get_build_date();
 std::string get_version_information();
 
 /**
- * Checks whether selector was compiled with a given feature.
+ * Checks whether pagoda was compiled with a given feature.
  */
 bool has_feature(const std::string &featureName);
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

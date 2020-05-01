@@ -1,5 +1,5 @@
-#ifndef SELECTOR_GEOMETRY_CORE_GEOMETRY_BUILDER_H
-#define SELECTOR_GEOMETRY_CORE_GEOMETRY_BUILDER_H
+#ifndef PAGODA_GEOMETRY_CORE_GEOMETRY_BUILDER_H
+#define PAGODA_GEOMETRY_CORE_GEOMETRY_BUILDER_H
 
 #include "common/assertions.h"
 #include "common/logger.h"
@@ -13,7 +13,7 @@
 #include <memory>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Helper class to build a geometry.
@@ -247,6 +247,6 @@ private:
 	AssociativeIndexedContainer<Index_t, PointData> m_pointData;
 };  // class GeometryBuilderT
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

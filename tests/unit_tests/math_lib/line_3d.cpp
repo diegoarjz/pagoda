@@ -4,7 +4,7 @@
 
 #include <boost/qvm/vec_operations.hpp>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(Line3D, when_using_default_constructor_should_create_the_x_axis)
 {

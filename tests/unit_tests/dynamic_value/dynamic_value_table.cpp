@@ -7,7 +7,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 class DynamicValueTableTest : public ::testing::Test
 {

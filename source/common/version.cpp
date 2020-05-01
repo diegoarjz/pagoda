@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 struct Feature
 {
@@ -23,12 +23,12 @@ struct Feature
 std::vector<Feature> get_features()
 {
 	std::vector<Feature> features = {
-#ifdef SELECTOR_PROFILER_ACTIVE
+#ifdef PAGODA_PROFILER_ACTIVE
 	    {"Profiler", true},
 #else
 	    {"Profiler", false},
 #endif
-#ifdef SELECTOR_ENABLE_ASSERTIONS
+#ifdef PAGODA_ENABLE_ASSERTIONS
 	    {"DebugAsserts", true},
 #else
 	    {"DebugAsserts", false},
@@ -49,17 +49,17 @@ bool has_feature(const std::string &featureName)
 	return false;
 }
 
-std::string get_version_string() { return SELECTOR_VERSION; }
+std::string get_version_string() { return PAGODA_VERSION; }
 
-std::string get_build_number() { return SELECTOR_BUILD_NUMBER; }
+std::string get_build_number() { return PAGODA_BUILD_NUMBER; }
 
-std::string get_build_date() { return SELECTOR_BUILD_DATE; }
+std::string get_build_date() { return PAGODA_BUILD_DATE; }
 
 std::string get_version_information()
 {
 	std::stringstream ss;
 
-	ss << "Selector version " << get_version_string();
+	ss << "Pagoda version " << get_version_string();
 	if (!get_build_number().empty())
 	{
 		ss << "\n Build Number: " << get_build_number();
@@ -75,7 +75,7 @@ std::string get_version_information()
 		ss << static_cast<std::string>(f) << " ";
 	}
 
-#if SELECTOR_INCLUDE_GIT_INFO
+#if PAGODA_INCLUDE_GIT_INFO
 	{
 		ss << "\n\nGit:" << std::endl;
 		ss << " Branch:         " << GIT_BRANCH << " (" << GIT_COMMIT_HASH << ")" << std::endl;
@@ -86,4 +86,4 @@ std::string get_version_information()
 
 	return ss.str();
 }
-}  // namespace selector
+}  // namespace pagoda

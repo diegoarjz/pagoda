@@ -11,7 +11,7 @@
 
 #include <boost/qvm/map_vec_mat.hpp>
 
-using namespace selector;
+using namespace pagoda;
 
 class ProceduralObjectPredicateTest : public ::testing::Test
 {

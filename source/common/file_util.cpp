@@ -6,7 +6,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace selector::file_util
+namespace pagoda::file_util
 {
 std::string LoadFileToString(const boost::filesystem::path &path) { return LoadFileToString(path.string()); }
 
@@ -64,4 +64,4 @@ bool CreateDirectories(const boost::filesystem::path &path)
 		throw Exception("Unable to create directories");
 	}
 }
-}  // namespace selector::file_util
+}  // namespace pagoda::file_util

@@ -69,7 +69,7 @@ add_library(procedural_graph OBJECT ${PROCEDURAL_GRAPH_SRCS})
 target_include_directories(
     procedural_graph
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}

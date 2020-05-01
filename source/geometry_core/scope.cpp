@@ -7,7 +7,7 @@
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 Scope::Scope() : m_position{0, 0, 0}, m_size{0, 0, 0}, m_rotation(boost::qvm::diag_mat(Vec3F{1, 1, 1})) {}
 
@@ -128,4 +128,4 @@ Vec3F Scope::GetCenterPointInLocal() const
 {
 	return 0.5f * (GetLocalPoint(BoxPoints::LowerBottomLeft) + GetLocalPoint(BoxPoints::HigherTopRight));
 }
-}  // namespace selector
+}  // namespace pagoda

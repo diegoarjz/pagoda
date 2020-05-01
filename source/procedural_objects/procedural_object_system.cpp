@@ -7,7 +7,7 @@
 #include "procedural_component_system.h"
 #include "procedural_object.h"
 
-namespace selector
+namespace pagoda
 {
 ProceduralObjectSystem::ProceduralObjectSystem() { LOG_TRACE(Core, "Creating ProceduralObjectSystem"); }
 
@@ -88,4 +88,4 @@ void ProceduralObjectSystem::KillProceduralObject(std::shared_ptr<ProceduralObje
 
 	m_proceduralObjects.erase(proceduralObject);
 }
-}  // namespace selector
+}  // namespace pagoda

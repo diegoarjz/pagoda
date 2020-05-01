@@ -1,5 +1,5 @@
-#ifndef SELECTOR_GEOMETRY_CORE_SCOPE_H_
-#define SELECTOR_GEOMETRY_CORE_SCOPE_H_
+#ifndef PAGODA_GEOMETRY_CORE_SCOPE_H_
+#define PAGODA_GEOMETRY_CORE_SCOPE_H_
 
 #include <math_lib/matrix_base.h>
 #include <math_lib/plane.h>
@@ -12,7 +12,7 @@
 #include <array>
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Represents an oriented bounding box to be used as a local frame of coordinates for geometries.
@@ -160,5 +160,5 @@ private:
 	/// Scope rotation
 	Mat3x3F m_rotation;
 };  // class Scope
-}  // namespace selector
+}  // namespace pagoda
 #endif

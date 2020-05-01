@@ -2,7 +2,7 @@
 
 #include "ast_node_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 NamedArgument::NamedArgument(const std::string& name, const ArgumentType type, const std::string& value)
     : m_name(name), m_argumentType(type), m_argumentValue(value)
@@ -45,4 +45,4 @@ void NamedArgument::AcceptVisitor(AstNodeVisitor* visitor)
 {
 	visitor->Visit(std::dynamic_pointer_cast<NamedArgument>(shared_from_this()).get());
 }
-}  // namespace selector
+}  // namespace pagoda

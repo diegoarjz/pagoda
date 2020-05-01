@@ -1,9 +1,9 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_CLIP_GEOMETRY_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_CLIP_GEOMETRY_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_CLIP_GEOMETRY_H_
+#define PAGODA_PROCEDURAL_OBJECTS_CLIP_GEOMETRY_H_
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class ClipGeometry : public ProceduralOperation
 {
@@ -18,6 +18,6 @@ public:
 
 	void DoWork() override;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

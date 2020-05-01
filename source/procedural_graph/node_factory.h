@@ -1,11 +1,11 @@
-#ifndef SELECTOR_NODE_FACTORY_H_
-#define SELECTOR_NODE_FACTORY_H_
+#ifndef PAGODA_NODE_FACTORY_H_
+#define PAGODA_NODE_FACTORY_H_
 
 #include "common/factory.h"
 
 #include "node.h"
 
-namespace selector
+namespace pagoda
 {
 class NodeFactory : public Factory<Node>
 {
@@ -15,6 +15,6 @@ public:
 };
 
 using NodeFactoryPtr = std::shared_ptr<NodeFactory>;
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef SELECTOR_TEST_TEST_UTILS_H_
-#define SELECTOR_TEST_TEST_UTILS_H_
+#ifndef PAGODA_TEST_TEST_UTILS_H_
+#define PAGODA_TEST_TEST_UTILS_H_
 
 #include <common/assertions.h>
 
@@ -7,7 +7,7 @@
 
 #include <boost/filesystem.hpp>
 
-selector::Fail::FailBehaviour AssertExpected(const char *condition, const char *file, const int line,
+pagoda::Fail::FailBehaviour AssertExpected(const char *condition, const char *file, const int line,
                                              const char *message);
 struct ExpectAssert
 {
@@ -29,7 +29,7 @@ private:
     bool m_saveFile;
 };
 
-class SelectorTestFixtureBase
+class PagodaTestFixtureBase
 {
 public:
     static void SetExecutablePath(const std::string &path);
@@ -44,12 +44,12 @@ private:
 };
 
 template<class F>
-class SelectorTestFixture : public SelectorTestFixtureBase, public F
+class PagodaTestFixture : public PagodaTestFixtureBase, public F
 {
 public:
     boost::filesystem::path GetTestFilesDir() const
     {
-        return SelectorTestFixtureBase::GetExecutableDirectory() /= "test_files";
+        return PagodaTestFixtureBase::GetExecutableDirectory() /= "test_files";
     }
 
     boost::filesystem::path GetCurrentTestFileInputDirectory()

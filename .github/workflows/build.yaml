@@ -71,8 +71,8 @@ jobs:
                   cd ${{ github.workspace }}/build
                   BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. \
                                                                    -DCMAKE_BUILD_TYPE=Release \
-                                                                   -DSELECTOR_VERSION=${{ github.repository }}-${{ github.run_number }} \
-                                                                   -DSELECTOR_BUILD_NUMBER=${{ github.run_number }}
+                                                                   -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} \
+                                                                   -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
                   cmake --build .
 
             - name: Run tests

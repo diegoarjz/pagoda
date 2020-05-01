@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -38,4 +38,4 @@ private:
 	std::string m_operatorName;
 	const TypeInfoPtr &m_operandType;
 };
-}  // namespace selector
+}  // namespace pagoda

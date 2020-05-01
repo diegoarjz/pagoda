@@ -5,7 +5,7 @@
 
 #include <boost/qvm/vec_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class CreateSphere
@@ -97,4 +97,4 @@ private:
 	uint32_t m_slices;
 	uint32_t m_stacks;
 };
-}  // namespace selector
+}  // namespace pagoda

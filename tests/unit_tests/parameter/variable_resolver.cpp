@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 class VariableResolverTest : public ::testing::Test
 {

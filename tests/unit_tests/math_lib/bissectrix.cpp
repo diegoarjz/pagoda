@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(Bissectrix, when_finding_the_bissectrix_between_two_vectors_should_return_a_vector)
 {

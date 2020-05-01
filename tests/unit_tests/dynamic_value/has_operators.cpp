@@ -12,7 +12,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 template<class LHS, class RHS>
 bool assertHasAddOperator()

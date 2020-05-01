@@ -20,7 +20,7 @@
 #include <stdexcept>
 #include <type_traits>
 
-namespace selector
+namespace pagoda
 {
 template<typename R>
 struct ValueVisitor
@@ -118,4 +118,4 @@ public:
 	}
 };
 
-}  // namespace selector
+}  // namespace pagoda

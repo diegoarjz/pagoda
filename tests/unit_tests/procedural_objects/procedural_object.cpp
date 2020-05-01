@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(ProceduralObject, hierarchical_component_set_parent)
 {

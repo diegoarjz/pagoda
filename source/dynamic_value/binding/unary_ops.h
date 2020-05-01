@@ -6,7 +6,7 @@
 #include "../value_visitor.h"
 #include "has_operators.h"
 
-namespace selector
+namespace pagoda
 {
 /**
  * Exception thrown when the negate operator is undefined for a \c DynamicValueBase.
@@ -76,4 +76,4 @@ struct unary_ops_dispatcher : public ValueVisitor<DynamicValueBasePtr>
 		return Op::apply(operand);
 	}
 };
-}  // namespace selector
+}  // namespace pagoda

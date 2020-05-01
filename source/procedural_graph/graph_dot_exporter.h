@@ -1,11 +1,11 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_GRAPH_DOT_EXPORTER_H_
-#define SELECTOR_PROCEDURAL_GRAPH_GRAPH_DOT_EXPORTER_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_GRAPH_DOT_EXPORTER_H_
+#define PAGODA_PROCEDURAL_GRAPH_GRAPH_DOT_EXPORTER_H_
 
 #include <iostream>
 #include <memory>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 class Graph;
 using GraphPtr = std::shared_ptr<Graph>;
@@ -92,6 +92,6 @@ private:
 	RankDirection m_rankDirection;
 	bool m_showParameters;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

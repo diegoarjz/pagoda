@@ -2,7 +2,7 @@
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class Split : public ProceduralOperation
 {
@@ -14,4 +14,4 @@ public:
 
 	void DoWork() override;
 };
-}  // namespace selector
+}  // namespace pagoda

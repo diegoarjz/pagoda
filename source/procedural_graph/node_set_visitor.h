@@ -1,10 +1,10 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_SET_VISITOR_H_
-#define SELECTOR_PROCEDURAL_GRAPH_NODE_SET_VISITOR_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_NODE_SET_VISITOR_H_
+#define PAGODA_PROCEDURAL_GRAPH_NODE_SET_VISITOR_H_
 
 #include "node.h"
 #include "node_set.h"
 
-namespace selector
+namespace pagoda
 {
 template<class T>
 void node_type_filter(const NodeSet<Node> &nodeSet, NodeSet<T> &outNodes)
@@ -18,6 +18,6 @@ void node_type_filter(const NodeSet<Node> &nodeSet, NodeSet<T> &outNodes)
 		}
 	}
 }
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

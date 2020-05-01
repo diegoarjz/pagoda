@@ -1,5 +1,5 @@
-#ifndef SELECTOR_SPLIT_POINT_TOPOLOGY_H_
-#define SELECTOR_SPLIT_POINT_TOPOLOGY_H_
+#ifndef PAGODA_SPLIT_POINT_TOPOLOGY_H_
+#define PAGODA_SPLIT_POINT_TOPOLOGY_H_
 
 #include "indexed_container.h"
 
@@ -7,7 +7,7 @@
 #include <iostream>
 #include <unordered_set>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Implements a Split Point Topology to be used by \c Geometry.
@@ -667,6 +667,6 @@ private:
 	FaceContainer_t m_faces;
 };
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

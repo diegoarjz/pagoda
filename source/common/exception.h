@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class Exception
 {
@@ -14,4 +14,4 @@ public:
 private:
 	const std::string m_message;
 };
-}  // namespace selector
+}  // namespace pagoda

@@ -1,9 +1,9 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_CREATE_RECT
-#define SELECTOR_PROCEDURAL_OBJECTS_CREATE_RECT
+#ifndef PAGODA_PROCEDURAL_OBJECTS_CREATE_RECT
+#define PAGODA_PROCEDURAL_OBJECTS_CREATE_RECT
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class CreateRectGeometry : public ProceduralOperation
 {
@@ -17,6 +17,6 @@ public:
 	void DoWork() override;
 };  // class CreateSquareGeometry
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

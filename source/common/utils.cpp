@@ -2,7 +2,7 @@
 
 #include <regex>
 
-namespace selector
+namespace pagoda
 {
 bool is_float(const std::string &str)
 {
@@ -10,4 +10,4 @@ bool is_float(const std::string &str)
 	return std::regex_match(str, float_regex);
 }
 
-}  // namespace selector
+}  // namespace pagoda

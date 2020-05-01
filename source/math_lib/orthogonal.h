@@ -1,10 +1,10 @@
-#ifndef SELECTOR_MATH_LIB_ORTHOGONAL_H_
-#define SELECTOR_MATH_LIB_ORTHOGONAL_H_
+#ifndef PAGODA_MATH_LIB_ORTHOGONAL_H_
+#define PAGODA_MATH_LIB_ORTHOGONAL_H_
 
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_access.hpp>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Returns a vector orthogonal to \p v.
@@ -40,6 +40,6 @@ boost::qvm::vec<Rep, 3> orthogonal(const boost::qvm::vec<Rep, 3>& v)
 	return boost::qvm::vec<Rep, 3>{1, 1, -(x + y) / z};
 }
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

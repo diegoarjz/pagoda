@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(VariableTest, when_creating_a_variable_with_a_single_identifier_should_store_the_identifier)
 {

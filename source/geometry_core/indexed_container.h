@@ -1,5 +1,5 @@
-#ifndef SELECTOR_GEOMETRY_CORE_INDEXED_CONTAINTER_H_
-#define SELECTOR_GEOMETRY_CORE_INDEXED_CONTAINTER_H_
+#ifndef PAGODA_GEOMETRY_CORE_INDEXED_CONTAINTER_H_
+#define PAGODA_GEOMETRY_CORE_INDEXED_CONTAINTER_H_
 
 #include "common/assertions.h"
 #include "common/exception.h"
@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 template<class IndexType>
 class IndexedDeletedException : public Exception
@@ -261,6 +261,6 @@ private:
 	IndexType m_nextIndex;
 	ContainerType m_container;
 };  // class AssociativeIndexedContainer
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

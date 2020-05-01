@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralObject;
 class ProceduralComponentSystemBase;
@@ -70,5 +70,5 @@ private:
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
 using ProceduralObjectSystemWeakPtr = std::weak_ptr<ProceduralObjectSystem>;
 
-}  // namespace selector
+}  // namespace pagoda
 

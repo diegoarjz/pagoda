@@ -5,7 +5,7 @@
 
 #include "math_lib/vec_base.h"
 
-namespace selector
+namespace pagoda
 {
 class FloatValue;
 using FloatValuePtr = std::shared_ptr<FloatValue>;
@@ -54,4 +54,4 @@ private:
 	Vec3F m_nativeVector;
 };
 
-}  // namespace selector
+}  // namespace pagoda

@@ -46,7 +46,7 @@ add_library(common OBJECT ${COMMON_SRCS})
 target_include_directories(
     common
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}
@@ -72,10 +72,10 @@ target_compile_options(
 target_compile_definitions(
     common
     PRIVATE
-        -DSELECTOR_VERSION=\"${SELECTOR_VERSION}\"
-        -DSELECTOR_BUILD_NUMBER=\"${SELECTOR_BUILD_NUMBER}\"
-        -DSELECTOR_BUILD_DATE=\"${SELECTOR_BUILD_DATE}\"
-        -DSELECTOR_INCLUDE_GIT_INFO=${SELECTOR_INCLUDE_GIT_INFO}
+        -DPAGODA_VERSION=\"${PAGODA_VERSION}\"
+        -DPAGODA_BUILD_NUMBER=\"${PAGODA_BUILD_NUMBER}\"
+        -DPAGODA_BUILD_DATE=\"${PAGODA_BUILD_DATE}\"
+        -DPAGODA_INCLUDE_GIT_INFO=${PAGODA_INCLUDE_GIT_INFO}
         -DGIT_BRANCH=\"${GIT_BRANCH}\"
         -DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\"
         -DGIT_COMMIT_AUTHOR=${GIT_COMMIT_AUTHOR}
@@ -83,11 +83,11 @@ target_compile_definitions(
         "$<$<CONFIG:DEBUG>:DEBUG>"
 )
 
-if (${SELECTOR_ENABLE_ASSERTIONS})
-    target_compile_options(common PUBLIC -DSELECTOR_ENABLE_ASSERTIONS="${SELECTOR_ENABLE_ASSERTIONS}")
+if (${PAGODA_ENABLE_ASSERTIONS})
+    target_compile_options(common PUBLIC -DPAGODA_ENABLE_ASSERTIONS="${PAGODA_ENABLE_ASSERTIONS}")
 endif()
-if (${SELECTOR_PROFILER_ACTIVE})
-    target_compile_options(common PUBLIC -DSELECTOR_PROFILER_ACTIVE="${SELECTOR_PROFILER_ACTIVE}")
+if (${PAGODA_PROFILER_ACTIVE})
+    target_compile_options(common PUBLIC -DPAGODA_PROFILER_ACTIVE="${PAGODA_PROFILER_ACTIVE}")
 endif()
 
 target_link_libraries(

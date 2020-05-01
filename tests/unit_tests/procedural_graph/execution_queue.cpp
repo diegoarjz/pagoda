@@ -2,18 +2,18 @@
 #include <procedural_graph/graph.h>
 #include <procedural_graph/input_interface_node.h>
 
-#include <selector.h>
+#include <pagoda.h>
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 class ExecutionQueueTest : public ::testing::Test
 {
 protected:
 	void SetUp()
 	{
-		m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
+		m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
 		a = m_graph->CreateNode<InputInterfaceNode>();
 		b = m_graph->CreateNode<InputInterfaceNode>();
 		c = m_graph->CreateNode<InputInterfaceNode>();
@@ -29,7 +29,7 @@ protected:
 	NodePtr c;
 	NodePtr d;
 	NodePtr e;
-	Selector m_selector;
+	Pagoda m_pagoda;
 };
 
 TEST_F(ExecutionQueueTest, when_iterating_the_nodes_should_visit_them_by_depth)

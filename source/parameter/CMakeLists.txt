@@ -15,7 +15,7 @@ add_library(parameter OBJECT ${PARAMETER_SRCS})
 target_include_directories(
     parameter
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
 )

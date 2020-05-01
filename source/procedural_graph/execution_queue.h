@@ -1,9 +1,9 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_EXECUTION_QUEUE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_EXECUTION_QUEUE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_EXECUTION_QUEUE_H_
+#define PAGODA_PROCEDURAL_GRAPH_EXECUTION_QUEUE_H_
 
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 class Graph;
 using GraphPtr = std::shared_ptr<Graph>;
@@ -43,6 +43,6 @@ private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

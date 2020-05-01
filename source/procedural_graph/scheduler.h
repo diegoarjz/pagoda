@@ -1,7 +1,7 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_SCHEDULER_H_
-#define SELECTOR_PROCEDURAL_GRAPH_SCHEDULER_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_SCHEDULER_H_
+#define PAGODA_PROCEDURAL_GRAPH_SCHEDULER_H_
 
-namespace selector
+namespace pagoda
 {
 class IScheduler
 {
@@ -12,5 +12,5 @@ public:
 	virtual bool Step() = 0;
 	virtual void Finalize() = 0;
 };  // class IScheduler
-}  // namespace selector
+}  // namespace pagoda
 #endif

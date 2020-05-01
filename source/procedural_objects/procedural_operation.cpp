@@ -6,9 +6,7 @@
 #include "dynamic_value/value_visitor.h"
 #include "procedural_object.h"
 
-#include "../selector.h"
-
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr ProceduralOperation::s_typeInfo = std::make_shared<TypeInfo>("ProceduralOperation");
 
@@ -120,4 +118,4 @@ void ProceduralOperation::UpdateValue(const std::string& valueName)
 
 DynamicValueBasePtr ProceduralOperation::GetValue(const std::string& valueName) { return GetMember(valueName); }
 
-}  // namespace selector
+}  // namespace pagoda

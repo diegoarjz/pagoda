@@ -4,7 +4,7 @@
 
 #include <list>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
@@ -29,4 +29,4 @@ private:
 	std::list<ProceduralObjectPtr> m_proceduralObjects;
 	ProceduralObjectPredicateRegistryPtr m_predicateRegistry;
 };
-}  // namespace selector
+}  // namespace pagoda

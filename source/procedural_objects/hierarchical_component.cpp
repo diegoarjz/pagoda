@@ -3,7 +3,7 @@
 #include "common/profiler.h"
 #include "hierarchical_system.h"
 
-namespace selector
+namespace pagoda
 {
 std::string HierarchicalComponent::GetComponentSystemName() { return HierarchicalSystem::GetComponentSystemName(); }
 
@@ -26,4 +26,4 @@ void HierarchicalComponent::SetParent(std::shared_ptr<HierarchicalComponent> par
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda

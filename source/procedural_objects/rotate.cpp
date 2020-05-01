@@ -18,7 +18,7 @@
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 const std::string Rotate::s_inputGeometry("in");
 const std::string Rotate::s_outputGeometry("out");
@@ -121,5 +121,5 @@ void Rotate::DoWork()
 		auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
 		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
-}  // namespace selector
-}  // namespace selector
+}  // namespace pagoda
+}  // namespace pagoda

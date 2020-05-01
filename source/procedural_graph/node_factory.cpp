@@ -1,6 +1,6 @@
 #include "node_factory.h"
 
-namespace selector
+namespace pagoda
 {
 NodeFactory::NodeFactory() : Factory<Node>("Node") {}
 

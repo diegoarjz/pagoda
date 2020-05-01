@@ -11,7 +11,7 @@
 
 #include <boost/qvm/map_vec_mat.hpp>
 
-namespace selector
+namespace pagoda
 {
 const std::string CreateRectGeometry::output_geometry("out");
 const char* CreateRectGeometry::name = "CreateRectGeometry";
@@ -76,4 +76,4 @@ void CreateRectGeometry::DoWork()
 	std::shared_ptr<HierarchicalComponent> hierarchical_component =
 	    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(object);
 }
-}  // namespace selector
+}  // namespace pagoda

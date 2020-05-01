@@ -5,7 +5,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 class ProceduralOperationObjectInterfaceTest : public ::testing::Test
 {

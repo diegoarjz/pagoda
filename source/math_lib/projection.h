@@ -1,5 +1,5 @@
-#ifndef SELECTOR_MATH_LIB_PROJECTION_H_
-#define SELECTOR_MATH_LIB_PROJECTION_H_
+#ifndef PAGODA_MATH_LIB_PROJECTION_H_
+#define PAGODA_MATH_LIB_PROJECTION_H_
 
 #include "line_3d.h"
 #include "line_segment_3d.h"
@@ -8,7 +8,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Calculates the projection of point \p p onto the line \p l
@@ -59,6 +59,6 @@ boost::qvm::vec<Rep, 3> projection(const boost::qvm::vec<Rep, 3> &p, const Plane
 	auto dot = boost::qvm::dot(plane.GetPoint() - p, planeNormal);
 	return p + dot * planeNormal;
 }
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

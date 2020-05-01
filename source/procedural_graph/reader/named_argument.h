@@ -1,11 +1,11 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_NAMED_ARGUMENT_H_
-#define SELECTOR_PROCEDURAL_GRAPH_NAMED_ARGUMENT_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_NAMED_ARGUMENT_H_
+#define PAGODA_PROCEDURAL_GRAPH_NAMED_ARGUMENT_H_
 
 #include "ast_node.h"
 
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Represents a named argument (both construction and execution arguments) in the graph format.
@@ -93,6 +93,6 @@ private:
 	ArgumentType m_argumentType;  ///< The type of the \c NamedArgument
 	std::string m_argumentValue;  ///< The string representation of the value of the \c NamedArgument
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

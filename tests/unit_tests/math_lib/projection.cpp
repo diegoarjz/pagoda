@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(ProjectionTest, when_projecting_a_point_to_a_line_should_return_the_correct_point)
 {

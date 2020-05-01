@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_READER_H_
-#define SELECTOR_PROCEDURAL_GRAPH_READER_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_READER_H_
+#define PAGODA_PROCEDURAL_GRAPH_READER_H_
 
 #include "graph.h"
 #include "node.h"
@@ -8,7 +8,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace selector
+namespace pagoda
 {
 class NodeFactory;
 using NodeFactoryPtr = std::shared_ptr<NodeFactory>;
@@ -26,6 +26,6 @@ private:
 	struct Impl;
 	std::unique_ptr<Impl> m_implementation;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

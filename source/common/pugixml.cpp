@@ -1782,9 +1782,9 @@ PUGI__NS_BEGIN
 		}
 	};
 
-	template <size_t size> struct wchar_selector;
+	template <size_t size> struct wchar_pagoda;
 
-	template <> struct wchar_selector<2>
+	template <> struct wchar_pagoda<2>
 	{
 		typedef uint16_t type;
 		typedef utf16_counter counter;
@@ -1792,7 +1792,7 @@ PUGI__NS_BEGIN
 		typedef utf16_decoder<opt_false> decoder;
 	};
 
-	template <> struct wchar_selector<4>
+	template <> struct wchar_pagoda<4>
 	{
 		typedef uint32_t type;
 		typedef utf32_counter counter;
@@ -1800,8 +1800,8 @@ PUGI__NS_BEGIN
 		typedef utf32_decoder<opt_false> decoder;
 	};
 
-	typedef wchar_selector<sizeof(wchar_t)>::counter wchar_counter;
-	typedef wchar_selector<sizeof(wchar_t)>::writer wchar_writer;
+	typedef wchar_pagoda<sizeof(wchar_t)>::counter wchar_counter;
+	typedef wchar_pagoda<sizeof(wchar_t)>::writer wchar_writer;
 
 	struct wchar_decoder
 	{
@@ -1809,7 +1809,7 @@ PUGI__NS_BEGIN
 
 		template <typename Traits> static inline typename Traits::value_type process(const wchar_t* data, size_t size, typename Traits::value_type result, Traits traits)
 		{
-			typedef wchar_selector<sizeof(wchar_t)>::decoder decoder;
+			typedef wchar_pagoda<sizeof(wchar_t)>::decoder decoder;
 
 			return decoder::process(reinterpret_cast<const typename decoder::type*>(data), size, result, traits);
 		}
@@ -1819,7 +1819,7 @@ PUGI__NS_BEGIN
 	PUGI__FN void convert_wchar_endian_swap(wchar_t* result, const wchar_t* data, size_t length)
 	{
 		for (size_t i = 0; i < length; ++i)
-			result[i] = static_cast<wchar_t>(endian_swap(static_cast<wchar_selector<sizeof(wchar_t)>::type>(data[i])));
+			result[i] = static_cast<wchar_t>(endian_swap(static_cast<wchar_pagoda<sizeof(wchar_t)>::type>(data[i])));
 	}
 #endif
 PUGI__NS_END

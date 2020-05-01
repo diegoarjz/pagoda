@@ -4,7 +4,7 @@
 #include "dynamic_value_base.h"
 #include "icallable.h"
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -12,7 +12,7 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 class ICallableBody;
 
 /**
- * Represents a dynamic class that can be defined in selscript.
+ * Represents a dynamic class that can be defined in pgscript.
  */
 class DynamicClass : public DynamicValueBase, public ClassBase, public ICallable
 {
@@ -58,4 +58,4 @@ private:
 };
 
 using DynamicClassPtr = std::shared_ptr<DynamicClass>;
-}  // namespace selector
+}  // namespace pagoda

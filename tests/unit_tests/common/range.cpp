@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-using namespace selector;
+using namespace pagoda;
 
 template<class Type>
 class RangeTest : public ::testing::Test

@@ -1,11 +1,11 @@
-#ifndef SELECTOR_GEOMETRY_OPERATIONS_EXTRUSION_PROFILE_H_
-#define SELECTOR_GEOMETRY_OPERATIONS_EXTRUSION_PROFILE_H_
+#ifndef PAGODA_GEOMETRY_OPERATIONS_EXTRUSION_PROFILE_H_
+#define PAGODA_GEOMETRY_OPERATIONS_EXTRUSION_PROFILE_H_
 
 #include <vector>
 
 #include <math_lib/VecBase.h>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Implements an extrusion profile that is to be applied to
@@ -28,5 +28,5 @@ public:
 private:
 	std::vector<math_lib::Vec2F> profile;
 };  // class ExtrusionProfile
-}  // namespace selector
+}  // namespace pagoda
 #endif

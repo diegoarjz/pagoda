@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(LineVsLineNearestPointsTest, when_lines_dont_interset_should_return_the_nearest_points_on_both)
 {

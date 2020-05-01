@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Infers the return and argument types for the member function given in \p p, producing a
@@ -14,5 +14,5 @@ auto make_member_function(ReturnType (C::*p)(Args...)) -> std::function<ReturnTy
 	return {p};
 }
 
-}  // namespace selector
+}  // namespace pagoda
 

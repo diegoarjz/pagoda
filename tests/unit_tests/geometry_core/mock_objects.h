@@ -1,5 +1,5 @@
-#ifndef SELECTOR_TESTS_GEOMETRY_CORE_MOCK_OBJECTS_H_
-#define SELECTOR_TESTS_GEOMETRY_CORE_MOCK_OBJECTS_H_
+#ifndef PAGODA_TESTS_GEOMETRY_CORE_MOCK_OBJECTS_H_
+#define PAGODA_TESTS_GEOMETRY_CORE_MOCK_OBJECTS_H_
 
 #include <math_lib/vec_base.h>
 
@@ -7,7 +7,7 @@ class MockGeometry
 {
 public:
 	using Index_t = uint32_t;
-	using PositionType = selector::Vec3F;
+	using PositionType = pagoda::Vec3F;
 
 	MOCK_METHOD1(CreateVertex, Index_t(const PositionType &position));
 	MOCK_CONST_METHOD0(GetNumVertices, uint32_t(void));

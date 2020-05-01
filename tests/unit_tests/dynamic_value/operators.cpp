@@ -19,7 +19,7 @@
 #include <iostream>
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(UnaryOperators, test_valid_negate_operator)
 {
@@ -125,7 +125,7 @@ TEST(BinaryOperators, test_valid_div_operator)
 	auto f1 = std::make_shared<FloatValue>(123.0f);
 	auto f2 = std::make_shared<FloatValue>(2.0f);
 
-	binary_op_dispatcher<selector::div> dispatcher(f1, f2);
+	binary_op_dispatcher<pagoda::div> dispatcher(f1, f2);
 	FloatValuePtr result = std::dynamic_pointer_cast<FloatValue>(apply_visitor(dispatcher, *f1));
 	ASSERT_NE(result, nullptr);
 	EXPECT_EQ(123.0f / 2.0f, static_cast<float>(*result));
@@ -136,7 +136,7 @@ TEST(BinaryOperators, test_valid_eq_operator)
 	auto f1 = std::make_shared<FloatValue>(123.0f);
 	auto f2 = std::make_shared<FloatValue>(123.0f);
 
-	binary_op_dispatcher<selector::eq> dispatcher(f1, f2);
+	binary_op_dispatcher<pagoda::eq> dispatcher(f1, f2);
 	BooleanPtr result = std::dynamic_pointer_cast<Boolean>(apply_visitor(dispatcher, *f1));
 	ASSERT_NE(result, nullptr);
 	EXPECT_TRUE(static_cast<bool>(*result));
@@ -147,7 +147,7 @@ TEST(BinaryOperators, test_valid_neq_operator)
 	auto f1 = std::make_shared<FloatValue>(123.0f);
 	auto f2 = std::make_shared<FloatValue>(23.0f);
 
-	binary_op_dispatcher<selector::neq> dispatcher(f1, f2);
+	binary_op_dispatcher<pagoda::neq> dispatcher(f1, f2);
 	BooleanPtr result = std::dynamic_pointer_cast<Boolean>(apply_visitor(dispatcher, *f1));
 	ASSERT_NE(result, nullptr);
 	EXPECT_TRUE(static_cast<bool>(*result));
@@ -158,7 +158,7 @@ TEST(BinaryOperators, test_valid_gt_operator)
 	auto f1 = std::make_shared<FloatValue>(123.0f);
 	auto f2 = std::make_shared<FloatValue>(23.0f);
 
-	binary_op_dispatcher<selector::gt> dispatcher(f1, f2);
+	binary_op_dispatcher<pagoda::gt> dispatcher(f1, f2);
 	BooleanPtr result = std::dynamic_pointer_cast<Boolean>(apply_visitor(dispatcher, *f1));
 	ASSERT_NE(result, nullptr);
 	EXPECT_TRUE(static_cast<bool>(*result));
@@ -169,7 +169,7 @@ TEST(BinaryOperators, test_valid_gte_operator)
 	auto f1 = std::make_shared<FloatValue>(123.0f);
 	auto f2 = std::make_shared<FloatValue>(23.0f);
 
-	binary_op_dispatcher<selector::gte> dispatcher(f1, f2);
+	binary_op_dispatcher<pagoda::gte> dispatcher(f1, f2);
 	BooleanPtr result = std::dynamic_pointer_cast<Boolean>(apply_visitor(dispatcher, *f1));
 	ASSERT_NE(result, nullptr);
 	EXPECT_TRUE(static_cast<bool>(*result));
@@ -180,7 +180,7 @@ TEST(BinaryOperators, test_valid_lt_operator)
 	auto f2 = std::make_shared<FloatValue>(123.0f);
 	auto f1 = std::make_shared<FloatValue>(23.0f);
 
-	binary_op_dispatcher<selector::lt> dispatcher(f1, f2);
+	binary_op_dispatcher<pagoda::lt> dispatcher(f1, f2);
 	BooleanPtr result = std::dynamic_pointer_cast<Boolean>(apply_visitor(dispatcher, *f1));
 	ASSERT_NE(result, nullptr);
 	EXPECT_TRUE(static_cast<bool>(*result));
@@ -191,7 +191,7 @@ TEST(BinaryOperators, test_valid_lte_operator)
 	auto f2 = std::make_shared<FloatValue>(123.0f);
 	auto f1 = std::make_shared<FloatValue>(23.0f);
 
-	binary_op_dispatcher<selector::lte> dispatcher(f1, f2);
+	binary_op_dispatcher<pagoda::lte> dispatcher(f1, f2);
 	BooleanPtr result = std::dynamic_pointer_cast<Boolean>(apply_visitor(dispatcher, *f1));
 	ASSERT_NE(result, nullptr);
 	EXPECT_TRUE(static_cast<bool>(*result));

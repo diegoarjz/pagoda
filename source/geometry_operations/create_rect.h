@@ -1,5 +1,5 @@
-#ifndef SELECTOR_GEOMETRY_OPERATIONS_CREATE_RECT_H_
-#define SELECTOR_GEOMETRY_OPERATIONS_CREATE_RECT_H_
+#ifndef PAGODA_GEOMETRY_OPERATIONS_CREATE_RECT_H_
+#define PAGODA_GEOMETRY_OPERATIONS_CREATE_RECT_H_
 
 #include <common/logger.h>
 #include <geometry_core/geometry.h>
@@ -8,7 +8,7 @@
 
 #include <boost/qvm/vec_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class CreateRect
@@ -54,6 +54,6 @@ private:
 	Vec3F m_xAxis;
 	Vec3F m_yAxis;
 };  // class CreateRect
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

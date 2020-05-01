@@ -4,11 +4,11 @@
 #include <procedural_graph/node.h>
 #include <procedural_graph/operation_node.h>
 
-#include <selector.h>
+#include <pagoda.h>
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 class Delegate
 {
@@ -23,7 +23,7 @@ class NodeVisitorTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
+		m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
@@ -34,7 +34,7 @@ protected:
 
 	GraphPtr m_graph;
 	std::vector<NodePtr> m_nodes;
-	Selector m_selector;
+	Pagoda m_pagoda;
 };
 
 TEST_F(NodeVisitorTest, when_visiting_should_call_the_delegate_for_each_node)
@@ -53,7 +53,7 @@ class BreadthFirstNodeVisitorTest : public ::testing::Test
 protected:
 	void SetUp()
 	{
-		m_graph = std::make_shared<Graph>(m_selector.GetNodeFactory());
+		m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
 		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
@@ -65,7 +65,7 @@ protected:
 
 	GraphPtr m_graph;
 	std::vector<NodePtr> m_nodes;
-	Selector m_selector;
+	Pagoda m_pagoda;
 };
 
 TEST_F(BreadthFirstNodeVisitorTest, when_visiting_should_call_the_delegate_for_each_node)

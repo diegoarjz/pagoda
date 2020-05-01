@@ -12,7 +12,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(FloatValue, test_constructions)
 {

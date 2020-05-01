@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_COMPONENT_SYSTEM_H_
-#define SELECTOR_PROCEDURAL_COMPONENT_SYSTEM_H_
+#ifndef PAGODA_PROCEDURAL_COMPONENT_SYSTEM_H_
+#define PAGODA_PROCEDURAL_COMPONENT_SYSTEM_H_
 
 #include "common/assertions.h"
 #include "common/logger.h"
@@ -9,7 +9,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
@@ -74,6 +74,6 @@ private:
 	std::unordered_map<ProceduralObjectPtr, std::shared_ptr<Component_t>> m_components;
 };  // class ProceduralComponentSystem
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

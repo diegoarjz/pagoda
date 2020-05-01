@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(MatrixBase, when_constructing_with_default_constructor_should_set_all_elements_to_zero)
 {

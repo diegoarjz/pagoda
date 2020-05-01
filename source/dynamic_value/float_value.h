@@ -2,7 +2,7 @@
 
 #include "dynamic_value_base.h"
 
-namespace selector
+namespace pagoda
 {
 class Integer;
 using IntegerPtr = std::shared_ptr<Integer>;
@@ -83,4 +83,4 @@ private:
 	float m_value;
 };
 using FloatValuePtr = std::shared_ptr<FloatValue>;
-}  // namespace selector
+}  // namespace pagoda

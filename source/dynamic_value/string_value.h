@@ -2,7 +2,7 @@
 
 #include "dynamic_value_base.h"
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -48,4 +48,4 @@ private:
 	std::string m_value;
 };
 using StringPtr = std::shared_ptr<String>;
-}  // namespace selector
+}  // namespace pagoda

@@ -1,10 +1,10 @@
-#ifndef SELECTOR_PARAMETER_VARIABLE_H_
-#define SELECTOR_PARAMETER_VARIABLE_H_
+#ifndef PAGODA_PARAMETER_VARIABLE_H_
+#define PAGODA_PARAMETER_VARIABLE_H_
 
 #include <list>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Represents a \c Variable in an \c Expression.
@@ -62,6 +62,6 @@ public:
 private:
 	std::list<std::string> m_identifiers;  ///< The list of identifiers.
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

@@ -10,11 +10,9 @@
 #include "hierarchical_system.h"
 #include "procedural_component.h"
 
-#include "../selector.h"
-
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 const char* ExtrudeGeometry::name = "ExtrudeGeometry";
 const std::string ExtrudeGeometry::input_geometry("in");
@@ -70,4 +68,4 @@ void ExtrudeGeometry::DoWork()
 		hierarchicalSystem->SetParent(out_hierarchical_component, in_hierarchical_component);
 	}
 }
-}  // namespace selector
+}  // namespace pagoda

@@ -2,7 +2,7 @@
 
 #include "math_utils.h"
 
-namespace selector
+namespace pagoda
 {
 template<class T>
 class Degrees;
@@ -22,5 +22,5 @@ public:
 private:
 	T m_radians;
 };
-}  // namespace selector
+}  // namespace pagoda
 

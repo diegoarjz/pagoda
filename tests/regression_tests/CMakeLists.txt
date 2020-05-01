@@ -28,7 +28,7 @@ target_compile_options(
 target_include_directories(
     regression_tests
     PUBLIC
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
@@ -38,13 +38,13 @@ target_include_directories(
 target_compile_definitions(
     regression_tests
     PRIVATE
-        -DASSERTS_ENABLED=${Selector_ENABLE_ASSERTIONS}
+        -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
 
 target_link_libraries(
     regression_tests
     PRIVATE
-        selector
+        libpagoda
         Boost::chrono
         Boost::system
         Boost::filesystem

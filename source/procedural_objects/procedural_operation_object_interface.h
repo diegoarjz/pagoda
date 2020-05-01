@@ -1,12 +1,12 @@
-#ifndef SELECTOR_PROCEDURAL_OPERATION_OBJECT_INTERFACE_H_
-#define SELECTOR_PROCEDURAL_OPERATION_OBJECT_INTERFACE_H_
+#ifndef PAGODA_PROCEDURAL_OPERATION_OBJECT_INTERFACE_H_
+#define PAGODA_PROCEDURAL_OPERATION_OBJECT_INTERFACE_H_
 
 #include "procedural_object_mask.h"
 
 #include <list>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralOperationObjectInterface
 {
@@ -25,6 +25,6 @@ private:
 	std::string interface_name;
 	std::list<ProceduralObjectPtr> procedural_objects;
 };  // class ProceduralOperationObjectInterface
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

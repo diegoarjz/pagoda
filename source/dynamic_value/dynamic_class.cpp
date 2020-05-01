@@ -10,7 +10,7 @@
 
 #include "common/unimplemented.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr DynamicClass::typeInfo = std::make_shared<TypeInfo>("DynamicClass");
 
@@ -73,4 +73,4 @@ FunctionPtr DynamicClass::Bind(std::shared_ptr<ICallableBody> callable, std::sha
 	UNIMPLEMENTED;
 }
 
-}  // namespace selector
+}  // namespace pagoda

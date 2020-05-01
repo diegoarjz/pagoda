@@ -9,12 +9,12 @@
 
 #include <memory>
 
-using namespace selector;
+using namespace pagoda;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;
 
-class CreateRectTest : public SelectorTestFixture<::testing::Test>
+class CreateRectTest : public PagodaTestFixture<::testing::Test>
 {
 public:
 	void SetUp() {}

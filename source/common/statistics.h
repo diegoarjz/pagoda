@@ -1,5 +1,5 @@
-#ifndef SELECTOR_COMMON_DEBUG_STATISTICS_H_
-#define SELECTOR_COMMON_DEBUG_STATISTICS_H_
+#ifndef PAGODA_COMMON_DEBUG_STATISTICS_H_
+#define PAGODA_COMMON_DEBUG_STATISTICS_H_
 
 #include "assertions.h"
 
@@ -9,7 +9,7 @@
 #include <ostream>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Main class responsible for holding statistics about execution.
@@ -129,7 +129,7 @@ private:
 	OneShotProfilerStats() { StatisticsManager::Instance()->AddGroup(this); }
 };  // struct OneShotProfilerStats
 
-#ifdef SELECTOR_STATISTICS_ENABLED
+#ifdef PAGODA_STATISTICS_ENABLED
 
 #define LOG_STATISTICS(STAT_INSTRUCTION) (STAT_INSTRUCTION);
 
@@ -139,6 +139,6 @@ private:
 
 #endif
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

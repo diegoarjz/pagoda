@@ -71,7 +71,7 @@ add_library(dynamic_value OBJECT ${DYNAMIC_VALUE_SRCS})
 target_include_directories(
     dynamic_value
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
         ${SELSCRIPT_INCLUDE_DIR}

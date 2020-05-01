@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 class AstInterpreterTest : public ::testing::Test
 {

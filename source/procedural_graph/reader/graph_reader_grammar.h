@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_GRAPH_FORMAT_GRAMMAR_H_
-#define SELECTOR_PROCEDURAL_GRAPH_GRAPH_FORMAT_GRAMMAR_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_GRAPH_FORMAT_GRAMMAR_H_
+#define PAGODA_PROCEDURAL_GRAPH_GRAPH_FORMAT_GRAMMAR_H_
 
 #include "graph_definition_node.h"
 #include "graph_reader_grammar_helper.h"
@@ -9,7 +9,7 @@
 
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 template<class Iterator>
 struct GraphReaderGrammar
@@ -38,7 +38,7 @@ struct GraphReaderGrammar
 
 		using namespace boost::spirit;
 		using namespace boost::spirit::qi;
-		using namespace selector::grammar_helpers;
+		using namespace pagoda::grammar_helpers;
 		using boost::phoenix::bind;
 
 		// clang-format off
@@ -129,6 +129,6 @@ struct GraphReaderGrammar
 	Rule_t<Iterator, GraphDefinitionNodePtr()> graph_definition;
 };
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

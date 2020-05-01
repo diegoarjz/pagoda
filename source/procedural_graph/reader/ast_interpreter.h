@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_AST_INTERPRETER_H_
-#define SELECTOR_PROCEDURAL_GRAPH_AST_INTERPRETER_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_AST_INTERPRETER_H_
+#define PAGODA_PROCEDURAL_GRAPH_AST_INTERPRETER_H_
 
 #include <string>
 #include <unordered_map>
@@ -7,7 +7,7 @@
 #include "ast_node_visitor.h"
 #include "procedural_graph/node_factory.h"
 
-namespace selector
+namespace pagoda
 {
 class Graph;
 using GraphPtr = std::shared_ptr<Graph>;
@@ -36,5 +36,5 @@ private:
 	std::unordered_map<std::string, NodePtr> m_nodeTable;
 	std::unordered_map<std::string, DynamicValueBasePtr> m_currentNamedParameters;
 };
-}  // namespace selector
+}  // namespace pagoda
 #endif

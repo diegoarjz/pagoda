@@ -11,7 +11,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(DynamicPlaneTest, test_construction)
 {

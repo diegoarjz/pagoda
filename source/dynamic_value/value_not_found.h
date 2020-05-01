@@ -5,11 +5,11 @@
 #include <stdexcept>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class ValueNotFoundException : public Exception
 {
 public:
 	ValueNotFoundException(const std::string &name);
 };
-}  // namespace selector
+}  // namespace pagoda

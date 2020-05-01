@@ -1,10 +1,10 @@
 #pragma once
-#ifndef SELECTOR_PROCEDURAL_GRAPH_OPERATION_NODE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_OPERATION_NODE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_OPERATION_NODE_H_
+#define PAGODA_PROCEDURAL_GRAPH_OPERATION_NODE_H_
 
 #include "node.h"
 
-namespace selector
+namespace pagoda
 {
 class ProceduralOperation;
 using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
@@ -30,6 +30,6 @@ private:
 	ProceduralOperationPtr m_operation;
 	OperationFactoryPtr m_operationFactory;
 };  // class OperationNode
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

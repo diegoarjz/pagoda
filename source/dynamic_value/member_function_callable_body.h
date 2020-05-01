@@ -4,7 +4,7 @@
 
 #include "binding/return_from_member_function.h"
 
-namespace selector
+namespace pagoda
 {
 /**
  * Implements a wrapper for a c++ member function \c ICallableBody.
@@ -41,4 +41,4 @@ private:
 	FunctionType m_function;
 	std::shared_ptr<DynamicValueTable> m_closure;
 };
-}  // namespace selector
+}  // namespace pagoda

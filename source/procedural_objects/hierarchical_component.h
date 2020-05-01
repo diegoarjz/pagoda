@@ -1,12 +1,12 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_HIERARCHICAL_COMPONENT_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_HIERARCHICAL_COMPONENT_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_HIERARCHICAL_COMPONENT_H_
+#define PAGODA_PROCEDURAL_OBJECTS_HIERARCHICAL_COMPONENT_H_
 
 #include "procedural_component.h"
 
 #include <list>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class HierarchicalComponent : public ProceduralComponent, public std::enable_shared_from_this<HierarchicalComponent>
 {
@@ -30,6 +30,6 @@ private:
 	std::weak_ptr<HierarchicalComponent> parent;
 	std::list<std::weak_ptr<HierarchicalComponent>> children;
 };  // class HierarchicalComponent
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

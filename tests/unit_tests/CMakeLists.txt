@@ -50,7 +50,7 @@ set(test_srcs
     "procedural_graph/graph_reader_grammar.cpp"
     "procedural_graph/parameter_node.cpp"
     "procedural_graph/graph_reader_ast.cpp"
-    "selscript/grammar.cpp"
+    "pgscript/grammar.cpp"
     )
 
 add_executable(unit_tests ${test_srcs})
@@ -74,7 +74,7 @@ target_compile_options(
 target_include_directories(
     unit_tests
     PUBLIC
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
@@ -85,13 +85,13 @@ target_include_directories(
 target_compile_definitions(
     unit_tests
     PRIVATE
-        -DASSERTS_ENABLED=${Selector_ENABLE_ASSERTIONS}
+        -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
 
 target_link_libraries(
     unit_tests
     PRIVATE
-        selector
+        libpagoda
         Boost::chrono
         Boost::system
         Boost::filesystem

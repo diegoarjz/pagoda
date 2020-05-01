@@ -5,7 +5,7 @@
 
 #include <ostream>
 
-namespace selector
+namespace pagoda
 {
 DynamicValueTable::DynamicValueTable(const std::string &tableName) : m_tableName(tableName) {}
 
@@ -60,4 +60,4 @@ typename DynamicValueTable::Entry &DynamicValueTable::FindValue(const std::strin
 	}
 	throw ValueNotFoundException(name);
 }
-}  // namespace selector
+}  // namespace pagoda

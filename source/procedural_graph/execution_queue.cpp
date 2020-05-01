@@ -7,7 +7,7 @@
 
 #include <unordered_map>
 
-namespace selector
+namespace pagoda
 {
 class ExecutionQueue::Impl
 {
@@ -78,4 +78,4 @@ NodePtr ExecutionQueue::GetNextNode() { return m_implementation->GetNextNode(); 
 void ExecutionQueue::Reset() { m_implementation->Reset(); }
 
 std::size_t ExecutionQueue::GetNodeCount() const { return m_implementation->GetNodeCount(); }
-}  // namespace selector
+}  // namespace pagoda

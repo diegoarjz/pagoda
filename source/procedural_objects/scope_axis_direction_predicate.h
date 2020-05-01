@@ -4,7 +4,7 @@
 #include "math_lib/vec_base.h"
 #include "procedural_object_predicate.h"
 
-namespace selector
+namespace pagoda
 {
 class GeometrySystem;
 using GeometrySystemPtr = std::shared_ptr<GeometrySystem>;
@@ -37,4 +37,4 @@ private:
 
 	GeometrySystemPtr m_geometrySystem;
 };
-}  // namespace selector
+}  // namespace pagoda

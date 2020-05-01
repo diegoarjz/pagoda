@@ -1,9 +1,9 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_EXTRUDE_GEOMETRY
-#define SELECTOR_PROCEDURAL_OBJECTS_EXTRUDE_GEOMETRY
+#ifndef PAGODA_PROCEDURAL_OBJECTS_EXTRUDE_GEOMETRY
+#define PAGODA_PROCEDURAL_OBJECTS_EXTRUDE_GEOMETRY
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class ExtrudeGeometry : public ProceduralOperation
 {
@@ -18,6 +18,6 @@ public:
 	void DoWork() override;
 };  // class ExtrudeGEometry
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

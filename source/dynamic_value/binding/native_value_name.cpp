@@ -1,6 +1,6 @@
 #include "native_value_name.h"
 
-namespace selector
+namespace pagoda
 {
 template<>
 const std::string native_value_name<char>::GetName()
@@ -31,4 +31,4 @@ const std::string native_value_name<std::string>::GetName()
 {
 	return "std::string";
 }
-}  // namespace selector
+}  // namespace pagoda

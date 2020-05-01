@@ -1,12 +1,12 @@
 #pragma once
-#ifndef SELECTOR_PROCEDURAL_GRAPH_OUTPUT_INTERFACE_EXECUTION_H_
-#define SELECTOR_PROCEDURAL_GRAPH_OUTPUT_INTERFACE_EXECUTION_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_OUTPUT_INTERFACE_EXECUTION_H_
+#define PAGODA_PROCEDURAL_GRAPH_OUTPUT_INTERFACE_EXECUTION_H_
 
 #include "node.h"
 
 #include <list>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralOperation;
 using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
@@ -35,6 +35,6 @@ private:
 	std::string m_interfaceName;
 	std::list<ProceduralObjectPtr> m_proceduralObjects;
 };  // class OutputInterfaceNode
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

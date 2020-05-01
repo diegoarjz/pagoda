@@ -7,7 +7,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(HandleImplicitCastTest, test_implicit_casts)
 {
@@ -31,7 +31,7 @@ TEST(HandleImplicitCastTest, test_implicit_casts)
 	EXPECT_EQ(i, 4);
 }
 
-class SplitPointTopologyCreateFaceTest : public SelectorTestFixture<::testing::Test>
+class SplitPointTopologyCreateFaceTest : public PagodaTestFixture<::testing::Test>
 {
 protected:
 	void SetUp() {}
@@ -93,7 +93,7 @@ TEST_F(SplitPointTopologyCreateFaceTest, when_creating_faces_should_be_able_to_r
     match.Match(ss.str());
 }
 
-class SplitPointTopologyOperationsTest : public SelectorTestFixture<::testing::Test>
+class SplitPointTopologyOperationsTest : public PagodaTestFixture<::testing::Test>
 {
 protected:
 	void SetUp() {}
@@ -149,7 +149,7 @@ TEST_F(SplitPointTopologyOperationsTest, when_getting_the_face_from_an_edge_shou
 	}
 }
 
-class SplitPointTopologyNavigationTest : public SelectorTestFixture<::testing::Test>
+class SplitPointTopologyNavigationTest : public PagodaTestFixture<::testing::Test>
 {
 protected:
 	void SetUp() {}
@@ -193,7 +193,7 @@ TEST_F(SplitPointTopologyNavigationTest, when_navigating_the_edges_should_be_abl
 	}
 }
 
-class SplitPointTopologyIteratorsTest : public SelectorTestFixture<::testing::Test>
+class SplitPointTopologyIteratorsTest : public PagodaTestFixture<::testing::Test>
 {
 protected:
     void SetUp()
@@ -351,7 +351,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_points_should
     EXPECT_EQ(seenPoints.size(), 3);
 }
 
-class SplitPointTopologySplitEdgeTest : public SelectorTestFixture<::testing::Test>
+class SplitPointTopologySplitEdgeTest : public PagodaTestFixture<::testing::Test>
 {
 protected:
 	void SetUp() {}
@@ -375,7 +375,7 @@ TEST_F(SplitPointTopologySplitEdgeTest, when_splitting_an_edge_should_create_a_n
     match.Match(ss.str());
 }
 
-class SplitPointTopologyCollapseEdgeTest : public SelectorTestFixture<::testing::Test>
+class SplitPointTopologyCollapseEdgeTest : public PagodaTestFixture<::testing::Test>
 {
 protected:
 	void SetUp()
@@ -404,7 +404,7 @@ TEST_F(SplitPointTopologyCollapseEdgeTest, when_collapsing_an_edge_should_remove
 
 TEST_F(SplitPointTopologyCollapseEdgeTest, when_face_is_a_triangle_should_not_allow_collapsing) {}
 
-class SplitPointTopologyDeleteTest : public SelectorTestFixture<::testing::Test>
+class SplitPointTopologyDeleteTest : public PagodaTestFixture<::testing::Test>
 {
 protected:
 	void SetUp()
@@ -542,7 +542,7 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_not_affect_unr
     match.Match(ss.str());
 }
 
-class SplitPointTopologySplitFaceTest : public SelectorTestFixture<::testing::Test>
+class SplitPointTopologySplitFaceTest : public PagodaTestFixture<::testing::Test>
 {
 protected:
 	void SetUp()

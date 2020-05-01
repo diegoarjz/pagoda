@@ -12,11 +12,9 @@
 
 #include "geometry_operations/face_offset.h"
 
-#include "../selector.h"
-
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 const char* FaceOffsetOperation::name = "FaceOffsetOperation";
 const std::string FaceOffsetOperation::inputGeometry("in");
@@ -95,5 +93,5 @@ void FaceOffsetOperation::DoWork()
 		}
 	}
 }
-}  // namespace selector
+}  // namespace pagoda
 

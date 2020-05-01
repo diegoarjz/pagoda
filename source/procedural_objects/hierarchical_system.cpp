@@ -2,7 +2,7 @@
 
 #include "hierarchical_component.h"
 
-namespace selector
+namespace pagoda
 {
 const std::string HierarchicalSystem::GetComponentSystemName() { return "HierarchicalSystem"; }
 
@@ -28,4 +28,4 @@ void HierarchicalSystem::SetParent(std::shared_ptr<HierarchicalComponent> parent
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda

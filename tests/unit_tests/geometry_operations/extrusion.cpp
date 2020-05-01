@@ -11,12 +11,12 @@
 
 #include <memory>
 
-using namespace selector;
+using namespace pagoda;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;
 
-class ExtrusionTest : public SelectorTestFixture<::testing::Test>
+class ExtrusionTest : public PagodaTestFixture<::testing::Test>
 {
 public:
 	void SetUp() {}

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace selector
+namespace pagoda
 {
 std::unique_ptr<Logger> Logger::sTrace = nullptr;
 std::unique_ptr<Logger> Logger::sDebug = nullptr;
@@ -48,7 +48,7 @@ Logger *Logger::info()
 {
 	if (sInfo == nullptr)
 	{
-		sInfo = std::make_unique<Logger>("selector.log");
+		sInfo = std::make_unique<Logger>("pagoda.log");
 	}
 	return sInfo.get();
 }
@@ -57,7 +57,7 @@ Logger *Logger::warning()
 {
 	if (sWarning == nullptr)
 	{
-		sWarning = std::make_unique<Logger>("selector.log", ConsoleOutput::StdOut);
+		sWarning = std::make_unique<Logger>("pagoda.log", ConsoleOutput::StdOut);
 	}
 	return sWarning.get();
 }
@@ -66,7 +66,7 @@ Logger *Logger::error()
 {
 	if (sError == nullptr)
 	{
-		sError = std::make_unique<Logger>("selector.log", ConsoleOutput::StdErr);
+		sError = std::make_unique<Logger>("pagoda.log", ConsoleOutput::StdErr);
 	}
 	return sError.get();
 }
@@ -75,7 +75,7 @@ Logger *Logger::fatal()
 {
 	if (sFatal == nullptr)
 	{
-		sFatal = std::make_unique<Logger>("selector.log", ConsoleOutput::StdErr);
+		sFatal = std::make_unique<Logger>("pagoda.log", ConsoleOutput::StdErr);
 	}
 	return sFatal.get();
 }
@@ -215,4 +215,4 @@ void Logger::Shutdown()
 
 bool Logger::IsTraceEnabled(const TraceLogs &trace) { return trace_enabled[static_cast<uint32_t>(trace)]; }
 
-}  // namespace selector
+}  // namespace pagoda

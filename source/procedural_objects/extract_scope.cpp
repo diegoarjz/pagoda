@@ -8,7 +8,7 @@
 #include "procedural_component.h"
 #include "procedural_object_system.h"
 
-namespace selector
+namespace pagoda
 {
 const std::string ExtractScope::inputGeometry("in");
 const std::string ExtractScope::outputGeometry("out");
@@ -60,5 +60,5 @@ void ExtractScope::DoWork()
 		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }
-}  // namespace selector
+}  // namespace pagoda
 

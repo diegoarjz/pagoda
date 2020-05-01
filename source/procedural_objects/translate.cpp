@@ -15,7 +15,7 @@
 #include <boost/qvm/map_mat_vec.hpp>
 #include <boost/qvm/map_vec_mat.hpp>
 
-namespace selector
+namespace pagoda
 {
 const std::string Translate::s_inputGeometry("in");
 const std::string Translate::s_outputGeometry("out");
@@ -80,4 +80,4 @@ void Translate::DoWork()
 		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }
-}  // namespace selector
+}  // namespace pagoda

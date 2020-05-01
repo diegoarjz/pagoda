@@ -3,7 +3,7 @@
 #include "dynamic_value_base.h"
 #include "value_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const std::shared_ptr<TypeInfo> TypeInfo::s_typeInfo = std::make_shared<TypeInfo>("TypeInfo");
 
@@ -16,4 +16,4 @@ std::string TypeInfo::GetTypeName() const { return m_typeName; }
 std::string TypeInfo::ToString() const { return "<TypeInfo:" + m_typeName + ">"; }
 
 void TypeInfo::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
-}  // namespace selector
+}  // namespace pagoda

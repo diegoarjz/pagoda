@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
+#define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 
 #include "common/factory.h"
 #include "dynamic_value/builtin_class.h"
@@ -11,7 +11,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralObjectSystem;
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
@@ -87,5 +87,5 @@ private:
 	InterfaceContainer_t output_interfaces;
 
 };  // class ProceduralOperation
-}  // namespace selector
+}  // namespace pagoda
 #endif

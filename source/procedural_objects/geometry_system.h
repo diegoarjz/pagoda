@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_GEOMETRY_SYSTEM_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_GEOMETRY_SYSTEM_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_SYSTEM_H_
+#define PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_SYSTEM_H_
 
 #include "procedural_component_system.h"
 #include "procedural_object.h"
@@ -10,7 +10,7 @@
 #include <geometry_operations/create_rect.h>
 #include <geometry_operations/extrusion.h>
 
-namespace selector
+namespace pagoda
 {
 // TODO: Maybe move these type defs to geometry core
 using Geometry = GeometryBase<>;
@@ -37,6 +37,6 @@ public:
 using GeometrySystemPtr = std::shared_ptr<GeometrySystem>;
 using GeometrySystemWeakPtr = std::weak_ptr<GeometrySystem>;
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

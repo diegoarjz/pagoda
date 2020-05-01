@@ -8,12 +8,12 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;
 
-class TriangulateTest : public SelectorTestFixture<::testing::Test>
+class TriangulateTest : public PagodaTestFixture<::testing::Test>
 {
 public:
 	void SetUp()
