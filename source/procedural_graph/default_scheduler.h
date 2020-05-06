@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_DEFAULT_SCHEDULER_H_
-#define SELECTOR_PROCEDURAL_GRAPH_DEFAULT_SCHEDULER_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_DEFAULT_SCHEDULER_H_
+#define PAGODA_PROCEDURAL_GRAPH_DEFAULT_SCHEDULER_H_
 
 #include "execution_queue.h"
 #include "graph.h"
@@ -10,7 +10,7 @@
 #include <queue>
 #include <unordered_set>
 
-namespace selector
+namespace pagoda
 {
 class DefaultScheduler : public IScheduler
 {
@@ -27,6 +27,6 @@ private:
 	Graph &m_graph;
 	ExecutionQueue m_executionQueue;
 };  // class Scheduler
-}  // namespace selector
+}  // namespace pagoda
 #endif
 

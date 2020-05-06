@@ -1,6 +1,6 @@
 #pragma once
 
-namespace selector
+namespace pagoda
 {
 template<class T>
 class MathUtils
@@ -23,4 +23,4 @@ public:
 	}
 };
 
-}  // namespace selector
+}  // namespace pagoda

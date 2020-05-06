@@ -1,6 +1,6 @@
 #pragma once
 
-namespace selector
+namespace pagoda
 {
 template<class C, class F>
 void RegisterMemberFunction(C* instance, const std::string& name, const F& memberFunction)
@@ -8,4 +8,4 @@ void RegisterMemberFunction(C* instance, const std::string& name, const F& membe
 	instance->RegisterMember(name, std::make_shared<Function>(std::make_shared<MemberFunctionCallableBody<C, F>>(
 	                                   *static_cast<C*>(instance), memberFunction)));
 }
-}  // namespace selector
+}  // namespace pagoda

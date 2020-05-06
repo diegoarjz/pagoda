@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
+#define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 
 #include "dynamic_value/builtin_class.h"
 #include "geometry_core/geometry.h"
@@ -11,7 +11,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 class Context;
 using ContextPtr = std::shared_ptr<Context>;
@@ -36,6 +36,6 @@ public:
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 using ProceduralObjectWeakPtr = std::weak_ptr<ProceduralObject>;
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

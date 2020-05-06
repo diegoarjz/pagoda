@@ -5,7 +5,7 @@
 #include "graph.h"
 #include "node.h"
 
-namespace selector
+namespace pagoda
 {
 GraphDotExporter::GraphDotExporter(GraphPtr graph)
     : m_graph(graph), m_rankBy(RankBy::None), m_rankDirection(RankDirection::LeftToRight), m_showParameters(false)
@@ -126,5 +126,5 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 
 	return nodes;
 }
-}  // namespace selector
+}  // namespace pagoda
 

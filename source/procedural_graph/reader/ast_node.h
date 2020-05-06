@@ -1,9 +1,9 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_AST_NODE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_AST_NODE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_AST_NODE_H_
+#define PAGODA_PROCEDURAL_GRAPH_AST_NODE_H_
 
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 class AstNodeVisitor;
 
@@ -72,6 +72,6 @@ private:
 
 using AstNodePtr = std::shared_ptr<AstNode>;
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

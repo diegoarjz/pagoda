@@ -1,5 +1,5 @@
-#ifndef SELECTOR_GEOMETRY_OPERATIONS_TRIANGULATE_H_
-#define SELECTOR_GEOMETRY_OPERATIONS_TRIANGULATE_H_
+#ifndef PAGODA_GEOMETRY_OPERATIONS_TRIANGULATE_H_
+#define PAGODA_GEOMETRY_OPERATIONS_TRIANGULATE_H_
 
 #include <geometry_core/geometry_builder.h>
 #include <geometry_core/geometry_sizes.h>
@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class Triangulate
@@ -62,6 +62,6 @@ public:
 		}
 	}
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

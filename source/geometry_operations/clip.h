@@ -1,5 +1,5 @@
-#ifndef SELECTOR_GEOMETRY_OPERATIONS_CLIP_H_
-#define SELECTOR_GEOMETRY_OPERATIONS_CLIP_H_
+#ifndef PAGODA_GEOMETRY_OPERATIONS_CLIP_H_
+#define PAGODA_GEOMETRY_OPERATIONS_CLIP_H_
 
 #include "math_lib/intersection.h"
 #include "math_lib/line_3d.h"
@@ -7,7 +7,7 @@
 
 #include "geometry_core/geometry_builder.h"
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class Clip
@@ -236,6 +236,6 @@ private:
 	std::map<Index_t, Plane<float>::PlaneSide> m_faceSide;
 	Plane<float> m_plane;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

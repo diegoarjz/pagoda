@@ -8,7 +8,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-using namespace selector;
+using namespace pagoda;
 using GeometryType = GeometryBase<>;
 
 TEST(Scope, test_scope_construction)

@@ -27,16 +27,10 @@ add_library(geometry_core OBJECT ${GEOMETRY_CORE_SRCS})
 target_include_directories(
     geometry_core
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
-)
-
-set_target_properties(
-    geometry_core
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
+        ${PGSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_features(
@@ -52,7 +46,8 @@ target_compile_options(
     geometry_core
     PRIVATE
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(
@@ -66,22 +61,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS geometry_core
-    EXPORT geometry_core-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/geometry_core
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/geometry_core
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/geometry_core)
-
-install(EXPORT geometry_core-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

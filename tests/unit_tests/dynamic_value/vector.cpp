@@ -9,7 +9,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(Vector3, test_constructions)
 {

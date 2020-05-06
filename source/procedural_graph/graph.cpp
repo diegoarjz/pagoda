@@ -9,7 +9,7 @@
 
 #include <array>
 
-namespace selector
+namespace pagoda
 {
 class Graph::Impl
 {
@@ -264,4 +264,4 @@ Graph::SchedulerFactoryFunction_t Graph::GetSchedulerFactory() { return s_schedu
 Graph::SchedulerFactoryFunction_t Graph::s_schedulerFactoryFunction = [](Graph &graph) {
 	return std::make_unique<DefaultScheduler>(graph);
 };
-}  // namespace selector
+}  // namespace pagoda

@@ -1,11 +1,11 @@
-#ifndef SELECTOR_COMMON_FILE_UTIL_H_
-#define SELECTOR_COMMON_FILE_UTIL_H_
+#ifndef PAGODA_COMMON_FILE_UTIL_H_
+#define PAGODA_COMMON_FILE_UTIL_H_
 
 #include <boost/filesystem.hpp>
 
 #include <string>
 
-namespace selector::file_util
+namespace pagoda::file_util
 {
 std::string LoadFileToString(const boost::filesystem::path &path);
 std::string LoadFileToString(const std::string &filePath);
@@ -36,6 +36,6 @@ void GetAllFilesWithExtension(const boost::filesystem::path &dirPath, const std:
 		++iterator;
 	}
 }
-}  // namespace selector::file_util
+}  // namespace pagoda::file_util
 
 #endif

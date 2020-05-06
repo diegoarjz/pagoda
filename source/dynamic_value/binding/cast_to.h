@@ -8,7 +8,7 @@
 #include <memory>
 #include <type_traits>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Exception thrown if a cast is impossible.
@@ -64,4 +64,4 @@ typename std::enable_if<std::is_base_of<typename D::element_type, typename T::el
 	return ptr;
 }
 
-}  // namespace selector
+}  // namespace pagoda

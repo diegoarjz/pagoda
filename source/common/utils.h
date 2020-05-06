@@ -1,9 +1,9 @@
-#ifndef SELECTOR_COMMON_UTILS_H_
-#define SELECTOR_COMMON_UTILS_H_
+#ifndef PAGODA_COMMON_UTILS_H_
+#define PAGODA_COMMON_UTILS_H_
 
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 /// Suppresses warnings about unused values and guarantees that the code is not
 /// optimised out
@@ -15,6 +15,6 @@ namespace selector
 
 bool is_float(const std::string &str);
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

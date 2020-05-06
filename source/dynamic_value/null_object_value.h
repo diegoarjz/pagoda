@@ -2,7 +2,7 @@
 
 #include "dynamic_value_base.h"
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -21,4 +21,4 @@ public:
 };
 using NullObjectPtr = std::shared_ptr<NullObject>;
 
-}  // namespace selector
+}  // namespace pagoda

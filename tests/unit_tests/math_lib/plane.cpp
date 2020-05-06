@@ -5,7 +5,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(Plane, when_using_default_constructor_should_construct_the_xy_plane)
 {

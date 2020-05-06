@@ -5,7 +5,7 @@
 #include "dynamic_value/type_info.h"
 #include "dynamic_value/value_not_found.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr Node::s_typeInfo = std::make_shared<TypeInfo>("Node");
 
@@ -55,4 +55,4 @@ std::string Node::ToString() const { return "<Node>"; }
 
 void Node::AcceptVisitor(ValueVisitorBase &visitor) { throw Exception("Unimplemented"); }
 
-}  // namespace selector
+}  // namespace pagoda

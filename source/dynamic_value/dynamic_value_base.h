@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -11,7 +11,7 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 class ValueVisitorBase;
 
 /**
- * Represents a base class that can be used as parameters and as instances in selscript.
+ * Represents a base class that can be used as parameters and as instances in pgscript.
  */
 class DynamicValueBase : public std::enable_shared_from_this<DynamicValueBase>
 {
@@ -42,4 +42,4 @@ private:
 };
 
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
-}  // namespace selector
+}  // namespace pagoda

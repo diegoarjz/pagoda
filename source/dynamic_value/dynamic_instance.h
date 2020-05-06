@@ -3,7 +3,7 @@
 #include "dynamic_value_base.h"
 #include "class_base.h"
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -19,7 +19,7 @@ class ICallableBody;
 class DynamicValueTable;
 
 /**
- * Represents a dynamic instance that can be created in selscript.
+ * Represents a dynamic instance that can be created in pgscript.
  */
 class DynamicInstance : public DynamicValueBase, public ClassBase
 {
@@ -40,4 +40,4 @@ private:
 };
 
 using DynamicInstancePtr = std::shared_ptr<DynamicInstance>;
-}  // namespace selector
+}  // namespace pagoda

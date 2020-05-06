@@ -3,23 +3,23 @@
 #include <common/file_util.h>
 
 bool g_asserted = false;
-selector::Fail::FailBehaviour AssertExpected(const char *condition, const char *file, const int line,
+pagoda::Fail::FailBehaviour AssertExpected(const char *condition, const char *file, const int line,
                                              const char *message)
 {
 	g_asserted = true;
-	return selector::Fail::FailBehaviour::Continue;
+	return pagoda::Fail::FailBehaviour::Continue;
 }
 
 ExpectAssert::ExpectAssert()
 {
 	g_asserted = false;
-	selector::Fail::SetFailHandler(AssertExpected);
+	pagoda::Fail::SetFailHandler(AssertExpected);
 }
 
 ExpectAssert::~ExpectAssert()
 {
 	g_asserted = false;
-	selector::Fail::SetFailHandler(selector::DefaultHandler);
+	pagoda::Fail::SetFailHandler(pagoda::DefaultHandler);
 }
 
 bool ExpectAssert::Asserted() { return g_asserted; }
@@ -29,7 +29,7 @@ MatchFile::MatchFile(const boost::filesystem::path &filePath, bool saveFile)
 {
 	try
 	{
-		m_fileContents = selector::file_util::LoadFileToString(filePath.string());
+		m_fileContents = pagoda::file_util::LoadFileToString(filePath.string());
 	}
 	catch (...)
 	{
@@ -41,8 +41,8 @@ bool MatchFile::Match(const std::string &in)
 {
 	if (m_saveFile)
 	{
-		selector::file_util::CreateDirectories(m_filePath.parent_path());
-		selector::file_util::WriteStringToFile(m_filePath.string(), in);
+		pagoda::file_util::CreateDirectories(m_filePath.parent_path());
+		pagoda::file_util::WriteStringToFile(m_filePath.string(), in);
 		m_fileContents = in;
 		return true;
 	}
@@ -51,19 +51,19 @@ bool MatchFile::Match(const std::string &in)
 	return m_fileContents == in;
 }
 
-void SelectorTestFixtureBase::SetExecutablePath(const std::string &path)
+void PagodaTestFixtureBase::SetExecutablePath(const std::string &path)
 {
 	s_executablePath = path;
 	s_executableDirectory = s_executablePath.remove_filename();
 }
 
-boost::filesystem::path SelectorTestFixtureBase::GetExecutablePath() { return s_executablePath; }
+boost::filesystem::path PagodaTestFixtureBase::GetExecutablePath() { return s_executablePath; }
 
-boost::filesystem::path SelectorTestFixtureBase::GetExecutableDirectory() { return s_executableDirectory; }
+boost::filesystem::path PagodaTestFixtureBase::GetExecutableDirectory() { return s_executableDirectory; }
 
-void SelectorTestFixtureBase::SetShouldWriteFiles(const bool &write) { s_writeFiles = write; }
-bool SelectorTestFixtureBase::GetShouldWriteFiles() { return s_writeFiles; }
+void PagodaTestFixtureBase::SetShouldWriteFiles(const bool &write) { s_writeFiles = write; }
+bool PagodaTestFixtureBase::GetShouldWriteFiles() { return s_writeFiles; }
 
-boost::filesystem::path SelectorTestFixtureBase::s_executablePath = "";
-boost::filesystem::path SelectorTestFixtureBase::s_executableDirectory = "";
-bool SelectorTestFixtureBase::s_writeFiles = false;
+boost::filesystem::path PagodaTestFixtureBase::s_executablePath = "";
+boost::filesystem::path PagodaTestFixtureBase::s_executableDirectory = "";
+bool PagodaTestFixtureBase::s_writeFiles = false;

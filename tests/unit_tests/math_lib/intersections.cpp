@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(PlaneVsPlaneIntersectionTest, when_the_planes_intersect_should_return_a_line_intersection)
 {

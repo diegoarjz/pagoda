@@ -1,8 +1,8 @@
 #include "operation_factory.h"
 
-namespace selector
+namespace pagoda
 {
 OperationFactory::OperationFactory() : Factory<ProceduralOperation>("ProceduralOperation") {}
 
 OperationFactory::~OperationFactory() {}
-}  // namespace selector
+}  // namespace pagoda

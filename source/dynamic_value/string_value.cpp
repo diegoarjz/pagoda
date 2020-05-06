@@ -4,7 +4,7 @@
 #include "type_info.h"
 #include "value_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr String::s_typeInfo = std::make_shared<TypeInfo>("String");
 
@@ -38,4 +38,4 @@ bool String::operator==(const String& s) const { return m_value == s.m_value; }
 bool String::operator!=(const String& s) const { return m_value != s.m_value; }
 
 void String::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
-}  // namespace selector
+}  // namespace pagoda

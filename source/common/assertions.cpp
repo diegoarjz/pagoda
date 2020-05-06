@@ -3,7 +3,7 @@
 #include <cstdarg>
 #include <cstdio>
 
-namespace selector
+namespace pagoda
 {
 typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *file, const int line,
                                             const char *message)
@@ -47,4 +47,4 @@ typename Fail::FailBehaviour Fail::ReportFail(const char *condition, const char 
 	return sFailHandler(condition, file, line, final_message);
 }
 
-}  // namespace selector
+}  // namespace pagoda

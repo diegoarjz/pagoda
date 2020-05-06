@@ -1,11 +1,11 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_BREADTH_FIRST_NODE_VISITOR_H_
-#define SELECTOR_PROCEDURAL_GRAPH_BREADTH_FIRST_NODE_VISITOR_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_BREADTH_FIRST_NODE_VISITOR_H_
+#define PAGODA_PROCEDURAL_GRAPH_BREADTH_FIRST_NODE_VISITOR_H_
 
 #include "graph_node_visitor.h"
 
 #include <queue>
 
-namespace selector
+namespace pagoda
 {
 template<class Delegate_t>
 class BreadthFirstNodeVisitor : public GraphNodeVisitor<Delegate_t>
@@ -39,6 +39,6 @@ public:
 private:
 	std::queue<NodePtr> m_nodesToVisit;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

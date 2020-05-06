@@ -6,7 +6,7 @@
 #include "math_lib/plane.h"
 #include "math_lib/vec_base.h"
 
-namespace selector
+namespace pagoda
 {
 class FloatValue;
 using FloatValuePtr = std::shared_ptr<FloatValue>;
@@ -48,4 +48,4 @@ private:
 
 	Plane<float> m_nativePlane;
 };
-}  // namespace selector
+}  // namespace pagoda

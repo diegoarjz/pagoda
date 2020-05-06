@@ -1,6 +1,6 @@
 #include "unknown_operation.h"
 
-namespace selector
+namespace pagoda
 {
 UnknownOperation::UnknownOperation(const std::string operationName) : Exception("Unknown operation " + operationName) {}
-}  // namespace selector
+}  // namespace pagoda

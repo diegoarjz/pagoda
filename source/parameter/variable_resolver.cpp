@@ -1,6 +1,6 @@
 #include "variable_resolver.h"
 
-namespace selector
+namespace pagoda
 {
 VariableResolver::VariableResolver(const Variable& v) : m_variable(v) {}
 
@@ -23,4 +23,4 @@ DynamicValueBasePtr VariableResolver::Resolve(DynamicValueBasePtr parameterizabl
 	// throw std::runtime_error("Unimplemented");
 	return nullptr;
 }
-}  // namespace selector
+}  // namespace pagoda

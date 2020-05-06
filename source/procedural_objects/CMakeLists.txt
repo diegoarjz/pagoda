@@ -103,16 +103,10 @@ add_library(procedural_objects OBJECT ${PROCEDURAL_OBJECTS_SRCS})
 target_include_directories(
     procedural_objects
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
-)
-
-set_target_properties(
-    procedural_objects
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
+        ${PGSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_features(
@@ -128,7 +122,8 @@ target_compile_options(
     procedural_objects
     PRIVATE
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(
@@ -142,22 +137,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS procedural_objects
-    EXPORT procedural_objects-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/procedural_objects
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/procedural_objects
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/procedural_objects)
-
-install(EXPORT procedural_objects-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

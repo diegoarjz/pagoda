@@ -15,15 +15,9 @@ add_library(parameter OBJECT ${PARAMETER_SRCS})
 target_include_directories(
     parameter
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-)
-
-set_target_properties(
-    parameter
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
 )
 
 target_compile_features(
@@ -39,7 +33,8 @@ target_compile_options(
     parameter
     PRIVATE
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(
@@ -53,22 +48,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS parameter
-    EXPORT parameter-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/parameter
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/parameter
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/parameter)
-
-install(EXPORT parameter-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

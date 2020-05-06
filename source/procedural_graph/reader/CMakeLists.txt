@@ -36,16 +36,10 @@ add_library(procedural_graph_reader OBJECT ${PROCEDURAL_GRAPH_READER_SRCS})
 target_include_directories(
     procedural_graph_reader
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
-)
-
-set_target_properties(
-    procedural_graph_reader
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
+        ${PGSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_features(
@@ -61,7 +55,8 @@ target_compile_options(
     procedural_graph_reader
     PRIVATE
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(
@@ -75,22 +70,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS procedural_graph_reader
-    EXPORT procedural_graph_reader-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/reader/
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/reader
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/reader)
-
-install(EXPORT procedural_graph_reader-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

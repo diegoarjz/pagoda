@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_GEOMETRY_COMPONENT_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_GEOMETRY_COMPONENT_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_COMPONENT_H_
+#define PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_COMPONENT_H_
 
 #include "geometry_system.h"
 
@@ -7,7 +7,7 @@
 #include "geometry_core/geometry_builder.h"
 #include "geometry_core/scope.h"
 
-namespace selector
+namespace pagoda
 {
 class GeometryComponent : public ProceduralComponent
 {
@@ -27,6 +27,6 @@ private:
 	Scope m_scope;
 };  // class GeometryComponent
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

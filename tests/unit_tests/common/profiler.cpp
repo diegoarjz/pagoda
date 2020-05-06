@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-using namespace selector;
+using namespace pagoda;
 
 void GetInstance(ProfilerManager** instance) { *instance = ProfilerManager::Instance(); }
 

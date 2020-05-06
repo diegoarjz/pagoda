@@ -1,10 +1,10 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_SET_H_
-#define SELECTOR_PROCEDURAL_GRAPH_NODE_SET_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_NODE_SET_H_
+#define PAGODA_PROCEDURAL_GRAPH_NODE_SET_H_
 
 #include <memory>
 #include <set>
 
-namespace selector
+namespace pagoda
 {
 class Node;
 using NodePtr = std::shared_ptr<Node>;
@@ -16,6 +16,6 @@ struct NodePtrCompare
 
 template<class NodeT>
 using NodeSet = std::set<std::shared_ptr<NodeT>, NodePtrCompare>;
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

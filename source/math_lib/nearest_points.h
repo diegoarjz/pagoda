@@ -1,5 +1,5 @@
-#ifndef SELECTOR_MATH_LIB_NEAREST_POINTS_H_
-#define SELECTOR_MATH_LIB_NEAREST_POINTS_H_
+#ifndef PAGODA_MATH_LIB_NEAREST_POINTS_H_
+#define PAGODA_MATH_LIB_NEAREST_POINTS_H_
 
 #include "line_3d.h"
 #include "line_segment_3d.h"
@@ -9,7 +9,7 @@
 
 #include <cmath>
 
-namespace selector
+namespace pagoda
 {
 template<class P>
 struct NearestPoints
@@ -125,6 +125,6 @@ NearestPoints<boost::qvm::vec<Rep, 3>> nearest_points(const LineSegment3D<Rep> &
 	std::swap(n.m_point1, n.m_point2);
 	return n;
 }
-}  // namespace selector
+}  // namespace pagoda
 #endif
 

@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Base template call_free_function_helper.
@@ -166,4 +166,4 @@ R call_free_function(std::function<R(Args...)> f, const std::vector<DynamicValue
 {
 	return call_free_function_helper<R, Args...>::call(f, args);
 }
-}  // namespace selector
+}  // namespace pagoda

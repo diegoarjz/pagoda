@@ -2,11 +2,11 @@
 
 #include "common/exception.h"
 
-namespace selector
+namespace pagoda
 {
 class CallableBodyNotSet : public Exception
 {
 public:
 	CallableBodyNotSet(const std::string &dynamicValueName);
 };
-}  // namespace selector
+}  // namespace pagoda

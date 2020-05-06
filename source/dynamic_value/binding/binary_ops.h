@@ -8,7 +8,7 @@
 
 #include "common/exception.h"
 
-namespace selector
+namespace pagoda
 {
 template<class LHS, class RHS>
 class UndefinedBinaryOperator : public Exception
@@ -219,4 +219,4 @@ struct binary_op_dispatcher : public ValueVisitor<DynamicValueBasePtr>
 		return apply_visitor(rhs_visitor, *m_rhs);
 	}
 };
-}  // namespace selector
+}  // namespace pagoda

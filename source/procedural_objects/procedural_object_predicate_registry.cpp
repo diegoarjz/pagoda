@@ -2,7 +2,7 @@
 
 #include "procedural_object_predicate.h"
 
-namespace selector
+namespace pagoda
 {
 void ProceduralObjectPredicateRegistry::Register(const std::string &name, ProceduralObjectPredicatePtr predicate)
 {
@@ -18,4 +18,4 @@ ProceduralObjectPredicatePtr ProceduralObjectPredicateRegistry::Get(const std::s
 	}
 	return iter->second;
 }
-}  // namespace selector
+}  // namespace pagoda

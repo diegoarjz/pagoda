@@ -2,7 +2,7 @@
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class ExtractFaces : public ProceduralOperation
 {
@@ -15,4 +15,4 @@ public:
 
 	void DoWork() override;
 };  // class ExtractFaces
-}  // namespace selector
+}  // namespace pagoda

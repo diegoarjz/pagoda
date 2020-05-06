@@ -12,7 +12,7 @@
 
 #include <procedural_objects/procedural_operation.h>
 
-namespace selector
+namespace pagoda
 {
 const char* InputInterfaceNode::name = "InputInterface";
 
@@ -91,4 +91,4 @@ void InputInterfaceNode::Execute(const NodeSet<Node>& inNodes, const NodeSet<Nod
 		i->AcceptNodeVisitor(&v);
 	}
 }
-}  // namespace selector
+}  // namespace pagoda

@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Represents the type information for all \c DynamicValueBase.
@@ -37,4 +37,4 @@ private:
 };
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
-}  // namespace selector
+}  // namespace pagoda

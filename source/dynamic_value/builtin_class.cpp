@@ -6,7 +6,7 @@
 #include "common/exception.h"
 #include "common/unimplemented.h"
 
-namespace selector
+namespace pagoda
 {
 BuiltinClass::BuiltinClass(const TypeInfoPtr& typeInfo) : DynamicValueBase(typeInfo), ClassBase(typeInfo->GetTypeName())
 {
@@ -18,4 +18,4 @@ FunctionPtr BuiltinClass::Bind(std::shared_ptr<ICallableBody> callable, std::sha
 	boundMethod->SetVariadic(true);
 	return boundMethod;
 }
-}  // namespace selector
+}  // namespace pagoda

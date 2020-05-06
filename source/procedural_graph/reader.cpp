@@ -16,7 +16,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace selector
+namespace pagoda
 {
 struct GraphReader::Impl
 {
@@ -61,4 +61,4 @@ GraphReader::~GraphReader() {}
 GraphPtr GraphReader::Read(const std::string &str) { return m_implementation->Read(str); }
 const ParseResult &GraphReader::GetParseResult() const { return m_implementation->GetParseResult(); }
 
-}  // namespace selector
+}  // namespace pagoda

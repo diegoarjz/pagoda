@@ -2,7 +2,7 @@
 
 #include "dynamic_value_base.h"
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -45,4 +45,4 @@ private:
 	bool m_value;
 };
 using BooleanPtr = std::shared_ptr<Boolean>;
-}  // namespace selector
+}  // namespace pagoda

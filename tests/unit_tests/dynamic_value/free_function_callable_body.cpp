@@ -6,7 +6,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 static bool test_function1Called = false;
 void test_function1() { test_function1Called = true; }

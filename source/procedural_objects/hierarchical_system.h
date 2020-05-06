@@ -1,11 +1,11 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_HIERARCHICAL_SYSTEM_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_HIERARCHICAL_SYSTEM_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_HIERARCHICAL_SYSTEM_H_
+#define PAGODA_PROCEDURAL_OBJECTS_HIERARCHICAL_SYSTEM_H_
 
 #include "procedural_object.h"
 #include "procedural_operation.h"
 #include "procedural_component_system.h"
 
-namespace selector
+namespace pagoda
 {
 class HierarchicalComponent;
 
@@ -46,6 +46,6 @@ private:
 using HierarchicalSystemPtr = std::shared_ptr<HierarchicalSystem>;
 using HierarchicalSystemWeakPtr = std::weak_ptr<HierarchicalSystem>;
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

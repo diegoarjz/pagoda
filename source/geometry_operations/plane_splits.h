@@ -1,9 +1,9 @@
-#ifndef SELECTOR_GEOMETRY_OPERATIONS_PLANE_SPLITS_H_
-#define SELECTOR_GEOMETRY_OPERATIONS_PLANE_SPLITS_H_
+#ifndef PAGODA_GEOMETRY_OPERATIONS_PLANE_SPLITS_H_
+#define PAGODA_GEOMETRY_OPERATIONS_PLANE_SPLITS_H_
 
 #include "clip.h"
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class PlaneSplits
@@ -56,6 +56,6 @@ public:
 private:
 	std::vector<Plane<float>> m_planes;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

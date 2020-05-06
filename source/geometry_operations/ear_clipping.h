@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class EarClipping
@@ -228,4 +228,4 @@ private:
 		return (u >= 0) && (v >= 0) && (u + v < 1);
 	}
 };
-}  // namespace selector
+}  // namespace pagoda

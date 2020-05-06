@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SELECTOR_PROCEDURAL_GRAH_GRAPH_H_
-#define SELECTOR_PROCEDURAL_GRAH_GRAPH_H_
+#ifndef PAGODA_PROCEDURAL_GRAH_GRAPH_H_
+#define PAGODA_PROCEDURAL_GRAH_GRAPH_H_
 
 #include "node_set.h"
 #include "scheduler.h"
@@ -11,7 +11,7 @@
 #include <unordered_set>
 #include <functional>
 
-namespace selector
+namespace pagoda
 {
 class Node;
 using NodePtr = std::shared_ptr<Node>;
@@ -188,6 +188,6 @@ private:
 
 using GraphPtr = std::shared_ptr<Graph>;
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

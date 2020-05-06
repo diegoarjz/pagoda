@@ -9,7 +9,7 @@
 #include "hierarchical_system.h"
 #include "procedural_object_system.h"
 
-namespace selector
+namespace pagoda
 {
 const std::string ExtractFaces::s_inputGeometry("in");
 const std::string ExtractFaces::s_outputGeometry("out");
@@ -43,17 +43,32 @@ void ExtractFaces::DoWork()
 		std::vector<GeometryPtr> explodedFaces;
 		explodeToFaces.Execute(inGeometry, explodedFaces);
 
+		auto inScopeZAxis = inGeometryComponent->GetScope().GetZAxis();
 		for (auto &g : explodedFaces)
 		{
+			auto faceNormal = g->GetFaceAttributes(*g->FacesBegin()).m_normal;
+
 			auto outObject = CreateOutputProceduralObject(s_outputGeometry);
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 			auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
 
 			outGeometryComponent->SetGeometry(g);
-			outGeometryComponent->SetScope(Scope::FromGeometry(g));
+			if (boost::qvm::dot(faceNormal, inScopeZAxis) == 0)
+			{
+				Mat3x3F constrainedRotation;
+				auto xAxis = boost::qvm::normalized(boost::qvm::cross(inScopeZAxis, faceNormal));
+				boost::qvm::col<0>(constrainedRotation) = xAxis;
+				boost::qvm::col<1>(constrainedRotation) = inScopeZAxis;
+				boost::qvm::col<2>(constrainedRotation) = faceNormal;
+				outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(g, constrainedRotation));
+			}
+			else
+			{
+				outGeometryComponent->SetScope(Scope::FromGeometry(g));
+			}
 
 			hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 		}
 	}
 }
-}  // namespace selector
+}  // namespace pagoda

@@ -8,7 +8,7 @@
 #include "value_not_found.h"
 #include "value_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr DynamicInstance::s_typeInfo = std::make_shared<TypeInfo>("DynamicInstance");
 
@@ -41,4 +41,4 @@ FunctionPtr DynamicInstance::Bind(std::shared_ptr<ICallableBody> callable, std::
 	boundMethod->SetClosure(closure);
 	return boundMethod;
 }
-}  // namespace selector
+}  // namespace pagoda

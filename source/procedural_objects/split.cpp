@@ -12,7 +12,7 @@
 
 #include "geometry_operations/plane_splits.h"
 
-namespace selector
+namespace pagoda
 {
 const std::string Split::s_inputGeometry("in");
 
@@ -134,4 +134,4 @@ void Split::DoWork()
 		}
 	}
 }
-}  // namespace selector
+}  // namespace pagoda

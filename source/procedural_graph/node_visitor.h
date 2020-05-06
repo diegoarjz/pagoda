@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 class OperationNode;
 class InputInterfaceNode;
@@ -19,4 +19,4 @@ public:
 	virtual void Visit(std::shared_ptr<ParameterNode> n) = 0;
 	virtual void Visit(std::shared_ptr<RouterNode> n) = 0;
 };
-}  // namespace selector
+}  // namespace pagoda

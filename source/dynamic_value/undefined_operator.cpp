@@ -2,7 +2,7 @@
 
 #include "type_info.h"
 
-namespace selector
+namespace pagoda
 {
 UndefinedBinaryOperatorException::UndefinedBinaryOperatorException(const std::string &op, const TypeInfoPtr &lhsType,
                                                                    const TypeInfoPtr &rhsType)
@@ -23,4 +23,4 @@ UndefinedUnaryOperatorException::UndefinedUnaryOperatorException(const std::stri
 }
 
 UndefinedUnaryOperatorException::~UndefinedUnaryOperatorException() {}
-}  // namespace selector
+}  // namespace pagoda

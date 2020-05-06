@@ -10,11 +10,11 @@
 #include <procedural_objects/hierarchical_system.h>
 #include <procedural_objects/procedural_object.h>
 
-#include <selector.h>
+#include <pagoda.h>
 
 #include <boost/filesystem/path.hpp>
 
-using namespace selector;
+using namespace pagoda;
 
 class RegressionTest
 {
@@ -36,7 +36,7 @@ public:
 		auto pathToGraphFile = GetTestFilesDirectory();
 		pathToGraphFile /= "test_files";
 		pathToGraphFile /= m_regressionTestName;
-		pathToGraphFile /= m_regressionTestName + ".sel";
+		pathToGraphFile /= m_regressionTestName + ".pgd";
 		return pathToGraphFile;
 	}
 
@@ -84,7 +84,7 @@ public:
 
 	std::shared_ptr<Graph> ReadGraphFromFile(const std::string& filePath)
 	{
-		m_graph = m_selector.CreateGraphFromFile(filePath);
+		m_graph = m_pagoda.CreateGraphFromFile(filePath);
 		return m_graph;
 	}
 
@@ -122,7 +122,7 @@ private:
 	std::string m_regressionTestName;
 
 	GraphPtr m_graph;
-	Selector m_selector;
+	Pagoda m_pagoda;
 
 	static bool s_writeFiles;
 };

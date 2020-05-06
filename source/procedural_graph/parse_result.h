@@ -1,7 +1,7 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_XML_PARSE_RESULT_H_
-#define SELECTOR_PROCEDURAL_GRAPH_XML_PARSE_RESULT_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_XML_PARSE_RESULT_H_
+#define PAGODA_PROCEDURAL_GRAPH_XML_PARSE_RESULT_H_
 
-namespace selector
+namespace pagoda
 {
 struct ParseResult
 {
@@ -29,6 +29,6 @@ struct ParseResult
 	Status status;
 	uint32_t offset;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

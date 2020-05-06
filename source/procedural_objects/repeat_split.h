@@ -1,11 +1,11 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_REPEAT_SPLIT_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_REPEAT_SPLIT_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_REPEAT_SPLIT_H_
+#define PAGODA_PROCEDURAL_OBJECTS_REPEAT_SPLIT_H_
 
 #include "math_lib/plane.h"
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class Scope;
 
@@ -24,6 +24,6 @@ public:
 private:
 	std::vector<Plane<float>> CreatePlanes(const Scope &scope, const float &size, const std::string &axis, bool adjust);
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

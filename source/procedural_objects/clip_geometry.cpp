@@ -10,7 +10,7 @@
 
 #include "geometry_operations/clip.h"
 
-namespace selector
+namespace pagoda
 {
 const std::string ClipGeometry::inputGeometry("in");
 const std::string ClipGeometry::frontGeometry("front");
@@ -73,4 +73,4 @@ void ClipGeometry::DoWork()
 		}
 	}
 }
-}  // namespace selector
+}  // namespace pagoda

@@ -1,12 +1,12 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_DEFINITION_NODE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_NODE_DEFINITION_NODE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_NODE_DEFINITION_NODE_H_
+#define PAGODA_PROCEDURAL_GRAPH_NODE_DEFINITION_NODE_H_
 
 #include "graph_statement_node.h"
 
 #include <string>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 class NamedArgument;
 using NamedArgumentPtr = std::shared_ptr<NamedArgument>;
@@ -145,6 +145,6 @@ private:
 };
 
 using NodeDefinitionNodePtr = std::shared_ptr<NodeDefinitionNode>;
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

@@ -1,10 +1,10 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_VISITOR
-#define SELECTOR_PROCEDURAL_GRAPH_NODE_VISITOR
+#ifndef PAGODA_PROCEDURAL_GRAPH_NODE_VISITOR
+#define PAGODA_PROCEDURAL_GRAPH_NODE_VISITOR
 
 #include "graph.h"
 #include "node.h"
 
-namespace selector
+namespace pagoda
 {
 template<class Delegate_t>
 class GraphNodeVisitor
@@ -26,6 +26,6 @@ protected:
 	Graph& m_graph;
 	Delegate_t& m_delegate;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

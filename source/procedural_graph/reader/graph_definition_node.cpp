@@ -2,7 +2,7 @@
 
 #include "ast_node_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 GraphDefinitionNode::GraphDefinitionNode() {}
 
@@ -43,4 +43,4 @@ void GraphDefinitionNode::AcceptVisitor(AstNodeVisitor *visitor)
 	visitor->Visit(std::dynamic_pointer_cast<GraphDefinitionNode>(shared_from_this()).get());
 }
 
-}  // namespace selector
+}  // namespace pagoda

@@ -12,16 +12,16 @@
 #include "value_not_found.h"
 #include "value_visitor.h"
 
-#include "selscript/intermediate/ast.h"
-#include "selscript/intermediate/ast_visitor.h"
-#include "selscript/interpreter/interpreter.h"
-#include "selscript/parser/parser.h"
+#include "pgscript/intermediate/ast.h"
+#include "pgscript/intermediate/ast_visitor.h"
+#include "pgscript/interpreter/interpreter.h"
+#include "pgscript/parser/parser.h"
 
 #include "common/profiler.h"
 
 #include <unordered_map>
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr Expression::s_typeInfo = std::make_shared<TypeInfo>("Expression");
 
@@ -48,7 +48,7 @@ private:
 	static const DynamicClassPtr m_parameterClass;
 };
 
-const DynamicClassPtr ExpressionInterpreter::m_parameterClass = std::make_shared<DynamicClass>("SelectorObject");
+const DynamicClassPtr ExpressionInterpreter::m_parameterClass = std::make_shared<DynamicClass>("PagodaObject");
 
 class ExpressionValidator : public AstVisitor
 {
@@ -335,5 +335,5 @@ std::string Expression::ToString() const { return m_implementation->ToString(); 
 void Expression::AcceptVisitor(ValueVisitorBase &visitor) { visitor.Visit(*this); }
 
 DynamicValueBasePtr Expression::Evaluate() { return m_implementation->Evaluate(); }
-}  // namespace selector
+}  // namespace pagoda
 

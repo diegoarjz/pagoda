@@ -6,7 +6,7 @@
 
 #include "node_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const char *ParameterNode::name = "Parameter";
 
@@ -37,4 +37,4 @@ void ParameterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 		}
 	}
 }
-}  // namespace selector
+}  // namespace pagoda

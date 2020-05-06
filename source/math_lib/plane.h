@@ -1,5 +1,5 @@
-#ifndef SELECTOR_MATH_LIB_PLANE_H_
-#define SELECTOR_MATH_LIB_PLANE_H_
+#ifndef PAGODA_MATH_LIB_PLANE_H_
+#define PAGODA_MATH_LIB_PLANE_H_
 
 #include "orthogonal.h"
 #include "vec_base.h"
@@ -7,7 +7,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 template<class Rep>
 class Plane
@@ -144,16 +144,16 @@ std::ostream &operator<<(std::ostream &o, const Plane<Rep> &plane)
 template<class Rep>
 std::string to_string(const typename Plane<Rep>::PlaneSide &side)
 {
-	if (side == selector::Plane<Rep>::PlaneSide::Front)
+	if (side == pagoda::Plane<Rep>::PlaneSide::Front)
 	{
 		return "front";
 	}
-	if (side == selector::Plane<Rep>::PlaneSide::Back)
+	if (side == pagoda::Plane<Rep>::PlaneSide::Back)
 	{
 		return "back";
 	}
 	return "contained";
 }
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

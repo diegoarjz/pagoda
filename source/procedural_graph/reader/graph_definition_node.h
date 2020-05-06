@@ -1,11 +1,11 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_GRAPH_DEFINITION_NODE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_GRAPH_DEFINITION_NODE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_GRAPH_DEFINITION_NODE_H_
+#define PAGODA_PROCEDURAL_GRAPH_GRAPH_DEFINITION_NODE_H_
 
 #include "ast_node.h"
 
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 class GraphStatementNode;
 using GraphStatementNodePtr = std::shared_ptr<GraphStatementNode>;
@@ -107,6 +107,6 @@ private:
 };
 
 using GraphDefinitionNodePtr = std::shared_ptr<GraphDefinitionNode>;
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

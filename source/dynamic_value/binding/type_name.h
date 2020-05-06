@@ -4,7 +4,7 @@
 
 #include "native_value_name.h"
 
-namespace selector
+namespace pagoda
 {
 /**
  * Returns a human readable name for the type T.
@@ -27,4 +27,4 @@ struct type_name
 		return native_value_name<U>::GetName();
 	}
 };
-}  // namespace selector
+}  // namespace pagoda

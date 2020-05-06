@@ -1,48 +1,43 @@
-set(SelSources
-    sel.cpp
+set(PagodaSources
+    pagoda.cpp
     )
 
-add_executable(sel ${SelSources})
+add_executable(pagoda ${PagodaSources})
 
 target_compile_features(
-    sel
+    pagoda
     PRIVATE
         cxx_std_17
 )
 
 target_compile_options(
-    sel
+    pagoda
     PRIVATE
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_include_directories(
-    sel
+    pagoda
     PUBLIC
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
-)
-
-set_target_properties(
-    sel
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
+        ${PGSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_definitions(
-    sel
+    pagoda
     PRIVATE
 )
 
 target_link_libraries(
-    sel
+    pagoda
     PRIVATE
-        selector
+        libpagoda
         Boost::chrono
         Boost::filesystem
         Boost::system
@@ -50,7 +45,7 @@ target_link_libraries(
 )
 
 include(GNUInstallDirs)
-install(TARGETS sel
-    EXPORT sel-export
+install(TARGETS pagoda
+    EXPORT pagoda-export
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

@@ -1,10 +1,10 @@
-#ifndef SELECTOR_PROCEDURAL_COMPONENT_SYSTEM_BASE_H_
-#define SELECTOR_PROCEDURAL_COMPONENT_SYSTEM_BASE_H_
+#ifndef PAGODA_PROCEDURAL_COMPONENT_SYSTEM_BASE_H_
+#define PAGODA_PROCEDURAL_COMPONENT_SYSTEM_BASE_H_
 
 #include <memory>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
@@ -41,5 +41,5 @@ public:
 private:
 	const std::string m_systemName;
 };
-}  // namespace selector
+}  // namespace pagoda
 #endif

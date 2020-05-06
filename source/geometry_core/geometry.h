@@ -1,5 +1,5 @@
-#ifndef SELECTOR_GEOMETRY_CORE_GEOMETRY_H_
-#define SELECTOR_GEOMETRY_CORE_GEOMETRY_H_
+#ifndef PAGODA_GEOMETRY_CORE_GEOMETRY_H_
+#define PAGODA_GEOMETRY_CORE_GEOMETRY_H_
 
 #include <common/assertions.h>
 #include <common/logger.h>
@@ -15,7 +15,7 @@
 
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Default attributes for vertices.
@@ -85,5 +85,5 @@ private:
 	AssociativeIndexedContainer<Index_t, FaceAttributes> m_faceAttributes;
 };  // class Geometry
 
-}  // namespace selector
+}  // namespace pagoda
 #endif

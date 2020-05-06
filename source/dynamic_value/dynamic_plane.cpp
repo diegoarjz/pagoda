@@ -9,7 +9,7 @@
 #include "member_function_callable_body.h"
 #include "register_member_function.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr DynamicPlane::s_typeInfo = std::make_shared<TypeInfo>("Plane");
 
@@ -74,5 +74,5 @@ void DynamicPlane::RegisterMembers()
 	RegisterMemberFunction(this, "GetVector2", make_member_function(&DynamicPlane::GetVector2));
 	RegisterMemberFunction(this, "GetDistanceToOrigin", make_member_function(&DynamicPlane::GetDistanceToOrigin));
 }
-}  // namespace selector
+}  // namespace pagoda
 

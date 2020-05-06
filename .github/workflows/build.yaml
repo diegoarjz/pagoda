@@ -71,15 +71,15 @@ jobs:
                   cd ${{ github.workspace }}/build
                   BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. \
                                                                    -DCMAKE_BUILD_TYPE=Release \
-                                                                   -DSELECTOR_VERSION=${{ github.repository }}-${{ github.run_number }} \
-                                                                   -DSELECTOR_BUILD_NUMBER=${{ github.run_number }}
+                                                                   -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} \
+                                                                   -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
                   cmake --build .
 
             - name: Run tests
               run: |
                   cd build
                   ./tests/unit_tests/unit_tests
-                  ./tests/selscript/selscript_tests
+                  ./tests/pgscript/pgscript_tests
                   ./tests/regression_tests/regression_tests
             - name: Pack Regression Test Results
               if: always()
@@ -108,3 +108,79 @@ jobs:
               with:
                   path: ./${{ matrix.config.name }}.tar.xz
                   name: ${{ matrix.config.name }}.tar.xz
+
+    release:
+        if: contains(github.ref, 'tags/v')
+        runs-on: ubuntu-latest
+        needs: build
+
+        steps:
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1.0.0
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                tag_name: ${{ github.ref }}
+                release_name: Release ${{ github.ref }}
+                draft: false
+                prerelease: false
+
+            - name: Store Release url
+              run: |
+                echo "${{ steps.create_release.outputs.upload_url }}" > ./upload_url
+
+            - uses: actions/upload-artifact@v1
+              with:
+                path: ./upload_url
+                name: upload_url
+
+    publish:
+        if: contains(github.ref, 'tags/v')
+        name: ${{ matrix.config.name }}
+        runs-on: ${{ matrix.config.os }}
+        needs: release
+        strategy:
+            fail-fast: false
+            matrix:
+                config:
+                - {
+                    name: "Ubuntu Latest GCC",
+                    os: ubuntu-latest,
+                  }
+                - {
+                    name: "Ubuntu Latest clang",
+                    os: ubuntu-latest,
+                  }
+                - {
+                    name: "macOs Latest clang",
+                    os: ubuntu-latest,
+                  }
+
+        steps:
+            - name: Download artifact
+              uses: actions/download-artifact@v1
+              with:
+                  name: ${{ matrix.config.name }}.tar.xz
+                  path: ./
+
+            - name: Download URL
+              uses: actions/download-artifact@v1
+              with:
+                name: upload_url
+                path: ./
+            - id: set_upload_url
+              run: |
+                upload_url=`cat ./upload_url`
+                echo ::set-output name=upload_url::$upload_url
+
+            - name: Upload to Release
+              id: upload_to_release
+              uses: actions/upload-release-asset@v1.0.1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
+                asset_path: ./${{ matrix.config.name }}.tar.xz
+                asset_name: ${{ matrix.config.name }}.tar.xz
+                asset_content_type: application/x-gtar

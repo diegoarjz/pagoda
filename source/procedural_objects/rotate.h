@@ -2,7 +2,7 @@
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class Rotate : public ProceduralOperation
 {
@@ -15,4 +15,4 @@ public:
 
 	void DoWork() override;
 };
-}  // namespace selector
+}  // namespace pagoda

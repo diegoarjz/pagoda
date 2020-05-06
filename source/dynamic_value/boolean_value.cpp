@@ -3,7 +3,7 @@
 #include "type_info.h"
 #include "value_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr Boolean::s_typeInfo = std::make_shared<TypeInfo>("Boolean");
 
@@ -27,4 +27,4 @@ Boolean Boolean::operator!=(const Boolean& b) const { return Boolean(m_value != 
 Boolean Boolean::operator!() const { return Boolean(!m_value); }
 
 void Boolean::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
-}  // namespace selector
+}  // namespace pagoda

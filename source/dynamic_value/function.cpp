@@ -4,7 +4,7 @@
 #include "type_info.h"
 #include "value_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr Function::s_typeInfo = std::make_shared<TypeInfo>("Function");
 
@@ -47,4 +47,4 @@ DynamicValueBasePtr Function::Call(const std::vector<DynamicValueBasePtr>& args)
 	}
 	return std::make_shared<NullObject>();
 }
-}  // namespace selector
+}  // namespace pagoda

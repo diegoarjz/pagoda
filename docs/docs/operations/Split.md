@@ -18,7 +18,7 @@ along a scope's axis.
 ## Parameters
 
 Note: the parameters for the Split operation are most likely to change as soon
-as lists are implemented in selscript.
+as lists are implemented in pgscript.
 
 
 | Name        | Type    | Allowed values | Default | Description                                                    |

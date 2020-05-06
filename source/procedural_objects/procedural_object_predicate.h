@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
@@ -33,4 +33,4 @@ public:
 protected:
 	ProceduralObjectSystemPtr m_objectSystem;
 };
-}  // namespace selector
+}  // namespace pagoda

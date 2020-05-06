@@ -6,7 +6,7 @@
 #include <boost/qvm/mat_operations.hpp>
 #include <boost/qvm/vec_mat_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class MatrixTransform
@@ -39,4 +39,4 @@ public:
 private:
 	Mat4x4F m_matrix;
 };
-}  // namespace selector
+}  // namespace pagoda

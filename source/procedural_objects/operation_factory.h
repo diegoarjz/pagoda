@@ -1,11 +1,11 @@
-#ifndef SELECTOR_OPERATION_FACTORY_H_
-#define SELECTOR_OPERATION_FACTORY_H_
+#ifndef PAGODA_OPERATION_FACTORY_H_
+#define PAGODA_OPERATION_FACTORY_H_
 
 #include "common/factory.h"
 
 #include "procedural_operation.h"
 
-namespace selector
+namespace pagoda
 {
 class OperationFactory : public Factory<ProceduralOperation>
 {
@@ -15,5 +15,5 @@ public:
 };
 
 using OperationFactoryPtr = std::shared_ptr<OperationFactory>;
-}  // namespace selector
+}  // namespace pagoda
 #endif

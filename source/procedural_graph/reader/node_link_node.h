@@ -1,12 +1,12 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_NODE_LINK_NODE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_NODE_LINK_NODE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_NODE_LINK_NODE_H_
+#define PAGODA_PROCEDURAL_GRAPH_NODE_LINK_NODE_H_
 
 #include "graph_statement_node.h"
 
 #include <list>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Represents node links in the graph format.
@@ -80,6 +80,6 @@ public:
 private:
 	NodeLinkContainer_t m_linkedNodes;  ///< List of linked nodes.
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

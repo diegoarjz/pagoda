@@ -14,7 +14,7 @@
 
 #include "node_visitor.h"
 
-namespace selector
+namespace pagoda
 {
 const char *RouterNode::name = "Router";
 
@@ -105,4 +105,4 @@ void RouterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outN
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda

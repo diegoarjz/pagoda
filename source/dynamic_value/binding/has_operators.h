@@ -1,6 +1,6 @@
 #pragma once
 
-namespace selector
+namespace pagoda
 {
 /**
  * Tests whether the \c DynamicValueBase of type T can be added by V.
@@ -272,4 +272,4 @@ public:
 		value = (sizeof(test<T>(0)) == sizeof(yes))
 	};
 };
-}  // namespace selector
+}  // namespace pagoda

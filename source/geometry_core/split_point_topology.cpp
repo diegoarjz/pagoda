@@ -2,7 +2,7 @@
 
 #include "common/logger.h"
 
-namespace selector
+namespace pagoda
 {
 const SplitPointTopology::Index_t SplitPointTopology::s_invalidIndex =
     std::numeric_limits<SplitPointTopology::Index_t>::max();
@@ -966,4 +966,4 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 	}
 	outStream << std::endl;
 }
-}  // namespace selector
+}  // namespace pagoda

@@ -1,12 +1,12 @@
-#ifndef SELECTOR_MATH_LIB_LINE_SEGMENT_3D_H_
-#define SELECTOR_MATH_LIB_LINE_SEGMENT_3D_H_
+#ifndef PAGODA_MATH_LIB_LINE_SEGMENT_3D_H_
+#define PAGODA_MATH_LIB_LINE_SEGMENT_3D_H_
 
 #include "vec_base.h"
 
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 template<class Rep>
 class LineSegment3D
@@ -49,6 +49,6 @@ private:
 	VectorType m_supportVector;  ///< This line's supporting vector
 };
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

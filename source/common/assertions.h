@@ -1,11 +1,11 @@
-#ifndef SELECTOR_COMMON_ASSERTIONS_H_
-#define SELECTOR_COMMON_ASSERTIONS_H_
+#ifndef PAGODA_COMMON_ASSERTIONS_H_
+#define PAGODA_COMMON_ASSERTIONS_H_
 
 #include "utils.h"
 
 #include <type_traits>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Class that deals with the assertion infrastructure.
@@ -55,12 +55,12 @@ private:
 typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *file, const int line,
                                             const char *message);
 
-}  // namespace selector
+}  // namespace pagoda
 
 /// Interrupts the execution and tries to step into debugger
 #define HALT asm("int $3")
 
-#ifdef SELECTOR_ENABLE_ASSERTIONS
+#ifdef PAGODA_ENABLE_ASSERTIONS
 
 /**
  * Assertion that will only be called in DEBUG mode.
@@ -70,7 +70,7 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 	{                                                                                                                \
 		if (!(cond))                                                                                                 \
 		{                                                                                                            \
-			if (::selector::Fail::ReportFail(#cond, __FILE__, __LINE__, 0) == ::selector::Fail::FailBehaviour::Halt) \
+			if (::pagoda::Fail::ReportFail(#cond, __FILE__, __LINE__, 0) == ::pagoda::Fail::FailBehaviour::Halt) \
 			{                                                                                                        \
 				HALT;                                                                                                \
 			}                                                                                                        \
@@ -86,8 +86,8 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 	{                                                                                   \
 		if (!(cond))                                                                    \
 		{                                                                               \
-			if (::selector::Fail::ReportFail(#cond, __FILE__, __LINE__, __VA_ARGS__) == \
-			    ::selector::Fail::FailBehaviour::Halt)                                  \
+			if (::pagoda::Fail::ReportFail(#cond, __FILE__, __LINE__, __VA_ARGS__) == \
+			    ::pagoda::Fail::FailBehaviour::Halt)                                  \
 			{                                                                           \
 				HALT;                                                                   \
 			}                                                                           \
@@ -118,8 +118,8 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 	{                                                                                      \
 		if (!(cond))                                                                       \
 		{                                                                                  \
-			if (::selector::Fail::ReportFail("CRITICAL! " #cond, __FILE__, __LINE__, 0) == \
-			    ::selector::Fail::FailBehaviour::Halt)                                     \
+			if (::pagoda::Fail::ReportFail("CRITICAL! " #cond, __FILE__, __LINE__, 0) == \
+			    ::pagoda::Fail::FailBehaviour::Halt)                                     \
 			{                                                                              \
 				HALT;                                                                      \
 			}                                                                              \
@@ -135,8 +135,8 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 	{                                                                                                \
 		if (!(cond))                                                                                 \
 		{                                                                                            \
-			if (::selector::Fail::ReportFail("CRITICAL! " #cond, __FILE__, __LINE__, __VA_ARGS__) == \
-			    ::selector::Fail::FailBehaviour::Halt)                                               \
+			if (::pagoda::Fail::ReportFail("CRITICAL! " #cond, __FILE__, __LINE__, __VA_ARGS__) == \
+			    ::pagoda::Fail::FailBehaviour::Halt)                                               \
 			{                                                                                        \
 				HALT;                                                                                \
 			}                                                                                        \

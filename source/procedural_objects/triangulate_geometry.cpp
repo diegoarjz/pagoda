@@ -10,11 +10,9 @@
 
 #include "geometry_operations/ear_clipping.h"
 
-#include "../selector.h"
-
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 const std::string TriangulateGeometry::sInputGeometry("in");
 const std::string TriangulateGeometry::sOutputGeometry("out");
@@ -66,4 +64,4 @@ void TriangulateGeometry::DoWork()
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda

@@ -1,7 +1,7 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_AST_NODE_VISITOR_H_
-#define SELECTOR_PROCEDURAL_GRAPH_AST_NODE_VISITOR_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_AST_NODE_VISITOR_H_
+#define PAGODA_PROCEDURAL_GRAPH_AST_NODE_VISITOR_H_
 
-namespace selector
+namespace pagoda
 {
 class GraphDefinitionNode;
 class NamedArgument;
@@ -18,6 +18,6 @@ public:
 	virtual void Visit(NodeDefinitionNode *nodeDefinition) = 0;
 	virtual void Visit(NodeLinkNode *nodeLink) = 0;
 };
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef SELECTOR_MATH_LIB_VEC_BASE_H
-#define SELECTOR_MATH_LIB_VEC_BASE_H
+#ifndef PAGODA_MATH_LIB_VEC_BASE_H
+#define PAGODA_MATH_LIB_VEC_BASE_H
 
 #include <common/assertions.h>
 #include <common/profiler.h>
@@ -8,7 +8,7 @@
 
 #include <boost/qvm/vec.hpp>
 
-namespace selector
+namespace pagoda
 {
 template<int Size, class Rep>
 std::ostream& operator<<(std::ostream& o, const boost::qvm::vec<Rep, Size>& vec)
@@ -39,6 +39,6 @@ using Vec2D = boost::qvm::vec<double, 2>;
 using Vec3D = boost::qvm::vec<double, 3>;
 using Vec4D = boost::qvm::vec<double, 4>;
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

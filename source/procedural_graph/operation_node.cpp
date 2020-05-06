@@ -15,7 +15,7 @@
 #include "procedural_objects/procedural_operation.h"
 #include "procedural_objects/unknown_operation.h"
 
-namespace selector
+namespace pagoda
 {
 const char *OperationNode::name = "Operation";
 
@@ -108,4 +108,4 @@ void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &o
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda

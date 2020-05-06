@@ -8,7 +8,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(CastTo, test_dynamic_value_cast_to_native)
 {

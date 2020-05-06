@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace selector;
+using namespace pagoda;
 
 TEST(LineSegment3D, when_using_default_constructor_should_create_a_unit_line_segment_in_the_x_axis)
 {

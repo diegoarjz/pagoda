@@ -1,10 +1,10 @@
 #pragma once
-#ifndef SELECTOR_PROCEDURAL_GRAPH_PARAMETER_NODE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_PARAMETER_NODE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_PARAMETER_NODE_H_
+#define PAGODA_PROCEDURAL_GRAPH_PARAMETER_NODE_H_
 
 #include "node.h"
 
-namespace selector
+namespace pagoda
 {
 /**
  * Node to propagate parameters to its out nodes.
@@ -25,6 +25,6 @@ public:
 	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
 };
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

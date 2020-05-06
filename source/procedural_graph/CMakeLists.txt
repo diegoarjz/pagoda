@@ -69,16 +69,10 @@ add_library(procedural_graph OBJECT ${PROCEDURAL_GRAPH_SRCS})
 target_include_directories(
     procedural_graph
     PRIVATE
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source>
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
-)
-
-set_target_properties(
-    procedural_graph
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
+        ${PGSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_features(
@@ -94,7 +88,8 @@ target_compile_options(
     procedural_graph
     PRIVATE
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_compile_definitions(
@@ -108,22 +103,3 @@ target_link_libraries(
     PRIVATE
         common
 )
-
-include(GNUInstallDirs)
-install(TARGETS procedural_graph
-    EXPORT procedural_graph-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/procedural_graph
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/selector/procedural_graph
-)
-install(FILES ${VALUE_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selector/procedural_graph)
-
-install(EXPORT procedural_graph-export
-    FILE
-        BindingTargets.cmake
-    NAMESPACE
-        Selector::
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/selector/cmake/
-)
-
-

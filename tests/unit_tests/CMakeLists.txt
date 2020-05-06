@@ -50,16 +50,10 @@ set(test_srcs
     "procedural_graph/graph_reader_grammar.cpp"
     "procedural_graph/parameter_node.cpp"
     "procedural_graph/graph_reader_ast.cpp"
-    "selscript/grammar.cpp"
+    "pgscript/grammar.cpp"
     )
 
 add_executable(unit_tests ${test_srcs})
-
-set_target_properties(
-    unit_tests
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
 
 target_compile_features(
     unit_tests
@@ -73,30 +67,31 @@ target_compile_options(
     unit_tests
     PRIVATE
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 target_include_directories(
     unit_tests
     PUBLIC
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}
-        ${SELSCRIPT_INCLUDE_DIR}
+        ${PGSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_definitions(
     unit_tests
     PRIVATE
-        -DASSERTS_ENABLED=${Selector_ENABLE_ASSERTIONS}
+        -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
 
 target_link_libraries(
     unit_tests
     PRIVATE
-        selector
+        libpagoda
         Boost::chrono
         Boost::system
         Boost::filesystem

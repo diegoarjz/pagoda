@@ -15,7 +15,7 @@
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 const std::string Scale::s_inputGeometry("in");
 const std::string Scale::s_outputGeometry("out");
@@ -92,5 +92,5 @@ void Scale::DoWork()
 		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }
-}  // namespace selector
+}  // namespace pagoda
 

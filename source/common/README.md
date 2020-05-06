@@ -13,7 +13,7 @@ These files should contain things like:
 
 ## Assertion System
 
-The main class of the assertions subsystem is the `selector::common::debug::Fail`. There are two fail behaviour modes,
+The main class of the assertions subsystem is the `pagoda::common::debug::Fail`. There are two fail behaviour modes,
 specified in `Fail::FailBehaviour`, allowing to either halt the program (debug break) or print a message and continue.
 The FailMode is returned from the FailHandler method.
 
@@ -35,7 +35,7 @@ Fail::SetFailHandler(NewHandler);
 
 ## Profiling System
 
-The main class in the Profiler system is `selector::comon::debug::ProfilerManager`. It registers scoped profile data
+The main class in the Profiler system is `pagoda::comon::debug::ProfilerManager`. It registers scoped profile data
 where outer scopes don't account for time spent in inner scopes.
 
 It is possible to profile different threads since the `ProfilerManager::Instance` method returns a thread local instance

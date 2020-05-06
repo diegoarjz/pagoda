@@ -13,7 +13,7 @@
 #include "procedural_graph/graph.h"
 #include "procedural_graph/node.h"
 
-namespace selector
+namespace pagoda
 {
 AstInterpreter::AstInterpreter(GraphPtr graph) : m_graph(graph) {}
 
@@ -108,5 +108,5 @@ const std::unordered_map<std::string, DynamicValueBasePtr> &AstInterpreter::GetC
 	return m_currentNamedParameters;
 }
 
-}  // namespace selector
+}  // namespace pagoda
 

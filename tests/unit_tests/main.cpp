@@ -16,13 +16,13 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	SelectorTestFixtureBase::SetExecutablePath(argv[0]);
-	SelectorTestFixtureBase::SetShouldWriteFiles(shouldWriteFiles);
+	PagodaTestFixtureBase::SetExecutablePath(argv[0]);
+	PagodaTestFixtureBase::SetShouldWriteFiles(shouldWriteFiles);
 	::testing::InitGoogleTest(&argc, argv);
 
 	auto returnVal = RUN_ALL_TESTS();
 
-	selector::Logger::Shutdown();
+	pagoda::Logger::Shutdown();
 
 	return returnVal;
 }

@@ -11,11 +11,11 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 using GeometryType = GeometryBase<>;
 
-class GeometryExporterTest : public SelectorTestFixture<::testing::Test>
+class GeometryExporterTest : public PagodaTestFixture<::testing::Test>
 {
 public:
 	void SetUp() { m_geometry = std::make_shared<GeometryType>(); }

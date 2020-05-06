@@ -1,5 +1,5 @@
-#ifndef SELECTOR_MATH_LIB_INTERSECTIONS_H_
-#define SELECTOR_MATH_LIB_INTERSECTIONS_H_
+#ifndef PAGODA_MATH_LIB_INTERSECTIONS_H_
+#define PAGODA_MATH_LIB_INTERSECTIONS_H_
 
 #include "line_3d.h"
 #include "line_segment_3d.h"
@@ -8,7 +8,7 @@
 
 #include <boost/qvm/vec_operations.hpp>
 
-namespace selector
+namespace pagoda
 {
 template<class T, typename I>
 struct Intersection
@@ -119,6 +119,6 @@ Intersection<PlaneLineIntersection, boost::qvm::vec<Rep, 3>> intersection(const 
 {
 	return intersection(p, l);
 }
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

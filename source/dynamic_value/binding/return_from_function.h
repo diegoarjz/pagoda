@@ -5,7 +5,7 @@
 
 #include <functional>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Calls the free function and throws its return value which must be a \c DynamicValueBasePtr.
@@ -42,4 +42,4 @@ void return_from_function(std::function<R(Args...)> function, const std::vector<
 	return_from_function_helper<R, Args...>::call_and_return(function, args);
 }
 
-}  // namespace selector
+}  // namespace pagoda

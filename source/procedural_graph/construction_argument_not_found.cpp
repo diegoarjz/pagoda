@@ -1,6 +1,6 @@
 #include "construction_argument_not_found.h"
 
-namespace selector
+namespace pagoda
 {
 ConstructionArgumentNotFound::ConstructionArgumentNotFound(const std::string nodeName, const uint32_t nodeId,
                                                            const std::string &argName)
@@ -8,4 +8,4 @@ ConstructionArgumentNotFound::ConstructionArgumentNotFound(const std::string nod
                 " (id: " + std::to_string(nodeId) + ")")
 {
 }
-}  // namespace selector
+}  // namespace pagoda

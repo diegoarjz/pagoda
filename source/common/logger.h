@@ -1,5 +1,5 @@
-#ifndef SELECTOR_COMMON_LOGGER_H_
-#define SELECTOR_COMMON_LOGGER_H_
+#ifndef PAGODA_COMMON_LOGGER_H_
+#define PAGODA_COMMON_LOGGER_H_
 
 #include <cstdio>
 #include <cstdlib>
@@ -8,7 +8,7 @@
 #include <sstream>
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class Logger
 {
@@ -81,43 +81,43 @@ private:
 };  // class Logger
 
 #define LOG_TRACE(TRACE, message)                                             \
-	if (selector::Logger::IsTraceEnabled(selector::Logger::TraceLogs::TRACE)) \
+	if (pagoda::Logger::IsTraceEnabled(pagoda::Logger::TraceLogs::TRACE)) \
 	{                                                                         \
 		std::stringstream _logger_ss_;                                        \
 		_logger_ss_ << #TRACE ": " << message;                                \
-		selector::Logger::trace()->Log(_logger_ss_.str());                    \
+		pagoda::Logger::trace()->Log(_logger_ss_.str());                    \
 	}
 
 #define LOG_DEBUG(message)                                 \
 	{                                                      \
 		std::stringstream _logger_ss_;                     \
 		_logger_ss_ << "Debug: " << message;               \
-		selector::Logger::debug()->Log(_logger_ss_.str()); \
+		pagoda::Logger::debug()->Log(_logger_ss_.str()); \
 	}
 #define LOG_INFO(message)                                  \
 	{                                                      \
 		std::stringstream _logger_ss_;                     \
 		_logger_ss_ << "Info: " << message;                \
-		selector::Logger::debug()->Log(_logger_ss_.str()); \
+		pagoda::Logger::debug()->Log(_logger_ss_.str()); \
 	}
 #define LOG_WARNING(message)                               \
 	{                                                      \
 		std::stringstream _logger_ss_;                     \
 		_logger_ss_ << "Warning: " << message;             \
-		selector::Logger::debug()->Log(_logger_ss_.str()); \
+		pagoda::Logger::debug()->Log(_logger_ss_.str()); \
 	}
 #define LOG_ERROR(message)                                 \
 	{                                                      \
 		std::stringstream _logger_ss_;                     \
 		_logger_ss_ << "Error: " << message;               \
-		selector::Logger::debug()->Log(_logger_ss_.str()); \
+		pagoda::Logger::debug()->Log(_logger_ss_.str()); \
 	}
 #define LOG_FATAL(message)                                 \
 	{                                                      \
 		std::stringstream _logger_ss_;                     \
 		_logger_ss_ << "Fatal: " << message;               \
-		selector::Logger::debug()->Log(_logger_ss_.str()); \
+		pagoda::Logger::debug()->Log(_logger_ss_.str()); \
 	}
 
-}  // namespace selector
+}  // namespace pagoda
 #endif

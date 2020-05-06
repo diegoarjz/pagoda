@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace selector
+namespace pagoda
 {
 class DynamicValueBase;
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
@@ -77,4 +77,4 @@ private:
 	std::string m_tableName;
 };
 
-}  // namespace selector
+}  // namespace pagoda

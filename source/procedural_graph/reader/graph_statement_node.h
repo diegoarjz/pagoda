@@ -1,9 +1,9 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_GRAPH_STATEMENT_NODE_H_
-#define SELECTOR_PROCEDURAL_GRAPH_GRAPH_STATEMENT_NODE_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_GRAPH_STATEMENT_NODE_H_
+#define PAGODA_PROCEDURAL_GRAPH_GRAPH_STATEMENT_NODE_H_
 
 #include "ast_node.h"
 
-namespace selector
+namespace pagoda
 {
 /**
  * Represents a statement in the graph format.
@@ -25,6 +25,6 @@ private:
 };
 
 using GraphStatementNodePtr = std::shared_ptr<GraphStatementNode>;
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

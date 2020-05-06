@@ -14,7 +14,7 @@
 
 #include <fstream>
 
-namespace selector
+namespace pagoda
 {
 const char* ExportGeometry::name = "ExportGeometry";
 const std::string ExportGeometry::inputGeometry("in");
@@ -44,7 +44,7 @@ void ExportGeometry::DoWork()
 
 		auto geometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		auto geometry = geometryComponent->GetGeometry();
-		selector::ObjExporter<Geometry> exporter(geometry);
+		pagoda::ObjExporter<Geometry> exporter(geometry);
 
 		std::string outputPath = get_value_as<std::string>(*GetValue("path"));
 		file_util::CreateDirectories(boost::filesystem::path(outputPath).parent_path());
@@ -57,4 +57,4 @@ void ExportGeometry::DoWork()
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda

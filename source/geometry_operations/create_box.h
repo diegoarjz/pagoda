@@ -1,12 +1,12 @@
-#ifndef SELECTOR_GEOMETRY_OPERATIONS_CREATE_BOX_H_
-#define SELECTOR_GEOMETRY_OPERATIONS_CREATE_BOX_H_
+#ifndef PAGODA_GEOMETRY_OPERATIONS_CREATE_BOX_H_
+#define PAGODA_GEOMETRY_OPERATIONS_CREATE_BOX_H_
 
 #include <common/logger.h>
 #include <geometry_core/geometry.h>
 #include <geometry_core/geometry_builder.h>
 #include <geometry_core/scope.h>
 
-namespace selector
+namespace pagoda
 {
 template<class G>
 class CreateBox
@@ -108,6 +108,6 @@ private:
 	std::array<Vec3F, 8> m_points;
 };
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

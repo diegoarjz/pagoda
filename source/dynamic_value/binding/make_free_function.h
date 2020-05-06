@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Infers the return and argument types for the function given in \p p, creating a
@@ -13,4 +13,4 @@ auto make_free_function(ReturnType (*p)(Args...)) -> std::function<ReturnType(Ar
 {
 	return {p};
 }
-}  // namespace selector
+}  // namespace pagoda

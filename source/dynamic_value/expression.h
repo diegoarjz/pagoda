@@ -1,5 +1,5 @@
-#ifndef SELECTOR_PARAMETER_EXPRESSION_H_
-#define SELECTOR_PARAMETER_EXPRESSION_H_
+#ifndef PAGODA_PARAMETER_EXPRESSION_H_
+#define PAGODA_PARAMETER_EXPRESSION_H_
 
 #include "../parameter/variable.h"
 
@@ -10,7 +10,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -81,5 +81,5 @@ private:
 };
 using ExpressionPtr = std::shared_ptr<Expression>;
 
-}  // namespace selector
+}  // namespace pagoda
 #endif

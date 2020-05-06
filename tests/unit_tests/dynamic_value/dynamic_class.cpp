@@ -8,7 +8,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 class TestCallableBody : public ICallableBody
 {

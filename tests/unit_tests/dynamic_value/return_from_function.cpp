@@ -9,7 +9,7 @@
 
 #include "../test_utils.h"
 
-using namespace selector;
+using namespace pagoda;
 
 static BooleanPtr f2(BooleanPtr b) { return b; }
 

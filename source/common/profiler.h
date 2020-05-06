@@ -1,5 +1,5 @@
-#ifndef SELECTOR_COMMON_PROFILER_H_
-#define SELECTOR_COMMON_PROFILER_H_
+#ifndef PAGODA_COMMON_PROFILER_H_
+#define PAGODA_COMMON_PROFILER_H_
 
 #include "utils.h"
 
@@ -10,7 +10,7 @@
 #include <set>
 #include <stack>
 
-namespace selector
+namespace pagoda
 {
 /**
  * Provides an entry point for the profiling system.
@@ -176,10 +176,10 @@ public:
 	void Log(std::size_t nLines = 0) final;
 };  // class ConsoleProfilerLogger
 
-#ifdef SELECTOR_PROFILER_ACTIVE
+#ifdef PAGODA_PROFILER_ACTIVE
 
-#define START_PROFILE selector::Profiler __PROFILER__(__FUNCTION__, __FILE__, __LINE__)
-#define START_NAMED_PROFILE(x) selector::Profiler x(#x, __FILE__, __LINE__)
+#define START_PROFILE pagoda::Profiler __PROFILER__(__FUNCTION__, __FILE__, __LINE__)
+#define START_NAMED_PROFILE(x) pagoda::Profiler x(#x, __FILE__, __LINE__)
 
 #define END_NAMED_PROFILE(x) (x).EndProfile()
 
@@ -191,6 +191,6 @@ public:
 
 #endif
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

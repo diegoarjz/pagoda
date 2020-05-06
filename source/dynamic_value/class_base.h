@@ -2,7 +2,7 @@
 
 #include "dynamic_value_table.h"
 
-namespace selector
+namespace pagoda
 {
 class ICallableBody;
 
@@ -35,4 +35,4 @@ public:
 protected:
 	std::shared_ptr<DynamicValueTable> m_memberTable;
 };
-}  // namespace selector
+}  // namespace pagoda

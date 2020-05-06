@@ -3,7 +3,7 @@
 #include "class_base.h"
 #include "dynamic_value_base.h"
 
-namespace selector
+namespace pagoda
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
@@ -15,4 +15,4 @@ public:
 
 	FunctionPtr Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals = nullptr);
 };
-}  // namespace selector
+}  // namespace pagoda

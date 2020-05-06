@@ -9,12 +9,6 @@ set(test_srcs
 
 add_executable(regression_tests ${test_srcs})
 
-set_target_properties(
-    regression_tests
-    PROPERTIES
-        COMPILE_FLAGS ${COMPILE_FLAGS} "-Wno-gnu-zero-variadic-macro-arguments"
-)
-
 target_compile_features(
     regression_tests
     PRIVATE
@@ -26,14 +20,15 @@ target_compile_features(
 target_compile_options(
     regression_tests
     PRIVATE
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
         -Wall
-        -Werror
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
 )
 
 target_include_directories(
     regression_tests
     PUBLIC
-        $<INSTALL_INTERFACE:selector>
+        $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
@@ -43,13 +38,13 @@ target_include_directories(
 target_compile_definitions(
     regression_tests
     PRIVATE
-        -DASSERTS_ENABLED=${Selector_ENABLE_ASSERTIONS}
+        -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
 
 target_link_libraries(
     regression_tests
     PRIVATE
-        selector
+        libpagoda
         Boost::chrono
         Boost::system
         Boost::filesystem

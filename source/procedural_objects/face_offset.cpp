@@ -12,11 +12,9 @@
 
 #include "geometry_operations/face_offset.h"
 
-#include "../selector.h"
-
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 const char* FaceOffsetOperation::name = "FaceOffsetOperation";
 const std::string FaceOffsetOperation::inputGeometry("in");
@@ -80,7 +78,7 @@ void FaceOffsetOperation::DoWork()
 
 		for (const auto& i : outerGeometries)
 		{
-			ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputInnerGeometry);
+			ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputOuterGeometry);
 			outObject->RegisterOrSetMember("offset_tag", std::make_shared<String>("outer"));
 
 			std::shared_ptr<GeometryComponent> geometryComponent =
@@ -95,5 +93,5 @@ void FaceOffsetOperation::DoWork()
 		}
 	}
 }
-}  // namespace selector
+}  // namespace pagoda
 

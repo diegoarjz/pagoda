@@ -1,56 +1,56 @@
 <a href="https://www.buymeacoffee.com/diegoarjz" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
-| Branch | master| development | selscript |
-|--------|-------|-------------|-----------|
-| | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=master) | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=development) | ![Build](https://github.com/diegoarjz/selector/workflows/Build/badge.svg?branch=selscript) |
+| Branch | master| development |
+|--------|-------|-------------|
+| | ![Build](https://github.com/diegoarjz/pagoda/workflows/Build/badge.svg?branch=master) | ![Build](https://github.com/diegoarjz/pagoda/workflows/Build/badge.svg?branch=development) |
 
-You can find Selector's documentation [here](https://diegoarjz.github.io/selector).
+You can find Pagoda's documentation [here](https://diegoarjz.github.io/pagoda).
 
-# What is Selector
+# What is Pagoda
 
 ![banner](https://user-images.githubusercontent.com/6498824/68999381-481b2f80-08b7-11ea-8259-05bbc2b0a454.png)
 
 ![graph](https://user-images.githubusercontent.com/6498824/68999389-5bc69600-08b7-11ea-93f0-c16b6dabc04a.png)
 
-The goal of Selector is to be a procedural modelling framework aimed at
+The goal of Pagoda is to be a procedural modelling framework aimed at
 supporting researchers and academics in this field. Therefore, it must be
 flexible enough to allow the implementation of multiple algorithms and
 methodologies.
 
-Currently, Selector implements a graph-based approach since it is considered to
+Currently, Pagoda implements a graph-based approach since it is considered to
 be one of the most flexible methods to specify the rules in procedural
 modelling. The idea is to, eventually, reach a design that allows its users to
 re-use code from any of the available layers to implement other methodologies.
 
-# Building Selector
+# Building Pagoda
 
-Before building selector, you need to install the
+Before building pagoda, you need to install the
 [Boost](https://www.boost.org) libraries. Instructions on how to do so can be
 found on its website.
 
-Selector also needs [Google Test](https://github.com/google/googletest).
+Pagoda also needs [Google Test](https://github.com/google/googletest).
 However, this dependency is built for you automatically.
 
 Once you have installed [Boost](https://www.boost.org) execute the following
 commands in the terminal:
 
 ```
-$ git clone https://github.com/diegarjz/selector.git selector
-$ cd selector
+$ git clone https://github.com/diegarjz/pagoda.git pagoda
+$ cd pagoda
 $ mkdir build
 $ cd build
 $ cmake .. -DCMAKE_BUILD_TYPE=Release
 $ make && make test && make install
 ```
 
-If all goes well you will have built and installed the selector library,
-headers and the sel executable. The sel executable is what
-allows you to execute a procedural graph in the specified in the selector
+If all goes well you will have built and installed the pagoda library,
+headers and the `pagoda` executable. The `pagoda` executable is what
+allows you to execute a procedural graph in the specified in the pagoda
 format.
 
 # Executing your first procedural graph
 
-The sel executable takes a procedural graph file and optionally executes it.
+The `pagoda` executable takes a procedural graph file and optionally executes it.
 
 A procedural graph is a directed graph that details the execution of the
 operations and the flow of procedural objects through the operations.
@@ -103,36 +103,8 @@ operation and the export geometry.
 To execute this node you can run the following on the command line:
 
 ```
-sel create_rect.sel --execute
+pagoda create_rect.pgd --execute
 ```
 
 You will then have a rect.obj file with the square.
-
-# Selector Roadmap
-
-## Version 0.1
-
-- [x] Basic maths library
-- [x] Basic geometry representation
-- [x] Procedural Object System
-    - [x] Component System
-    - [x] Geometry Component
-- [x] Basic geometry operations
-    - [x] Create Rectangle
-    - [x] Create Sphere
-    - [x] Create Box
-    - [x] Extrusion
-    - [x] Split
-    - [x] Repeat split
-    - [x] Extract Faces
-    - [x] Offset
-    - [x] Rotation
-    - [x] Translation
-    - [x] Scale
-    - [x] Geometry Triangulation
-- [x] Procedural graph
-    - [x] Parametrised procedural rules
-    - [x] Expressions in parameters
-    - [x] Basic procedural graph reader
-- [x] Basic geometry exporter
 

@@ -4,12 +4,12 @@
 
 #include <string>
 
-namespace selector
+namespace pagoda
 {
 class UnknownOperation : public Exception
 {
 public:
 	UnknownOperation(const std::string operationName);
 };
-}  // namespace selector
+}  // namespace pagoda
 

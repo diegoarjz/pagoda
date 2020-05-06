@@ -1,5 +1,5 @@
-#ifndef SELECTOR_COMMON_FACTORY_H_
-#define SELECTOR_COMMON_FACTORY_H_
+#ifndef PAGODA_COMMON_FACTORY_H_
+#define PAGODA_COMMON_FACTORY_H_
 
 #include "logger.h"
 #include "utils.h"
@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 template<class ObjectType>
 class Factory
@@ -67,6 +67,6 @@ private:
 	std::string m_name;
 };
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

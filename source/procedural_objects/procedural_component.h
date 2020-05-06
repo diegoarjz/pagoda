@@ -1,9 +1,9 @@
-#ifndef SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_COMPONENT_H_
-#define SELECTOR_PROCEDURAL_OBJECTS_PROCEDURAL_COMPONENT_H_
+#ifndef PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_COMPONENT_H_
+#define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_COMPONENT_H_
 
 #include <memory>
 
-namespace selector
+namespace pagoda
 {
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
@@ -27,6 +27,6 @@ protected:
 using ProceduralComponentPtr = std::shared_ptr<ProceduralComponent>;
 using ProceduralComponentWeakPtr = std::weak_ptr<ProceduralComponent>;
 
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

@@ -1,10 +1,10 @@
-#ifndef SELECTOR_PROCEDURAL_GRAPH_GRAPH_READER_GRAMMAR_HELPER_H_
-#define SELECTOR_PROCEDURAL_GRAPH_GRAPH_READER_GRAMMAR_HELPER_H_
+#ifndef PAGODA_PROCEDURAL_GRAPH_GRAPH_READER_GRAMMAR_HELPER_H_
+#define PAGODA_PROCEDURAL_GRAPH_GRAPH_READER_GRAMMAR_HELPER_H_
 
 #include <memory>
 #include <vector>
 
-namespace selector
+namespace pagoda
 {
 class NamedArgument;
 using NamedArgumentPtr = std::shared_ptr<NamedArgument>;
@@ -37,6 +37,6 @@ GraphDefinitionNodePtr CreateGraphDefinition();
 void AddNodeDefinition(GraphDefinitionNodePtr graph, NodeDefinitionNodePtr statement);
 void AddNodeLinks(GraphDefinitionNodePtr graph, NodeLinkNodePtr statement);
 }  // namespace grammar_helpers
-}  // namespace selector
+}  // namespace pagoda
 
 #endif

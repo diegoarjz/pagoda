@@ -10,7 +10,7 @@
 #include "member_function_callable_body.h"
 #include "register_member_function.h"
 
-namespace selector
+namespace pagoda
 {
 const TypeInfoPtr Vector3::s_typeInfo = std::make_shared<TypeInfo>("Vector3");
 
@@ -63,4 +63,4 @@ void Vector3::RegisterMembers()
 	RegisterMemberFunction(this, "GetY", make_member_function(&Vector3::GetY));
 	RegisterMemberFunction(this, "GetZ", make_member_function(&Vector3::GetZ));
 }
-}  // namespace selector
+}  // namespace pagoda

@@ -2,7 +2,7 @@
 
 #include "procedural_object.h"
 
-namespace selector
+namespace pagoda
 {
 ProceduralOperationObjectInterface::ProceduralOperationObjectInterface(const std::string& name) : interface_name(name)
 {
@@ -54,4 +54,4 @@ ProceduralObjectPtr ProceduralOperationObjectInterface::GetAndPopProceduralObjec
 	}
 }
 
-}  // namespace selector
+}  // namespace pagoda
