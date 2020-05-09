@@ -12,6 +12,8 @@ re-use code from any of the available layers to implement other methodologies.
 
 ## Project layout
 
+[Project Layout](project_layout.md)
+
     pagoda/
         source/                         # Pagoda's library source code
             common/                     # Code common to all layers
@@ -21,7 +23,7 @@ re-use code from any of the available layers to implement other methodologies.
             math_lib/                   # Mathematics Library
             procedural_graph/           # Procedural graph, nodes and reader
             procedural_objects/         # Procedural objects, components and operations
-            pgscript/                  # Grammar, parser and interpreter for pgscript
+            pgscript/                   # Grammar, parser and interpreter for pgscript
         tests/                          # Unit tests and regression tests for pagoda and pgscript
         tools/                          # Executables
 

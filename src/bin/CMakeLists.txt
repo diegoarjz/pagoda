@@ -1,19 +1,17 @@
-set(test_srcs
-    "main.cpp"
-)
+set(PagodaSources
+    pagoda.cpp
+    )
 
-add_executable(pgscript_tests ${test_srcs})
+add_executable(pagoda ${PagodaSources})
 
 target_compile_features(
-    pgscript_tests
+    pagoda
     PRIVATE
         cxx_std_17
-        cxx_constexpr
-        cxx_relaxed_constexpr
 )
 
 target_compile_options(
-    pgscript_tests
+    pagoda
     PRIVATE
         -Wall
         $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
@@ -21,33 +19,33 @@ target_compile_options(
 )
 
 target_include_directories(
-    pgscript_tests
+    pagoda
     PUBLIC
         $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/pagoda>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}
+        ${PGSCRIPT_INCLUDE_DIR}
 )
 
 target_compile_definitions(
-    pgscript_tests
+    pagoda
     PRIVATE
-        -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
 
 target_link_libraries(
-    pgscript_tests
+    pagoda
     PRIVATE
         libpagoda
         Boost::chrono
-        Boost::system
         Boost::filesystem
-        gmock
-        gtest
-        pthread
+        Boost::system
+        Boost::program_options
 )
 
-file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
-add_test(NAME pgscript_tests COMMAND pgscript_tests)
+include(GNUInstallDirs)
+install(TARGETS pagoda
+    EXPORT pagoda-export
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

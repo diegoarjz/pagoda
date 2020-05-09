@@ -29,7 +29,7 @@ target_include_directories(
     regression_tests
     PUBLIC
         $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/pagoda>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}
