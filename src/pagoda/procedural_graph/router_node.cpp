@@ -1,16 +1,16 @@
 #include "router_node.h"
 
-#include "common/assertions.h"
-#include "common/logger.h"
-#include "common/profiler.h"
-#include "dynamic_value/string_value.h"
-#include "dynamic_value/type_info.h"
 #include "input_interface_node.h"
 #include "node_visitor.h"
 #include "unsupported_node_link.h"
 
-#include "procedural_objects/procedural_object_predicate.h"
-#include "procedural_objects/procedural_object_predicate_registry.h"
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/instrument/profiler.h>
+#include <pagoda/dynamic_value/string_value.h>
+#include <pagoda/dynamic_value/type_info.h>
+#include <pagoda/procedural_objects/procedural_object_predicate.h>
+#include <pagoda/procedural_objects/procedural_object_predicate_registry.h>
 
 #include "node_visitor.h"
 

@@ -1,14 +1,13 @@
 #include "export_geometry.h"
 
-#include "dynamic_value/get_value_as.h"
-#include "dynamic_value/set_value_from.h"
-#include "geometry_core/geometry_exporter.h"
-
 #include "geometry_component.h"
 #include "hierarchical_component.h"
 #include "procedural_object_system.h"
 
-#include "common/file_util.h"
+#include <pagoda/common/fs/file_util.h>
+#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/dynamic_value/set_value_from.h>
+#include <pagoda/geometry_core/geometry_exporter.h>
 
 #include <boost/filesystem/path.hpp>
 
@@ -47,7 +46,7 @@ void ExportGeometry::DoWork()
 		pagoda::ObjExporter<Geometry> exporter(geometry);
 
 		std::string outputPath = get_value_as<std::string>(*GetValue("path"));
-		file_util::CreateDirectories(boost::filesystem::path(outputPath).parent_path());
+		common::fs::CreateDirectories(boost::filesystem::path(outputPath).parent_path());
 
 		std::ofstream out_file(outputPath.c_str());
 		exporter.Export(out_file);

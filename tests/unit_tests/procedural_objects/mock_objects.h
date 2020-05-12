@@ -1,10 +1,10 @@
 #ifndef PAGODA_TESTS_PROCEDURAL_OBJECTS_MOCK_OBJECTS_H_
 #define PAGODA_TESTS_PROCEDURAL_OBJECTS_MOCK_OBJECTS_H_
 
-#include <procedural_objects/geometry_component.h>
-#include <procedural_objects/geometry_system.h>
-#include <procedural_objects/procedural_object.h>
-#include <procedural_objects/procedural_object_system.h>
+#include <pagoda/procedural_objects/geometry_component.h>
+#include <pagoda/procedural_objects/geometry_system.h>
+#include <pagoda/procedural_objects/procedural_object.h>
+#include <pagoda/procedural_objects/procedural_object_system.h>
 
 #include <gmock/gmock.h>
 

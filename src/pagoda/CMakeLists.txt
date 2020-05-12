@@ -32,7 +32,7 @@ add_library(libpagoda STATIC "${PAGODA_SOURCES}"
 target_include_directories(
     libpagoda
     PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/pagoda>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         ${Boost_INCLUDE_DIRS}
 )
 

@@ -1,7 +1,7 @@
 #ifndef PAGODA_COMMON_PROFILER_H_
 #define PAGODA_COMMON_PROFILER_H_
 
-#include "utils.h"
+#include "pagoda/common/utils.h"
 
 #include <boost/chrono.hpp>
 
@@ -10,7 +10,7 @@
 #include <set>
 #include <stack>
 
-namespace pagoda
+namespace pagoda::common::instrument
 {
 /**
  * Provides an entry point for the profiling system.
@@ -178,8 +178,8 @@ public:
 
 #ifdef PAGODA_PROFILER_ACTIVE
 
-#define START_PROFILE pagoda::Profiler __PROFILER__(__FUNCTION__, __FILE__, __LINE__)
-#define START_NAMED_PROFILE(x) pagoda::Profiler x(#x, __FILE__, __LINE__)
+#define START_PROFILE ::pagoda::common::instrument::Profiler __PROFILER__(__FUNCTION__, __FILE__, __LINE__)
+#define START_NAMED_PROFILE(x) ::pagoda::common::instrument::Profiler x(#x, __FILE__, __LINE__)
 
 #define END_NAMED_PROFILE(x) (x).EndProfile()
 
@@ -191,6 +191,6 @@ public:
 
 #endif
 
-}  // namespace pagoda
+}  // namespace pagoda::common::instrument
 
 #endif

@@ -1,12 +1,13 @@
 #include "interpreter.h"
 
-#include "dynamic_value/binding/make_free_function.h"
-#include "dynamic_value/dynamic_plane.h"
-#include "dynamic_value/dynamic_value_table.h"
-#include "dynamic_value/free_function_callable_body.h"
-#include "dynamic_value/value_not_found.h"
-#include "dynamic_value/vector3.h"
 #include "interpreter_visitor.h"
+
+#include <pagoda/dynamic_value/binding/make_free_function.h>
+#include <pagoda/dynamic_value/dynamic_plane.h>
+#include <pagoda/dynamic_value/dynamic_value_table.h>
+#include <pagoda/dynamic_value/free_function_callable_body.h>
+#include <pagoda/dynamic_value/value_not_found.h>
+#include <pagoda/dynamic_value/vector3.h>
 
 #include <stack>
 

@@ -1,13 +1,14 @@
 #include "create_rect.h"
 
-#include "dynamic_value/float_value.h"
-#include "dynamic_value/get_value_as.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
 #include "procedural_component.h"
 #include "procedural_object_system.h"
+
+#include <pagoda/dynamic_value/float_value.h>
+#include <pagoda/dynamic_value/get_value_as.h>
 
 #include <boost/qvm/map_vec_mat.hpp>
 
@@ -54,8 +55,8 @@ void CreateRectGeometry::DoWork()
 			rectYAxis = Vec3F{0, 1, 0};
 			break;
 		default:
-			throw Exception("The 'plane' parameter in create rect must be one of 'x', 'y', or 'z'. It was '" +
-			                planeName + "'");
+			throw common::exception::Exception(
+			    "The 'plane' parameter in create rect must be one of 'x', 'y', or 'z'. It was '" + planeName + "'");
 	}
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();

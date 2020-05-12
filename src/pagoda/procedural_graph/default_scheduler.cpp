@@ -1,8 +1,9 @@
 #include "default_scheduler.h"
 
 #include "breadth_first_node_visitor.h"
-#include "common/exception.h"
-#include "common/profiler.h"
+
+#include <pagoda/common/exception/exception.h>
+#include <pagoda/common/instrument/profiler.h>
 
 namespace pagoda
 {
@@ -29,7 +30,7 @@ bool DefaultScheduler::Step()
 		LOG_INFO("Executing node '" << nextNode->GetName() << "'");
 		nextNode->Execute(inNodes, outNodes);
 	}
-	catch (Exception &e)
+	catch (common::exception::Exception &e)
 	{
 		LOG_ERROR("Exception caught while executing Node " << nextNode->GetName() << "(" << nextNode->GetId() << ")");
 		LOG_ERROR(e.What());

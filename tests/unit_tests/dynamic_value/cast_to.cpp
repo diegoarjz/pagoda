@@ -1,8 +1,8 @@
-#include <dynamic_value/binding/cast_to.h>
-#include <dynamic_value/boolean_value.h>
-#include <dynamic_value/float_value.h>
+#include <pagoda/dynamic_value/binding/cast_to.h>
+#include <pagoda/dynamic_value/boolean_value.h>
+#include <pagoda/dynamic_value/float_value.h>
 
-#include <dynamic_value/binding/call_free_function.h>
+#include <pagoda/dynamic_value/binding/call_free_function.h>
 
 #include <gtest/gtest.h>
 

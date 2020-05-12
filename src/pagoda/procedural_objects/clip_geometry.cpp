@@ -1,14 +1,14 @@
 #include "clip_geometry.h"
 
-#include "dynamic_value/float_value.h"
-#include "dynamic_value/get_value_as.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
 #include "procedural_object_system.h"
 
-#include "geometry_operations/clip.h"
+#include <pagoda/dynamic_value/float_value.h>
+#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/geometry_operations/clip.h>
 
 namespace pagoda
 {

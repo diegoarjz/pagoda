@@ -5,7 +5,7 @@
 
 #include "value_visitor.h"
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 namespace pagoda
 {
@@ -13,12 +13,12 @@ namespace pagoda
  * Exception to be thrown when it is impossible to cast a \c DynamicValueBase to a native type.
  */
 template<class T, typename N>
-class UnableToCastToNative : public Exception
+class UnableToCastToNative : public common::exception::Exception
 {
 public:
 	UnableToCastToNative()
-	    : Exception("Unable to cast dynamic value of type " + T::s_typeInfo->GetTypeName() + " to native type " +
-	                native_value_name<N>::GetName())
+	    : common::exception::Exception("Unable to cast dynamic value of type " + T::s_typeInfo->GetTypeName() +
+	                                   " to native type " + native_value_name<N>::GetName())
 	{
 	}
 	virtual ~UnableToCastToNative() {}

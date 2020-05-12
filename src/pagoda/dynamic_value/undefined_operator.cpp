@@ -6,7 +6,8 @@ namespace pagoda
 {
 UndefinedBinaryOperatorException::UndefinedBinaryOperatorException(const std::string &op, const TypeInfoPtr &lhsType,
                                                                    const TypeInfoPtr &rhsType)
-    : Exception("Undefined Binary Operator."),  // + op + " between " + lhsType->Name() + " and " + rhsType->Name()),
+    : common::exception::Exception(
+          "Undefined Binary Operator."),  // + op + " between " + lhsType->Name() + " and " + rhsType->Name()),
       m_operatorName(op),
       m_lhsType(lhsType),
       m_rhsType(rhsType)
@@ -16,7 +17,7 @@ UndefinedBinaryOperatorException::UndefinedBinaryOperatorException(const std::st
 UndefinedBinaryOperatorException::~UndefinedBinaryOperatorException() {}
 
 UndefinedUnaryOperatorException::UndefinedUnaryOperatorException(const std::string &op, const TypeInfoPtr &operand)
-    : Exception("Undefined Unary Operator."),  // + op + " for " + operand->Name()),
+    : common::exception::Exception("Undefined Unary Operator."),  // + op + " for " + operand->Name()),
       m_operatorName(op),
       m_operandType(operand)
 {

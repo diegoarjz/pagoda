@@ -2,9 +2,10 @@
 
 #include "procedural_object_system.h"
 
-#include "common/assertions.h"
-#include "dynamic_value/value_visitor.h"
 #include "procedural_object.h"
+
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/dynamic_value/value_visitor.h>
 
 namespace pagoda
 {

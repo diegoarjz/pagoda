@@ -1,15 +1,15 @@
 #ifndef PAGODA_COMMON_FACTORY_H_
 #define PAGODA_COMMON_FACTORY_H_
 
-#include "logger.h"
-#include "utils.h"
+#include "pagoda/common/debug/logger.h"
+#include "pagoda/common/utils.h"
 
 #include <functional>
 #include <memory>
 #include <unordered_map>
 #include <vector>
 
-namespace pagoda
+namespace pagoda::common
 {
 template<class ObjectType>
 class Factory
@@ -67,6 +67,6 @@ private:
 	std::string m_name;
 };
 
-}  // namespace pagoda
+}  // namespace pagoda::common
 
 #endif

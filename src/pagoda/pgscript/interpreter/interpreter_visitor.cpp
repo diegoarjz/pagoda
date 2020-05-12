@@ -23,7 +23,7 @@
 
 #include "../value/script_callable_body.h"
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 namespace pagoda
 {
@@ -309,7 +309,7 @@ void interpreter_visitor::Visit(ast::CallPtr c)
 
 	if (!callee->IsVariadic() && callee->GetArity() != args.size())
 	{
-		throw Exception("Wrong arity");
+		throw common::exception::Exception("Wrong arity");
 	}
 
 	auto prevSymbolTable = GetCurrentSymbolTable();
@@ -337,7 +337,7 @@ void interpreter_visitor::Visit(ast::FunctionDeclarationPtr func)
 	GetCurrentSymbolTable()->Declare(identifier->GetIdentifier(), callable);
 }
 
-void interpreter_visitor::Visit(ast::ParameterPtr par) { throw Exception("Unimplemented"); }
+void interpreter_visitor::Visit(ast::ParameterPtr par) { throw common::exception::Exception("Unimplemented"); }
 
 void interpreter_visitor::Visit(ast::ReturnPtr r)
 {

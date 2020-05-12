@@ -5,10 +5,10 @@
 #include "procedural_object.h"
 #include "procedural_operation.h"
 
-#include <geometry_core/geometry.h>
-#include <geometry_core/geometry_builder.h>
-#include <geometry_operations/create_rect.h>
-#include <geometry_operations/extrusion.h>
+#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/geometry_operations/create_rect.h>
+#include <pagoda/geometry_operations/extrusion.h>
 
 namespace pagoda
 {

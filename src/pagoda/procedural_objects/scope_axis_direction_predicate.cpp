@@ -1,10 +1,11 @@
 #include "scope_axis_direction_predicate.h"
 
 #include "geometry_component.h"
-#include "geometry_core/scope.h"
 #include "geometry_system.h"
-#include "math_lib/radians.h"
 #include "procedural_object_system.h"
+
+#include <pagoda/geometry_core/scope.h>
+#include <pagoda/math_lib/radians.h>
 
 #include <boost/qvm/vec_operations.hpp>
 

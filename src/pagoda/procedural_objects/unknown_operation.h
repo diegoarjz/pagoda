@@ -1,12 +1,12 @@
 #pragma once
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 #include <string>
 
 namespace pagoda
 {
-class UnknownOperation : public Exception
+class UnknownOperation : public common::exception::Exception
 {
 public:
 	UnknownOperation(const std::string operationName);

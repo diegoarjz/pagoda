@@ -1,8 +1,8 @@
 #ifndef PAGODA_MATH_LIB_VEC_BASE_H
 #define PAGODA_MATH_LIB_VEC_BASE_H
 
-#include <common/assertions.h>
-#include <common/profiler.h>
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/instrument/profiler.h>
 
 #include <cstring>
 

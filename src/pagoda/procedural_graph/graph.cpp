@@ -1,11 +1,12 @@
 #include "graph.h"
 
-#include "common/assertions.h"
-#include "common/profiler.h"
 #include "default_scheduler.h"
 #include "node.h"
 #include "node_factory.h"
 #include "unknown_node_type.h"
+
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/instrument/profiler.h>
 
 #include <array>
 

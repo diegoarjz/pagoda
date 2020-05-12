@@ -1,5 +1,5 @@
-#include <math_lib/plane.h>
-#include <math_lib/projection.h>
+#include <pagoda/math_lib/plane.h>
+#include <pagoda/math_lib/projection.h>
 
 #include <boost/qvm/vec_operations.hpp>
 

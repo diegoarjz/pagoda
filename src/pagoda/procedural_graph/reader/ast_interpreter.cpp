@@ -1,17 +1,17 @@
 #include "ast_interpreter.h"
 
-#include "common/exception.h"
 #include "graph_definition_node.h"
 #include "named_argument.h"
 #include "node_definition_node.h"
 #include "node_link_node.h"
 
-#include "dynamic_value/expression.h"
-#include "dynamic_value/float_value.h"
-#include "dynamic_value/integer_value.h"
-#include "dynamic_value/string_value.h"
-#include "procedural_graph/graph.h"
-#include "procedural_graph/node.h"
+#include <pagoda/common/exception/exception.h>
+#include <pagoda/dynamic_value/expression.h>
+#include <pagoda/dynamic_value/float_value.h>
+#include <pagoda/dynamic_value/integer_value.h>
+#include <pagoda/dynamic_value/string_value.h>
+#include <pagoda/procedural_graph/graph.h>
+#include <pagoda/procedural_graph/node.h>
 
 namespace pagoda
 {
@@ -91,7 +91,8 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 
 		if (prevNode == std::end(m_nodeTable) || currNode == std::end(m_nodeTable))
 		{
-			throw Exception("Node not found while linking '" + (*prevNodeName) + "' to '" + (*currentNodeName) + "'");
+			throw common::exception::Exception("Node not found while linking '" + (*prevNodeName) + "' to '" +
+			                                   (*currentNodeName) + "'");
 		}
 
 		m_graph->CreateEdge(prevNode->second, currNode->second);

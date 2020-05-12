@@ -1,7 +1,7 @@
 #pragma once
 
-#include "geometry_core/geometry_builder.h"
-#include "math_lib/matrix_base.h"
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/math_lib/matrix_base.h>
 
 #include <boost/qvm/mat_operations.hpp>
 #include <boost/qvm/vec_mat_operations.hpp>

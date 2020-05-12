@@ -1,10 +1,8 @@
 #pragma once
 
-#include <geometry_core/geometry_builder.h>
-
-#include <common/logger.h>
-
-#include <math_lib/math_utils.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/math_lib/math_utils.h>
 
 #include <vector>
 

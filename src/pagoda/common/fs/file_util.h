@@ -5,15 +5,12 @@
 
 #include <string>
 
-namespace pagoda::file_util
+namespace pagoda::common::fs
 {
 std::string LoadFileToString(const boost::filesystem::path &path);
-std::string LoadFileToString(const std::string &filePath);
 
 void WriteStringToFile(const boost::filesystem::path &filePath, const std::string &contents);
-void WriteStringToFile(const std::string &filePath, const std::string &contents);
 
-bool CreateDirectories(const std::string &path);
 bool CreateDirectories(const boost::filesystem::path &path);
 
 template<class T>
@@ -36,6 +33,6 @@ void GetAllFilesWithExtension(const boost::filesystem::path &dirPath, const std:
 		++iterator;
 	}
 }
-}  // namespace pagoda::file_util
+}  // namespace pagoda::common::fs
 
 #endif

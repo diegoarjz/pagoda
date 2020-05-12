@@ -1,10 +1,10 @@
 #ifndef PAGODA_GEOMETRY_OPERATIONS_CREATE_BOX_H_
 #define PAGODA_GEOMETRY_OPERATIONS_CREATE_BOX_H_
 
-#include <common/logger.h>
-#include <geometry_core/geometry.h>
-#include <geometry_core/geometry_builder.h>
-#include <geometry_core/scope.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/geometry_core/scope.h>
 
 namespace pagoda
 {

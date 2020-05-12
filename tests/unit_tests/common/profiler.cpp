@@ -1,4 +1,4 @@
-#include <common/profiler.h>
+#include <pagoda/common/instrument/profiler.h>
 
 #include <gtest/gtest.h>
 
@@ -14,10 +14,10 @@
 #include <iostream>
 
 using namespace pagoda;
-
-void GetInstance(ProfilerManager** instance) { *instance = ProfilerManager::Instance(); }
+using namespace pagoda::common::instrument;
 
 /*
+void GetInstance(ProfilerManager** instance) { *instance = ProfilerManager::Instance(); }
 TEST(Profiler, multi_threaded_should_return_different_instances)
 {
     ProfilerManager* i1;

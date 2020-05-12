@@ -1,10 +1,10 @@
 #ifndef PAGODA_GEOMETRY_CORE_INDEXED_CONTAINTER_H_
 #define PAGODA_GEOMETRY_CORE_INDEXED_CONTAINTER_H_
 
-#include "common/assertions.h"
-#include "common/exception.h"
-#include "common/profiler.h"
-#include "common/range.h"
+#include "pagoda/common/debug/assertions.h"
+#include "pagoda/common/exception/exception.h"
+#include "pagoda/common/instrument/profiler.h"
+#include "pagoda/common/range.h"
 
 #include <unordered_map>
 
@@ -13,10 +13,13 @@
 namespace pagoda
 {
 template<class IndexType>
-class IndexedDeletedException : public Exception
+class IndexedDeletedException : public common::exception::Exception
 {
 public:
-	IndexedDeletedException(const IndexType& i) : Exception("Tried to access deleted index " + std::to_string(i)) {}
+	IndexedDeletedException(const IndexType& i)
+	    : common::exception::Exception("Tried to access deleted index " + std::to_string(i))
+	{
+	}
 };
 
 template<class IndexType, class ValueType>

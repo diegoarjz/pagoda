@@ -1,7 +1,7 @@
-#include <dynamic_value/binding/make_free_function.h>
-#include <dynamic_value/boolean_value.h>
+#include <pagoda/dynamic_value/binding/make_free_function.h>
+#include <pagoda/dynamic_value/boolean_value.h>
 
-#include <dynamic_value/binding/call_free_function.h>
+#include <pagoda/dynamic_value/binding/call_free_function.h>
 
 #include <gtest/gtest.h>
 

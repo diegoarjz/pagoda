@@ -1,7 +1,7 @@
 #ifndef PAGODA_COMMON_RANGE_H_
 #define PAGODA_COMMON_RANGE_H_
 
-namespace pagoda
+namespace pagoda::common
 {
 /**
  * \brief Implements a Range between two values with increments.
@@ -56,5 +56,5 @@ private:
 	T m_rangeEnd;
 	T m_rangeIncrement;
 };  // class Range
-}  // namespace pagoda
+}  // namespace pagoda::common
 #endif

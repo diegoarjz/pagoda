@@ -1,11 +1,10 @@
 #ifndef PAGODA_GEOMETRY_OPERATIONS_CLIP_H_
 #define PAGODA_GEOMETRY_OPERATIONS_CLIP_H_
 
-#include "math_lib/intersection.h"
-#include "math_lib/line_3d.h"
-#include "math_lib/plane.h"
-
-#include "geometry_core/geometry_builder.h"
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/math_lib/intersection.h>
+#include <pagoda/math_lib/line_3d.h>
+#include <pagoda/math_lib/plane.h>
 
 namespace pagoda
 {

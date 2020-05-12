@@ -1,8 +1,8 @@
-#include <common/file_util.h>
-#include <geometry_core/geometry.h>
-#include <geometry_core/geometry_builder.h>
-#include <geometry_core/geometry_exporter.h>
-#include <geometry_operations/triangulate.h>
+#include <pagoda/common/fs/file_util.h>
+#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/geometry_core/geometry_exporter.h>
+#include <pagoda/geometry_operations/triangulate.h>
 
 #include <gtest/gtest.h>
 

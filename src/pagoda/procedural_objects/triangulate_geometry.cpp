@@ -8,7 +8,7 @@
 #include "hierarchical_system.h"
 #include "procedural_component.h"
 
-#include "geometry_operations/ear_clipping.h"
+#include <pagoda/geometry_operations/ear_clipping.h>
 
 #include <memory>
 

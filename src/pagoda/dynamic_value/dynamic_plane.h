@@ -3,8 +3,8 @@
 #include "builtin_class.h"
 #include "dynamic_value_base.h"
 
-#include "math_lib/plane.h"
-#include "math_lib/vec_base.h"
+#include <pagoda/math_lib/plane.h>
+#include <pagoda/math_lib/vec_base.h>
 
 namespace pagoda
 {
@@ -18,7 +18,7 @@ class DynamicPlane : public BuiltinClass
 public:
 	static const TypeInfoPtr s_typeInfo;
 
-    static std::shared_ptr<DynamicPlane> DynamicConstructor(const std::vector<DynamicValueBasePtr>& args);
+	static std::shared_ptr<DynamicPlane> DynamicConstructor(const std::vector<DynamicValueBasePtr>& args);
 
 	DynamicPlane();
 	DynamicPlane(const Plane<float>& plane);

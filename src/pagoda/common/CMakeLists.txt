@@ -1,20 +1,20 @@
 set(COMMON_SRCS
-    "assertions.cpp"
-    "assertions.h"
-    "exception.h"
-    "exception.cpp"
+    "debug/assertions.cpp"
+    "debug/assertions.h"
+    "debug/logger.cpp"
+    "debug/logger.h"
+    "exception/exception.h"
+    "exception/exception.cpp"
+    "exception/unimplemented.cpp"
+    "exception/unimplemented.h"
+    "instrument/profiler.cpp"
+    "instrument/profiler.h"
+    "instrument/statistics.cpp"
+    "instrument/statistics.h"
     "factory.h"
-    "file_util.cpp"
-    "file_util.h"
-    "logger.cpp"
-    "logger.h"
-    "profiler.cpp"
-    "profiler.h"
+    "fs/file_util.cpp"
+    "fs/file_util.h"
     "range.h"
-    "statistics.cpp"
-    "statistics.h"
-    "unimplemented.cpp"
-    "unimplemented.h"
     "utils.cpp"
     "utils.h"
     "version.cpp"
@@ -26,7 +26,7 @@ add_library(common OBJECT ${COMMON_SRCS})
 target_include_directories(
     common
     PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/pagoda>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         ${Boost_INCLUDE_DIRS}
 )
 

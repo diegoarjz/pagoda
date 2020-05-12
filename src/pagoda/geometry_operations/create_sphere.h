@@ -1,7 +1,7 @@
 #pragma once
 
-#include <common/logger.h>
-#include <math_lib/math_utils.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/math_lib/math_utils.h>
 
 #include <boost/qvm/vec_operations.hpp>
 

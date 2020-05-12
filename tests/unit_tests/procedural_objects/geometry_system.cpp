@@ -1,12 +1,12 @@
 #include "mock_objects.h"
 
-#include <procedural_objects/create_rect.h>
-#include <procedural_objects/extrude_geometry.h>
-#include <procedural_objects/geometry_component.h>
-#include <procedural_objects/geometry_system.h>
-#include <procedural_objects/hierarchical_component.h>
-#include <procedural_objects/hierarchical_system.h>
-#include <procedural_objects/procedural_object.h>
+#include <pagoda/procedural_objects/create_rect.h>
+#include <pagoda/procedural_objects/extrude_geometry.h>
+#include <pagoda/procedural_objects/geometry_component.h>
+#include <pagoda/procedural_objects/geometry_system.h>
+#include <pagoda/procedural_objects/hierarchical_component.h>
+#include <pagoda/procedural_objects/hierarchical_system.h>
+#include <pagoda/procedural_objects/procedural_object.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>

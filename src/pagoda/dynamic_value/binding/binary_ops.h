@@ -6,17 +6,17 @@
 
 #include "../expression.h"
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 namespace pagoda
 {
 template<class LHS, class RHS>
-class UndefinedBinaryOperator : public Exception
+class UndefinedBinaryOperator : public common::exception::Exception
 {
 public:
 	UndefinedBinaryOperator(const std::string &op)
-	    : Exception("Undefined " + op + " operator between " + LHS::s_typeInfo->GetTypeName() + " and " +
-	                RHS::s_typeInfo->GetTypeName())
+	    : common::exception::Exception("Undefined " + op + " operator between " + LHS::s_typeInfo->GetTypeName() +
+	                                   " and " + RHS::s_typeInfo->GetTypeName())
 	{
 	}
 };

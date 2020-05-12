@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #include "ast_node_visitor.h"
-#include "procedural_graph/node_factory.h"
+#include "pagoda/procedural_graph/node_factory.h"
 
 namespace pagoda
 {

@@ -1,13 +1,13 @@
 #ifndef PAGODA_OPERATION_FACTORY_H_
 #define PAGODA_OPERATION_FACTORY_H_
 
-#include "common/factory.h"
-
 #include "procedural_operation.h"
+
+#include <pagoda/common/factory.h>
 
 namespace pagoda
 {
-class OperationFactory : public Factory<ProceduralOperation>
+class OperationFactory : public common::Factory<ProceduralOperation>
 {
 public:
 	OperationFactory();

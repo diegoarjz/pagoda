@@ -1,10 +1,10 @@
-#include <procedural_graph/breadth_first_node_visitor.h>
-#include <procedural_graph/graph.h>
-#include <procedural_graph/graph_node_visitor.h>
-#include <procedural_graph/node.h>
-#include <procedural_graph/operation_node.h>
+#include <pagoda/procedural_graph/breadth_first_node_visitor.h>
+#include <pagoda/procedural_graph/graph.h>
+#include <pagoda/procedural_graph/graph_node_visitor.h>
+#include <pagoda/procedural_graph/node.h>
+#include <pagoda/procedural_graph/operation_node.h>
 
-#include <pagoda.h>
+#include <pagoda/pagoda.h>
 
 #include <gtest/gtest.h>
 

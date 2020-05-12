@@ -1,10 +1,11 @@
 #ifndef PAGODA_GEOMETRY_CORE_GEOMETRY_BUILDER_H
 #define PAGODA_GEOMETRY_CORE_GEOMETRY_BUILDER_H
 
-#include "common/assertions.h"
-#include "common/logger.h"
-#include "common/profiler.h"
 #include "indexed_container.h"
+
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/instrument/profiler.h>
 
 #include <boost/qvm/vec_access.hpp>
 #include <boost/qvm/vec_operations.hpp>

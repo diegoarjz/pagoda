@@ -1,13 +1,14 @@
 #include "create_sphere.h"
 
-#include "dynamic_value/get_value_as.h"
 #include "geometry_component.h"
-#include "geometry_operations/create_sphere.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
 #include "procedural_component.h"
 #include "procedural_object_system.h"
+
+#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/geometry_operations/create_sphere.h>
 
 #include <boost/qvm/map_vec_mat.hpp>
 

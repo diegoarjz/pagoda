@@ -1,7 +1,7 @@
 #ifndef PAGODA_TESTS_GEOMETRY_CORE_MOCK_OBJECTS_H_
 #define PAGODA_TESTS_GEOMETRY_CORE_MOCK_OBJECTS_H_
 
-#include <math_lib/vec_base.h>
+#include <pagoda/math_lib/vec_base.h>
 
 class MockGeometry
 {

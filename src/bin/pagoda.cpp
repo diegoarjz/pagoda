@@ -1,34 +1,34 @@
-#include <common/exception.h>
-#include <common/file_util.h>
-#include <common/logger.h>
-#include <common/profiler.h>
-#include <common/version.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/exception/exception.h>
+#include <pagoda/common/fs/file_util.h>
+#include <pagoda/common/instrument/profiler.h>
+#include <pagoda/common/version.h>
 
-#include <dynamic_value/set_value_from.h>
-#include <dynamic_value/value_visitor.h>
+#include <pagoda/dynamic_value/set_value_from.h>
+#include <pagoda/dynamic_value/value_visitor.h>
 
-#include <geometry_core/geometry_exporter.h>
-#include <procedural_graph/default_scheduler.h>
-#include <procedural_graph/execution_queue.h>
-#include <procedural_graph/graph_dot_exporter.h>
-#include <procedural_graph/input_interface_node.h>
-#include <procedural_graph/node_set_visitor.h>
-#include <procedural_graph/node_visitor.h>
-#include <procedural_graph/operation_node.h>
-#include <procedural_graph/output_interface_node.h>
-#include <procedural_graph/parameter_node.h>
-#include <procedural_graph/parse_result.h>
-#include <procedural_graph/reader.h>
-#include <procedural_graph/router_node.h>
+#include <pagoda/geometry_core/geometry_exporter.h>
+#include <pagoda/procedural_graph/default_scheduler.h>
+#include <pagoda/procedural_graph/execution_queue.h>
+#include <pagoda/procedural_graph/graph_dot_exporter.h>
+#include <pagoda/procedural_graph/input_interface_node.h>
+#include <pagoda/procedural_graph/node_set_visitor.h>
+#include <pagoda/procedural_graph/node_visitor.h>
+#include <pagoda/procedural_graph/operation_node.h>
+#include <pagoda/procedural_graph/output_interface_node.h>
+#include <pagoda/procedural_graph/parameter_node.h>
+#include <pagoda/procedural_graph/parse_result.h>
+#include <pagoda/procedural_graph/reader.h>
+#include <pagoda/procedural_graph/router_node.h>
 
-#include <procedural_objects/create_rect.h>
-#include <procedural_objects/export_geometry.h>
-#include <procedural_objects/extrude_geometry.h>
-#include <procedural_objects/geometry_component.h>
-#include <procedural_objects/geometry_system.h>
-#include <procedural_objects/hierarchical_system.h>
-#include <procedural_objects/triangulate_geometry.h>
-#include <pagoda.h>
+#include <pagoda/pagoda.h>
+#include <pagoda/procedural_objects/create_rect.h>
+#include <pagoda/procedural_objects/export_geometry.h>
+#include <pagoda/procedural_objects/extrude_geometry.h>
+#include <pagoda/procedural_objects/geometry_component.h>
+#include <pagoda/procedural_objects/geometry_system.h>
+#include <pagoda/procedural_objects/hierarchical_system.h>
+#include <pagoda/procedural_objects/triangulate_geometry.h>
 
 #include <boost/program_options.hpp>
 
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 				ExecuteGraph(graph);
 			}
 		}
-		catch (const Exception& e)
+		catch (const pagoda::common::exception::Exception& e)
 		{
 			LOG_FATAL("Exception: " << e.What());
 		}
@@ -183,22 +183,28 @@ struct ParamSetter : ValueVisitorBase
 	{
 		if (m_value != "true" || m_value != "false")
 		{
-			throw Exception("Unable to set Boolean parameter from " + m_value + " value.");
+			throw pagoda::common::exception::Exception("Unable to set Boolean parameter from " + m_value + " value.");
 		}
 		set_value_from<bool>(v, m_value == "true");
 	}
 	void Visit(FloatValue& v) override { set_value_from<float>(v, std::atof(m_value.c_str())); }
 	void Visit(Integer& v) override { set_value_from<float>(v, std::atof(m_value.c_str())); }
 	void Visit(String& v) override { set_value_from<std::string>(v, m_value); }
-	void Visit(NullObject& v) override { throw Exception("Cannot set a NullObject."); }
-	void Visit(TypeInfo& v) override { throw Exception("Cannot set a TypeInfo."); }
-	void Visit(Vector3& v) override { throw Exception("Cannot set a Vector3."); }
-	void Visit(DynamicPlane& v) override { throw Exception("Cannot set a DynamicPlane."); }
-	void Visit(Function& v) override { throw Exception("Cannot set a Function."); }
-	void Visit(DynamicClass& v) override { throw Exception("Cannot set a DynamicClass."); }
-	void Visit(DynamicInstance& v) override { throw Exception("Cannot set a DynamicInstance."); }
-	void Visit(Expression& v) override { throw Exception("Cannot set an Expression."); }
-	void Visit(ProceduralOperation& v) override { throw Exception("Cannot set a ProceduralOperation."); }
+	void Visit(NullObject& v) override { throw pagoda::common::exception::Exception("Cannot set a NullObject."); }
+	void Visit(TypeInfo& v) override { throw pagoda::common::exception::Exception("Cannot set a TypeInfo."); }
+	void Visit(Vector3& v) override { throw pagoda::common::exception::Exception("Cannot set a Vector3."); }
+	void Visit(DynamicPlane& v) override { throw pagoda::common::exception::Exception("Cannot set a DynamicPlane."); }
+	void Visit(Function& v) override { throw pagoda::common::exception::Exception("Cannot set a Function."); }
+	void Visit(DynamicClass& v) override { throw pagoda::common::exception::Exception("Cannot set a DynamicClass."); }
+	void Visit(DynamicInstance& v) override
+	{
+		throw pagoda::common::exception::Exception("Cannot set a DynamicInstance.");
+	}
+	void Visit(Expression& v) override { throw pagoda::common::exception::Exception("Cannot set an Expression."); }
+	void Visit(ProceduralOperation& v) override
+	{
+		throw pagoda::common::exception::Exception("Cannot set a ProceduralOperation.");
+	}
 
 	std::string m_value;
 };
@@ -225,7 +231,7 @@ void SetParameter(const NodeSet<Node>& nodes, const std::string& param)
 	}
 	else
 	{
-		throw Exception("Invalid parameter definition: '" + param + "'");
+		throw pagoda::common::exception::Exception("Invalid parameter definition: '" + param + "'");
 	}
 }
 
@@ -241,7 +247,7 @@ void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 
 void PrintProfile()
 {
-	if (!has_feature("Profiler"))
+	if (!pagoda::common::has_feature("Profiler"))
 	{
 		LOG_WARNING("Pagoda was compiled without the Profiler feature.");
 		LOG_WARNING(" Please build Pagoda with '-DPAGODA_PROFILER_ACTIVE=ON'.");
@@ -249,7 +255,8 @@ void PrintProfile()
 	}
 
 	std::cout << "Showing profiling data:" << std::endl;
-	ConsoleProfilerLogger consoleLogger(ProfilerManager::Instance());
+	pagoda::common::instrument::ConsoleProfilerLogger consoleLogger(
+	    pagoda::common::instrument::ProfilerManager::Instance());
 	consoleLogger.Log(20);
 }
 
@@ -284,7 +291,7 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
 
 		if (out_vm->count("version"))
 		{
-			std::cout << get_version_information() << std::endl;
+			std::cout << pagoda::common::get_version_information() << std::endl;
 			return false;
 		}
 	}

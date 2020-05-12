@@ -3,7 +3,7 @@
 namespace pagoda
 {
 CallableBodyNotSet::CallableBodyNotSet(const std::string &dynamicValueName)
-    : Exception("Callable body not set in " + dynamicValueName)
+    : common::exception::Exception("Callable body not set in " + dynamicValueName)
 {
 }
 }  // namespace pagoda

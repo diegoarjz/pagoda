@@ -1,11 +1,11 @@
 #include <sstream>
 
-#include <geometry_core/geometry.h>
-#include <geometry_core/geometry_builder.h>
-#include <geometry_core/geometry_exporter.h>
-#include <math_lib/vec_base.h>
+#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/geometry_core/geometry_exporter.h>
+#include <pagoda/math_lib/vec_base.h>
 
-#include <common/file_util.h>
+#include <pagoda/common/fs/file_util.h>
 
 #include <gtest/gtest.h>
 

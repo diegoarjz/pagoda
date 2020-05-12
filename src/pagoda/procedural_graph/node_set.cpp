@@ -2,7 +2,7 @@
 
 #include "node.h"
 
-#include "common/assertions.h"
+#include <pagoda/common/debug/assertions.h>
 
 namespace pagoda
 {

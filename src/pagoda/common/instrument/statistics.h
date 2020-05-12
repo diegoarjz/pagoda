@@ -1,15 +1,13 @@
 #ifndef PAGODA_COMMON_DEBUG_STATISTICS_H_
 #define PAGODA_COMMON_DEBUG_STATISTICS_H_
 
-#include "assertions.h"
-
 #include <iostream>
 #include <map>
 #include <memory>
 #include <ostream>
 #include <string>
 
-namespace pagoda
+namespace pagoda::common::instrument
 {
 /**
  * Main class responsible for holding statistics about execution.
@@ -44,7 +42,7 @@ public:
 	struct StatsContainer
 	{
 		explicit StatsContainer(const NameType &name) : m_name(name) {}
-        virtual ~StatsContainer() {}
+		virtual ~StatsContainer() {}
 		NameType m_name;
 
 		virtual void Write(std::ostream &outStream) = 0;
@@ -139,6 +137,6 @@ private:
 
 #endif
 
-}  // namespace pagoda
+}  // namespace pagoda::common::instrument
 
 #endif

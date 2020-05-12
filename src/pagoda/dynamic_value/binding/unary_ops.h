@@ -1,10 +1,10 @@
 #pragma once
 
-#include "common/exception.h"
-
 #include "../dynamic_value_base.h"
 #include "../value_visitor.h"
 #include "has_operators.h"
+
+#include <pagoda/common/exception/exception.h>
 
 namespace pagoda
 {
@@ -12,10 +12,13 @@ namespace pagoda
  * Exception thrown when the negate operator is undefined for a \c DynamicValueBase.
  */
 template<class T>
-class UndefinedNegateOperator : public Exception
+class UndefinedNegateOperator : public common::exception::Exception
 {
 public:
-	UndefinedNegateOperator() : Exception("Undefined negate operator for " + T::s_typeInfo->GetTypeName() + " type") {}
+	UndefinedNegateOperator()
+	    : common::exception::Exception("Undefined negate operator for " + T::s_typeInfo->GetTypeName() + " type")
+	{
+	}
 };
 
 /**
@@ -40,10 +43,13 @@ struct negate
  * Exception thrown when the minus operator is undefined for a \c DynamicValueBase.
  */
 template<class T>
-class UndefinedMinusOperator : public Exception
+class UndefinedMinusOperator : public common::exception::Exception
 {
 public:
-	UndefinedMinusOperator() : Exception("Undefined minus operator for " + T::s_typeInfo->GetTypeName() + " type") {}
+	UndefinedMinusOperator()
+	    : common::exception::Exception("Undefined minus operator for " + T::s_typeInfo->GetTypeName() + " type")
+	{
+	}
 };
 
 /**

@@ -15,7 +15,7 @@ target_include_directories(
     pgscript_intermediate
     PRIVATE
         $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/pagoda>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         ${Boost_INCLUDE_DIRS}
 )
 

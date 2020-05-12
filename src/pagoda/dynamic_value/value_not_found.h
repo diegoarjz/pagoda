@@ -1,13 +1,13 @@
 #pragma once
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 #include <stdexcept>
 #include <string>
 
 namespace pagoda
 {
-class ValueNotFoundException : public Exception
+class ValueNotFoundException : public common::exception::Exception
 {
 public:
 	ValueNotFoundException(const std::string &name);

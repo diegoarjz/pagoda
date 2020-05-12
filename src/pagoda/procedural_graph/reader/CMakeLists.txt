@@ -23,7 +23,7 @@ add_library(procedural_graph_reader OBJECT ${PROCEDURAL_GRAPH_READER_SRCS})
 target_include_directories(
     procedural_graph_reader
     PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/pagoda>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         ${Boost_INCLUDE_DIRS}
 )
 

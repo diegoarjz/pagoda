@@ -1,7 +1,6 @@
 #pragma once
 
 #include "boolean_value.h"
-#include "common/exception.h"
 #include "dynamic_class.h"
 #include "dynamic_instance.h"
 #include "dynamic_plane.h"
@@ -15,7 +14,8 @@
 #include "type_info.h"
 #include "vector3.h"
 
-#include "procedural_objects/procedural_operation.h"
+#include <pagoda/common/exception/exception.h>
+#include <pagoda/procedural_objects/procedural_operation.h>
 
 #include <stdexcept>
 #include <type_traits>
@@ -114,7 +114,7 @@ public:
 	template<typename V>
 	T& operator()(V&)
 	{
-		throw Exception("Unable to apply the value type visitor.");
+		throw common::exception::Exception("Unable to apply the value type visitor.");
 	}
 };
 

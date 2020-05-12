@@ -1,5 +1,5 @@
-#include <procedural_graph/operation_node.h>
-#include <procedural_objects/operation_factory.h>
+#include <pagoda/procedural_graph/operation_node.h>
+#include <pagoda/procedural_objects/operation_factory.h>
 
 #include "mock_objects.h"
 

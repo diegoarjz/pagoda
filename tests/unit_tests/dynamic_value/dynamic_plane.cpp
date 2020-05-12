@@ -1,11 +1,11 @@
-#include <dynamic_value/dynamic_plane.h>
-#include <dynamic_value/get_value_as.h>
-#include <dynamic_value/set_value_from.h>
-#include <dynamic_value/type_info.h>
-#include <dynamic_value/vector3.h>
+#include <pagoda/dynamic_value/dynamic_plane.h>
+#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/dynamic_value/set_value_from.h>
+#include <pagoda/dynamic_value/type_info.h>
+#include <pagoda/dynamic_value/vector3.h>
 
-#include <math_lib/plane.h>
-#include <math_lib/vec_base.h>
+#include <pagoda/math_lib/plane.h>
+#include <pagoda/math_lib/vec_base.h>
 
 #include <gtest/gtest.h>
 

@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace pagoda
+namespace pagoda::common
 {
 /// Suppresses warnings about unused values and guarantees that the code is not
 /// optimised out
@@ -15,6 +15,6 @@ namespace pagoda
 
 bool is_float(const std::string &str);
 
-}  // namespace pagoda
+}  // namespace pagoda::common
 
 #endif

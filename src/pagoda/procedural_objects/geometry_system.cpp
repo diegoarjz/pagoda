@@ -1,9 +1,10 @@
 #include "geometry_system.h"
 
-#include "common/assertions.h"
-#include "common/profiler.h"
 #include "geometry_component.h"
 #include "procedural_object.h"
+
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/instrument/profiler.h>
 
 namespace pagoda
 {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <common/assertions.h>
-#include <common/profiler.h>
-#include <geometry_core/geometry.h>
-#include <geometry_core/geometry_builder.h>
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/instrument/profiler.h>
+#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry_core/geometry_builder.h>
 
-#include <math_lib/bissectrix.h>
+#include <pagoda/math_lib/bissectrix.h>
 
 namespace pagoda
 {

@@ -1,6 +1,8 @@
 #include "statistics.h"
 
-namespace pagoda
+#include "pagoda/common/debug/assertions.h"
+
+namespace pagoda::common::instrument
 {
 StatisticsManager *StatisticsManager::Instance()
 {
@@ -42,4 +44,4 @@ void OneShotProfilerStats::Write(std::ostream &outStream)
 	}
 }
 
-}  // namespace pagoda
+}  // namespace pagoda::common::instrument

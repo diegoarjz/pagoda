@@ -1,6 +1,6 @@
-#include <math_lib/degrees.h>
-#include <math_lib/math_utils.h>
-#include <math_lib/radians.h>
+#include <pagoda/math_lib/degrees.h>
+#include <pagoda/math_lib/math_utils.h>
+#include <pagoda/math_lib/radians.h>
 
 #include <gtest/gtest.h>
 

@@ -1,8 +1,8 @@
-#include <dynamic_value/dynamic_class.h>
-#include <dynamic_value/dynamic_instance.h>
-#include <dynamic_value/icallable_body.h>
-#include <dynamic_value/null_object_value.h>
-#include <dynamic_value/type_info.h>
+#include <pagoda/dynamic_value/dynamic_class.h>
+#include <pagoda/dynamic_value/dynamic_instance.h>
+#include <pagoda/dynamic_value/icallable_body.h>
+#include <pagoda/dynamic_value/null_object_value.h>
+#include <pagoda/dynamic_value/type_info.h>
 
 #include <gtest/gtest.h>
 

@@ -1,4 +1,4 @@
-#include <math_lib/nearest_points.h>
+#include <pagoda/math_lib/nearest_points.h>
 
 #include <gtest/gtest.h>
 

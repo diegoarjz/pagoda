@@ -1,8 +1,9 @@
 #pragma once
 
-#include "math_lib/degrees.h"
-#include "math_lib/vec_base.h"
 #include "procedural_object_predicate.h"
+
+#include <pagoda/math_lib/degrees.h>
+#include <pagoda/math_lib/vec_base.h>
 
 namespace pagoda
 {

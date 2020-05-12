@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common/assertions.h"
-#include "common/profiler.h"
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/instrument/profiler.h>
 
 #include <memory>
 #include <unordered_map>

@@ -8,7 +8,7 @@
 #include "type_info.h"
 #include "value_visitor.h"
 
-#include "common/unimplemented.h"
+#include <pagoda/common/exception/unimplemented.h>
 
 namespace pagoda
 {

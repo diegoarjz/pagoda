@@ -1,4 +1,4 @@
-#include <parameter/variable.h>
+#include <pagoda/parameter/variable.h>
 
 #include <gtest/gtest.h>
 

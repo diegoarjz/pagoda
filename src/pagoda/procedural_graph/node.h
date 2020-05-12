@@ -1,10 +1,11 @@
 #ifndef PAGODA_PROCEDURAL_GRAPH_NODE_H_
 #define PAGODA_PROCEDURAL_GRAPH_NODE_H_
 
-#include "common/factory.h"
-#include "dynamic_value/builtin_class.h"
 #include "node_set.h"
-#include "procedural_objects/procedural_operation.h"
+
+#include <pagoda/common/factory.h>
+#include <pagoda/dynamic_value/builtin_class.h>
+#include <pagoda/procedural_objects/procedural_operation.h>
 
 #include <memory>
 #include <set>

@@ -1,10 +1,10 @@
 #ifndef PAGODA_GEOMETRY_CORE_GEOMETRY_H_
 #define PAGODA_GEOMETRY_CORE_GEOMETRY_H_
 
-#include <common/assertions.h>
-#include <common/logger.h>
-#include <common/profiler.h>
-#include <math_lib/vec_base.h>
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/instrument/profiler.h>
+#include <pagoda/math_lib/vec_base.h>
 
 #include <cstdint>
 

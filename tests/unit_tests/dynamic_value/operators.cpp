@@ -1,18 +1,18 @@
-#include <dynamic_value/binding/binary_ops.h>
-#include <dynamic_value/binding/has_operators.h>
-#include <dynamic_value/binding/unary_ops.h>
-#include <dynamic_value/boolean_value.h>
-#include <dynamic_value/dynamic_class.h>
-#include <dynamic_value/dynamic_instance.h>
-#include <dynamic_value/dynamic_value_base.h>
-#include <dynamic_value/float_value.h>
-#include <dynamic_value/function.h>
-#include <dynamic_value/integer_value.h>
-#include <dynamic_value/null_object_value.h>
-#include <dynamic_value/string_value.h>
-#include <dynamic_value/type_info.h>
-#include <dynamic_value/vector3.h>
-#include <dynamic_value/expression.h>
+#include <pagoda/dynamic_value/binding/binary_ops.h>
+#include <pagoda/dynamic_value/binding/has_operators.h>
+#include <pagoda/dynamic_value/binding/unary_ops.h>
+#include <pagoda/dynamic_value/boolean_value.h>
+#include <pagoda/dynamic_value/dynamic_class.h>
+#include <pagoda/dynamic_value/dynamic_instance.h>
+#include <pagoda/dynamic_value/dynamic_value_base.h>
+#include <pagoda/dynamic_value/expression.h>
+#include <pagoda/dynamic_value/float_value.h>
+#include <pagoda/dynamic_value/function.h>
+#include <pagoda/dynamic_value/integer_value.h>
+#include <pagoda/dynamic_value/null_object_value.h>
+#include <pagoda/dynamic_value/string_value.h>
+#include <pagoda/dynamic_value/type_info.h>
+#include <pagoda/dynamic_value/vector3.h>
 
 #include <gtest/gtest.h>
 

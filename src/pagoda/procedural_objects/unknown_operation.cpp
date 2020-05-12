@@ -2,5 +2,8 @@
 
 namespace pagoda
 {
-UnknownOperation::UnknownOperation(const std::string operationName) : Exception("Unknown operation " + operationName) {}
+UnknownOperation::UnknownOperation(const std::string operationName)
+    : common::exception::Exception("Unknown operation " + operationName)
+{
+}
 }  // namespace pagoda

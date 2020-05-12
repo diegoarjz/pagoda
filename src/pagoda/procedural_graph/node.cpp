@@ -1,9 +1,9 @@
 #include "node.h"
 
-#include "common/assertions.h"
-#include "dynamic_value/expression.h"
-#include "dynamic_value/type_info.h"
-#include "dynamic_value/value_not_found.h"
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/dynamic_value/expression.h>
+#include <pagoda/dynamic_value/type_info.h>
+#include <pagoda/dynamic_value/value_not_found.h>
 
 namespace pagoda
 {
@@ -53,6 +53,6 @@ void Node::SetExpressionVariables()
 
 std::string Node::ToString() const { return "<Node>"; }
 
-void Node::AcceptVisitor(ValueVisitorBase &visitor) { throw Exception("Unimplemented"); }
+void Node::AcceptVisitor(ValueVisitorBase &visitor) { throw common::exception::Exception("Unimplemented"); }
 
 }  // namespace pagoda

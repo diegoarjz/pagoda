@@ -1,12 +1,13 @@
 #include "extract_scope.h"
 
 #include "geometry_component.h"
-#include "geometry_operations/create_box.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
 #include "procedural_component.h"
 #include "procedural_object_system.h"
+
+#include <pagoda/geometry_operations/create_box.h>
 
 namespace pagoda
 {

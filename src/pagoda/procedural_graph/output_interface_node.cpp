@@ -1,7 +1,6 @@
 #include "output_interface_node.h"
 
 #include "construction_argument_not_found.h"
-#include "dynamic_value/get_value_as.h"
 #include "graph.h"
 #include "input_interface_node.h"
 #include "node.h"
@@ -11,7 +10,8 @@
 #include "router_node.h"
 #include "unsupported_node_link.h"
 
-#include <procedural_objects/procedural_operation.h>
+#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/procedural_objects/procedural_operation.h>
 
 namespace pagoda
 {

@@ -24,7 +24,7 @@ target_include_directories(
     pgscript_tests
     PUBLIC
         $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/pagoda>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/source
         ${Boost_INCLUDE_DIRS}

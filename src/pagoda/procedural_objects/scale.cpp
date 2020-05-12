@@ -1,16 +1,16 @@
 #include "scale.h"
 
-#include "dynamic_value/boolean_value.h"
-#include "dynamic_value/float_value.h"
-#include "dynamic_value/get_value_as.h"
 #include "geometry_component.h"
 #include "geometry_system.h"
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
-#include "math_lib/matrix_base.h"
 #include "procedural_object_system.h"
 
-#include "geometry_operations/matrix_transform.h"
+#include <pagoda/dynamic_value/boolean_value.h>
+#include <pagoda/dynamic_value/float_value.h>
+#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/geometry_operations/matrix_transform.h>
+#include <pagoda/math_lib/matrix_base.h>
 
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations.hpp>

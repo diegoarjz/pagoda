@@ -1,12 +1,12 @@
 #pragma once
 
-#include "common/exception.h"
+#include "pagoda/common/exception/exception.h"
 
 #include <string>
 
 namespace pagoda
 {
-class ConstructionArgumentNotFound : public Exception
+class ConstructionArgumentNotFound : public common::exception::Exception
 {
 public:
 	ConstructionArgumentNotFound(const std::string nodeName, const uint32_t nodeId, const std::string &argName);

@@ -1,6 +1,6 @@
 #include "scope.h"
 
-#include "math_lib/transpose.h"
+#include "pagoda/math_lib/transpose.h"
 
 #include <boost/qvm/map_mat_mat.hpp>
 #include <boost/qvm/map_mat_vec.hpp>

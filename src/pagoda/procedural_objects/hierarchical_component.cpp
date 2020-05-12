@@ -1,7 +1,8 @@
 #include "hierarchical_component.h"
 
-#include "common/profiler.h"
 #include "hierarchical_system.h"
+
+#include <pagoda/common/instrument/profiler.h>
 
 namespace pagoda
 {

@@ -1,13 +1,13 @@
 #ifndef PAGODA_NODE_FACTORY_H_
 #define PAGODA_NODE_FACTORY_H_
 
-#include "common/factory.h"
+#include "pagoda/common/factory.h"
 
 #include "node.h"
 
 namespace pagoda
 {
-class NodeFactory : public Factory<Node>
+class NodeFactory : public common::Factory<Node>
 {
 public:
 	NodeFactory();

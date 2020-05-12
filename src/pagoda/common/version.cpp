@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 
-namespace pagoda
+namespace pagoda::common
 {
 struct Feature
 {
@@ -86,4 +86,4 @@ std::string get_version_information()
 
 	return ss.str();
 }
-}  // namespace pagoda
+}  // namespace pagoda::common

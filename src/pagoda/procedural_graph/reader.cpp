@@ -1,14 +1,15 @@
 #include "reader.h"
 
+#include "parse_result.h"
+
 #include "reader/ast_interpreter.h"
 #include "reader/graph_definition_node.h"
 #include "reader/graph_reader_grammar.h"
 
-#include "common/assertions.h"
-#include "common/exception.h"
-#include "common/logger.h"
-#include "parse_result.h"
-#include "procedural_graph/node_factory.h"
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/exception/exception.h>
+#include <pagoda/procedural_graph/node_factory.h>
 
 #include <cstring>
 #include <exception>
@@ -36,7 +37,8 @@ struct GraphReader::Impl
 
 		if (!result || begin != end)
 		{
-			throw Exception("Syntax error while reading graph file. Starting in\n " + std::string(begin, end));
+			throw common::exception::Exception("Syntax error while reading graph file. Starting in\n " +
+			                                   std::string(begin, end));
 			m_currentParseResult.status = ParseResult::Status::UnknownError;
 			return nullptr;
 		}

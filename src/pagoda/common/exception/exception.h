@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace pagoda
+namespace pagoda::common::exception
 {
 class Exception
 {
@@ -14,4 +14,4 @@ public:
 private:
 	const std::string m_message;
 };
-}  // namespace pagoda
+}  // namespace pagoda::common::exception

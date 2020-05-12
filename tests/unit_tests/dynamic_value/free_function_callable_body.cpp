@@ -1,6 +1,6 @@
-#include <dynamic_value/boolean_value.h>
-#include <dynamic_value/free_function_callable_body.h>
-#include <dynamic_value/type_info.h>
+#include <pagoda/dynamic_value/boolean_value.h>
+#include <pagoda/dynamic_value/free_function_callable_body.h>
+#include <pagoda/dynamic_value/type_info.h>
 
 #include <gtest/gtest.h>
 

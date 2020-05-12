@@ -1,9 +1,10 @@
 #include "execution_queue.h"
 
-#include "../common/profiler.h"
 #include "breadth_first_node_visitor.h"
 #include "graph.h"
 #include "node.h"
+
+#include <pagoda/common/instrument/profiler.h>
 
 #include <unordered_map>
 

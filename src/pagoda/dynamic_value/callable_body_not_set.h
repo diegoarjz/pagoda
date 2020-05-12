@@ -1,10 +1,10 @@
 #pragma once
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 namespace pagoda
 {
-class CallableBodyNotSet : public Exception
+class CallableBodyNotSet : public common::exception::Exception
 {
 public:
 	CallableBodyNotSet(const std::string &dynamicValueName);

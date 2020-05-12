@@ -1,7 +1,7 @@
 #include "extract_faces.h"
 
-#include "common/profiler.h"
-#include "geometry_operations/explode_to_faces.h"
+#include <pagoda/common/instrument/profiler.h>
+#include <pagoda/geometry_operations/explode_to_faces.h>
 
 #include "geometry_component.h"
 #include "geometry_system.h"

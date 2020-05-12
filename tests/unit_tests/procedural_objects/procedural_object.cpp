@@ -1,10 +1,10 @@
-#include <procedural_objects/geometry_system.h>
+#include <pagoda/procedural_objects/geometry_system.h>
 
-#include <procedural_objects/geometry_component.h>
-#include <procedural_objects/hierarchical_component.h>
-#include <procedural_objects/hierarchical_system.h>
-#include <procedural_objects/procedural_object.h>
-#include <procedural_objects/procedural_object_system.h>
+#include <pagoda/procedural_objects/geometry_component.h>
+#include <pagoda/procedural_objects/hierarchical_component.h>
+#include <pagoda/procedural_objects/hierarchical_system.h>
+#include <pagoda/procedural_objects/procedural_object.h>
+#include <pagoda/procedural_objects/procedural_object_system.h>
 
 #include <gtest/gtest.h>
 
@@ -12,11 +12,13 @@ using namespace pagoda;
 
 TEST(ProceduralObject, hierarchical_component_set_parent)
 {
-    auto proceduralObject = std::make_shared<ProceduralObject>();
-    auto proceduralObject2 = std::make_shared<ProceduralObject>();
+	auto proceduralObject = std::make_shared<ProceduralObject>();
+	auto proceduralObject2 = std::make_shared<ProceduralObject>();
 	auto hierarchical_system = std::make_shared<HierarchicalSystem>();
-	auto parent = std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject));
-	auto child = std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject2));
+	auto parent =
+	    std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject));
+	auto child =
+	    std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject2));
 
 	hierarchical_system->SetParent(parent, child);
 	EXPECT_EQ(child->GetParent(), parent);

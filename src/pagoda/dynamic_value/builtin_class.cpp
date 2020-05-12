@@ -3,9 +3,6 @@
 #include "function.h"
 #include "type_info.h"
 
-#include "common/exception.h"
-#include "common/unimplemented.h"
-
 namespace pagoda
 {
 BuiltinClass::BuiltinClass(const TypeInfoPtr& typeInfo) : DynamicValueBase(typeInfo), ClassBase(typeInfo->GetTypeName())

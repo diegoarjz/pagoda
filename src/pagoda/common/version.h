@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace pagoda
+namespace pagoda::common
 {
 /**
  * Returns the current version for the project.
@@ -29,6 +29,6 @@ std::string get_version_information();
  * Checks whether pagoda was compiled with a given feature.
  */
 bool has_feature(const std::string &featureName);
-}  // namespace pagoda
+}  // namespace pagoda::common
 
 #endif

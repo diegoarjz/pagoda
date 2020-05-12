@@ -1,6 +1,6 @@
 #include "split_point_topology.h"
 
-#include "common/logger.h"
+#include <pagoda/common/debug/logger.h>
 
 namespace pagoda
 {
@@ -473,8 +473,8 @@ SplitPointTopology::FaceHandle SplitPointTopology::SplitFace(const FaceHandle &f
 	SetPoint(splitPoint_d_, point_p0, d_, p0);
 	SetPoint(splitPoint_d, point_p0, d, p0);
 
-    // Set the old face's split point to a point that we know is still in the old face
-    SetSplitPoint(m_faces.Get(f), splitPoint_a, f, a);
+	// Set the old face's split point to a point that we know is still in the old face
+	SetSplitPoint(m_faces.Get(f), splitPoint_a, f, a);
 
 #ifdef DEBUG
 	IsValid();

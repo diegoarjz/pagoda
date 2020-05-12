@@ -1,10 +1,11 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 #define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 
-#include "common/factory.h"
-#include "dynamic_value/builtin_class.h"
 #include "procedural_component.h"
 #include "procedural_operation_object_interface.h"
+
+#include <pagoda/common/factory.h>
+#include <pagoda/dynamic_value/builtin_class.h>
 
 #include <bitset>
 #include <list>

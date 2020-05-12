@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace pagoda
+namespace pagoda::common::debug
 {
 std::unique_ptr<Logger> Logger::sTrace = nullptr;
 std::unique_ptr<Logger> Logger::sDebug = nullptr;
@@ -215,4 +215,4 @@ void Logger::Shutdown()
 
 bool Logger::IsTraceEnabled(const TraceLogs &trace) { return trace_enabled[static_cast<uint32_t>(trace)]; }
 
-}  // namespace pagoda
+}  // namespace pagoda::common::debug

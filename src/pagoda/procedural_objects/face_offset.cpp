@@ -1,7 +1,5 @@
 #include "face_offset.h"
 
-#include "dynamic_value/float_value.h"
-#include "dynamic_value/get_value_as.h"
 #include "procedural_object_system.h"
 
 #include "geometry_component.h"
@@ -10,7 +8,9 @@
 #include "hierarchical_system.h"
 #include "procedural_component.h"
 
-#include "geometry_operations/face_offset.h"
+#include <pagoda/dynamic_value/float_value.h>
+#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/geometry_operations/face_offset.h>
 
 #include <memory>
 

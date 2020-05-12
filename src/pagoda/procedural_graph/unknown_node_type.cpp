@@ -3,7 +3,7 @@
 namespace pagoda
 {
 UnknownNodeTypeException::UnknownNodeTypeException(const std::string &nodeType)
-    : Exception("Unknown Node Type " + nodeType)
+    : common::exception::Exception("Unknown Node Type " + nodeType)
 {
 }
 }  // namespace pagoda

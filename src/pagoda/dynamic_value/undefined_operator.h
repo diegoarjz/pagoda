@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 #include <memory>
 #include <stdexcept>
@@ -11,7 +11,7 @@ namespace pagoda
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
-class UndefinedBinaryOperatorException : public Exception
+class UndefinedBinaryOperatorException : public common::exception::Exception
 {
 public:
 	UndefinedBinaryOperatorException(const std::string &op, const TypeInfoPtr &lhsType, const TypeInfoPtr &rhsType);
@@ -26,7 +26,7 @@ private:
 	const TypeInfoPtr &m_rhsType;
 };
 
-class UndefinedUnaryOperatorException : public Exception
+class UndefinedUnaryOperatorException : public common::exception::Exception
 {
 public:
 	UndefinedUnaryOperatorException(const std::string &op, const TypeInfoPtr &operand);

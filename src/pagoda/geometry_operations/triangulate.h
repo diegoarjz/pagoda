@@ -1,10 +1,10 @@
 #ifndef PAGODA_GEOMETRY_OPERATIONS_TRIANGULATE_H_
 #define PAGODA_GEOMETRY_OPERATIONS_TRIANGULATE_H_
 
-#include <geometry_core/geometry_builder.h>
-#include <geometry_core/geometry_sizes.h>
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/geometry_core/geometry_sizes.h>
 
-#include <common/logger.h>
+#include <pagoda/common/debug/logger.h>
 
 #include <cstdint>
 #include <memory>

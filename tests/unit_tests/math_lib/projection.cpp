@@ -1,6 +1,6 @@
-#include <math_lib/vec_base.h>
+#include <pagoda/math_lib/vec_base.h>
 
-#include <math_lib/projection.h>
+#include <pagoda/math_lib/projection.h>
 
 #include <gtest/gtest.h>
 

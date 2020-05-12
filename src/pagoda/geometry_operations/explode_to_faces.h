@@ -1,10 +1,10 @@
 #pragma once
 
-#include "common/assertions.h"
-#include "common/logger.h"
-#include "common/profiler.h"
-#include "geometry_core/geometry.h"
-#include "geometry_core/geometry_builder.h"
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/instrument/profiler.h>
+#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry_core/geometry_builder.h>
 
 namespace pagoda
 {

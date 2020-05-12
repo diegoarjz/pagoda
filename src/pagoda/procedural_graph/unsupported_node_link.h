@@ -1,10 +1,10 @@
 #pragma once
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 namespace pagoda
 {
-class UnsupportedNodeLink : Exception
+class UnsupportedNodeLink : common::exception::Exception
 {
 public:
 	UnsupportedNodeLink(const std::string &direction, const std::string nodeType);

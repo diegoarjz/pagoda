@@ -1,9 +1,10 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 #define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 
-#include "dynamic_value/builtin_class.h"
-#include "geometry_core/geometry.h"
 #include "procedural_component.h"
+
+#include <pagoda/dynamic_value/builtin_class.h>
+#include <pagoda/geometry_core/geometry.h>
 
 #include <bitset>
 #include <list>

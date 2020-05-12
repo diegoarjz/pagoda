@@ -1,7 +1,7 @@
-#include <procedural_objects/geometry_component.h>
-#include <procedural_objects/geometry_system.h>
-#include <procedural_objects/procedural_object.h>
-#include <procedural_objects/procedural_operation.h>
+#include <pagoda/procedural_objects/geometry_component.h>
+#include <pagoda/procedural_objects/geometry_system.h>
+#include <pagoda/procedural_objects/procedural_object.h>
+#include <pagoda/procedural_objects/procedural_operation.h>
 
 #include <gtest/gtest.h>
 

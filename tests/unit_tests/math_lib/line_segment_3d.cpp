@@ -1,7 +1,8 @@
-#include <math_lib/vec_base.h>
+#include <pagoda/math_lib/vec_base.h>
 
-#include <math_lib/length.h>
-#include <math_lib/line_segment_3d.h>
+#include <pagoda/math_lib/length.h>
+#include <pagoda/math_lib/line_segment_3d.h>
+
 #include <boost/qvm/vec_operations.hpp>
 
 #include <gtest/gtest.h>

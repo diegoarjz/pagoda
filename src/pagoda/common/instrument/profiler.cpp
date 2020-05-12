@@ -1,6 +1,6 @@
 #include "profiler.h"
 
-#include "assertions.h"
+#include "pagoda/common/debug/assertions.h"
 #include "statistics.h"
 
 #include <algorithm>
@@ -10,7 +10,7 @@
 #include <iostream>
 #include <list>
 
-namespace pagoda
+namespace pagoda::common::instrument
 {
 ProfilerManager::ProfilerManager() {}
 
@@ -160,4 +160,4 @@ void ConsoleProfilerLogger::Log(std::size_t nLines)
 	}
 }
 
-}  // namespace pagoda
+}  // namespace pagoda::common::instrument

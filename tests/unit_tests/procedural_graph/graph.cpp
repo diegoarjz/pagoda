@@ -1,10 +1,10 @@
-#include <procedural_graph/graph.h>
-#include <procedural_graph/input_interface_node.h>
-#include <procedural_graph/node.h>
-#include <procedural_graph/operation_node.h>
-#include <procedural_graph/output_interface_node.h>
+#include <pagoda/procedural_graph/graph.h>
+#include <pagoda/procedural_graph/input_interface_node.h>
+#include <pagoda/procedural_graph/node.h>
+#include <pagoda/procedural_graph/operation_node.h>
+#include <pagoda/procedural_graph/output_interface_node.h>
 
-#include <pagoda.h>
+#include <pagoda/pagoda.h>
 
 #include <gtest/gtest.h>
 
@@ -27,7 +27,7 @@ protected:
 	NodePtr input_interface_node;
 	NodePtr output_interface_node;
 	NodePtr operation_node;
-    Pagoda m_pagoda;
+	Pagoda m_pagoda;
 };
 
 TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_it_from_the_graph)

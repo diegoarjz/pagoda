@@ -1,7 +1,7 @@
-#include <procedural_graph/reader/graph_definition_node.h>
-#include <procedural_graph/reader/named_argument.h>
-#include <procedural_graph/reader/node_definition_node.h>
-#include <procedural_graph/reader/node_link_node.h>
+#include <pagoda/procedural_graph/reader/graph_definition_node.h>
+#include <pagoda/procedural_graph/reader/named_argument.h>
+#include <pagoda/procedural_graph/reader/node_definition_node.h>
+#include <pagoda/procedural_graph/reader/node_link_node.h>
 
 #include <gtest/gtest.h>
 

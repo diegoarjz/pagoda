@@ -1,9 +1,9 @@
 #ifndef PAGODA_GEOMETRY_CORE_SCOPE_H_
 #define PAGODA_GEOMETRY_CORE_SCOPE_H_
 
-#include <math_lib/matrix_base.h>
-#include <math_lib/plane.h>
-#include <math_lib/vec_base.h>
+#include <pagoda/math_lib/matrix_base.h>
+#include <pagoda/math_lib/plane.h>
+#include <pagoda/math_lib/vec_base.h>
 
 #include <boost/qvm/map_mat_vec.hpp>
 #include <boost/qvm/swizzle.hpp>

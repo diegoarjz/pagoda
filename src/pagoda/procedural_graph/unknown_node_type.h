@@ -1,12 +1,12 @@
 #pragma once
 
-#include "common/exception.h"
+#include <pagoda/common/exception/exception.h>
 
 #include <string>
 
 namespace pagoda
 {
-class UnknownNodeTypeException : public Exception
+class UnknownNodeTypeException : public common::exception::Exception
 {
 public:
 	UnknownNodeTypeException(const std::string &nodeType);

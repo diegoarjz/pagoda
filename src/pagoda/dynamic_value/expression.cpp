@@ -12,12 +12,12 @@
 #include "value_not_found.h"
 #include "value_visitor.h"
 
-#include "pgscript/intermediate/ast.h"
-#include "pgscript/intermediate/ast_visitor.h"
-#include "pgscript/interpreter/interpreter.h"
-#include "pgscript/parser/parser.h"
+#include <pagoda/pgscript/intermediate/ast.h>
+#include <pagoda/pgscript/intermediate/ast_visitor.h>
+#include <pagoda/pgscript/interpreter/interpreter.h>
+#include <pagoda/pgscript/parser/parser.h>
 
-#include "common/profiler.h"
+#include <pagoda/common/instrument/profiler.h>
 
 #include <unordered_map>
 

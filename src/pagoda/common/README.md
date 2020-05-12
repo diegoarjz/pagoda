@@ -27,7 +27,7 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
                                             const char *message)
 {
     // Print messages
-    
+
     return Fail::FailBehaviour::Halt; // or Fail::FailBehaviour::Continue
 }
 Fail::SetFailHandler(NewHandler);

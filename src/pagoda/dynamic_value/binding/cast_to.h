@@ -2,8 +2,9 @@
 
 #include "../get_value_as.h"
 #include "can_cast_to_native.h"
-#include "common/exception.h"
 #include "type_name.h"
+
+#include <pagoda/common/exception/exception.h>
 
 #include <memory>
 #include <type_traits>
@@ -14,10 +15,13 @@ namespace pagoda
  * Exception thrown if a cast is impossible.
  */
 template<class T, class C>
-class UnableToCast : public Exception
+class UnableToCast : public common::exception::Exception
 {
 public:
-	UnableToCast() : Exception("Unable to cast " + type_name<T>::GetName() + " to " + type_name<C>::GetName()) {}
+	UnableToCast()
+	    : common::exception::Exception("Unable to cast " + type_name<T>::GetName() + " to " + type_name<C>::GetName())
+	{
+	}
 };
 
 /**

@@ -3,9 +3,9 @@
 
 #include "geometry_system.h"
 
-#include "geometry_core/geometry.h"
-#include "geometry_core/geometry_builder.h"
-#include "geometry_core/scope.h"
+#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry_core/geometry_builder.h>
+#include <pagoda/geometry_core/scope.h>
 
 namespace pagoda
 {

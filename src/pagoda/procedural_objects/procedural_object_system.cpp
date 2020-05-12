@@ -1,8 +1,8 @@
 #include "procedural_object_system.h"
 
-#include "common/assertions.h"
-#include "common/logger.h"
-#include "common/profiler.h"
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/instrument/profiler.h>
 
 #include "procedural_component_system.h"
 #include "procedural_object.h"

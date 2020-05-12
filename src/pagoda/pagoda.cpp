@@ -1,37 +1,37 @@
 #include "pagoda.h"
 
-#include "common/factory.h"
-#include "common/file_util.h"
-#include "common/logger.h"
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/factory.h>
+#include <pagoda/common/fs/file_util.h>
 
-#include <procedural_graph/graph.h>
-#include <procedural_graph/input_interface_node.h>
-#include <procedural_graph/operation_node.h>
-#include <procedural_graph/output_interface_node.h>
-#include <procedural_graph/parameter_node.h>
-#include <procedural_graph/reader.h>
-#include <procedural_graph/router_node.h>
+#include <pagoda/procedural_graph/graph.h>
+#include <pagoda/procedural_graph/input_interface_node.h>
+#include <pagoda/procedural_graph/operation_node.h>
+#include <pagoda/procedural_graph/output_interface_node.h>
+#include <pagoda/procedural_graph/parameter_node.h>
+#include <pagoda/procedural_graph/reader.h>
+#include <pagoda/procedural_graph/router_node.h>
 
-#include <procedural_objects/clip_geometry.h>
-#include <procedural_objects/create_box.h>
-#include <procedural_objects/create_rect.h>
-#include <procedural_objects/create_sphere.h>
-#include <procedural_objects/export_geometry.h>
-#include <procedural_objects/extract_faces.h>
-#include <procedural_objects/extract_scope.h>
-#include <procedural_objects/extrude_geometry.h>
-#include <procedural_objects/face_offset.h>
-#include <procedural_objects/geometry_system.h>
-#include <procedural_objects/hierarchical_system.h>
-#include <procedural_objects/repeat_split.h>
-#include <procedural_objects/rotate.h>
-#include <procedural_objects/scale.h>
-#include <procedural_objects/split.h>
-#include <procedural_objects/translate.h>
-#include <procedural_objects/triangulate_geometry.h>
+#include <pagoda/procedural_objects/clip_geometry.h>
+#include <pagoda/procedural_objects/create_box.h>
+#include <pagoda/procedural_objects/create_rect.h>
+#include <pagoda/procedural_objects/create_sphere.h>
+#include <pagoda/procedural_objects/export_geometry.h>
+#include <pagoda/procedural_objects/extract_faces.h>
+#include <pagoda/procedural_objects/extract_scope.h>
+#include <pagoda/procedural_objects/extrude_geometry.h>
+#include <pagoda/procedural_objects/face_offset.h>
+#include <pagoda/procedural_objects/geometry_system.h>
+#include <pagoda/procedural_objects/hierarchical_system.h>
+#include <pagoda/procedural_objects/repeat_split.h>
+#include <pagoda/procedural_objects/rotate.h>
+#include <pagoda/procedural_objects/scale.h>
+#include <pagoda/procedural_objects/split.h>
+#include <pagoda/procedural_objects/translate.h>
+#include <pagoda/procedural_objects/triangulate_geometry.h>
 
-#include <procedural_objects/procedural_object_predicate_registry.h>
-#include <procedural_objects/scope_axis_direction_predicate.h>
+#include <pagoda/procedural_objects/procedural_object_predicate_registry.h>
+#include <pagoda/procedural_objects/scope_axis_direction_predicate.h>
 
 namespace pagoda
 {
@@ -122,7 +122,7 @@ public:
 	~Impl()
 	{
 		LOG_TRACE(Core, "Shutting down Pagoda");
-		Logger::Shutdown();
+		common::debug::Logger::Shutdown();
 	}
 
 	ProceduralObjectSystemPtr GetProceduralObjectSystem() { return m_proceduralObjectSystem; }
@@ -137,7 +137,7 @@ public:
 	{
 		LOG_TRACE(Core, "Creating Graph From File: " << filePath.c_str());
 		GraphReader reader(GetNodeFactory());
-		GraphPtr graph = reader.Read(file_util::LoadFileToString(filePath));
+		GraphPtr graph = reader.Read(common::fs::LoadFileToString(filePath));
 		return graph;
 	}
 
@@ -151,10 +151,7 @@ private:
 Pagoda::Pagoda() : m_implementation(std::make_unique<Pagoda::Impl>()) {}
 Pagoda::~Pagoda() {}
 
-ProceduralObjectSystemPtr Pagoda::GetProceduralObjectSystem()
-{
-	return m_implementation->GetProceduralObjectSystem();
-}
+ProceduralObjectSystemPtr Pagoda::GetProceduralObjectSystem() { return m_implementation->GetProceduralObjectSystem(); }
 
 OperationFactoryPtr Pagoda::GetOperationFactory() { return m_implementation->GetOperationFactory(); }
 

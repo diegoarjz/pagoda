@@ -1,11 +1,11 @@
-#include <procedural_objects/geometry_system.h>
+#include <pagoda/procedural_objects/geometry_system.h>
 
-#include <procedural_objects/geometry_component.h>
-#include <procedural_objects/hierarchical_component.h>
-#include <procedural_objects/hierarchical_system.h>
-#include <procedural_objects/procedural_object.h>
-#include <procedural_objects/procedural_object_system.h>
-#include <procedural_objects/scope_axis_direction_predicate.h>
+#include <pagoda/procedural_objects/geometry_component.h>
+#include <pagoda/procedural_objects/hierarchical_component.h>
+#include <pagoda/procedural_objects/hierarchical_system.h>
+#include <pagoda/procedural_objects/procedural_object.h>
+#include <pagoda/procedural_objects/procedural_object_system.h>
+#include <pagoda/procedural_objects/scope_axis_direction_predicate.h>
 
 #include <gtest/gtest.h>
 

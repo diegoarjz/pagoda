@@ -1,25 +1,25 @@
 #include "test_utils.h"
 
-#include <common/file_util.h>
+#include <pagoda/common/fs/file_util.h>
 
 bool g_asserted = false;
-pagoda::Fail::FailBehaviour AssertExpected(const char *condition, const char *file, const int line,
-                                             const char *message)
+pagoda::common::debug::Fail::FailBehaviour AssertExpected(const char *condition, const char *file, const int line,
+                                                          const char *message)
 {
 	g_asserted = true;
-	return pagoda::Fail::FailBehaviour::Continue;
+	return pagoda::common::debug::Fail::FailBehaviour::Continue;
 }
 
 ExpectAssert::ExpectAssert()
 {
 	g_asserted = false;
-	pagoda::Fail::SetFailHandler(AssertExpected);
+	pagoda::common::debug::Fail::SetFailHandler(AssertExpected);
 }
 
 ExpectAssert::~ExpectAssert()
 {
 	g_asserted = false;
-	pagoda::Fail::SetFailHandler(pagoda::DefaultHandler);
+	pagoda::common::debug::Fail::SetFailHandler(pagoda::common::debug::DefaultHandler);
 }
 
 bool ExpectAssert::Asserted() { return g_asserted; }
@@ -29,7 +29,7 @@ MatchFile::MatchFile(const boost::filesystem::path &filePath, bool saveFile)
 {
 	try
 	{
-		m_fileContents = pagoda::file_util::LoadFileToString(filePath.string());
+		m_fileContents = pagoda::common::fs::LoadFileToString(filePath.string());
 	}
 	catch (...)
 	{
@@ -41,8 +41,8 @@ bool MatchFile::Match(const std::string &in)
 {
 	if (m_saveFile)
 	{
-		pagoda::file_util::CreateDirectories(m_filePath.parent_path());
-		pagoda::file_util::WriteStringToFile(m_filePath.string(), in);
+		pagoda::common::fs::CreateDirectories(m_filePath.parent_path());
+		pagoda::common::fs::WriteStringToFile(m_filePath.string(), in);
 		m_fileContents = in;
 		return true;
 	}
