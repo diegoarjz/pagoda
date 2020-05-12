@@ -12,30 +12,31 @@
 #include <pagoda/procedural_graph/reader.h>
 #include <pagoda/procedural_graph/router_node.h>
 
-#include <pagoda/procedural_objects/clip_geometry.h>
-#include <pagoda/procedural_objects/create_box.h>
-#include <pagoda/procedural_objects/create_rect.h>
-#include <pagoda/procedural_objects/create_sphere.h>
-#include <pagoda/procedural_objects/export_geometry.h>
-#include <pagoda/procedural_objects/extract_faces.h>
-#include <pagoda/procedural_objects/extract_scope.h>
-#include <pagoda/procedural_objects/extrude_geometry.h>
-#include <pagoda/procedural_objects/face_offset.h>
+#include <pagoda/geometry/operations/clip_geometry.h>
+#include <pagoda/geometry/operations/create_box.h>
+#include <pagoda/geometry/operations/create_rect.h>
+#include <pagoda/geometry/operations/create_sphere.h>
+#include <pagoda/geometry/operations/export_geometry.h>
+#include <pagoda/geometry/operations/extract_faces.h>
+#include <pagoda/geometry/operations/extract_scope.h>
+#include <pagoda/geometry/operations/extrude_geometry.h>
+#include <pagoda/geometry/operations/face_offset.h>
+#include <pagoda/geometry/operations/repeat_split.h>
+#include <pagoda/geometry/operations/rotate.h>
+#include <pagoda/geometry/operations/scale.h>
+#include <pagoda/geometry/operations/split.h>
+#include <pagoda/geometry/operations/translate.h>
+#include <pagoda/geometry/operations/triangulate_geometry.h>
+
 #include <pagoda/procedural_objects/geometry_system.h>
 #include <pagoda/procedural_objects/hierarchical_system.h>
-#include <pagoda/procedural_objects/repeat_split.h>
-#include <pagoda/procedural_objects/rotate.h>
-#include <pagoda/procedural_objects/scale.h>
-#include <pagoda/procedural_objects/split.h>
-#include <pagoda/procedural_objects/translate.h>
-#include <pagoda/procedural_objects/triangulate_geometry.h>
-
 #include <pagoda/procedural_objects/procedural_object_predicate_registry.h>
 #include <pagoda/procedural_objects/scope_axis_direction_predicate.h>
 
 namespace pagoda
 {
 using namespace math;
+using namespace geometry::operations;
 
 class Pagoda::Impl
 {

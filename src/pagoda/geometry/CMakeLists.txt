@@ -1,0 +1,87 @@
+set(GEOMETRY_SRCS
+    "core/geometry.h"
+    "core/geometry_builder.h"
+    "core/geometry_exporter.h"
+    "core/geometry_sizes.h"
+    "core/indexed_container.h"
+    "core/scope.cpp"
+    "core/scope.h"
+    "core/split_point_topology.cpp"
+    "core/split_point_topology.h"
+    "algorithms/create_box.h"
+    "algorithms/create_rect.h"
+    "algorithms/create_sphere.h"
+    "algorithms/ear_clipping.h"
+    "algorithms/explode_to_faces.h"
+    "algorithms/extrusion.h"
+    "algorithms/extrusion_profile.h"
+    "algorithms/face_offset.h"
+    "algorithms/plane_splits.h"
+    "algorithms/triangulate.h"
+    "operations/clip_geometry.cpp"
+    "operations/clip_geometry.h"
+    "operations/create_box.cpp"
+    "operations/create_box.h"
+    "operations/create_rect.cpp"
+    "operations/create_rect.h"
+    "operations/create_sphere.cpp"
+    "operations/create_sphere.h"
+    "operations/export_geometry.cpp"
+    "operations/export_geometry.h"
+    "operations/extract_faces.cpp"
+    "operations/extract_faces.h"
+    "operations/extract_scope.cpp"
+    "operations/extract_scope.h"
+    "operations/extrude_geometry.cpp"
+    "operations/extrude_geometry.h"
+    "operations/face_offset.cpp"
+    "operations/face_offset.h"
+    "operations/repeat_split.cpp"
+    "operations/repeat_split.h"
+    "operations/rotate.cpp"
+    "operations/rotate.h"
+    "operations/scale.cpp"
+    "operations/scale.h"
+    "operations/split.cpp"
+    "operations/split.h"
+    "operations/translate.cpp"
+    "operations/translate.h"
+    "operations/triangulate_geometry.cpp"
+    "operations/triangulate_geometry.h"
+)
+
+add_library(geometry OBJECT ${GEOMETRY_SRCS})
+
+target_include_directories(
+    geometry
+    PRIVATE
+        $<INSTALL_INTERFACE:pagoda>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+        ${Boost_INCLUDE_DIRS}
+)
+
+target_compile_features(
+    geometry
+    PRIVATE
+        cxx_std_17
+)
+
+target_compile_options(
+    geometry
+    PRIVATE
+        -Wall
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+)
+
+target_compile_definitions(
+    geometry
+    PRIVATE
+        $<$<CONFIG:DEBUG>:DEBUG>
+)
+
+target_link_libraries(
+    geometry
+    PRIVATE
+        common
+)

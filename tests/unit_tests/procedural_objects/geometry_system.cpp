@@ -1,7 +1,8 @@
 #include "mock_objects.h"
 
-#include <pagoda/procedural_objects/create_rect.h>
-#include <pagoda/procedural_objects/extrude_geometry.h>
+#include <pagoda/geometry/operations/create_rect.h>
+#include <pagoda/geometry/operations/extrude_geometry.h>
+
 #include <pagoda/procedural_objects/geometry_component.h>
 #include <pagoda/procedural_objects/geometry_system.h>
 #include <pagoda/procedural_objects/hierarchical_component.h>

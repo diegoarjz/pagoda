@@ -7,7 +7,7 @@
 #include <pagoda/dynamic_value/set_value_from.h>
 #include <pagoda/dynamic_value/value_visitor.h>
 
-#include <pagoda/geometry_core/geometry_exporter.h>
+#include <pagoda/geometry/core/geometry_exporter.h>
 #include <pagoda/procedural_graph/default_scheduler.h>
 #include <pagoda/procedural_graph/execution_queue.h>
 #include <pagoda/procedural_graph/graph_dot_exporter.h>
@@ -22,13 +22,9 @@
 #include <pagoda/procedural_graph/router_node.h>
 
 #include <pagoda/pagoda.h>
-#include <pagoda/procedural_objects/create_rect.h>
-#include <pagoda/procedural_objects/export_geometry.h>
-#include <pagoda/procedural_objects/extrude_geometry.h>
 #include <pagoda/procedural_objects/geometry_component.h>
 #include <pagoda/procedural_objects/geometry_system.h>
 #include <pagoda/procedural_objects/hierarchical_system.h>
-#include <pagoda/procedural_objects/triangulate_geometry.h>
 
 #include <boost/program_options.hpp>
 

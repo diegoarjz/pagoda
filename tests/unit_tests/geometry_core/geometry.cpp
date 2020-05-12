@@ -1,4 +1,4 @@
-#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry/core/geometry.h>
 #include <pagoda/math/vec_base.h>
 
 #include <gtest/gtest.h>
@@ -7,6 +7,7 @@
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace geometry::core;
 
 class GeometryTest : public ::testing::Test
 {

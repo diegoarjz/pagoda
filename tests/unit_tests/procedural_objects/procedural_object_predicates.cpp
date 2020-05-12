@@ -13,6 +13,7 @@
 
 using namespace pagoda;
 using namespace pagoda::math;
+using namespace pagoda::geometry::core;
 
 class ProceduralObjectPredicateTest : public ::testing::Test
 {

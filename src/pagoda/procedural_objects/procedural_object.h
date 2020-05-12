@@ -4,7 +4,7 @@
 #include "procedural_component.h"
 
 #include <pagoda/dynamic_value/builtin_class.h>
-#include <pagoda/geometry_core/geometry.h>
+#include <pagoda/geometry/core/geometry.h>
 
 #include <bitset>
 #include <list>

@@ -1,5 +1,5 @@
 #include <pagoda/common/debug/logger.h>
-#include <pagoda/geometry_core/split_point_topology.h>
+#include <pagoda/geometry/core/split_point_topology.h>
 #include <pagoda/math/vec_base.h>
 
 #include <gtest/gtest.h>
@@ -8,6 +8,7 @@
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace pagoda::geometry::core;
 
 TEST(HandleImplicitCastTest, test_implicit_casts)
 {

@@ -3,9 +3,9 @@
 
 #include "geometry_system.h"
 
-#include <pagoda/geometry_core/geometry.h>
-#include <pagoda/geometry_core/geometry_builder.h>
-#include <pagoda/geometry_core/scope.h>
+#include <pagoda/geometry/core/geometry.h>
+#include <pagoda/geometry/core/geometry_builder.h>
+#include <pagoda/geometry/core/scope.h>
 
 namespace pagoda
 {
@@ -19,12 +19,12 @@ public:
 	std::string GetType() const override { return GetComponentSystemName(); }
 	void SetGeometry(GeometryPtr geom) { geometry = geom; }
 	GeometryPtr GetGeometry() const { return geometry; }
-	const Scope& GetScope() const;
-	void SetScope(const Scope& scope);
+	const geometry::core::Scope& GetScope() const;
+	void SetScope(const geometry::core::Scope& scope);
 
 private:
 	GeometryPtr geometry;
-	Scope m_scope;
+	geometry::core::Scope m_scope;
 };  // class GeometryComponent
 
 }  // namespace pagoda

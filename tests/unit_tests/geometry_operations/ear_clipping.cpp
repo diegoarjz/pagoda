@@ -1,9 +1,9 @@
 #include <pagoda/common/fs/file_util.h>
-#include <pagoda/geometry_core/geometry.h>
-#include <pagoda/geometry_core/geometry_builder.h>
-#include <pagoda/geometry_core/geometry_exporter.h>
-#include <pagoda/geometry_operations/create_box.h>
-#include <pagoda/geometry_operations/ear_clipping.h>
+#include <pagoda/geometry/algorithms/create_box.h>
+#include <pagoda/geometry/algorithms/ear_clipping.h>
+#include <pagoda/geometry/core/geometry.h>
+#include <pagoda/geometry/core/geometry_builder.h>
+#include <pagoda/geometry/core/geometry_exporter.h>
 #include <pagoda/math/math_utils.h>
 
 #include <gtest/gtest.h>
@@ -15,6 +15,8 @@
 using namespace pagoda;
 using namespace pagoda::common;
 using namespace pagoda::math;
+using namespace pagoda::geometry::core;
+using namespace pagoda::geometry::algorithms;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;

@@ -1,4 +1,4 @@
-#include <pagoda/geometry_core/indexed_container.h>
+#include <pagoda/geometry/core/indexed_container.h>
 #include <pagoda/math/vec_base.h>
 
 #include <iostream>
@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::geometry::core;
 
 class Value
 {

@@ -1,20 +1,21 @@
 #include <gtest/gtest.h>
 
-#include <common/file_util.h>
-#include <common/logger.h>
-#include <common/profiler.h>
-#include <procedural_graph/default_scheduler.h>
-#include <procedural_graph/graph.h>
-#include <procedural_graph/reader.h>
-#include <procedural_objects/geometry_system.h>
-#include <procedural_objects/hierarchical_system.h>
-#include <procedural_objects/procedural_object.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/fs/file_util.h>
+#include <pagoda/common/instrument/profiler.h>
+#include <pagoda/procedural_graph/default_scheduler.h>
+#include <pagoda/procedural_graph/graph.h>
+#include <pagoda/procedural_graph/reader.h>
+#include <pagoda/procedural_objects/geometry_system.h>
+#include <pagoda/procedural_objects/hierarchical_system.h>
+#include <pagoda/procedural_objects/procedural_object.h>
 
-#include <pagoda.h>
+#include <pagoda/pagoda.h>
 
 #include <boost/filesystem/path.hpp>
 
 using namespace pagoda;
+using namespace pagoda::common;
 
 class RegressionTest
 {
@@ -47,7 +48,7 @@ public:
 		dir /= m_regressionTestName;
 		if (!boost::filesystem::exists(dir))
 		{
-			file_util::CreateDirectories(dir);
+			fs::CreateDirectories(dir);
 		}
 		return dir;
 	}
@@ -60,7 +61,7 @@ public:
 	std::set<boost::filesystem::path> GetAllExpectedFiles()
 	{
 		std::set<boost::filesystem::path> files;
-		file_util::GetAllFilesWithExtension(GetExpectedResultsDir(), ".obj", std::inserter(files, files.end()));
+		fs::GetAllFilesWithExtension(GetExpectedResultsDir(), ".obj", std::inserter(files, files.end()));
 		return files;
 	}
 
@@ -76,7 +77,7 @@ public:
 	std::set<boost::filesystem::path> GetAllResultFiles()
 	{
 		std::set<boost::filesystem::path> files;
-		file_util::GetAllFilesWithExtension(GetResultsDir(), ".obj", std::inserter(files, files.end()));
+		fs::GetAllFilesWithExtension(GetResultsDir(), ".obj", std::inserter(files, files.end()));
 		return files;
 	}
 
@@ -111,8 +112,8 @@ public:
 			EXPECT_EQ(expectedFiles, resultFiles);
 			for (const auto& f : expectedFiles)
 			{
-				std::string resultFile = file_util::LoadFileToString(GetResultFile(f));
-				std::string expectedFile = file_util::LoadFileToString(GetExpectedResultFile(f));
+				std::string resultFile = fs::LoadFileToString(GetResultFile(f));
+				std::string expectedFile = fs::LoadFileToString(GetExpectedResultFile(f));
 				EXPECT_EQ(expectedFile, resultFile);
 			}
 		}
@@ -169,7 +170,7 @@ int main(int argc, char* argv[])
 
 	auto returnVal = RUN_ALL_TESTS();
 
-	ConsoleProfilerLogger consoleLogger(ProfilerManager::Instance());
+	instrument::ConsoleProfilerLogger consoleLogger(instrument::ProfilerManager::Instance());
 	consoleLogger.Log(20);
 
 	return returnVal;

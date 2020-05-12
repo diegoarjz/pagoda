@@ -5,17 +5,17 @@
 #include "procedural_object.h"
 #include "procedural_operation.h"
 
-#include <pagoda/geometry_core/geometry.h>
-#include <pagoda/geometry_core/geometry_builder.h>
-#include <pagoda/geometry_operations/create_rect.h>
-#include <pagoda/geometry_operations/extrusion.h>
+#include <pagoda/geometry/algorithms/create_rect.h>
+#include <pagoda/geometry/algorithms/extrusion.h>
+#include <pagoda/geometry/core/geometry.h>
+#include <pagoda/geometry/core/geometry_builder.h>
 
 namespace pagoda
 {
 // TODO: Maybe move these type defs to geometry core
-using Geometry = GeometryBase<>;
+using Geometry = geometry::core::GeometryBase<>;
 using GeometryPtr = std::shared_ptr<Geometry>;
-using GeometryBuilder = GeometryBuilderT<Geometry>;
+using GeometryBuilder = geometry::core::GeometryBuilderT<Geometry>;
 using GeometryBuilderPtr = std::shared_ptr<GeometryBuilder>;
 
 class GeometryComponent;
