@@ -1,7 +1,8 @@
 #pragma once
 
 #include <pagoda/common/debug/logger.h>
-#include <pagoda/math_lib/math_utils.h>
+#include <pagoda/math/math_utils.h>
+#include <pagoda/math/vec_base.h>
 
 #include <boost/qvm/vec_operations.hpp>
 
@@ -26,14 +27,11 @@ public:
 		LOG_TRACE(GeometryOperations,
 		          "CreateSphere. Radius: " << m_radius << " Slices: " << m_slices << " Stacks: " << m_stacks);
 
-		Vec3F top = {0, 0, m_radius};
-		Vec3F bottom{0, 0, -m_radius};
+		math::Vec3F top = {0, 0, m_radius};
+		math::Vec3F bottom{0, 0, -m_radius};
 
-		LOG_TRACE(GeometryOperations, "Top: " << top);
-		LOG_TRACE(GeometryOperations, "Bottom: " << bottom);
-
-		float sliceIncrementAngle = MathUtils<float>::two_pi / m_slices;
-		float stackIncrementAngle = MathUtils<float>::pi / static_cast<float>(2 + (m_stacks - 1));
+		float sliceIncrementAngle = math::MathUtils<float>::two_pi / m_slices;
+		float stackIncrementAngle = math::MathUtils<float>::pi / static_cast<float>(2 + (m_stacks - 1));
 
 		LOG_TRACE(GeometryOperations, "Slice Increment Angle: " << sliceIncrementAngle);
 		LOG_TRACE(GeometryOperations, "Stack Increment Angle: " << stackIncrementAngle);
@@ -52,7 +50,7 @@ public:
 			{
 				auto sinTheta = std::sin(theta);
 				points.push_back(builder.AddPoint(
-				    m_radius * Vec3F{sinTheta * std::cos(omega), sinTheta * std::sin(omega), std::cos(theta)}));
+				    m_radius * math::Vec3F{sinTheta * std::cos(omega), sinTheta * std::sin(omega), std::cos(theta)}));
 			}
 		}
 		auto topIndex = builder.AddPoint(top);

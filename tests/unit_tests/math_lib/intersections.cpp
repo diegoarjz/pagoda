@@ -1,12 +1,13 @@
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
-#include <pagoda/math_lib/intersection.h>
+#include <pagoda/math/intersection.h>
 
 #include <boost/qvm/vec_operations.hpp>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(PlaneVsPlaneIntersectionTest, when_the_planes_intersect_should_return_a_line_intersection)
 {

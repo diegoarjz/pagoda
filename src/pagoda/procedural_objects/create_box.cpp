@@ -14,6 +14,8 @@
 
 namespace pagoda
 {
+using namespace math;
+
 const std::string CreateBoxGeometry::outputGeometry("out");
 const char* CreateBoxGeometry::name = "CreateBoxGeometry";
 

@@ -22,18 +22,18 @@ public:
 		float halfYSize = 0.5f * ySize;
 		float halfZSize = 0.5f * zSize;
 
-		m_points[0] = Vec3F{-halfXSize, -halfYSize, -halfZSize};
-		m_points[1] = Vec3F{halfXSize, -halfYSize, -halfZSize};
-		m_points[2] = Vec3F{-halfXSize, halfYSize, -halfZSize};
-		m_points[3] = Vec3F{halfXSize, halfYSize, -halfZSize};
+		m_points[0] = math::Vec3F{-halfXSize, -halfYSize, -halfZSize};
+		m_points[1] = math::Vec3F{halfXSize, -halfYSize, -halfZSize};
+		m_points[2] = math::Vec3F{-halfXSize, halfYSize, -halfZSize};
+		m_points[3] = math::Vec3F{halfXSize, halfYSize, -halfZSize};
 
-		m_points[4] = Vec3F{-halfXSize, -halfYSize, halfZSize};
-		m_points[5] = Vec3F{halfXSize, -halfYSize, halfZSize};
-		m_points[6] = Vec3F{-halfXSize, halfYSize, halfZSize};
-		m_points[7] = Vec3F{halfXSize, halfYSize, halfZSize};
+		m_points[4] = math::Vec3F{-halfXSize, -halfYSize, halfZSize};
+		m_points[5] = math::Vec3F{halfXSize, -halfYSize, halfZSize};
+		m_points[6] = math::Vec3F{-halfXSize, halfYSize, halfZSize};
+		m_points[7] = math::Vec3F{halfXSize, halfYSize, halfZSize};
 	}
 
-	CreateBox(const std::array<Vec3F, 8> &points) : m_points(points) {}
+	CreateBox(const std::array<math::Vec3F, 8> &points) : m_points(points) {}
 
 	CreateBox(const Scope &s) : m_points(s.GetWorldPoints()) {}
 
@@ -41,12 +41,6 @@ public:
 	{
 		START_PROFILE;
 		LOG_TRACE(GeometryOperations, "CreateBox.");
-#ifdef DEBUG
-		for (auto i = 0u; i < 8; ++i)
-		{
-			LOG_TRACE(GeometryOperations, " Point: " << to_string(m_points[i]));
-		}
-#endif
 
 		GeometryBuilderT<Geometry> builder(geometryOut);
 		std::array<typename Geometry::Index_t, 8> pointIndices = {
@@ -105,7 +99,7 @@ public:
 	}
 
 private:
-	std::array<Vec3F, 8> m_points;
+	std::array<math::Vec3F, 8> m_points;
 };
 
 }  // namespace pagoda

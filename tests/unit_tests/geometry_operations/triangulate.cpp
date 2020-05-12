@@ -9,6 +9,7 @@
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;

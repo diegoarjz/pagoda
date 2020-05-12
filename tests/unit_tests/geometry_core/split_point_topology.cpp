@@ -1,6 +1,6 @@
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/geometry_core/split_point_topology.h>
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
 #include <gtest/gtest.h>
 #include <algorithm>

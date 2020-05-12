@@ -1,11 +1,11 @@
 #include "scope.h"
 
-#include "pagoda/math_lib/transpose.h"
-
 #include <boost/qvm/map_mat_mat.hpp>
 #include <boost/qvm/map_mat_vec.hpp>
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/vec_operations.hpp>
+
+using namespace pagoda::math;
 
 namespace pagoda
 {

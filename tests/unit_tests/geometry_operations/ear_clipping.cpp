@@ -4,7 +4,7 @@
 #include <pagoda/geometry_core/geometry_exporter.h>
 #include <pagoda/geometry_operations/create_box.h>
 #include <pagoda/geometry_operations/ear_clipping.h>
-#include <pagoda/math_lib/math_utils.h>
+#include <pagoda/math/math_utils.h>
 
 #include <gtest/gtest.h>
 
@@ -14,6 +14,7 @@
 
 using namespace pagoda;
 using namespace pagoda::common;
+using namespace pagoda::math;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;

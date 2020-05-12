@@ -1,7 +1,7 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_REPEAT_SPLIT_H_
 #define PAGODA_PROCEDURAL_OBJECTS_REPEAT_SPLIT_H_
 
-#include <pagoda/math_lib/plane.h>
+#include <pagoda/math/plane.h>
 
 #include "procedural_operation.h"
 
@@ -22,7 +22,8 @@ public:
 	void DoWork() override;
 
 private:
-	std::vector<Plane<float>> CreatePlanes(const Scope &scope, const float &size, const std::string &axis, bool adjust);
+	std::vector<math::Plane<float>> CreatePlanes(const Scope &scope, const float &size, const std::string &axis,
+	                                             bool adjust);
 };
 }  // namespace pagoda
 

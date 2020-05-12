@@ -5,7 +5,7 @@
 #include <pagoda/geometry_core/geometry.h>
 #include <pagoda/geometry_core/geometry_builder.h>
 
-#include <pagoda/math_lib/bissectrix.h>
+#include <pagoda/math/bissectrix.h>
 
 namespace pagoda
 {
@@ -31,15 +31,15 @@ public:
 
 		for (auto fIter = geometryIn->FacesBegin(); fIter != geometryIn->FacesEnd(); ++fIter)
 		{
-			std::vector<Vec3F> outerPoints;
-			std::vector<Vec3F> innerPoints;
+			std::vector<math::Vec3F> outerPoints;
+			std::vector<math::Vec3F> innerPoints;
 			for (auto fvIter = geometryIn->FaceSplitPointCirculatorBegin(*fIter); fvIter; ++fvIter)
 			{
 				auto curr = geometryIn->GetPosition(geometryIn->GetPoint(*fvIter));
 				auto prev = geometryIn->GetPosition(geometryIn->GetPoint(geometryIn->GetPrevSplitPoint(*fvIter)));
 				auto next = geometryIn->GetPosition(geometryIn->GetPoint(geometryIn->GetNextSplitPoint(*fvIter)));
 
-				auto currBiss = m_amount * bissectrix((prev - curr), (next - curr));
+				auto currBiss = m_amount * math::bissectrix((prev - curr), (next - curr));
 
 				outerPoints.push_back(curr);
 				innerPoints.push_back(curr + currBiss);

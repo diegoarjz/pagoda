@@ -4,7 +4,7 @@
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/instrument/profiler.h>
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
 #include <cstdint>
 
@@ -23,7 +23,7 @@ namespace pagoda
 struct DefaultVertexAttributes
 {
 	/// Normal at the point. May differ from the face normal.
-	Vec3F m_normal;
+	math::Vec3F m_normal;
 };  // struct VertAttributes
 
 /**
@@ -39,7 +39,7 @@ struct DefaultEdgeAttributes
 struct DefaultFaceAttributes
 {
 	/// Face normal.
-	Vec3F m_normal;
+	math::Vec3F m_normal;
 };
 
 /**
@@ -68,7 +68,7 @@ public:
 	using FaceAttributes = F;
 	using EdgeAttributes = E;
 	using VertexAttributes = V;
-	using PositionType = Vec3F;
+	using PositionType = math::Vec3F;
 
 	void SetPosition(const Index_t &index, const PositionType &p) { m_vertexPositions.GetOrCreate(index, p) = p; }
 

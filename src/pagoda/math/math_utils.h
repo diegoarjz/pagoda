@@ -1,6 +1,6 @@
 #pragma once
 
-namespace pagoda
+namespace pagoda::math
 {
 template<class T>
 class MathUtils
@@ -23,4 +23,4 @@ public:
 	}
 };
 
-}  // namespace pagoda
+}  // namespace pagoda::math

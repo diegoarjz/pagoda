@@ -8,7 +8,7 @@
 
 #include <boost/qvm/vec_operations.hpp>
 
-namespace pagoda
+namespace pagoda::math
 {
 template<class T, typename I>
 struct Intersection
@@ -119,6 +119,6 @@ Intersection<PlaneLineIntersection, boost::qvm::vec<Rep, 3>> intersection(const 
 {
 	return intersection(p, l);
 }
-}  // namespace pagoda
+}  // namespace pagoda::math
 
 #endif

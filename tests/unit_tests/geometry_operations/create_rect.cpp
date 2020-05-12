@@ -1,7 +1,7 @@
 #include <pagoda/geometry_core/geometry.h>
 #include <pagoda/geometry_core/geometry_exporter.h>
 #include <pagoda/geometry_operations/create_rect.h>
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
 #include "../test_utils.h"
 
@@ -10,6 +10,7 @@
 #include <memory>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;

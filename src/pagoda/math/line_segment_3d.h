@@ -6,7 +6,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-namespace pagoda
+namespace pagoda::math
 {
 template<class Rep>
 class LineSegment3D
@@ -49,6 +49,6 @@ private:
 	VectorType m_supportVector;  ///< This line's supporting vector
 };
 
-}  // namespace pagoda
+}  // namespace pagoda::math
 
 #endif

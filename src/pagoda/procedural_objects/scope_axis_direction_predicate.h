@@ -2,8 +2,8 @@
 
 #include "procedural_object_predicate.h"
 
-#include <pagoda/math_lib/degrees.h>
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/degrees.h>
+#include <pagoda/math/vec_base.h>
 
 namespace pagoda
 {
@@ -16,8 +16,8 @@ public:
 	/**
 	 * Constructs the predicate with the \p direction and a \p tolerance.
 	 */
-	ScopeAxisDirectionPredicate(ProceduralObjectSystemPtr objectSystem, char scopeAxis, const Vec3F& direction,
-	                            const Degrees<float>& tolerance = Degrees<float>(0.0f));
+	ScopeAxisDirectionPredicate(ProceduralObjectSystemPtr objectSystem, char scopeAxis, const math::Vec3F& direction,
+	                            const math::Degrees<float>& tolerance = math::Degrees<float>(0.0f));
 
 	virtual ~ScopeAxisDirectionPredicate();
 
@@ -33,8 +33,8 @@ public:
 
 private:
 	char m_scopeAxis;
-	Vec3F m_direction;
-	Degrees<float> m_tolerance;
+	math::Vec3F m_direction;
+	math::Degrees<float> m_tolerance;
 
 	GeometrySystemPtr m_geometrySystem;
 };

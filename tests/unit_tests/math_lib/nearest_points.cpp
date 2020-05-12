@@ -1,8 +1,9 @@
-#include <pagoda/math_lib/nearest_points.h>
+#include <pagoda/math/nearest_points.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(LineVsLineNearestPointsTest, when_lines_dont_interset_should_return_the_nearest_points_on_both)
 {

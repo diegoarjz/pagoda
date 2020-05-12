@@ -8,7 +8,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-namespace pagoda
+namespace pagoda::math
 {
 /**
  * Calculates the projection of point \p p onto the line \p l
@@ -59,6 +59,6 @@ boost::qvm::vec<Rep, 3> projection(const boost::qvm::vec<Rep, 3> &p, const Plane
 	auto dot = boost::qvm::dot(plane.GetPoint() - p, planeNormal);
 	return p + dot * planeNormal;
 }
-}  // namespace pagoda
+}  // namespace pagoda::math
 
 #endif

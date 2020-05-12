@@ -1,11 +1,12 @@
-#include <pagoda/math_lib/plane.h>
-#include <pagoda/math_lib/projection.h>
+#include <pagoda/math/plane.h>
+#include <pagoda/math/projection.h>
 
 #include <boost/qvm/vec_operations.hpp>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(Plane, when_using_default_constructor_should_construct_the_xy_plane)
 {

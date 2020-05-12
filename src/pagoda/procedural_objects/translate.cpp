@@ -10,13 +10,15 @@
 #include <pagoda/dynamic_value/float_value.h>
 #include <pagoda/dynamic_value/get_value_as.h>
 #include <pagoda/geometry_operations/matrix_transform.h>
-#include <pagoda/math_lib/matrix_base.h>
+#include <pagoda/math/matrix_base.h>
 
 #include <boost/qvm/map_mat_vec.hpp>
 #include <boost/qvm/map_vec_mat.hpp>
 
 namespace pagoda
 {
+using namespace math;
+
 const std::string Translate::s_inputGeometry("in");
 const std::string Translate::s_outputGeometry("out");
 

@@ -1,10 +1,11 @@
-#include <pagoda/math_lib/line_3d.h>
+#include <pagoda/math/line_3d.h>
 
 #include <gtest/gtest.h>
 
 #include <boost/qvm/vec_operations.hpp>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(Line3D, when_using_default_constructor_should_create_the_x_axis)
 {

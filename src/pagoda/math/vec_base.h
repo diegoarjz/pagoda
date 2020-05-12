@@ -8,7 +8,7 @@
 
 #include <boost/qvm/vec.hpp>
 
-namespace pagoda
+namespace pagoda::math
 {
 template<int Size, class Rep>
 std::ostream& operator<<(std::ostream& o, const boost::qvm::vec<Rep, Size>& vec)
@@ -39,6 +39,6 @@ using Vec2D = boost::qvm::vec<double, 2>;
 using Vec3D = boost::qvm::vec<double, 3>;
 using Vec4D = boost::qvm::vec<double, 4>;
 
-}  // namespace pagoda
+}  // namespace pagoda::math
 
 #endif

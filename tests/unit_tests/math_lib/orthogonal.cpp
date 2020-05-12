@@ -1,12 +1,13 @@
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
-#include <pagoda/math_lib/orthogonal.h>
+#include <pagoda/math/orthogonal.h>
 
 #include <boost/qvm/vec_operations.hpp>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(Orthogonal, when_calculating_the_orthogonal_vector_of_a_2d_vector_should_have_zero_as_dot_product)
 {

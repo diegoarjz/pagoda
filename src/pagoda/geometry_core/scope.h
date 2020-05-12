@@ -1,9 +1,9 @@
 #ifndef PAGODA_GEOMETRY_CORE_SCOPE_H_
 #define PAGODA_GEOMETRY_CORE_SCOPE_H_
 
-#include <pagoda/math_lib/matrix_base.h>
-#include <pagoda/math_lib/plane.h>
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/matrix_base.h>
+#include <pagoda/math/plane.h>
+#include <pagoda/math/vec_base.h>
 
 #include <boost/qvm/map_mat_vec.hpp>
 #include <boost/qvm/swizzle.hpp>
@@ -57,47 +57,47 @@ public:
 	};
 
 	Scope();
-	Scope(const Vec3F &pos, const Vec3F &size, const Mat3x3F &rot);
-	Scope(const std::array<Vec3F, 8> &boxPoints);
+	Scope(const math::Vec3F &pos, const math::Vec3F &size, const math::Mat3x3F &rot);
+	Scope(const std::array<math::Vec3F, 8> &boxPoints);
 
-	Vec3F GetPosition() const;
-	void SetPosition(const Vec3F &pos);
-	Vec3F GetSize() const;
-	void SetSize(const Vec3F &size);
-	Mat3x3F GetRotation() const;
-	void SetRotation(const Mat3x3F &rotation);
-	Mat3x3F GetInverseRotation() const;
+	math::Vec3F GetPosition() const;
+	void SetPosition(const math::Vec3F &pos);
+	math::Vec3F GetSize() const;
+	void SetSize(const math::Vec3F &size);
+	math::Mat3x3F GetRotation() const;
+	void SetRotation(const math::Mat3x3F &rotation);
+	math::Mat3x3F GetInverseRotation() const;
 
-	Vec3F GetXAxis() const;
-	Vec3F GetYAxis() const;
-	Vec3F GetZAxis() const;
-	Vec3F GetAxis(const std::string &axisName) const;
-	Vec3F GetAxis(char axisName) const;
+	math::Vec3F GetXAxis() const;
+	math::Vec3F GetYAxis() const;
+	math::Vec3F GetZAxis() const;
+	math::Vec3F GetAxis(const std::string &axisName) const;
+	math::Vec3F GetAxis(char axisName) const;
 
-	Plane<float> GetXYPlane() const;
-	Plane<float> GetXZPlane() const;
-	Plane<float> GetYZPlane() const;
+	math::Plane<float> GetXYPlane() const;
+	math::Plane<float> GetXZPlane() const;
+	math::Plane<float> GetYZPlane() const;
 
-	Vec3F LocalPointInWorld(const Vec3F &localPoint) const;
-	Vec3F GetLocalPoint(const BoxPoints &p) const;
-	Vec3F GetWorldPoint(const BoxPoints &p) const;
-	std::array<Vec3F, 8> GetWorldPoints() const;
-	Vec3F GetLocalVector(const Vec3F &worldVector) const;
-	Vec3F GetWorldVector(const Vec3F &localVector) const;
+	math::Vec3F LocalPointInWorld(const math::Vec3F &localPoint) const;
+	math::Vec3F GetLocalPoint(const BoxPoints &p) const;
+	math::Vec3F GetWorldPoint(const BoxPoints &p) const;
+	std::array<math::Vec3F, 8> GetWorldPoints() const;
+	math::Vec3F GetLocalVector(const math::Vec3F &worldVector) const;
+	math::Vec3F GetWorldVector(const math::Vec3F &localVector) const;
 
-	Vec3F GetCenterPointInWorld() const;
-	Vec3F GetCenterPointInLocal() const;
+	math::Vec3F GetCenterPointInWorld() const;
+	math::Vec3F GetCenterPointInLocal() const;
 
 	template<class Geometry>
-	static Scope FromGeometryAndConstrainedRotation(const std::shared_ptr<Geometry> geom, const Mat3x3F &rotation)
+	static Scope FromGeometryAndConstrainedRotation(const std::shared_ptr<Geometry> geom, const math::Mat3x3F &rotation)
 	{
 		Scope s;
 		auto pIter = geom->PointsBegin();
 		auto p0 = geom->GetPosition(*pIter);
 		s.SetRotation(rotation);
-		auto xAxis = Vec3F(boost::qvm::col<0>(rotation));
-		auto yAxis = Vec3F(boost::qvm::col<1>(rotation));
-		auto zAxis = Vec3F(boost::qvm::col<2>(rotation));
+		auto xAxis = math::Vec3F(boost::qvm::col<0>(rotation));
+		auto yAxis = math::Vec3F(boost::qvm::col<1>(rotation));
+		auto zAxis = math::Vec3F(boost::qvm::col<2>(rotation));
 
 		float minX = std::numeric_limits<float>::max();
 		float maxX = -std::numeric_limits<float>::max();
@@ -121,7 +121,7 @@ public:
 			minZ = std::min(minZ, zProjection);
 			maxZ = std::max(maxZ, zProjection);
 		}
-		Vec3F size{maxX - minX, maxY - minY, maxZ - minZ};
+		math::Vec3F size{maxX - minX, maxY - minY, maxZ - minZ};
 		s.SetPosition(p0 + xAxis * minX + yAxis * minY + zAxis * minZ);
 		s.SetSize(size);
 
@@ -144,7 +144,7 @@ public:
 		auto zAxis = boost::qvm::normalized(boost::qvm::cross(xAxis, yAxis));
 		yAxis = boost::qvm::normalized(boost::qvm::cross(zAxis, xAxis));
 
-		Mat3x3F rotation;
+		math::Mat3x3F rotation;
 		boost::qvm::col<0>(rotation) = xAxis;
 		boost::qvm::col<1>(rotation) = yAxis;
 		boost::qvm::col<2>(rotation) = zAxis;
@@ -154,11 +154,11 @@ public:
 
 private:
 	/// Scope position in world coordinates
-	Vec3F m_position;
+	math::Vec3F m_position;
 	/// Scope size in world coordinates
-	Vec3F m_size;
+	math::Vec3F m_size;
 	/// Scope rotation
-	Mat3x3F m_rotation;
+	math::Mat3x3F m_rotation;
 };  // class Scope
 }  // namespace pagoda
 #endif

@@ -5,7 +5,7 @@
 #include "procedural_object_system.h"
 
 #include <pagoda/geometry_core/scope.h>
-#include <pagoda/math_lib/radians.h>
+#include <pagoda/math/radians.h>
 
 #include <boost/qvm/vec_operations.hpp>
 
@@ -14,6 +14,8 @@
 
 namespace pagoda
 {
+using namespace math;
+
 ScopeAxisDirectionPredicate::ScopeAxisDirectionPredicate(ProceduralObjectSystemPtr objectSystem, char scopeAxis,
                                                          const Vec3F& direction, const Degrees<float>& tolerance)
     : ProceduralObjectPredicate(objectSystem),

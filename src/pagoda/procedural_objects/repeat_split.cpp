@@ -15,6 +15,8 @@
 
 namespace pagoda
 {
+using namespace math;
+
 const std::string RepeatSplit::inputGeometry("in");
 const std::string RepeatSplit::outputGeometry("out");
 const char* RepeatSplit::name = "RepeatSplit";

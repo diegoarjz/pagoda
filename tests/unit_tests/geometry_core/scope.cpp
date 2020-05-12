@@ -9,6 +9,8 @@
 #include <boost/qvm/vec_operations.hpp>
 
 using namespace pagoda;
+using namespace pagoda::math;
+
 using GeometryType = GeometryBase<>;
 
 TEST(Scope, test_scope_construction)

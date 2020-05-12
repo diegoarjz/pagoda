@@ -37,22 +37,22 @@ void CreateRectGeometry::DoWork()
 	float width = get_value_as<float>(*GetValue("width"));
 	float height = get_value_as<float>(*GetValue("height"));
 	std::string planeName = get_value_as<std::string>(*GetValue("plane"));
-	Vec3F rectXAxis;
-	Vec3F rectYAxis;
+	math::Vec3F rectXAxis;
+	math::Vec3F rectYAxis;
 
 	switch (planeName[0])
 	{
 		case 'x':
-			rectXAxis = Vec3F{0, 1, 0};
-			rectYAxis = Vec3F{0, 0, 1};
+			rectXAxis = math::Vec3F{0, 1, 0};
+			rectYAxis = math::Vec3F{0, 0, 1};
 			break;
 		case 'y':
-			rectXAxis = Vec3F{1, 0, 0};
-			rectYAxis = Vec3F{0, 0, -1};
+			rectXAxis = math::Vec3F{1, 0, 0};
+			rectYAxis = math::Vec3F{0, 0, -1};
 			break;
 		case 'z':
-			rectXAxis = Vec3F{1, 0, 0};
-			rectYAxis = Vec3F{0, 1, 0};
+			rectXAxis = math::Vec3F{1, 0, 0};
+			rectYAxis = math::Vec3F{0, 1, 0};
 			break;
 		default:
 			throw common::exception::Exception(
@@ -71,8 +71,8 @@ void CreateRectGeometry::DoWork()
 	    geometrySystem->CreateComponentAs<GeometryComponent>(object);
 
 	geometry_component->SetGeometry(geometry);
-	geometry_component->SetScope(
-	    Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
+	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
+	    geometry, math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
 
 	std::shared_ptr<HierarchicalComponent> hierarchical_component =
 	    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(object);

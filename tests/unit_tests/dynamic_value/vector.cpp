@@ -3,13 +3,14 @@
 #include <pagoda/dynamic_value/type_info.h>
 #include <pagoda/dynamic_value/vector3.h>
 
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
 #include <gtest/gtest.h>
 
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(Vector3, test_constructions)
 {

@@ -7,6 +7,8 @@
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/instrument/profiler.h>
 
+#include <pagoda/math/vec_base.h>
+
 #include <boost/qvm/vec_access.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
@@ -97,20 +99,12 @@ public:
 			DBG_ASSERT_MSG(m_faceIndices.size() >= 3, "Trying to close a face with less than 3 points");
 
 			LOG_TRACE(GeometryCore, "Closing face");
-#ifdef DEBUG
-			for (const auto &i : m_faceIndices)
-			{
-				LOG_TRACE(GeometryCore, " Face Point Index: "
-				                            << i << ". Topology Point Index: " << m_builder->m_pointData.Get(i).m_index
-				                            << ". Position: " << m_builder->m_pointData.Get(i).m_position);
-			}
-#endif
 
 			auto pd0 = m_builder->m_pointData.Get(m_faceIndices[0]);
 			auto pd1 = m_builder->m_pointData.Get(m_faceIndices[1]);
 			auto pd2 = m_builder->m_pointData.Get(m_faceIndices[2]);
 
-			Vec3F normal{0, 0, 0};
+			math::Vec3F normal{0, 0, 0};
 			for (auto i = 0u; i < m_faceIndices.size(); ++i)
 			{
 				auto nextIndex = (i + 1) % m_faceIndices.size();
@@ -232,8 +226,6 @@ public:
 	Index_t AddPoint(const PositionType &pos)
 	{
 		START_PROFILE;
-		LOG_TRACE(GeometryCore, "Adding point with position " << pos << " to geometry builder");
-
 		return m_pointData.Create(PointData(pos));
 	}
 

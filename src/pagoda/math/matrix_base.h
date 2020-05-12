@@ -4,7 +4,7 @@
 
 #include <ostream>
 
-namespace pagoda
+namespace pagoda::math
 {
 template<int NumCols, int NumRows, class Rep>
 std::ostream &operator<<(std::ostream &o, const boost::qvm::mat<Rep, NumRows, NumCols> &mat)
@@ -26,4 +26,4 @@ using Mat2x2F = boost::qvm::mat<float, 2, 2>;
 using Mat3x3F = boost::qvm::mat<float, 3, 3>;
 using Mat4x4F = boost::qvm::mat<float, 4, 4>;
 
-}  // namespace pagoda
+}  // namespace pagoda::math

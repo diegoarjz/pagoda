@@ -1,13 +1,13 @@
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
-#include <pagoda/math_lib/length.h>
-#include <pagoda/math_lib/line_segment_3d.h>
+#include <pagoda/math/line_segment_3d.h>
 
 #include <boost/qvm/vec_operations.hpp>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(LineSegment3D, when_using_default_constructor_should_create_a_unit_line_segment_in_the_x_axis)
 {

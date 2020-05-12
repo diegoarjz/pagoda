@@ -12,6 +12,8 @@
 
 namespace pagoda
 {
+using namespace math;
+
 const std::string ClipGeometry::inputGeometry("in");
 const std::string ClipGeometry::frontGeometry("front");
 const std::string ClipGeometry::backGeometry("back");

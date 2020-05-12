@@ -12,7 +12,7 @@
 #include <pagoda/dynamic_value/string_value.h>
 #include <pagoda/dynamic_value/vector3.h>
 
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
 #include <pagoda/common/exception/exception.h>
 #include <pagoda/common/fs/file_util.h>
@@ -21,6 +21,7 @@
 
 using namespace pagoda;
 using namespace pagoda::common;
+using namespace pagoda::math;
 
 class RegressionTest
 {

@@ -2,7 +2,7 @@
 
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/geometry_core/geometry_builder.h>
-#include <pagoda/math_lib/math_utils.h>
+#include <pagoda/math/math_utils.h>
 
 #include <vector>
 
@@ -18,13 +18,13 @@ private:
 
 	struct VertexLinkedListNode
 	{
-		VertexLinkedListNode(const Index_t splitPoint, const Vec3F &position)
+		VertexLinkedListNode(const Index_t splitPoint, const math::Vec3F &position)
 		    : m_splitPoint(splitPoint), m_position(position)
 		{
 		}
 
 		Index_t m_splitPoint;
-		Vec3F m_position;
+		math::Vec3F m_position;
 		VertexLinkedListNode *m_next;
 		VertexLinkedListNode *m_prev;
 	};
@@ -62,7 +62,7 @@ public:
 		for (auto faceIter = geometryIn->FacesBegin(); faceIter != geometryIn->FacesEnd(); ++faceIter)
 		{
 			std::vector<VertexLinkedListNode> vertexLinkedList;
-			Vec3F faceNormal = geometryIn->GetFaceAttributes(*faceIter).m_normal;
+			math::Vec3F faceNormal = geometryIn->GetFaceAttributes(*faceIter).m_normal;
 
 			std::set<VertexLinkedListNode *, Sorter> reflexVertices;
 			std::set<VertexLinkedListNode *, Sorter> convexVertices;
@@ -70,7 +70,7 @@ public:
 
 			for (auto fspIter = geometryIn->FaceSplitPointCirculatorBegin(*faceIter); fspIter; ++fspIter)
 			{
-				Vec3F curr = geometryIn->GetPosition(geometryIn->GetPoint(*fspIter));
+				math::Vec3F curr = geometryIn->GetPosition(geometryIn->GetPoint(*fspIter));
 				vertexLinkedList.emplace_back(*fspIter, curr);
 			}
 
@@ -81,9 +81,9 @@ public:
 				vertexLinkedList[i].m_next = &(vertexLinkedList[nextIndex]);
 				vertexLinkedList[i].m_prev = &(vertexLinkedList[prevIndex]);
 
-				Vec3F prev = vertexLinkedList[i].m_prev->m_position;
-				Vec3F curr = vertexLinkedList[i].m_position;
-				Vec3F next = vertexLinkedList[i].m_next->m_position;
+				math::Vec3F prev = vertexLinkedList[i].m_prev->m_position;
+				math::Vec3F curr = vertexLinkedList[i].m_position;
+				math::Vec3F next = vertexLinkedList[i].m_next->m_position;
 
 				auto dot = boost::qvm::dot(boost::qvm::cross((next - curr), (prev - curr)), faceNormal);
 				if (dot < 0)
@@ -125,9 +125,9 @@ public:
 				{
 					bool isConvex = false;
 
-					Vec3F prevPos = adj->m_prev->m_position;
-					Vec3F currPos = adj->m_position;
-					Vec3F nextPos = adj->m_next->m_position;
+					math::Vec3F prevPos = adj->m_prev->m_position;
+					math::Vec3F currPos = adj->m_position;
+					math::Vec3F nextPos = adj->m_next->m_position;
 
 					auto dot = boost::qvm::dot(boost::qvm::cross((nextPos - currPos), (prevPos - currPos)), faceNormal);
 					if (dot < 0)
@@ -185,9 +185,9 @@ public:
 private:
 	bool isEar(VertexLinkedListNode &v, std::set<VertexLinkedListNode *, Sorter> reflexVertices)
 	{
-		Vec3F p0 = v.m_prev->m_position;
-		Vec3F p1 = v.m_position;
-		Vec3F p2 = v.m_next->m_position;
+		math::Vec3F p0 = v.m_prev->m_position;
+		math::Vec3F p1 = v.m_position;
+		math::Vec3F p2 = v.m_next->m_position;
 
 		for (const auto rv : reflexVertices)
 		{
@@ -206,11 +206,11 @@ private:
 		return true;
 	}
 
-	bool pointInsideTriangle(const Vec3F &P, const Vec3F &a, const Vec3F &b, const Vec3F &c)
+	bool pointInsideTriangle(const math::Vec3F &P, const math::Vec3F &a, const math::Vec3F &b, const math::Vec3F &c)
 	{
-		Vec3F e0 = c - a;
-		Vec3F e1 = b - a;
-		Vec3F e2 = P - a;
+		math::Vec3F e0 = c - a;
+		math::Vec3F e1 = b - a;
+		math::Vec3F e2 = P - a;
 
 		float dot00 = boost::qvm::dot(e0, e0);
 		float dot01 = boost::qvm::dot(e0, e1);

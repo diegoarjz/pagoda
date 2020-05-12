@@ -14,6 +14,8 @@
 
 namespace pagoda
 {
+using namespace math;
+
 const std::string Split::s_inputGeometry("in");
 
 Split::Split(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)

@@ -4,7 +4,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_access.hpp>
 
-namespace pagoda
+namespace pagoda::math
 {
 /**
  * Returns a vector orthogonal to \p v.
@@ -40,6 +40,6 @@ boost::qvm::vec<Rep, 3> orthogonal(const boost::qvm::vec<Rep, 3>& v)
 	return boost::qvm::vec<Rep, 3>{1, 1, -(x + y) / z};
 }
 
-}  // namespace pagoda
+}  // namespace pagoda::math
 
 #endif

@@ -6,7 +6,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-namespace pagoda
+namespace pagoda::math
 {
 template<class Rep>
 class Line3D
@@ -57,6 +57,6 @@ private:
 	VectorType m_direction;  ///< The line's normalized direction
 };
 
-}  // namespace pagoda
+}  // namespace pagoda::math
 
 #endif

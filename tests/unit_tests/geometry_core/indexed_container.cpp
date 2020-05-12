@@ -1,5 +1,5 @@
 #include <pagoda/geometry_core/indexed_container.h>
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
 #include <iostream>
 #include <list>

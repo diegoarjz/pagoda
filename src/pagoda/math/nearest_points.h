@@ -9,7 +9,7 @@
 
 #include <cmath>
 
-namespace pagoda
+namespace pagoda::math
 {
 template<class P>
 struct NearestPoints
@@ -125,6 +125,6 @@ NearestPoints<boost::qvm::vec<Rep, 3>> nearest_points(const LineSegment3D<Rep> &
 	std::swap(n.m_point1, n.m_point2);
 	return n;
 }
-}  // namespace pagoda
+}  // namespace pagoda::math
 #endif
 

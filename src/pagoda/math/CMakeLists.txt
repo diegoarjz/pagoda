@@ -1,8 +1,7 @@
-set(MATH_LIB_SRCS
+set(MATH_SRCS
     "bissectrix.h"
     "degrees.h"
     "intersection.h"
-    "length.h"
     "math_utils.h"
     "line_3d.h"
     "line_segment_3d.h"
@@ -12,14 +11,13 @@ set(MATH_LIB_SRCS
     "plane.h"
     "projection.h"
     "radians.h"
-    "transpose.h"
     "vec_base.h"
 )
 
-add_library(math_lib OBJECT ${MATH_LIB_SRCS})
+add_library(math OBJECT ${MATH_SRCS})
 
 target_include_directories(
-    math_lib
+    math
     PRIVATE
         $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
@@ -27,13 +25,13 @@ target_include_directories(
 )
 
 target_compile_features(
-    math_lib
+    math
     PRIVATE
         cxx_std_17
 )
 
 target_compile_options(
-    math_lib
+    math
     PRIVATE
         -Wall
         $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
@@ -41,13 +39,13 @@ target_compile_options(
 )
 
 target_compile_definitions(
-    math_lib
+    math
     PRIVATE
         $<$<CONFIG:DEBUG>:DEBUG>
 )
 
 target_link_libraries(
-    math_lib
+    math
     PRIVATE
         common
 )

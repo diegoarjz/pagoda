@@ -3,7 +3,7 @@
 #include "builtin_class.h"
 #include "dynamic_value_base.h"
 
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
 namespace pagoda
 {
@@ -19,13 +19,13 @@ public:
 	static std::shared_ptr<Vector3> DynamicConstructor(const std::vector<DynamicValueBasePtr>& args);
 
 	Vector3();
-	explicit Vector3(const Vec3F& v);
+	explicit Vector3(const math::Vec3F& v);
 	explicit Vector3(const Vector3& v);
 	virtual ~Vector3();
 
-	explicit operator Vec3F() const;
+	explicit operator math::Vec3F() const;
 
-	Vector3& operator=(const Vec3F& v);
+	Vector3& operator=(const math::Vec3F& v);
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
@@ -51,7 +51,7 @@ public:
 private:
 	void RegisterMembers();
 
-	Vec3F m_nativeVector;
+	math::Vec3F m_nativeVector;
 };
 
 }  // namespace pagoda

@@ -10,15 +10,17 @@
 #include <pagoda/dynamic_value/float_value.h>
 #include <pagoda/dynamic_value/get_value_as.h>
 #include <pagoda/geometry_operations/matrix_transform.h>
-#include <pagoda/math_lib/degrees.h>
-#include <pagoda/math_lib/matrix_base.h>
-#include <pagoda/math_lib/radians.h>
+#include <pagoda/math/degrees.h>
+#include <pagoda/math/matrix_base.h>
+#include <pagoda/math/radians.h>
 
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations.hpp>
 
 namespace pagoda
 {
+using namespace math;
+
 const std::string Rotate::s_inputGeometry("in");
 const std::string Rotate::s_outputGeometry("out");
 

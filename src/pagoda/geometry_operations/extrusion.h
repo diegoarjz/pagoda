@@ -43,7 +43,7 @@ public:
 		std::unordered_map<Index_t, Index_t> pointsMap;
 
 		auto inNumPoints = geometryIn->GetPointCount();
-		std::vector<Vec3F> inVertices;
+		std::vector<math::Vec3F> inVertices;
 		inVertices.reserve(inNumPoints);
 		for (auto pointIter = geometryIn->PointsBegin(); pointIter != geometryIn->PointsEnd(); ++pointIter)
 		{

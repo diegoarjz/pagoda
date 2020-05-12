@@ -10,6 +10,8 @@
 #include "member_function_callable_body.h"
 #include "register_member_function.h"
 
+using namespace pagoda::math;
+
 namespace pagoda
 {
 const TypeInfoPtr Vector3::s_typeInfo = std::make_shared<TypeInfo>("Vector3");

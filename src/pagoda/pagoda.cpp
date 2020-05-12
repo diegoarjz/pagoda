@@ -35,6 +35,8 @@
 
 namespace pagoda
 {
+using namespace math;
+
 class Pagoda::Impl
 {
 public:

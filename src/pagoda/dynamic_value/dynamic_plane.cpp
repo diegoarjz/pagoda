@@ -9,6 +9,8 @@
 #include "member_function_callable_body.h"
 #include "register_member_function.h"
 
+using namespace pagoda::math;
+
 namespace pagoda
 {
 const TypeInfoPtr DynamicPlane::s_typeInfo = std::make_shared<TypeInfo>("Plane");

@@ -3,8 +3,8 @@
 #include "builtin_class.h"
 #include "dynamic_value_base.h"
 
-#include <pagoda/math_lib/plane.h>
-#include <pagoda/math_lib/vec_base.h>
+#include <pagoda/math/plane.h>
+#include <pagoda/math/vec_base.h>
 
 namespace pagoda
 {
@@ -21,13 +21,13 @@ public:
 	static std::shared_ptr<DynamicPlane> DynamicConstructor(const std::vector<DynamicValueBasePtr>& args);
 
 	DynamicPlane();
-	DynamicPlane(const Plane<float>& plane);
+	DynamicPlane(const math::Plane<float>& plane);
 	DynamicPlane(Vector3Ptr point, Vector3Ptr normal);
 	virtual ~DynamicPlane();
 
-	explicit operator Plane<float>() const;
+	explicit operator math::Plane<float>() const;
 
-	DynamicPlane& operator=(const Plane<float>& p);
+	DynamicPlane& operator=(const math::Plane<float>& p);
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
@@ -46,6 +46,6 @@ public:
 private:
 	void RegisterMembers();
 
-	Plane<float> m_nativePlane;
+	math::Plane<float> m_nativePlane;
 };
 }  // namespace pagoda

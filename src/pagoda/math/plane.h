@@ -7,7 +7,7 @@
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
 
-namespace pagoda
+namespace pagoda::math
 {
 template<class Rep>
 class Plane
@@ -144,16 +144,16 @@ std::ostream &operator<<(std::ostream &o, const Plane<Rep> &plane)
 template<class Rep>
 std::string to_string(const typename Plane<Rep>::PlaneSide &side)
 {
-	if (side == pagoda::Plane<Rep>::PlaneSide::Front)
+	if (side == Plane<Rep>::PlaneSide::Front)
 	{
 		return "front";
 	}
-	if (side == pagoda::Plane<Rep>::PlaneSide::Back)
+	if (side == Plane<Rep>::PlaneSide::Back)
 	{
 		return "back";
 	}
 	return "contained";
 }
-}  // namespace pagoda
+}  // namespace pagoda::math
 
 #endif

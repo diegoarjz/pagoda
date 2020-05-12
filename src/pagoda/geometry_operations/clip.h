@@ -2,9 +2,10 @@
 #define PAGODA_GEOMETRY_OPERATIONS_CLIP_H_
 
 #include <pagoda/geometry_core/geometry_builder.h>
-#include <pagoda/math_lib/intersection.h>
-#include <pagoda/math_lib/line_3d.h>
-#include <pagoda/math_lib/plane.h>
+#include <pagoda/math/intersection.h>
+#include <pagoda/math/line_3d.h>
+#include <pagoda/math/plane.h>
+#include <pagoda/math/vec_base.h>
 
 namespace pagoda
 {
@@ -17,7 +18,7 @@ private:
 	using Index_t = typename Geometry::Index_t;
 
 public:
-	Clip(const Plane<float> &plane) : m_plane(plane) {}
+	Clip(const math::Plane<float> &plane) : m_plane(plane) {}
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr front, GeometryPtr back)
 	{
@@ -41,7 +42,7 @@ public:
 		std::set<Index_t> facesToDelete;
 		for (auto fIter = front->FacesBegin(); fIter != front->FacesEnd(); ++fIter)
 		{
-			if (m_faceSide[*fIter] == Plane<float>::PlaneSide::Back)
+			if (m_faceSide[*fIter] == math::Plane<float>::PlaneSide::Back)
 			{
 				LOG_TRACE(GeometryOperations, "Face " << *fIter << " is behind the plane");
 				facesToDelete.insert(*fIter);
@@ -72,13 +73,7 @@ private:
 	{
 		START_PROFILE;
 
-#ifdef DEBUG
-		LOG_TRACE(GeometryOperations, "Clipping Face " << face << " with vertices");
-		for (auto fpIter = geometry->FacePointCirculatorBegin(face); fpIter; ++fpIter)
-		{
-			LOG_TRACE(GeometryOperations, " " << geometry->GetPosition(*fpIter));
-		}
-#endif
+		LOG_TRACE(GeometryOperations, "Clipping Face " << face);
 
 		std::vector<std::pair<Index_t, Index_t>> splitFaceEdges;
 		std::pair<Index_t, Index_t> currentEdgeToSplit;
@@ -113,42 +108,37 @@ private:
 #ifdef DEBUG
 			for (const auto &f : {face, newFace})
 			{
-				LOG_TRACE(GeometryOperations, "Into face " << f << " with vertices");
-				for (auto fpIter = geometry->FacePointCirculatorBegin(f); fpIter; ++fpIter)
-				{
-					LOG_TRACE(GeometryOperations, " " << geometry->GetPosition(*fpIter));
-				}
+				LOG_TRACE(GeometryOperations, "Into face " << f);
 			}
 #endif
 
-			if (faceSide == Plane<float>::PlaneSide::Front)
+			if (faceSide == math::Plane<float>::PlaneSide::Front)
 			{
-				m_faceSide[face] = Plane<float>::PlaneSide::Back;
+				m_faceSide[face] = math::Plane<float>::PlaneSide::Back;
 			}
-			else if (faceSide == Plane<float>::PlaneSide::Back)
+			else if (faceSide == math::Plane<float>::PlaneSide::Back)
 			{
-				m_faceSide[face] = Plane<float>::PlaneSide::Front;
+				m_faceSide[face] = math::Plane<float>::PlaneSide::Front;
 			}
 			else  // Contained
 			{
-				m_faceSide[face] = Plane<float>::PlaneSide::Front;
+				m_faceSide[face] = math::Plane<float>::PlaneSide::Front;
 			}
 		}
 	}
 
-	typename Plane<float>::PlaneSide CheckFaceSide(GeometryPtr geometry, const Index_t &face)
+	typename math::Plane<float>::PlaneSide CheckFaceSide(GeometryPtr geometry, const Index_t &face)
 	{
-		typename Plane<float>::PlaneSide planeSide;
+		typename math::Plane<float>::PlaneSide planeSide;
 		for (auto fpIter = geometry->FacePointCirculatorBegin(face); fpIter; ++fpIter)
 		{
 			auto pos = geometry->GetPosition(*fpIter);
 			planeSide = m_plane.GetPlaneSide(pos);
-			if (planeSide != Plane<float>::PlaneSide::Contained)
+			if (planeSide != math::Plane<float>::PlaneSide::Contained)
 			{
 				break;
 			}
 		}
-		LOG_TRACE(GeometryOperations, "Face " << face << " is " << to_string<float>(planeSide));
 		return planeSide;
 	}
 
@@ -162,8 +152,6 @@ private:
 			auto pos = geometry->GetPosition(*pIter);
 			auto planeSide = m_plane.GetPlaneSide(pos);
 			m_pointsSide[*pIter] = planeSide;
-			LOG_TRACE(GeometryOperations, "Point " << *pIter << " " << pos << " is " << to_string<float>(planeSide)
-			                                       << " Plane" << to_string<float>(planeSide).c_str());
 		}
 	}
 
@@ -181,21 +169,11 @@ private:
 
 			if (!SameSide(sourcePoint, destPoint))
 			{
-				LOG_TRACE(GeometryOperations,
-				          "Points " << sourcePoint << " (" << to_string<float>(m_pointsSide[sourcePoint]) << " ) and "
-				                    << destPoint << " (" << to_string<float>(m_pointsSide[destPoint])
-				                    << ") are on different sides");
 				auto sourcePos = geometry->GetPosition(sourcePoint);
 				auto destPos = geometry->GetPosition(destPoint);
 
-				LOG_TRACE(GeometryOperations, " Source Position: " << to_string(sourcePos));
-				LOG_TRACE(GeometryOperations, " Destination Position: " << to_string(destPos));
-
-				auto line = Line3D<float>::FromTwoPoints(sourcePos, destPos);
-				auto edgeIntersection = intersection(m_plane, line);
-
-				LOG_TRACE(GeometryOperations,
-				          " Intersection with plane: " << to_string(edgeIntersection.m_intersection));
+				auto line = math::Line3D<float>::FromTwoPoints(sourcePos, destPos);
+				auto edgeIntersection = math::intersection(m_plane, line);
 
 				auto edgesBetweenPoints = geometry->GetEdges(sourcePoint, destPoint);
 				for (const auto &e : edgesBetweenPoints)
@@ -203,10 +181,10 @@ private:
 					edgesToSplit[e] = edgeIntersection.m_intersection;
 				}
 			}
-			else if (m_pointsSide[sourcePoint] == Plane<float>::PlaneSide::Back)
+			else if (m_pointsSide[sourcePoint] == math::Plane<float>::PlaneSide::Back)
 			{
 				// It's a face behind the plane
-				m_faceSide[geometry->GetFace(*eIter)] = Plane<float>::PlaneSide::Back;
+				m_faceSide[geometry->GetFace(*eIter)] = math::Plane<float>::PlaneSide::Back;
 			}
 		}
 
@@ -226,14 +204,14 @@ private:
 		auto p1Side = m_pointsSide[p1];
 		auto p2Side = m_pointsSide[p2];
 
-		return p1Side == p2Side || p1Side == Plane<float>::PlaneSide::Contained ||
-		       p2Side == Plane<float>::PlaneSide::Contained;
+		return p1Side == p2Side || p1Side == math::Plane<float>::PlaneSide::Contained ||
+		       p2Side == math::Plane<float>::PlaneSide::Contained;
 	}
 
 	std::set<Index_t> m_newEdges;
-	std::map<Index_t, Plane<float>::PlaneSide> m_pointsSide;
-	std::map<Index_t, Plane<float>::PlaneSide> m_faceSide;
-	Plane<float> m_plane;
+	std::map<Index_t, math::Plane<float>::PlaneSide> m_pointsSide;
+	std::map<Index_t, math::Plane<float>::PlaneSide> m_faceSide;
+	math::Plane<float> m_plane;
 };
 }  // namespace pagoda
 

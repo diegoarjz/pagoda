@@ -11,6 +11,8 @@
 
 namespace pagoda
 {
+using namespace math;
+
 const std::string ExtractFaces::s_inputGeometry("in");
 const std::string ExtractFaces::s_outputGeometry("out");
 

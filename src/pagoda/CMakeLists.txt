@@ -6,7 +6,7 @@ set(PAGODA_SOURCES
 add_subdirectory(common)
 add_subdirectory(geometry_core)
 add_subdirectory(geometry_operations)
-add_subdirectory(math_lib)
+add_subdirectory(math)
 add_subdirectory(parameter)
 add_subdirectory(procedural_graph)
 add_subdirectory(procedural_objects)
@@ -17,7 +17,7 @@ add_library(libpagoda STATIC "${PAGODA_SOURCES}"
     $<TARGET_OBJECTS:common>
     $<TARGET_OBJECTS:geometry_core>
     $<TARGET_OBJECTS:geometry_operations>
-    $<TARGET_OBJECTS:math_lib>
+    $<TARGET_OBJECTS:math>
     $<TARGET_OBJECTS:parameter>
     $<TARGET_OBJECTS:procedural_graph>
     $<TARGET_OBJECTS:procedural_graph_reader>
