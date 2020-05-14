@@ -11,10 +11,12 @@
 #include "unsupported_node_link.h"
 
 #include <pagoda/dynamic_value/get_value_as.h>
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda
 {
+using namespace objects;
+
 const char* OutputInterfaceNode::name = "OutputInterface";
 
 OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName("", 0) {}

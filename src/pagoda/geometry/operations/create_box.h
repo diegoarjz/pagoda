@@ -1,17 +1,17 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_CREATE_BOX_H_
 #define PAGODA_PROCEDURAL_OBJECTS_CREATE_BOX_H_
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class CreateBoxGeometry : public ProceduralOperation
+class CreateBoxGeometry : public objects::ProceduralOperation
 {
 public:
 	static const std::string outputGeometry;
 	static const char* name;
 
-	CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem);
+	CreateBoxGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateBoxGeometry();
 
 	void DoWork() override;

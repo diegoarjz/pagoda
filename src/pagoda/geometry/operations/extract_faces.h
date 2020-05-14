@@ -1,16 +1,16 @@
 #pragma once
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class ExtractFaces : public ProceduralOperation
+class ExtractFaces : public objects::ProceduralOperation
 {
 public:
 	static const std::string s_inputGeometry;
 	static const std::string s_outputGeometry;
 
-	ExtractFaces(ProceduralObjectSystemPtr objectSystem);
+	ExtractFaces(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractFaces();
 
 	void DoWork() override;

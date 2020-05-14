@@ -11,12 +11,14 @@
 
 #include <pagoda/dynamic_value/get_value_as.h>
 #include <pagoda/dynamic_value/value_not_found.h>
-#include <pagoda/procedural_objects/operation_factory.h>
-#include <pagoda/procedural_objects/procedural_operation.h>
-#include <pagoda/procedural_objects/unknown_operation.h>
+#include <pagoda/objects/operation_factory.h>
+#include <pagoda/objects/procedural_operation.h>
+#include <pagoda/objects/unknown_operation.h>
 
 namespace pagoda
 {
+using namespace objects;
+
 const char *OperationNode::name = "Operation";
 
 OperationNode::OperationNode(OperationFactoryPtr operationFactory) : m_operationFactory(operationFactory) {}

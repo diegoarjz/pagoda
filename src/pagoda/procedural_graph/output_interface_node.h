@@ -8,10 +8,13 @@
 
 namespace pagoda
 {
+namespace objects
+{
 class ProceduralOperation;
 using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
 class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
+}  // namespace objects
 
 class OutputInterfaceNode : public Node
 {
@@ -27,13 +30,13 @@ public:
 
 	void SetInterfaceName(const std::string& name);
 	const std::string& GetInterfaceName() const;
-	const std::list<ProceduralObjectPtr>& GetProceduralObjects() const { return m_proceduralObjects; }
-	void AddProceduralObject(ProceduralObjectPtr object);
+	const std::list<objects::ProceduralObjectPtr>& GetProceduralObjects() const { return m_proceduralObjects; }
+	void AddProceduralObject(objects::ProceduralObjectPtr object);
 	void AcceptNodeVisitor(NodeVisitor* visitor) override;
 
 private:
 	std::string m_interfaceName;
-	std::list<ProceduralObjectPtr> m_proceduralObjects;
+	std::list<objects::ProceduralObjectPtr> m_proceduralObjects;
 };  // class OutputInterfaceNode
 }  // namespace pagoda
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <pagoda/geometry/core/geometry_builder.h>
+
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/math/math_utils.h>
 #include <pagoda/math/vec_base.h>

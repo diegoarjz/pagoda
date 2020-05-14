@@ -21,10 +21,10 @@
 #include <pagoda/procedural_graph/reader.h>
 #include <pagoda/procedural_graph/router_node.h>
 
+#include <pagoda/geometry/geometry_component.h>
+#include <pagoda/geometry/geometry_system.h>
+#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/pagoda.h>
-#include <pagoda/procedural_objects/geometry_component.h>
-#include <pagoda/procedural_objects/geometry_system.h>
-#include <pagoda/procedural_objects/hierarchical_system.h>
 
 #include <boost/program_options.hpp>
 
@@ -34,6 +34,8 @@
 
 namespace po = boost::program_options;
 using namespace pagoda;
+using namespace pagoda::objects;
+using namespace pagoda::geometry;
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
 std::shared_ptr<Graph> ReadGraphFromFile(Pagoda& pagoda, const std::string& file_path);

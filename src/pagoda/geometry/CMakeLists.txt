@@ -48,6 +48,12 @@ set(GEOMETRY_SRCS
     "operations/translate.h"
     "operations/triangulate_geometry.cpp"
     "operations/triangulate_geometry.h"
+    "geometry_component.cpp"
+    "geometry_component.h"
+    "geometry_system.cpp"
+    "geometry_system.h"
+    "scope_axis_direction_predicate.cpp"
+    "scope_axis_direction_predicate.h"
 )
 
 add_library(geometry OBJECT ${GEOMETRY_SRCS})

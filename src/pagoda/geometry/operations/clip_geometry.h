@@ -1,11 +1,11 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_CLIP_GEOMETRY_H_
 #define PAGODA_PROCEDURAL_OBJECTS_CLIP_GEOMETRY_H_
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class ClipGeometry : public ProceduralOperation
+class ClipGeometry : public objects::ProceduralOperation
 {
 public:
 	static const std::string inputGeometry;
@@ -13,7 +13,7 @@ public:
 	static const std::string backGeometry;
 	static const char* name;
 
-	ClipGeometry(ProceduralObjectSystemPtr objectSystem);
+	ClipGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ClipGeometry();
 
 	void DoWork() override;

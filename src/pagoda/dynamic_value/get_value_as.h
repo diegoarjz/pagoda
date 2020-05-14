@@ -2,6 +2,7 @@
 
 #include "binding/can_cast_to_native.h"
 #include "binding/native_value_name.h"
+#include "type_info.h"
 
 #include "value_visitor.h"
 

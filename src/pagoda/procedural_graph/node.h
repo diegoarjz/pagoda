@@ -5,7 +5,7 @@
 
 #include <pagoda/common/factory.h>
 #include <pagoda/dynamic_value/builtin_class.h>
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 #include <memory>
 #include <set>

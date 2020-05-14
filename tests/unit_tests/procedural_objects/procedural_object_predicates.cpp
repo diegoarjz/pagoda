@@ -1,11 +1,11 @@
-#include <pagoda/procedural_objects/geometry_system.h>
+#include <pagoda/geometry/geometry_component.h>
+#include <pagoda/geometry/geometry_system.h>
+#include <pagoda/geometry/scope_axis_direction_predicate.h>
 
-#include <pagoda/procedural_objects/geometry_component.h>
-#include <pagoda/procedural_objects/hierarchical_component.h>
-#include <pagoda/procedural_objects/hierarchical_system.h>
-#include <pagoda/procedural_objects/procedural_object.h>
-#include <pagoda/procedural_objects/procedural_object_system.h>
-#include <pagoda/procedural_objects/scope_axis_direction_predicate.h>
+#include <pagoda/objects/hierarchical_component.h>
+#include <pagoda/objects/hierarchical_system.h>
+#include <pagoda/objects/procedural_object.h>
+#include <pagoda/objects/procedural_object_system.h>
 
 #include <gtest/gtest.h>
 
@@ -14,6 +14,8 @@
 using namespace pagoda;
 using namespace pagoda::math;
 using namespace pagoda::geometry::core;
+using namespace pagoda::objects;
+using namespace pagoda::geometry;
 
 class ProceduralObjectPredicateTest : public ::testing::Test
 {

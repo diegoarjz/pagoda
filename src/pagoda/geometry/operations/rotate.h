@@ -1,16 +1,16 @@
 #pragma once
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class Rotate : public ProceduralOperation
+class Rotate : public objects::ProceduralOperation
 {
 public:
 	static const std::string s_inputGeometry;
 	static const std::string s_outputGeometry;
 
-	Rotate(ProceduralObjectSystemPtr objectSystem);
+	Rotate(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Rotate();
 
 	void DoWork() override;

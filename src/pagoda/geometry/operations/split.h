@@ -1,15 +1,15 @@
 #pragma once
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class Split : public ProceduralOperation
+class Split : public objects::ProceduralOperation
 {
 public:
 	static const std::string s_inputGeometry;
 
-	Split(ProceduralObjectSystemPtr objectSystem);
+	Split(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Split();
 
 	void DoWork() override;

@@ -6,29 +6,32 @@
 
 namespace pagoda
 {
+namespace objects
+{
 class ProceduralOperation;
 using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
 class OperationFactory;
 using OperationFactoryPtr = std::shared_ptr<OperationFactory>;
+}  // namespace objects
 
 class OperationNode : public Node
 {
 public:
 	static const char *name;
 
-	OperationNode(OperationFactoryPtr operationFactory);
+	OperationNode(objects::OperationFactoryPtr operationFactory);
 	~OperationNode();
 
 	void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &) override;
 
 	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
-	void SetOperation(ProceduralOperationPtr operation);
-	ProceduralOperationPtr GetOperation() const { return m_operation; }
+	void SetOperation(objects::ProceduralOperationPtr operation);
+	objects::ProceduralOperationPtr GetOperation() const { return m_operation; }
 	void AcceptNodeVisitor(NodeVisitor *visitor) override;
 
 private:
-	ProceduralOperationPtr m_operation;
-	OperationFactoryPtr m_operationFactory;
+	objects::ProceduralOperationPtr m_operation;
+	objects::OperationFactoryPtr m_operationFactory;
 };  // class OperationNode
 }  // namespace pagoda
 

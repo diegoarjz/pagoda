@@ -1,13 +1,14 @@
 #include "export_geometry.h"
 
-#include <pagoda/procedural_objects/geometry_component.h>
-#include <pagoda/procedural_objects/hierarchical_component.h>
-#include <pagoda/procedural_objects/procedural_object_system.h>
+#include <pagoda/geometry/core/geometry_exporter.h>
+#include <pagoda/geometry/geometry_component.h>
+
+#include <pagoda/objects/hierarchical_component.h>
+#include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/common/fs/file_util.h>
 #include <pagoda/dynamic_value/get_value_as.h>
 #include <pagoda/dynamic_value/set_value_from.h>
-#include <pagoda/geometry/core/geometry_exporter.h>
 
 #include <boost/filesystem/path.hpp>
 
@@ -15,6 +16,7 @@
 
 namespace pagoda::geometry::operations
 {
+using namespace objects;
 using namespace geometry::core;
 using namespace geometry::algorithms;
 

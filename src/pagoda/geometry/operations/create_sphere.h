@@ -1,16 +1,16 @@
 #pragma once
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class CreateSphereGeometry : public ProceduralOperation
+class CreateSphereGeometry : public objects::ProceduralOperation
 {
 public:
 	static const std::string outputGeometry;
 	static const char* name;
 
-	CreateSphereGeometry(ProceduralObjectSystemPtr objectSystem);
+	CreateSphereGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateSphereGeometry();
 
 	void DoWork() override;

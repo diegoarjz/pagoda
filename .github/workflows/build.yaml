@@ -73,7 +73,7 @@ jobs:
                                                                    -DCMAKE_BUILD_TYPE=Release \
                                                                    -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} \
                                                                    -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
-                  cmake --build .
+                  cmake --build . -j4
 
             - name: Run tests
               run: |

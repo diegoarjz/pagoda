@@ -3,7 +3,7 @@
 
 #include <pagoda/math/plane.h>
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::core
 {
@@ -12,14 +12,14 @@ class Scope;
 
 namespace pagoda::geometry::operations
 {
-class RepeatSplit : public ProceduralOperation
+class RepeatSplit : public objects::ProceduralOperation
 {
 public:
 	static const std::string inputGeometry;
 	static const std::string outputGeometry;
 	static const char *name;
 
-	RepeatSplit(ProceduralObjectSystemPtr objectSystem);
+	RepeatSplit(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~RepeatSplit();
 
 	void DoWork() override;

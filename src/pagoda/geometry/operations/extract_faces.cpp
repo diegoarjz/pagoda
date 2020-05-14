@@ -1,17 +1,19 @@
 #include "extract_faces.h"
 
-#include <pagoda/common/instrument/profiler.h>
 #include <pagoda/geometry/algorithms/explode_to_faces.h>
+#include <pagoda/geometry/geometry_component.h>
+#include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/procedural_objects/geometry_component.h>
-#include <pagoda/procedural_objects/geometry_system.h>
-#include <pagoda/procedural_objects/hierarchical_component.h>
-#include <pagoda/procedural_objects/hierarchical_system.h>
-#include <pagoda/procedural_objects/procedural_object_system.h>
+#include <pagoda/common/instrument/profiler.h>
+
+#include <pagoda/objects/hierarchical_component.h>
+#include <pagoda/objects/hierarchical_system.h>
+#include <pagoda/objects/procedural_object_system.h>
 
 namespace pagoda::geometry::operations
 {
 using namespace math;
+using namespace objects;
 using namespace geometry::core;
 using namespace geometry::algorithms;
 

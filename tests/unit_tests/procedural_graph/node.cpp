@@ -1,11 +1,12 @@
+#include <pagoda/objects/operation_factory.h>
 #include <pagoda/procedural_graph/operation_node.h>
-#include <pagoda/procedural_objects/operation_factory.h>
 
 #include "mock_objects.h"
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::objects;
 
 class NodeTest : public ::testing::Test
 {

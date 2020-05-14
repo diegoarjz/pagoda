@@ -1,17 +1,17 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_CREATE_RECT
 #define PAGODA_PROCEDURAL_OBJECTS_CREATE_RECT
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class CreateRectGeometry : public ProceduralOperation
+class CreateRectGeometry : public objects::ProceduralOperation
 {
 public:
 	static const std::string output_geometry;
 	static const char* name;
 
-	CreateRectGeometry(ProceduralObjectSystemPtr objectSystem);
+	CreateRectGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateRectGeometry();
 
 	void DoWork() override;

@@ -3,12 +3,12 @@
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/fs/file_util.h>
 #include <pagoda/common/instrument/profiler.h>
+#include <pagoda/geometry/geometry_system.h>
+#include <pagoda/objects/hierarchical_system.h>
+#include <pagoda/objects/procedural_object.h>
 #include <pagoda/procedural_graph/default_scheduler.h>
 #include <pagoda/procedural_graph/graph.h>
 #include <pagoda/procedural_graph/reader.h>
-#include <pagoda/procedural_objects/geometry_system.h>
-#include <pagoda/procedural_objects/hierarchical_system.h>
-#include <pagoda/procedural_objects/procedural_object.h>
 
 #include <pagoda/pagoda.h>
 

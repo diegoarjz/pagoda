@@ -1,10 +1,10 @@
 #include "clip_geometry.h"
 
-#include <pagoda/procedural_objects/geometry_component.h>
-#include <pagoda/procedural_objects/geometry_system.h>
-#include <pagoda/procedural_objects/hierarchical_component.h>
-#include <pagoda/procedural_objects/hierarchical_system.h>
-#include <pagoda/procedural_objects/procedural_object_system.h>
+#include <pagoda/geometry/geometry_component.h>
+#include <pagoda/geometry/geometry_system.h>
+#include <pagoda/objects/hierarchical_component.h>
+#include <pagoda/objects/hierarchical_system.h>
+#include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/dynamic_value/float_value.h>
 #include <pagoda/dynamic_value/get_value_as.h>
@@ -12,6 +12,7 @@
 
 namespace pagoda::geometry::operations
 {
+using namespace objects;
 using namespace math;
 using namespace geometry::core;
 using namespace geometry::algorithms;
@@ -21,7 +22,7 @@ const std::string ClipGeometry::frontGeometry("front");
 const std::string ClipGeometry::backGeometry("back");
 const char* ClipGeometry::name = "ClipGeometry";
 
-ClipGeometry::ClipGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+ClipGeometry::ClipGeometry(objects::ProceduralObjectSystemPtr objectSystem) : objects::ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
 

@@ -1,18 +1,18 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_EXTRACT_SCOPE_H_
 #define PAGODA_PROCEDURAL_OBJECTS_EXTRACT_SCOPE_H_
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class ExtractScope : public ProceduralOperation
+class ExtractScope : public objects::ProceduralOperation
 {
 public:
 	static const std::string inputGeometry;
 	static const std::string outputGeometry;
 	static const char* name;
 
-	ExtractScope(ProceduralObjectSystemPtr objectSystem);
+	ExtractScope(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractScope();
 
 	void DoWork() override;

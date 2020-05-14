@@ -9,13 +9,15 @@
 #include <pagoda/common/instrument/profiler.h>
 #include <pagoda/dynamic_value/string_value.h>
 #include <pagoda/dynamic_value/type_info.h>
-#include <pagoda/procedural_objects/procedural_object_predicate.h>
-#include <pagoda/procedural_objects/procedural_object_predicate_registry.h>
+#include <pagoda/objects/procedural_object_predicate.h>
+#include <pagoda/objects/procedural_object_predicate_registry.h>
 
 #include "node_visitor.h"
 
 namespace pagoda
 {
+using namespace objects;
+
 const char *RouterNode::name = "Router";
 
 RouterNode::RouterNode(ProceduralObjectPredicateRegistryPtr predicateRegistry) : m_predicateRegistry(predicateRegistry)

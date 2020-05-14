@@ -1,17 +1,17 @@
 #ifndef PAGODA_PROCEDURAL_OPERATIONS_EXPORT_GEOMETRY_H_
 #define PAGODA_PROCEDURAL_OPERATIONS_EXPORT_GEOMETRY_H_
 
-#include <pagoda/procedural_objects/procedural_operation.h>
+#include <pagoda/objects/procedural_operation.h>
 
 namespace pagoda::geometry::operations
 {
-class ExportGeometry : public ProceduralOperation
+class ExportGeometry : public objects::ProceduralOperation
 {
 public:
 	static const char* name;
 	static const std::string inputGeometry;
 
-	ExportGeometry(ProceduralObjectSystemPtr objectSystem);
+	ExportGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	~ExportGeometry();
 
 	void DoWork() override;
