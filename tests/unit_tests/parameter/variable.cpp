@@ -1,4 +1,4 @@
-#include <pagoda/parameter/variable.h>
+#include <pagoda/dynamic_value/variable.h>
 
 #include <gtest/gtest.h>
 

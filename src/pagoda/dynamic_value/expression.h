@@ -1,9 +1,8 @@
 #ifndef PAGODA_PARAMETER_EXPRESSION_H_
 #define PAGODA_PARAMETER_EXPRESSION_H_
 
-#include "../parameter/variable.h"
-
 #include "dynamic_value_base.h"
+#include "variable.h"
 
 #include <memory>
 #include <string>
@@ -73,7 +72,7 @@ public:
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
-    DynamicValueBasePtr Evaluate();
+	DynamicValueBasePtr Evaluate();
 
 private:
 	class Impl;

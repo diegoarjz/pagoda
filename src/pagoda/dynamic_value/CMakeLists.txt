@@ -50,6 +50,8 @@ set(DYNAMIC_VALUE_SRCS
     "undefined_operator.h"
     "value_not_found.cpp"
     "value_not_found.h"
+    "variable.cpp"
+    "variable.h"
     "vector3.cpp"
     "vector3.h"
 )

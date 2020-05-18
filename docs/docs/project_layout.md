@@ -129,7 +129,6 @@ pagoda::
     interpreter::
   dynamic_value::
     binding::
-    parameter::
 ```
 
 ### common namespace
