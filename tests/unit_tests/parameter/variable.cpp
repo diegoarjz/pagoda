@@ -1,8 +1,9 @@
-#include <pagoda/dynamic_value/variable.h>
+#include <pagoda/dynamic/variable.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace dynamic;
 
 TEST(VariableTest, when_creating_a_variable_with_a_single_identifier_should_store_the_identifier)
 {

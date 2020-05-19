@@ -11,10 +11,13 @@ class Program;
 using ProgramPtr = std::shared_ptr<Program>;
 }  // namespace ast
 
+namespace dynamic
+{
 class DynamicValueBase;
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
 
 class DynamicValueTable;
+}  // namespace dynamic
 
 class Interpreter
 {
@@ -24,10 +27,10 @@ public:
 
 	bool Interpret(const ast::ProgramPtr &program);
 
-	void PushExternalSymbols(std::shared_ptr<DynamicValueTable> &externalSymbols);
+	void PushExternalSymbols(std::shared_ptr<dynamic::DynamicValueTable> &externalSymbols);
 	void PopExternalSymbols();
 
-	DynamicValueBasePtr GetLastEvaluatedExpression() const;
+	dynamic::DynamicValueBasePtr GetLastEvaluatedExpression() const;
 
 	static void SetStdOutStream(std::ostream *o);
 	static std::ostream *GetStdOutStream();

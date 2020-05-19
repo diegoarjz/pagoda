@@ -9,8 +9,10 @@
 #include "output_interface_node.h"
 #include "unsupported_node_link.h"
 
-#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/objects/procedural_operation.h>
+
+using namespace pagoda::dynamic;
 
 namespace pagoda
 {

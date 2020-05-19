@@ -1,9 +1,11 @@
 #include "node.h"
 
 #include <pagoda/common/debug/assertions.h>
-#include <pagoda/dynamic_value/expression.h>
-#include <pagoda/dynamic_value/type_info.h>
-#include <pagoda/dynamic_value/value_not_found.h>
+#include <pagoda/dynamic/expression.h>
+#include <pagoda/dynamic/type_info.h>
+#include <pagoda/dynamic/value_not_found.h>
+
+using namespace pagoda::dynamic;
 
 namespace pagoda
 {

@@ -24,7 +24,7 @@ public:
 	OutputInterfaceNode();
 	~OutputInterfaceNode();
 
-	void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr>&) override;
+	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr>&) override;
 
 	void Execute(const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;
 

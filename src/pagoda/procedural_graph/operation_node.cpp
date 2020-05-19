@@ -9,11 +9,13 @@
 #include "output_interface_node.h"
 #include "unsupported_node_link.h"
 
-#include <pagoda/dynamic_value/get_value_as.h>
-#include <pagoda/dynamic_value/value_not_found.h>
+#include <pagoda/dynamic/get_value_as.h>
+#include <pagoda/dynamic/value_not_found.h>
 #include <pagoda/objects/operation_factory.h>
 #include <pagoda/objects/procedural_operation.h>
 #include <pagoda/objects/unknown_operation.h>
+
+using namespace pagoda::dynamic;
 
 namespace pagoda
 {

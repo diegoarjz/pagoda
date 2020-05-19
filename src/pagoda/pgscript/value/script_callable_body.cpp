@@ -2,6 +2,8 @@
 
 namespace pagoda
 {
+using namespace dynamic;
+
 ScriptCallableBody::ScriptCallableBody(ast::IdentifierPtr identifier, ast::StatementBlockPtr body,
                                        const std::vector<ast::ParameterPtr> &parameters)
     : m_body(body), m_functionIdentifier(identifier), m_parameters(parameters)

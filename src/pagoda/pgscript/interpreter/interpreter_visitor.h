@@ -7,6 +7,17 @@
 
 namespace pagoda
 {
+namespace dynamic
+{
+class DynamicValueBase;
+using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
+class Function;
+using FunctionPtr = std::shared_ptr<Function>;
+class DynamicValueTable;
+class ICallable;
+using ICallablePtr = std::shared_ptr<ICallable>;
+}  // namespace dynamic
+
 namespace ast
 {
 struct Float;
@@ -51,14 +62,6 @@ class Program;
 using ProgramPtr = std::shared_ptr<Program>;
 }  // namespace ast
 
-class DynamicValueBase;
-using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
-class Function;
-using FunctionPtr = std::shared_ptr<Function>;
-class DynamicValueTable;
-class ICallable;
-using ICallablePtr = std::shared_ptr<ICallable>;
-
 struct interpreter_visitor : public AstVisitor
 {
 	interpreter_visitor();
@@ -90,22 +93,22 @@ struct interpreter_visitor : public AstVisitor
 	void Visit(ast::VarDeclPtr v) override;
 	void Visit(ast::ParameterPtr p) override;
 
-	void PushValue(const DynamicValueBasePtr &v);
-	DynamicValueBasePtr PopValue();
+	void PushValue(const dynamic::DynamicValueBasePtr &v);
+	dynamic::DynamicValueBasePtr PopValue();
 
 	void EnterBlock();
-	void ExitBlock(const std::shared_ptr<DynamicValueTable> &previousSymbolTable);
-	void EnterFunction(const ICallablePtr &callable);
-	void ExitFunction(const std::shared_ptr<DynamicValueTable> &previousSymbolTable);
+	void ExitBlock(const std::shared_ptr<dynamic::DynamicValueTable> &previousSymbolTable);
+	void EnterFunction(const dynamic::ICallablePtr &callable);
+	void ExitFunction(const std::shared_ptr<dynamic::DynamicValueTable> &previousSymbolTable);
 
-	std::shared_ptr<DynamicValueTable> GetCurrentSymbolTable() { return m_symbolTable; }
-	std::shared_ptr<DynamicValueTable> GetGlobals() { return m_globals; }
-	DynamicValueBasePtr GetLastEvaluatedExpression() const { return m_lastValue; }
+	std::shared_ptr<dynamic::DynamicValueTable> GetCurrentSymbolTable() { return m_symbolTable; }
+	std::shared_ptr<dynamic::DynamicValueTable> GetGlobals() { return m_globals; }
+	dynamic::DynamicValueBasePtr GetLastEvaluatedExpression() const { return m_lastValue; }
 
 private:
-	std::stack<DynamicValueBasePtr> m_values;
-	std::shared_ptr<DynamicValueTable> m_globals;
-	std::shared_ptr<DynamicValueTable> m_symbolTable;
-	DynamicValueBasePtr m_lastValue;
+	std::stack<dynamic::DynamicValueBasePtr> m_values;
+	std::shared_ptr<dynamic::DynamicValueTable> m_globals;
+	std::shared_ptr<dynamic::DynamicValueTable> m_symbolTable;
+	dynamic::DynamicValueBasePtr m_lastValue;
 };
 }  // namespace pagoda

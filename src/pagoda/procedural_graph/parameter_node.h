@@ -19,7 +19,7 @@ public:
 	ParameterNode();
 	virtual ~ParameterNode();
 
-	void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &) override;
+	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &) override;
 	void AcceptNodeVisitor(NodeVisitor *visitor) override;
 
 	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;

@@ -8,8 +8,8 @@
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
-#include <pagoda/dynamic_value/float_value.h>
-#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/geometry/algorithms/face_offset.h>
 
 #include <memory>
@@ -19,6 +19,7 @@ namespace pagoda::geometry::operations
 using namespace objects;
 using namespace geometry::core;
 using namespace geometry::algorithms;
+using namespace dynamic;
 
 const char* FaceOffsetOperation::name = "FaceOffsetOperation";
 const std::string FaceOffsetOperation::inputGeometry("in");

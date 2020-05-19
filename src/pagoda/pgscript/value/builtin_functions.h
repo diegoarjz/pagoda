@@ -5,6 +5,8 @@
 
 namespace pagoda
 {
+namespace dynamic
+{
 class DynamicValueBase;
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
 class FloatValue;
@@ -13,7 +15,8 @@ class Integer;
 using IntegerPtr = std::shared_ptr<Integer>;
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
+}  // namespace dynamic
 
-void print(const std::vector<DynamicValueBasePtr>& args);
-TypeInfoPtr type(const DynamicValueBasePtr& value);
+void print(const std::vector<dynamic::DynamicValueBasePtr>& args);
+dynamic::TypeInfoPtr type(const dynamic::DynamicValueBasePtr& value);
 }  // namespace pagoda

@@ -6,6 +6,8 @@
 
 #include "node_visitor.h"
 
+using namespace pagoda::dynamic;
+
 namespace pagoda
 {
 const char *ParameterNode::name = "Parameter";

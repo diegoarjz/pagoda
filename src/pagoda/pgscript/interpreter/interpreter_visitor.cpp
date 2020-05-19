@@ -1,29 +1,30 @@
 #include "interpreter_visitor.h"
 
-#include "../../dynamic_value/binding/binary_ops.h"
-#include "../../dynamic_value/binding/make_free_function.h"
-#include "../../dynamic_value/binding/unary_ops.h"
-#include "../../dynamic_value/boolean_value.h"
-#include "../../dynamic_value/class_base.h"
-#include "../../dynamic_value/dynamic_class.h"
-#include "../../dynamic_value/dynamic_instance.h"
-#include "../../dynamic_value/dynamic_value_base.h"
-#include "../../dynamic_value/dynamic_value_table.h"
-#include "../../dynamic_value/float_value.h"
-#include "../../dynamic_value/function.h"
-#include "../../dynamic_value/get_value_as.h"
-#include "../../dynamic_value/icallable.h"
-#include "../../dynamic_value/integer_value.h"
-#include "../../dynamic_value/null_object_value.h"
-#include "../../dynamic_value/string_value.h"
-#include "../../dynamic_value/type_info.h"
-#include "../../dynamic_value/value_visitor.h"
-#include "../../dynamic_value/vector3.h"
 #include "../value/builtin_functions.h"
-
 #include "../value/script_callable_body.h"
 
 #include <pagoda/common/exception/exception.h>
+#include <pagoda/dynamic/binding/binary_ops.h>
+#include <pagoda/dynamic/binding/make_free_function.h>
+#include <pagoda/dynamic/binding/unary_ops.h>
+#include <pagoda/dynamic/boolean_value.h>
+#include <pagoda/dynamic/class_base.h>
+#include <pagoda/dynamic/dynamic_class.h>
+#include <pagoda/dynamic/dynamic_instance.h>
+#include <pagoda/dynamic/dynamic_value_base.h>
+#include <pagoda/dynamic/dynamic_value_table.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/function.h>
+#include <pagoda/dynamic/get_value_as.h>
+#include <pagoda/dynamic/icallable.h>
+#include <pagoda/dynamic/integer_value.h>
+#include <pagoda/dynamic/null_object_value.h>
+#include <pagoda/dynamic/string_value.h>
+#include <pagoda/dynamic/type_info.h>
+#include <pagoda/dynamic/value_visitor.h>
+#include <pagoda/dynamic/vector3.h>
+
+using namespace pagoda::dynamic;
 
 namespace pagoda
 {
@@ -80,7 +81,7 @@ void interpreter_visitor::Visit(ast::ArithmeticOpPtr op)
 		}
 		case ast::ArithmeticOp::types::Div:
 		{
-			binary_op_dispatcher<div> v(lhs, rhs);
+			binary_op_dispatcher<dynamic::div> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}

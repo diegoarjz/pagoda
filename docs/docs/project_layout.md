@@ -133,17 +133,29 @@ pagoda::
 
 ### common namespace
 
-The **common** namespace contains code that, as the name implies, is common to all of **pagoda**. Within it, there are namespaces with code to help in debugging (e.g., assertions, logging), the base of the exception system, generic file system handling and code for instrumenting **pagoda** itself (e.g., profilers and statistics).
+The **common** namespace contains code that, as the name implies, is common to
+all of **pagoda**. Within it, there are namespaces with code to help in
+debugging (e.g., assertions, logging), the base of the exception system,
+generic file system handling and code for instrumenting **pagoda** itself
+(e.g., profilers and statistics).
 
 ### math namespace
 
-The **math** namespace contains mathematical functions and methods that are not provided by other libraries (currently, **pagoda** is only using **boost** libraries). Whenever possible, it should be better reusing maths code that is provided by specific libraries. **Pagoda** doesn't want to reinvent the mathematical wheel.
+The **math** namespace contains mathematical functions and methods that are not
+provided by other libraries (currently, **pagoda** is only using **boost**
+libraries). Whenever possible, it should be better reusing maths code that is
+provided by specific libraries. **Pagoda** doesn't want to reinvent the
+mathematical wheel.
 
 ### object namespace
 
-The **object** namespace is meat to contain the code related to the procedural objects system. As described in its [documentation](objects/objects.md), this is an entity composed system.
+The **object** namespace is meat to contain the code related to the procedural
+objects system. As described in its [documentation](objects/objects.md), this
+is an entity composed system.
 
-Within this namespace, code inside the **core** namespace provides code for the foundations of this system (e.g., `ProceduralObjectSystem`, `ProceduralObject`).
+Within this namespace, code inside the **core** namespace provides code for the
+foundations of this system (e.g., `ProceduralObjectSystem`,
+`ProceduralObject`).
 
 ### graph namespace
 
@@ -157,7 +169,9 @@ in the **pagoda::graph::io** namespace.
 
 ### geometry namespace
 
-The **geometry** namespace contains code for geometry and topology representations in its **core** namespace. In the **io** namespace provides methods for reading and writing geometries to file or elsewhere.
+The **geometry** namespace contains code for geometry and topology
+representations in its **core** namespace. In the **io** namespace provides
+methods for reading and writing geometries to file or elsewhere.
 
 ### pgscript namespace
 

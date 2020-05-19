@@ -7,11 +7,11 @@
 #include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object_system.h>
 
-#include <pagoda/dynamic_value/boolean_value.h>
-#include <pagoda/dynamic_value/float_value.h>
-#include <pagoda/dynamic_value/get_value_as.h>
-#include <pagoda/dynamic_value/integer_value.h>
-#include <pagoda/dynamic_value/string_value.h>
+#include <pagoda/dynamic/boolean_value.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/get_value_as.h>
+#include <pagoda/dynamic/integer_value.h>
+#include <pagoda/dynamic/string_value.h>
 #include <pagoda/geometry/algorithms/plane_splits.h>
 
 namespace pagoda::geometry::operations
@@ -20,6 +20,7 @@ using namespace objects;
 using namespace math;
 using namespace core;
 using namespace algorithms;
+using namespace dynamic;
 
 const std::string RepeatSplit::inputGeometry("in");
 const std::string RepeatSplit::outputGeometry("out");

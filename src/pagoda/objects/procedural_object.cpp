@@ -1,6 +1,8 @@
 #include "procedural_object.h"
 
-#include <pagoda/dynamic_value/type_info.h>
+#include <pagoda/dynamic/type_info.h>
+
+using namespace pagoda::dynamic;
 
 namespace pagoda::objects
 {

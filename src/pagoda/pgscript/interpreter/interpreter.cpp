@@ -2,14 +2,17 @@
 
 #include "interpreter_visitor.h"
 
-#include <pagoda/dynamic_value/binding/make_free_function.h>
-#include <pagoda/dynamic_value/dynamic_plane.h>
-#include <pagoda/dynamic_value/dynamic_value_table.h>
-#include <pagoda/dynamic_value/free_function_callable_body.h>
-#include <pagoda/dynamic_value/value_not_found.h>
-#include <pagoda/dynamic_value/vector3.h>
+#include <pagoda/dynamic/binding/make_free_function.h>
+#include <pagoda/dynamic/dynamic_plane.h>
+#include <pagoda/dynamic/dynamic_value_base.h>
+#include <pagoda/dynamic/dynamic_value_table.h>
+#include <pagoda/dynamic/free_function_callable_body.h>
+#include <pagoda/dynamic/value_not_found.h>
+#include <pagoda/dynamic/vector3.h>
 
 #include <stack>
+
+using namespace pagoda::dynamic;
 
 namespace pagoda
 {
@@ -20,7 +23,7 @@ std::shared_ptr<T> constructor_wrapper(const std::vector<DynamicValueBasePtr> &a
 	return instance;
 }
 
-void print(const std::vector<DynamicValueBasePtr> &args)
+void print(const std::vector<dynamic::DynamicValueBasePtr> &args)
 {
 	auto out = Interpreter::GetStdOutStream();
 	for (const auto &d : args)

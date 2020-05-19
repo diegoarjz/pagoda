@@ -8,7 +8,7 @@ add_subdirectory(geometry)
 add_subdirectory(math)
 add_subdirectory(objects)
 add_subdirectory(procedural_graph)
-add_subdirectory(dynamic_value)
+add_subdirectory(dynamic)
 add_subdirectory(pgscript)
 
 add_library(libpagoda STATIC "${PAGODA_SOURCES}"
@@ -22,7 +22,7 @@ add_library(libpagoda STATIC "${PAGODA_SOURCES}"
     $<TARGET_OBJECTS:pgscript_interpreter>
     $<TARGET_OBJECTS:pgscript_parser>
     $<TARGET_OBJECTS:pgscript_value>
-    $<TARGET_OBJECTS:dynamic_value>
+    $<TARGET_OBJECTS:dynamic>
 )
 
 target_include_directories(

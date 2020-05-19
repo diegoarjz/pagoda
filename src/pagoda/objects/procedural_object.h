@@ -3,7 +3,7 @@
 
 #include "procedural_component.h"
 
-#include <pagoda/dynamic_value/builtin_class.h>
+#include <pagoda/dynamic/builtin_class.h>
 #include <pagoda/geometry/core/geometry.h>
 
 #include <bitset>
@@ -12,28 +12,28 @@
 #include <unordered_set>
 #include <vector>
 
-namespace pagoda
+namespace pagoda::dynamic
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
-}  // namespace pagoda
+}  // namespace pagoda::dynamic
 
 namespace pagoda::objects
 {
 class Context;
 using ContextPtr = std::shared_ptr<Context>;
 
-class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>, public BuiltinClass
+class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>, public dynamic::BuiltinClass
 {
 public:
-	static const TypeInfoPtr s_typeInfo;
+	static const dynamic::TypeInfoPtr s_typeInfo;
 
 	ProceduralObject();
 	virtual ~ProceduralObject();
 
 	std::string ToString() const override;
 
-	void AcceptVisitor(ValueVisitorBase& visitor) override;
+	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
 
 };  // class ProceduralObject
 

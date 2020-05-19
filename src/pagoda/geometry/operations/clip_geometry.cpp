@@ -6,8 +6,8 @@
 #include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object_system.h>
 
-#include <pagoda/dynamic_value/float_value.h>
-#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/geometry/algorithms/clip.h>
 
 namespace pagoda::geometry::operations
@@ -16,6 +16,7 @@ using namespace objects;
 using namespace math;
 using namespace geometry::core;
 using namespace geometry::algorithms;
+using namespace dynamic;
 
 const std::string ClipGeometry::inputGeometry("in");
 const std::string ClipGeometry::frontGeometry("front");

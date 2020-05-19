@@ -5,18 +5,18 @@
 #include "procedural_operation_object_interface.h"
 
 #include <pagoda/common/factory.h>
-#include <pagoda/dynamic_value/builtin_class.h>
+#include <pagoda/dynamic/builtin_class.h>
 
 #include <bitset>
 #include <list>
 #include <string>
 #include <unordered_map>
 
-namespace pagoda
+namespace pagoda::dynamic
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
-}  // namespace pagoda
+}  // namespace pagoda::dynamic
 
 namespace pagoda::objects
 {
@@ -32,10 +32,10 @@ using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
  * Has input and output \c ProceduralOperationObjectInterface which is used to pass
  * input and output procedural objects.
  */
-class ProceduralOperation : public std::enable_shared_from_this<ProceduralOperation>, public BuiltinClass
+class ProceduralOperation : public std::enable_shared_from_this<ProceduralOperation>, public dynamic::BuiltinClass
 {
 public:
-	static const TypeInfoPtr s_typeInfo;
+	static const dynamic::TypeInfoPtr s_typeInfo;
 
 	ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem);
 	virtual ~ProceduralOperation() {}
@@ -56,7 +56,7 @@ public:
 
 	std::string ToString() const override;
 
-	void AcceptVisitor(ValueVisitorBase& visitor) override;
+	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
 
 protected:
 	/**
@@ -67,7 +67,7 @@ protected:
 	/**
 	 * Registers the \c DynamicValueBase objects that will be used during the execution.
 	 */
-	void RegisterValues(const std::unordered_map<std::string, DynamicValueBasePtr>& values);
+	void RegisterValues(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr>& values);
 	/**
 	 * Updates the value of the \c DynamicValueBase with the \p valueName if it is an expression.
 	 */
@@ -75,7 +75,7 @@ protected:
 	/**
 	 * Returns the value of the \c DynamicValueBase with the \p valueName.
 	 */
-	DynamicValueBasePtr GetValue(const std::string& valueName);
+	dynamic::DynamicValueBasePtr GetValue(const std::string& valueName);
 
 	void CreateInputInterface(const std::string& interfaceName);
 	void CreateOutputInterface(const std::string& interfaceName);

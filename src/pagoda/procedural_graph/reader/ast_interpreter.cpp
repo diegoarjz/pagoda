@@ -6,12 +6,14 @@
 #include "node_link_node.h"
 
 #include <pagoda/common/exception/exception.h>
-#include <pagoda/dynamic_value/expression.h>
-#include <pagoda/dynamic_value/float_value.h>
-#include <pagoda/dynamic_value/integer_value.h>
-#include <pagoda/dynamic_value/string_value.h>
+#include <pagoda/dynamic/expression.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/integer_value.h>
+#include <pagoda/dynamic/string_value.h>
 #include <pagoda/procedural_graph/graph.h>
 #include <pagoda/procedural_graph/node.h>
+
+using namespace pagoda::dynamic;
 
 namespace pagoda
 {

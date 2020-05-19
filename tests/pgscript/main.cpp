@@ -6,11 +6,11 @@
 #include <pagoda/pgscript/interpreter/interpreter.h>
 #include <pagoda/pgscript/parser/parser.h>
 
-#include <pagoda/dynamic_value/dynamic_plane.h>
-#include <pagoda/dynamic_value/float_value.h>
-#include <pagoda/dynamic_value/integer_value.h>
-#include <pagoda/dynamic_value/string_value.h>
-#include <pagoda/dynamic_value/vector3.h>
+#include <pagoda/dynamic/dynamic_plane.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/integer_value.h>
+#include <pagoda/dynamic/string_value.h>
+#include <pagoda/dynamic/vector3.h>
 
 #include <pagoda/math/vec_base.h>
 
@@ -22,6 +22,7 @@
 using namespace pagoda;
 using namespace pagoda::common;
 using namespace pagoda::math;
+using namespace pagoda::dynamic;
 
 class RegressionTest
 {

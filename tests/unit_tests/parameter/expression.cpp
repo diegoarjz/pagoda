@@ -1,9 +1,10 @@
-#include <pagoda/dynamic_value/expression.h>
-#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/dynamic/expression.h>
+#include <pagoda/dynamic/get_value_as.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::dynamic;
 
 class ExpressionTest : public ::testing::Test
 {

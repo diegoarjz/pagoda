@@ -4,8 +4,8 @@
 #include <pagoda/common/instrument/profiler.h>
 #include <pagoda/common/version.h>
 
-#include <pagoda/dynamic_value/set_value_from.h>
-#include <pagoda/dynamic_value/value_visitor.h>
+#include <pagoda/dynamic/set_value_from.h>
+#include <pagoda/dynamic/value_visitor.h>
 
 #include <pagoda/geometry/core/geometry_exporter.h>
 #include <pagoda/procedural_graph/default_scheduler.h>
@@ -36,6 +36,7 @@ namespace po = boost::program_options;
 using namespace pagoda;
 using namespace pagoda::objects;
 using namespace pagoda::geometry;
+using namespace pagoda::dynamic;
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
 std::shared_ptr<Graph> ReadGraphFromFile(Pagoda& pagoda, const std::string& file_path);

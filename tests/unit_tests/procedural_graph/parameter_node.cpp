@@ -1,9 +1,10 @@
-#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/procedural_graph/parameter_node.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::dynamic;
 
 TEST(ParameterNode, when_executing_a_parameter_node_should_propagate_the_parameters_to_its_outnodes)
 {

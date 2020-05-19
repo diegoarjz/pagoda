@@ -5,7 +5,10 @@
 #include "procedural_object.h"
 
 #include <pagoda/common/debug/assertions.h>
-#include <pagoda/dynamic_value/value_visitor.h>
+#include <pagoda/dynamic/type_info.h>
+#include <pagoda/dynamic/value_visitor.h>
+
+using namespace pagoda::dynamic;
 
 namespace pagoda::objects
 {

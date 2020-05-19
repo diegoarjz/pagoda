@@ -1,7 +1,7 @@
-#include <pagoda/dynamic_value/get_value_as.h>
-#include <pagoda/dynamic_value/set_value_from.h>
-#include <pagoda/dynamic_value/type_info.h>
-#include <pagoda/dynamic_value/vector3.h>
+#include <pagoda/dynamic/get_value_as.h>
+#include <pagoda/dynamic/set_value_from.h>
+#include <pagoda/dynamic/type_info.h>
+#include <pagoda/dynamic/vector3.h>
 
 #include <pagoda/math/vec_base.h>
 
@@ -11,6 +11,7 @@
 
 using namespace pagoda;
 using namespace pagoda::math;
+using namespace pagoda::dynamic;
 
 TEST(Vector3, test_constructions)
 {

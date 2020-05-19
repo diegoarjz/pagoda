@@ -22,7 +22,7 @@ public:
 	RouterNode(objects::ProceduralObjectPredicateRegistryPtr predicateRegistry);
 	virtual ~RouterNode();
 
-	void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &) override;
+	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &) override;
 	void AcceptNodeVisitor(NodeVisitor *visitor) override;
 	void AddProceduralObject(objects::ProceduralObjectPtr object);
 

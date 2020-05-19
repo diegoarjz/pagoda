@@ -1,13 +1,15 @@
 #include "builtin_functions.h"
 
-#include "../../dynamic_value/float_value.h"
-#include "../../dynamic_value/integer_value.h"
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/integer_value.h>
 
 #include <chrono>
 #include <iostream>
 
 namespace pagoda
 {
+using namespace dynamic;
+
 void print(const std::vector<DynamicValueBasePtr> &args)
 {
 	for (auto &a : args)

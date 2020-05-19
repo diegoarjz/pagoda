@@ -1,11 +1,12 @@
-#include <pagoda/dynamic_value/binding/make_free_function.h>
-#include <pagoda/dynamic_value/boolean_value.h>
+#include <pagoda/dynamic/binding/make_free_function.h>
+#include <pagoda/dynamic/boolean_value.h>
 
 #include <gtest/gtest.h>
 
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace pagoda::dynamic;
 
 static bool called_f = false;
 static void f() { called_f = true; }

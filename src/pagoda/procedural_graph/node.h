@@ -4,7 +4,7 @@
 #include "node_set.h"
 
 #include <pagoda/common/factory.h>
-#include <pagoda/dynamic_value/builtin_class.h>
+#include <pagoda/dynamic/builtin_class.h>
 #include <pagoda/objects/procedural_operation.h>
 
 #include <memory>
@@ -23,10 +23,10 @@ class NodeVisitor;
  * Each subclass of \c Node is responsible for implementing an execution logic by
  * overriding the Node::Execute() method.
  */
-class Node : public BuiltinClass
+class Node : public dynamic::BuiltinClass
 {
 public:
-	static const TypeInfoPtr s_typeInfo;
+	static const dynamic::TypeInfoPtr s_typeInfo;
 
 	Node();
 	virtual ~Node();
@@ -37,12 +37,13 @@ public:
 	/**
 	 * Sets the construction arguments from \p arguments.
 	 */
-	virtual void SetConstructionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &arguments) = 0;
+	virtual void SetConstructionArguments(
+	    const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &arguments) = 0;
 
 	/**
 	 * Sets the execution arguments from \p arguments.
 	 */
-	void SetExecutionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &arguments);
+	void SetExecutionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &arguments);
 
 	/**
 	 * Gets the id from this \c Node.
@@ -86,7 +87,7 @@ public:
 
 	std::string ToString() const override;
 
-	void AcceptVisitor(ValueVisitorBase &visitor) override;
+	void AcceptVisitor(dynamic::ValueVisitorBase &visitor) override;
 
 private:
 	std::string m_nodeName;

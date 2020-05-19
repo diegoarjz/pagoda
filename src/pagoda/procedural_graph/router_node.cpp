@@ -7,12 +7,14 @@
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/instrument/profiler.h>
-#include <pagoda/dynamic_value/string_value.h>
-#include <pagoda/dynamic_value/type_info.h>
+#include <pagoda/dynamic/string_value.h>
+#include <pagoda/dynamic/type_info.h>
 #include <pagoda/objects/procedural_object_predicate.h>
 #include <pagoda/objects/procedural_object_predicate_registry.h>
 
 #include "node_visitor.h"
+
+using namespace pagoda::dynamic;
 
 namespace pagoda
 {

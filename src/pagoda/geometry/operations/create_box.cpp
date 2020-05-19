@@ -4,7 +4,7 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/dynamic_value/get_value_as.h>
+#include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/objects/hierarchical_component.h>
 #include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_component.h>
@@ -18,6 +18,7 @@ using namespace math;
 using namespace geometry::core;
 using namespace geometry::algorithms;
 using namespace objects;
+using namespace dynamic;
 
 const std::string CreateBoxGeometry::outputGeometry("out");
 const char* CreateBoxGeometry::name = "CreateBoxGeometry";
