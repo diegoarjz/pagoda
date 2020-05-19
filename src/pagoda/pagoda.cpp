@@ -4,13 +4,13 @@
 #include <pagoda/common/factory.h>
 #include <pagoda/common/fs/file_util.h>
 
-#include <pagoda/procedural_graph/graph.h>
-#include <pagoda/procedural_graph/input_interface_node.h>
-#include <pagoda/procedural_graph/operation_node.h>
-#include <pagoda/procedural_graph/output_interface_node.h>
-#include <pagoda/procedural_graph/parameter_node.h>
-#include <pagoda/procedural_graph/reader.h>
-#include <pagoda/procedural_graph/router_node.h>
+#include <pagoda/graph/graph.h>
+#include <pagoda/graph/input_interface_node.h>
+#include <pagoda/graph/io/reader.h>
+#include <pagoda/graph/operation_node.h>
+#include <pagoda/graph/output_interface_node.h>
+#include <pagoda/graph/parameter_node.h>
+#include <pagoda/graph/router_node.h>
 
 #include <pagoda/geometry/operations/clip_geometry.h>
 #include <pagoda/geometry/operations/create_box.h>
@@ -39,6 +39,8 @@ using namespace objects;
 using namespace math;
 using namespace geometry;
 using namespace geometry::operations;
+using namespace graph;
+using namespace graph::io;
 
 class Pagoda::Impl
 {

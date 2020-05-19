@@ -1,14 +1,15 @@
-#include <pagoda/procedural_graph/breadth_first_node_visitor.h>
-#include <pagoda/procedural_graph/graph.h>
-#include <pagoda/procedural_graph/graph_node_visitor.h>
-#include <pagoda/procedural_graph/node.h>
-#include <pagoda/procedural_graph/operation_node.h>
+#include <pagoda/graph/breadth_first_node_visitor.h>
+#include <pagoda/graph/graph.h>
+#include <pagoda/graph/graph_node_visitor.h>
+#include <pagoda/graph/node.h>
+#include <pagoda/graph/operation_node.h>
 
 #include <pagoda/pagoda.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::graph;
 
 class Delegate
 {

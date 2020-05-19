@@ -1,12 +1,13 @@
-#include <pagoda/procedural_graph/execution_queue.h>
-#include <pagoda/procedural_graph/graph.h>
-#include <pagoda/procedural_graph/input_interface_node.h>
+#include <pagoda/graph/execution_queue.h>
+#include <pagoda/graph/graph.h>
+#include <pagoda/graph/input_interface_node.h>
 
 #include <pagoda/pagoda.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::graph;
 
 class ExecutionQueueTest : public ::testing::Test
 {

@@ -1,8 +1,8 @@
-#include <pagoda/procedural_graph/graph.h>
-#include <pagoda/procedural_graph/input_interface_node.h>
-#include <pagoda/procedural_graph/node.h>
-#include <pagoda/procedural_graph/operation_node.h>
-#include <pagoda/procedural_graph/output_interface_node.h>
+#include <pagoda/graph/graph.h>
+#include <pagoda/graph/input_interface_node.h>
+#include <pagoda/graph/node.h>
+#include <pagoda/graph/operation_node.h>
+#include <pagoda/graph/output_interface_node.h>
 
 #include <pagoda/pagoda.h>
 
@@ -11,6 +11,7 @@
 #include "mock_objects.h"
 
 using namespace pagoda;
+using namespace pagoda::graph;
 
 class GraphSimpleOperationsTest : public ::testing::Test
 {

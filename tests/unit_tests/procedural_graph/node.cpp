@@ -1,5 +1,5 @@
+#include <pagoda/graph/operation_node.h>
 #include <pagoda/objects/operation_factory.h>
-#include <pagoda/procedural_graph/operation_node.h>
 
 #include "mock_objects.h"
 
@@ -7,6 +7,7 @@
 
 using namespace pagoda;
 using namespace pagoda::objects;
+using namespace pagoda::graph;
 
 class NodeTest : public ::testing::Test
 {

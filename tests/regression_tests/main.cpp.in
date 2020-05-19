@@ -4,11 +4,11 @@
 #include <pagoda/common/fs/file_util.h>
 #include <pagoda/common/instrument/profiler.h>
 #include <pagoda/geometry/geometry_system.h>
+#include <pagoda/graph/default_scheduler.h>
+#include <pagoda/graph/graph.h>
+#include <pagoda/graph/io/reader.h>
 #include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object.h>
-#include <pagoda/procedural_graph/default_scheduler.h>
-#include <pagoda/procedural_graph/graph.h>
-#include <pagoda/procedural_graph/reader.h>
 
 #include <pagoda/pagoda.h>
 
@@ -16,6 +16,8 @@
 
 using namespace pagoda;
 using namespace pagoda::common;
+using namespace pagoda::graph;
+using namespace pagoda::graph::io;
 
 class RegressionTest
 {

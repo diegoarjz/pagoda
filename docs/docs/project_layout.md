@@ -127,7 +127,7 @@ pagoda::
     parser::
     intermediate::
     interpreter::
-  dynamic_value::
+  dynamic::
     binding::
 ```
 
@@ -175,4 +175,4 @@ methods for reading and writing geometries to file or elsewhere.
 
 ### pgscript namespace
 
-### dynamic_value namepsace
+### dynamic namepsace

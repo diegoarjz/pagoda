@@ -7,7 +7,7 @@ add_subdirectory(common)
 add_subdirectory(geometry)
 add_subdirectory(math)
 add_subdirectory(objects)
-add_subdirectory(procedural_graph)
+add_subdirectory(graph)
 add_subdirectory(dynamic)
 add_subdirectory(pgscript)
 
@@ -15,8 +15,7 @@ add_library(libpagoda STATIC "${PAGODA_SOURCES}"
     $<TARGET_OBJECTS:common>
     $<TARGET_OBJECTS:geometry>
     $<TARGET_OBJECTS:math>
-    $<TARGET_OBJECTS:procedural_graph>
-    $<TARGET_OBJECTS:procedural_graph_reader>
+    $<TARGET_OBJECTS:graph>
     $<TARGET_OBJECTS:objects>
     $<TARGET_OBJECTS:pgscript_intermediate>
     $<TARGET_OBJECTS:pgscript_interpreter>

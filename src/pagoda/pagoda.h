@@ -1,14 +1,17 @@
 #ifndef PAGODA_PAGODA_H_
 #define PAGODA_PAGODA_H_
 
+#include "graph/node_factory.h"
 #include "objects/operation_factory.h"
 #include "objects/procedural_object_system.h"
-#include "procedural_graph/node_factory.h"
 
 namespace pagoda
 {
+namespace graph
+{
 class Graph;
 using GraphPtr = std::shared_ptr<Graph>;
+}  // namespace graph
 
 /**
  * Entry point class for the pagoda library.
@@ -49,17 +52,17 @@ public:
 	 *
 	 * Different types of \c NodeFactory can be registered here.
 	 */
-	NodeFactoryPtr GetNodeFactory();
+	graph::NodeFactoryPtr GetNodeFactory();
 
 	/**
 	 * Creates an empty \c Graph.
 	 */
-	GraphPtr CreateGraph();
+	graph::GraphPtr CreateGraph();
 
 	/**
 	 * Creates a \c Graph from the file given in \p filePath.
 	 */
-	GraphPtr CreateGraphFromFile(const std::string &filePath);
+	graph::GraphPtr CreateGraphFromFile(const std::string &filePath);
 
 private:
 	class Impl;

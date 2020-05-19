@@ -1,13 +1,14 @@
-#include <pagoda/procedural_graph/input_interface_node.h>
-#include <pagoda/procedural_graph/node_set_visitor.h>
-#include <pagoda/procedural_graph/operation_node.h>
-#include <pagoda/procedural_graph/output_interface_node.h>
+#include <pagoda/graph/input_interface_node.h>
+#include <pagoda/graph/node_set_visitor.h>
+#include <pagoda/graph/operation_node.h>
+#include <pagoda/graph/output_interface_node.h>
 
 #include <pagoda/pagoda.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::graph;
 
 class NodeTypeFilterTest : public ::testing::Test
 {

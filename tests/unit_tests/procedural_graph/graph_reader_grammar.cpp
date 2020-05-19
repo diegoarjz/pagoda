@@ -1,7 +1,7 @@
-#include <pagoda/procedural_graph/reader/graph_reader_grammar.h>
-#include <pagoda/procedural_graph/reader/named_argument.h>
-#include <pagoda/procedural_graph/reader/node_definition_node.h>
-#include <pagoda/procedural_graph/reader/node_link_node.h>
+#include <pagoda/graph/io/graph_reader_grammar.h>
+#include <pagoda/graph/io/named_argument.h>
+#include <pagoda/graph/io/node_definition_node.h>
+#include <pagoda/graph/io/node_link_node.h>
 
 #include <boost/spirit/include/qi.hpp>
 
@@ -9,6 +9,8 @@
 
 using namespace pagoda;
 using namespace boost::spirit;
+using namespace pagoda::graph;
+using namespace pagoda::graph::io;
 
 class GraphReaderGrammarTest : public ::testing::Test
 {

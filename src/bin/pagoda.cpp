@@ -8,18 +8,18 @@
 #include <pagoda/dynamic/value_visitor.h>
 
 #include <pagoda/geometry/core/geometry_exporter.h>
-#include <pagoda/procedural_graph/default_scheduler.h>
-#include <pagoda/procedural_graph/execution_queue.h>
-#include <pagoda/procedural_graph/graph_dot_exporter.h>
-#include <pagoda/procedural_graph/input_interface_node.h>
-#include <pagoda/procedural_graph/node_set_visitor.h>
-#include <pagoda/procedural_graph/node_visitor.h>
-#include <pagoda/procedural_graph/operation_node.h>
-#include <pagoda/procedural_graph/output_interface_node.h>
-#include <pagoda/procedural_graph/parameter_node.h>
-#include <pagoda/procedural_graph/parse_result.h>
-#include <pagoda/procedural_graph/reader.h>
-#include <pagoda/procedural_graph/router_node.h>
+#include <pagoda/graph/default_scheduler.h>
+#include <pagoda/graph/execution_queue.h>
+#include <pagoda/graph/graph_dot_exporter.h>
+#include <pagoda/graph/input_interface_node.h>
+#include <pagoda/graph/io/parse_result.h>
+#include <pagoda/graph/io/reader.h>
+#include <pagoda/graph/node_set_visitor.h>
+#include <pagoda/graph/node_visitor.h>
+#include <pagoda/graph/operation_node.h>
+#include <pagoda/graph/output_interface_node.h>
+#include <pagoda/graph/parameter_node.h>
+#include <pagoda/graph/router_node.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -37,6 +37,7 @@ using namespace pagoda;
 using namespace pagoda::objects;
 using namespace pagoda::geometry;
 using namespace pagoda::dynamic;
+using namespace pagoda::graph;
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
 std::shared_ptr<Graph> ReadGraphFromFile(Pagoda& pagoda, const std::string& file_path);
