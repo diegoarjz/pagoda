@@ -1,13 +1,25 @@
-add_subdirectory(intermediate)
-add_subdirectory(value)
-add_subdirectory(parser)
-add_subdirectory(interpreter)
+set(PGSCRIPT_SOURCES
+    "ir/anonymous_method.cpp"
+    "ir/ast.cpp"
+    "ir/ast_printer.cpp"
+    "ir/class_declaration.cpp"
+    "ir/function_declaration.cpp"
+    "ir/get_expression.cpp"
+    "ir/parameter.cpp"
+    "ir/set_expression.cpp"
+    "interpreter/interpreter.cpp"
+    "interpreter/interpreter_visitor.cpp"
+    "parser/grammar.h"
+    "parser/grammar_helpers.cpp"
+    "parser/parser.cpp"
+    "value/builtin_functions.cpp"
+    "value/builtin_functions.h"
+    "value/script_callable_body.h"
+    "value/script_callable_body.cpp"
+)
 
 add_library(pgscript OBJECT
-    $<TARGET_OBJECTS:pgscript_intermediate>
-    $<TARGET_OBJECTS:pgscript_interpreter>
-    $<TARGET_OBJECTS:pgscript_parser>
-    $<TARGET_OBJECTS:pgscript_value>
+    ${PGSCRIPT_SOURCES}
 )
 
 target_include_directories(

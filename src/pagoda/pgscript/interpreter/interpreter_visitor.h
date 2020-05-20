@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../intermediate/ast_visitor.h"
+#include "../ir/ast_visitor.h"
 
 #include <memory>
 #include <stack>

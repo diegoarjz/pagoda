@@ -17,10 +17,7 @@ add_library(libpagoda STATIC "${PAGODA_SOURCES}"
     $<TARGET_OBJECTS:math>
     $<TARGET_OBJECTS:graph>
     $<TARGET_OBJECTS:objects>
-    $<TARGET_OBJECTS:pgscript_intermediate>
-    $<TARGET_OBJECTS:pgscript_interpreter>
-    $<TARGET_OBJECTS:pgscript_parser>
-    $<TARGET_OBJECTS:pgscript_value>
+    $<TARGET_OBJECTS:pgscript>
     $<TARGET_OBJECTS:dynamic>
 )
 

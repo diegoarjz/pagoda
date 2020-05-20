@@ -2,7 +2,7 @@
 
 #include <pagoda/geometry/core/geometry.h>
 #include <pagoda/geometry/core/geometry_builder.h>
-#include <pagoda/geometry/core/geometry_exporter.h>
+#include <pagoda/geometry/io/geometry_exporter.h>
 #include <pagoda/math/vec_base.h>
 
 #include <pagoda/common/fs/file_util.h>
@@ -14,6 +14,7 @@
 using namespace pagoda;
 using namespace pagoda::math;
 using namespace pagoda::geometry::core;
+using namespace pagoda::geometry::io;
 
 using GeometryType = GeometryBase<>;
 

@@ -1,7 +1,7 @@
 #include "export_geometry.h"
 
-#include <pagoda/geometry/core/geometry_exporter.h>
 #include <pagoda/geometry/geometry_component.h>
+#include <pagoda/geometry/io/geometry_exporter.h>
 
 #include <pagoda/objects/hierarchical_component.h>
 #include <pagoda/objects/procedural_object_system.h>
@@ -18,6 +18,7 @@ namespace pagoda::geometry::operations
 {
 using namespace objects;
 using namespace geometry::core;
+using namespace geometry::io;
 using namespace geometry::algorithms;
 using namespace dynamic;
 

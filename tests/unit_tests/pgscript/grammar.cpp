@@ -1,4 +1,4 @@
-#include <pagoda/pgscript/intermediate/ast_printer.h>
+#include <pagoda/pgscript/ir/ast_printer.h>
 #include <pagoda/pgscript/parser/grammar.h>
 
 #include <gtest/gtest.h>

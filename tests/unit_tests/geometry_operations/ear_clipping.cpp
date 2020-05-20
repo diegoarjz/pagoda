@@ -3,7 +3,7 @@
 #include <pagoda/geometry/algorithms/ear_clipping.h>
 #include <pagoda/geometry/core/geometry.h>
 #include <pagoda/geometry/core/geometry_builder.h>
-#include <pagoda/geometry/core/geometry_exporter.h>
+#include <pagoda/geometry/io/geometry_exporter.h>
 #include <pagoda/math/math_utils.h>
 
 #include <gtest/gtest.h>
@@ -17,6 +17,7 @@ using namespace pagoda::common;
 using namespace pagoda::math;
 using namespace pagoda::geometry::core;
 using namespace pagoda::geometry::algorithms;
+using namespace pagoda::geometry::io;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../intermediate/ast.h"
-#include "../intermediate/class_declaration.h"
+#include "../ir/ast.h"
+#include "../ir/class_declaration.h"
 #include "grammar_helpers.h"
 
 #include <boost/phoenix/object/construct.hpp>

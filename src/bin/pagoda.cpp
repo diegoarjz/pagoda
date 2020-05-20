@@ -7,7 +7,6 @@
 #include <pagoda/dynamic/set_value_from.h>
 #include <pagoda/dynamic/value_visitor.h>
 
-#include <pagoda/geometry/core/geometry_exporter.h>
 #include <pagoda/graph/default_scheduler.h>
 #include <pagoda/graph/execution_queue.h>
 #include <pagoda/graph/graph_dot_exporter.h>

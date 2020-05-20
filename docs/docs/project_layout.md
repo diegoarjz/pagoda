@@ -113,8 +113,6 @@ pagoda::
     instrument::
   math::
   objects::
-    core::
-    operations::
   graph::
     io::
   geometry::
@@ -153,10 +151,6 @@ The **object** namespace is meat to contain the code related to the procedural
 objects system. As described in its [documentation](objects/objects.md), this
 is an entity composed system.
 
-Within this namespace, code inside the **core** namespace provides code for the
-foundations of this system (e.g., `ProceduralObjectSystem`,
-`ProceduralObject`).
-
 ### graph namespace
 
 The **graph** namespace contains code that allows defining the procedural
@@ -175,4 +169,10 @@ methods for reading and writing geometries to file or elsewhere.
 
 ### pgscript namespace
 
+The **pgscript** namespace contains code for the **pgscript** scripting
+language.
+
 ### dynamic namepsace
+
+The **dynamic** namespace contains code that serves as dynamic bindings between
+*C++* and either **pgscript** or parameters in graph or operations.

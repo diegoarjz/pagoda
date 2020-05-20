@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../intermediate/ast.h"
-#include "../intermediate/parameter.h"
+#include "../ir/ast.h"
+#include "../ir/parameter.h"
 
 #include <pagoda/dynamic/icallable_body.h>
 

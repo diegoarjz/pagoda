@@ -3,12 +3,12 @@
 
 #include <ostream>
 
-#include "geometry.h"
+#include <pagoda/geometry/core/geometry.h>
 
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_access.hpp>
 
-namespace pagoda::geometry::core
+namespace pagoda::geometry::io
 {
 template<class G>
 class GeometryExporter
@@ -111,5 +111,5 @@ protected:
 
 };  // class ObjExporter
 
-}  // namespace pagoda::geometry::core
+}  // namespace pagoda::geometry::io
 #endif

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../intermediate/anonymous_method.h"
-#include "../intermediate/ast.h"
-#include "../intermediate/class_declaration.h"
-#include "../intermediate/get_expression.h"
-#include "../intermediate/parameter.h"
-#include "../intermediate/set_expression.h"
+#include "../ir/anonymous_method.h"
+#include "../ir/ast.h"
+#include "../ir/class_declaration.h"
+#include "../ir/get_expression.h"
+#include "../ir/parameter.h"
+#include "../ir/set_expression.h"
 
 namespace pagoda
 {

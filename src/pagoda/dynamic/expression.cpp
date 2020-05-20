@@ -12,8 +12,8 @@
 #include "value_not_found.h"
 #include "value_visitor.h"
 
-#include <pagoda/pgscript/intermediate/ast.h>
-#include <pagoda/pgscript/intermediate/ast_visitor.h>
+#include <pagoda/pgscript/ir/ast.h>
+#include <pagoda/pgscript/ir/ast_visitor.h>
 #include <pagoda/pgscript/interpreter/interpreter.h>
 #include <pagoda/pgscript/parser/parser.h>
 

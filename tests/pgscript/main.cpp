@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
 #include <pagoda/pagoda.h>
-#include <pagoda/pgscript/intermediate/ast.h>
-#include <pagoda/pgscript/intermediate/ast_printer.h>
+#include <pagoda/pgscript/ir/ast.h>
+#include <pagoda/pgscript/ir/ast_printer.h>
 #include <pagoda/pgscript/interpreter/interpreter.h>
 #include <pagoda/pgscript/parser/parser.h>
 
