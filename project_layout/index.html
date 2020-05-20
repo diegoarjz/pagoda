@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Project Layout - Selector</title>
+    <link href="../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Project Layout", url: "#_top", children: [
+              {title: "Top Level Layout", url: "#top-level-layout" },
+              {title: "Namespace Layout", url: "#namespace-layout" },
+          ]},
+        ];
+
+    </script>
+    <script src="../js/base.js"></script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-65082977-2', 'auto');
+        ga('send', 'pageview');
+    </script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="project-layout">Project Layout</h1>
+<p><strong>Pagoda</strong> tries to follow the <a href="https://api.csswg.org/bikeshed/?force=1&amp;url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs">Pitchfork Layout Model</a> (PFL) as closely as possible.</p>
+<p>The authors succinctly describe PFL as follows:</p>
+<blockquote>
+<p>PFL a convention for laying out source, build, and resource files in a
+filesystem to aide in uniformity, tooling, understandability, and
+compartmentalization.</p>
+</blockquote>
+<p>It's a very thought out layout that tries to achieve a more standard way of
+structuring a C++ source code. To this end, and in the interest of keeping
+things as standard as possible with other open source projects, this page
+describes the project layout for <strong>pagoda</strong>.</p>
+<h2 id="top-level-layout">Top Level Layout</h2>
+<p>From the layout described in PCL, <strong>pagoda</strong> uses the following:</p>
+<pre><code class="text">pagoda/
+  build/
+  include/
+    pagoda/
+  src/
+    pagoda/
+    bin/
+  tests/
+  external/
+  docs/
+</code></pre>
+
+<p>We will start by describing the simplest directories first.</p>
+<h3 id="build-directory">Build Directory</h3>
+<p>The purpose of the <strong>build</strong> is to contain ephemeral build results and should
+not be checked into the version control system. According to PFL multiple
+subdirectories are allowed, each reflecting a different build configuration
+(e.g., <strong>Release</strong> or <strong>Debug</strong>).</p>
+<h3 id="tests-directory">Tests Directory</h3>
+<p>The purpose of the <strong>tests</strong> directory is to contain all source code files used
+to compile (<strong>non-unit</strong>) tests. More specifically, this directory contains
+regression tests for both <strong>pagoda</strong> graph files and <strong>pgscript</strong> scripts.</p>
+<p>To allow <strong>pagoda</strong> to be embedded in other projects, the compilation of the
+tests in this directory should be automatically disabled.</p>
+<p>Unit tests are placed alongside the respective <strong>unit</strong> they are testing. For
+example, if we have a class in <code>pagoda/src/module/a_class.cpp</code> its test should
+be placed in <code>pagoda/src/module/a_class.test.cpp</code>. The advantage being that,
+while writing <strong>pagoda</strong>'s source code, it should be easier to navigate between
+source and test code and to understand which compilation units have unit tests
+or not.</p>
+<h3 id="external-directory">External Directory</h3>
+<p>The purpose of the <strong>external</strong> directory is to contain all embeddable projects
+that are to be built as a part of <strong>pagoda</strong>. Each subdirectory should be
+respective to a different project.</p>
+<p>Currently, the only embeddable dependency in <strong>pagoda</strong> is the <a href="https://github.com/google/googletest">google
+test</a>. Because it is set as a git
+sub-module, its subdirectory within the <strong>exteral</strong> directory is
+auto-populated.</p>
+<h3 id="include-directory">Include Directory</h3>
+<p>The purpose of the <strong>include</strong> directory is to hold <strong>pagoda</strong>'s public headers
+which are meant to be used by clients of the <strong>pagoda</strong> library.</p>
+<p>Consumers of <strong>pagoda</strong>'s library should only be pointed to this directory as a
+source of include files, preventing users from being able to <code>#include</code> files
+that are inside the <strong>source</strong> directory.</p>
+<p>The file structure within the <strong>include</strong> directory follows the exact same
+structure as the <strong>src</strong> directory.</p>
+<h3 id="src-directory">Src Directory</h3>
+<p>The purpose the <strong>src</strong> directory is to contain all source code files to build
+<strong>pagoda</strong> executable binary and library.</p>
+<p>The PFL doesn't shed a lot of light into how the split between library code and
+executable code should be achieved. Furthermore, because <strong>pagoda</strong>'s main
+codebase lies in its library and it is still not clear how many executables
+this project will have, the current choice of splitting is to have a
+<code>src/pagoda/</code> and <code>include/pagoda/</code> directories for the library and a
+<code>src/bin/</code> directory for the executables. At this stage, it is not prescribed
+how the source code for each binary shall be structure within this directory.</p>
+<p>C++ namespaces should be reflected in the file structure of both the <strong>src</strong>
+and <strong>include</strong> directories. For example the class <code>pagoda::geometry::Geometry</code>
+should have its c++ file in <code>pagoda/src/pagoda/geometry/Geometry.cpp</code> and its
+header file in <code>pagoda/include/pagoda/geometry/Geometry.h</code> (assuming it's a
+public header).</p>
+<h2 id="namespace-layout">Namespace Layout</h2>
+<p><strong>Pagoda</strong>'s library has several components that should be properly organised
+to allow a better and faster development. Because the namespace structure
+dictates the file layout, it is more convenient to describe the namespaces and
+their structure.</p>
+<pre><code class="text">pagoda::
+  common::
+    debug::
+    exception::
+    fs::
+    instrument::
+  math::
+  objects::
+  graph::
+    io::
+  geometry::
+    core::
+    io::
+    algorithms::
+    operations::
+  pgscript::
+    value::
+    parser::
+    intermediate::
+    interpreter::
+  dynamic::
+    binding::
+</code></pre>
+
+<h3 id="common-namespace">common namespace</h3>
+<p>The <strong>common</strong> namespace contains code that, as the name implies, is common to
+all of <strong>pagoda</strong>. Within it, there are namespaces with code to help in
+debugging (e.g., assertions, logging), the base of the exception system,
+generic file system handling and code for instrumenting <strong>pagoda</strong> itself
+(e.g., profilers and statistics).</p>
+<h3 id="math-namespace">math namespace</h3>
+<p>The <strong>math</strong> namespace contains mathematical functions and methods that are not
+provided by other libraries (currently, <strong>pagoda</strong> is only using <strong>boost</strong>
+libraries). Whenever possible, it should be better reusing maths code that is
+provided by specific libraries. <strong>Pagoda</strong> doesn't want to reinvent the
+mathematical wheel.</p>
+<h3 id="object-namespace">object namespace</h3>
+<p>The <strong>object</strong> namespace is meat to contain the code related to the procedural
+objects system. As described in its <a href="../objects/objects/">documentation</a>, this
+is an entity composed system.</p>
+<h3 id="graph-namespace">graph namespace</h3>
+<p>The <strong>graph</strong> namespace contains code that allows defining the procedural
+graphs, its rules and their posterior execution. The execution code for the
+core node types, along with the extension points, should also reside within
+this name space.</p>
+<p>Code for loading and saving graphs (to disk or elsewhere) should be contained
+in the <strong>pagoda::graph::io</strong> namespace.</p>
+<h3 id="geometry-namespace">geometry namespace</h3>
+<p>The <strong>geometry</strong> namespace contains code for geometry and topology
+representations in its <strong>core</strong> namespace. In the <strong>io</strong> namespace provides
+methods for reading and writing geometries to file or elsewhere.</p>
+<h3 id="pgscript-namespace">pgscript namespace</h3>
+<p>The <strong>pgscript</strong> namespace contains code for the <strong>pgscript</strong> scripting
+language.</p>
+<h3 id="dynamic-namepsace">dynamic namepsace</h3>
+<p>The <strong>dynamic</strong> namespace contains code that serves as dynamic bindings between
+<em>C++</em> and either <strong>pgscript</strong> or parameters in graph or operations.</p>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="container-fluid wm-page-content">
+      <p>
+        <a href="https://github.com/diegoarjz/selector/edit/master/docs/docs/project_layout.md"><i class="fa fa-github"></i>
+Edit on GitHub</a>
+      </p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+
+</body>
+</html>

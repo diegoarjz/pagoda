@@ -174,19 +174,8 @@ be one of the most flexible methods to specify the rules in procedural
 modelling. The idea is to, eventually, reach a design that allows its users to
 re-use code from any of the available layers to implement other methodologies.</p>
 <h2 id="project-layout">Project layout</h2>
-<pre><code>pagoda/
-    source/                         # Pagoda's library source code
-        common/                     # Code common to all layers
-        dynamic_value/              # Interface between pagoda and pgscript
-        geometry_core/              # Core geometry and topology representation
-        geometry_operations/        # Operations on geometries
-        math_lib/                   # Mathematics Library
-        procedural_graph/           # Procedural graph, nodes and reader
-        procedural_objects/         # Procedural objects, components and operations
-        pgscript/                  # Grammar, parser and interpreter for pgscript
-    tests/                          # Unit tests and regression tests for pagoda and pgscript
-    tools/                          # Executables
-</code></pre>
+<p><strong>Pagoda</strong> tries to follow the <a href="https://api.csswg.org/bikeshed/?force=1&amp;url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs">Pitchfork Layout Model</a> (PFL) as closely as possible.</p>
+<p>The exact project layout is described here: <a href="project_layout/">Project Layout</a>.</p>
 <h2 id="procedural-objects">Procedural Objects</h2>
 <p><a href="objects/objects/">Procedural Objects</a> flow through the graph edges and are
 manipulated by <a href="operations/operations/">Procedural Operations</a>.</p>
@@ -238,5 +227,5 @@ Edit on GitHub</a>
 </html>
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-05-06 17:49:16
+Build Date UTC : 2020-05-20 13:54:54
 -->
