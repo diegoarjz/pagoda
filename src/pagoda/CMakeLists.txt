@@ -47,3 +47,6 @@ target_compile_definitions(
     PRIVATE
         $<$<CONFIG:DEBUG>:DEBUG>
 )
+
+set_target_properties(libpagoda PROPERTIES PREFIX "")
+set_target_properties(libpagoda PROPERTIES OUTPUT_NAME "libpagoda")
