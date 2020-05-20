@@ -1,25 +1,28 @@
 #include <gtest/gtest.h>
 
-#include <pagoda.h>
-#include <pgscript/intermediate/ast.h>
-#include <pgscript/intermediate/ast_printer.h>
-#include <pgscript/interpreter/interpreter.h>
-#include <pgscript/parser/parser.h>
+#include <pagoda/pagoda.h>
+#include <pagoda/pgscript/ir/ast.h>
+#include <pagoda/pgscript/ir/ast_printer.h>
+#include <pagoda/pgscript/interpreter/interpreter.h>
+#include <pagoda/pgscript/parser/parser.h>
 
-#include <dynamic_value/dynamic_plane.h>
-#include <dynamic_value/float_value.h>
-#include <dynamic_value/integer_value.h>
-#include <dynamic_value/string_value.h>
-#include <dynamic_value/vector3.h>
+#include <pagoda/dynamic/dynamic_plane.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/integer_value.h>
+#include <pagoda/dynamic/string_value.h>
+#include <pagoda/dynamic/vector3.h>
 
-#include <math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
-#include <common/exception.h>
-#include <common/file_util.h>
+#include <pagoda/common/exception/exception.h>
+#include <pagoda/common/fs/file_util.h>
 
 #include <boost/filesystem/path.hpp>
 
 using namespace pagoda;
+using namespace pagoda::common;
+using namespace pagoda::math;
+using namespace pagoda::dynamic;
 
 class RegressionTest
 {
@@ -36,7 +39,7 @@ public:
 	RegressionTest(const std::string& name) : m_regressionTestName(name)
 	{
 		m_testDir = GetTestFilesDirectory() / "test_files" / name;
-		std::string code = file_util::LoadFileToString(GetScriptFile().string());
+		std::string code = fs::LoadFileToString(GetScriptFile().string());
 		m_program = Parser().Parse(code);
 	}
 
@@ -58,15 +61,15 @@ public:
 		m_program->AcceptVisitor(&printer);
 		if (s_write)
 		{
-			file_util::WriteStringToFile(GetASTFile().string(), ss.str());
-			file_util::WriteStringToFile(GetStdOutFile().string(), myStdout.str());
-			file_util::WriteStringToFile(GetStdErrFile().string(), myStderr.str());
+			fs::WriteStringToFile(GetASTFile().string(), ss.str());
+			fs::WriteStringToFile(GetStdOutFile().string(), myStdout.str());
+			fs::WriteStringToFile(GetStdErrFile().string(), myStderr.str());
 		}
 		else
 		{
-			std::string expectedAst = file_util::LoadFileToString(GetASTFile().string());
-			std::string expectedOut = file_util::LoadFileToString(GetStdOutFile().string());
-			std::string expectedErr = file_util::LoadFileToString(GetStdErrFile().string());
+			std::string expectedAst = fs::LoadFileToString(GetASTFile().string());
+			std::string expectedOut = fs::LoadFileToString(GetStdOutFile().string());
+			std::string expectedErr = fs::LoadFileToString(GetStdErrFile().string());
 
 			EXPECT_EQ(ss.str(), expectedAst);
 			EXPECT_EQ(myStdout.str(), expectedOut);
@@ -99,7 +102,7 @@ bool RegressionTest::s_write = false;
 			RegressionTest r(#NAME);                           \
 			r.Match(EXPECTED);                                 \
 		}                                                      \
-		catch (Exception & e)                                  \
+		catch (pagoda::common::exception::Exception & e)       \
 		{                                                      \
 			LOG_ERROR("Exception caught while running test:"); \
 			LOG_ERROR(e.What());                               \
@@ -122,7 +125,8 @@ int main(int argc, char* argv[])
 
 	auto returnVal = RUN_ALL_TESTS();
 
-	ConsoleProfilerLogger consoleLogger(ProfilerManager::Instance());
+	pagoda::common::instrument::ConsoleProfilerLogger consoleLogger(
+	    pagoda::common::instrument::ProfilerManager::Instance());
 	consoleLogger.Log(20);
 
 	return returnVal;

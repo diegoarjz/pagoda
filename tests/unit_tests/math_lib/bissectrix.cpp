@@ -1,5 +1,5 @@
-#include <math_lib/bissectrix.h>
-#include <math_lib/vec_base.h>
+#include <pagoda/math/bissectrix.h>
+#include <pagoda/math/vec_base.h>
 
 #include <boost/qvm/vec.hpp>
 #include <boost/qvm/vec_operations.hpp>
@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(Bissectrix, when_finding_the_bissectrix_between_two_vectors_should_return_a_vector)
 {

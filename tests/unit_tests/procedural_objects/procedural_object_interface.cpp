@@ -1,11 +1,13 @@
-#include <procedural_objects/geometry_component.h>
-#include <procedural_objects/geometry_system.h>
-#include <procedural_objects/procedural_object.h>
-#include <procedural_objects/procedural_operation.h>
+#include <pagoda/geometry/geometry_component.h>
+#include <pagoda/geometry/geometry_system.h>
+#include <pagoda/objects/procedural_object.h>
+#include <pagoda/objects/procedural_operation.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::objects;
+using namespace pagoda::geometry;
 
 class ProceduralOperationObjectInterfaceTest : public ::testing::Test
 {

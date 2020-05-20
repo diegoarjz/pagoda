@@ -1,18 +1,19 @@
-#include <dynamic_value/boolean_value.h>
-#include <dynamic_value/dynamic_value_base.h>
-#include <dynamic_value/float_value.h>
-#include <dynamic_value/get_value_as.h>
-#include <dynamic_value/integer_value.h>
-#include <dynamic_value/null_object_value.h>
-#include <dynamic_value/set_value_from.h>
-#include <dynamic_value/string_value.h>
-#include <dynamic_value/type_info.h>
+#include <pagoda/dynamic/boolean_value.h>
+#include <pagoda/dynamic/dynamic_value_base.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/get_value_as.h>
+#include <pagoda/dynamic/integer_value.h>
+#include <pagoda/dynamic/null_object_value.h>
+#include <pagoda/dynamic/set_value_from.h>
+#include <pagoda/dynamic/string_value.h>
+#include <pagoda/dynamic/type_info.h>
 
 #include <gtest/gtest.h>
 
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace pagoda::dynamic;
 
 TEST(FloatValue, test_constructions)
 {

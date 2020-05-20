@@ -1,14 +1,15 @@
-#include <dynamic_value/dynamic_class.h>
-#include <dynamic_value/dynamic_instance.h>
-#include <dynamic_value/icallable_body.h>
-#include <dynamic_value/null_object_value.h>
-#include <dynamic_value/type_info.h>
+#include <pagoda/dynamic/dynamic_class.h>
+#include <pagoda/dynamic/dynamic_instance.h>
+#include <pagoda/dynamic/icallable_body.h>
+#include <pagoda/dynamic/null_object_value.h>
+#include <pagoda/dynamic/type_info.h>
 
 #include <gtest/gtest.h>
 
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace pagoda::dynamic;
 
 class TestCallableBody : public ICallableBody
 {

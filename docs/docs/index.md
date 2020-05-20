@@ -12,18 +12,9 @@ re-use code from any of the available layers to implement other methodologies.
 
 ## Project layout
 
-    pagoda/
-        source/                         # Pagoda's library source code
-            common/                     # Code common to all layers
-            dynamic_value/              # Interface between pagoda and pgscript
-            geometry_core/              # Core geometry and topology representation
-            geometry_operations/        # Operations on geometries
-            math_lib/                   # Mathematics Library
-            procedural_graph/           # Procedural graph, nodes and reader
-            procedural_objects/         # Procedural objects, components and operations
-            pgscript/                  # Grammar, parser and interpreter for pgscript
-        tests/                          # Unit tests and regression tests for pagoda and pgscript
-        tools/                          # Executables
+**Pagoda** tries to follow the [Pitchfork Layout Model](https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs) (PFL) as closely as possible.
+
+The exact project layout is described here: [Project Layout](project_layout.md).
 
 ## Procedural Objects
 

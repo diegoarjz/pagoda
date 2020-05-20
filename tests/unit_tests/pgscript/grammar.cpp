@@ -1,5 +1,5 @@
-#include <pgscript/parser/grammar.h>
-#include <pgscript/intermediate/ast_printer.h>
+#include <pagoda/pgscript/ir/ast_printer.h>
+#include <pagoda/pgscript/parser/grammar.h>
 
 #include <gtest/gtest.h>
 
@@ -35,11 +35,11 @@ TEST_P(IdentifierTest, testIdentifierAsStatement)
 	iterator begin = test.begin();
 	iterator end = test.end();
 
-    pagoda::grammar<iterator> p;
-    ast::IdentifierPtr ident;
+	pagoda::grammar<iterator> p;
+	ast::IdentifierPtr ident;
 	boost::spirit::qi::phrase_parse(begin, end, p.identifier, boost::spirit::qi::space, ident);
-    ASSERT_NE(ident, nullptr);
-    EXPECT_EQ(ident->GetIdentifier(), GetParam());
+	ASSERT_NE(ident, nullptr);
+	EXPECT_EQ(ident->GetIdentifier(), GetParam());
 }
 
 // clang-format off

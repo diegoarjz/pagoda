@@ -13,8 +13,7 @@ find_package(Boost COMPONENTS chrono system program_options filesystem)
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(source)
-add_subdirectory(tools)
+add_subdirectory(src)
 
 enable_testing()
 add_subdirectory(tests)

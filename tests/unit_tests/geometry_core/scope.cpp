@@ -1,6 +1,6 @@
-#include <geometry_core/geometry.h>
-#include <geometry_core/geometry_builder.h>
-#include <geometry_core/scope.h>
+#include <pagoda/geometry/core/geometry.h>
+#include <pagoda/geometry/core/geometry_builder.h>
+#include <pagoda/geometry/core/scope.h>
 
 #include <gtest/gtest.h>
 
@@ -9,6 +9,9 @@
 #include <boost/qvm/vec_operations.hpp>
 
 using namespace pagoda;
+using namespace pagoda::math;
+using namespace pagoda::geometry::core;
+
 using GeometryType = GeometryBase<>;
 
 TEST(Scope, test_scope_construction)

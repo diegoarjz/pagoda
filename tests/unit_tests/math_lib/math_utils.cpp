@@ -1,10 +1,12 @@
-#include <math_lib/degrees.h>
-#include <math_lib/math_utils.h>
-#include <math_lib/radians.h>
+#include <pagoda/math/degrees.h>
+#include <pagoda/math/math_utils.h>
+#include <pagoda/math/radians.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::math;
+
 using mt = MathUtils<float>;
 
 TEST(ConversionTests, RadiansToDegrees)

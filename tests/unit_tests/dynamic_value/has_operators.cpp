@@ -1,18 +1,19 @@
-#include <dynamic_value/binding/has_operators.h>
-#include <dynamic_value/boolean_value.h>
-#include <dynamic_value/dynamic_value_base.h>
-#include <dynamic_value/float_value.h>
-#include <dynamic_value/integer_value.h>
-#include <dynamic_value/null_object_value.h>
-#include <dynamic_value/string_value.h>
-#include <dynamic_value/type_info.h>
-#include <dynamic_value/vector3.h>
+#include <pagoda/dynamic/binding/has_operators.h>
+#include <pagoda/dynamic/boolean_value.h>
+#include <pagoda/dynamic/dynamic_value_base.h>
+#include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/integer_value.h>
+#include <pagoda/dynamic/null_object_value.h>
+#include <pagoda/dynamic/string_value.h>
+#include <pagoda/dynamic/type_info.h>
+#include <pagoda/dynamic/vector3.h>
 
 #include <gtest/gtest.h>
 
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace pagoda::dynamic;
 
 template<class LHS, class RHS>
 bool assertHasAddOperator()

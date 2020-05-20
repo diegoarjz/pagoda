@@ -1,10 +1,11 @@
-#include <math_lib/vec_base.h>
+#include <pagoda/math/vec_base.h>
 
-#include <math_lib/projection.h>
+#include <pagoda/math/projection.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::math;
 
 TEST(ProjectionTest, when_projecting_a_point_to_a_line_should_return_the_correct_point)
 {

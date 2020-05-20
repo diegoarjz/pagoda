@@ -1,9 +1,9 @@
-#include <geometry_core/geometry.h>
-#include <geometry_core/geometry_exporter.h>
-#include <geometry_operations/extrusion.h>
-#include <math_lib/vec_base.h>
+#include <pagoda/geometry/algorithms/extrusion.h>
+#include <pagoda/geometry/core/geometry.h>
+#include <pagoda/geometry/io/geometry_exporter.h>
+#include <pagoda/math/vec_base.h>
 
-#include <common/file_util.h>
+#include <pagoda/common/fs/file_util.h>
 
 #include "../test_utils.h"
 
@@ -12,6 +12,10 @@
 #include <memory>
 
 using namespace pagoda;
+using namespace pagoda::math;
+using namespace pagoda::geometry::core;
+using namespace pagoda::geometry::io;
+using namespace pagoda::geometry::algorithms;
 
 using GeometryType = GeometryBase<>;
 using GeometryPtr = std::shared_ptr<GeometryType>;

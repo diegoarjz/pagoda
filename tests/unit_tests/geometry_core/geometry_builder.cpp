@@ -1,6 +1,6 @@
-#include <geometry_core/geometry.h>
-#include <geometry_core/geometry_builder.h>
-#include <math_lib/vec_base.h>
+#include <pagoda/geometry/core/geometry.h>
+#include <pagoda/geometry/core/geometry_builder.h>
+#include <pagoda/math/vec_base.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -9,6 +9,8 @@
 #include "mock_objects.h"
 
 using namespace pagoda;
+using namespace pagoda::math;
+using namespace pagoda::geometry::core;
 using namespace ::testing;
 
 using GeometryType = GeometryBase<>;

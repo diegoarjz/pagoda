@@ -1,13 +1,14 @@
-#include <dynamic_value/binding/cast_to.h>
-#include <dynamic_value/boolean_value.h>
-#include <dynamic_value/dynamic_value_table.h>
-#include <dynamic_value/value_not_found.h>
+#include <pagoda/dynamic/binding/cast_to.h>
+#include <pagoda/dynamic/boolean_value.h>
+#include <pagoda/dynamic/dynamic_value_table.h>
+#include <pagoda/dynamic/value_not_found.h>
 
 #include <gtest/gtest.h>
 
 #include "../test_utils.h"
 
 using namespace pagoda;
+using namespace pagoda::dynamic;
 
 class DynamicValueTableTest : public ::testing::Test
 {

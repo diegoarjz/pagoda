@@ -1,4 +1,0 @@
-#ifndef PAGODA_MATH_LIB_LENGHT_H_
-#define PAGODA_MATH_LIB_LENGHT_H_
-
-#endif

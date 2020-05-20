@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <common/logger.h>
+#include <pagoda/common/debug/logger.h>
 
 #include "test_utils.h"
 
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
 	auto returnVal = RUN_ALL_TESTS();
 
-	pagoda::Logger::Shutdown();
+	pagoda::common::debug::Logger::Shutdown();
 
 	return returnVal;
 }

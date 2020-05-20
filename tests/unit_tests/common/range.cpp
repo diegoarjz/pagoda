@@ -1,10 +1,11 @@
-#include <common/range.h>
+#include <pagoda/common/range.h>
 
 #include <gtest/gtest.h>
 
 #include <iostream>
 
 using namespace pagoda;
+using namespace pagoda::common;
 
 template<class Type>
 class RangeTest : public ::testing::Test

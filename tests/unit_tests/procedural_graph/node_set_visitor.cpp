@@ -1,13 +1,14 @@
-#include <procedural_graph/input_interface_node.h>
-#include <procedural_graph/node_set_visitor.h>
-#include <procedural_graph/operation_node.h>
-#include <procedural_graph/output_interface_node.h>
+#include <pagoda/graph/input_interface_node.h>
+#include <pagoda/graph/node_set_visitor.h>
+#include <pagoda/graph/operation_node.h>
+#include <pagoda/graph/output_interface_node.h>
 
-#include <pagoda.h>
+#include <pagoda/pagoda.h>
 
 #include <gtest/gtest.h>
 
 using namespace pagoda;
+using namespace pagoda::graph;
 
 class NodeTypeFilterTest : public ::testing::Test
 {
@@ -27,7 +28,7 @@ protected:
 	std::shared_ptr<OutputInterfaceNode> m_outputInterfaceNode;
 	std::shared_ptr<OperationNode> m_operationNode;
 	NodeSet<Node> m_nodeSet;
-    Pagoda m_pagoda;
+	Pagoda m_pagoda;
 };
 
 TEST_F(NodeTypeFilterTest, when_visiting_a_node_set_should_call_visitor_methods_for_different_node_types)
