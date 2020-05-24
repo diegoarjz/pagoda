@@ -94,8 +94,9 @@ protected:
 	                 const typename GeometryExporter<G>::VertexAttributes &vAttributes) final
 	{
 		outStream << "v " << X(position) << " " << Y(position) << " " << Z(position) << "\n";
-		outStream << "n " << X(vAttributes.m_normal) << " " << Y(vAttributes.m_normal) << " " << Z(vAttributes.m_normal)
-		          << "\n";
+		outStream << "vn " << X(vAttributes.m_normal) << " " << Y(vAttributes.m_normal) << " "
+		          << Z(vAttributes.m_normal) << "\n";
+		outStream << "vt " << X(vAttributes.m_texCoords) << " " << Y(vAttributes.m_texCoords) << "\n";
 	}
 
 	void StartFace(std::ostream &outStream) final { outStream << "f "; }

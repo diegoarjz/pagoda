@@ -24,6 +24,8 @@ struct DefaultVertexAttributes
 {
 	/// Normal at the point. May differ from the face normal.
 	math::Vec3F m_normal;
+	/// Texture coordinates.
+	math::Vec2F m_texCoords;
 };  // struct VertAttributes
 
 /**
