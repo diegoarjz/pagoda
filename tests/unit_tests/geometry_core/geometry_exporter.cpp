@@ -32,10 +32,10 @@ TEST_F(GeometryExporterTest, geometry_exporter_export_obj_one_face)
 {
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 
-	builder.AddPoint(Vec3F{0, 0, 0});
-	builder.AddPoint(Vec3F{1, 0, 0});
-	builder.AddPoint(Vec3F{1, 1, 0});
-	builder.AddPoint(Vec3F{0, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 0});
 
 	auto face = builder.StartFace(4);
 	face.AddIndex(0);
@@ -57,16 +57,16 @@ TEST_F(GeometryExporterTest, geometry_exporter_export_cube)
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 
 	// Bottom face
-	builder.AddPoint(Vec3F{0, 0, 0});
-	builder.AddPoint(Vec3F{1, 0, 0});
-	builder.AddPoint(Vec3F{1, 1, 0});
-	builder.AddPoint(Vec3F{0, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 0});
 
 	// Top face
-	builder.AddPoint(Vec3F{0, 0, 1});
-	builder.AddPoint(Vec3F{1, 0, 1});
-	builder.AddPoint(Vec3F{1, 1, 1});
-	builder.AddPoint(Vec3F{0, 1, 1});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 1});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 1});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 1});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 1});
 
 	auto bottomFace = builder.StartFace(4);
 	auto topFace = builder.StartFace(4);

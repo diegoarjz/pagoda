@@ -52,15 +52,15 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 	for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter)
 	{
 		auto position = m_geometry->GetPosition(m_geometry->GetPoint((*iter)));
-		if (position == Vec3F{0, 0, 0})
+		if (position == boost::qvm::vec<float, 3>{0, 0, 0})
 		{
 			currentSplitPoint = *iter;
 			break;
 		}
 	}
 
-	std::array<Vec3F, 5> expected = {Vec3F{0, 0, 0}, Vec3F{1, 0, 0}, Vec3F{1, 1, 0}, Vec3F{0.5f, 0.5f, 0},
-	                                 Vec3F{0, 1, 0}};
+	std::array<boost::qvm::vec<float, 3>, 5> expected = {boost::qvm::vec<float, 3>{0, 0, 0}, boost::qvm::vec<float, 3>{1, 0, 0}, boost::qvm::vec<float, 3>{1, 1, 0}, boost::qvm::vec<float, 3>{0.5f, 0.5f, 0},
+	                                 boost::qvm::vec<float, 3>{0, 1, 0}};
 
 	for (auto i = 0u; i < 5; ++i)
 	{

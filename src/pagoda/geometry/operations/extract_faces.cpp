@@ -61,7 +61,7 @@ void ExtractFaces::DoWork()
 			outGeometryComponent->SetGeometry(g);
 			if (boost::qvm::dot(faceNormal, inScopeZAxis) == 0)
 			{
-				Mat3x3F constrainedRotation;
+				boost::qvm::mat<float, 3, 3> constrainedRotation;
 				auto xAxis = boost::qvm::normalized(boost::qvm::cross(inScopeZAxis, faceNormal));
 				boost::qvm::col<0>(constrainedRotation) = xAxis;
 				boost::qvm::col<1>(constrainedRotation) = inScopeZAxis;

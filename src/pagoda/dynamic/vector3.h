@@ -19,13 +19,13 @@ public:
 	static std::shared_ptr<Vector3> DynamicConstructor(const std::vector<DynamicValueBasePtr>& args);
 
 	Vector3();
-	explicit Vector3(const math::Vec3F& v);
+	explicit Vector3(const boost::qvm::vec<float, 3>& v);
 	explicit Vector3(const Vector3& v);
 	virtual ~Vector3();
 
-	explicit operator math::Vec3F() const;
+	explicit operator boost::qvm::vec<float, 3>() const;
 
-	Vector3& operator=(const math::Vec3F& v);
+	Vector3& operator=(const boost::qvm::vec<float, 3>& v);
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
@@ -51,7 +51,7 @@ public:
 private:
 	void RegisterMembers();
 
-	math::Vec3F m_nativeVector;
+	boost::qvm::vec<float, 3> m_nativeVector;
 };
 
 }  // namespace pagoda::dynamic

@@ -31,7 +31,7 @@ DynamicPlane::DynamicPlane(const Plane<float>& plane) : BuiltinClass(s_typeInfo)
 
 DynamicPlane::DynamicPlane(Vector3Ptr point, Vector3Ptr normal)
     : BuiltinClass(s_typeInfo),
-      m_nativePlane(Plane<float>::FromPointAndNormal(static_cast<Vec3F>(*point), static_cast<Vec3F>(*normal)))
+      m_nativePlane(Plane<float>::FromPointAndNormal(static_cast<boost::qvm::vec<float, 3>>(*point), static_cast<boost::qvm::vec<float, 3>>(*normal)))
 {
 	RegisterMembers();
 }

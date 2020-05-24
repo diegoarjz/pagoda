@@ -36,9 +36,9 @@ TEST_F(TriangulateTest, test_triangulate_triangle)
 {
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 
-	builder.AddPoint(Vec3F{0, 0, 0});
-	builder.AddPoint(Vec3F{1, 0, 0});
-	builder.AddPoint(Vec3F{1, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 0});
 
 	auto face = builder.StartFace(3);
 	face.AddIndex(0);
@@ -60,10 +60,10 @@ TEST_F(TriangulateTest, test_triangulate_square)
 {
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 
-	builder.AddPoint(Vec3F{0, 0, 0});
-	builder.AddPoint(Vec3F{1, 0, 0});
-	builder.AddPoint(Vec3F{1, 1, 0});
-	builder.AddPoint(Vec3F{0, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 0});
 
 	auto face = builder.StartFace(4);
 	face.AddIndex(0);

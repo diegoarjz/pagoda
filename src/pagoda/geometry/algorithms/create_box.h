@@ -22,18 +22,18 @@ public:
 		float halfYSize = 0.5f * ySize;
 		float halfZSize = 0.5f * zSize;
 
-		m_points[0] = math::Vec3F{-halfXSize, -halfYSize, -halfZSize};
-		m_points[1] = math::Vec3F{halfXSize, -halfYSize, -halfZSize};
-		m_points[2] = math::Vec3F{-halfXSize, halfYSize, -halfZSize};
-		m_points[3] = math::Vec3F{halfXSize, halfYSize, -halfZSize};
+		m_points[0] = boost::qvm::vec<float, 3>{-halfXSize, -halfYSize, -halfZSize};
+		m_points[1] = boost::qvm::vec<float, 3>{halfXSize, -halfYSize, -halfZSize};
+		m_points[2] = boost::qvm::vec<float, 3>{-halfXSize, halfYSize, -halfZSize};
+		m_points[3] = boost::qvm::vec<float, 3>{halfXSize, halfYSize, -halfZSize};
 
-		m_points[4] = math::Vec3F{-halfXSize, -halfYSize, halfZSize};
-		m_points[5] = math::Vec3F{halfXSize, -halfYSize, halfZSize};
-		m_points[6] = math::Vec3F{-halfXSize, halfYSize, halfZSize};
-		m_points[7] = math::Vec3F{halfXSize, halfYSize, halfZSize};
+		m_points[4] = boost::qvm::vec<float, 3>{-halfXSize, -halfYSize, halfZSize};
+		m_points[5] = boost::qvm::vec<float, 3>{halfXSize, -halfYSize, halfZSize};
+		m_points[6] = boost::qvm::vec<float, 3>{-halfXSize, halfYSize, halfZSize};
+		m_points[7] = boost::qvm::vec<float, 3>{halfXSize, halfYSize, halfZSize};
 	}
 
-	CreateBox(const std::array<math::Vec3F, 8> &points) : m_points(points) {}
+	CreateBox(const std::array<boost::qvm::vec<float, 3>, 8> &points) : m_points(points) {}
 
 	CreateBox(const core::Scope &s) : m_points(s.GetWorldPoints()) {}
 
@@ -99,7 +99,7 @@ public:
 	}
 
 private:
-	std::array<math::Vec3F, 8> m_points;
+	std::array<boost::qvm::vec<float, 3>, 8> m_points;
 };
 
 }  // namespace pagoda::geometry::algorithms

@@ -11,8 +11,8 @@ using namespace pagoda::math;
 
 TEST(PlaneVsPlaneIntersectionTest, when_the_planes_intersect_should_return_a_line_intersection)
 {
-	Plane<float> p1(Vec3F{1, 0, 0}, 0);
-	Plane<float> p2(Vec3F{0, 1, 0}, 0);
+	Plane<float> p1(boost::qvm::vec<float, 3>{1, 0, 0}, 0);
+	Plane<float> p2(boost::qvm::vec<float, 3>{0, 1, 0}, 0);
 
 	auto i = intersection(p1, p2);
 	EXPECT_EQ(i.m_type, PlaneIntersectionType::Type::Intersection);
@@ -22,8 +22,8 @@ TEST(PlaneVsPlaneIntersectionTest, when_the_planes_intersect_should_return_a_lin
 
 TEST(PlaneVsPlaneIntersectionTest, when_the_planes_dont_intersect_should_return_no_intersection)
 {
-	Plane<float> p1(Vec3F{1, 0, 0}, 0);
-	Plane<float> p2(Vec3F{1, 0, 0}, 1);
+	Plane<float> p1(boost::qvm::vec<float, 3>{1, 0, 0}, 0);
+	Plane<float> p2(boost::qvm::vec<float, 3>{1, 0, 0}, 1);
 
 	auto i = intersection(p1, p2);
 	EXPECT_EQ(i.m_type, PlaneIntersectionType::Type::NoIntersection);
@@ -31,8 +31,8 @@ TEST(PlaneVsPlaneIntersectionTest, when_the_planes_dont_intersect_should_return_
 
 TEST(PlaneVsPlaneIntersectionTest, when_the_planes_are_coplanar_should_return_coplanar_intersection)
 {
-	Plane<float> p1(Vec3F{1, 0, 0}, 0);
-	Plane<float> p2(Vec3F{1, 0, 0}, 0);
+	Plane<float> p1(boost::qvm::vec<float, 3>{1, 0, 0}, 0);
+	Plane<float> p2(boost::qvm::vec<float, 3>{1, 0, 0}, 0);
 
 	auto i = intersection(p1, p2);
 	EXPECT_EQ(i.m_type, PlaneIntersectionType::Type::Coplanar);
@@ -40,18 +40,18 @@ TEST(PlaneVsPlaneIntersectionTest, when_the_planes_are_coplanar_should_return_co
 
 TEST(PlaneVsLineIntersectionTest, when_the_plane_and_line_intersect_should_return_the_intersection_point)
 {
-	Plane<float> p(Vec3F{1, 0, 0}, 0);
-	Line3D<float> l(Vec3F{0, 0, 0}, Vec3F{1, 0, 0});
+	Plane<float> p(boost::qvm::vec<float, 3>{1, 0, 0}, 0);
+	Line3D<float> l(boost::qvm::vec<float, 3>{0, 0, 0}, boost::qvm::vec<float, 3>{1, 0, 0});
 
 	auto i = intersection(p, l);
 	EXPECT_EQ(i.m_type, PlaneLineIntersection::Type::Intersection);
-	EXPECT_TRUE(i.m_intersection == (Vec3F{0, 0, 0}));
+	EXPECT_TRUE(i.m_intersection == (boost::qvm::vec<float, 3>{0, 0, 0}));
 }
 
 TEST(PlaneVsLineIntersectionTest, when_the_plane_and_line_dont_intersect_should_return_no_intersection)
 {
-	Plane<float> p(Vec3F{1, 0, 0}, 0);
-	Line3D<float> l(Vec3F{1, 0, 0}, Vec3F{0, 1, 0});
+	Plane<float> p(boost::qvm::vec<float, 3>{1, 0, 0}, 0);
+	Line3D<float> l(boost::qvm::vec<float, 3>{1, 0, 0}, boost::qvm::vec<float, 3>{0, 1, 0});
 
 	auto i = intersection(p, l);
 	EXPECT_EQ(i.m_type, PlaneLineIntersection::Type::NoIntersection);
@@ -59,8 +59,8 @@ TEST(PlaneVsLineIntersectionTest, when_the_plane_and_line_dont_intersect_should_
 
 TEST(PlaneVsLineIntersectionTest, when_the_plane_and_line_are_coplanar_should_return_coplanar)
 {
-	Plane<float> p(Vec3F{1, 0, 0}, 0);
-	Line3D<float> l(Vec3F{0, 0, 0}, Vec3F{0, 1, 0});
+	Plane<float> p(boost::qvm::vec<float, 3>{1, 0, 0}, 0);
+	Line3D<float> l(boost::qvm::vec<float, 3>{0, 0, 0}, boost::qvm::vec<float, 3>{0, 1, 0});
 
 	auto i = intersection(p, l);
 	EXPECT_EQ(i.m_type, PlaneLineIntersection::Type::Coplanar);
@@ -69,8 +69,8 @@ TEST(PlaneVsLineIntersectionTest, when_the_plane_and_line_are_coplanar_should_re
 TEST(PlaneVsLineIntersectionTest, has_intersection_test)
 {
 	// clang-format off
-	std::vector<std::tuple<Plane<float>, Line3D<float>, Vec3F>> tests = {
-	    {Plane<float>::FromPointAndNormal({0, 0, 0}, {1, 0, 0}), Line3D<float>::FromTwoPoints({-5, -5, 0}, {5, -5, 0}), Vec3F{0, -5, 0}}
+	std::vector<std::tuple<Plane<float>, Line3D<float>, boost::qvm::vec<float, 3>>> tests = {
+	    {Plane<float>::FromPointAndNormal({0, 0, 0}, {1, 0, 0}), Line3D<float>::FromTwoPoints({-5, -5, 0}, {5, -5, 0}), boost::qvm::vec<float, 3>{0, -5, 0}}
     };
 	// clang-format on
 

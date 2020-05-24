@@ -16,7 +16,7 @@ private:
 	using GeometryPtr = std::shared_ptr<Geometry>;
 
 public:
-	MatrixTransform(const math::Mat4x4F& matrix) : m_matrix(matrix) {}
+	MatrixTransform(const boost::qvm::mat<float, 4, 4>& matrix) : m_matrix(matrix) {}
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
 	{
@@ -28,12 +28,12 @@ public:
 		for (auto iter = geometryOut->PointsBegin(); iter != geometryOut->PointsEnd(); ++iter)
 		{
 			auto& pos = geometryOut->GetPosition(*iter);
-			math::Vec4F finalPos = m_matrix * XYZ1(pos);
+			boost::qvm::vec<float, 4> finalPos = m_matrix * XYZ1(pos);
 			pos = XYZ(finalPos) / W(finalPos);
 		}
 	}
 
 private:
-	math::Mat4x4F m_matrix;
+	boost::qvm::mat<float, 4, 4> m_matrix;
 };
 }  // namespace pagoda::geometry::algorithms

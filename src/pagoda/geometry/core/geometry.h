@@ -23,7 +23,7 @@ namespace pagoda::geometry::core
 struct DefaultVertexAttributes
 {
 	/// Normal at the point. May differ from the face normal.
-	math::Vec3F m_normal;
+	boost::qvm::vec<float, 3> m_normal;
 };  // struct VertAttributes
 
 /**
@@ -39,7 +39,7 @@ struct DefaultEdgeAttributes
 struct DefaultFaceAttributes
 {
 	/// Face normal.
-	math::Vec3F m_normal;
+	boost::qvm::vec<float, 3> m_normal;
 };
 
 /**
@@ -68,7 +68,7 @@ public:
 	using FaceAttributes = F;
 	using EdgeAttributes = E;
 	using VertexAttributes = V;
-	using PositionType = math::Vec3F;
+	using PositionType = boost::qvm::vec<float, 3>;
 
 	void SetPosition(const Index_t &index, const PositionType &p) { m_vertexPositions.GetOrCreate(index, p) = p; }
 

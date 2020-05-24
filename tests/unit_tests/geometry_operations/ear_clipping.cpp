@@ -41,10 +41,10 @@ TEST_F(EarClippingTest, test_triangulate_square)
 {
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 
-	builder.AddPoint(Vec3F{0, 0, 0});
-	builder.AddPoint(Vec3F{1, 0, 0});
-	builder.AddPoint(Vec3F{1, 1, 0});
-	builder.AddPoint(Vec3F{0, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 0});
 
 	auto face = builder.StartFace(4);
 	face.AddIndex(0);
@@ -67,11 +67,11 @@ TEST_F(EarClippingTest, test_triangulate_concave)
 {
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 
-	builder.AddPoint(Vec3F{0.5, 0.5, 0});
-	builder.AddPoint(Vec3F{0, 1, 0});
-	builder.AddPoint(Vec3F{0, 0, 0});
-	builder.AddPoint(Vec3F{1, 0, 0});
-	builder.AddPoint(Vec3F{1, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0.5, 0.5, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 0});
 
 	auto face = builder.StartFace(5);
 	face.AddIndex(0);
@@ -118,11 +118,11 @@ TEST_F(EarClippingTest, test_triangulate_star)
 	for (auto i = 0u; i < slices; ++i)
 	{
 		auto r = i % 2 == 0 ? outerRadius : innerRadius;
-		face.AddIndex(builder.AddPoint(r * Vec3F{std::cos(a), std::sin(a), 0}));
+		face.AddIndex(builder.AddPoint(r * boost::qvm::vec<float, 3>{std::cos(a), std::sin(a), 0}));
 		a += MathUtils<float>::two_pi / slices;
 	}
 	face.CloseFace();
-	m_geometry->GetFaceAttributes(*m_geometry->FacesBegin()).m_normal = Vec3F{0, 0, 1};
+	m_geometry->GetFaceAttributes(*m_geometry->FacesBegin()).m_normal = boost::qvm::vec<float, 3>{0, 0, 1};
 
 	std::stringstream ss1;
 	ObjExporter<GeometryType> e(m_geometry);

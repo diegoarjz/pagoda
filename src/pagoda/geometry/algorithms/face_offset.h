@@ -31,8 +31,8 @@ public:
 
 		for (auto fIter = geometryIn->FacesBegin(); fIter != geometryIn->FacesEnd(); ++fIter)
 		{
-			std::vector<math::Vec3F> outerPoints;
-			std::vector<math::Vec3F> innerPoints;
+			std::vector<boost::qvm::vec<float, 3>> outerPoints;
+			std::vector<boost::qvm::vec<float, 3>> innerPoints;
 			for (auto fvIter = geometryIn->FaceSplitPointCirculatorBegin(*fIter); fvIter; ++fvIter)
 			{
 				auto curr = geometryIn->GetPosition(geometryIn->GetPoint(*fvIter));

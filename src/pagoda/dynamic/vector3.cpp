@@ -20,20 +20,20 @@ const TypeInfoPtr Vector3::s_typeInfo = std::make_shared<TypeInfo>("Vector3");
 std::shared_ptr<Vector3> Vector3::DynamicConstructor(const std::vector<DynamicValueBasePtr>& args)
 {
 	return std::make_shared<Vector3>(
-	    Vec3F{get_value_as<float>(*args[0]), get_value_as<float>(*args[1]), get_value_as<float>(*args[2])});
+	    boost::qvm::vec<float, 3>{get_value_as<float>(*args[0]), get_value_as<float>(*args[1]), get_value_as<float>(*args[2])});
 }
 
 Vector3::Vector3() : BuiltinClass(s_typeInfo), m_nativeVector{0, 0, 0} { RegisterMembers(); }
 
-Vector3::Vector3(const Vec3F& v) : BuiltinClass(s_typeInfo), m_nativeVector(v) { RegisterMembers(); }
+Vector3::Vector3(const boost::qvm::vec<float, 3>& v) : BuiltinClass(s_typeInfo), m_nativeVector(v) { RegisterMembers(); }
 
 Vector3::Vector3(const Vector3& v) : BuiltinClass(s_typeInfo), m_nativeVector(v.m_nativeVector) { RegisterMembers(); }
 
 Vector3::~Vector3() {}
 
-Vector3::operator Vec3F() const { return m_nativeVector; }
+Vector3::operator boost::qvm::vec<float, 3>() const { return m_nativeVector; }
 
-Vector3& Vector3::operator=(const Vec3F& v)
+Vector3& Vector3::operator=(const boost::qvm::vec<float, 3>& v)
 {
 	m_nativeVector = v;
 	return *this;

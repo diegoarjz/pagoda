@@ -10,6 +10,13 @@ include("gtest")
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS chrono system program_options filesystem)
 
+find_package(glfw3 REQUIRED)
+find_package(glew REQUIRED)
+find_package(OpenGL REQUIRED)
+find_library(COCOA_LIBRARY Cocoa)
+find_library(IOKIT_LIBRARY IOKit)
+find_library(CORE_VIDEO_LIBRARY CoreVideo)
+
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

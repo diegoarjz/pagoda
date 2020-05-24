@@ -41,7 +41,7 @@ public:
 		std::unordered_map<Index_t, Index_t> pointsMap;
 
 		auto inNumPoints = geometryIn->GetPointCount();
-		std::vector<math::Vec3F> inVertices;
+		std::vector<boost::qvm::vec<float, 3>> inVertices;
 		inVertices.reserve(inNumPoints);
 		for (auto pointIter = geometryIn->PointsBegin(); pointIter != geometryIn->PointsEnd(); ++pointIter)
 		{

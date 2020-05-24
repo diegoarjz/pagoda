@@ -7,7 +7,7 @@ class MockGeometry
 {
 public:
 	using Index_t = uint32_t;
-	using PositionType = pagoda::math::Vec3F;
+	using PositionType = boost::qvm::vec<float, 3>;
 
 	MOCK_METHOD1(CreateVertex, Index_t(const PositionType &position));
 	MOCK_CONST_METHOD0(GetNumVertices, uint32_t(void));

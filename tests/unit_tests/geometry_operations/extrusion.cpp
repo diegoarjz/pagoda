@@ -34,10 +34,10 @@ TEST_F(ExtrusionTest, test_extrusion)
 	auto geom = std::make_shared<GeometryType>();
 	GeometryBuilderT<GeometryType> builder(geom);
 
-	builder.AddPoint(Vec3F{0, 0, 0});
-	builder.AddPoint(Vec3F{1, 0, 0});
-	builder.AddPoint(Vec3F{1, 1, 0});
-	builder.AddPoint(Vec3F{0, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 0});
 
 	auto face = builder.StartFace(4);
 	face.AddIndex(0);

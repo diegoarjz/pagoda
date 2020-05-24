@@ -17,7 +17,7 @@ public:
 	 * Constructs the predicate with the \p direction and a \p tolerance.
 	 */
 	ScopeAxisDirectionPredicate(objects::ProceduralObjectSystemPtr objectSystem, char scopeAxis,
-	                            const math::Vec3F& direction,
+	                            const boost::qvm::vec<float, 3>& direction,
 	                            const math::Degrees<float>& tolerance = math::Degrees<float>(0.0f));
 
 	virtual ~ScopeAxisDirectionPredicate();
@@ -34,7 +34,7 @@ public:
 
 private:
 	char m_scopeAxis;
-	math::Vec3F m_direction;
+	boost::qvm::vec<float, 3> m_direction;
 	math::Degrees<float> m_tolerance;
 
 	GeometrySystemPtr m_geometrySystem;

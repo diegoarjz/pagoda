@@ -39,7 +39,7 @@ TEST_F(ProceduralObjectPredicateTest,
        when_testing_scope_axis_direction_should_evaluate_whether_the_axis_is_facing_the_direction)
 {
 	auto component = m_geometrySystem->CreateComponentAs<GeometryComponent>(m_object);
-	component->SetScope(Scope({0, 0, 0}, {1, 1, 1}, boost::qvm::diag_mat(XYZ(Vec3F{1, 1, 1}))));
+	component->SetScope(Scope({0, 0, 0}, {1, 1, 1}, boost::qvm::diag_mat(XYZ(boost::qvm::vec<float, 3>{1, 1, 1}))));
 
 	{
 		ScopeAxisDirectionPredicate pred(m_objectSystem, 'x', {1, 0, 0});

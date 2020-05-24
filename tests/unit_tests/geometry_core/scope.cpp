@@ -18,29 +18,29 @@ TEST(Scope, test_scope_construction)
 {
 	Scope s;
 
-	EXPECT_TRUE(s.GetPosition() == (Vec3F{0, 0, 0}));
-	EXPECT_TRUE(s.GetSize() == (Vec3F{0, 0, 0}));
-	EXPECT_TRUE(boost::qvm::col<0>(s.GetRotation()) == (Vec3F{1, 0, 0}));
-	EXPECT_TRUE(boost::qvm::col<1>(s.GetRotation()) == (Vec3F{0, 1, 0}));
-	EXPECT_TRUE(boost::qvm::col<2>(s.GetRotation()) == (Vec3F{0, 0, 1}));
+	EXPECT_TRUE(s.GetPosition() == (boost::qvm::vec<float, 3>{0, 0, 0}));
+	EXPECT_TRUE(s.GetSize() == (boost::qvm::vec<float, 3>{0, 0, 0}));
+	EXPECT_TRUE(boost::qvm::col<0>(s.GetRotation()) == (boost::qvm::vec<float, 3>{1, 0, 0}));
+	EXPECT_TRUE(boost::qvm::col<1>(s.GetRotation()) == (boost::qvm::vec<float, 3>{0, 1, 0}));
+	EXPECT_TRUE(boost::qvm::col<2>(s.GetRotation()) == (boost::qvm::vec<float, 3>{0, 0, 1}));
 }
 
 TEST(Scope, when_constructing_from_box_points_should_create_a_correct_scope)
 {
 	// clang-format off
-	std::array<Vec3F, 8> boxPoints = {
-	    Vec3F{0, 0, 0}, Vec3F{0, 2, 0}, Vec3F{-1, 0, 0}, Vec3F{-1, 1, 0},
-        Vec3F{0, 0, 3}, Vec3F{0, 2, 3}, Vec3F{-1, 0, 3}, Vec3F{-1, 1, 3},
+	std::array<boost::qvm::vec<float, 3>, 8> boxPoints = {
+	    boost::qvm::vec<float, 3>{0, 0, 0}, boost::qvm::vec<float, 3>{0, 2, 0}, boost::qvm::vec<float, 3>{-1, 0, 0}, boost::qvm::vec<float, 3>{-1, 1, 0},
+        boost::qvm::vec<float, 3>{0, 0, 3}, boost::qvm::vec<float, 3>{0, 2, 3}, boost::qvm::vec<float, 3>{-1, 0, 3}, boost::qvm::vec<float, 3>{-1, 1, 3},
 	};
 	// clang-format on
 
 	Scope s(boxPoints);
 
-	EXPECT_TRUE(s.GetPosition() == (Vec3F{0, 0, 0}));
-	EXPECT_TRUE(s.GetSize() == (Vec3F{2, 1, 3}));
-	EXPECT_TRUE(boost::qvm::col<0>(s.GetRotation()) == (Vec3F{0, 1, 0}));
-	EXPECT_TRUE(boost::qvm::col<1>(s.GetRotation()) == (Vec3F{-1, 0, 0}));
-	EXPECT_TRUE(boost::qvm::col<2>(s.GetRotation()) == (Vec3F{0, 0, 1}));
+	EXPECT_TRUE(s.GetPosition() == (boost::qvm::vec<float, 3>{0, 0, 0}));
+	EXPECT_TRUE(s.GetSize() == (boost::qvm::vec<float, 3>{2, 1, 3}));
+	EXPECT_TRUE(boost::qvm::col<0>(s.GetRotation()) == (boost::qvm::vec<float, 3>{0, 1, 0}));
+	EXPECT_TRUE(boost::qvm::col<1>(s.GetRotation()) == (boost::qvm::vec<float, 3>{-1, 0, 0}));
+	EXPECT_TRUE(boost::qvm::col<2>(s.GetRotation()) == (boost::qvm::vec<float, 3>{0, 0, 1}));
 }
 
 TEST(Scope, when_constructing_from_geometry_and_constrained_rotation_should_create_a_correct_scope)
@@ -49,16 +49,16 @@ TEST(Scope, when_constructing_from_geometry_and_constrained_rotation_should_crea
 	GeometryBuilderT<GeometryType> builder(geometry);
 
 	// Bottom face
-	builder.AddPoint(Vec3F{0, 0, 0});
-	builder.AddPoint(Vec3F{1, 0, 0});
-	builder.AddPoint(Vec3F{1, 1, 0});
-	builder.AddPoint(Vec3F{0, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 0});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 0});
 
 	// Top face
-	builder.AddPoint(Vec3F{0, 0, 1});
-	builder.AddPoint(Vec3F{1, 0, 1});
-	builder.AddPoint(Vec3F{1, 1, 1});
-	builder.AddPoint(Vec3F{0, 1, 1});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 0, 1});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 0, 1});
+	builder.AddPoint(boost::qvm::vec<float, 3>{1, 1, 1});
+	builder.AddPoint(boost::qvm::vec<float, 3>{0, 1, 1});
 
 	auto bottomFace = builder.StartFace(4);
 	auto topFace = builder.StartFace(4);
@@ -95,10 +95,10 @@ TEST(Scope, when_constructing_from_geometry_and_constrained_rotation_should_crea
 		sideFaces[i++].CloseFace();
 	}
 
-	auto s = Scope::FromGeometryAndConstrainedRotation(geometry, boost::qvm::diag_mat(XYZ(Vec3F{1, 1, 1})));
-	EXPECT_TRUE(s.GetPosition() == (Vec3F{0, 0, 0}));
-	EXPECT_TRUE(s.GetSize() == (Vec3F{1, 1, 1}));
-	EXPECT_TRUE(boost::qvm::col<0>(s.GetRotation()) == (Vec3F{1, 0, 0}));
-	EXPECT_TRUE(boost::qvm::col<1>(s.GetRotation()) == (Vec3F{0, 1, 0}));
-	EXPECT_TRUE(boost::qvm::col<2>(s.GetRotation()) == (Vec3F{0, 0, 1}));
+	auto s = Scope::FromGeometryAndConstrainedRotation(geometry, boost::qvm::diag_mat(XYZ(boost::qvm::vec<float, 3>{1, 1, 1})));
+	EXPECT_TRUE(s.GetPosition() == (boost::qvm::vec<float, 3>{0, 0, 0}));
+	EXPECT_TRUE(s.GetSize() == (boost::qvm::vec<float, 3>{1, 1, 1}));
+	EXPECT_TRUE(boost::qvm::col<0>(s.GetRotation()) == (boost::qvm::vec<float, 3>{1, 0, 0}));
+	EXPECT_TRUE(boost::qvm::col<1>(s.GetRotation()) == (boost::qvm::vec<float, 3>{0, 1, 0}));
+	EXPECT_TRUE(boost::qvm::col<2>(s.GetRotation()) == (boost::qvm::vec<float, 3>{0, 0, 1}));
 }

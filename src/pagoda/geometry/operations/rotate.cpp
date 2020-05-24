@@ -74,14 +74,14 @@ void Rotate::DoWork()
 		auto rotationOrder = get_value_as<std::string>(*GetValue("rotation_order"));
 		auto world = get_value_as<std::string>(*GetValue("world")) == "true";
 
-		Mat4x4F matrix(boost::qvm::diag_mat(Vec4F{1.0f, 1.0f, 1.0f, 1.0f}));
+		boost::qvm::mat<float, 4, 4> matrix(boost::qvm::diag_mat(boost::qvm::vec<float, 4>{1.0f, 1.0f, 1.0f, 1.0f}));
 		if (world)
 		{
 			auto rot = inScope.GetRotation();
 			boost::qvm::col<0>(matrix) = XYZ0(boost::qvm::col<0>(rot));
 			boost::qvm::col<1>(matrix) = XYZ0(boost::qvm::col<1>(rot));
 			boost::qvm::col<2>(matrix) = XYZ0(boost::qvm::col<2>(rot));
-			boost::qvm::col<3>(matrix) = Vec4F{0, 0, 0, 1};
+			boost::qvm::col<3>(matrix) = boost::qvm::vec<float, 4>{0, 0, 0, 1};
 		}
 
 		for (std::size_t i = rotationOrder.size(); i > 0; --i)
@@ -106,17 +106,17 @@ void Rotate::DoWork()
 		if (world)
 		{
 			auto rot = inScope.GetInverseRotation();
-			Mat4x4F invRot;
+			boost::qvm::mat<float, 4, 4> invRot;
 			boost::qvm::col<0>(invRot) = XYZ0(boost::qvm::col<0>(rot));
 			boost::qvm::col<1>(invRot) = XYZ0(boost::qvm::col<1>(rot));
 			boost::qvm::col<2>(invRot) = XYZ0(boost::qvm::col<2>(rot));
-			boost::qvm::col<3>(invRot) = Vec4F{0, 0, 0, 1};
+			boost::qvm::col<3>(invRot) = boost::qvm::vec<float, 4>{0, 0, 0, 1};
 			matrix = matrix * invRot;
 		}
 
 		MatrixTransform<Geometry> transform(matrix);
 		transform.Execute(inGeometry, outGeometry);
-		Mat3x3F rot;
+		boost::qvm::mat<float, 3, 3> rot;
 		boost::qvm::col<0>(rot) = XYZ(boost::qvm::col<0>(matrix));
 		boost::qvm::col<1>(rot) = XYZ(boost::qvm::col<1>(matrix));
 		boost::qvm::col<2>(rot) = XYZ(boost::qvm::col<2>(matrix));

@@ -68,24 +68,24 @@ void Scale::DoWork()
 		auto z = get_value_as<float>(*GetValue("z"));
 		auto pivotalPointName = get_value_as<std::string>(*GetValue("pivotal_point"));
 
-		Mat4x4F matrix;
+		boost::qvm::mat<float, 4, 4> matrix;
 		if (pivotalPointName == "scope_center")
 		{
-			Vec3F pivotalPoint = inScope.GetCenterPointInWorld();
-			Mat4x4F translation = boost::qvm::translation_mat(XYZ(pivotalPoint));
-			Mat4x4F scale = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
-			Mat4x4F invTranslation = boost::qvm::translation_mat(XYZ(-pivotalPoint));
+			boost::qvm::vec<float, 3> pivotalPoint = inScope.GetCenterPointInWorld();
+			boost::qvm::mat<float, 4, 4> translation = boost::qvm::translation_mat(XYZ(pivotalPoint));
+			boost::qvm::mat<float, 4, 4> scale = boost::qvm::diag_mat(XYZ1(boost::qvm::vec<float, 3>{x, y, z}));
+			boost::qvm::mat<float, 4, 4> invTranslation = boost::qvm::translation_mat(XYZ(-pivotalPoint));
 			matrix = translation * scale * invTranslation;
 		}
 		else if (pivotalPointName == "scope_origin")
 		{
-			Vec3F pivotalPoint = inScope.GetWorldPoint(Scope::BoxPoints::LowerBottomLeft);
-			matrix = boost::qvm::translation_mat(pivotalPoint) * boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z})) *
+			boost::qvm::vec<float, 3> pivotalPoint = inScope.GetWorldPoint(Scope::BoxPoints::LowerBottomLeft);
+			matrix = boost::qvm::translation_mat(pivotalPoint) * boost::qvm::diag_mat(XYZ1(boost::qvm::vec<float, 3>{x, y, z})) *
 			         boost::qvm::translation_mat(-pivotalPoint);
 		}
 		else if (pivotalPointName == "world_origin")
 		{
-			matrix = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
+			matrix = boost::qvm::diag_mat(XYZ1(boost::qvm::vec<float, 3>{x, y, z}));
 		}
 
 		MatrixTransform<Geometry> transform(matrix);

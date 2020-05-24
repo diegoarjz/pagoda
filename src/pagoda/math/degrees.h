@@ -15,7 +15,7 @@ private:
 
 public:
 	explicit Degrees(const T& deg) : m_degrees(deg) {}
-	explicit Degrees(const Radians<T>& rad) : m_degrees(mt::radians_to_degrees(static_cast<T>(rad))) {}
+	Degrees(const Radians<T>& rad) : m_degrees(mt::radians_to_degrees(static_cast<T>(rad))) {}
 
 	explicit operator T() const { return m_degrees; }
 

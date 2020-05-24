@@ -20,13 +20,13 @@ class ExtrusionProfile
 public:
 	ExtrusionProfile(const size_t &num_points);
 
-	void AddPoint(const math_lib::Vec2F &point);
+	void AddPoint(const math_lib::boost::qvm::vec<float, 2> &point);
 
-	std::vector<math_lib::Vec2F>::const_iterator cbegin() { return profile.cbegin(); }
-	std::vector<math_lib::Vec2F>::const_iterator cend() { return profile.cend(); }
+	std::vector<math_lib::boost::qvm::vec<float, 2>>::const_iterator cbegin() { return profile.cbegin(); }
+	std::vector<math_lib::boost::qvm::vec<float, 2>>::const_iterator cend() { return profile.cend(); }
 
 private:
-	std::vector<math_lib::Vec2F> profile;
+	std::vector<math_lib::boost::qvm::vec<float, 2>> profile;
 };  // class ExtrusionProfile
 }  // namespace pagoda::geometry::algorithms
 #endif

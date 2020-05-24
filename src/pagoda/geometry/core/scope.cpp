@@ -9,13 +9,13 @@ using namespace pagoda::math;
 
 namespace pagoda::geometry::core
 {
-Scope::Scope() : m_position{0, 0, 0}, m_size{0, 0, 0}, m_rotation(boost::qvm::diag_mat(Vec3F{1, 1, 1})) {}
+Scope::Scope() : m_position{0, 0, 0}, m_size{0, 0, 0}, m_rotation(boost::qvm::diag_mat(boost::qvm::vec<float, 3>{1, 1, 1})) {}
 
-Scope::Scope(const Vec3F &pos, const Vec3F &size, const Mat3x3F &rot) : m_position(pos), m_size(size), m_rotation(rot)
+Scope::Scope(const boost::qvm::vec<float, 3> &pos, const boost::qvm::vec<float, 3> &size, const boost::qvm::mat<float, 3, 3> &rot) : m_position(pos), m_size(size), m_rotation(rot)
 {
 }
 
-Scope::Scope(const std::array<Vec3F, 8> &boxPoints)
+Scope::Scope(const std::array<boost::qvm::vec<float, 3>, 8> &boxPoints)
 {
 	auto origin = boxPoints[static_cast<int>(BoxPoints::LowerBottomLeft)];
 	auto lbr = boxPoints[static_cast<int>(BoxPoints::LowerBottomRight)];
@@ -26,31 +26,31 @@ Scope::Scope(const std::array<Vec3F, 8> &boxPoints)
 	auto zAxis = boost::qvm::cross(xAxis, yAxis);
 
 	m_position = origin;
-	m_size = Vec3F{boost::qvm::mag(xAxis), boost::qvm::mag(yAxis), boost::qvm::mag(origin - hbl)};
+	m_size = boost::qvm::vec<float, 3>{boost::qvm::mag(xAxis), boost::qvm::mag(yAxis), boost::qvm::mag(origin - hbl)};
 	boost::qvm::col<0>(m_rotation) = boost::qvm::normalized(xAxis);
 	boost::qvm::col<1>(m_rotation) = boost::qvm::normalized(yAxis);
 	boost::qvm::col<2>(m_rotation) = boost::qvm::normalized(zAxis);
 }
 
-Vec3F Scope::GetPosition() const { return m_position; }
+boost::qvm::vec<float, 3> Scope::GetPosition() const { return m_position; }
 
-void Scope::SetPosition(const Vec3F &pos) { m_position = pos; }
+void Scope::SetPosition(const boost::qvm::vec<float, 3> &pos) { m_position = pos; }
 
-Vec3F Scope::GetSize() const { return m_size; }
+boost::qvm::vec<float, 3> Scope::GetSize() const { return m_size; }
 
-void Scope::SetSize(const Vec3F &size) { m_size = size; }
+void Scope::SetSize(const boost::qvm::vec<float, 3> &size) { m_size = size; }
 
-Mat3x3F Scope::GetRotation() const { return m_rotation; }
+boost::qvm::mat<float, 3, 3> Scope::GetRotation() const { return m_rotation; }
 
-void Scope::SetRotation(const Mat3x3F &rotation) { m_rotation = rotation; }
+void Scope::SetRotation(const boost::qvm::mat<float, 3, 3> &rotation) { m_rotation = rotation; }
 
-Mat3x3F Scope::GetInverseRotation() const { return boost::qvm::transposed(m_rotation); }
+boost::qvm::mat<float, 3, 3> Scope::GetInverseRotation() const { return boost::qvm::transposed(m_rotation); }
 
-Vec3F Scope::GetXAxis() const { return boost::qvm::col<0>(m_rotation); }
-Vec3F Scope::GetYAxis() const { return boost::qvm::col<1>(m_rotation); }
-Vec3F Scope::GetZAxis() const { return boost::qvm::col<2>(m_rotation); }
+boost::qvm::vec<float, 3> Scope::GetXAxis() const { return boost::qvm::col<0>(m_rotation); }
+boost::qvm::vec<float, 3> Scope::GetYAxis() const { return boost::qvm::col<1>(m_rotation); }
+boost::qvm::vec<float, 3> Scope::GetZAxis() const { return boost::qvm::col<2>(m_rotation); }
 
-Vec3F Scope::GetAxis(const std::string &axisName) const
+boost::qvm::vec<float, 3> Scope::GetAxis(const std::string &axisName) const
 {
 	if (axisName == "x")
 	{
@@ -64,7 +64,7 @@ Vec3F Scope::GetAxis(const std::string &axisName) const
 	return GetZAxis();
 }
 
-Vec3F Scope::GetAxis(char axisName) const
+boost::qvm::vec<float, 3> Scope::GetAxis(char axisName) const
 {
 	switch (axisName)
 	{
@@ -77,33 +77,33 @@ Vec3F Scope::GetAxis(char axisName) const
 		default:
 			CRITICAL_ASSERT_MSG(false, "Axis must be one of x, y or z.");
 	}
-	return Vec3F();
+	return boost::qvm::vec<float, 3>();
 }
 
 Plane<float> Scope::GetXYPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetZAxis()); }
 Plane<float> Scope::GetXZPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetYAxis()); }
 Plane<float> Scope::GetYZPlane() const { return Plane<float>::FromPointAndNormal(m_position, GetXAxis()); }
 
-Vec3F Scope::LocalPointInWorld(const Vec3F &localPoint) const
+boost::qvm::vec<float, 3> Scope::LocalPointInWorld(const boost::qvm::vec<float, 3> &localPoint) const
 {
 	return m_position + GetXAxis() * X(localPoint) + GetYAxis() * Y(localPoint) + GetZAxis() * Z(localPoint);
 }
 
-Vec3F Scope::GetLocalPoint(const BoxPoints &p) const
+boost::qvm::vec<float, 3> Scope::GetLocalPoint(const BoxPoints &p) const
 {
 	uint32_t index = static_cast<uint32_t>(p);
-	Vec3F localPoint;
+	boost::qvm::vec<float, 3> localPoint;
 	X(localPoint) = ((index & (1 << 0)) != 0 ? X(m_size) : 0);
 	Y(localPoint) = ((index & (1 << 1)) != 0 ? Y(m_size) : 0);
 	Z(localPoint) = ((index & (1 << 2)) != 0 ? Z(m_size) : 0);
 	return localPoint;
 }
 
-Vec3F Scope::GetWorldPoint(const BoxPoints &p) const { return LocalPointInWorld(GetLocalPoint(p)); }
+boost::qvm::vec<float, 3> Scope::GetWorldPoint(const BoxPoints &p) const { return LocalPointInWorld(GetLocalPoint(p)); }
 
-std::array<Vec3F, 8> Scope::GetWorldPoints() const
+std::array<boost::qvm::vec<float, 3>, 8> Scope::GetWorldPoints() const
 {
-	std::array<Vec3F, 8> boxPoints;
+	std::array<boost::qvm::vec<float, 3>, 8> boxPoints;
 	for (int i = 0; i < 8; ++i)
 	{
 		boxPoints[i] = GetWorldPoint(static_cast<BoxPoints>(i));
@@ -111,20 +111,20 @@ std::array<Vec3F, 8> Scope::GetWorldPoints() const
 	return boxPoints;
 }
 
-Vec3F Scope::GetLocalVector(const Vec3F &worldVector) const
+boost::qvm::vec<float, 3> Scope::GetLocalVector(const boost::qvm::vec<float, 3> &worldVector) const
 {
-	return Vec3F{boost::qvm::dot(GetXAxis(), worldVector), boost::qvm::dot(GetYAxis(), worldVector),
+	return boost::qvm::vec<float, 3>{boost::qvm::dot(GetXAxis(), worldVector), boost::qvm::dot(GetYAxis(), worldVector),
 	             boost::qvm::dot(GetZAxis(), worldVector)};
 }
 
-Vec3F Scope::GetWorldVector(const Vec3F &localVector) const
+boost::qvm::vec<float, 3> Scope::GetWorldVector(const boost::qvm::vec<float, 3> &localVector) const
 {
 	return GetXAxis() * X(localVector) + GetYAxis() * Y(localVector) + GetZAxis() * Z(localVector);
 }
 
-Vec3F Scope::GetCenterPointInWorld() const { return LocalPointInWorld(GetCenterPointInLocal()); }
+boost::qvm::vec<float, 3> Scope::GetCenterPointInWorld() const { return LocalPointInWorld(GetCenterPointInLocal()); }
 
-Vec3F Scope::GetCenterPointInLocal() const
+boost::qvm::vec<float, 3> Scope::GetCenterPointInLocal() const
 {
 	return 0.5f * (GetLocalPoint(BoxPoints::LowerBottomLeft) + GetLocalPoint(BoxPoints::HigherTopRight));
 }

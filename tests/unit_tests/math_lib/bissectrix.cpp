@@ -15,7 +15,7 @@ TEST(Bissectrix, when_finding_the_bissectrix_between_two_vectors_should_return_a
 	boost::qvm::vec<float, 3> v2{-1, 1, 0};
 
 	auto r = bissectrix(v1, v2);
-	EXPECT_TRUE(r == (Vec3F{0, 1, 0}));
+	EXPECT_TRUE(r == (boost::qvm::vec<float, 3>{0, 1, 0}));
 }
 
 TEST(Bissectrix, when_finding_the_bissectrix_between_two_colinear_vectors_should_return_an_orthogonal_vector)

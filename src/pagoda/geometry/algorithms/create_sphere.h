@@ -29,8 +29,8 @@ public:
 		LOG_TRACE(GeometryOperations,
 		          "CreateSphere. Radius: " << m_radius << " Slices: " << m_slices << " Stacks: " << m_stacks);
 
-		math::Vec3F top = {0, 0, m_radius};
-		math::Vec3F bottom{0, 0, -m_radius};
+		boost::qvm::vec<float, 3> top = {0, 0, m_radius};
+		boost::qvm::vec<float, 3> bottom{0, 0, -m_radius};
 
 		float sliceIncrementAngle = math::MathUtils<float>::two_pi / m_slices;
 		float stackIncrementAngle = math::MathUtils<float>::pi / static_cast<float>(2 + (m_stacks - 1));
@@ -52,7 +52,7 @@ public:
 			{
 				auto sinTheta = std::sin(theta);
 				points.push_back(builder.AddPoint(
-				    m_radius * math::Vec3F{sinTheta * std::cos(omega), sinTheta * std::sin(omega), std::cos(theta)}));
+				    m_radius * boost::qvm::vec<float, 3>{sinTheta * std::cos(omega), sinTheta * std::sin(omega), std::cos(theta)}));
 			}
 		}
 		auto topIndex = builder.AddPoint(top);

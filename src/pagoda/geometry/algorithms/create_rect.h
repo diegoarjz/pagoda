@@ -18,8 +18,8 @@ private:
 	using GeometryPtr = std::shared_ptr<Geometry>;
 
 public:
-	CreateRect(const float &width, const float &height, const math::Vec3F &xAxis = {1, 0, 0},
-	           const math::Vec3F &yAxis = {0, 1, 0})
+	CreateRect(const float &width, const float &height, const boost::qvm::vec<float, 3> &xAxis = {1, 0, 0},
+	           const boost::qvm::vec<float, 3> &yAxis = {0, 1, 0})
 	    : m_width(width), m_height(height), m_xAxis(normalized(xAxis)), m_yAxis(normalized(yAxis))
 	{
 		DBG_ASSERT_MSG(width != 0 && height != 0, "Can't create a rect with zero width or height");
@@ -32,7 +32,7 @@ public:
 		START_PROFILE;
 		LOG_TRACE(GeometryOperations, "CreateRect. Width: " << m_width << " Height: " << m_height);
 
-		math::Vec3F center{0, 0, 0};
+		boost::qvm::vec<float, 3> center{0, 0, 0};
 		auto half_width = 0.5 * m_width;
 		auto half_height = 0.5 * m_height;
 
@@ -50,8 +50,8 @@ public:
 private:
 	float m_width;
 	float m_height;
-	math::Vec3F m_xAxis;
-	math::Vec3F m_yAxis;
+	boost::qvm::vec<float, 3> m_xAxis;
+	boost::qvm::vec<float, 3> m_yAxis;
 };  // class CreateRect
 }  // namespace pagoda::geometry::algorithms
 

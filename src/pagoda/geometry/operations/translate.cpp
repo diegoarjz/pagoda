@@ -67,14 +67,14 @@ void Translate::DoWork()
 		auto y = get_value_as<float>(*GetValue("y"));
 		auto z = get_value_as<float>(*GetValue("z"));
 		auto inWorldCoordinates = get_value_as<std::string>(*GetValue("world")) == "true";
-		Mat4x4F matrix;
+		boost::qvm::mat<float, 4, 4> matrix;
 		if (inWorldCoordinates)
 		{
-			matrix = boost::qvm::translation_mat(Vec3F{x, y, z});
+			matrix = boost::qvm::translation_mat(boost::qvm::vec<float, 3>{x, y, z});
 		}
 		else
 		{
-			matrix = boost::qvm::translation_mat(inScope.GetLocalVector(Vec3F{x, y, z}));
+			matrix = boost::qvm::translation_mat(inScope.GetLocalVector(boost::qvm::vec<float, 3>{x, y, z}));
 		}
 		MatrixTransform<Geometry> transform(matrix);
 

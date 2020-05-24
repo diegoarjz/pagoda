@@ -15,26 +15,27 @@ using namespace pagoda::dynamic;
 
 TEST(Vector3, test_constructions)
 {
-	EXPECT_TRUE((Vec3F{0, 0, 0}) == static_cast<Vec3F>(Vector3()));
-	EXPECT_TRUE((Vec3F{1, 2, 3}) == static_cast<Vec3F>(Vector3(Vec3F{1, 2, 3})));
+	EXPECT_TRUE((boost::qvm::vec<float, 3>{0, 0, 0}) == (static_cast<boost::qvm::vec<float, 3>>(Vector3())));
+	EXPECT_TRUE((boost::qvm::vec<float, 3>{1, 2, 3}) ==
+	            (static_cast<boost::qvm::vec<float, 3>>(Vector3(boost::qvm::vec<float, 3>{1, 2, 3}))));
 }
 
 TEST(Vector3, test_get_value_as)
 {
-	Vector3 v(Vec3F{1, 2, 3});
-	EXPECT_TRUE((Vec3F{1, 2, 3}) == get_value_as<Vec3F>(v));
+	Vector3 v(boost::qvm::vec<float, 3>{1, 2, 3});
+	EXPECT_TRUE((boost::qvm::vec<float, 3>{1, 2, 3}) == (get_value_as<boost::qvm::vec<float, 3>>(v)));
 }
 
 TEST(Vector3, test_set_value_from)
 {
 	Vector3 v;
-	set_value_from<Vec3F>(v, Vec3F{3, 2, 1});
-	EXPECT_TRUE((Vec3F{3, 2, 1}) == static_cast<Vec3F>(v));
+	set_value_from<boost::qvm::vec<float, 3>>(v, boost::qvm::vec<float, 3>{3, 2, 1});
+	EXPECT_TRUE((boost::qvm::vec<float, 3>{3, 2, 1}) == (static_cast<boost::qvm::vec<float, 3>>(v)));
 }
 
 TEST(Vector3, test_members)
 {
-	Vector3 v(Vec3F{1, 2, 3});
+	Vector3 v(boost::qvm::vec<float, 3>{1, 2, 3});
 
 	uint32_t i = 1;
 	for (auto name : {"GetX", "GetY", "GetZ"})

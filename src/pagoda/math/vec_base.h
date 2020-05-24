@@ -31,13 +31,13 @@ std::string to_string(const boost::qvm::vec<Rep, Size>& vec)
 }
 
 // Common vector types
-using Vec2F = boost::qvm::vec<float, 2>;
-using Vec3F = boost::qvm::vec<float, 3>;
-using Vec4F = boost::qvm::vec<float, 4>;
+// using boost::qvm::vec<float, 2> = boost::qvm::vec<float, 2>;
+// using boost::qvm::vec<float, 3> = boost::qvm::vec<float, 3>;
+// using boost::qvm::vec<float, 4> = boost::qvm::vec<float, 4>;
 
-using Vec2D = boost::qvm::vec<double, 2>;
-using Vec3D = boost::qvm::vec<double, 3>;
-using Vec4D = boost::qvm::vec<double, 4>;
+// using Vec2D = boost::qvm::vec<double, 2>;
+// using Vec3D = boost::qvm::vec<double, 3>;
+// using Vec4D = boost::qvm::vec<double, 4>;
 
 }  // namespace pagoda::math
 

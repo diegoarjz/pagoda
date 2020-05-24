@@ -56,7 +56,7 @@ void CreateSphereGeometry::DoWork()
 
 	geometry_component->SetGeometry(geometry);
 	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
-	    geometry, math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
+	    geometry, boost::qvm::mat<float, 3, 3>(boost::qvm::diag_mat(boost::qvm::vec<float, 3>{1.0f, 1.0f, 1.0f}))));
 
 	std::shared_ptr<HierarchicalComponent> hierarchical_component =
 	    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(object);

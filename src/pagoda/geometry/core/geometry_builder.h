@@ -104,7 +104,7 @@ public:
 			auto pd1 = m_builder->m_pointData.Get(m_faceIndices[1]);
 			auto pd2 = m_builder->m_pointData.Get(m_faceIndices[2]);
 
-			math::Vec3F normal{0, 0, 0};
+			boost::qvm::vec<float, 3> normal{0, 0, 0};
 			for (auto i = 0u; i < m_faceIndices.size(); ++i)
 			{
 				auto nextIndex = (i + 1) % m_faceIndices.size();

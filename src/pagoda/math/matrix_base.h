@@ -22,8 +22,8 @@ std::ostream &operator<<(std::ostream &o, const boost::qvm::mat<Rep, NumRows, Nu
 }
 
 // Common matrix types
-using Mat2x2F = boost::qvm::mat<float, 2, 2>;
-using Mat3x3F = boost::qvm::mat<float, 3, 3>;
-using Mat4x4F = boost::qvm::mat<float, 4, 4>;
+// using boost::qvm::mat<float, 2, 2> = boost::qvm::mat<float, 2, 2>;
+// using boost::qvm::mat<float, 3, 3> = boost::qvm::mat<float, 3, 3>;
+// using boost::qvm::mat<float, 4, 4> = boost::qvm::mat<float, 4, 4>;
 
 }  // namespace pagoda::math

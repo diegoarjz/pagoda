@@ -32,7 +32,7 @@ TEST_F(CreateRectTest, create_rect)
 	GeometryPtr out = std::make_shared<GeometryType>();
 	create.Execute(out);
 
-	Vec3F expected[] = {{-5, 2.5, 0}, {-5, -2.5, 0}, {5, -2.5, 0}, {5, 2.5, 0}};
+	boost::qvm::vec<float, 3> expected[] = {{-5, 2.5, 0}, {-5, -2.5, 0}, {5, -2.5, 0}, {5, 2.5, 0}};
 
 	ASSERT_TRUE(out->IsValid());
 	EXPECT_EQ(out->GetFaceCount(), 1);
