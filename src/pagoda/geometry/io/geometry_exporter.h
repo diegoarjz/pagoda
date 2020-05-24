@@ -103,7 +103,8 @@ protected:
 
 	void FaceAddIndex(std::ostream &outStream, const typename GeometryExporter<G>::IndexType &index) final
 	{
-		outStream << (index + 1) << "//" << (index + 1) << " ";
+		uint32_t i = index + 1;
+		outStream << i << "/" << i << "/" << i << " ";
 	}
 
 	void EndFace(std::ostream &outStream) final { outStream << "\n"; }

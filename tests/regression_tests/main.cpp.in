@@ -154,6 +154,7 @@ REGRESSION_TEST(split)
 REGRESSION_TEST(scale)
 REGRESSION_TEST(rotate)
 REGRESSION_TEST(parameters_in_procedural_objects)
+REGRESSION_TEST(scope_texture_projection)
 REGRESSION_TEST(banner)
 
 int main(int argc, char* argv[])
