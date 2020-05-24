@@ -62,21 +62,25 @@ void PrintProfile();
 const char* vertexShader =
     "#version 410\n"
     "layout(location = 0) in vec3 vertexPosition_modelSpace;\n"
-    "layout(location = 1) in vec3 vertexColor;\n"
+    "layout(location = 1) in vec3 vertexNormal_modelSpace;\n"
+    "layout(location = 2) in vec2 texCoord;\n"
     "uniform mat4 modelMatrix;\n"
     "uniform mat4 viewMatrix;\n"
     "uniform mat4 projection;\n"
-    "out vec3 outColor;\n"
+    "out vec3 vertexNormal;\n"
+    "out vec2 outTexCoord;\n"
     "void main(){\n"
     "   gl_Position = projection * viewMatrix * modelMatrix * vec4(vertexPosition_modelSpace.xyz, 1.0);\n"
-    "   outColor = vertexColor;\n"
+    "   vertexNormal = vertexNormal_modelSpace;\n"
+    "   outTexCoord = texCoord;\n"
     "}";
 
 const char* fragmentShader = "#version 410\n"
-                             "in vec3 outColor;\n"
+                             "in vec3 vertexNormal;\n"
+                             "in vec2 outTexCoord;\n"
                              "out vec3 color;\n"
                              "void main() {\n"
-                             "  color = outColor;\n"
+                             "  color = vec3(outTexCoord.xy, 0);\n"
                              "}";
 
 int main(int argc, char* argv[])
@@ -168,10 +172,12 @@ int main(int argc, char* argv[])
 			for (auto pCirc = triangulatedGeometry->FacePointCirculatorBegin(*fIter); pCirc.IsValid(); ++pCirc)
 			{
 				pagoda::geometry::Geometry::PositionType pos = triangulatedGeometry->GetPosition(*pCirc);
+				qvm::vec<float, 2> texCoord = triangulatedGeometry->GetVertexAttributes(*pCirc).m_texCoords;
 				// clang-format off
 				Vertex v{
                     {X(pos), Y(pos), Z(pos)},
-                    {X(normal), Y(normal), Z(normal)}
+                    {X(normal), Y(normal), Z(normal)},
+                    {X(texCoord), Y(texCoord)}
                 };
 				// clang-format on
 				verts.push_back(v);

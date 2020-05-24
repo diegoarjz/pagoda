@@ -364,12 +364,17 @@ private:
 
 		// Position Attrib Array
 		CHECK_GL_ERROR(glEnableVertexAttribArray(0));
-		CHECK_GL_ERROR(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0));
+		CHECK_GL_ERROR(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0));
 
 		// Normal Attrib Array
 		CHECK_GL_ERROR(glEnableVertexAttribArray(1));
-		CHECK_GL_ERROR(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+		CHECK_GL_ERROR(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
 		                                     reinterpret_cast<void*>(3 * sizeof(float))));
+
+		// Texture coordinates
+		CHECK_GL_ERROR(glEnableVertexAttribArray(2));
+		CHECK_GL_ERROR(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
+		                                     reinterpret_cast<void*>(6 * sizeof(float))));
 
 		// Create Element Buffer
 		CHECK_GL_ERROR(glGenBuffers(1, &bindData.m_elementBufferId));

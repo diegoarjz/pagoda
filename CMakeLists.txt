@@ -20,7 +20,6 @@ find_library(CORE_VIDEO_LIBRARY CoreVideo)
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(src)
-
 enable_testing()
+add_subdirectory(src)
 add_subdirectory(tests)

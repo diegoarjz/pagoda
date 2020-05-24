@@ -24,6 +24,8 @@ struct DefaultVertexAttributes
 {
 	/// Normal at the point. May differ from the face normal.
 	boost::qvm::vec<float, 3> m_normal;
+	/// Texture coordinates.
+	boost::qvm::vec<float, 2> m_texCoords;
 };  // struct VertAttributes
 
 /**

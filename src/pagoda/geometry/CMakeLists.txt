@@ -7,6 +7,8 @@ set(GEOMETRY_SRCS
     "core/scope.h"
     "core/split_point_topology.cpp"
     "core/split_point_topology.h"
+    "core/planar_texture_projection.h"
+    "core/planar_texture_projection.cpp"
     "io/geometry_exporter.h"
     "algorithms/create_box.h"
     "algorithms/create_rect.h"
@@ -48,6 +50,8 @@ set(GEOMETRY_SRCS
     "operations/translate.h"
     "operations/triangulate_geometry.cpp"
     "operations/triangulate_geometry.h"
+    "operations/scope_texture_projection.cpp"
+    "operations/scope_texture_projection.h"
     "geometry_component.cpp"
     "geometry_component.h"
     "geometry_system.cpp"
@@ -91,3 +95,58 @@ target_link_libraries(
     PRIVATE
         common
 )
+
+#########################################################################
+# Unit tests
+#########################################################################
+
+set(GEOMETRY_UNIT_TESTS
+    "core/planar_texture_projection.test.cpp"
+)
+
+foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})
+    get_filename_component(unit_test_base_name ${unit_test_src} NAME)
+    string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
+    message(STATUS "src: ${unit_test_src} name: ${test_name}")
+
+    add_executable(${test_name} ${unit_test_src})
+
+    target_include_directories(
+        ${test_name}
+        PRIVATE
+            $<INSTALL_INTERFACE:pagoda>
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+            ${Boost_INCLUDE_DIRS}
+    )
+
+    target_compile_features(
+        ${test_name}
+        PRIVATE
+            cxx_std_17
+    )
+
+    target_compile_options(
+        ${test_name}
+        PRIVATE
+            -Wall
+            $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+            $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+    )
+
+    target_compile_definitions(
+        ${test_name}
+        PRIVATE
+            $<$<CONFIG:DEBUG>:DEBUG>
+    )
+
+    target_link_libraries(
+        ${test_name}
+        PRIVATE
+            libpagoda
+            gmock
+            gtest
+            pthread
+    )
+
+add_test(NAME ${test_name} COMMAND ${test_name})
+endforeach()

@@ -3,6 +3,7 @@
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/factory.h>
 #include <pagoda/common/fs/file_util.h>
+#include <memory>
 
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/input_interface_node.h>
@@ -24,6 +25,7 @@
 #include <pagoda/geometry/operations/repeat_split.h>
 #include <pagoda/geometry/operations/rotate.h>
 #include <pagoda/geometry/operations/scale.h>
+#include <pagoda/geometry/operations/scope_texture_projection.h>
 #include <pagoda/geometry/operations/split.h>
 #include <pagoda/geometry/operations/translate.h>
 #include <pagoda/geometry/operations/triangulate_geometry.h>
@@ -103,6 +105,9 @@ public:
 			                             [this]() { return std::make_shared<Scale>(m_proceduralObjectSystem); });
 			m_operationFactory->Register("Rotate",
 			                             [this]() { return std::make_shared<Rotate>(m_proceduralObjectSystem); });
+			m_operationFactory->Register("ScopeTextureProjection", [this]() {
+				return std::make_shared<ScopeTextureProjection>(m_proceduralObjectSystem);
+			});
 		}
 
 		// Register Predicates
