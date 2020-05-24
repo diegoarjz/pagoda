@@ -75,29 +75,39 @@ void ScopeTextureProjection::DoWork()
 		UpdateValue("offset_v");
 		UpdateValue("clamp");
 
-		qvm::vec<float, 3> scopePos = outGeometryComponent->GetScope().GetPosition();
+		auto &scope = outGeometryComponent->GetScope();
+		auto scopeSize = scope.GetSize();
+		qvm::vec<float, 3> scopePos = scope.GetPosition();
 		qvm::vec<float, 3> uAxis;
 		qvm::vec<float, 3> vAxis;
+		float uScale = get_value_as<float>(*GetValue("scale_u"));
+		float vScale = get_value_as<float>(*GetValue("scale_v"));
 
 		std::string axis = get_value_as<std::string>(*GetValue("axis"));
 		if (axis == "x")
 		{
-			uAxis = outGeometryComponent->GetScope().GetAxis('y');
-			vAxis = outGeometryComponent->GetScope().GetAxis('z');
+			uAxis = scope.GetAxis('y');
+			vAxis = scope.GetAxis('z');
+			uScale *= Y(scopeSize);
+			vScale *= Z(scopeSize);
 		}
 		else if (axis == "y")
 		{
-			uAxis = outGeometryComponent->GetScope().GetAxis('x');
-			vAxis = outGeometryComponent->GetScope().GetAxis('z');
+			uAxis = scope.GetAxis('x');
+			vAxis = scope.GetAxis('z');
+			uScale *= X(scopeSize);
+			vScale *= Z(scopeSize);
 		}
 		else if (axis == "z")
 		{
-			uAxis = outGeometryComponent->GetScope().GetAxis('x');
-			vAxis = outGeometryComponent->GetScope().GetAxis('y');
+			uAxis = scope.GetAxis('x');
+			vAxis = scope.GetAxis('y');
+			uScale *= X(scopeSize);
+			vScale *= Y(scopeSize);
 		}
 
 		PlanarTextureProjection ptp(scopePos, uAxis, vAxis);
-		ptp.SetScale(get_value_as<float>(*GetValue("scale_u")), get_value_as<float>(*GetValue("scale_v")));
+		ptp.SetScale(uScale, vScale);
 		ptp.SetOffset(get_value_as<float>(*GetValue("offset_u")), get_value_as<float>(*GetValue("offset_v")));
 		ptp.SetClamp(get_value_as<bool>(*GetValue("clamp")));
 
