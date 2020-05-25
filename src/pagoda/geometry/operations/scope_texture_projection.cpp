@@ -118,7 +118,7 @@ void ScopeTextureProjection::DoWork()
 
 		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
-		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
+		hierarchicalSystem->SetParent(inHierarchicalComponent, outHierarchicalComponent);
 	}
 }
 }  // namespace pagoda::geometry::operations
