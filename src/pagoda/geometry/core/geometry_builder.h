@@ -32,16 +32,22 @@ private:
 	/// The Geometry position type.
 	using PositionType = typename Geometry::PositionType;
 	using GeometryBuilder = GeometryBuilderT<Geometry>;
+	using VertexAttributes = typename Geometry::VertexAttributes;
 
 	struct PointData
 	{
 		PointData() : m_position{0, 0, 0}, m_index(Geometry::s_invalidIndex) {}
 		PointData(const PositionType &pos) : m_position(pos), m_index(Geometry::s_invalidIndex) {}
 		PointData(const PointData &o) : m_position(o.m_position), m_index(o.m_index) {}
+		PointData(const PositionType &pos, const VertexAttributes &v)
+		    : m_position(pos), m_attributes(v), m_index(Geometry::s_invalidIndex)
+		{
+		}
 
 		bool IsInitialized() const { return m_index != Geometry::s_invalidIndex; }
 
 		PositionType m_position;
+		VertexAttributes m_attributes;
 		Index_t m_index;
 	};
 
@@ -124,7 +130,9 @@ public:
 			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
 			for (auto i = 0u; i < 3; ++i)
 			{
-				m_builder->m_pointData.Get(m_faceIndices[i]).m_index = m_geometry->GetPoint(face.m_splitPoints[i]);
+				auto &pointData = m_builder->m_pointData.Get(m_faceIndices[i]);
+				pointData.m_index = m_geometry->GetPoint(face.m_splitPoints[i]);
+				m_geometry->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
 				m_geometry->SetPosition(m_geometry->GetPoint(face.m_splitPoints[i]),
 				                        m_builder->m_pointData.Get(m_faceIndices[i]).m_position);
 			}
@@ -141,6 +149,7 @@ public:
 					LOG_TRACE(GeometryCore, " Needs to create a new point");
 					auto newSplitPoint = m_geometry->SplitEdge(currentEdge);
 					pointData.m_index = m_geometry->GetPoint(newSplitPoint);
+					m_geometry->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
 				}
 				else
 				{
@@ -227,6 +236,15 @@ public:
 	{
 		START_PROFILE;
 		return m_pointData.Create(PointData(pos));
+	}
+
+	/**
+	 * Adds a point to the geometry, sets its data and returns its index.
+	 */
+	Index_t AddPoint(const PositionType &pos, const VertexAttributes &v)
+	{
+		START_PROFILE;
+		return m_pointData.Create(PointData(pos, v));
 	}
 
 	/**

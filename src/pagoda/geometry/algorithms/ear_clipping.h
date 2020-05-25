@@ -169,7 +169,7 @@ public:
 		for (auto pointIter = geometryIn->PointsBegin(); pointIter != pointEndIter; ++pointIter)
 		{
 			auto vertPos = geometryIn->GetPosition(*pointIter);
-			pointsMap[*pointIter] = builder.AddPoint(vertPos);
+			pointsMap[*pointIter] = builder.AddPoint(vertPos, geometryIn->GetVertexAttributes(*pointIter));
 		}
 
 		for (const auto &t : triangles)
