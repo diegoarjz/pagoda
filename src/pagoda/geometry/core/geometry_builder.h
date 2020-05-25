@@ -38,7 +38,7 @@ private:
 	{
 		PointData() : m_position{0, 0, 0}, m_index(Geometry::s_invalidIndex) {}
 		PointData(const PositionType &pos) : m_position(pos), m_index(Geometry::s_invalidIndex) {}
-		PointData(const PointData &o) : m_position(o.m_position), m_index(o.m_index) {}
+		PointData(const PointData &o) : m_position(o.m_position), m_attributes(o.m_attributes), m_index(o.m_index) {}
 		PointData(const PositionType &pos, const VertexAttributes &v)
 		    : m_position(pos), m_attributes(v), m_index(Geometry::s_invalidIndex)
 		{
@@ -132,7 +132,7 @@ public:
 			{
 				auto &pointData = m_builder->m_pointData.Get(m_faceIndices[i]);
 				pointData.m_index = m_geometry->GetPoint(face.m_splitPoints[i]);
-				m_geometry->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
+				m_geometry->GetVertexAttributes(m_geometry->GetPoint(face.m_splitPoints[i])) = pointData.m_attributes;
 				m_geometry->SetPosition(m_geometry->GetPoint(face.m_splitPoints[i]),
 				                        m_builder->m_pointData.Get(m_faceIndices[i]).m_position);
 			}
@@ -149,7 +149,7 @@ public:
 					LOG_TRACE(GeometryCore, " Needs to create a new point");
 					auto newSplitPoint = m_geometry->SplitEdge(currentEdge);
 					pointData.m_index = m_geometry->GetPoint(newSplitPoint);
-					m_geometry->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
+					m_geometry->GetVertexAttributes(m_geometry->GetPoint(newSplitPoint)) = pointData.m_attributes;
 				}
 				else
 				{
