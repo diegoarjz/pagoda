@@ -22,6 +22,8 @@ namespace pagoda::geometry::core
  */
 struct DefaultVertexAttributes
 {
+	DefaultVertexAttributes() : m_normal{0, 0, 0}, m_texCoords{0, 0} {}
+
 	/// Normal at the point. May differ from the face normal.
 	boost::qvm::vec<float, 3> m_normal;
 	/// Texture coordinates.
