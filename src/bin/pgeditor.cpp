@@ -29,6 +29,9 @@
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/graph/graph.h>
 
+#include <pagoda/objects/hierarchical_component.h>
+#include <pagoda/objects/hierarchical_system.h>
+
 #include <pagoda/pagoda.h>
 
 #include <boost/program_options.hpp>
@@ -120,6 +123,7 @@ int main(int argc, char* argv[])
 	Pagoda pagoda;
 	ProceduralObjectSystemPtr objectSystem = pagoda.GetProceduralObjectSystem();
 	GeometrySystemPtr geometrySystem = objectSystem->GetComponentSystem<GeometrySystem>();
+	HierarchicalSystemPtr hierarchicalSystem = objectSystem->GetComponentSystem<HierarchicalSystem>();
 	GraphPtr graph = pagoda.CreateGraphFromFile(graphFile);
 	graph->Execute();
 
@@ -155,19 +159,19 @@ int main(int argc, char* argv[])
 	auto geomNode = std::make_shared<scene::Node>();
 	geomNode->SetParent(rootNode);
 
-	LOG_DEBUG("Triangulating");
 	for (const auto& p : objectSystem->GetProceduralObjects())
 	{
 		auto geometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(p);
+		auto hierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(p);
+
+		if (hierarchicalComponent->ChildrenCount() != 0)
+		{
+			continue;
+		}
+
 		auto geometry = geometryComponent->GetGeometry();
 		auto triangulatedGeometry = std::make_shared<pagoda::geometry::Geometry>();
 		t.Execute(geometry, triangulatedGeometry);
-
-		for (auto pIter = geometry->PointsBegin(); pIter != geometry->PointsEnd(); ++pIter)
-		{
-			auto& d = geometry->GetVertexAttributes(*pIter);
-			LOG_DEBUG("Original TexCoords: " << X(d.m_texCoords) << ", " << Y(d.m_texCoords));
-		}
 
 		std::vector<Vertex> verts;
 		std::vector<uint32_t> indices;
@@ -180,7 +184,6 @@ int main(int argc, char* argv[])
 			{
 				pagoda::geometry::Geometry::PositionType pos = triangulatedGeometry->GetPosition(*pCirc);
 				qvm::vec<float, 2> texCoord = triangulatedGeometry->GetVertexAttributes(*pCirc).m_texCoords;
-				LOG_DEBUG("TexCoord: " << X(texCoord) << ", " << Y(texCoord));
 				// clang-format off
 				Vertex v{
                     {X(pos), Y(pos), Z(pos)},
