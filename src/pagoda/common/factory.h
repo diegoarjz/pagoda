@@ -6,12 +6,13 @@
 
 #include <functional>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
 namespace pagoda::common
 {
-template<class ObjectType>
+template<class ObjectType, class KeyType = std::string>
 class Factory
 {
 public:
@@ -22,23 +23,23 @@ public:
 
 	virtual ~Factory() {}
 
-	PointerType_t Create(const std::string& name)
+	PointerType_t Create(const KeyType& name)
 	{
-		LOG_TRACE(Common, "Factory " << m_name << " creating object of type " << name)
+		// LOG_TRACE(Common, "Factory " << m_name << " creating object of type " << std::to_string(name))
 
 		auto methods = factoryMethods();
 		auto iter = methods.find(name);
 		if (iter == std::end(methods))
 		{
-			LOG_TRACE(Common, " Element of type " << name << " not found. Returning nullptr.");
+			// LOG_TRACE(Common, " Element of type " << std::to_string(name) << " not found. Returning nullptr.");
 			return nullptr;
 		}
 		return iter->second();
 	}
 
-	std::vector<std::string> RegisteredTypes()
+	std::vector<KeyType> RegisteredTypes()
 	{
-		std::vector<std::string> typeNames;
+		std::vector<KeyType> typeNames;
 		auto methods = factoryMethods();
 		typeNames.reserve(methods.size());
 
@@ -50,9 +51,9 @@ public:
 		return typeNames;
 	}
 
-	void Register(const std::string& name, const FactoryMethod_t& method)
+	void Register(const KeyType& name, const FactoryMethod_t& method)
 	{
-		LOG_TRACE(Common, "Registering type " << name << " with " << m_name << " factory");
+		// LOG_TRACE(Common, "Registering type " << std::to_string(name) << " with " << m_name << " factory");
 
 		factoryMethods()[name] = method;
 	}
@@ -60,7 +61,7 @@ public:
 private:
 	auto& factoryMethods()
 	{
-		static std::unordered_map<std::string, FactoryMethod_t> s_factoryMethods;
+		static std::unordered_map<KeyType, FactoryMethod_t> s_factoryMethods;
 		return s_factoryMethods;
 	}
 

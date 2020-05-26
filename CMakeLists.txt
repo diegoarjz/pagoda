@@ -10,6 +10,8 @@ include("gtest")
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS chrono system program_options filesystem)
 
+find_package(PNG REQUIRED)
+
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
