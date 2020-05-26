@@ -30,6 +30,9 @@
 #include <pagoda/geometry/operations/translate.h>
 #include <pagoda/geometry/operations/triangulate_geometry.h>
 
+#include <pagoda/material/material_system.h>
+#include <pagoda/material/operations/set_material.h>
+
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/geometry/scope_axis_direction_predicate.h>
 #include <pagoda/objects/hierarchical_system.h>
@@ -39,10 +42,14 @@ namespace pagoda
 {
 using namespace objects;
 using namespace math;
-using namespace geometry;
-using namespace geometry::operations;
 using namespace graph;
 using namespace graph::io;
+
+using namespace geometry;
+using namespace geometry::operations;
+
+using namespace material;
+using namespace material::operations;
 
 class Pagoda::Impl
 {
@@ -54,6 +61,7 @@ public:
 		m_proceduralObjectSystem = std::make_shared<ProceduralObjectSystem>();
 		m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<GeometrySystem>());
 		m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<HierarchicalSystem>());
+		m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<MaterialSystem>());
 
 		m_operationFactory = std::make_shared<OperationFactory>();
 		m_predicateRegistry = std::make_shared<ProceduralObjectPredicateRegistry>();
@@ -108,6 +116,9 @@ public:
 			m_operationFactory->Register("ScopeTextureProjection", [this]() {
 				return std::make_shared<ScopeTextureProjection>(m_proceduralObjectSystem);
 			});
+
+			m_operationFactory->Register("SetMaterial",
+			                             [this]() { return std::make_shared<SetMaterial>(m_proceduralObjectSystem); });
 		}
 
 		// Register Predicates

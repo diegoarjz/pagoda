@@ -19,7 +19,6 @@ namespace pagoda::geometry::operations
 using namespace objects;
 using namespace geometry::core;
 using namespace geometry::io;
-using namespace geometry::algorithms;
 using namespace dynamic;
 
 const char* ExportGeometry::name = "ExportGeometry";

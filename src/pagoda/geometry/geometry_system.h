@@ -1,8 +1,6 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_SYSTEM_H_
 #define PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_SYSTEM_H_
 
-#include <pagoda/geometry/algorithms/create_rect.h>
-#include <pagoda/geometry/algorithms/extrusion.h>
 #include <pagoda/geometry/core/geometry.h>
 #include <pagoda/geometry/core/geometry_builder.h>
 

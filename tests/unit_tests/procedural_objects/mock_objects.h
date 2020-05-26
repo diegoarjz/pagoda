@@ -12,13 +12,14 @@ using namespace pagoda;
 using namespace pagoda::geometry;
 using namespace pagoda::objects;
 using namespace pagoda::geometry::core;
-using namespace pagoda::geometry::algorithms;
 
 class GeometrySystemMock : public GeometrySystem
 {
 public:
+	/*
 	MOCK_METHOD2(GetCreateRect, CreateRect<Geometry>(const float&, const float&));
 	MOCK_METHOD1(GetExtrude, Extrusion<Geometry>(const float&));
+	*/
 };
 
 #endif

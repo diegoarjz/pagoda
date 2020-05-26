@@ -1,5 +1,6 @@
 #include "extrude_geometry.h"
 
+#include <pagoda/geometry/algorithms/extrusion.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
