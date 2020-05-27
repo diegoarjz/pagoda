@@ -5,6 +5,8 @@ set(PAGODA_SOURCES
 
 add_subdirectory(common)
 add_subdirectory(geometry)
+add_subdirectory(image)
+add_subdirectory(material)
 add_subdirectory(math)
 add_subdirectory(objects)
 add_subdirectory(graph)
@@ -14,6 +16,8 @@ add_subdirectory(pgscript)
 add_library(libpagoda STATIC "${PAGODA_SOURCES}"
     $<TARGET_OBJECTS:common>
     $<TARGET_OBJECTS:geometry>
+    $<TARGET_OBJECTS:image>
+    $<TARGET_OBJECTS:material>
     $<TARGET_OBJECTS:math>
     $<TARGET_OBJECTS:graph>
     $<TARGET_OBJECTS:objects>
@@ -26,6 +30,7 @@ target_include_directories(
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         ${Boost_INCLUDE_DIRS}
+        ${PNG_INCLUDE_DIRS}
 )
 
 target_compile_features(
@@ -46,6 +51,12 @@ target_compile_definitions(
     libpagoda
     PRIVATE
         $<$<CONFIG:DEBUG>:DEBUG>
+)
+
+target_link_libraries(
+    libpagoda
+    PUBLIC
+        ${PNG_LIBRARY}
 )
 
 set_target_properties(libpagoda PROPERTIES PREFIX "")

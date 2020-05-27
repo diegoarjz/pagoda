@@ -1,5 +1,6 @@
 #include "create_rect.h"
 
+#include <pagoda/geometry/algorithms/create_rect.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 

@@ -1,20 +1,20 @@
 #pragma once
 
-#include <pgeditor/rendering/bound_state.h>
+#include "bound_state.h"
+#include "renderable.h"
 
+#include <GL/glew.h>
 #include <vector>
 
 namespace pgeditor::rendering
 {
 struct Vertex;
-}
 
-namespace pgeditor::scene
-{
-class Geometry
+class Geometry : public Renderable
 {
 public:
-	Geometry(const std::vector<rendering::Vertex>& vertices, const std::vector<uint32_t>& indices);
+	Geometry(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+	virtual ~Geometry();
 
 	std::size_t VertexCount() const;
 	std::size_t VertexBufferSizeInBytes() const;
@@ -24,20 +24,19 @@ public:
 	std::size_t IndexBufferSizeInBytes() const;
 	const uint32_t* GetIndexData() const;
 
-	std::size_t GetBindableId() const;
-
-	rendering::BoundState GetBoundState() const;
-	void Bind(const std::size_t& id);
-	void Unbind();
+public:
+	void DoLoad(Renderer* r) override;
+	void DoRender(Renderer* r) override;
+	void DoDispose(Renderer* r) override;
 
 private:
 	/// Vertex Buffer
 	std::vector<rendering::Vertex> m_vertices;
 	/// Index Buffer
 	std::vector<uint32_t> m_indices;
-	/// Bindable Id
-	std::size_t m_bindableId;
-	/// Bound state
-	rendering::BoundState m_bound;
+
+	GLuint m_vertexArrayObject;
+	GLuint m_vertexBufferObject;
+	GLuint m_elementBufferId;
 };
-}  // namespace pgeditor::scene
+}  // namespace pgeditor::rendering

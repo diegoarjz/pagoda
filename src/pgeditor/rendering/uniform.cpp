@@ -1,16 +1,24 @@
 #include "uniform.h"
 
+#include "gl_debug.h"
+#include "shader_program.h"
+
+#include <pagoda/common/debug/logger.h>
+
 #include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/mat_access.hpp>
 #include <boost/qvm/mat_operations.hpp>
 #include <boost/qvm/vec_operations.hpp>
+
+#include <GL/glew.h>
 
 using namespace pagoda::math;
 using namespace boost;
 
 namespace pgeditor::rendering
 {
-Uniform::Uniform(const std::string &name, Uniform::Type type)
-    : m_name(name), m_type(type), m_semantics(Uniform::Semantics::Custom), m_isDirty(true)
+Uniform::Uniform(std::shared_ptr<ShaderProgram> program, const std::string &name, Uniform::Type type)
+    : m_name(name), m_type(type), m_semantics(Uniform::Semantics::Custom), m_isDirty(true), m_shaderProgram(program)
 {
 	switch (type)
 	{
@@ -45,8 +53,9 @@ Uniform::Uniform(const std::string &name, Uniform::Type type)
 	};
 }
 
-Uniform::Uniform(const std::string &name, Uniform::Type type, Uniform::Semantics semantics)
-    : m_name(name), m_type(type), m_semantics(semantics), m_isDirty(true)
+Uniform::Uniform(std::shared_ptr<ShaderProgram> program, const std::string &name, Uniform::Type type,
+                 Uniform::Semantics semantics)
+    : m_name(name), m_type(type), m_semantics(semantics), m_isDirty(true), m_shaderProgram(program)
 {
 	switch (type)
 	{
@@ -80,6 +89,8 @@ Uniform::Uniform(const std::string &name, Uniform::Type type, Uniform::Semantics
 			break;
 	};
 }
+
+Uniform::~Uniform() {}
 
 void Uniform::SetFloat(float f)
 {
@@ -192,14 +203,68 @@ const boost::qvm::mat<float, 4, 4> &Uniform::GetMatrix4() const
 	return std::get<boost::qvm::mat<float, 4, 4>>(m_value);
 }
 
-std::size_t Uniform::GetBindableId() const { return m_bindableId; }
-BoundState Uniform::GetBoundState() const { return m_bound; }
-void Uniform::Bind(const std::size_t &id)
+void Uniform::DoLoad(Renderer *r)
 {
-	m_bound = BoundState::Bound;
-	m_bindableId = id;
+	START_PROFILE;
+
+	CHECK_GL_ERROR(m_uniformId = glGetUniformLocation(m_shaderProgram->GetShaderProgramId(), m_name.c_str()));
+	LOG_DEBUG("Binding Uniform '" << m_name << "' to location " << m_uniformId);
 }
-void Uniform::Unbind() { m_bound = BoundState::Unbound; }
+
+void Uniform::DoRender(Renderer *r)
+{
+	START_PROFILE;
+
+	if (!IsDirty())
+	{
+		return;
+	}
+
+	switch (GetType())
+	{
+		case Uniform::Type::Float:
+			break;
+		case Uniform::Type::Vec2:
+			break;
+		case Uniform::Type::Vec3:
+		{
+			CHECK_GL_ERROR(glUniform3fv(m_uniformId, 1, GetVec3().a));
+			break;
+		}
+		case Uniform::Type::Vec4:
+			break;
+		case Uniform::Type::Integer:
+			break;
+		case Uniform::Type::Unsigned:
+			break;
+		case Uniform::Type::Matrix2:
+			break;
+		case Uniform::Type::Matrix3:
+			break;
+		case Uniform::Type::Matrix4:
+		{
+			auto m = GetMatrix4();
+			// clang-format off
+					GLfloat mat[16] = {
+                        A00(m), A10(m), A20(m), A30(m),
+                        A01(m), A11(m), A21(m), A31(m),
+                        A02(m), A12(m), A22(m), A32(m),
+                        A03(m), A13(m), A23(m), A33(m),
+                    };
+			// clang-format on
+			CHECK_GL_ERROR(glUniformMatrix4fv(m_uniformId, 1, GL_FALSE, mat));
+			break;
+		}
+	};
+
+	SetNotDirty();
+}
+
+void Uniform::DoDispose(Renderer *r)
+{
+	//
+}
+
 bool Uniform::IsDirty() const { return m_isDirty; }
 void Uniform::SetNotDirty() { m_isDirty = false; }
 }  // namespace pgeditor::rendering

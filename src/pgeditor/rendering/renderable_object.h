@@ -1,25 +1,29 @@
 #pragma once
 
+#include "renderable.h"
+
 #include <pagoda/math/matrix_base.h>
 
 #include <memory>
 
-namespace pgeditor::scene
+namespace pagoda::image
 {
-class Geometry;
+class Image;
 }
 
 namespace pgeditor::rendering
 {
-class ShaderProgram;
+class Geometry;
+class Material;
 
-class RenderableObject
+class RenderableObject : public Renderable
 {
 public:
-	RenderableObject(std::shared_ptr<scene::Geometry> geometry, std::shared_ptr<ShaderProgram> shaderProgram);
+	RenderableObject(std::shared_ptr<rendering::Geometry> geometry, std::shared_ptr<Material> material);
+	virtual ~RenderableObject();
 
-	std::shared_ptr<scene::Geometry> GetGeometry() const;
-	std::shared_ptr<ShaderProgram> GetShaderProgram() const;
+	std::shared_ptr<rendering::Geometry> GetGeometry() const;
+	std::shared_ptr<Material> GetMaterial() const;
 
 	void SetModelMatrix(const boost::qvm::mat<float, 4, 4>& modelMatrix);
 	const boost::qvm::mat<float, 4, 4>& GetModelMatrix() const;
@@ -30,9 +34,14 @@ public:
 	void SetProjectionMatrix(const boost::qvm::mat<float, 4, 4>& projectionMatrix);
 	const boost::qvm::mat<float, 4, 4>& GetProjectionMatrix() const;
 
+protected:
+	void DoLoad(Renderer* r) override;
+	void DoRender(Renderer* r) override;
+	void DoDispose(Renderer* r) override;
+
 private:
-	std::shared_ptr<scene::Geometry> m_geometry;
-	std::shared_ptr<ShaderProgram> m_shaderProgram;
+	std::shared_ptr<rendering::Geometry> m_geometry;
+	std::shared_ptr<Material> m_material;
 
 	boost::qvm::mat<float, 4, 4> m_modelMatrix;
 	boost::qvm::mat<float, 4, 4> m_viewMatrix;

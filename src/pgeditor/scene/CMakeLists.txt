@@ -7,8 +7,6 @@ set(SCENE_SRCS
     "camera_manager.h"
     "camera_rig.cpp"
     "camera_rig.h"
-    "geometry.cpp"
-    "geometry.h"
     "lens.cpp"
     "lens.h"
     "mesh.cpp"

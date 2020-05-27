@@ -2,19 +2,22 @@
 #include <pagoda/common/instrument/profiler.h>
 #include <memory>
 
+#include <pgeditor/rendering/geometry.h>
 #include <pgeditor/rendering/gl_debug.h>
+#include <pgeditor/rendering/material.h>
 #include <pgeditor/rendering/renderable_object.h>
 #include <pgeditor/rendering/renderer.h>
 #include <pgeditor/rendering/shader.h>
 #include <pgeditor/rendering/shader_program.h>
+#include <pgeditor/rendering/texture.h>
 #include <pgeditor/rendering/vertex.h>
+
 #include <pgeditor/window/window.h>
 #include <pgeditor/window/window_creation_params.h>
 
 #include <pgeditor/scene/camera.h>
 #include <pgeditor/scene/camera_manager.h>
 #include <pgeditor/scene/camera_rig.h>
-#include <pgeditor/scene/geometry.h>
 #include <pgeditor/scene/mesh.h>
 #include <pgeditor/scene/node.h>
 
@@ -29,8 +32,13 @@
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/graph/graph.h>
 
+#include <pagoda/material/material.h>
+#include <pagoda/material/material_component.h>
+#include <pagoda/material/material_system.h>
 #include <pagoda/objects/hierarchical_component.h>
 #include <pagoda/objects/hierarchical_system.h>
+
+#include <pagoda/image/image.h>
 
 #include <pagoda/pagoda.h>
 
@@ -52,6 +60,8 @@ using namespace pagoda::geometry;
 using namespace pagoda::geometry::algorithms;
 using namespace pagoda::graph;
 using namespace pagoda::math;
+using namespace pagoda::material;
+using namespace pagoda::image;
 
 using namespace pgeditor;
 using namespace pgeditor::input;
@@ -81,9 +91,10 @@ const char* vertexShader =
 const char* fragmentShader = "#version 410\n"
                              "in vec3 vertexNormal;\n"
                              "in vec2 outTexCoord;\n"
-                             "out vec3 color;\n"
+                             "out vec4 color;\n"
+                             "uniform sampler2D sampler; \n"
                              "void main() {\n"
-                             "  color = vec3(outTexCoord.xy, 0);\n"
+                             "  color = texture(sampler, outTexCoord);\n"
                              "}";
 
 int main(int argc, char* argv[])
@@ -124,6 +135,8 @@ int main(int argc, char* argv[])
 	ProceduralObjectSystemPtr objectSystem = pagoda.GetProceduralObjectSystem();
 	GeometrySystemPtr geometrySystem = objectSystem->GetComponentSystem<GeometrySystem>();
 	HierarchicalSystemPtr hierarchicalSystem = objectSystem->GetComponentSystem<HierarchicalSystem>();
+	std::shared_ptr<MaterialSystem> materialSystem = objectSystem->GetComponentSystem<MaterialSystem>();
+
 	GraphPtr graph = pagoda.CreateGraphFromFile(graphFile);
 	graph->Execute();
 
@@ -163,6 +176,7 @@ int main(int argc, char* argv[])
 	{
 		auto geometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(p);
 		auto hierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(p);
+		auto materialComponent = materialSystem->GetComponentAs<MaterialComponent>(p);
 
 		if (hierarchicalComponent->ChildrenCount() != 0)
 		{
@@ -196,10 +210,19 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		auto renderableGeometry = std::make_shared<pgeditor::scene::Geometry>(verts, indices);
+		auto renderableGeometry = std::make_shared<pgeditor::rendering::Geometry>(verts, indices);
 		auto objectNode = std::make_shared<pgeditor::scene::Node>();
 		objectNode->SetParent(geomNode);
-		auto mesh = std::make_shared<Mesh>(renderableGeometry, shaderProgram);
+
+		auto material = std::make_shared<rendering::Material>(shaderProgram);
+		if (materialComponent != nullptr)
+		{
+			auto texture = std::make_shared<Texture>(materialComponent->GetMaterial().GetTexture());
+			material->SetTexture(0, texture);
+		}
+
+		auto mesh = std::make_shared<Mesh>(renderableGeometry, material);
+
 		objectNode->Attach(mesh);
 
 		n = objectNode;

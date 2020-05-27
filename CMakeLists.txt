@@ -17,6 +17,8 @@ find_library(COCOA_LIBRARY Cocoa)
 find_library(IOKIT_LIBRARY IOKit)
 find_library(CORE_VIDEO_LIBRARY CoreVideo)
 
+find_package(PNG REQUIRED)
+
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

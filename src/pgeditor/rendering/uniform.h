@@ -1,16 +1,22 @@
 #pragma once
 
 #include "bound_state.h"
+#include "renderable.h"
 
 #include <pagoda/math/matrix_base.h>
 #include <pagoda/math/vec_base.h>
+#include <memory>
 
 #include <string>
 #include <variant>
 
+#include <GL/glew.h>
+
 namespace pgeditor::rendering
 {
-class Uniform
+class ShaderProgram;
+
+class Uniform : public Renderable
 {
 public:
 	enum class Type
@@ -35,8 +41,9 @@ public:
 		MAX
 	};
 
-	Uniform(const std::string &name, Type type);
-	Uniform(const std::string &name, Type type, Semantics semantics);
+	Uniform(std::shared_ptr<ShaderProgram> program, const std::string &name, Type type);
+	Uniform(std::shared_ptr<ShaderProgram> program, const std::string &name, Type type, Semantics semantics);
+	virtual ~Uniform();
 
 	const std::string &GetName() const { return m_name; }
 	Type GetType() const { return m_type; }
@@ -64,10 +71,10 @@ public:
 	bool IsDirty() const;
 	void SetNotDirty();
 
-	std::size_t GetBindableId() const;
-	BoundState GetBoundState() const;
-	void Bind(const std::size_t &id);
-	void Unbind();
+protected:
+	void DoLoad(Renderer *r) override;
+	void DoRender(Renderer *r) override;
+	void DoDispose(Renderer *r) override;
 
 private:
 	// clang-format off
@@ -91,9 +98,8 @@ private:
 	Type m_type;
 	Semantics m_semantics;
 	bool m_isDirty;
-	/// Bindable Id
-	std::size_t m_bindableId;
-	/// Bound state
-	BoundState m_bound;
+
+	GLuint m_uniformId;
+	std::shared_ptr<ShaderProgram> m_shaderProgram;
 };
 }  // namespace pgeditor::rendering
