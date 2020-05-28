@@ -29,6 +29,7 @@ public:
 
 	double GetEllapsedTime() const;
 
+	void RegisterOnWindowResize(const std::function<void(int, int)> &handler);
 	void RegisterOnKeyPressed(const std::function<void(input::Key, int)> &handler);
 	void RegisterOnKeyReleased(const std::function<void(input::Key, int)> &handler);
 	void RegisterOnKeyRepeat(const std::function<void(input::Key, int)> &handler);

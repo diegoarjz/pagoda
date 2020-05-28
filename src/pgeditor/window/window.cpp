@@ -13,6 +13,7 @@
 #include <unordered_map>
 
 using namespace pgeditor::input;
+using namespace boost;
 
 namespace pgeditor::window
 {
@@ -20,6 +21,7 @@ Key convertKeyFromGLFW(int k) { return static_cast<Key>(k); }
 MouseButton convertMouseFromGLFW(int m) { return static_cast<MouseButton>(m); }
 
 static void errorCallback(int errorCode, const char* errorDescription);
+static void windowSizeCallback(GLFWwindow* w, int width, int height);
 static void cursorPosCallBack(GLFWwindow* window, double xPos, double yPos);
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
@@ -120,6 +122,7 @@ struct Window::Impl
 		glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
 		glfwSetScrollCallback(m_window, scrollCallback);
 		glfwSetKeyCallback(m_window, keyCallback);
+		glfwSetWindowSizeCallback(m_window, windowSizeCallback);
 
 		s_glfwToWindowMap[m_window] = this;
 
@@ -186,6 +189,8 @@ struct Window::Impl
 		m_mouseYPos = yPos;
 	}
 
+	void WindowResize(int width, int height) { m_windowResize(width, height); }
+
 	void KeyPressed(int key, int scancode, int mods) { m_keyPressed(convertKeyFromGLFW(key), scancode); }
 
 	void KeyReleased(int key, int scancode, int mods) { m_keyReleased(convertKeyFromGLFW(key), scancode); }
@@ -197,6 +202,8 @@ struct Window::Impl
 	void MouseButtonReleased(int button, int mods) { m_mouseButtonReleased(convertMouseFromGLFW(button)); }
 
 	void Scroll(double xOffset, double yOffset) { m_scrolled(xOffset, yOffset); }
+
+	void RegisterOnWindowResize(const std::function<void(int, int)>& handler) { m_windowResize.connect(handler); }
 
 	void RegisterOnDrag(const std::function<void(MouseButton, int, int, int, int)>& handler)
 	{
@@ -227,14 +234,15 @@ private:
 	int m_mouseXPos;
 	int m_mouseYPos;
 
-	boost::signals2::signal<void(int, int, int, int)> m_mouseMoved;
-	boost::signals2::signal<void(MouseButton)> m_mouseButtonPressed;
-	boost::signals2::signal<void(MouseButton)> m_mouseButtonReleased;
-	boost::signals2::signal<void(double, double)> m_scrolled;
-	boost::signals2::signal<void(Key, int)> m_keyPressed;
-	boost::signals2::signal<void(Key, int)> m_keyReleased;
-	boost::signals2::signal<void(Key, int)> m_keyRepeat;
-	boost::signals2::signal<void(MouseButton, int, int, int, int)> m_drag;
+	signals2::signal<void(int, int, int, int)> m_mouseMoved;
+	signals2::signal<void(MouseButton)> m_mouseButtonPressed;
+	signals2::signal<void(MouseButton)> m_mouseButtonReleased;
+	signals2::signal<void(double, double)> m_scrolled;
+	signals2::signal<void(Key, int)> m_keyPressed;
+	signals2::signal<void(Key, int)> m_keyReleased;
+	signals2::signal<void(Key, int)> m_keyRepeat;
+	signals2::signal<void(MouseButton, int, int, int, int)> m_drag;
+	signals2::signal<void(int, int)> m_windowResize;
 
 	static std::unordered_map<GLFWwindow*, Impl*> s_glfwToWindowMap;
 };  // struct Window::Impl
@@ -246,6 +254,11 @@ static void errorCallback(int errorCode, const char* errorDescription)
 	LOG_FATAL("GLFW raised an error");
 	LOG_FATAL("\tError Code: 0x" << errorCode);
 	LOG_FATAL("\tError Description: " << errorDescription);
+}
+
+static void windowSizeCallback(GLFWwindow* w, int width, int height)
+{
+	Window::Impl::GetMappedWindow(w)->WindowResize(width, height);
 }
 
 static void cursorPosCallBack(GLFWwindow* window, double xPos, double yPos)
@@ -299,6 +312,11 @@ void Window::Destroy() { m_implementation->Destroy(); }
 void Window::SwapBuffers() { m_implementation->SwapBuffers(); }
 void Window::PollEvents() { m_implementation->PollEvents(); }
 double Window::GetEllapsedTime() const { return m_implementation->GetEllapsedTime(); }
+
+void Window::RegisterOnWindowResize(const std::function<void(int, int)>& handler)
+{
+	m_implementation->RegisterOnWindowResize(handler);
+}
 
 void Window::RegisterOnKeyPressed(const std::function<void(Key, int)>& handler)
 {

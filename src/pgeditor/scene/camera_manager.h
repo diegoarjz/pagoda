@@ -17,6 +17,8 @@ public:
 
 	void Update(double dT);
 
+	void SetViewportSize(int width, int height);
+
 private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;

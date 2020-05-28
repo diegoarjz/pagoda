@@ -57,7 +57,7 @@ void Camera::SetTransformation(const Transformation &t)
 }
 
 void Camera::SetLens(const Lens &lens) { m_lens = lens; }
-const Lens &Camera::GetLens() const { return m_lens; }
+Lens &Camera::GetLens() { return m_lens; }
 
 template<typename T>
 qvm::mat<T, 4, 4> look_at(const qvm::vec<T, 3> &eye, const qvm::vec<T, 3> &target, const qvm::vec<T, 3> &upDirection)

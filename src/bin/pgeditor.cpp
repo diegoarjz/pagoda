@@ -142,8 +142,10 @@ int main(int argc, char* argv[])
 
 	auto rootNode = std::make_shared<pgeditor::scene::Node>();
 
+	WindowCreationParams wcp;
 	InputManager inputManager;
 	CameraManager cameraManager;
+	cameraManager.SetViewportSize(wcp.GetWidth(), wcp.GetHeight());
 
 	auto cameraNode = std::make_shared<pgeditor::scene::Node>();
 	auto camera = cameraManager.CreateCamera();
@@ -228,7 +230,6 @@ int main(int argc, char* argv[])
 		n = objectNode;
 	}
 
-	WindowCreationParams wcp;
 	auto w = std::make_shared<Window>();
 	w->Create(wcp);
 
@@ -247,18 +248,6 @@ int main(int argc, char* argv[])
 	inputManager.AddKeyMapping({0, Key::K, InputManager::Action::WhilePressed, [&rig, rot](){ rig.Rotate( rot,  0.0); }});
 	inputManager.AddKeyMapping({0, Key::H, InputManager::Action::WhilePressed, [&rig, rot](){ rig.Rotate( 0.0, -rot); }});
 	inputManager.AddKeyMapping({0, Key::L, InputManager::Action::WhilePressed, [&rig, rot](){ rig.Rotate( 0.0,  rot); }});
-
-
-	inputManager.AddKeyMapping({0, Key::C, InputManager::Action::OnPress, [&cameraNode, &camera](){
-            std::cout << "  Cam Node Pos: " << cameraNode->GetPosition() << std::endl;
-            std::cout << "Cam Node Front: " << cameraNode->GetWorldTransformation().GetFrontDirection() << std::endl;
-            std::cout << "Cam Node Right: " << cameraNode->GetWorldTransformation().GetRightDirection() << std::endl;
-            std::cout << "   Cam Node Up: " << cameraNode->GetWorldTransformation().GetUpDirection() << std::endl;
-            std::cout << "       Cam Pos: " << camera->GetPosition() << std::endl;
-            std::cout << "      Cam View: " << camera->GetViewDirection() << std::endl;
-            std::cout << "     Cam Right: " << camera->GetRightVector() << std::endl;
-            std::cout << "        Cam Up: " << camera->GetUpVector() << std::endl;
-    }});
 	// clang-format on
 
 	w->RegisterOnKeyPressed(
@@ -274,6 +263,9 @@ int main(int argc, char* argv[])
 
 	inputManager.AddMouseDragHandler(
 	    {0, MouseButton::Left, [&rig](const MouseButton& b, int x, int y, int dx, int dy) { rig.Rotate(dy, -dx); }});
+
+	w->RegisterOnWindowResize(
+	    std::bind(&CameraManager::SetViewportSize, &cameraManager, std::placeholders::_1, std::placeholders::_2));
 
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
