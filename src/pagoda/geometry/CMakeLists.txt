@@ -107,7 +107,6 @@ set(GEOMETRY_UNIT_TESTS
 foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})
     get_filename_component(unit_test_base_name ${unit_test_src} NAME)
     string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
-    message(STATUS "src: ${unit_test_src} name: ${test_name}")
 
     add_executable(${test_name} ${unit_test_src})
 
