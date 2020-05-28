@@ -6,8 +6,6 @@
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 
 #include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/dynamic/string_value.h>
@@ -41,12 +39,11 @@ void SetMaterial::DoWork()
 
 	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	while (HasInput(inputObject))
 	{
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputObject);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
 
 		UpdateValue("texture");
 		std::shared_ptr<MaterialComponent> materialComponent =
@@ -60,11 +57,6 @@ void SetMaterial::DoWork()
 		*geom = *inGeometryComponent->GetGeometry();
 		outGeometryComponent->SetGeometry(geom);
 		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
-
-		// hierarchy
-		auto parentHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
-		auto childHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
-		hierarchicalSystem->SetParent(parentHierarchicalComponent, childHierarchicalComponent);
 	}
 }
 }  // namespace pagoda::material::operations

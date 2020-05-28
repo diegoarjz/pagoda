@@ -6,8 +6,6 @@
 
 #include <pagoda/common/instrument/profiler.h>
 
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object_system.h>
 
 namespace pagoda::geometry::operations
@@ -35,7 +33,6 @@ void ExtractFaces::DoWork()
 	START_PROFILE;
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	ExplodeToFaces<Geometry> explodeToFaces;
 	while (HasInput(s_inputGeometry))
@@ -43,7 +40,6 @@ void ExtractFaces::DoWork()
 		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
 
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 
 		auto inGeometry = inGeometryComponent->GetGeometry();
 		std::vector<GeometryPtr> explodedFaces;
@@ -54,9 +50,8 @@ void ExtractFaces::DoWork()
 		{
 			auto faceNormal = g->GetFaceAttributes(*g->FacesBegin()).m_normal;
 
-			auto outObject = CreateOutputProceduralObject(s_outputGeometry);
+			auto outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-			auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
 
 			outGeometryComponent->SetGeometry(g);
 			if (boost::qvm::dot(faceNormal, inScopeZAxis) == 0)
@@ -72,8 +67,6 @@ void ExtractFaces::DoWork()
 			{
 				outGeometryComponent->SetScope(Scope::FromGeometry(g));
 			}
-
-			hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 		}
 	}
 }

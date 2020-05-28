@@ -3,8 +3,6 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -36,7 +34,6 @@ void TriangulateGeometry::DoWork()
 {
 	START_PROFILE;
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	EarClipping<Geometry> earClipping;
 
@@ -44,7 +41,7 @@ void TriangulateGeometry::DoWork()
 	{
 		// Geometry
 		ProceduralObjectPtr inObject = GetInputProceduralObject(sInputGeometry);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(sOutputGeometry);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, sOutputGeometry);
 
 		std::shared_ptr<GeometryComponent> inGeometryComponent =
 		    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -57,14 +54,6 @@ void TriangulateGeometry::DoWork()
 		earClipping.Execute(inGeometry, outGeometry);
 		outGeometryComponent->SetGeometry(outGeometry);
 		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
-
-		// Hierarchy
-		std::shared_ptr<HierarchicalComponent> inHierarchicalComponent =
-		    hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
-		std::shared_ptr<HierarchicalComponent> outHierarchicalComponent =
-		    hierarchicalSystem->GetComponentAs<HierarchicalComponent>(outObject);
-
-		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }
 

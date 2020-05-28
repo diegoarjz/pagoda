@@ -24,6 +24,9 @@ public:
 	void SetNamedMaterial(const std::string &name, const Material &material);
 	const Material &GetNamedMaterial(const std::string &name);
 
+protected:
+	void DoClone(std::shared_ptr<MaterialComponent> from, std::shared_ptr<MaterialComponent> to) override;
+
 private:
 	std::unordered_map<std::string, Material> m_namedMaterials;
 };

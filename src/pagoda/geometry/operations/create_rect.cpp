@@ -4,8 +4,6 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -68,7 +66,6 @@ void CreateRectGeometry::DoWork()
 	}
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	CreateRect<Geometry> create_rect(width, height, rectXAxis, rectYAxis);
 	auto geometry = std::make_shared<Geometry>();
@@ -81,8 +78,5 @@ void CreateRectGeometry::DoWork()
 	geometry_component->SetGeometry(geometry);
 	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
 	    geometry, math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
-
-	std::shared_ptr<HierarchicalComponent> hierarchical_component =
-	    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(object);
 }
 }  // namespace pagoda::geometry::operations

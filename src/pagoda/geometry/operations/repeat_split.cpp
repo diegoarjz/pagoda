@@ -3,8 +3,6 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/dynamic/boolean_value.h>
@@ -45,7 +43,6 @@ void RepeatSplit::DoWork()
 	START_PROFILE;
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	while (HasInput(inputGeometry))
 	{
@@ -57,7 +54,6 @@ void RepeatSplit::DoWork()
 
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
-		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		auto inScope = inGeometryComponent->GetScope();
 
 		auto size = get_value_as<float>(*GetValue("size"));
@@ -72,15 +68,12 @@ void RepeatSplit::DoWork()
 		int32_t createdObjectCount = 1;
 		for (auto& g : splitGeometries)
 		{
-			auto outProceduralObject = CreateOutputProceduralObject(outputGeometry);
+			auto outProceduralObject = CreateOutputProceduralObject(inObject, outputGeometry);
 			outProceduralObject->RegisterOrSetMember("index", std::make_shared<Integer>(createdObjectCount++));
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outProceduralObject);
-			auto outHierarchicalComponent =
-			    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outProceduralObject);
 
 			outGeometryComponent->SetGeometry(g);
 			outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(g, inScope.GetRotation()));
-			hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 		}
 	}
 }

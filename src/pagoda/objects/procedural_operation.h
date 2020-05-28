@@ -82,6 +82,14 @@ protected:
 	std::shared_ptr<ProceduralObject> GetInputProceduralObject(const std::string& interfaceName);
 	bool HasInput(const std::string& interfaceName) const;
 	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(const std::string& interfaceName);
+
+	/**
+	 * Creates a \c ProceduralObject in the output interface named \p interfaceName, copying all components present in
+	 * \p base.
+	 */
+	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(std::shared_ptr<ProceduralObject>& base,
+	                                                               const std::string& interfaceName);
+
 	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 
 private:
