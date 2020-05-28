@@ -12,6 +12,8 @@ find_package(Boost COMPONENTS chrono system program_options filesystem)
 
 find_package(PNG REQUIRED)
 
+message(STATUS ">>>> ${PNG_INCLUDE_DIRS}")
+
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
