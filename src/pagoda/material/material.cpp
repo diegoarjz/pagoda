@@ -13,7 +13,10 @@ namespace pagoda::material
 {
 Material::Material() {}
 
-void Material::SetTexture(const std::string &textureFile) { m_texture = std::make_shared<Image>(textureFile); }
+void Material::SetTexture(int slot, const std::string &textureFile)
+{
+	m_textures[slot] = std::make_shared<Image>(textureFile);
+}
 
-void Material::SetTexture(const image::ImagePtr texture) { m_texture = texture; }
+void Material::SetTexture(int slot, const image::ImagePtr texture) { m_textures[slot] = texture; }
 }  // namespace pagoda::material

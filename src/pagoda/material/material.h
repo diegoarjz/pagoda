@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
 namespace pagoda
 {
@@ -17,11 +18,11 @@ class Material
 public:
 	Material();
 
-	void SetTexture(const std::string &textureFile);
-	void SetTexture(const image::ImagePtr texture);
+	void SetTexture(int slot, const std::string &textureFile);
+	void SetTexture(int slot, const image::ImagePtr texture);
 
 private:
-	image::ImagePtr m_texture;
+	std::unordered_map<int, image::ImagePtr> m_textures;
 };
 }  // namespace material
 }  // namespace pagoda

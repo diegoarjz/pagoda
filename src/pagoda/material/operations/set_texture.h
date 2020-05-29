@@ -5,14 +5,14 @@
 
 namespace pagoda::material::operations
 {
-class SetMaterial : public objects::ProceduralOperation
+class SetTexture : public objects::ProceduralOperation
 {
 public:
 	static const std::string inputObject;
 	static const std::string outputObject;
 
-	SetMaterial(objects::ProceduralObjectSystemPtr objectSystem);
-	virtual ~SetMaterial();
+	SetTexture(objects::ProceduralObjectSystemPtr objectSystem);
+	virtual ~SetTexture();
 
 	void DoWork() override;
 };

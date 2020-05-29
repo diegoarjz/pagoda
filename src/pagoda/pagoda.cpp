@@ -32,6 +32,7 @@
 
 #include <pagoda/material/material_system.h>
 #include <pagoda/material/operations/set_material.h>
+#include <pagoda/material/operations/set_texture.h>
 
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/geometry/scope_axis_direction_predicate.h>
@@ -119,6 +120,8 @@ public:
 
 			m_operationFactory->Register("SetMaterial",
 			                             [this]() { return std::make_shared<SetMaterial>(m_proceduralObjectSystem); });
+			m_operationFactory->Register("SetTexture",
+			                             [this]() { return std::make_shared<SetTexture>(m_proceduralObjectSystem); });
 		}
 
 		// Register Predicates
