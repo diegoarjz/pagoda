@@ -32,6 +32,8 @@
 
 #include <pagoda/material/material_system.h>
 #include <pagoda/material/operations/set_material.h>
+#include <pagoda/material/operations/set_material_attribute.h>
+#include <pagoda/material/operations/set_shader.h>
 #include <pagoda/material/operations/set_texture.h>
 
 #include <pagoda/geometry/geometry_system.h>
@@ -122,6 +124,11 @@ public:
 			                             [this]() { return std::make_shared<SetMaterial>(m_proceduralObjectSystem); });
 			m_operationFactory->Register("SetTexture",
 			                             [this]() { return std::make_shared<SetTexture>(m_proceduralObjectSystem); });
+			m_operationFactory->Register("SetShader",
+			                             [this]() { return std::make_shared<SetShader>(m_proceduralObjectSystem); });
+			m_operationFactory->Register("SetMaterialAttribute", [this]() {
+				return std::make_shared<SetMaterialAttribute>(m_proceduralObjectSystem);
+			});
 		}
 
 		// Register Predicates

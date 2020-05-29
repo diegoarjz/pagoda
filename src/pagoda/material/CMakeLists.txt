@@ -9,6 +9,10 @@ set(MATERIAL_SRCS
     "operations/set_material.h"
     "operations/set_texture.cpp"
     "operations/set_texture.h"
+    "operations/set_shader.cpp"
+    "operations/set_shader.cpp"
+    "operations/set_material_attribute.cpp"
+    "operations/set_material_attribute.h"
 )
 
 add_library(material OBJECT ${MATERIAL_SRCS})
