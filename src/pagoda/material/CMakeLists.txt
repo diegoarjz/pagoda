@@ -7,6 +7,8 @@ set(MATERIAL_SRCS
     "material_component.h"
     "operations/set_material.cpp"
     "operations/set_material.h"
+    "operations/set_texture.cpp"
+    "operations/set_texture.h"
 )
 
 add_library(material OBJECT ${MATERIAL_SRCS})
