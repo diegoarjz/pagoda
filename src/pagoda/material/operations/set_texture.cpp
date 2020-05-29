@@ -43,7 +43,7 @@ void SetTexture::DoWork()
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
 		std::shared_ptr<MaterialComponent> materialComponent =
-		    materialSystem->GetComponentAs<MaterialComponent>(inObject);
+		    materialSystem->GetComponentAs<MaterialComponent>(outObject);
 		if (materialComponent == nullptr)
 		{
 			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(inObject);
