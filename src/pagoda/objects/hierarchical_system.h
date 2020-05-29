@@ -21,6 +21,9 @@ public:
 
 	void SetParent(std::shared_ptr<HierarchicalComponent> parent, std::shared_ptr<HierarchicalComponent> child);
 
+protected:
+	void DoClone(std::shared_ptr<HierarchicalComponent> from, std::shared_ptr<HierarchicalComponent> to) override;
+
 private:
 	struct HierarchicalComponentWeakPtrHasher
 	{

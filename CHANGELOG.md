@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Texture coordinates in geometries.
 - Texture coordinates projection based on geometry scope.
+- Support for loading PNG images as RGB8.
+- Material system and components.
 
 ### Changed
 

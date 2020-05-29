@@ -25,6 +25,7 @@ public:
 
 	std::shared_ptr<ProceduralObject> CreateProceduralObject();
 	void KillProceduralObject(std::shared_ptr<ProceduralObject>& proceduralObject);
+	std::shared_ptr<ProceduralObject> CloneProceduralObject(std::shared_ptr<ProceduralObject>& toClone);
 
 	bool RegisterProceduralComponentSystem(std::shared_ptr<ProceduralComponentSystemBase> system);
 	bool UnregisterProceduralComponentSystem(std::shared_ptr<ProceduralComponentSystemBase> system);

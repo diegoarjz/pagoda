@@ -25,6 +25,7 @@ public:
 	virtual std::shared_ptr<ProceduralComponent> CreateComponent(ProceduralObjectPtr) = 0;
 	virtual std::shared_ptr<ProceduralComponent> GetComponent(ProceduralObjectPtr object) = 0;
 	virtual void KillProceduralComponent(ProceduralObjectPtr) = 0;
+	virtual void CloneComponent(ProceduralObjectPtr from, ProceduralObjectPtr to) = 0;
 
 	template<typename C>
 	std::shared_ptr<C> GetComponentAs(ProceduralObjectPtr object)

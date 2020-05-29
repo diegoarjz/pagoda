@@ -3,8 +3,6 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -35,13 +33,12 @@ void ExtractScope::DoWork()
 	START_PROFILE;
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	while (HasInput(inputGeometry))
 	{
 		// Geometry
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputGeometry);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputGeometry);
 
 		std::shared_ptr<GeometryComponent> inGeometryComponent =
 		    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -56,14 +53,6 @@ void ExtractScope::DoWork()
 
 		outGeometryComponent->SetGeometry(outGeometry);
 		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
-
-		// Hierarchy
-		std::shared_ptr<HierarchicalComponent> inHierarchicalComponent =
-		    hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
-		std::shared_ptr<HierarchicalComponent> outHierarchicalComponent =
-		    hierarchicalSystem->GetComponentAs<HierarchicalComponent>(outObject);
-
-		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }
 }  // namespace pagoda::geometry::operations

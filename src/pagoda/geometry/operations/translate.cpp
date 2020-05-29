@@ -3,8 +3,6 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/dynamic/boolean_value.h>
@@ -44,12 +42,11 @@ void Translate::DoWork()
 	START_PROFILE;
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	while (HasInput(s_inputGeometry))
 	{
 		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(s_outputGeometry);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);
 
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
@@ -81,10 +78,6 @@ void Translate::DoWork()
 		transform.Execute(inGeometry, outGeometry);
 
 		outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(outGeometry, inScope.GetRotation()));
-
-		auto inHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
-		auto outHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
-		hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 	}
 }
 }  // namespace pagoda::geometry::operations

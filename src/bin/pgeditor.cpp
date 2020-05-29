@@ -219,7 +219,7 @@ int main(int argc, char* argv[])
 		auto material = std::make_shared<rendering::Material>(shaderProgram);
 		if (materialComponent != nullptr)
 		{
-			auto texture = std::make_shared<Texture>(materialComponent->GetMaterial().GetTexture());
+			auto texture = std::make_shared<Texture>(materialComponent->GetMaterial().GetTexture(0));
 			material->SetTexture(0, texture);
 		}
 

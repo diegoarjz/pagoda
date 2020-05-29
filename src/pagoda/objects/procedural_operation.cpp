@@ -1,8 +1,9 @@
 #include "procedural_operation.h"
 
-#include "procedural_object_system.h"
-
+#include "hierarchical_component.h"
+#include "hierarchical_system.h"
 #include "procedural_object.h"
+#include "procedural_object_system.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/dynamic/type_info.h>
@@ -96,7 +97,25 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObj
 	auto procedural_object = m_proceduralObjectSystem->CreateProceduralObject();
 	output_interfaces[interfaceName]->AddProceduralObject(procedural_object);
 
+	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
+	hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(procedural_object);
+
 	return procedural_object;
+}
+
+std::shared_ptr<ProceduralObject> ProceduralOperation::CreateOutputProceduralObject(
+    std::shared_ptr<ProceduralObject>& base, const std::string& interfaceName)
+{
+	auto proceduralObject = m_proceduralObjectSystem->CloneProceduralObject(base);
+	output_interfaces[interfaceName]->AddProceduralObject(proceduralObject);
+
+	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
+	auto parentObject = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(base);
+	auto childObject = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(proceduralObject);
+
+	hierarchicalSystem->SetParent(parentObject, childObject);
+
+	return proceduralObject;
 }
 
 std::string ProceduralOperation::ToString() const { return "<ProceduralOperation>"; }

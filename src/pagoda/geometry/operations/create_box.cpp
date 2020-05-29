@@ -5,8 +5,6 @@
 #include <pagoda/geometry/geometry_system.h>
 
 #include <pagoda/dynamic/get_value_as.h>
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -44,7 +42,6 @@ void CreateBoxGeometry::DoWork()
 	float zSize = get_value_as<float>(*GetValue("zSize"));
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	CreateBox<Geometry> createBox(xSize, ySize, zSize);
 	auto geometry = std::make_shared<Geometry>();
@@ -55,10 +52,7 @@ void CreateBoxGeometry::DoWork()
 	    geometrySystem->CreateComponentAs<GeometryComponent>(object);
 
 	geometry_component->SetGeometry(geometry);
-	geometry_component->SetScope(
-	    Scope::FromGeometryAndConstrainedRotation(geometry, boost::qvm::mat<float, 3, 3>(boost::qvm::diag_mat(boost::qvm::vec<float, 3>{1.0f, 1.0f, 1.0f}))));
-
-	std::shared_ptr<HierarchicalComponent> hierarchical_component =
-	    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(object);
+	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
+	    geometry, boost::qvm::mat<float, 3, 3>(boost::qvm::diag_mat(boost::qvm::vec<float, 3>{1.0f, 1.0f, 1.0f}))));
 }
 }  // namespace pagoda::geometry::operations

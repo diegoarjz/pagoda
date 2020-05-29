@@ -21,6 +21,8 @@ target_include_directories(
         $<INSTALL_INTERFACE:pagoda>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
         ${Boost_INCLUDE_DIRS}
+    PUBLIC
+        ${PNG_INCLUDE_DIRS}
 )
 
 target_compile_features(

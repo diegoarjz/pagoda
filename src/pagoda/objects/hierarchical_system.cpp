@@ -28,4 +28,10 @@ void HierarchicalSystem::SetParent(std::shared_ptr<HierarchicalComponent> parent
 	}
 }
 
+void HierarchicalSystem::DoClone(std::shared_ptr<HierarchicalComponent> from, std::shared_ptr<HierarchicalComponent> to)
+{
+	to->parent = from->parent;
+	to->children = from->children;
+}
+
 }  // namespace pagoda::objects

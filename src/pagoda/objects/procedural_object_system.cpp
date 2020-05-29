@@ -3,6 +3,7 @@
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/instrument/profiler.h>
+#include <memory>
 
 #include "procedural_component_system.h"
 #include "procedural_object.h"
@@ -19,6 +20,21 @@ std::shared_ptr<ProceduralObject> ProceduralObjectSystem::CreateProceduralObject
 
 	auto object = std::make_shared<ProceduralObject>();
 	m_proceduralObjects.insert(object);
+
+	return object;
+}
+
+std::shared_ptr<ProceduralObject> ProceduralObjectSystem::CloneProceduralObject(
+    std::shared_ptr<ProceduralObject>& toClone)
+{
+	START_PROFILE;
+
+	auto object = CreateProceduralObject();
+
+	for (auto& system : m_proceduralComponentSystems)
+	{
+		system.second->CloneComponent(toClone, object);
+	}
 
 	return object;
 }

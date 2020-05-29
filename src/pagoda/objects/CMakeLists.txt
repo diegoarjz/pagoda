@@ -63,3 +63,15 @@ target_link_libraries(
     PRIVATE
         common
 )
+
+#########################################################################
+# Unit tests
+#########################################################################
+
+set(GEOMETRY_UNIT_TESTS
+    "procedural_object.test.cpp"
+)
+
+foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})
+    add_unit_test(${unit_test_src})
+endforeach()

@@ -5,6 +5,7 @@
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
+#include <memory>
 
 #include <string>
 #include <unordered_map>
@@ -39,8 +40,6 @@ public:
 	{
 		DBG_ASSERT_MSG(object != nullptr, "Can't create a component (%s) for a null ProceduralObject",
 		               GetComponentSystemTypeName().c_str());
-		DBG_ASSERT_MSG(m_components.find(object) == std::end(m_components),
-		               "Procedural object already has a component for %s", GetComponentSystemTypeName().c_str());
 
 		auto component = std::make_shared<Component_t>();
 		m_components[object] = component;
@@ -62,10 +61,25 @@ public:
 		return component->second;
 	}
 
+	void CloneComponent(ProceduralObjectPtr from, ProceduralObjectPtr to) override
+	{
+		auto originalComponent = GetComponentAs<Component_t>(from);
+		if (originalComponent == nullptr)
+		{
+			// no component to be cloned so nothing to be done
+			return;
+		}
+		auto newComponent = CreateComponentAs<Component_t>(to);
+		DoClone(originalComponent, newComponent);
+	}
+
 	/**
 	 * Deletes the \c ProceduralComponent for the \c ProceduralObject \p object.
 	 */
 	void KillProceduralComponent(ProceduralObjectPtr object) override { m_components.erase(object); }
+
+protected:
+	virtual void DoClone(std::shared_ptr<Component_t> from, std::shared_ptr<Component_t> to) = 0;
 
 private:
 	/// Stores the \c ProceduralComponent for each \c ProceduralObject.

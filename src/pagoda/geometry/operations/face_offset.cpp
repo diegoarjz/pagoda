@@ -3,8 +3,6 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -43,7 +41,6 @@ void FaceOffsetOperation::DoWork()
 {
 	START_PROFILE;
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	while (HasInput(inputGeometry))
 	{
@@ -58,15 +55,13 @@ void FaceOffsetOperation::DoWork()
 
 		std::shared_ptr<GeometryComponent> inGeometryComponent =
 		    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		std::shared_ptr<HierarchicalComponent> inHierarchicalComponent =
-		    hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 
 		offset.Execute(inGeometry, std::back_inserter(innerGeometries), std::back_inserter(outerGeometries));
 
 		for (const auto& i : innerGeometries)
 		{
-			ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputInnerGeometry);
+			ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputInnerGeometry);
 			outObject->RegisterOrSetMember("offset_tag", std::make_shared<String>("inner"));
 
 			std::shared_ptr<GeometryComponent> geometryComponent =
@@ -74,27 +69,17 @@ void FaceOffsetOperation::DoWork()
 			geometryComponent->SetGeometry(i);
 			geometryComponent->SetScope(
 			    Scope::FromGeometryAndConstrainedRotation(i, inGeometryComponent->GetScope().GetRotation()));
-
-			std::shared_ptr<HierarchicalComponent> outHierarchicalComponent =
-			    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
-
-			hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 		}
 
 		for (const auto& i : outerGeometries)
 		{
-			ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputOuterGeometry);
+			ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputOuterGeometry);
 			outObject->RegisterOrSetMember("offset_tag", std::make_shared<String>("outer"));
 
 			std::shared_ptr<GeometryComponent> geometryComponent =
 			    geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 			geometryComponent->SetGeometry(i);
 			geometryComponent->SetScope(Scope::FromGeometry(i));
-
-			std::shared_ptr<HierarchicalComponent> outHierarchicalComponent =
-			    hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
-
-			hierarchicalSystem->SetParent(outHierarchicalComponent, inHierarchicalComponent);
 		}
 	}
 }

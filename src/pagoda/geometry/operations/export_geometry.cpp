@@ -3,7 +3,6 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/io/geometry_exporter.h>
 
-#include <pagoda/objects/hierarchical_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/common/fs/file_util.h>

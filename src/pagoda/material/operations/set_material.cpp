@@ -2,15 +2,16 @@
 
 #include <pagoda/material/material_component.h>
 #include <pagoda/material/material_system.h>
-#include <memory>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
-#include <pagoda/objects/hierarchical_component.h>
-#include <pagoda/objects/hierarchical_system.h>
 
 #include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/dynamic/string_value.h>
+
+#include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace pagoda::material::operations
 {
@@ -26,11 +27,14 @@ SetMaterial::SetMaterial(objects::ProceduralObjectSystemPtr objectSystem) : Proc
 	CreateInputInterface(inputObject);
 	CreateOutputInterface(outputObject);
 
-	// clang-format off
-    RegisterValues({
-        {"texture", std::make_shared<String>()}
-    });
-	// clang-format on
+	std::unordered_map<std::string, DynamicValueBasePtr> values;
+
+	for (uint32_t i = 0u; i < 8; ++i)
+	{
+		values.emplace("texture_" + std::to_string(i), std::make_shared<String>());
+	}
+
+	RegisterValues(values);
 }
 
 SetMaterial::~SetMaterial() {}
@@ -41,17 +45,24 @@ void SetMaterial::DoWork()
 
 	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-	auto hierarchicalSystem = m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
 
 	while (HasInput(inputObject))
 	{
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(outputObject);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
 
-		UpdateValue("texture");
-		std::shared_ptr<MaterialComponent> materialComponent =
-		    materialSystem->CreateComponentAs<MaterialComponent>(outObject);
-		materialComponent->GetMaterial().SetTexture(get_value_as<std::string>(*GetValue("texture")));
+		for (uint32_t i = 0u; i < 8; ++i)
+		{
+			std::string texture = "texture_" + std::to_string(i);
+			UpdateValue(texture);
+			std::shared_ptr<MaterialComponent> materialComponent =
+			    materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+			auto value = GetValue(texture);
+			if (value != nullptr)
+			{
+				materialComponent->GetMaterial().SetTexture(i, get_value_as<std::string>(*value));
+			}
+		}
 
 		// geometry
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -60,11 +71,6 @@ void SetMaterial::DoWork()
 		*geom = *inGeometryComponent->GetGeometry();
 		outGeometryComponent->SetGeometry(geom);
 		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
-
-		// hierarchy
-		auto parentHierarchicalComponent = hierarchicalSystem->GetComponentAs<HierarchicalComponent>(inObject);
-		auto childHierarchicalComponent = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(outObject);
-		hierarchicalSystem->SetParent(parentHierarchicalComponent, childHierarchicalComponent);
 	}
 }
 }  // namespace pagoda::material::operations

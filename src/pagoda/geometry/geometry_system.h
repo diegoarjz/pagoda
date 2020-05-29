@@ -31,6 +31,9 @@ public:
 	GeometrySystem();
 	virtual ~GeometrySystem();
 
+protected:
+	void DoClone(std::shared_ptr<GeometryComponent> from, std::shared_ptr<GeometryComponent> to) override;
+
 };  // class GeometrySystem
 using GeometrySystemPtr = std::shared_ptr<GeometrySystem>;
 using GeometrySystemWeakPtr = std::weak_ptr<GeometrySystem>;
