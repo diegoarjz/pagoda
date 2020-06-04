@@ -13,14 +13,14 @@ namespace pagoda::material
 {
 Material::Material() {}
 
-void Material::SetTexture(int slot, const std::string &textureFile)
+void Material::SetTexture(uint32_t slot, const std::string &textureFile)
 {
 	m_textures[slot] = std::make_shared<Image>(textureFile);
 }
 
-void Material::SetTexture(int slot, const image::ImagePtr texture) { m_textures[slot] = texture; }
+void Material::SetTexture(uint32_t slot, const image::ImagePtr texture) { m_textures[slot] = texture; }
 
-image::ImagePtr Material::GetTexture(int slot)
+image::ImagePtr Material::GetTexture(uint32_t slot) const
 {
 	auto tex = m_textures.find(slot);
 	if (tex == m_textures.end())
@@ -30,9 +30,17 @@ image::ImagePtr Material::GetTexture(int slot)
 	return tex->second;
 }
 
+void Material::TexturesEach(const std::function<void(uint32_t, image::ImagePtr)> &fn) const
+{
+	for (const auto &t : m_textures)
+	{
+		fn(t.first, t.second);
+	}
+}
+
 void Material::SetShaderSource(ShaderType type, const std::string &source) { m_shaderSources[type] = source; }
 
-void Material::ShadersEach(std::function<void(ShaderType, const std::string &)> &fn)
+void Material::ShadersEach(const std::function<void(ShaderType, const std::string &)> &fn)
 {
 	for (const auto &s : m_shaderSources)
 	{
@@ -40,12 +48,14 @@ void Material::ShadersEach(std::function<void(ShaderType, const std::string &)> 
 	}
 }
 
+std::size_t Material::GetShaderCount() const { return m_shaderSources.size(); }
+
 void Material::SetAttribute(const std::string &name, dynamic::DynamicValueBasePtr value)
 {
 	m_materialAttributes[name] = value;
 }
 
-void Material::AttributesEach(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> &fn)
+void Material::AttributesEach(const std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> &fn) const
 {
 	for (const auto &m : m_materialAttributes)
 	{

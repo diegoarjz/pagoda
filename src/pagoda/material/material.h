@@ -30,18 +30,20 @@ public:
 
 	Material();
 
-	void SetTexture(int slot, const std::string &textureFile);
-	void SetTexture(int slot, const image::ImagePtr texture);
-	image::ImagePtr GetTexture(int slot);
+	void SetTexture(uint32_t slot, const std::string &textureFile);
+	void SetTexture(uint32_t slot, const image::ImagePtr texture);
+	image::ImagePtr GetTexture(uint32_t slot) const;
+	void TexturesEach(const std::function<void(uint32_t, image::ImagePtr)> &fn) const;
 
 	void SetShaderSource(ShaderType type, const std::string &source);
-	void ShadersEach(std::function<void(ShaderType, const std::string &)> &fn);
+	void ShadersEach(const std::function<void(ShaderType, const std::string &)> &fn);
+	std::size_t GetShaderCount() const;
 
 	void SetAttribute(const std::string &name, dynamic::DynamicValueBasePtr value);
-	void AttributesEach(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> &fn);
+	void AttributesEach(const std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> &fn) const;
 
 private:
-	std::unordered_map<int, image::ImagePtr> m_textures;
+	std::unordered_map<uint32_t, image::ImagePtr> m_textures;
 	std::unordered_map<ShaderType, std::string> m_shaderSources;
 	std::unordered_map<std::string, dynamic::DynamicValueBasePtr> m_materialAttributes;
 };
