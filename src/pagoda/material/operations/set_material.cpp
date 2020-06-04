@@ -56,7 +56,7 @@ void SetMaterial::DoWork()
 			std::string texture = "texture_" + std::to_string(i);
 			UpdateValue(texture);
 			std::shared_ptr<MaterialComponent> materialComponent =
-			    materialSystem->CreateComponentAs<MaterialComponent>(inObject);
+			    materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 			auto value = GetValue(texture);
 			if (value != nullptr)
 			{

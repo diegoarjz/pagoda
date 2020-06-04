@@ -37,6 +37,11 @@ SetMaterialAttribute::SetMaterialAttribute(objects::ProceduralObjectSystemPtr ob
 
 SetMaterialAttribute::~SetMaterialAttribute() {}
 
+struct evaluator : public ValueVisitor<DynamicValueBasePtr>
+{
+	DynamicValueBasePtr operator()(ExpressionPtr& e) { return e->Evaluate(); }
+};
+
 void SetMaterialAttribute::DoWork()
 {
 	START_PROFILE;
@@ -57,8 +62,15 @@ void SetMaterialAttribute::DoWork()
 		UpdateValue("name");
 		UpdateValue("value");
 
+		DynamicValueBasePtr v = GetValue("value");
+		ExpressionPtr e = std::dynamic_pointer_cast<Expression>(v);
+		if (e != nullptr)
+		{
+			v = e->Evaluate();
+		}
+
 		std::string name = get_value_as<std::string>(*GetValue("name"));
-		materialComponent->GetMaterial().SetAttribute(name, GetValue("value"));
+		materialComponent->GetMaterial().SetAttribute(name, v);
 	}
 }
 }  // namespace pagoda::material::operations

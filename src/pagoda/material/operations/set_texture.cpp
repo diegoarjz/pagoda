@@ -46,7 +46,7 @@ void SetTexture::DoWork()
 		    materialSystem->GetComponentAs<MaterialComponent>(outObject);
 		if (materialComponent == nullptr)
 		{
-			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(inObject);
+			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 		}
 
 		UpdateValue("slot");

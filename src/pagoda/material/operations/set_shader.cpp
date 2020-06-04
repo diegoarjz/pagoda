@@ -52,7 +52,7 @@ void SetShader::DoWork()
 			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 		}
 
-		UpdateValue("slot");
+		UpdateValue("type");
 		UpdateValue("path");
 
 		std::string type = get_value_as<std::string>(*GetValue("type"));
