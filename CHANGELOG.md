@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Restrutctured the code to use the Pitchfork Layout model.
+- System registration (e.g., Geometry and Material) is now performed by each
+  system. The core systems are automatically registered.
 
 ## [0.1.0] - 2020-04-28
 

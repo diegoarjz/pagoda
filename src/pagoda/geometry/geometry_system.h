@@ -42,6 +42,9 @@ public:
 	GeometrySystem();
 	virtual ~GeometrySystem();
 
+	/**
+	 * Performs the registration of the Geometry System in \p pagoda.
+	 */
 	static void Registration(Pagoda* pagoda);
 
 protected:

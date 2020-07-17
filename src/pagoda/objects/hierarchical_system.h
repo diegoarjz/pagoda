@@ -26,6 +26,9 @@ public:
 
 	void SetParent(std::shared_ptr<HierarchicalComponent> parent, std::shared_ptr<HierarchicalComponent> child);
 
+	/**
+	 * Performs the registration of the Hierarchical System with \p pagoda.
+	 */
 	static void Registration(Pagoda *pagoda);
 
 protected:

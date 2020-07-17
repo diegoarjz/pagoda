@@ -32,6 +32,9 @@ public:
 	void SetNamedMaterial(const std::string &name, const Material &material);
 	const Material &GetNamedMaterial(const std::string &name);
 
+	/**
+	 * Performs the registration of the Material System with \p pagoda.
+	 */
 	static void Registration(Pagoda *pagoda);
 
 protected:
