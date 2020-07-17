@@ -9,6 +9,14 @@
 
 namespace pagoda
 {
+class Pagoda;
+
+namespace objects
+{
+class ProceduralObjectSystem;
+using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
+}  // namespace objects
+
 namespace material
 {
 class MaterialComponent;
@@ -23,6 +31,11 @@ public:
 
 	void SetNamedMaterial(const std::string &name, const Material &material);
 	const Material &GetNamedMaterial(const std::string &name);
+
+	/**
+	 * Performs the registration of the Material System with \p pagoda.
+	 */
+	static void Registration(Pagoda *pagoda);
 
 protected:
 	void DoClone(std::shared_ptr<MaterialComponent> from, std::shared_ptr<MaterialComponent> to) override;

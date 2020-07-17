@@ -8,6 +8,17 @@
 #include <pagoda/objects/procedural_object.h>
 #include <pagoda/objects/procedural_operation.h>
 
+namespace pagoda
+{
+class Pagoda;
+
+namespace objects
+{
+class ProceduralObjectSystem;
+using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
+}  // namespace objects
+}  // namespace pagoda
+
 namespace pagoda::geometry
 {
 // TODO: Maybe move these type defs to geometry core
@@ -30,6 +41,11 @@ public:
 
 	GeometrySystem();
 	virtual ~GeometrySystem();
+
+	/**
+	 * Performs the registration of the Geometry System in \p pagoda.
+	 */
+	static void Registration(Pagoda* pagoda);
 
 protected:
 	void DoClone(std::shared_ptr<GeometryComponent> from, std::shared_ptr<GeometryComponent> to) override;

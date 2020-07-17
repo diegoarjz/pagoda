@@ -16,10 +16,10 @@ using GraphPtr = std::shared_ptr<Graph>;
 /**
  * Entry point class for the pagoda library.
  *
- * Pagoda is fully initialized on construction of this object and
- * shutdown on destruction.
- *
- * There can be several instances of \c Pagoda.
+ * Pagoda is fully initialized on construction of this object and shutdown on
+ * destruction. The core Pagoda systems and their operations are registered on
+ * initialization. There can be several instances of \c Pagoda and each will
+ * have its own instances of the core systems.
  */
 class Pagoda
 {
@@ -62,7 +62,7 @@ public:
 	/**
 	 * Creates a \c Graph from the file given in \p filePath.
 	 */
-	graph::GraphPtr CreateGraphFromFile(const std::string &filePath);
+	graph::GraphPtr CreateGraphFromFile(const std::string& filePath);
 
 private:
 	class Impl;
