@@ -57,17 +57,64 @@ using namespace material::operations;
 class Pagoda::Impl
 {
 public:
-	Impl()
+	Impl(Pagoda *pagoda) : m_pagoda(pagoda), m_initialized(false) {}
+
+	~Impl()
 	{
+		LOG_TRACE(Core, "Shutting down Pagoda");
+		common::debug::Logger::Shutdown();
+	}
+
+	ProceduralObjectSystemPtr GetProceduralObjectSystem()
+	{
+		Init();
+		return m_proceduralObjectSystem;
+	}
+
+	OperationFactoryPtr GetOperationFactory()
+	{
+		Init();
+		return m_operationFactory;
+	}
+
+	NodeFactoryPtr GetNodeFactory()
+	{
+		Init();
+		return m_nodeFactory;
+	}
+
+	GraphPtr CreateGraph()
+	{
+		Init();
+		return std::make_shared<Graph>(GetNodeFactory());
+	}
+
+	GraphPtr CreateGraphFromFile(const std::string &filePath)
+	{
+		Init();
+		LOG_TRACE(Core, "Creating Graph From File: " << filePath.c_str());
+		GraphReader reader(GetNodeFactory());
+		GraphPtr graph = reader.Read(common::fs::LoadFileToString(filePath));
+		return graph;
+	}
+
+	void Init()
+	{
+		if (m_initialized)
+		{
+			return;
+		}
+		m_initialized = true;
+
 		LOG_TRACE(Core, "Initializing Pagoda");
 
 		m_proceduralObjectSystem = std::make_shared<ProceduralObjectSystem>();
-		m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<GeometrySystem>());
-		m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<HierarchicalSystem>());
-		m_proceduralObjectSystem->RegisterProceduralComponentSystem(std::make_shared<MaterialSystem>());
-
 		m_operationFactory = std::make_shared<OperationFactory>();
 		m_predicateRegistry = std::make_shared<ProceduralObjectPredicateRegistry>();
+
+		HierarchicalSystem::Registration(m_pagoda);
+		GeometrySystem::Registration(m_pagoda);
+		MaterialSystem::Registration(m_pagoda);
 
 		// Register Nodes
 		{
@@ -80,98 +127,30 @@ public:
 			m_nodeFactory->Register("Router", [this]() { return std::make_shared<RouterNode>(m_predicateRegistry); });
 		}
 
-		// Register Operations
-		{
-			m_operationFactory->Register("CreateRectGeometry", [this]() {
-				return std::make_shared<CreateRectGeometry>(m_proceduralObjectSystem);
-			});
-			m_operationFactory->Register("CreateSphereGeometry", [this]() {
-				return std::make_shared<CreateSphereGeometry>(m_proceduralObjectSystem);
-			});
-			m_operationFactory->Register("CreateBoxGeometry", [this]() {
-				return std::make_shared<CreateBoxGeometry>(m_proceduralObjectSystem);
-			});
-			m_operationFactory->Register(
-			    "ExportGeometry", [this]() { return std::make_shared<ExportGeometry>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("ExtractScope",
-			                             [this]() { return std::make_shared<ExtractScope>(m_proceduralObjectSystem); });
-			m_operationFactory->Register(
-			    "ExtrudeGeometry", [this]() { return std::make_shared<ExtrudeGeometry>(m_proceduralObjectSystem); });
-			m_operationFactory->Register(
-			    "FaceOffset", [this]() { return std::make_shared<FaceOffsetOperation>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("TriangulateGeometry", [this]() {
-				return std::make_shared<TriangulateGeometry>(m_proceduralObjectSystem);
-			});
-			m_operationFactory->Register("ClipGeometry",
-			                             [this]() { return std::make_shared<ClipGeometry>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("RepeatSplit",
-			                             [this]() { return std::make_shared<RepeatSplit>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("ExtractFaces",
-			                             [this]() { return std::make_shared<ExtractFaces>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("Translate",
-			                             [this]() { return std::make_shared<Translate>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("Split",
-			                             [this]() { return std::make_shared<Split>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("Scale",
-			                             [this]() { return std::make_shared<Scale>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("Rotate",
-			                             [this]() { return std::make_shared<Rotate>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("ScopeTextureProjection", [this]() {
-				return std::make_shared<ScopeTextureProjection>(m_proceduralObjectSystem);
-			});
-
-			m_operationFactory->Register("SetMaterial",
-			                             [this]() { return std::make_shared<SetMaterial>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("SetTexture",
-			                             [this]() { return std::make_shared<SetTexture>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("SetShader",
-			                             [this]() { return std::make_shared<SetShader>(m_proceduralObjectSystem); });
-			m_operationFactory->Register("SetMaterialAttribute", [this]() {
-				return std::make_shared<SetMaterialAttribute>(m_proceduralObjectSystem);
-			});
-		}
-
 		// Register Predicates
 		{
 			m_predicateRegistry->Register(
-			    "front", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{1, 0, 0}));
+			    "front", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
+			                                                           boost::qvm::vec<float, 3>{1, 0, 0}));
 			m_predicateRegistry->Register(
-			    "back", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{-1, 0, 0}));
+			    "back", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
+			                                                          boost::qvm::vec<float, 3>{-1, 0, 0}));
+			m_predicateRegistry->Register("up", std::make_shared<ScopeAxisDirectionPredicate>(
+			                                        m_proceduralObjectSystem, 'z', boost::qvm::vec<float, 3>{0, 0, 1}));
+			m_predicateRegistry->Register(
+			    "down", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
+			                                                          boost::qvm::vec<float, 3>{0, 0, -1}));
 
 			m_predicateRegistry->Register(
-			    "up", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, 0, 1}));
+			    "left", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
+			                                                          boost::qvm::vec<float, 3>{0, 1, 0}));
 			m_predicateRegistry->Register(
-			    "down", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, 0, -1}));
-
+			    "right", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
+			                                                           boost::qvm::vec<float, 3>{0, -1, 0}));
 			m_predicateRegistry->Register(
-			    "left", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, 1, 0}));
-			m_predicateRegistry->Register(
-			    "right", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z', Vec3F{0, -1, 0}));
-			m_predicateRegistry->Register(
-			    "side", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'y', Vec3F{0, 0, 1}));
+			    "side", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'y',
+			                                                          boost::qvm::vec<float, 3>{0, 0, 1}));
 		}
-	}
-
-	~Impl()
-	{
-		LOG_TRACE(Core, "Shutting down Pagoda");
-		common::debug::Logger::Shutdown();
-	}
-
-	ProceduralObjectSystemPtr GetProceduralObjectSystem() { return m_proceduralObjectSystem; }
-
-	OperationFactoryPtr GetOperationFactory() { return m_operationFactory; }
-
-	NodeFactoryPtr GetNodeFactory() { return m_nodeFactory; }
-
-	GraphPtr CreateGraph() { return std::make_shared<Graph>(GetNodeFactory()); }
-
-	GraphPtr CreateGraphFromFile(const std::string &filePath)
-	{
-		LOG_TRACE(Core, "Creating Graph From File: " << filePath.c_str());
-		GraphReader reader(GetNodeFactory());
-		GraphPtr graph = reader.Read(common::fs::LoadFileToString(filePath));
-		return graph;
 	}
 
 private:
@@ -179,9 +158,11 @@ private:
 	OperationFactoryPtr m_operationFactory;
 	NodeFactoryPtr m_nodeFactory;
 	ProceduralObjectPredicateRegistryPtr m_predicateRegistry;
+	Pagoda *m_pagoda;
+	bool m_initialized;
 };
 
-Pagoda::Pagoda() : m_implementation(std::make_unique<Pagoda::Impl>()) {}
+Pagoda::Pagoda() : m_implementation(std::make_unique<Pagoda::Impl>(this)) {}
 Pagoda::~Pagoda() {}
 
 ProceduralObjectSystemPtr Pagoda::GetProceduralObjectSystem() { return m_implementation->GetProceduralObjectSystem(); }

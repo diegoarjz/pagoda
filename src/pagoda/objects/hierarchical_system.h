@@ -5,6 +5,11 @@
 #include "procedural_object.h"
 #include "procedural_operation.h"
 
+namespace pagoda
+{
+class Pagoda;
+}
+
 namespace pagoda::objects
 {
 class HierarchicalComponent;
@@ -20,6 +25,8 @@ public:
 	virtual ~HierarchicalSystem();
 
 	void SetParent(std::shared_ptr<HierarchicalComponent> parent, std::shared_ptr<HierarchicalComponent> child);
+
+	static void Registration(Pagoda *pagoda);
 
 protected:
 	void DoClone(std::shared_ptr<HierarchicalComponent> from, std::shared_ptr<HierarchicalComponent> to) override;

@@ -62,7 +62,7 @@ public:
 	/**
 	 * Creates a \c Graph from the file given in \p filePath.
 	 */
-	graph::GraphPtr CreateGraphFromFile(const std::string &filePath);
+	graph::GraphPtr CreateGraphFromFile(const std::string& filePath);
 
 private:
 	class Impl;
