@@ -9,6 +9,7 @@
 #include <pagoda/common/instrument/profiler.h>
 
 #include <array>
+#include <string>
 
 namespace pagoda::graph
 {
@@ -57,6 +58,16 @@ public:
 		m_adjacencies.erase(node);
 
 		m_nodes.erase(node);
+	}
+
+	NodePtr GetNode(const std::string &name) const
+	{
+		auto iter = m_nodesByName.find(name);
+		if (iter == m_nodesByName.end())
+		{
+			return nullptr;
+		}
+		return iter->second.lock();
 	}
 
 	Graph::EdgeCreated CreateEdge(NodePtr source_node, NodePtr target_node)
@@ -171,7 +182,9 @@ public:
 		scheduler->Finalize();
 	}
 
-	NodePtr CreateNode(const std::string &nodeType)
+	NodePtr CreateNode(const std::string &nodeType) { return CreateNode(nodeType, nodeType); }
+
+	NodePtr CreateNode(const std::string &nodeType, const std::string &nodeName)
 	{
 		auto node = m_nodeFactory->Create(nodeType);
 		if (node == nullptr)
@@ -179,6 +192,22 @@ public:
 			throw UnknownNodeTypeException(nodeType);
 		}
 		AddNode(node);
+
+		auto name = nodeName;
+		if (m_nodesByName.find(name) != m_nodesByName.end())
+		{
+			std::size_t counter = 1;
+			std::string availableName = name + std::to_string(counter);
+			while (m_nodesByName.find(availableName) != m_nodesByName.end())
+			{
+				availableName = name + std::to_string(++counter);
+			}
+			name = availableName;
+		}
+
+		node->SetName(name);
+		m_nodesByName.emplace(name, node);
+
 		return node;
 	}
 
@@ -206,6 +235,7 @@ private:
 
 	uint32_t m_nextNodeId;
 	NodeSet<Node> m_nodes;
+	std::unordered_map<std::string, NodeWeakPtr> m_nodesByName;
 	AdjacencyContainer m_adjacencies;
 	NodeWeakPtrSet m_inputNodes;
 	NodeWeakPtrSet m_outputNodes;
@@ -221,6 +251,8 @@ Graph::~Graph() {}
 void Graph::AddNode(NodePtr node) { m_implementation->AddNode(node); }
 
 void Graph::DestroyNode(NodePtr node) { m_implementation->DestroyNode(node); }
+
+NodePtr Graph::GetNode(const std::string &name) const { return m_implementation->GetNode(name); }
 
 Graph::EdgeCreated Graph::CreateEdge(NodePtr source_node, NodePtr target_node)
 {
@@ -252,6 +284,11 @@ void Graph::SetScheduler(std::unique_ptr<IScheduler> scheduler)
 }
 
 NodePtr Graph::CreateNode(const std::string &nodeType) { return m_implementation->CreateNode(nodeType); }
+
+NodePtr Graph::CreateNode(const std::string &nodeType, const std::string &nodeName)
+{
+	return m_implementation->CreateNode(nodeType, nodeName);
+}
 
 void Graph::Execute() { m_implementation->Execute(); }
 

@@ -41,7 +41,6 @@ set(test_srcs
     "procedural_objects/procedural_object_interface.cpp"
     "procedural_objects/geometry_system.cpp"
     "procedural_objects/procedural_object_predicates.cpp"
-    "procedural_graph/graph.cpp"
     "procedural_graph/node.cpp"
     "procedural_graph/node_set_visitor.cpp"
     "procedural_graph/execution_queue.cpp"

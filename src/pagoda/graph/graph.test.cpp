@@ -8,8 +8,6 @@
 
 #include <gtest/gtest.h>
 
-#include "mock_objects.h"
-
 using namespace pagoda;
 using namespace pagoda::graph;
 
@@ -30,6 +28,13 @@ protected:
 	NodePtr operation_node;
 	Pagoda m_pagoda;
 };
+
+TEST_F(GraphSimpleOperationsTest, when_creating_nodes_their_id_should_be_incremental)
+{
+	EXPECT_EQ(input_interface_node->GetId(), 0);
+	EXPECT_EQ(output_interface_node->GetId(), 1);
+	EXPECT_EQ(operation_node->GetId(), 2);
+}
 
 TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_it_from_the_graph)
 {
@@ -63,7 +68,7 @@ TEST_F(GraphSimpleOperationsTest, when_destroying_an_output_node_should_remove_i
 	EXPECT_EQ(std::find(outNodes.begin(), outNodes.end(), this->operation_node), std::end(outNodes));
 }
 
-TEST_F(GraphSimpleOperationsTest, when_creating_an_edge_should_return_true_edge_created)
+TEST_F(GraphSimpleOperationsTest, when_creating_an_edge_should_return_true_created)
 {
 	EXPECT_EQ(this->graph->CreateEdge(this->input_interface_node, this->operation_node), Graph::EdgeCreated::Created);
 }
@@ -190,3 +195,42 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_a_node_making_it_an_output_node
 
 	ASSERT_EQ(output_nodes.size(), 3);
 }
+
+class GraphNodeCreationByName : public ::testing::Test
+{
+protected:
+	virtual void SetUp() { m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory()); }
+
+	std::shared_ptr<Graph> m_graph;
+	Pagoda m_pagoda;
+};
+
+TEST_F(GraphNodeCreationByName, when_creating_nodes_with_name_should_set_the_node_name)
+{
+	auto node = m_graph->CreateNode<OperationNode>("operation");
+	EXPECT_EQ(node->GetName(), "operation");
+}
+
+TEST_F(GraphNodeCreationByName, when_creating_multiple_nodes_with_the_same_name_should_add_an_index)
+{
+	auto node1 = m_graph->CreateNode<OperationNode>("operation");
+	auto node2 = m_graph->CreateNode<OperationNode>("operation");
+	EXPECT_EQ(node1->GetName(), "operation");
+	EXPECT_EQ(node2->GetName(), "operation1");
+}
+
+TEST_F(GraphNodeCreationByName, when_creating_nodes_without_a_name_should_use_node_type_as_default)
+{
+	auto node = m_graph->CreateNode<OperationNode>();
+	EXPECT_EQ(node->GetName(), OperationNode::name);
+}
+
+TEST_F(GraphNodeCreationByName, when_creating_node_by_name_should_be_able_to_get_by_name)
+{
+	auto node = m_graph->CreateNode<OperationNode>("operation");
+	EXPECT_EQ(m_graph->GetNode("operation"), node);
+
+	node = m_graph->CreateNode(InputInterfaceNode::name);
+	EXPECT_EQ(m_graph->GetNode(InputInterfaceNode::name), node);
+}
+

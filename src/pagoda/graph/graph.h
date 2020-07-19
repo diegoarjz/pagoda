@@ -78,7 +78,18 @@ public:
 	template<class N>
 	NodePtr CreateNode()
 	{
-		return CreateNode(N::name);
+		return CreateNode(N::name, N::name);
+	}
+
+	/**
+	 * Creates and adds \c Node object for this \c Graph.
+	 *
+	 * @return An instance of a \c Node.
+	 */
+	template<class N>
+	NodePtr CreateNode(const std::string &nodeName)
+	{
+		return CreateNode(N::name, nodeName);
 	}
 
 	/**
@@ -87,6 +98,11 @@ public:
 	 * @return An instance of a \c Node.
 	 */
 	NodePtr CreateNode(const std::string &nodeType);
+
+	/**
+	 * Creates and adds a \c Node with the given \c nodeType and \c nodeName.
+	 */
+	NodePtr CreateNode(const std::string &nodeType, const std::string &nodeName);
 
 	/**
 	 * Adds a \c Node object to this \c Graph.
@@ -106,6 +122,11 @@ public:
 	 * @param [in] node The Node to be destroyed and removed from this graph.
 	 */
 	void DestroyNode(NodePtr node);
+
+	/**
+	 * Returns a \c Node given its \p name.
+	 */
+	NodePtr GetNode(const std::string &name) const;
 
 	/**
 	 * Creates an edge between two \c Node objects in this \c Graph.
