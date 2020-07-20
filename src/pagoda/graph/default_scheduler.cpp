@@ -21,8 +21,8 @@ bool DefaultScheduler::Step()
 		return false;
 	}
 
-	auto inNodes = m_graph.GetNodeInputNodes(nextNode);
-	auto outNodes = m_graph.GetNodeOutputNodes(nextNode);
+	auto inNodes = m_graph.GetNodeInputNodes(nextNode->GetName());
+	auto outNodes = m_graph.GetNodeOutputNodes(nextNode->GetName());
 
 	nextNode->SetExpressionVariables();
 	try

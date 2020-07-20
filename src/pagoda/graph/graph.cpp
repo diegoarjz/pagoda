@@ -8,6 +8,8 @@
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/instrument/profiler.h>
 
+#include <pagoda/dynamic/dynamic_value_base.h>
+
 #include <array>
 #include <string>
 
@@ -28,29 +30,20 @@ private:
 public:
 	Impl(NodeFactoryPtr nodeFactory, Graph *graph) : m_nextNodeId(0), m_graph(graph), m_nodeFactory(nodeFactory) {}
 
-	void AddNode(NodePtr node)
+	void DestroyNode(const NodeIdentifier_t &nodeName)
 	{
-		node->SetId(m_nextNodeId++);
-		m_nodes.insert(node);
-		m_adjacencies[node] = Adjacency{};
-
-		m_inputNodes.insert(node);
-		m_outputNodes.insert(node);
-	}
-
-	void DestroyNode(NodePtr node)
-	{
-		NodeSet<Node> nodeInNodes = GetInNodes(node);
-		NodeSet<Node> nodeOutNodes = GetOutNodes(node);
+		auto node = GetNode(nodeName);
+		NodeSet<Node> nodeInNodes = GetInNodes(node->GetName());
+		NodeSet<Node> nodeOutNodes = GetOutNodes(node->GetName());
 
 		for (auto n : nodeInNodes)
 		{
-			DestroyEdge(n, node);
+			DestroyEdge(n->GetName(), nodeName);
 		}
 
 		for (auto n : nodeOutNodes)
 		{
-			DestroyEdge(node, n);
+			DestroyEdge(nodeName, n->GetName());
 		}
 
 		m_inputNodes.erase(node);
@@ -60,7 +53,7 @@ public:
 		m_nodes.erase(node);
 	}
 
-	NodePtr GetNode(const std::string &name) const
+	NodePtr GetNode(const NodeIdentifier_t &name) const
 	{
 		auto iter = m_nodesByName.find(name);
 		if (iter == m_nodesByName.end())
@@ -70,44 +63,48 @@ public:
 		return iter->second.lock();
 	}
 
-	Graph::EdgeCreated CreateEdge(NodePtr source_node, NodePtr target_node)
+	Graph::EdgeCreated CreateEdge(const NodeIdentifier_t &source_node, const NodeIdentifier_t &target_node)
 	{
-		auto &source_node_out = OutNodes(source_node);
-		auto &target_node_in = InNodes(target_node);
+		auto sourceNodePtr = GetNode(source_node);
+		auto targetNodePtr = GetNode(target_node);
+		auto &source_node_out = OutNodes(sourceNodePtr);
+		auto &target_node_in = InNodes(targetNodePtr);
 
-		auto out_link_inserted = source_node_out.insert(target_node);
-		auto in_link_inserted = target_node_in.insert(source_node);
+		auto out_link_inserted = source_node_out.insert(targetNodePtr);
+		auto in_link_inserted = target_node_in.insert(sourceNodePtr);
 
 		if (!out_link_inserted.second || !in_link_inserted.second)
 		{
 			return EdgeCreated::EdgeExists;
 		}
 
-		m_inputNodes.erase(target_node);
-		m_outputNodes.erase(source_node);
+		m_inputNodes.erase(targetNodePtr);
+		m_outputNodes.erase(sourceNodePtr);
 
 		return EdgeCreated::Created;
 	}
 
-	Graph::EdgeDestroyed DestroyEdge(NodePtr source_node, NodePtr target_node)
+	Graph::EdgeDestroyed DestroyEdge(const NodeIdentifier_t &source_node, const NodeIdentifier_t &target_node)
 	{
-		auto &source_node_out = OutNodes(source_node);
-		auto &target_node_in = InNodes(target_node);
+		auto sourceNodePtr = GetNode(source_node);
+		auto targetNodePtr = GetNode(target_node);
+		auto &source_node_out = OutNodes(sourceNodePtr);
+		auto &target_node_in = InNodes(targetNodePtr);
 
-		size_t out_links_removed = source_node_out.erase(target_node);
-		size_t in_links_removed = target_node_in.erase(source_node);
+		size_t out_links_removed = source_node_out.erase(targetNodePtr);
+		size_t in_links_removed = target_node_in.erase(sourceNodePtr);
 
 		DBG_ASSERT_MSG(out_links_removed == in_links_removed,
 		               "Mismatch between number of removed in links and out links");
 
 		if (source_node_out.size() == 0)
 		{
-			m_outputNodes.insert(source_node);
+			m_outputNodes.insert(sourceNodePtr);
 		}
 
 		if (target_node_in.size() == 0)
 		{
-			m_inputNodes.insert(target_node);
+			m_inputNodes.insert(targetNodePtr);
 		}
 
 		return out_links_removed > 0 && in_links_removed > 0 ? EdgeDestroyed::Destroyed
@@ -144,23 +141,26 @@ public:
 		return nodes;
 	}
 
-	NodeSet<Node> GetNodesAdjacentTo(NodePtr node)
+	NodeSet<Node> GetNodesAdjacentTo(const NodeIdentifier_t &nodeName)
 	{
+		auto node = GetNode(nodeName);
 		NodeSet<Node> nodes;
 		CollectNodes(InNodes(node), nodes);
 		CollectNodes(OutNodes(node), nodes);
 		return nodes;
 	}
 
-	NodeSet<Node> GetInNodes(NodePtr node)
+	NodeSet<Node> GetInNodes(const NodeIdentifier_t &nodeName)
 	{
+		auto node = GetNode(nodeName);
 		NodeSet<Node> nodes;
 		CollectNodes(InNodes(node), nodes);
 		return nodes;
 	}
 
-	NodeSet<Node> GetOutNodes(NodePtr node)
+	NodeSet<Node> GetOutNodes(const NodeIdentifier_t &nodeName)
 	{
+		auto node = GetNode(nodeName);
 		NodeSet<Node> nodes;
 		CollectNodes(OutNodes(node), nodes);
 		return nodes;
@@ -184,14 +184,20 @@ public:
 
 	NodePtr CreateNode(const std::string &nodeType) { return CreateNode(nodeType, nodeType); }
 
-	NodePtr CreateNode(const std::string &nodeType, const std::string &nodeName)
+	NodePtr CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName)
 	{
 		auto node = m_nodeFactory->Create(nodeType);
 		if (node == nullptr)
 		{
 			throw UnknownNodeTypeException(nodeType);
 		}
-		AddNode(node);
+
+		node->SetId(m_nextNodeId++);
+		m_nodes.insert(node);
+		m_adjacencies[node] = Adjacency{};
+
+		m_inputNodes.insert(node);
+		m_outputNodes.insert(node);
 
 		auto name = nodeName;
 		if (m_nodesByName.find(name) != m_nodesByName.end())
@@ -209,6 +215,28 @@ public:
 		m_nodesByName.emplace(name, node);
 
 		return node;
+	}
+
+	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
+	                                   const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+	{
+		auto node = GetNode(nodeName);
+		if (node == nullptr)
+		{
+			return;
+		}
+		node->SetConstructionArguments(args);
+	}
+
+	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
+	                                const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+	{
+		auto node = GetNode(nodeName);
+		if (node == nullptr)
+		{
+			return;
+		}
+		node->SetExecutionArguments(args);
 	}
 
 private:
@@ -235,7 +263,7 @@ private:
 
 	uint32_t m_nextNodeId;
 	NodeSet<Node> m_nodes;
-	std::unordered_map<std::string, NodeWeakPtr> m_nodesByName;
+	std::unordered_map<NodeIdentifier_t, NodeWeakPtr> m_nodesByName;
 	AdjacencyContainer m_adjacencies;
 	NodeWeakPtrSet m_inputNodes;
 	NodeWeakPtrSet m_outputNodes;
@@ -248,18 +276,16 @@ Graph::Graph(NodeFactoryPtr nodeFactory) : m_implementation(std::make_unique<Gra
 
 Graph::~Graph() {}
 
-void Graph::AddNode(NodePtr node) { m_implementation->AddNode(node); }
+void Graph::DestroyNode(const NodeIdentifier_t &node) { m_implementation->DestroyNode(node); }
 
-void Graph::DestroyNode(NodePtr node) { m_implementation->DestroyNode(node); }
+NodePtr Graph::GetNode(const NodeIdentifier_t &name) const { return m_implementation->GetNode(name); }
 
-NodePtr Graph::GetNode(const std::string &name) const { return m_implementation->GetNode(name); }
-
-Graph::EdgeCreated Graph::CreateEdge(NodePtr source_node, NodePtr target_node)
+Graph::EdgeCreated Graph::CreateEdge(const NodeIdentifier_t &source_node, const NodeIdentifier_t &target_node)
 {
 	return m_implementation->CreateEdge(source_node, target_node);
 }
 
-Graph::EdgeDestroyed Graph::DestroyEdge(NodePtr source_node, NodePtr target_node)
+Graph::EdgeDestroyed Graph::DestroyEdge(const NodeIdentifier_t &source_node, const NodeIdentifier_t &target_node)
 {
 	return m_implementation->DestroyEdge(source_node, target_node);
 }
@@ -272,22 +298,28 @@ NodeSet<Node> Graph::GetGraphInputNodes() { return m_implementation->GetInputNod
 
 NodeSet<Node> Graph::GetGraphOutputNodes() { return m_implementation->GetOutputNodes(); }
 
-NodeSet<Node> Graph::GetNodesAdjacentTo(NodePtr node) { return m_implementation->GetNodesAdjacentTo(node); }
+NodeSet<Node> Graph::GetNodesAdjacentTo(const NodeIdentifier_t &node)
+{
+	return m_implementation->GetNodesAdjacentTo(node);
+}
 
-NodeSet<Node> Graph::GetNodeInputNodes(NodePtr node) { return m_implementation->GetInNodes(node); }
+NodeSet<Node> Graph::GetNodeInputNodes(const NodeIdentifier_t &node) { return m_implementation->GetInNodes(node); }
 
-NodeSet<Node> Graph::GetNodeOutputNodes(NodePtr node) { return m_implementation->GetOutNodes(node); }
+NodeSet<Node> Graph::GetNodeOutputNodes(const NodeIdentifier_t &node) { return m_implementation->GetOutNodes(node); }
 
 void Graph::SetScheduler(std::unique_ptr<IScheduler> scheduler)
 {
 	m_implementation->SetScheduler(std::move(scheduler));
 }
 
-NodePtr Graph::CreateNode(const std::string &nodeType) { return m_implementation->CreateNode(nodeType); }
-
-NodePtr Graph::CreateNode(const std::string &nodeType, const std::string &nodeName)
+Graph::NodeIdentifier_t Graph::CreateNode(const std::string &nodeType)
 {
-	return m_implementation->CreateNode(nodeType, nodeName);
+	return m_implementation->CreateNode(nodeType)->GetName();
+}
+
+Graph::NodeIdentifier_t Graph::CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName)
+{
+	return m_implementation->CreateNode(nodeType, nodeName)->GetName();
 }
 
 void Graph::Execute() { m_implementation->Execute(); }
@@ -302,4 +334,16 @@ Graph::SchedulerFactoryFunction_t Graph::GetSchedulerFactory() { return s_schedu
 Graph::SchedulerFactoryFunction_t Graph::s_schedulerFactoryFunction = [](Graph &graph) {
 	return std::make_unique<DefaultScheduler>(graph);
 };
+
+void Graph::SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
+                                          const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+{
+	m_implementation->SetNodeConstructionParameters(nodeName, args);
+}
+
+void Graph::SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
+                                       const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+{
+	m_implementation->SetNodeExecutionParameters(nodeName, args);
+}
 }  // namespace pagoda::graph

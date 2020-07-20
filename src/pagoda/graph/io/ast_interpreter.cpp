@@ -65,19 +65,16 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 		namedArgument->AcceptVisitor(this);
 	}
 
-	auto node = m_graph->CreateNode(nodeDefinition->GetNodeType());
-	node->SetName(nodeDefinition->GetNodeName());
-	node->SetConstructionArguments(m_currentNamedParameters);
+	auto nodeName = nodeDefinition->GetNodeName();
+	nodeName = m_graph->CreateNode(nodeDefinition->GetNodeType(), nodeName);
+	m_graph->SetNodeConstructionParameters(nodeName, m_currentNamedParameters);
 
 	m_currentNamedParameters.clear();
 	for (const auto &namedArgument : nodeDefinition->GetExecutionArguments())
 	{
 		namedArgument->AcceptVisitor(this);
 	}
-	node->SetExecutionArguments(m_currentNamedParameters);
-
-	m_graph->AddNode(node);
-	m_nodeTable[nodeDefinition->GetNodeName()] = node;
+	m_graph->SetNodeExecutionParameters(nodeName, m_currentNamedParameters);
 }
 
 void AstInterpreter::Visit(NodeLinkNode *nodeLink)
@@ -88,23 +85,21 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 
 	while (currentNodeName != end)
 	{
-		auto prevNode = m_nodeTable.find(*prevNodeName);
-		auto currNode = m_nodeTable.find(*currentNodeName);
-
-		if (prevNode == std::end(m_nodeTable) || currNode == std::end(m_nodeTable))
+		/*
+		if (prevNode == nullptr || currNode == nullptr)
 		{
-			throw common::exception::Exception("Node not found while linking '" + (*prevNodeName) + "' to '" +
-			                                   (*currentNodeName) + "'");
+		    throw common::exception::Exception("Node not found while linking '" + (*prevNodeName) + "' to '" +
+		                                       (*currentNodeName) + "'");
 		}
+		*/
 
-		m_graph->CreateEdge(prevNode->second, currNode->second);
+		// TODO: Confirm that the nodes exist
+		m_graph->CreateEdge(*prevNodeName, *currentNodeName);
 
 		++prevNodeName;
 		++currentNodeName;
 	}
 }
-
-const std::unordered_map<std::string, NodePtr> &AstInterpreter::GetNodeTable() const { return m_nodeTable; }
 
 const std::unordered_map<std::string, DynamicValueBasePtr> &AstInterpreter::GetCurrentNamedArguments() const
 {

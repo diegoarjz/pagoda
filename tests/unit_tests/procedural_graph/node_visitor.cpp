@@ -25,10 +25,10 @@ protected:
 	void SetUp()
 	{
 		m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>()));
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>()));
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>()));
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>()));
 	}
 
 	void TearDown() {}
@@ -55,11 +55,11 @@ protected:
 	void SetUp()
 	{
 		m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
-		m_nodes.push_back(m_graph->CreateNode<OperationNode>());
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>("a")));
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>("b")));
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>("c")));
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>("d")));
+		m_nodes.push_back(m_graph->GetNode(m_graph->CreateNode<OperationNode>("e")));
 	}
 
 	void TearDown() {}
@@ -88,14 +88,9 @@ TEST_F(BreadthFirstNodeVisitorTest, when_visiting_should_visit_the_nodes_in_brea
 	 * a -> d
 	 * e
 	 */
-	m_nodes[0]->SetName("a");
-	m_nodes[1]->SetName("b");
-	m_nodes[2]->SetName("c");
-	m_nodes[3]->SetName("d");
-	m_nodes[4]->SetName("e");
-	m_graph->CreateEdge(m_nodes[0], m_nodes[1]);
-	m_graph->CreateEdge(m_nodes[1], m_nodes[2]);
-	m_graph->CreateEdge(m_nodes[0], m_nodes[3]);
+	m_graph->CreateEdge("a", "b");
+	m_graph->CreateEdge("b", "c");
+	m_graph->CreateEdge("a", "d");
 
 	BreadthFirstNodeVisitor v(*m_graph, d);
 	v.Visit();

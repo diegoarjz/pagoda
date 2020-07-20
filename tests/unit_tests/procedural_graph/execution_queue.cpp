@@ -15,11 +15,11 @@ protected:
 	void SetUp()
 	{
 		m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
-		a = m_graph->CreateNode<InputInterfaceNode>();
-		b = m_graph->CreateNode<InputInterfaceNode>();
-		c = m_graph->CreateNode<InputInterfaceNode>();
-		d = m_graph->CreateNode<InputInterfaceNode>();
-		e = m_graph->CreateNode<InputInterfaceNode>();
+		a = m_graph->GetNode(m_graph->CreateNode<InputInterfaceNode>("a"));
+		b = m_graph->GetNode(m_graph->CreateNode<InputInterfaceNode>("b"));
+		c = m_graph->GetNode(m_graph->CreateNode<InputInterfaceNode>("c"));
+		d = m_graph->GetNode(m_graph->CreateNode<InputInterfaceNode>("d"));
+		e = m_graph->GetNode(m_graph->CreateNode<InputInterfaceNode>("e"));
 	}
 
 	void TearDown() {}
@@ -45,9 +45,9 @@ TEST_F(ExecutionQueueTest, when_iterating_the_nodes_should_visit_them_by_depth)
 	c->SetName("c");
 	d->SetName("d");
 	e->SetName("e");
-	m_graph->CreateEdge(a, b);
-	m_graph->CreateEdge(b, c);
-	m_graph->CreateEdge(a, d);
+	m_graph->CreateEdge("a", "b");
+	m_graph->CreateEdge("b", "c");
+	m_graph->CreateEdge("a", "d");
 
 	ExecutionQueue q(*m_graph);
 
@@ -69,11 +69,11 @@ TEST_F(ExecutionQueueTest, when_iterating_the_nodes_should_only_visit_them_once)
 	 * d -> e
 	 */
 
-	m_graph->CreateEdge(a, b);
-	m_graph->CreateEdge(a, c);
-	m_graph->CreateEdge(b, d);
-	m_graph->CreateEdge(c, d);
-	m_graph->CreateEdge(d, e);
+	m_graph->CreateEdge("a", "b");
+	m_graph->CreateEdge("a", "c");
+	m_graph->CreateEdge("b", "d");
+	m_graph->CreateEdge("c", "d");
+	m_graph->CreateEdge("d", "e");
 
 	ExecutionQueue q(*m_graph);
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_map>
 #ifndef PAGODA_PROCEDURAL_GRAH_GRAPH_H_
 #define PAGODA_PROCEDURAL_GRAH_GRAPH_H_
 
@@ -10,6 +11,12 @@
 #include <memory>
 #include <string>
 #include <unordered_set>
+
+namespace pagoda::dynamic
+{
+class DynamicValueBase;
+using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
+}  // namespace pagoda::dynamic
 
 namespace pagoda::graph
 {
@@ -42,6 +49,8 @@ public:
 	static void SetSchedulerFactory(const SchedulerFactoryFunction_t &factoryFunction);
 
 	static SchedulerFactoryFunction_t GetSchedulerFactory();
+
+	using NodeIdentifier_t = std::string;
 
 	/**
 	 * Result of calling CreateEdge.
@@ -76,7 +85,7 @@ public:
 	 * @return An instance of a \c Node.
 	 */
 	template<class N>
-	NodePtr CreateNode()
+	NodeIdentifier_t CreateNode()
 	{
 		return CreateNode(N::name, N::name);
 	}
@@ -87,7 +96,7 @@ public:
 	 * @return An instance of a \c Node.
 	 */
 	template<class N>
-	NodePtr CreateNode(const std::string &nodeName)
+	NodeIdentifier_t CreateNode(const NodeIdentifier_t &nodeName)
 	{
 		return CreateNode(N::name, nodeName);
 	}
@@ -97,19 +106,12 @@ public:
 	 *
 	 * @return An instance of a \c Node.
 	 */
-	NodePtr CreateNode(const std::string &nodeType);
+	NodeIdentifier_t CreateNode(const std::string &nodeType);
 
 	/**
 	 * Creates and adds a \c Node with the given \c nodeType and \c nodeName.
 	 */
-	NodePtr CreateNode(const std::string &nodeType, const std::string &nodeName);
-
-	/**
-	 * Adds a \c Node object to this \c Graph.
-	 *
-	 * The \c Graph will take ownership of the \c Node.
-	 */
-	void AddNode(NodePtr node);
+	NodeIdentifier_t CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName);
 
 	/**
 	 * Destroys a \c Node object from this \c Graph.
@@ -121,12 +123,12 @@ public:
 	 *
 	 * @param [in] node The Node to be destroyed and removed from this graph.
 	 */
-	void DestroyNode(NodePtr node);
+	void DestroyNode(const NodeIdentifier_t &node);
 
 	/**
 	 * Returns a \c Node given its \p name.
 	 */
-	NodePtr GetNode(const std::string &name) const;
+	NodePtr GetNode(const NodeIdentifier_t &name) const;
 
 	/**
 	 * Creates an edge between two \c Node objects in this \c Graph.
@@ -138,7 +140,7 @@ public:
 	 * @param [in] targetNode The target \c Node.
 	 * @return Returns true if linking both nodes was successful, false otherwise.
 	 */
-	EdgeCreated CreateEdge(NodePtr sourceNode, NodePtr targetNode);
+	EdgeCreated CreateEdge(const NodeIdentifier_t &sourceNode, const NodeIdentifier_t &targetNode);
 
 	/**
 	 * Destroys an edge between two \c Node objects in this \c Graph.
@@ -147,7 +149,7 @@ public:
 	 * @param [in] targetNode The target \c Node.
 	 * @return Returns true if unlinking the nodes was successful, false otherwise.
 	 */
-	EdgeDestroyed DestroyEdge(NodePtr sourceNode, NodePtr targetNode);
+	EdgeDestroyed DestroyEdge(const NodeIdentifier_t &sourceNode, const NodeIdentifier_t &targetNode);
 
 	/**
 	 * Returns all the \c Node in this \c Graph.
@@ -174,21 +176,21 @@ public:
 	 *
 	 * @param [in] node The node.
 	 */
-	NodeSet<Node> GetNodesAdjacentTo(NodePtr node);
+	NodeSet<Node> GetNodesAdjacentTo(const NodeIdentifier_t &node);
 
 	/**
 	 * Returns all input \c Node objects of \p node.
 	 *
 	 * @param [in] node The node.
 	 */
-	NodeSet<Node> GetNodeInputNodes(NodePtr node);
+	NodeSet<Node> GetNodeInputNodes(const NodeIdentifier_t &node);
 
 	/**
 	 * Returns all output \c Node objects of \p node.
 	 *
 	 * @param [in] node The node.
 	 */
-	NodeSet<Node> GetNodeOutputNodes(NodePtr node);
+	NodeSet<Node> GetNodeOutputNodes(const NodeIdentifier_t &node);
 
 	/**
 	 * Sets the \c IScheduler for this \c Graph to \p scheduler.
@@ -199,6 +201,12 @@ public:
 	 * Executes the \c Graph using the defined \c IScheduler.
 	 */
 	void Execute();
+
+	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
+	                                   const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args);
+
+	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
+	                                const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args);
 
 private:
 	class Impl;

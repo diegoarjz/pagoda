@@ -52,7 +52,7 @@ void GraphDotExporter::Export(std::ostream &outStream)
 
 		outStream << "</table>>]\n\n";
 
-		auto outNodes = m_graph->GetNodeOutputNodes(node);
+		auto outNodes = m_graph->GetNodeOutputNodes(node->GetName());
 		std::string sourceNodeName = node->GetName();
 
 		for (auto outNode : outNodes)
@@ -85,7 +85,7 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 			std::unordered_map<NodePtr, uint32_t> depths;
 			auto delegate = [&depths, this](const NodePtr &n) {
 				auto thisNodeDepth = depths.emplace(n, 0).first->second;
-				for (auto outNode : this->m_graph->GetNodeOutputNodes(n))
+				for (auto outNode : this->m_graph->GetNodeOutputNodes(n->GetName()))
 				{
 					if (depths[outNode] <= thisNodeDepth)
 					{

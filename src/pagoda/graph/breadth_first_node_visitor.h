@@ -28,7 +28,7 @@ public:
 
 			this->m_delegate(n);
 
-			auto outNodes = this->m_graph.GetNodeOutputNodes(n);
+			auto outNodes = this->m_graph.GetNodeOutputNodes(n->GetName());
 			for (auto outNode : outNodes)
 			{
 				m_nodesToVisit.push(outNode);

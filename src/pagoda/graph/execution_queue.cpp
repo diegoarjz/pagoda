@@ -51,7 +51,7 @@ public:
 	{
 		m_seenNodes.insert(n);
 		auto thisNodeDepth = m_nodeDepths.emplace(n, 0).first->second;
-		for (auto outNode : m_graph.GetNodeOutputNodes(n))
+		for (auto outNode : m_graph.GetNodeOutputNodes(n->GetName()))
 		{
 			if (m_nodeDepths[outNode] <= thisNodeDepth)
 			{
