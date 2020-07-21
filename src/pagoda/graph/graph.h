@@ -26,6 +26,11 @@ using NodePtr = std::shared_ptr<Node>;
 class NodeFactory;
 using NodeFactoryPtr = std::shared_ptr<NodeFactory>;
 
+namespace query
+{
+    class Query;
+}
+
 /**
  * @brief Represents a procedural graph.
  *
@@ -201,6 +206,11 @@ public:
 	 * Executes the \c Graph using the defined \c IScheduler.
 	 */
 	void Execute();
+
+    /**
+     * Executes a query on the \c Graph collecting the \c Nodes.
+     */
+    void ExecuteQuery(query::Query& q);
 
 	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
 	                                   const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args);

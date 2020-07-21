@@ -1,13 +1,17 @@
 #include "graph.h"
 
+#include "query/input_node.h"
+#include "query/output_node.h"
+#include "query/query.h"
+
 #include "default_scheduler.h"
 #include "node.h"
 #include "node_factory.h"
 #include "unknown_node_type.h"
 
 #include <pagoda/common/debug/assertions.h>
-#include <pagoda/common/instrument/profiler.h>
 #include <pagoda/common/exception/exception.h>
+#include <pagoda/common/instrument/profiler.h>
 
 #include <pagoda/dynamic/dynamic_value_base.h>
 
@@ -47,8 +51,6 @@ public:
 			DestroyEdge(nodeName, n->GetName());
 		}
 
-		m_inputNodes.erase(node);
-		m_outputNodes.erase(node);
 		m_adjacencies.erase(node);
 
 		m_nodes.erase(node);
@@ -59,7 +61,7 @@ public:
 		auto iter = m_nodesByIdentifier.find(name);
 		if (iter == m_nodesByIdentifier.end())
 		{
-            throw common::exception::Exception("Node not found in graph: " + name);
+			throw common::exception::Exception("Node not found in graph: " + name);
 			return nullptr;
 		}
 		return iter->second.lock();
@@ -80,9 +82,6 @@ public:
 			return EdgeCreated::EdgeExists;
 		}
 
-		m_inputNodes.erase(targetNodePtr);
-		m_outputNodes.erase(sourceNodePtr);
-
 		return EdgeCreated::Created;
 	}
 
@@ -99,21 +98,17 @@ public:
 		DBG_ASSERT_MSG(out_links_removed == in_links_removed,
 		               "Mismatch between number of removed in links and out links");
 
-		if (source_node_out.size() == 0)
-		{
-			m_outputNodes.insert(sourceNodePtr);
-		}
-
-		if (target_node_in.size() == 0)
-		{
-			m_inputNodes.insert(targetNodePtr);
-		}
-
 		return out_links_removed > 0 && in_links_removed > 0 ? EdgeDestroyed::Destroyed
 		                                                     : EdgeDestroyed::EdgeDoesntExist;
 	}
 
-	NodeSet<Node> GetGraphNodes() { return m_nodes; }
+	NodeSet<Node> GetGraphNodes()
+	{
+		NodeSet<Node> nodes;
+		query::Query q(nodes);
+		ExecuteQuery(q);
+		return nodes;
+	}
 
 	std::size_t GetNodeCount() const { return m_nodes.size(); }
 
@@ -121,10 +116,8 @@ public:
 	{
 		NodeSet<Node> nodes;
 
-		for (auto n : m_inputNodes)
-		{
-			nodes.insert(n.lock());
-		}
+		query::InputNode q(nodes);
+		ExecuteQuery(q);
 
 		return nodes;
 	}
@@ -135,10 +128,8 @@ public:
 
 		NodeSet<Node> nodes;
 
-		for (auto n : m_outputNodes)
-		{
-			nodes.insert(n.lock());
-		}
+		query::OutputNode q(nodes);
+		ExecuteQuery(q);
 
 		return nodes;
 	}
@@ -198,9 +189,6 @@ public:
 		m_nodes.insert(node);
 		m_adjacencies[node] = Adjacency{};
 
-		m_inputNodes.insert(node);
-		m_outputNodes.insert(node);
-
 		auto name = nodeName;
 		if (m_nodesByIdentifier.find(name) != m_nodesByIdentifier.end())
 		{
@@ -241,6 +229,20 @@ public:
 		node->SetExecutionArguments(args);
 	}
 
+	void ExecuteQuery(query::Query &q)
+	{
+		START_PROFILE;
+
+		q.Start(m_graph);
+		for (const auto &node : m_nodes)
+		{
+			if (q.Matches(node))
+			{
+				q.AddNode(node);
+			}
+		}
+	}
+
 private:
 	IScheduler *GetScheduler()
 	{
@@ -267,8 +269,6 @@ private:
 	NodeSet<Node> m_nodes;
 	std::unordered_map<NodeIdentifier_t, NodeWeakPtr> m_nodesByIdentifier;
 	AdjacencyContainer m_adjacencies;
-	NodeWeakPtrSet m_inputNodes;
-	NodeWeakPtrSet m_outputNodes;
 	Graph *m_graph;
 	std::unique_ptr<IScheduler> m_scheduler;
 	NodeFactoryPtr m_nodeFactory;
@@ -336,6 +336,8 @@ Graph::SchedulerFactoryFunction_t Graph::GetSchedulerFactory() { return s_schedu
 Graph::SchedulerFactoryFunction_t Graph::s_schedulerFactoryFunction = [](Graph &graph) {
 	return std::make_unique<DefaultScheduler>(graph);
 };
+
+void Graph::ExecuteQuery(query::Query &q) { m_implementation->ExecuteQuery(q); }
 
 void Graph::SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
                                           const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
