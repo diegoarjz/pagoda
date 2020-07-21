@@ -7,6 +7,7 @@
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/instrument/profiler.h>
+#include <pagoda/common/exception/exception.h>
 
 #include <pagoda/dynamic/dynamic_value_base.h>
 
@@ -55,9 +56,10 @@ public:
 
 	NodePtr GetNode(const NodeIdentifier_t &name) const
 	{
-		auto iter = m_nodesByName.find(name);
-		if (iter == m_nodesByName.end())
+		auto iter = m_nodesByIdentifier.find(name);
+		if (iter == m_nodesByIdentifier.end())
 		{
+            throw common::exception::Exception("Node not found in graph: " + name);
 			return nullptr;
 		}
 		return iter->second.lock();
@@ -182,9 +184,9 @@ public:
 		scheduler->Finalize();
 	}
 
-	NodePtr CreateNode(const std::string &nodeType) { return CreateNode(nodeType, nodeType); }
+	NodeIdentifier_t CreateNode(const std::string &nodeType) { return CreateNode(nodeType, nodeType); }
 
-	NodePtr CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName)
+	NodeIdentifier_t CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName)
 	{
 		auto node = m_nodeFactory->Create(nodeType);
 		if (node == nullptr)
@@ -200,11 +202,11 @@ public:
 		m_outputNodes.insert(node);
 
 		auto name = nodeName;
-		if (m_nodesByName.find(name) != m_nodesByName.end())
+		if (m_nodesByIdentifier.find(name) != m_nodesByIdentifier.end())
 		{
 			std::size_t counter = 1;
 			std::string availableName = name + std::to_string(counter);
-			while (m_nodesByName.find(availableName) != m_nodesByName.end())
+			while (m_nodesByIdentifier.find(availableName) != m_nodesByIdentifier.end())
 			{
 				availableName = name + std::to_string(++counter);
 			}
@@ -212,9 +214,9 @@ public:
 		}
 
 		node->SetName(name);
-		m_nodesByName.emplace(name, node);
+		m_nodesByIdentifier.emplace(name, node);
 
-		return node;
+		return name;
 	}
 
 	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
@@ -263,7 +265,7 @@ private:
 
 	uint32_t m_nextNodeId;
 	NodeSet<Node> m_nodes;
-	std::unordered_map<NodeIdentifier_t, NodeWeakPtr> m_nodesByName;
+	std::unordered_map<NodeIdentifier_t, NodeWeakPtr> m_nodesByIdentifier;
 	AdjacencyContainer m_adjacencies;
 	NodeWeakPtrSet m_inputNodes;
 	NodeWeakPtrSet m_outputNodes;
@@ -314,12 +316,12 @@ void Graph::SetScheduler(std::unique_ptr<IScheduler> scheduler)
 
 Graph::NodeIdentifier_t Graph::CreateNode(const std::string &nodeType)
 {
-	return m_implementation->CreateNode(nodeType)->GetName();
+	return m_implementation->CreateNode(nodeType);
 }
 
 Graph::NodeIdentifier_t Graph::CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName)
 {
-	return m_implementation->CreateNode(nodeType, nodeName)->GetName();
+	return m_implementation->CreateNode(nodeType, nodeName);
 }
 
 void Graph::Execute() { m_implementation->Execute(); }
