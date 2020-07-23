@@ -1,15 +1,14 @@
 #pragma once
-#include <unordered_map>
-#ifndef PAGODA_PROCEDURAL_GRAH_GRAPH_H_
-#define PAGODA_PROCEDURAL_GRAH_GRAPH_H_
 
 #include "node_set.h"
 #include "scheduler.h"
+#include "traversal/traversal.h"
 
 #include <functional>
 #include <list>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 
 namespace pagoda::dynamic
@@ -28,7 +27,7 @@ using NodeFactoryPtr = std::shared_ptr<NodeFactory>;
 
 namespace query
 {
-    class Query;
+class Query;
 }
 
 /**
@@ -157,24 +156,9 @@ public:
 	EdgeDestroyed DestroyEdge(const NodeIdentifier_t &sourceNode, const NodeIdentifier_t &targetNode);
 
 	/**
-	 * Returns all the \c Node in this \c Graph.
-	 */
-	NodeSet<Node> GetGraphNodes();
-
-	/**
 	 * Returns the number of \c Node in this \c Graph.
 	 */
 	std::size_t GetNodeCount() const;
-
-	/**
-	 * Returns the input nodes of this \c Graph.
-	 */
-	NodeSet<Node> GetGraphInputNodes();
-
-	/**
-	 * Returns the output nodes of this \c Graph.
-	 */
-	NodeSet<Node> GetGraphOutputNodes();
 
 	/**
 	 * Returns all \c Node objects that share an edge with \p node.
@@ -207,10 +191,10 @@ public:
 	 */
 	void Execute();
 
-    /**
-     * Executes a query on the \c Graph collecting the \c Nodes.
-     */
-    void ExecuteQuery(query::Query& q);
+	/**
+	 * Executes a query on the \c Graph collecting the \c Nodes.
+	 */
+	void ExecuteQuery(query::Query &q);
 
 	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
 	                                   const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args);
@@ -223,10 +207,13 @@ private:
 	std::unique_ptr<Impl> m_implementation;
 
 	static SchedulerFactoryFunction_t s_schedulerFactoryFunction;
+
+	NodeSet<Node> &getNodes();
+
+	friend class traversal::Traversal;
 };  // class Graph
 
 using GraphPtr = std::shared_ptr<Graph>;
 
 }  // namespace pagoda::graph
 
-#endif

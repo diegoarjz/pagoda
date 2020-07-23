@@ -1,7 +1,5 @@
 #include "default_scheduler.h"
 
-#include "breadth_first_node_visitor.h"
-
 #include <pagoda/common/exception/exception.h>
 #include <pagoda/common/instrument/profiler.h>
 

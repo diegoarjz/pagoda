@@ -4,6 +4,8 @@
 #include "query/output_node.h"
 #include "query/query.h"
 
+#include "traversal/linear.h"
+
 #include "default_scheduler.h"
 #include "node.h"
 #include "node_factory.h"
@@ -102,37 +104,7 @@ public:
 		                                                     : EdgeDestroyed::EdgeDoesntExist;
 	}
 
-	NodeSet<Node> GetGraphNodes()
-	{
-		NodeSet<Node> nodes;
-		query::Query q(nodes);
-		ExecuteQuery(q);
-		return nodes;
-	}
-
 	std::size_t GetNodeCount() const { return m_nodes.size(); }
-
-	NodeSet<Node> GetInputNodes()
-	{
-		NodeSet<Node> nodes;
-
-		query::InputNode q(nodes);
-		ExecuteQuery(q);
-
-		return nodes;
-	}
-
-	NodeSet<Node> GetOutputNodes()
-	{
-		START_PROFILE;
-
-		NodeSet<Node> nodes;
-
-		query::OutputNode q(nodes);
-		ExecuteQuery(q);
-
-		return nodes;
-	}
 
 	NodeSet<Node> GetNodesAdjacentTo(const NodeIdentifier_t &nodeName)
 	{
@@ -234,14 +206,19 @@ public:
 		START_PROFILE;
 
 		q.Start(m_graph);
-		for (const auto &node : m_nodes)
+		traversal::Linear t(*m_graph);
+		while (t.HasNext())
 		{
-			if (q.Matches(node))
+			NodePtr n = t.Get();
+			if (q.Matches(n))
 			{
-				q.AddNode(node);
+				q.AddNode(n);
 			}
+			t.Advance();
 		}
 	}
+
+	NodeSet<Node> &getNodes() { return m_nodes; }
 
 private:
 	IScheduler *GetScheduler()
@@ -292,13 +269,7 @@ Graph::EdgeDestroyed Graph::DestroyEdge(const NodeIdentifier_t &source_node, con
 	return m_implementation->DestroyEdge(source_node, target_node);
 }
 
-NodeSet<Node> Graph::GetGraphNodes() { return m_implementation->GetGraphNodes(); }
-
 std::size_t Graph::GetNodeCount() const { return m_implementation->GetNodeCount(); }
-
-NodeSet<Node> Graph::GetGraphInputNodes() { return m_implementation->GetInputNodes(); }
-
-NodeSet<Node> Graph::GetGraphOutputNodes() { return m_implementation->GetOutputNodes(); }
 
 NodeSet<Node> Graph::GetNodesAdjacentTo(const NodeIdentifier_t &node)
 {
@@ -350,4 +321,6 @@ void Graph::SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
 {
 	m_implementation->SetNodeExecutionParameters(nodeName, args);
 }
+
+NodeSet<Node> &Graph::getNodes() { return m_implementation->getNodes(); }
 }  // namespace pagoda::graph

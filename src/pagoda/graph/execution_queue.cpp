@@ -1,6 +1,8 @@
 #include "execution_queue.h"
 
-#include "breadth_first_node_visitor.h"
+#include "query/query.h"
+#include "traversal/forward.h"
+
 #include "graph.h"
 #include "node.h"
 
@@ -15,9 +17,8 @@ class ExecutionQueue::Impl
 public:
 	Impl(Graph& graph) : m_graph(graph)
 	{
-		m_orderedNodes.reserve(graph.GetGraphNodes().size());
-		BreadthFirstNodeVisitor<ExecutionQueue::Impl> visitor(graph, *this);
-		visitor.Visit();
+		m_orderedNodes.reserve(graph.GetNodeCount());
+		traversal::Forward(graph).ForEach([this](NodePtr n) { (*this)(n); });
 		for (const auto& seenNode : m_seenNodes)
 		{
 			m_orderedNodes.push_back(seenNode);

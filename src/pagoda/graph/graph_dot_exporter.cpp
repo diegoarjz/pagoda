@@ -1,6 +1,8 @@
 #include "graph_dot_exporter.h"
 
-#include "breadth_first_node_visitor.h"
+#include "query/query.h"
+#include "traversal/forward.h"
+
 #include "execution_queue.h"
 #include "graph.h"
 #include "node.h"
@@ -74,7 +76,9 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 	{
 		case RankBy::None:
 		{
-			auto allNodes = m_graph->GetGraphNodes();
+			NodeSet<Node> allNodes;
+			query::Query q(allNodes);
+			m_graph->ExecuteQuery(q);
 			std::transform(allNodes.begin(), allNodes.end(), std::back_inserter(nodes), [](const NodePtr &n) {
 				return NodeExportInfo{n, 0};
 			});
@@ -83,7 +87,11 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 		case RankBy::Depth:
 		{
 			std::unordered_map<NodePtr, uint32_t> depths;
-			auto delegate = [&depths, this](const NodePtr &n) {
+			/*
+			BreadthFirstNodeVisitor<decltype(delegate)> visitor(*m_graph, delegate);
+			visitor.Visit();
+			*/
+			traversal::Forward(*m_graph).ForEach([&depths, this](NodePtr n) {
 				auto thisNodeDepth = depths.emplace(n, 0).first->second;
 				for (auto outNode : this->m_graph->GetNodeOutputNodes(n->GetName()))
 				{
@@ -92,10 +100,7 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 						depths[outNode] = thisNodeDepth + 1;
 					}
 				}
-			};
-
-			BreadthFirstNodeVisitor<decltype(delegate)> visitor(*m_graph, delegate);
-			visitor.Visit();
+			});
 
 			std::transform(depths.begin(), depths.end(), std::back_inserter(nodes),
 			               [](const std::pair<NodePtr, uint32_t> &n) {

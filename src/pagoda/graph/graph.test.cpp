@@ -1,3 +1,7 @@
+#include <pagoda/graph/query/input_node.h>
+#include <pagoda/graph/query/output_node.h>
+#include <pagoda/graph/query/query.h>
+
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/input_interface_node.h>
 #include <pagoda/graph/node.h>
@@ -40,7 +44,7 @@ TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_it_from_t
 {
 	this->graph->DestroyNode(this->operation_node->GetName());
 
-	EXPECT_EQ(this->graph->GetGraphNodes().size(), 2);
+	EXPECT_EQ(this->graph->GetNodeCount(), 2);
 }
 
 TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_all_of_its_links)
@@ -55,7 +59,9 @@ TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_all_of_it
 TEST_F(GraphSimpleOperationsTest, when_destroying_an_input_node_should_remove_it_from_the_input_nodes)
 {
 	this->graph->DestroyNode(this->operation_node->GetName());
-	auto inNodes = this->graph->GetGraphInputNodes();
+	NodeSet<Node> inNodes;
+    query::InputNode q(inNodes);
+    this->graph->ExecuteQuery(q);
 
 	EXPECT_EQ(std::find(inNodes.begin(), inNodes.end(), this->operation_node), std::end(inNodes));
 }
@@ -63,7 +69,9 @@ TEST_F(GraphSimpleOperationsTest, when_destroying_an_input_node_should_remove_it
 TEST_F(GraphSimpleOperationsTest, when_destroying_an_output_node_should_remove_it_from_the_output_nodes)
 {
 	this->graph->DestroyNode(this->operation_node->GetName());
-	auto outNodes = this->graph->GetGraphOutputNodes();
+	NodeSet<Node> outNodes;
+    query::OutputNode q(outNodes);
+    this->graph->ExecuteQuery(q);
 
 	EXPECT_EQ(std::find(outNodes.begin(), outNodes.end(), this->operation_node), std::end(outNodes));
 }
@@ -139,7 +147,9 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_nodes_should_remove_links)
 
 TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_input_nodes_should_return_all_nodes_that_dont_have_inputs)
 {
-	auto input_nodes = this->graph->GetGraphInputNodes();
+    NodeSet<Node> input_nodes;
+    query::InputNode q(input_nodes);
+    this->graph->ExecuteQuery(q);
 
 	ASSERT_EQ(input_nodes.size(), 3);
 	for (auto n : input_nodes)
@@ -151,7 +161,9 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_input_nodes_should_re
 TEST_F(GraphSimpleOperationsTest, when_linking_a_node_to_an_input_node_should_remove_it_from_input_nodes)
 {
 	this->graph->CreateEdge(this->input_interface_node->GetName(), this->operation_node->GetName());
-	auto input_nodes = this->graph->GetGraphInputNodes();
+    NodeSet<Node> input_nodes;
+    query::InputNode q(input_nodes);
+    this->graph->ExecuteQuery(q);
 
 	ASSERT_EQ(input_nodes.size(), 2);
 	ASSERT_NE(std::find(input_nodes.begin(), input_nodes.end(), this->input_interface_node), std::end(input_nodes));
@@ -162,14 +174,18 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_a_node_making_it_an_input_node_
 {
 	this->graph->CreateEdge(this->input_interface_node->GetName(), this->operation_node->GetName());
 	this->graph->DestroyEdge(this->input_interface_node->GetName(), this->operation_node->GetName());
-	auto input_nodes = this->graph->GetGraphInputNodes();
+    NodeSet<Node> input_nodes;
+    query::InputNode q(input_nodes);
+    this->graph->ExecuteQuery(q);
 
 	ASSERT_EQ(input_nodes.size(), 3);
 }
 
 TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_output_nodes_should_return_all_nodes_that_dont_have_outputs)
 {
-	auto output_nodes = this->graph->GetGraphOutputNodes();
+    NodeSet<Node> output_nodes;
+    query::OutputNode q(output_nodes);
+    this->graph->ExecuteQuery(q);
 
 	ASSERT_EQ(output_nodes.size(), 3);
 	for (auto n : output_nodes)
@@ -181,7 +197,9 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_output_nodes_should_r
 TEST_F(GraphSimpleOperationsTest, when_linking_a_node_to_an_output_node_should_remove_it_from_output_nodes)
 {
 	this->graph->CreateEdge(this->input_interface_node->GetName(), this->operation_node->GetName());
-	auto output_nodes = this->graph->GetGraphOutputNodes();
+    NodeSet<Node> output_nodes;
+    query::OutputNode q(output_nodes);
+    this->graph->ExecuteQuery(q);
 
 	ASSERT_EQ(output_nodes.size(), 2);
 	ASSERT_NE(std::find(output_nodes.begin(), output_nodes.end(), this->output_interface_node), std::end(output_nodes));
@@ -192,7 +210,9 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_a_node_making_it_an_output_node
 {
 	this->graph->CreateEdge(this->input_interface_node->GetName(), this->operation_node->GetName());
 	this->graph->DestroyEdge(this->input_interface_node->GetName(), this->operation_node->GetName());
-	auto output_nodes = this->graph->GetGraphOutputNodes();
+    NodeSet<Node> output_nodes;
+    query::OutputNode q(output_nodes);
+    this->graph->ExecuteQuery(q);
 
 	ASSERT_EQ(output_nodes.size(), 3);
 }

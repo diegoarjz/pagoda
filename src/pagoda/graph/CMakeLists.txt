@@ -25,7 +25,12 @@ set(GRAPH_SRCS
     "query/input_node.h"
     "query/output_node.cpp"
     "query/output_node.h"
-    "breadth_first_node_visitor.h"
+    "traversal/traversal.cpp"
+    "traversal/traversal.h"
+    "traversal/linear.cpp"
+    "traversal/linear.h"
+    "traversal/forward.cpp"
+    "traversal/forward.h"
     "construction_argument_not_found.cpp"
     "construction_argument_not_found.h"
     "default_scheduler.cpp"
@@ -45,7 +50,6 @@ set(GRAPH_SRCS
     "node_set.h"
     "node_set.cpp"
     "node_set_visitor.h"
-    "node_visitor.h"
     "operation_node.cpp"
     "operation_node.h"
     "output_interface_node.cpp"
@@ -104,6 +108,8 @@ target_link_libraries(
 
 set(GEOMETRY_UNIT_TESTS
     "graph.test.cpp"
+    "traversal/forward.test.cpp"
+    "traversal/linear.test.cpp"
 )
 
 foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})

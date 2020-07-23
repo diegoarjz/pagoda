@@ -7,6 +7,7 @@
 #include <pagoda/dynamic/set_value_from.h>
 #include <pagoda/dynamic/value_visitor.h>
 
+#include <pagoda/graph/query/query.h>
 #include <pagoda/graph/default_scheduler.h>
 #include <pagoda/graph/execution_queue.h>
 #include <pagoda/graph/graph_dot_exporter.h>
@@ -93,7 +94,9 @@ int main(int argc, char* argv[])
 			if (vm.count("param"))
 			{
 				std::vector<std::string> params = vm["param"].as<std::vector<std::string>>();
-				auto nodes = graph->GetGraphNodes();
+                NodeSet<Node> nodes;
+                query::Query q(nodes);
+                graph->ExecuteQuery(q);
 				for (const auto& p : params)
 				{
 					SetParameter(nodes, p);
