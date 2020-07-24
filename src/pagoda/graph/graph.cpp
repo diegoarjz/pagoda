@@ -14,6 +14,7 @@
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/exception/exception.h>
 #include <pagoda/common/instrument/profiler.h>
+#include <algorithm>
 
 #include <pagoda/dynamic/dynamic_value_base.h>
 
@@ -197,7 +198,6 @@ public:
 	{
 		START_PROFILE;
 
-		q.Start(m_graph);
 		traversal::Linear t(*m_graph);
 		while (t.HasNext())
 		{
@@ -224,10 +224,8 @@ private:
 
 	void CollectNodes(const NodeWeakPtrSet &node_set, NodeSet &outSet)
 	{
-		for (auto n : node_set)
-		{
-			outSet.insert(n.lock());
-		}
+		std::transform(node_set.begin(), node_set.end(), std::inserter(outSet, outSet.end()),
+		               [](NodeWeakPtr n) { return n.lock(); });
 	}
 
 	NodeWeakPtrSet &InNodes(NodeIdentifier_t node) { return m_adjacencies.find(node)->second.m_inLinks; }

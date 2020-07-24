@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
 			{
 				std::vector<std::string> params = vm["param"].as<std::vector<std::string>>();
 				NodeSet nodes;
-				query::Query q(nodes);
+				query::Query q(*graph, nodes);
 				graph->ExecuteQuery(q);
 				for (const auto& p : params)
 				{

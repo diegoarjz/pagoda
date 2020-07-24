@@ -40,24 +40,24 @@ public:
 	/**
 	 * Constructor with a custom \c QueryHandle_t.
 	 */
-	Query(QueryHandle_t queryHandle);
+	Query(Graph& graph, QueryHandle_t queryHandle);
 	/**
 	 * Specialized constructor that adds results in the \p nodeSet \c NodeSet.
 	 */
-	Query(NodeSet& nodeSet);
+	Query(Graph& graph, NodeSet& nodeSet);
 
 	virtual bool Matches(NodePtr n);
 
 	const std::string& GetQueryHash() const;
 
 protected:
-	Graph* m_graph;
+	Graph& m_graph;
 	QueryHandle_t m_queryHandle;
 
 private:
-	void Start(Graph* graph);
 	void AddNode(NodePtr n);
 
 	friend class pagoda::graph::Graph;
+	friend class pagoda::graph::NodeSet;
 };
 }  // namespace pagoda::graph::query

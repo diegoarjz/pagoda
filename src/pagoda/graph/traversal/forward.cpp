@@ -9,7 +9,7 @@ namespace pagoda::graph::traversal
 {
 Forward::Forward(Graph& graph) : Traversal(graph)
 {
-	query::InputNode q([this](NodePtr n) { m_nodesToVisit.push(n); });
+	query::InputNode q(graph, [this](NodePtr n) { m_nodesToVisit.push(n); });
 	graph.ExecuteQuery(q);
 }
 

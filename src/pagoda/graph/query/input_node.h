@@ -7,8 +7,8 @@ namespace pagoda::graph::query
 class InputNode : public Query
 {
 public:
-	InputNode(QueryHandle_t queryHandle);
-	InputNode(NodeSet &nodeSet);
+	InputNode(Graph &graph, QueryHandle_t queryHandle);
+	InputNode(Graph &graph, NodeSet &nodeSet);
 
 	bool Matches(NodePtr n) override;
 };

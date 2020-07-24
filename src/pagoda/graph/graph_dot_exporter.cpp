@@ -77,7 +77,7 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 		case RankBy::None:
 		{
 			NodeSet allNodes;
-			query::Query q(allNodes);
+			query::Query q(*m_graph, allNodes);
 			m_graph->ExecuteQuery(q);
 			std::transform(allNodes.begin(), allNodes.end(), std::back_inserter(nodes), [](const NodePtr &n) {
 				return NodeExportInfo{n, 0};
