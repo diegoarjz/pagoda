@@ -24,7 +24,7 @@ public:
 
 	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &) override;
 
-	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
+	void Execute(const NodeSet &inNodes, const NodeSet &outNodes) override;
 	void SetOperation(pagoda::objects::ProceduralOperationPtr operation);
 	pagoda::objects::ProceduralOperationPtr GetOperation() const { return m_operation; }
 	void AcceptNodeVisitor(NodeVisitor *visitor) override;

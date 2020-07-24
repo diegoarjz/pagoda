@@ -96,7 +96,7 @@ public:
 };
 }  // namespace
 
-void RouterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
+void RouterNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	START_PROFILE;
 	LOG_TRACE(ProceduralGraph, "Executing RouterNode " << GetName() << "(" << GetId() << ")");

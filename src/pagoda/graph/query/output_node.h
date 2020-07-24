@@ -8,8 +8,8 @@ class OutputNode : public Query
 {
 public:
 	OutputNode(QueryHandle_t queryHandle);
-	OutputNode(NodeSet<Node> &nodeSet);
+	OutputNode(NodeSet &nodeSet);
 
 	bool Matches(NodePtr n) override;
 };
-}
+}  // namespace pagoda::graph::query

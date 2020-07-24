@@ -22,7 +22,7 @@ public:
 	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &) override;
 	void AcceptNodeVisitor(NodeVisitor *visitor) override;
 
-	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
+	void Execute(const NodeSet &inNodes, const NodeSet &outNodes) override;
 };
 
 }  // namespace pagoda::graph

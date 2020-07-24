@@ -10,8 +10,10 @@ using namespace pagoda::graph;
 TEST(ParameterNode, when_executing_a_parameter_node_should_propagate_the_parameters_to_its_outnodes)
 {
 	auto p = std::make_shared<ParameterNode>();
-	NodeSet<Node> outNodes{std::make_shared<ParameterNode>(), std::make_shared<ParameterNode>()};
-	NodeSet<Node> emptyNodeSet;
+	NodeSet outNodes;
+	outNodes.insert(std::make_shared<ParameterNode>());
+	outNodes.insert(std::make_shared<ParameterNode>());
+	NodeSet emptyNodeSet;
 
 	p->RegisterMember("a", std::make_shared<FloatValue>(123.0f));
 	p->Execute(emptyNodeSet, outNodes);
@@ -30,8 +32,9 @@ TEST(ParameterNode, when_executing_a_parameter_node_should_overwrite_parameters_
 	auto p2 = std::make_shared<ParameterNode>();
 	p2->RegisterMember("a", std::make_shared<FloatValue>(0.0f));
 
-	NodeSet<Node> emptyNodeSet;
-	NodeSet<Node> outNodes{p2};
+	NodeSet emptyNodeSet;
+	NodeSet outNodes;
+	outNodes.insert(p2);
 
 	p->Execute(emptyNodeSet, outNodes);
 

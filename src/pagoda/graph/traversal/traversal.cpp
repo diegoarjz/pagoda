@@ -7,7 +7,7 @@ namespace pagoda::graph::traversal
 {
 Traversal::Traversal(Graph& graph) : m_graph(graph) {}
 
-void Traversal::GetInputNodes(const NodePtr& node, std::insert_iterator<NodeSet<Node>> inserter)
+void Traversal::GetInputNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter)
 {
 	for (NodePtr n : m_graph.GetNodeInputNodes(node->GetName()))
 	{
@@ -15,7 +15,7 @@ void Traversal::GetInputNodes(const NodePtr& node, std::insert_iterator<NodeSet<
 	}
 }
 
-void Traversal::GetOutputNodes(const NodePtr& node, std::insert_iterator<NodeSet<Node>> inserter)
+void Traversal::GetOutputNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter)
 {
 	for (NodePtr n : m_graph.GetNodeOutputNodes(node->GetName()))
 	{
@@ -23,13 +23,13 @@ void Traversal::GetOutputNodes(const NodePtr& node, std::insert_iterator<NodeSet
 	}
 }
 
-void Traversal::GetAdjacentNodes(const NodePtr& node, std::insert_iterator<NodeSet<Node>> inserter)
+void Traversal::GetAdjacentNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter)
 {
 	GetInputNodes(node, inserter);
 	GetOutputNodes(node, inserter);
 }
 
-NodeSet<Node>& Traversal::GetNodes() const { return m_graph.getNodes(); }
+NodeSet& Traversal::GetNodes() const { return m_graph.getNodes(); }
 
 void Traversal::ForEachUntil(std::function<bool(NodePtr)> handle)
 {

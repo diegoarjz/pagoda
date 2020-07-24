@@ -83,7 +83,7 @@ public:
 	 * @param inNodes           The input nodes to the current \c Node, if any.
 	 * @param outNodes          The output nodes to the current \c Node, if any.
 	 */
-	virtual void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) = 0;
+	virtual void Execute(const NodeSet &inNodes, const NodeSet &outNodes) = 0;
 
 	std::string ToString() const override;
 

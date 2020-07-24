@@ -6,7 +6,7 @@
 namespace pagoda::graph::query
 {
 Query::Query(QueryHandle_t queryHandle) : m_queryHandle(queryHandle) {}
-Query::Query(NodeSet<Node>& nodeSet) : m_queryHandle([&nodeSet](NodePtr n) { nodeSet.insert(n); }) {}
+Query::Query(NodeSet& nodeSet) : m_queryHandle([&nodeSet](NodePtr n) { nodeSet.insert(n); }) {}
 
 void Query::Start(Graph* graph) { m_graph = graph; }
 bool Query::Matches(NodePtr n) { return true; }

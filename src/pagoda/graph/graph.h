@@ -165,21 +165,21 @@ public:
 	 *
 	 * @param [in] node The node.
 	 */
-	NodeSet<Node> GetNodesAdjacentTo(const NodeIdentifier_t &node);
+	NodeSet GetNodesAdjacentTo(const NodeIdentifier_t &node);
 
 	/**
 	 * Returns all input \c Node objects of \p node.
 	 *
 	 * @param [in] node The node.
 	 */
-	NodeSet<Node> GetNodeInputNodes(const NodeIdentifier_t &node);
+	NodeSet GetNodeInputNodes(const NodeIdentifier_t &node);
 
 	/**
 	 * Returns all output \c Node objects of \p node.
 	 *
 	 * @param [in] node The node.
 	 */
-	NodeSet<Node> GetNodeOutputNodes(const NodeIdentifier_t &node);
+	NodeSet GetNodeOutputNodes(const NodeIdentifier_t &node);
 
 	/**
 	 * Sets the \c IScheduler for this \c Graph to \p scheduler.
@@ -208,7 +208,7 @@ private:
 
 	static SchedulerFactoryFunction_t s_schedulerFactoryFunction;
 
-	NodeSet<Node> &getNodes();
+	NodeSet &getNodes();
 
 	friend class traversal::Traversal;
 };  // class Graph

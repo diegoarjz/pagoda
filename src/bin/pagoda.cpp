@@ -7,7 +7,6 @@
 #include <pagoda/dynamic/set_value_from.h>
 #include <pagoda/dynamic/value_visitor.h>
 
-#include <pagoda/graph/query/query.h>
 #include <pagoda/graph/default_scheduler.h>
 #include <pagoda/graph/execution_queue.h>
 #include <pagoda/graph/graph_dot_exporter.h>
@@ -19,6 +18,7 @@
 #include <pagoda/graph/operation_node.h>
 #include <pagoda/graph/output_interface_node.h>
 #include <pagoda/graph/parameter_node.h>
+#include <pagoda/graph/query/query.h>
 #include <pagoda/graph/router_node.h>
 
 #include <pagoda/geometry/geometry_component.h>
@@ -41,7 +41,7 @@ using namespace pagoda::graph;
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
 std::shared_ptr<Graph> ReadGraphFromFile(Pagoda& pagoda, const std::string& file_path);
-void SetParameter(const NodeSet<Node>& nodes, const std::string& param);
+void SetParameter(const NodeSet& nodes, const std::string& param);
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path);
 void ListGraph(std::shared_ptr<Graph> graph);
 void ExecuteGraph(std::shared_ptr<Graph> graph);
@@ -94,9 +94,9 @@ int main(int argc, char* argv[])
 			if (vm.count("param"))
 			{
 				std::vector<std::string> params = vm["param"].as<std::vector<std::string>>();
-                NodeSet<Node> nodes;
-                query::Query q(nodes);
-                graph->ExecuteQuery(q);
+				NodeSet nodes;
+				query::Query q(nodes);
+				graph->ExecuteQuery(q);
 				for (const auto& p : params)
 				{
 					SetParameter(nodes, p);
@@ -211,7 +211,7 @@ struct ParamSetter : ValueVisitorBase
 	std::string m_value;
 };
 
-void SetParameter(const NodeSet<Node>& nodes, const std::string& param)
+void SetParameter(const NodeSet& nodes, const std::string& param)
 {
 	static const std::regex paramRegex("^(.+)\\.(.+)=(.+)$");
 	std::smatch matches;

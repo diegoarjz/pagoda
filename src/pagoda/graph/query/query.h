@@ -18,7 +18,7 @@ namespace pagoda::graph::query
  * Base class to perform queries on a \c Graph.
  *
  * \code{.cpp}
- * NodeSet<Node> result;
+ * NodeSet result;
  * Query q(result);
  * graph->ExecuteQuery(q);
  * \endcode
@@ -34,17 +34,17 @@ namespace pagoda::graph::query
 class Query
 {
 public:
-    /// Function type to handle each \c Node that matches a \c Query.
+	/// Function type to handle each \c Node that matches a \c Query.
 	using QueryHandle_t = std::function<void(NodePtr)>;
 
-    /**
-     * Constructor with a custom \c QueryHandle_t.
-     */
+	/**
+	 * Constructor with a custom \c QueryHandle_t.
+	 */
 	Query(QueryHandle_t queryHandle);
-    /**
-     * Specialized constructor that adds results in the \p nodeSet \c NodeSet.
-     */
-	Query(NodeSet<Node>& nodeSet);
+	/**
+	 * Specialized constructor that adds results in the \p nodeSet \c NodeSet.
+	 */
+	Query(NodeSet& nodeSet);
 
 	virtual bool Matches(NodePtr n);
 
@@ -58,6 +58,6 @@ private:
 	void Start(Graph* graph);
 	void AddNode(NodePtr n);
 
-    friend class pagoda::graph::Graph;
+	friend class pagoda::graph::Graph;
 };
 }  // namespace pagoda::graph::query

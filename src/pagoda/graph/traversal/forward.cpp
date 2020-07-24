@@ -19,7 +19,7 @@ bool Forward::Advance()
 {
 	auto front = m_nodesToVisit.front();
 	m_nodesToVisit.pop();
-	NodeSet<Node> outNodes;
+	NodeSet outNodes;
 	GetOutputNodes(front, std::inserter(outNodes, std::end(outNodes)));
 	for (auto n : outNodes)
 	{

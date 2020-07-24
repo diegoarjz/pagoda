@@ -26,7 +26,7 @@ void ParameterNode::AcceptNodeVisitor(NodeVisitor *visitor)
 	visitor->Visit(std::dynamic_pointer_cast<ParameterNode>(shared_from_this()));
 }
 
-void ParameterNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
+void ParameterNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	START_PROFILE;
 	LOG_TRACE(ProceduralGraph, "Executing ParameterNode " << GetName() << "(" << GetId() << ")");

@@ -26,7 +26,7 @@ public:
 
 	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr>&) override;
 
-	void Execute(const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes) override;
+	void Execute(const NodeSet& inNodes, const NodeSet& outNodes) override;
 
 	void SetInterfaceName(const std::string& name);
 	const std::string& GetInterfaceName() const;

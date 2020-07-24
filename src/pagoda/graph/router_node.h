@@ -26,7 +26,7 @@ public:
 	void AcceptNodeVisitor(NodeVisitor *visitor) override;
 	void AddProceduralObject(objects::ProceduralObjectPtr object);
 
-	void Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes) override;
+	void Execute(const NodeSet &inNodes, const NodeSet &outNodes) override;
 
 private:
 	std::list<objects::ProceduralObjectPtr> m_proceduralObjects;

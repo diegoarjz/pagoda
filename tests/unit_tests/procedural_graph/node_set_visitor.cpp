@@ -27,13 +27,13 @@ protected:
 	std::shared_ptr<InputInterfaceNode> m_inputInterfaceNode;
 	std::shared_ptr<OutputInterfaceNode> m_outputInterfaceNode;
 	std::shared_ptr<OperationNode> m_operationNode;
-	NodeSet<Node> m_nodeSet;
+	NodeSet m_nodeSet;
 	Pagoda m_pagoda;
 };
 
 TEST_F(NodeTypeFilterTest, when_visiting_a_node_set_should_call_visitor_methods_for_different_node_types)
 {
-	NodeSet<InputInterfaceNode> nodes;
+	NodeSet nodes;
 
 	node_type_filter<InputInterfaceNode>(m_nodeSet, nodes);
 

@@ -7,7 +7,7 @@
 namespace pagoda::graph
 {
 template<class T>
-void node_type_filter(const NodeSet<Node> &nodeSet, NodeSet<T> &outNodes)
+void node_type_filter(const NodeSet &nodeSet, NodeSet &outNodes)
 {
 	for (auto node : nodeSet)
 	{

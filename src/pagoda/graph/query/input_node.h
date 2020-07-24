@@ -8,7 +8,7 @@ class InputNode : public Query
 {
 public:
 	InputNode(QueryHandle_t queryHandle);
-	InputNode(NodeSet<Node> &nodeSet);
+	InputNode(NodeSet &nodeSet);
 
 	bool Matches(NodePtr n) override;
 };

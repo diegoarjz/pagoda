@@ -86,7 +86,7 @@ public:
 };
 }  // namespace
 
-void OperationNode::Execute(const NodeSet<Node> &inNodes, const NodeSet<Node> &outNodes)
+void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	LOG_TRACE(ProceduralGraph, "Executing OperationNode " << GetName() << "(" << GetId() << ")");
 	for (auto parIter = m_operation->GetMembersBegin(); parIter != m_operation->GetMembersEnd(); ++parIter)

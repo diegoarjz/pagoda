@@ -82,7 +82,7 @@ public:
 };
 }  // namespace
 
-void OutputInterfaceNode::Execute(const NodeSet<Node>& inNodes, const NodeSet<Node>& outNodes)
+void OutputInterfaceNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes)
 {
 	START_PROFILE;
 	LOG_TRACE(ProceduralGraph, "Executing OutputInterfaceNode " << GetName() << "(" << GetId() << ")");

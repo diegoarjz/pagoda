@@ -14,8 +14,9 @@ struct NodePtrCompare
 	bool operator()(const NodePtr &lhs, const NodePtr &rhs) const;
 };
 
-template<class NodeT>
-using NodeSet = std::set<std::shared_ptr<NodeT>, NodePtrCompare>;
+class NodeSet : public std::set<NodePtr, NodePtrCompare>
+{
+};
 }  // namespace pagoda::graph
 
 #endif

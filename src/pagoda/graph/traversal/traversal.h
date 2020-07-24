@@ -24,10 +24,10 @@ public:
 protected:
 	Traversal(Graph& graph);
 
-	void GetInputNodes(const NodePtr& node, std::insert_iterator<NodeSet<Node>> inserter);
-	void GetOutputNodes(const NodePtr& node, std::insert_iterator<NodeSet<Node>> inserter);
-	void GetAdjacentNodes(const NodePtr& node, std::insert_iterator<NodeSet<Node>> inserter);
-	NodeSet<Node>& GetNodes() const;
+	void GetInputNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter);
+	void GetOutputNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter);
+	void GetAdjacentNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter);
+	NodeSet& GetNodes() const;
 
 private:
 	Graph& m_graph;

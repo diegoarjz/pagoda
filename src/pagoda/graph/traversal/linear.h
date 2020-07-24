@@ -14,6 +14,6 @@ public:
 	bool HasNext() override;
 
 private:
-	NodeSet<Node>::iterator m_iterator;
+	NodeSet::iterator m_iterator;
 };
 }  // namespace pagoda::graph::traversal
