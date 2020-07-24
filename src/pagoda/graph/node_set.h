@@ -1,6 +1,7 @@
 #ifndef PAGODA_PROCEDURAL_GRAPH_NODE_SET_H_
 #define PAGODA_PROCEDURAL_GRAPH_NODE_SET_H_
 
+#include <functional>
 #include <memory>
 #include <numeric>
 #include <set>

@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Texture coordinates projection based on geometry scope.
 - Support for loading PNG images as RGB8.
 - Material system and components.
+- Methods to create and get nodes by name.
+- Traversal classes for graphs:
+    - *Linear* traverses the nodes without any particular order.
+    - *Forward* traverses the nodes, in breadth first order, starting with the
+      input nodes.
+- Query nodes in a graph:
+    - *InputNode* finds nodes that don't have upstream nodes.
+    - *OutputNode* finds nodes that don't have downstream nodes.
 
 ### Changed
 

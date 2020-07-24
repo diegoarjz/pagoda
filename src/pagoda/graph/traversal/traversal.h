@@ -2,7 +2,7 @@
 
 #include <pagoda/graph/node_set.h>
 
-#include <iterator>
+#include <functional>
 
 namespace pagoda::graph
 {
