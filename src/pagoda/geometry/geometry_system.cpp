@@ -1,5 +1,7 @@
 #include "geometry_system.h"
 
+#include "core/geometry.h"
+
 #include "operations/clip_geometry.h"
 #include "operations/create_box.h"
 #include "operations/create_rect.h"
@@ -38,7 +40,7 @@ GeometrySystem::~GeometrySystem() {}
 
 void GeometrySystem::DoClone(std::shared_ptr<GeometryComponent> from, std::shared_ptr<GeometryComponent> to)
 {
-	auto newGeom = std::make_shared<Geometry>();
+	auto newGeom = std::make_shared<core::Geometry>();
 	to->SetGeometry(newGeom);
 	*newGeom = *(from->GetGeometry());
 	to->SetScope(from->GetScope());

@@ -20,6 +20,7 @@ set(GEOMETRY_SRCS
     "algorithms/face_offset.h"
     "algorithms/plane_splits.h"
     "algorithms/triangulate.h"
+    "algorithms/traverse.h"
     "operations/clip_geometry.cpp"
     "operations/clip_geometry.h"
     "operations/create_box.cpp"
@@ -101,7 +102,10 @@ target_link_libraries(
 #########################################################################
 
 set(GEOMETRY_UNIT_TESTS
+    "core/geometry.test.cpp"
+    "core/geometry_builder.test.cpp"
     "core/planar_texture_projection.test.cpp"
+    "algorithms/traverse.test.cpp"
 )
 
 foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})

@@ -1,6 +1,7 @@
 #ifndef PAGODA_GEOMETRY_CORE_GEOMETRY_BUILDER_H
 #define PAGODA_GEOMETRY_CORE_GEOMETRY_BUILDER_H
 
+#include "geometry.h"
 #include "indexed_container.h"
 
 #include <pagoda/common/debug/assertions.h>
@@ -257,6 +258,9 @@ private:
 	std::shared_ptr<Geometry> m_geometry;
 	AssociativeIndexedContainer<Index_t, PointData> m_pointData;
 };  // class GeometryBuilderT
+
+using GeometryBuilder = geometry::core::GeometryBuilderT<Geometry>;
+using GeometryBuilderPtr = std::shared_ptr<GeometryBuilder>;
 
 }  // namespace pagoda::geometry::core
 

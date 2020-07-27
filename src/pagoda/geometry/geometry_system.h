@@ -21,12 +21,6 @@ using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
 
 namespace pagoda::geometry
 {
-// TODO: Maybe move these type defs to geometry core
-using Geometry = geometry::core::GeometryBase<>;
-using GeometryPtr = std::shared_ptr<Geometry>;
-using GeometryBuilder = geometry::core::GeometryBuilderT<Geometry>;
-using GeometryBuilderPtr = std::shared_ptr<GeometryBuilder>;
-
 class GeometryComponent;
 
 /**

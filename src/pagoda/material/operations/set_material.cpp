@@ -3,6 +3,7 @@
 #include <pagoda/material/material_component.h>
 #include <pagoda/material/material_system.h>
 
+#include <pagoda/geometry/core/geometry.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
@@ -67,7 +68,7 @@ void SetMaterial::DoWork()
 		// geometry
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-		auto geom = std::make_shared<Geometry>();
+		auto geom = std::make_shared<core::Geometry>();
 		*geom = *inGeometryComponent->GetGeometry();
 		outGeometryComponent->SetGeometry(geom);
 		outGeometryComponent->SetScope(inGeometryComponent->GetScope());

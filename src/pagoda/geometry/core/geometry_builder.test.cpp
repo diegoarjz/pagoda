@@ -2,11 +2,7 @@
 #include <pagoda/geometry/core/geometry_builder.h>
 #include <pagoda/math/vec_base.h>
 
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
-#include "../test_utils.h"
-#include "mock_objects.h"
 
 using namespace pagoda;
 using namespace pagoda::math;

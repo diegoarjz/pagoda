@@ -17,13 +17,13 @@ public:
 	virtual ~GeometryComponent(){};
 
 	std::string GetType() const override { return GetComponentSystemName(); }
-	void SetGeometry(GeometryPtr geom) { geometry = geom; }
-	GeometryPtr GetGeometry() const { return geometry; }
+	void SetGeometry(core::GeometryPtr geom) { geometry = geom; }
+	core::GeometryPtr GetGeometry() const { return geometry; }
 	const geometry::core::Scope& GetScope() const;
 	void SetScope(const geometry::core::Scope& scope);
 
 private:
-	GeometryPtr geometry;
+	core::GeometryPtr geometry;
 	geometry::core::Scope m_scope;
 };  // class GeometryComponent
 

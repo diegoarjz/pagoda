@@ -50,8 +50,7 @@ struct DefaultFaceAttributes
  * Calculates the normal of a face.
  */
 template<class Geometry>
-inline typename Geometry::PositionType face_normal(std::shared_ptr<Geometry> geometry,
-                                                   const typename Geometry::Index_t &face)
+inline typename Geometry::PositionType face_normal(Geometry *geometry, const typename Geometry::Index_t &face)
 {
 	START_PROFILE;
 	auto facePointCirc = geometry->FacePointCirculatorBegin(face);
@@ -61,6 +60,13 @@ inline typename Geometry::PositionType face_normal(std::shared_ptr<Geometry> geo
 	++facePointCirc;
 	typename Geometry::PositionType pos2 = geometry->GetPosition(*facePointCirc);
 	return boost::qvm::normalized(boost::qvm::cross(pos2 - pos1, pos0 - pos1));
+}
+
+template<class Geometry>
+inline typename Geometry::PositionType face_normal(std::shared_ptr<Geometry> geometry,
+                                                   const typename Geometry::Index_t &face)
+{
+	return face_normal(geometry.get(), face);
 }
 
 template<class Topology = SplitPointTopology, class F = DefaultFaceAttributes, class E = DefaultEdgeAttributes,
@@ -88,6 +94,9 @@ private:
 	AssociativeIndexedContainer<Index_t, EdgeAttributes> m_edgeAttributes;
 	AssociativeIndexedContainer<Index_t, FaceAttributes> m_faceAttributes;
 };  // class Geometry
+
+using Geometry = geometry::core::GeometryBase<>;
+using GeometryPtr = std::shared_ptr<Geometry>;
 
 }  // namespace pagoda::geometry::core
 #endif

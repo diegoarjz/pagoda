@@ -26,8 +26,6 @@ set(test_srcs
     "math_lib/orthogonal.cpp"
     "math_lib/intersections.cpp"
     "math_lib/nearest_points.cpp"
-    "geometry_core/geometry.cpp"
-    "geometry_core/geometry_builder.cpp"
     "geometry_core/geometry_exporter.cpp"
     "geometry_core/indexed_container.cpp"
     "geometry_core/split_point_topology.cpp"
