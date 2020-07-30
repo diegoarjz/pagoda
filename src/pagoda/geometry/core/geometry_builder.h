@@ -2,7 +2,9 @@
 #define PAGODA_GEOMETRY_CORE_GEOMETRY_BUILDER_H
 
 #include "geometry.h"
-#include "indexed_container.h"
+
+#include <pagoda/geometry/algorithms/face_normal.h>
+#include <pagoda/geometry/algorithms/traverse.h>
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
@@ -15,6 +17,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace pagoda::geometry::core
@@ -107,65 +110,92 @@ public:
 
 			LOG_TRACE(GeometryCore, "Closing face");
 
-			auto pd0 = m_builder->m_pointData.Get(m_faceIndices[0]);
-			auto pd1 = m_builder->m_pointData.Get(m_faceIndices[1]);
-			auto pd2 = m_builder->m_pointData.Get(m_faceIndices[2]);
-
-			math::Vec3F normal{0, 0, 0};
-			for (auto i = 0u; i < m_faceIndices.size(); ++i)
+			std::vector<typename Geometry::PointHandle> points;
+			points.reserve(m_faceIndices.size());
+			for (const auto &i : m_faceIndices)
 			{
-				auto nextIndex = (i + 1) % m_faceIndices.size();
-				auto curr = m_builder->m_pointData.Get(m_faceIndices[i]);
-				auto next = m_builder->m_pointData.Get(m_faceIndices[nextIndex]);
-
-				// Newell's Method
-				X(normal) += (Y(curr.m_position) - Y(next.m_position)) * (Z(curr.m_position) + Z(next.m_position));
-				Y(normal) += (Z(curr.m_position) - Z(next.m_position)) * (X(curr.m_position) + X(next.m_position));
-				Z(normal) += (X(curr.m_position) - X(next.m_position)) * (Y(curr.m_position) + Y(next.m_position));
+				points.emplace_back(m_builder->m_pointData[i].m_index);
 			}
-			DBG_ASSERT_MSG(boost::qvm::mag_sqr(normal) > 0,
-			               "The normal's magnitude is 0. Are all face points collinear?");
-			boost::qvm::normalize(normal);
+
+			auto face = m_geometry->CreateFace(points);
+			std::size_t index = 0;
+			algorithms::EachPointAroundFace(
+			    m_geometry.get(), face.m_face,
+			    [this, &index](Geometry *g, const typename Geometry::PointHandle &p) {
+			        auto &pointData = m_builder->m_pointData[m_faceIndices[index++]];
+				    pointData.m_index = p.GetIndex();
+			        g->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
+			        g->SetPosition(pointData.m_index, pointData.m_position);
+			    });
+
+			auto normal = algorithms::face_normal(m_geometry, face.m_face);
+			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
+			algorithms::EachPointAroundFace(
+			    m_geometry.get(), face.m_face,
+			    [normal](Geometry *g, const typename Geometry::PointHandle &p) {
+				    g->GetVertexAttributes(p).m_normal = normal;
+			    });
+
+			/*
+			auto pd0 = m_builder->m_pointData[m_faceIndices[0]];
+			auto pd1 = m_builder->m_pointData[m_faceIndices[1]];
+			auto pd2 = m_builder->m_pointData[m_faceIndices[2]];
 
 			auto face = m_geometry->CreateFace(pd0.m_index, pd1.m_index, pd2.m_index);
-			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
+			typename Geometry::EdgeHandle currentEdge(Geometry::s_invalidIndex);
+			uint32_t i = 0;
+			algorithms::EachSplitPointAroundFace(
+			    m_geometry.get(), face.m_face,
+			    [&i, &currentEdge, this](Geometry *g, const typename Geometry::SplitPointHandle &sp) {
+			        std::cout << "index: " << i << " splitPoint: " << sp.GetIndex() << std::endl;
+			        std::cout << " point: " << g->GetPoint(sp).GetIndex() << std::endl;
+			        auto &pointData = m_builder->m_pointData[m_faceIndices[i]];
+			        pointData.m_index = g->GetPoint(sp);
+			        g->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
+			        g->SetPosition(pointData.m_index, m_builder->m_pointData[i].m_position);
+			        currentEdge = g->GetOutEdge(sp);
+			        ++i;
+			    });
 			for (auto i = 0u; i < 3; ++i)
 			{
-				auto &pointData = m_builder->m_pointData.Get(m_faceIndices[i]);
-				pointData.m_index = m_geometry->GetPoint(face.m_splitPoints[i]);
-				m_geometry->GetVertexAttributes(m_geometry->GetPoint(face.m_splitPoints[i])) = pointData.m_attributes;
-				m_geometry->SetPosition(m_geometry->GetPoint(face.m_splitPoints[i]),
-				                        m_builder->m_pointData.Get(m_faceIndices[i]).m_position);
+			    auto &pointData = m_builder->m_pointData[m_faceIndices[i]];
+			    pointData.m_index = m_geometry->GetPoint(face.m_splitPoints[i]);
+			    m_geometry->GetVertexAttributes(m_geometry->GetPoint(face.m_splitPoints[i])) = pointData.m_attributes;
+			    m_geometry->SetPosition(m_geometry->GetPoint(face.m_splitPoints[i]),
+			                            m_builder->m_pointData[m_faceIndices[i]].m_position);
 			}
 
-			auto currentEdge = m_geometry->GetOutEdge(face.m_splitPoints[2]);
+			// auto currentEdge = m_geometry->GetOutEdge(face.m_splitPoints[2]);
 
 			for (auto i = 3u; i < m_faceIndices.size(); ++i)
 			{
-				LOG_TRACE(GeometryCore, " Going to split edge " << currentEdge);
+			    LOG_TRACE(GeometryCore, " Going to split edge " << currentEdge);
 
-				auto &pointData = m_builder->m_pointData.Get(m_faceIndices[i]);
-				if (pointData.m_index == Geometry::s_invalidIndex)
-				{
-					LOG_TRACE(GeometryCore, " Needs to create a new point");
-					auto newSplitPoint = m_geometry->SplitEdge(currentEdge);
-					pointData.m_index = m_geometry->GetPoint(newSplitPoint);
-					m_geometry->GetVertexAttributes(m_geometry->GetPoint(newSplitPoint)) = pointData.m_attributes;
-				}
-				else
-				{
-					LOG_TRACE(GeometryCore, " Reusing previous point " << pointData.m_index);
-					m_geometry->SplitEdge(currentEdge, pointData.m_index);
-				}
-				m_geometry->SetPosition(pointData.m_index, pointData.m_position);
-				currentEdge = m_geometry->GetNextEdge(currentEdge);
+			    auto &pointData = m_builder->m_pointData[m_faceIndices[i]];
+			    if (pointData.m_index == Geometry::s_invalidIndex)
+			    {
+			        LOG_TRACE(GeometryCore, " Needs to create a new point");
+			        auto newSplitPoint = m_geometry->SplitEdge(currentEdge);
+			        pointData.m_index = m_geometry->GetPoint(newSplitPoint);
+			        m_geometry->GetVertexAttributes(m_geometry->GetPoint(newSplitPoint)) = pointData.m_attributes;
+			    }
+			    else
+			    {
+			        LOG_TRACE(GeometryCore, " Reusing previous point " << pointData.m_index);
+			        m_geometry->SplitEdge(currentEdge, pointData.m_index);
+			    }
+			    m_geometry->SetPosition(pointData.m_index, pointData.m_position);
+			    currentEdge = m_geometry->GetNextEdge(currentEdge);
 			}
 
-			for (auto fpIter = m_geometry->FacePointCirculatorBegin(face.m_face); fpIter.IsValid(); ++fpIter)
-			{
-				m_geometry->GetVertexAttributes(*fpIter).m_normal = normal;
-			}
+			auto normal = algorithms::face_normal(m_geometry, face.m_face);
+			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
+			algorithms::EachPointAroundFace(m_geometry.get(), face.m_face,
+			                                [&normal](Geometry *g, const typename Geometry::PointHandle &p) {
+			                                    g->GetVertexAttributes(p).m_normal = normal;
+			                                });
 
+			*/
 			return face.m_face;
 		}
 
@@ -236,7 +266,9 @@ public:
 	Index_t AddPoint(const PositionType &pos)
 	{
 		START_PROFILE;
-		return m_pointData.Create(PointData(pos));
+		Index_t newIndex = m_pointData.size();
+		m_pointData.emplace(newIndex, PointData(pos));
+		return newIndex;
 	}
 
 	/**
@@ -245,7 +277,9 @@ public:
 	Index_t AddPoint(const PositionType &pos, const VertexAttributes &v)
 	{
 		START_PROFILE;
-		return m_pointData.Create(PointData(pos, v));
+		Index_t newIndex = m_pointData.size();
+		m_pointData.emplace(newIndex, PointData(pos, v));
+		return newIndex;
 	}
 
 	/**
@@ -256,7 +290,7 @@ public:
 private:
 	/// The Geometry to build.
 	std::shared_ptr<Geometry> m_geometry;
-	AssociativeIndexedContainer<Index_t, PointData> m_pointData;
+	std::unordered_map<Index_t, PointData> m_pointData;
 };  // class GeometryBuilderT
 
 using GeometryBuilder = geometry::core::GeometryBuilderT<Geometry>;

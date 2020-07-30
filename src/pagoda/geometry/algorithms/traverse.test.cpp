@@ -105,7 +105,7 @@ TEST_F(TraverseTest, should_traverse_all_split_points)
 
 TEST_F(TraverseTest, should_circulate_all_points_around_each_face)
 {
-	std::vector<uint32_t> expected({3, 0, 1, 2, 5, 0, 3, 4, 4, 3, 2, 6, 6, 2, 1, 7, 7, 1, 0, 5, 7, 5, 4, 6});
+	std::vector<uint32_t> expected({0, 1, 2, 3, 0, 3, 4, 5, 3, 2, 6, 4, 2, 1, 7, 6, 1, 0, 5, 7, 5, 4, 6, 7});
 
 	uint32_t index = 0;
 	algorithms::EachPointAroundEachFace<core::Geometry>(
@@ -116,13 +116,28 @@ TEST_F(TraverseTest, should_circulate_all_points_around_each_face)
 
 TEST_F(TraverseTest, should_circulate_all_points_around_a_face)
 {
-	std::vector<uint32_t> expected({3, 0, 1, 2, 5, 0, 3, 4, 4, 3, 2, 6, 6, 2, 1, 7, 7, 1, 0, 5, 7, 5, 4, 6});
+	std::vector<uint32_t> expected({0, 1, 2, 3, 0, 3, 4, 5, 3, 2, 6, 4, 2, 1, 7, 6, 1, 0, 5, 7, 5, 4, 6, 7});
 
 	uint32_t index = 0;
 	algorithms::EachFace<core::Geometry>(
 	    m_geometry.get(), [&index, &expected](core::Geometry *g, const core::Geometry::FaceHandle &f) {
 		    algorithms::EachPointAroundFace(
 		        g, f, [&index, &expected](core::Geometry *, const core::Geometry::PointHandle &p) {
+			        EXPECT_EQ(p.GetIndex(), expected[index++]);
+		        });
+	    });
+}
+
+TEST_F(TraverseTest, should_circulate_all_split_points_around_a_face)
+{
+	std::vector<uint32_t> expected(
+	    {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23});
+
+	uint32_t index = 0;
+	algorithms::EachFace<core::Geometry>(
+	    m_geometry.get(), [&index, &expected](core::Geometry *g, const core::Geometry::FaceHandle &f) {
+		    algorithms::EachSplitPointAroundFace(
+		        g, f, [&index, &expected](core::Geometry *, const core::Geometry::SplitPointHandle &p) {
 			        EXPECT_EQ(p.GetIndex(), expected[index++]);
 		        });
 	    });

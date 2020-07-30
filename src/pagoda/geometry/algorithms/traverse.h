@@ -87,4 +87,15 @@ void EachPointAroundEachFace(G* geometry, const F& f)
 	}
 }
 
+/**
+ * Calls function \p f with each split point around face \p face in \p geometry.
+ */
+template<class G, class F>
+void EachSplitPointAroundFace(G* geometry, const typename G::FaceHandle& face, const F& f)
+{
+	for (auto fspCirc = geometry->FaceSplitPointCirculatorBegin(face); fspCirc.IsValid(); ++fspCirc)
+	{
+		f(geometry, *fspCirc);
+	}
+}
 }  // namespace pagoda::geometry::algorithms

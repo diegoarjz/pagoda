@@ -8,6 +8,7 @@
 #include <pagoda/geometry/core/geometry_builder.h>
 #include <pagoda/geometry/core/geometry_sizes.h>
 
+#include <pagoda/geometry/algorithms/face_normal.h>
 #include <pagoda/geometry/algorithms/traverse.h>
 
 #include <vector>
@@ -53,7 +54,7 @@ public:
 			algorithms::EachPointAroundFace(
 			    geometry, f, [&bottomFaceSize](G *geometry, const typename G::PointHandle &p) { ++bottomFaceSize; });
 
-			auto extrusionVector = m_extrusionAMount * core::face_normal<Geometry>(geometry, f);
+			auto extrusionVector = m_extrusionAMount * face_normal<Geometry>(geometry, f);
 			auto bottomFace = builder.StartFace(bottomFaceSize);
 			auto topFace = builder.StartFace(bottomFaceSize);
 			auto sideFaces = builder.StartFaces(bottomFaceSize, 4);

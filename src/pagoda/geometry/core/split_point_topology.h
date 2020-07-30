@@ -257,13 +257,9 @@ public:
 	 */
 	struct CreateFaceResult
 	{
-		CreateFaceResult() : m_face(s_invalidIndex), m_splitPoints{s_invalidIndex, s_invalidIndex, s_invalidIndex} {};
-		CreateFaceResult(FaceHandle f, std::array<SplitPointHandle, 3> splitPoints)
-		    : m_face(f), m_splitPoints(splitPoints)
-		{
-		}
+		CreateFaceResult() : m_face(s_invalidIndex){};
+		CreateFaceResult(FaceHandle f, std::array<SplitPointHandle, 3> splitPoints) : m_face(f) {}
 		FaceHandle m_face;
-		std::array<SplitPointHandle, 3> m_splitPoints;
 	};
 
 	/**
@@ -286,6 +282,8 @@ public:
 	 * If any of the points doesn't exist, it is created.
 	 */
 	CreateFaceResult CreateFace(const PointHandle &p0, const PointHandle &p1, const PointHandle &p2);
+
+	CreateFaceResult CreateFace(const std::vector<PointHandle> &points);
 
 	/*
 	 * Modifying the topology
@@ -635,17 +633,14 @@ private:
 	using IndexEdgePairArray_t = std::array<EdgeContainer_t::IndexValuePair, size>;
 	template<int size>
 	using IndexFacePairArray_t = std::array<FaceContainer_t::IndexValuePair, size>;
-	template<int size>
-	using PointHandleArray_t = std::array<PointHandle, size>;
-	template<int size>
-	using SplitPointHandleArray_t = std::array<SplitPointHandle, size>;
-	template<int size>
-	using EdgeHandleArray_t = std::array<EdgeHandle, size>;
-	template<int size>
-	using FaceHandleArray_t = std::array<FaceHandle, size>;
 
-	CreateFaceResult CreateFace(const PointHandleArray_t<3> &points, const SplitPointHandleArray_t<3> &splitPoints,
-	                            const EdgeHandleArray_t<3> &edges);
+	using PointHandleArray_t = std::vector<PointHandle>;
+	using SplitPointHandleArray_t = std::vector<SplitPointHandle>;
+	using EdgeHandleArray_t = std::vector<EdgeHandle>;
+	using FaceHandleArray_t = std::vector<FaceHandle>;
+
+	CreateFaceResult CreateFace(const PointHandleArray_t &points, const SplitPointHandleArray_t &splitPoints,
+	                            const EdgeHandleArray_t &edges);
 
 	void SetOutgoingEdge(SplitPoint &splitPoint, Edge &edge, const SplitPointHandle &s, const EdgeHandle &e);
 	void SetIncomingEdge(SplitPoint &splitPoint, Edge &edge, const SplitPointHandle &s, const EdgeHandle &e);

@@ -6,16 +6,16 @@ Points:
  3 Edges: 3, 
 
 SplitPoints:
- 0:  P: 0 F: 0 In: 3 Out: 0
- 1:  P: 1 F: 0 In: 0 Out: 1
+ 0:  P: 0 F: 0 In: 2 Out: 0
+ 1:  P: 1 F: 0 In: 3 Out: 1
  2:  P: 2 F: 0 In: 1 Out: 2
- 3:  P: 3 F: 0 In: 2 Out: 3
+ 3:  P: 3 F: 0 In: 0 Out: 3
 
 Edges:
- 0: 0 -> 1
+ 0: 0 -> 3
  1: 1 -> 2
- 2: 2 -> 3
- 3: 3 -> 0
+ 2: 2 -> 0
+ 3: 3 -> 1
 
 Faces:
  0:   SP: 3

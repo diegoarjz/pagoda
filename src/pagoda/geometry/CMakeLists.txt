@@ -21,6 +21,7 @@ set(GEOMETRY_SRCS
     "algorithms/plane_splits.h"
     "algorithms/triangulate.h"
     "algorithms/traverse.h"
+    "algorithms/face_normal.h"
     "operations/clip_geometry.cpp"
     "operations/clip_geometry.h"
     "operations/create_box.cpp"

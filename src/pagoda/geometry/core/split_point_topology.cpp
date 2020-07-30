@@ -128,13 +128,13 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace()
 	LOG_TRACE(GeometryCore, "Creating a Face with 3 new points");
 
 	// Points
-	PointHandleArray_t<3> points = {m_points.Create(), m_points.Create(), m_points.Create()};
+	PointHandleArray_t points = {m_points.Create(), m_points.Create(), m_points.Create()};
 
 	// SplitPoints
-	SplitPointHandleArray_t<3> splitPoints = {m_splitPoints.Create(), m_splitPoints.Create(), m_splitPoints.Create()};
+	SplitPointHandleArray_t splitPoints = {m_splitPoints.Create(), m_splitPoints.Create(), m_splitPoints.Create()};
 
 	// Edges
-	EdgeHandleArray_t<3> edges = {m_edges.Create(), m_edges.Create(), m_edges.Create()};
+	EdgeHandleArray_t edges = {m_edges.Create(), m_edges.Create(), m_edges.Create()};
 
 	return CreateFace(points, splitPoints, edges);
 }
@@ -144,13 +144,13 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointH
 	START_PROFILE;
 	LOG_TRACE(GeometryCore, "Creating a face with point " << p0.GetIndex() << " and 2 new points");
 	// Points
-	PointHandleArray_t<3> points = {p0, m_points.Create(), m_points.Create()};
+	PointHandleArray_t points = {p0, m_points.Create(), m_points.Create()};
 
 	// SplitPoints
-	SplitPointHandleArray_t<3> splitPoints = {m_splitPoints.Create(), m_splitPoints.Create(), m_splitPoints.Create()};
+	SplitPointHandleArray_t splitPoints = {m_splitPoints.Create(), m_splitPoints.Create(), m_splitPoints.Create()};
 
 	// Edges
-	EdgeHandleArray_t<3> edges = {m_edges.Create(), m_edges.Create(), m_edges.Create()};
+	EdgeHandleArray_t edges = {m_edges.Create(), m_edges.Create(), m_edges.Create()};
 
 	return CreateFace(points, splitPoints, edges);
 }
@@ -161,13 +161,13 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointH
 	LOG_TRACE(GeometryCore,
 	          "Creating a face with points " << p0.GetIndex() << " and " << p1.GetIndex() << " and 1 new point");
 	// Points
-	PointHandleArray_t<3> points = {p0, p1, m_points.Create()};
+	PointHandleArray_t points = {p0, p1, m_points.Create()};
 
 	// SplitPoints
-	SplitPointHandleArray_t<3> splitPoints = {m_splitPoints.Create(), m_splitPoints.Create(), m_splitPoints.Create()};
+	SplitPointHandleArray_t splitPoints = {m_splitPoints.Create(), m_splitPoints.Create(), m_splitPoints.Create()};
 
 	// Edges
-	EdgeHandleArray_t<3> edges = {m_edges.Create(), m_edges.Create(), m_edges.Create()};
+	EdgeHandleArray_t edges = {m_edges.Create(), m_edges.Create(), m_edges.Create()};
 
 	return CreateFace(points, splitPoints, edges);
 }
@@ -186,20 +186,50 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointH
 		return p.GetIndex();
 	};
 	// Points
-	PointHandleArray_t<3> points = {getOrCreatePoint(p0), getOrCreatePoint(p1), getOrCreatePoint(p2)};
+	PointHandleArray_t points = {getOrCreatePoint(p0), getOrCreatePoint(p1), getOrCreatePoint(p2)};
 
 	// SplitPoints
-	SplitPointHandleArray_t<3> splitPoints = {m_splitPoints.Create(), m_splitPoints.Create(), m_splitPoints.Create()};
+	SplitPointHandleArray_t splitPoints = {m_splitPoints.Create(), m_splitPoints.Create(), m_splitPoints.Create()};
 
 	// Edges
-	EdgeHandleArray_t<3> edges = {m_edges.Create(), m_edges.Create(), m_edges.Create()};
+	EdgeHandleArray_t edges = {m_edges.Create(), m_edges.Create(), m_edges.Create()};
 
 	return CreateFace(points, splitPoints, edges);
 }
 
-SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointHandleArray_t<3> &points,
-                                                                    const SplitPointHandleArray_t<3> &splitPoints,
-                                                                    const EdgeHandleArray_t<3> &edges)
+SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const std::vector<PointHandle> &points)
+{
+	START_PROFILE;
+	LOG_TRACE(GeometryCore, "Creating face with multiple points.");
+
+	auto getOrCreatePoint = [this](const PointHandle &p) {
+		if (p.GetIndex() == s_invalidIndex)
+		{
+			return m_points.Create();
+		}
+		return p.GetIndex();
+	};
+
+	PointHandleArray_t facePoints;
+	facePoints.reserve(points.size());
+	SplitPointHandleArray_t splitPoints;
+	splitPoints.reserve(points.size());
+	EdgeHandleArray_t edges;
+	edges.reserve(points.size());
+
+	for (const auto &p : points)
+	{
+		facePoints.emplace_back(getOrCreatePoint(p));
+		splitPoints.emplace_back(m_splitPoints.Create());
+		edges.emplace_back(m_edges.Create());
+	}
+
+    return CreateFace(facePoints, splitPoints, edges);
+}
+
+SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointHandleArray_t &points,
+                                                                    const SplitPointHandleArray_t &splitPoints,
+                                                                    const EdgeHandleArray_t &edges)
 {
 	START_PROFILE;
 	LOG_TRACE(GeometryCore, "Creating a face");
@@ -225,17 +255,19 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointH
 	LOG_TRACE(GeometryCore, "New Face " << face.m_index);
 
 	// Connect the elements
-	for (uint32_t i = 0; i < 3; ++i)
+	auto size = points.size();
+	for (uint32_t i = 0; i < size; ++i)
 	{
 		AddEdge(points[i], edges[i]);
 		SetOutgoingEdge(m_splitPoints.Get(splitPoints[i]), m_edges.Get(edges[i]), splitPoints[i], edges[i]);
-		SetIncomingEdge(m_splitPoints.Get(splitPoints[i]), m_edges.Get(edges[(i - 1) % 3]), splitPoints[i],
-		                edges[(i - 1) % 3]);
+		SetIncomingEdge(m_splitPoints.Get(splitPoints[i]), m_edges.Get(edges[(i - 1) % size]), splitPoints[i],
+		                edges[(i - 1) % size]);
 		SetPoint(m_splitPoints.Get(splitPoints[i]), m_points.Get(points[i]), splitPoints[i], points[i]);
 		SetFace(m_splitPoints.Get(splitPoints[i]), face.m_value, splitPoints[i], face.m_index);
-		SetIncomingEdge(m_splitPoints.Get(splitPoints[(i + 1) % 3]), m_edges.Get(edges[i]), splitPoints[(i + 1) % 3],
-		                edges[i]);
+		SetIncomingEdge(m_splitPoints.Get(splitPoints[(i + 1) % size]), m_edges.Get(edges[i]),
+		                splitPoints[(i + 1) % size], edges[i]);
 	}
+    face.m_value.m_splitPoint = splitPoints[0];
 
 #ifdef DEBUG
 	LOG_TRACE(GeometryCore, "CreateFace: IsValid: " << IsValid());

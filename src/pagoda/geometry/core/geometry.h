@@ -48,26 +48,19 @@ struct DefaultFaceAttributes
 
 /**
  * Calculates the normal of a face.
- */
 template<class Geometry>
 inline typename Geometry::PositionType face_normal(Geometry *geometry, const typename Geometry::Index_t &face)
 {
-	START_PROFILE;
-	auto facePointCirc = geometry->FacePointCirculatorBegin(face);
-	typename Geometry::PositionType pos0 = geometry->GetPosition(*facePointCirc);
-	++facePointCirc;
-	typename Geometry::PositionType pos1 = geometry->GetPosition(*facePointCirc);
-	++facePointCirc;
-	typename Geometry::PositionType pos2 = geometry->GetPosition(*facePointCirc);
-	return boost::qvm::normalized(boost::qvm::cross(pos2 - pos1, pos0 - pos1));
+    START_PROFILE;
+    auto facePointCirc = geometry->FacePointCirculatorBegin(face);
+    typename Geometry::PositionType pos0 = geometry->GetPosition(*facePointCirc);
+    ++facePointCirc;
+    typename Geometry::PositionType pos1 = geometry->GetPosition(*facePointCirc);
+    ++facePointCirc;
+    typename Geometry::PositionType pos2 = geometry->GetPosition(*facePointCirc);
+    return boost::qvm::normalized(boost::qvm::cross(pos2 - pos1, pos0 - pos1));
 }
-
-template<class Geometry>
-inline typename Geometry::PositionType face_normal(std::shared_ptr<Geometry> geometry,
-                                                   const typename Geometry::Index_t &face)
-{
-	return face_normal(geometry.get(), face);
-}
+ */
 
 template<class Topology = SplitPointTopology, class F = DefaultFaceAttributes, class E = DefaultEdgeAttributes,
          class V = DefaultVertexAttributes>
@@ -75,16 +68,23 @@ class GeometryBase : public Topology
 {
 public:
 	using Index_t = typename Topology::Index_t;
+	using PositionIndex_t = typename Topology::PointHandle;
 	using FaceAttributes = F;
 	using EdgeAttributes = E;
 	using VertexAttributes = V;
 	using PositionType = math::Vec3F;
 
-	void SetPosition(const Index_t &index, const PositionType &p) { m_vertexPositions.GetOrCreate(index, p) = p; }
+	void SetPosition(const PositionIndex_t &index, const PositionType &p)
+	{
+		m_vertexPositions.GetOrCreate(index, p) = p;
+	}
 
-	PositionType &GetPosition(const Index_t &index) { return m_vertexPositions.GetOrCreate(index); }
+	PositionType &GetPosition(const PositionIndex_t &index) { return m_vertexPositions.GetOrCreate(index); }
 
-	VertexAttributes &GetVertexAttributes(const Index_t &vertex) { return m_vertexAttributes.GetOrCreate(vertex); }
+	VertexAttributes &GetVertexAttributes(const PositionIndex_t &vertex)
+	{
+		return m_vertexAttributes.GetOrCreate(vertex);
+	}
 	EdgeAttributes &GetEdgeAttributes(const Index_t &edge) { return m_edgeAttributes.GetOrCreate(edge); }
 	FaceAttributes &GetFaceAttributes(const Index_t &face) { return m_faceAttributes.GetOrCreate(face); }
 
