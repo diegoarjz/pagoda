@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Query nodes in a graph:
     - *InputNode* finds nodes that don't have upstream nodes.
     - *OutputNode* finds nodes that don't have downstream nodes.
+- Traversal operations for geometry, providing a cleaner interface for
+  operating on geometries.
 
 ### Changed
 
