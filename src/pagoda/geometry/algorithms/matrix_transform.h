@@ -1,5 +1,7 @@
 #pragma once
 
+#include "traverse.h"
+
 #include <pagoda/geometry/core/geometry_builder.h>
 #include <pagoda/math/matrix_base.h>
 
@@ -20,17 +22,17 @@ public:
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
 	{
+		using PointHandle = typename Geometry::PointHandle;
 		START_PROFILE;
 		LOG_TRACE(GeometryOperations, "Transforming with matrix");
 
 		*geometryOut = *geometryIn;
 
-		for (auto iter = geometryOut->PointsBegin(); iter != geometryOut->PointsEnd(); ++iter)
-		{
-			auto& pos = geometryOut->GetPosition(*iter);
+		algorithms::EachPoint(geometryOut.get(), [this](Geometry* g, const PointHandle& p) {
+			auto& pos = g->GetPosition(p);
 			math::Vec4F finalPos = m_matrix * XYZ1(pos);
 			pos = XYZ(finalPos) / W(finalPos);
-		}
+		});
 	}
 
 private:

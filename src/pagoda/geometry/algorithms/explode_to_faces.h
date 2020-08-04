@@ -1,5 +1,7 @@
 #pragma once
 
+#include "traverse.h"
+
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/instrument/profiler.h>
@@ -21,25 +23,24 @@ public:
 	template<class Container>
 	void Execute(GeometryPtr geometryIn, Container &outGeometries)
 	{
+		using FaceHandle = typename Geometry::FaceHandle;
+		using PointHandle = typename Geometry::PointHandle;
+
 		START_PROFILE;
 		LOG_TRACE(GeometryOperations, "Exploding to faces");
 
 		outGeometries.reserve(geometryIn->GetFaceCount());
 
-		for (auto fIter = geometryIn->FacesBegin(); fIter != geometryIn->FacesEnd(); ++fIter)
-		{
+		algorithms::EachFace(geometryIn.get(), [&outGeometries](Geometry *g, const FaceHandle &f) {
 			auto faceGeometry = std::make_shared<Geometry>();
 			core::GeometryBuilderT<Geometry> builder(faceGeometry);
-
 			auto faceBuilder = builder.StartFace();
-			for (auto fpCirc = geometryIn->FacePointCirculatorBegin(*fIter); fpCirc; ++fpCirc)
-			{
-				faceBuilder.AddIndex(builder.AddPoint(geometryIn->GetPosition(*fpCirc)));
-			}
+			algorithms::EachPointAroundFace(g, f, [&faceBuilder, &builder](Geometry *g, const PointHandle &p) {
+				faceBuilder.AddIndex(builder.AddPoint(g->GetPosition(p)));
+			});
 			faceBuilder.CloseFace();
-
 			outGeometries.push_back(faceGeometry);
-		}
+		});
 	}
 };
 }  // namespace pagoda::geometry::algorithms

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "traverse.h"
+
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/instrument/profiler.h>
 #include <pagoda/geometry/core/geometry.h>
@@ -26,24 +28,25 @@ public:
 	template<class T>
 	void Execute(GeometryPtr geometryIn, T innerGeometries, T outerGeometries)
 	{
+        using FaceHandle = typename Geometry::FaceHandle;
+        using SplitPointHandle = typename Geometry::SplitPointHandle;
+
 		START_PROFILE;
 		LOG_TRACE(GeometryOperations, "FaceOffset. Amount: " << m_amount);
 
-		for (auto fIter = geometryIn->FacesBegin(); fIter != geometryIn->FacesEnd(); ++fIter)
-		{
+        algorithms::EachFace(geometryIn.get(), [this, &innerGeometries, &outerGeometries](Geometry* g, const FaceHandle & f) {
 			std::vector<math::Vec3F> outerPoints;
 			std::vector<math::Vec3F> innerPoints;
-			for (auto fvIter = geometryIn->FaceSplitPointCirculatorBegin(*fIter); fvIter; ++fvIter)
-			{
-				auto curr = geometryIn->GetPosition(geometryIn->GetPoint(*fvIter));
-				auto prev = geometryIn->GetPosition(geometryIn->GetPoint(geometryIn->GetPrevSplitPoint(*fvIter)));
-				auto next = geometryIn->GetPosition(geometryIn->GetPoint(geometryIn->GetNextSplitPoint(*fvIter)));
+            algorithms::EachSplitPointAroundFace(g, f, [this, &innerPoints, &outerPoints](Geometry *g, const SplitPointHandle &sp) {
+				auto curr = g->GetPosition(g->GetPoint(sp));
+				auto prev = g->GetPosition(g->GetPoint(g->GetPrevSplitPoint(sp)));
+				auto next = g->GetPosition(g->GetPoint(g->GetNextSplitPoint(sp)));
 
 				auto currBiss = m_amount * math::bissectrix((prev - curr), (next - curr));
 
 				outerPoints.push_back(curr);
 				innerPoints.push_back(curr + currBiss);
-			}
+            });
 
 			// inner geometry
 			auto inner = std::make_shared<Geometry>();
@@ -71,7 +74,7 @@ public:
 
 				outerGeometries = outer;
 			}
-		}
+        });
 	}
 
 private:
