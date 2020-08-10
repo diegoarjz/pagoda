@@ -119,83 +119,21 @@ public:
 
 			auto face = m_geometry->CreateFace(points);
 			std::size_t index = 0;
-			algorithms::EachPointAroundFace(
-			    m_geometry.get(), face.m_face,
-			    [this, &index](Geometry *g, const typename Geometry::PointHandle &p) {
-			        auto &pointData = m_builder->m_pointData[m_faceIndices[index++]];
-				    pointData.m_index = p.GetIndex();
-			        g->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
-			        g->SetPosition(pointData.m_index, pointData.m_position);
-			    });
-
-			auto normal = algorithms::face_normal(m_geometry, face.m_face);
-			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
-			algorithms::EachPointAroundFace(
-			    m_geometry.get(), face.m_face,
-			    [normal](Geometry *g, const typename Geometry::PointHandle &p) {
-				    g->GetVertexAttributes(p).m_normal = normal;
-			    });
-
-			/*
-			auto pd0 = m_builder->m_pointData[m_faceIndices[0]];
-			auto pd1 = m_builder->m_pointData[m_faceIndices[1]];
-			auto pd2 = m_builder->m_pointData[m_faceIndices[2]];
-
-			auto face = m_geometry->CreateFace(pd0.m_index, pd1.m_index, pd2.m_index);
-			typename Geometry::EdgeHandle currentEdge(Geometry::s_invalidIndex);
-			uint32_t i = 0;
-			algorithms::EachSplitPointAroundFace(
-			    m_geometry.get(), face.m_face,
-			    [&i, &currentEdge, this](Geometry *g, const typename Geometry::SplitPointHandle &sp) {
-			        std::cout << "index: " << i << " splitPoint: " << sp.GetIndex() << std::endl;
-			        std::cout << " point: " << g->GetPoint(sp).GetIndex() << std::endl;
-			        auto &pointData = m_builder->m_pointData[m_faceIndices[i]];
-			        pointData.m_index = g->GetPoint(sp);
-			        g->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
-			        g->SetPosition(pointData.m_index, m_builder->m_pointData[i].m_position);
-			        currentEdge = g->GetOutEdge(sp);
-			        ++i;
-			    });
-			for (auto i = 0u; i < 3; ++i)
-			{
-			    auto &pointData = m_builder->m_pointData[m_faceIndices[i]];
-			    pointData.m_index = m_geometry->GetPoint(face.m_splitPoints[i]);
-			    m_geometry->GetVertexAttributes(m_geometry->GetPoint(face.m_splitPoints[i])) = pointData.m_attributes;
-			    m_geometry->SetPosition(m_geometry->GetPoint(face.m_splitPoints[i]),
-			                            m_builder->m_pointData[m_faceIndices[i]].m_position);
-			}
-
-			// auto currentEdge = m_geometry->GetOutEdge(face.m_splitPoints[2]);
-
-			for (auto i = 3u; i < m_faceIndices.size(); ++i)
-			{
-			    LOG_TRACE(GeometryCore, " Going to split edge " << currentEdge);
-
-			    auto &pointData = m_builder->m_pointData[m_faceIndices[i]];
-			    if (pointData.m_index == Geometry::s_invalidIndex)
-			    {
-			        LOG_TRACE(GeometryCore, " Needs to create a new point");
-			        auto newSplitPoint = m_geometry->SplitEdge(currentEdge);
-			        pointData.m_index = m_geometry->GetPoint(newSplitPoint);
-			        m_geometry->GetVertexAttributes(m_geometry->GetPoint(newSplitPoint)) = pointData.m_attributes;
-			    }
-			    else
-			    {
-			        LOG_TRACE(GeometryCore, " Reusing previous point " << pointData.m_index);
-			        m_geometry->SplitEdge(currentEdge, pointData.m_index);
-			    }
-			    m_geometry->SetPosition(pointData.m_index, pointData.m_position);
-			    currentEdge = m_geometry->GetNextEdge(currentEdge);
-			}
+			algorithms::EachPointAroundFace(m_geometry.get(), face.m_face,
+			                                [this, &index](Geometry *g, const typename Geometry::PointHandle &p) {
+				                                auto &pointData = m_builder->m_pointData[m_faceIndices[index++]];
+				                                pointData.m_index = p.GetIndex();
+				                                g->GetVertexAttributes(pointData.m_index) = pointData.m_attributes;
+				                                g->SetPosition(pointData.m_index, pointData.m_position);
+			                                });
 
 			auto normal = algorithms::face_normal(m_geometry, face.m_face);
 			m_geometry->GetFaceAttributes(face.m_face).m_normal = normal;
 			algorithms::EachPointAroundFace(m_geometry.get(), face.m_face,
-			                                [&normal](Geometry *g, const typename Geometry::PointHandle &p) {
-			                                    g->GetVertexAttributes(p).m_normal = normal;
+			                                [normal](Geometry *g, const typename Geometry::PointHandle &p) {
+				                                g->GetVertexAttributes(p).m_normal = normal;
 			                                });
 
-			*/
 			return face.m_face;
 		}
 

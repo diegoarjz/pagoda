@@ -3,6 +3,7 @@
 #include "traverse.h"
 
 #include <pagoda/math/vec_base.h>
+#include <boost/qvm/gen/vec_operations2.hpp>
 
 #include <boost/qvm/vec_access.hpp>
 #include <boost/qvm/vec_operations.hpp>
@@ -24,6 +25,16 @@ inline typename Geometry::PositionType face_normal(Geometry *geometry, const typ
 		                                     Z(normal) += (X(curr) - X(next)) * (Y(curr) + Y(next));
 	                                     });
 
+#ifdef DEBUG
+	if (boost::qvm::mag_sqr(normal) == 0)
+	{
+		LOG_ERROR("Normal's magnitude is 0");
+		algorithms::EachPointAroundFace(geometry, face, [](Geometry *g, const typename Geometry::PointHandle &p) {
+			auto pos = g->GetPosition(p);
+			LOG_ERROR(" (" << X(pos) << ", " << Y(pos) << ", " << Z(pos) << ")");
+		});
+	}
+#endif
 	DBG_ASSERT_MSG(boost::qvm::mag_sqr(normal) > 0, "The normal's magnitude is 0. Are all face points collinear?");
 	return boost::qvm::normalized(normal);
 }

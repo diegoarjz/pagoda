@@ -98,7 +98,7 @@ public:
 	 */
 	struct PointHandle : public Handle
 	{
-		PointHandle(const Index_t &index) : Handle(index) {}
+		PointHandle(const Index_t &index=s_invalidIndex) : Handle(index) {}
 
 		/**
 		 * Implicit cast to an \c Index_t

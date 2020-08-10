@@ -7,6 +7,8 @@
 #include <cstring>
 
 #include <boost/qvm/vec.hpp>
+#include <boost/qvm/vec_access.hpp>
+#include <boost/qvm/vec_operations.hpp>
 
 namespace pagoda::math
 {
