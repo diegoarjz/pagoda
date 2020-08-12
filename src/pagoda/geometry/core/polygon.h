@@ -7,13 +7,28 @@
 
 namespace pagoda::geometry::core
 {
+/**
+ * Class to represent a simple polygon.
+ */
 template<class T>
 class Polygon
 {
 public:
+	/**
+	 * Constructs an empty Polygon.
+	 */
 	Polygon() {}
+	/**
+	 * Constructs the Polygon by moving the \p points.
+	 */
 	Polygon(const std::vector<T>&& points) : m_points(std::move(points)) {}
+	/**
+	 * Move constructor.
+	 */
 	Polygon(Polygon<T>&& p) : m_points(std::move(p.m_points)) {}
+	/**
+	 * Compy constructor.
+	 */
 	Polygon(Polygon<T>& p) : m_points(p.m_points) {}
 
 	Polygon& operator=(const Polygon& o)
