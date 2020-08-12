@@ -11,6 +11,7 @@
 #include "operations/extract_scope.h"
 #include "operations/extrude_geometry.h"
 #include "operations/face_offset.h"
+#include "operations/read_geojson.h"
 #include "operations/repeat_split.h"
 #include "operations/rotate.h"
 #include "operations/scale.h"
@@ -85,6 +86,8 @@ void GeometrySystem::Registration(Pagoda* pagoda)
 		operationFactory->Register("Rotate", [objectSystem]() { return std::make_shared<Rotate>(objectSystem); });
 		operationFactory->Register("ScopeTextureProjection",
 		                           [objectSystem]() { return std::make_shared<ScopeTextureProjection>(objectSystem); });
+		operationFactory->Register("ReadGeoJson",
+		                           [objectSystem]() { return std::make_shared<ReadGeoJson>(objectSystem); });
 	}
 }
 }  // namespace pagoda::geometry

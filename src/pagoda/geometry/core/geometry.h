@@ -46,22 +46,6 @@ struct DefaultFaceAttributes
 	math::Vec3F m_normal;
 };
 
-/**
- * Calculates the normal of a face.
-template<class Geometry>
-inline typename Geometry::PositionType face_normal(Geometry *geometry, const typename Geometry::Index_t &face)
-{
-    START_PROFILE;
-    auto facePointCirc = geometry->FacePointCirculatorBegin(face);
-    typename Geometry::PositionType pos0 = geometry->GetPosition(*facePointCirc);
-    ++facePointCirc;
-    typename Geometry::PositionType pos1 = geometry->GetPosition(*facePointCirc);
-    ++facePointCirc;
-    typename Geometry::PositionType pos2 = geometry->GetPosition(*facePointCirc);
-    return boost::qvm::normalized(boost::qvm::cross(pos2 - pos1, pos0 - pos1));
-}
- */
-
 template<class Topology = SplitPointTopology, class F = DefaultFaceAttributes, class E = DefaultEdgeAttributes,
          class V = DefaultVertexAttributes>
 class GeometryBase : public Topology
@@ -73,6 +57,19 @@ public:
 	using EdgeAttributes = E;
 	using VertexAttributes = V;
 	using PositionType = math::Vec3F;
+
+	template<class T>
+	SplitPointTopology::FaceHandle CreateFaceFromPositions(const T &positions)
+	{
+		auto face =
+		    SplitPointTopology::CreateFace(std::vector<SplitPointTopology::PointHandle>(positions.size())).m_face;
+		std::size_t i = 0;
+		for (auto circ = this->FacePointCirculatorBegin(face); circ.IsValid(); ++circ)
+		{
+			GetPosition(*circ) = positions[i++];
+		}
+		return face;
+	}
 
 	void SetPosition(const PositionIndex_t &index, const PositionType &p)
 	{
