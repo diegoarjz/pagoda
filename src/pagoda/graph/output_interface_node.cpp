@@ -7,7 +7,6 @@
 #include "node_set_visitor.h"
 #include "node_visitor.h"
 #include "operation_node.h"
-#include "router_node.h"
 #include "unsupported_node_link.h"
 
 #include <pagoda/dynamic/get_value_as.h>
@@ -46,52 +45,6 @@ void OutputInterfaceNode::AcceptNodeVisitor(NodeVisitor* visitor)
 
 void OutputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object) { m_proceduralObjects.push_back(object); }
 
-namespace
-{
-class out_visitor : public NodeVisitor
-{
-public:
-	out_visitor(std::list<ProceduralObjectPtr>& objects) : m_proceduralObjects(objects) {}
-
-	void Visit(std::shared_ptr<OperationNode> n) override { throw UnsupportedNodeLink("input", "OperationNode"); }
-
-	void Visit(std::shared_ptr<InputInterfaceNode> n) override
-	{
-		for (auto o : m_proceduralObjects)
-		{
-			n->AddProceduralObject(o);
-		}
-	}
-
-	void Visit(std::shared_ptr<OutputInterfaceNode> n) override
-	{
-		throw UnsupportedNodeLink("input", "OutputInterfaceNode");
-	}
-
-	void Visit(std::shared_ptr<ParameterNode> n) override { throw UnsupportedNodeLink("input", "ParameterNode"); }
-
-	void Visit(std::shared_ptr<RouterNode> n) override
-	{
-		for (auto o : m_proceduralObjects)
-		{
-			n->AddProceduralObject(o);
-		}
-	}
-
-	std::list<ProceduralObjectPtr>& m_proceduralObjects;
-};
-}  // namespace
-
-void OutputInterfaceNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes)
-{
-	START_PROFILE;
-	LOG_TRACE(ProceduralGraph, "Executing OutputInterfaceNode " << GetName() << "(" << GetId() << ")");
-
-	out_visitor v(m_proceduralObjects);
-	for (auto n : outNodes)
-	{
-		n->AcceptNodeVisitor(&v);
-	}
-}
+void OutputInterfaceNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes) { START_PROFILE; }
 
 }  // namespace pagoda::graph

@@ -19,7 +19,6 @@
 #include <pagoda/graph/output_interface_node.h>
 #include <pagoda/graph/parameter_node.h>
 #include <pagoda/graph/query/query.h>
-#include <pagoda/graph/router_node.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -145,7 +144,6 @@ struct PrintVisitor : NodeVisitor
 	void Visit(std::shared_ptr<InputInterfaceNode> n) override { print(n, "InputInterfaceNode"); }
 	void Visit(std::shared_ptr<OutputInterfaceNode> n) override { print(n, "OutputInterfaceNode"); }
 	void Visit(std::shared_ptr<ParameterNode> n) override { print(n, "ParameterNode"); }
-	void Visit(std::shared_ptr<RouterNode> n) override { print(n, "RouterNode"); }
 
 	void print(std::shared_ptr<Node> n, const std::string& nodeType)
 	{
