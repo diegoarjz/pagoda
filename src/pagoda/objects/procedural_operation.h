@@ -2,12 +2,14 @@
 #define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 
 #include "procedural_component.h"
-#include "procedural_operation_object_interface.h"
 
 #include <pagoda/common/factory.h>
 #include <pagoda/dynamic/builtin_class.h>
+#include <cstddef>
+#include <memory>
 
-#include <bitset>
+#include <boost/signals2.hpp>
+
 #include <list>
 #include <string>
 #include <unordered_map>
@@ -20,6 +22,8 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
 namespace pagoda::objects
 {
+class ProceduralObject;
+using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 class ProceduralObjectSystem;
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
 
@@ -52,11 +56,19 @@ public:
 	/**
 	 * Pops a \c ProceduralObject from the output interface with the given \p interface
 	 */
-	ProceduralObjectPtr PopProceduralObject(const std::string& interface) const;
+	ProceduralObjectPtr PopProceduralObject(const std::string& interface);
+
+	void LinkInputInterface(const std::string& inputInterface, const std::string& outputInterface,
+	                        const std::shared_ptr<ProceduralOperation>& op);
 
 	std::string ToString() const override;
 
 	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
+
+	void OnOutputObjectCreated(
+	    const std::string& interface,
+	    const std::function<void(ProceduralOperation*, const std::string&, ProceduralObjectPtr)>& handler);
+	void OnProgress(const std::function<void(const std::size_t&, const std::size_t)>& handler);
 
 protected:
 	/**
@@ -93,10 +105,22 @@ protected:
 	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 
 private:
-	using InterfaceContainer_t = std::unordered_map<std::string, std::unique_ptr<ProceduralOperationObjectInterface>>;
+	using InterfaceContainer_t = std::unordered_map<std::string, std::list<ProceduralObjectPtr>>;
+	using InterfaceOperations_t = std::unordered_map<std::string, std::list<ProceduralOperation*>>;
+
+	std::unordered_map<std::string,
+	                   boost::signals2::signal<void(ProceduralOperation*, const std::string&, ProceduralObjectPtr)>>
+	    m_outputObjectCreated;
+	boost::signals2::signal<void(const std::size_t&, const std::size_t)> m_progressHandlers;
 
 	InterfaceContainer_t input_interfaces;
 	InterfaceContainer_t output_interfaces;
+
+	InterfaceOperations_t m_inputOperations;
+	InterfaceOperations_t m_outputOperations;
+
+	std::size_t m_pendingObjects;
+	std::size_t m_processedObjects;
 
 };  // class ProceduralOperation
 }  // namespace pagoda::objects

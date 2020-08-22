@@ -66,9 +66,9 @@ struct GraphReaderGrammar
 		/*
 		 * named_simple_arg -> identifier ":" literal
 		 */
-		named_simple_arg = (identifier >> ':' >> quoted_string) [_val = bind(CreateStringNamedArgument, _1, _2)] |
-                           (identifier >> ':' >> float_) [_val = bind(CreateFloatNamedArgument, _1, _2)] |
-                           (identifier >> ':' >> int_ >> !float_) [_val = bind(CreateIntegerNamedArgument, _1, _2)];
+		named_simple_arg = (identifier >> ':' >> quoted_string) [_val = bind(CreateStringNamedArgument, boost::spirit::_1, boost::spirit::_2)] |
+                           (identifier >> ':' >> float_) [_val = bind(CreateFloatNamedArgument, boost::spirit::_1, boost::spirit::_2)] |
+                           (identifier >> ':' >> int_ >> !float_) [_val = bind(CreateIntegerNamedArgument, boost::spirit::_1, boost::spirit::_2)];
 
 		/*
 		 * construction_args -> (named_simple_arg ("," named_simple_arg)*)?
@@ -78,8 +78,8 @@ struct GraphReaderGrammar
 		/*
 		 * named_expression_arg -> identifier ":" ( expression | literal )
 		 */
-		named_expression_arg = named_simple_arg [_val = _1 ]|
-                               (identifier >> ':' >> expression) [_val = bind(CreateExpressionNamedArgument, _1, _2)];
+		named_expression_arg = named_simple_arg [_val = boost::spirit::_1 ]|
+                               (identifier >> ':' >> expression) [_val = bind(CreateExpressionNamedArgument, boost::spirit::_1, boost::spirit::_2)];
 
 		/*
 		 * execution_args -> (named_expression_arg ("," named_expression_arg)*)?
@@ -93,23 +93,23 @@ struct GraphReaderGrammar
 		 */
 		node_definition = (
                 identifier >> '=' >> identifier >>
-                '(' >> construction_args >> ')') [ _val = bind(CreateNodeDefinition, _1, _2, _3) ] >>
-                -(('{' >> execution_args >> '}') [ _val = bind(SetExecutionArguments, _val, _1) ]);
+                '(' >> construction_args >> ')') [ _val = bind(CreateNodeDefinition, boost::spirit::_1, boost::spirit::_2, boost::spirit::_3) ] >>
+                -(('{' >> execution_args >> '}') [ _val = bind(SetExecutionArguments, _val, boost::spirit::_1) ]);
 
 		/*
 		 * node_links -> identifier "->" identifier ("->" identifier)*
 		 */
 		node_links = eps[ _val = bind(CreateNodeLink) ] >>
-                     identifier[ bind(AddLinkedNode, _val, _1) ] >> "->" >>
-                     (identifier[ bind(AddLinkedNode, _val, _1) ] % "->") > ';';
+                     identifier[ bind(AddLinkedNode, _val, boost::spirit::_1) ] >> "->" >>
+                     (identifier[ bind(AddLinkedNode, _val, boost::spirit::_1) ] % "->") > ';';
 
 		/*
 		 * graph_definition -> (node_definition | node_links)*
 		 */
 		graph_definition = eps[ _val = bind(CreateGraphDefinition) ] >>
                            *(
-                            node_definition[ bind(AddNodeDefinition, _val, _1) ] |
-                            node_links[ bind(AddNodeLinks, _val, _1) ]
+                            node_definition[ bind(AddNodeDefinition, _val, boost::spirit::_1) ] |
+                            node_links[ bind(AddNodeLinks, _val, boost::spirit::_1) ]
                             );
 
 		// clang-format on
