@@ -5,8 +5,6 @@
 
 #include <pagoda/common/debug/assertions.h>
 
-#include <functional>
-
 namespace pagoda::graph
 {
 bool NodePtrCompare::operator()(const NodePtr &lhs, const NodePtr &rhs) const { return lhs->GetId() < rhs->GetId(); }
