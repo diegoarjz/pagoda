@@ -1,10 +1,11 @@
 #include "node_set.h"
 
+#include "node.h"
 #include "query/query.h"
 
-#include "node.h"
-
 #include <pagoda/common/debug/assertions.h>
+
+#include <functional>
 
 namespace pagoda::graph
 {
