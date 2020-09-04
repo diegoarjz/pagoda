@@ -36,7 +36,6 @@ set(test_srcs
     "geometry_operations/triangulate.cpp"
     "parameter/expression.cpp"
     "parameter/variable.cpp"
-    "procedural_objects/procedural_object_interface.cpp"
     "procedural_objects/geometry_system.cpp"
     "procedural_objects/procedural_object_predicates.cpp"
     "procedural_graph/node.cpp"

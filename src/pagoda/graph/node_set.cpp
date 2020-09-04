@@ -1,8 +1,7 @@
 #include "node_set.h"
 
-#include "query/query.h"
-
 #include "node.h"
+#include "query/query.h"
 
 #include <pagoda/common/debug/assertions.h>
 

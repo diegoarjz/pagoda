@@ -1,15 +1,21 @@
 #include "procedural_object_system.h"
 
-#include <pagoda/common/debug/assertions.h>
-#include <pagoda/common/debug/logger.h>
-#include <pagoda/common/instrument/profiler.h>
-#include <memory>
-
+#include "operations/router.h"
 #include "procedural_component_system.h"
 #include "procedural_object.h"
 
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/debug/logger.h>
+#include <pagoda/common/instrument/profiler.h>
+
+#include <pagoda/pagoda.h>
+
+#include <memory>
+
 namespace pagoda::objects
 {
+using namespace operations;
+
 ProceduralObjectSystem::ProceduralObjectSystem() { LOG_TRACE(Core, "Creating ProceduralObjectSystem"); }
 
 ProceduralObjectSystem::~ProceduralObjectSystem() { LOG_TRACE(Core, "Destroying ProceduralObjectSystem"); }
@@ -103,5 +109,15 @@ void ProceduralObjectSystem::KillProceduralObject(std::shared_ptr<ProceduralObje
 	}
 
 	m_proceduralObjects.erase(proceduralObject);
+}
+
+void ProceduralObjectSystem::Registration(Pagoda* pagoda)
+{
+	auto operationFactory = pagoda->GetOperationFactory();
+	auto objectSystem = pagoda->GetProceduralObjectSystem();
+	// Register Operations
+	{
+		operationFactory->Register("Router", [objectSystem]() { return std::make_shared<Router>(objectSystem); });
+	}
 }
 }  // namespace pagoda::objects

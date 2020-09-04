@@ -45,53 +45,5 @@ void InputInterfaceNode::AcceptNodeVisitor(NodeVisitor* visitor)
 	visitor->Visit(std::dynamic_pointer_cast<InputInterfaceNode>(shared_from_this()));
 }
 
-namespace
-{
-class out_visitor : public NodeVisitor
-{
-public:
-	out_visitor(const std::string& name, std::list<ProceduralObjectPtr>& objects)
-	    : m_interfaceName(name), m_proceduralObjects(objects)
-	{
-	}
-
-	void Visit(std::shared_ptr<OperationNode> n) override
-	{
-		ProceduralOperationPtr op = n->GetOperation();
-		for (auto object : m_proceduralObjects)
-		{
-			op->PushProceduralObject(m_interfaceName, object);
-		}
-	}
-
-	void Visit(std::shared_ptr<InputInterfaceNode> n) override
-	{
-		throw UnsupportedNodeLink("input", "InputInterfaceNode");
-	}
-
-	void Visit(std::shared_ptr<OutputInterfaceNode> n) override
-	{
-		throw UnsupportedNodeLink("input", "OutputInterfaceNode");
-	}
-
-	void Visit(std::shared_ptr<ParameterNode> n) override { throw UnsupportedNodeLink("input", "ParameterNode"); }
-
-	void Visit(std::shared_ptr<RouterNode> n) override { throw UnsupportedNodeLink("input", "RouterNode"); }
-
-	const std::string& m_interfaceName;
-	std::list<ProceduralObjectPtr>& m_proceduralObjects;
-};
-}  // namespace
-
-void InputInterfaceNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes)
-{
-	START_PROFILE;
-	LOG_TRACE(ProceduralGraph, "Executing InputInterfaceNode " << GetName() << "(" << GetId() << ")");
-
-	out_visitor v(m_interfaceName, m_proceduralObjects);
-	for (auto& i : outNodes)
-	{
-		i->AcceptNodeVisitor(&v);
-	}
-}
+void InputInterfaceNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes) { START_PROFILE; }
 }  // namespace pagoda::graph
