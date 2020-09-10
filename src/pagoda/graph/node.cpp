@@ -22,34 +22,8 @@ const std::string &Node::GetName() const { return m_nodeName; }
 
 void Node::SetExecutionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &arguments)
 {
-	for (const auto &arg : arguments)
-	{
+	for (const auto &arg : arguments) {
 		RegisterMember(arg.first, arg.second);
-	}
-}
-
-void Node::SetExpressionVariables()
-{
-	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter)
-	{
-		ExpressionPtr e = std::dynamic_pointer_cast<Expression>(parIter->second.m_value);
-		if (e != nullptr)
-		{
-			for (const auto &var : e->GetVariables())
-			{
-				try
-				{
-					auto variableIdentifiers = var.GetIdentifiers();
-					DynamicValueBasePtr nodeParameter = GetMember(variableIdentifiers.front());
-					e->SetVariableValue(variableIdentifiers.front(), nodeParameter);
-				}
-				catch (ValueNotFoundException &e)
-				{
-					LOG_TRACE(ProceduralGraph,
-					          "Operation parameter " << parIter->first << " not found in Node " << GetName());
-				}
-			}
-		}
 	}
 }
 

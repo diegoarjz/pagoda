@@ -20,9 +20,9 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: true
 BinPackParameters: true
-BraceWrapping:   
+BraceWrapping:
   AfterClass:      true
-  AfterControlStatement: true
+  AfterControlStatement: false
   AfterEnum:       true
   AfterFunction:   true
   AfterNamespace:  true
@@ -30,8 +30,8 @@ BraceWrapping:
   AfterStruct:     true
   AfterUnion:      true
   AfterExternBlock: true
-  BeforeCatch:     true
-  BeforeElse:      true
+  BeforeCatch:     false
+  BeforeElse:      false
   IndentBraces:    false
   SplitEmptyFunction: true
   SplitEmptyRecord: true
@@ -47,20 +47,20 @@ BreakStringLiterals: true
 ColumnLimit:     120
 CommentPragmas:  '^ IWYU pragma:'
 CompactNamespaces: false
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 2
 Cpp11BracedListStyle: true
 DerivePointerAlignment: true
 DisableFormat:   false
 ExperimentalAutoDetectBinPacking: false
 FixNamespaceComments: true
-ForEachMacros:   
+ForEachMacros:
   - foreach
   - Q_FOREACH
   - BOOST_FOREACH
 IncludeBlocks:   Preserve
-IncludeCategories: 
+IncludeCategories:
   - Regex:           '^<ext/.*\.h>'
     Priority:        2
   - Regex:           '^<.*\.h>'
@@ -72,7 +72,7 @@ IncludeCategories:
 IncludeIsMainRegex: '([-_](test|unittest))?$'
 IndentCaseLabels: true
 IndentPPDirectives: None
-IndentWidth:     4
+IndentWidth:     2
 IndentWrappedFunctionNames: false
 JavaScriptQuotes: Leave
 JavaScriptWrapImports: true
@@ -92,7 +92,7 @@ PenaltyBreakString: 1000
 PenaltyExcessCharacter: 1000000
 PenaltyReturnTypeOnItsOwnLine: 200
 PointerAlignment: Left
-RawStringFormats: 
+RawStringFormats:
   - Delimiter:       pb
     Language:        TextProto
     BasedOnStyle:    google
@@ -111,7 +111,7 @@ SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard:        Cpp11
-TabWidth:        4
+TabWidth:        2
 UseTab:          ForIndentation
 ...
 

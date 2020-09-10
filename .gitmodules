@@ -7,3 +7,6 @@
 [submodule "third_party/WGS84toCartesian"]
 	path = third_party/WGS84toCartesian
 	url = https://github.com/chrberger/WGS84toCartesian.git
+[submodule "third_party/bgfx"]
+	path = third_party/bgfx
+	url = https://github.com/bkaradzic/bgfx.git

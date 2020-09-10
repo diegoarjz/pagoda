@@ -1,14 +1,17 @@
 #ifndef PAGODA_PROCEDURAL_GRAPH_DEFAULT_SCHEDULER_H_
 #define PAGODA_PROCEDURAL_GRAPH_DEFAULT_SCHEDULER_H_
 
-#include "execution_queue.h"
 #include "graph.h"
 #include "node.h"
 
 #include "scheduler.h"
 
 #include <queue>
-#include <unordered_set>
+
+namespace pagoda::objects
+{
+class ProceduralOperation;
+}
 
 namespace pagoda::graph
 {
@@ -22,10 +25,8 @@ public:
 	void Finalize() override;
 
 private:
-	using NodeWeakPtrSet = std::unordered_set<NodeWeakPtr, NodeWeakPtrHasher, NodeWeakPtrEqual>;
-
 	Graph &m_graph;
-	ExecutionQueue m_executionQueue;
+	std::queue<objects::ProceduralOperation *> m_operationQueue;
 };  // class Scheduler
 }  // namespace pagoda::graph
 #endif

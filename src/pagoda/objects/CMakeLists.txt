@@ -69,6 +69,7 @@ target_link_libraries(
 
 set(GEOMETRY_UNIT_TESTS
     "procedural_object.test.cpp"
+    "procedural_operation.test.cpp"
 )
 
 foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})

@@ -7,7 +7,7 @@ namespace pagoda::geometry::operations
 {
 class ExportGeometry : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const char* name;
 	static const std::string inputGeometry;
 
@@ -15,6 +15,9 @@ public:
 	~ExportGeometry();
 
 	void DoWork() override;
+
+	private:
+	uint32_t m_objectCount;
 };
 }  // namespace pagoda::geometry::operations
 

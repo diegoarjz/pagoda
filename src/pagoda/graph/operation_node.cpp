@@ -26,17 +26,15 @@ OperationNode::OperationNode(OperationFactoryPtr operationFactory) : m_operation
 OperationNode::~OperationNode() {}
 
 void OperationNode::SetConstructionArguments(
-    const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
+  const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
 {
 	auto operationIter = constructionArgs.find("operation");
-	if (operationIter == std::end(constructionArgs))
-	{
+	if (operationIter == std::end(constructionArgs)) {
 		throw ConstructionArgumentNotFound(GetName(), GetId(), "operation");
 	}
 
 	auto operation = m_operationFactory->Create(get_value_as<std::string>(*operationIter->second));
-	if (operation == nullptr)
-	{
+	if (operation == nullptr) {
 		throw UnknownOperation(get_value_as<std::string>(*operationIter->second));
 	}
 
@@ -57,12 +55,10 @@ void OperationNode::AcceptNodeVisitor(NodeVisitor *visitor)
 void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	LOG_TRACE(ProceduralGraph, "Executing OperationNode " << GetName() << "(" << GetId() << ")");
-	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter)
-	{
+	// Copy all parameters registered in this node to the operation
+	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter) {
 		m_operation->RegisterOrSetMember(parIter->first, GetMember(parIter->first));
 	}
-
-	m_operation->Execute();
 }
 
 }  // namespace pagoda::graph
