@@ -9,7 +9,7 @@ set(BGFX_INCLUDE_DIRS
   )
 
 if (${APPLE})
-  set(BGFX_MAKE_TARGET "osx-release62")
+  set(BGFX_MAKE_TARGET "osx-release64")
   set(BGFX_LIBRARY
     ${PROJECT_SOURCE_DIR}/${BGFX_ROOT}/.build/osx64_clang/bin/libbgfxRelease.a)
 elseif(${UNIX})
@@ -25,11 +25,18 @@ elseif(${UNIX})
   endif()
 endif()
 
+message(STATUS ">> ${PROJECT_SOURCE_DIR}/${BGFX_ROOT}")
+
 execute_process(
   COMMAND make -j4 ${BGFX_MAKE_TARGET}
-  WORKING_DIRECTORY ${BGFX_ROOT}
+  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/${BGFX_ROOT}"
+  RESULT_VARIABLE BGFX_ERROR_CODE
   )
 
+if (NOT "${BGFX_ERROR_CODE}" EQUAL 0)
+  message(FATAL "BGFX make command failed with '${BGFX_ERROR_CODE}'")
+endif()
+
 if (NOT EXISTS ${BGFX_LIBRARY})
-  message(FATAL "BGFX Library does not exist at ${BGFX_LIBRARY}")
+  message(FATAL "BGFX Library does not exist at '${BGFX_LIBRARY}'")
 endif()
