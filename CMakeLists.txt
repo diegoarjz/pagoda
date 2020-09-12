@@ -8,6 +8,7 @@ include("Pagoda")
 include("gtest")
 include("json")
 include("WGS84toCartesian")
+include("bgfx")
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS chrono system program_options filesystem)
