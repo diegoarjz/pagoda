@@ -14,20 +14,18 @@ namespace pagoda::graph
 {
 class ExecutionQueue::Impl
 {
-public:
+	public:
 	Impl(Graph& graph) : m_graph(graph)
 	{
 		m_orderedNodes.reserve(graph.GetNodeCount());
 		traversal::Forward(graph).ForEach([this](NodePtr n) { (*this)(n); });
-		for (const auto& seenNode : m_seenNodes)
-		{
+		for (const auto& seenNode : m_seenNodes) {
 			m_orderedNodes.push_back(seenNode);
 		}
 		std::sort(m_orderedNodes.begin(), m_orderedNodes.end(), [this](NodePtr a, NodePtr b) {
 			auto aDepth = this->m_nodeDepths[a];
 			auto bDepth = this->m_nodeDepths[b];
-			if (aDepth == bDepth)
-			{
+			if (aDepth == bDepth) {
 				return a->GetId() < b->GetId();
 			}
 			return aDepth < bDepth;
@@ -37,8 +35,7 @@ public:
 
 	NodePtr GetNextNode()
 	{
-		if (m_currentIterator == m_orderedNodes.end())
-		{
+		if (m_currentIterator == m_orderedNodes.end()) {
 			return nullptr;
 		}
 		return *m_currentIterator++;
@@ -52,10 +49,8 @@ public:
 	{
 		m_seenNodes.insert(n);
 		auto thisNodeDepth = m_nodeDepths.emplace(n, 0).first->second;
-		for (auto outNode : m_graph.GetNodeOutputNodes(n->GetName()))
-		{
-			if (m_nodeDepths[outNode] <= thisNodeDepth)
-			{
+		for (auto outNode : m_graph.GetNodeOutputNodes(n->GetName())) {
+			if (m_nodeDepths[outNode] <= thisNodeDepth) {
 				m_nodeDepths[outNode] = thisNodeDepth + 1;
 			}
 		}

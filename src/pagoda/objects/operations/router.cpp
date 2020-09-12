@@ -25,24 +25,19 @@ void Router::DoWork()
 
 	auto predicateRegistry = m_proceduralObjectSystem->GetPredicateRegistry();
 
-	while (HasInput("in"))
-	{
+	while (HasInput("in")) {
 		auto object = GetInputProceduralObject("in");
-		for (const auto &p : *m_memberTable)
-		{
-			if (p.second.m_value->GetTypeInfo() == dynamic::String::s_typeInfo)
-			{
+		for (const auto &p : *m_memberTable) {
+			if (p.second.m_value->GetTypeInfo() == dynamic::String::s_typeInfo) {
 				std::string predicateName = p.second.m_value->ToString();
 				auto predicate = predicateRegistry->Get(predicateName);
 
-				if (predicate == nullptr)
-				{
+				if (predicate == nullptr) {
 					LOG_ERROR("Predicate with name " << p.second.m_value->ToString() << " not found");
 					return;
 				}
 
-				if ((*predicate)(object))
-				{
+				if ((*predicate)(object)) {
 					CreateOutputProceduralObject(object, p.first);
 				}
 			}

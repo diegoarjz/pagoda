@@ -38,7 +38,7 @@ using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
  */
 class ProceduralOperation : public dynamic::BuiltinClass
 {
-public:
+	public:
 	static const dynamic::TypeInfoPtr s_typeInfo;
 
 	ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem);
@@ -64,7 +64,7 @@ public:
 	void OnProgress(const std::function<void(const std::size_t&, const std::size_t)>& handler);
 	void OnNeedsUpdate(const std::function<void(ProceduralOperation*)>& handler);
 
-protected:
+	protected:
 	/**
 	 * Performs the operation work.
 	 */
@@ -98,7 +98,7 @@ protected:
 
 	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 
-private:
+	private:
 	/**
 	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
 	 */
@@ -117,8 +117,7 @@ private:
 		void Add(ProceduralObjectPtr o) { m_objects.push_back(o); }
 		ProceduralObjectPtr GetFront()
 		{
-			if (m_objects.empty())
-			{
+			if (m_objects.empty()) {
 				return nullptr;
 			}
 			auto object = m_objects.front();

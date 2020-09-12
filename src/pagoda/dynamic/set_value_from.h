@@ -25,10 +25,10 @@ namespace pagoda::dynamic
 template<class T, typename N>
 class UnableToAssignFromNative : public common::exception::Exception
 {
-public:
+	public:
 	UnableToAssignFromNative()
-	    : common::exception::Exception("Unable to assign native value of type " + native_value_name<N>::GetName() +
-	                                   " to dynamic value of type " + T::s_typeInfo->GetTypeName())
+	  : common::exception::Exception("Unable to assign native value of type " + native_value_name<N>::GetName() +
+	                                 " to dynamic value of type " + T::s_typeInfo->GetTypeName())
 	{
 	}
 	virtual ~UnableToAssignFromNative() {}
@@ -53,7 +53,7 @@ class can_be_assigned
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = sizeof(test<T>(0)) == sizeof(yes)
@@ -63,7 +63,7 @@ public:
 template<class T>
 class convert_from_native_visitor : public ValueVisitor<void>
 {
-public:
+	public:
 	convert_from_native_visitor(const T& native) : m_nativeValue(native) {}
 
 	template<typename V>
@@ -78,7 +78,7 @@ public:
 		throw UnableToAssignFromNative<V, T>();
 	}
 
-private:
+	private:
 	/// The native value to assign.
 	const T& m_nativeValue;
 };

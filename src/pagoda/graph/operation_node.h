@@ -16,7 +16,7 @@ namespace pagoda::graph
 {
 class OperationNode : public Node
 {
-public:
+	public:
 	static const char *name;
 
 	OperationNode(pagoda::objects::OperationFactoryPtr operationFactory);
@@ -29,7 +29,7 @@ public:
 	pagoda::objects::ProceduralOperationPtr GetOperation() const { return m_operation; }
 	void AcceptNodeVisitor(NodeVisitor *visitor) override;
 
-private:
+	private:
 	pagoda::objects::ProceduralOperationPtr m_operation;
 	pagoda::objects::OperationFactoryPtr m_operationFactory;
 };  // class OperationNode

@@ -9,7 +9,7 @@ namespace pagoda
 {
 class AstPrinter : public AstVisitor
 {
-public:
+	public:
 	AstPrinter(std::ostream &out);
 
 	void Visit(ast::AnonymousMethodPtr) override;
@@ -38,7 +38,7 @@ public:
 	void Visit(ast::VarDeclPtr) override;
 	void Visit(ast::ParameterPtr) override;
 
-private:
+	private:
 	void indent();
 	std::string indentation();
 	void deindent();

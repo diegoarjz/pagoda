@@ -22,18 +22,15 @@ boost::qvm::vec<Rep, 3> orthogonal(const boost::qvm::vec<Rep, 3>& v)
 	const auto& y = Y(v);
 	const auto& z = Z(v);
 
-	if (x == Rep(0))
-	{
+	if (x == Rep(0)) {
 		return boost::qvm::vec<Rep, 3>{Rep(1), Rep(0), Rep(0)};
 	}
 
-	if (y == Rep(0))
-	{
+	if (y == Rep(0)) {
 		return boost::qvm::vec<Rep, 3>{Rep(0), Rep(1), Rep(0)};
 	}
 
-	if (z == Rep(0))
-	{
+	if (z == Rep(0)) {
 		return boost::qvm::vec<Rep, 3>{Rep(0), Rep(0), Rep(1)};
 	}
 

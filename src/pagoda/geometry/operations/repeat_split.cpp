@@ -44,8 +44,7 @@ void RepeatSplit::DoWork()
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(inputGeometry))
-	{
+	while (HasInput(inputGeometry)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 
 		UpdateValue("size");
@@ -66,8 +65,7 @@ void RepeatSplit::DoWork()
 		planeSplit.Execute(inGeometry, splitGeometries);
 
 		int32_t createdObjectCount = 1;
-		for (auto& g : splitGeometries)
-		{
+		for (auto& g : splitGeometries) {
 			auto outProceduralObject = CreateOutputProceduralObject(inObject, outputGeometry);
 			outProceduralObject->RegisterOrSetMember("index", std::make_shared<Integer>(createdObjectCount++));
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outProceduralObject);
@@ -89,18 +87,13 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const fl
 	auto scopeAxis = scope.GetAxis(axis);
 	Plane<float> scopePlane;
 	float scopeSize;
-	if (axis == "x")
-	{
+	if (axis == "x") {
 		scopePlane = scope.GetYZPlane();
 		scopeSize = X(scope.GetSize());
-	}
-	else if (axis == "y")
-	{
+	} else if (axis == "y") {
 		scopePlane = scope.GetXZPlane();
 		scopeSize = Y(scope.GetSize());
-	}
-	else
-	{
+	} else {
 		scopePlane = scope.GetXYPlane();
 		scopeSize = Z(scope.GetSize());
 	}
@@ -108,8 +101,7 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const fl
 	std::vector<Plane<float>> planes;
 	float planeDistance = size;
 	uint32_t numPlanes = scopeSize / planeDistance - 1;
-	if (adjust)
-	{
+	if (adjust) {
 		planeDistance = scopeSize / numPlanes;
 	}
 
@@ -119,8 +111,7 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const fl
 
 	LOG_TRACE(ProceduralObjects,
 	          " scopeAxis: " << scopeAxis << ", planeDistance: " << planeDistance << ", numPlanes: " << numPlanes);
-	for (uint32_t i = 0; i < numPlanes; ++i)
-	{
+	for (uint32_t i = 0; i < numPlanes; ++i) {
 		auto plane = Plane<float>::FromPointAndNormal(currentPoint, scopeAxis);
 		LOG_TRACE(ProceduralObjects, " Split Plane: " << plane);
 		planes.push_back(plane);

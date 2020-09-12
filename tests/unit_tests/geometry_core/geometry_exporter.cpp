@@ -20,7 +20,7 @@ using GeometryType = GeometryBase<>;
 
 class GeometryExporterTest : public PagodaTestFixture<::testing::Test>
 {
-public:
+	public:
 	void SetUp() { m_geometry = std::make_shared<GeometryType>(); }
 
 	void TearDown() {}
@@ -71,18 +71,16 @@ TEST_F(GeometryExporterTest, geometry_exporter_export_cube)
 	auto bottomFace = builder.StartFace(4);
 	auto topFace = builder.StartFace(4);
 	typename GeometryBuilderT<GeometryType>::FaceBuilder sideFaces[] = {
-	    builder.StartFace(4),
-	    builder.StartFace(4),
-	    builder.StartFace(4),
-	    builder.StartFace(4),
+	  builder.StartFace(4),
+	  builder.StartFace(4),
+	  builder.StartFace(4),
+	  builder.StartFace(4),
 	};
 
-	for (auto i : {3, 2, 1, 0})
-	{
+	for (auto i : {3, 2, 1, 0}) {
 		bottomFace.AddIndex(i);
 	}
-	for (auto i : {4, 5, 6, 7})
-	{
+	for (auto i : {4, 5, 6, 7}) {
 		topFace.AddIndex(i);
 	}
 	bottomFace.CloseFace();
@@ -94,10 +92,8 @@ TEST_F(GeometryExporterTest, geometry_exporter_export_cube)
 	sideFaceIndices.push_back({1, 2, 6, 5});
 	sideFaceIndices.push_back({2, 3, 7, 6});
 	sideFaceIndices.push_back({3, 0, 4, 7});
-	for (auto &f : sideFaceIndices)
-	{
-		for (auto index : f)
-		{
+	for (auto &f : sideFaceIndices) {
+		for (auto index : f) {
 			sideFaces[i].AddIndex(index);
 		}
 		sideFaces[i++].CloseFace();

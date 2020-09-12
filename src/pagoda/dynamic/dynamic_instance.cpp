@@ -13,9 +13,8 @@ namespace pagoda::dynamic
 const TypeInfoPtr DynamicInstance::s_typeInfo = std::make_shared<TypeInfo>("DynamicInstance");
 
 DynamicInstance::DynamicInstance(DynamicClassPtr klass)
-    : DynamicValueBase(std::make_shared<TypeInfo>(klass->GetClassName())),
-      ClassBase(klass->GetClassName()),
-      m_class(klass)
+  : DynamicValueBase(std::make_shared<TypeInfo>(klass->GetClassName())), ClassBase(klass->GetClassName()),
+    m_class(klass)
 {
 }
 
@@ -27,12 +26,9 @@ void DynamicInstance::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*
 
 FunctionPtr DynamicInstance::Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals)
 {
-	try
-	{
+	try {
 		m_memberTable->Get("this");
-	}
-	catch (ValueNotFoundException&)
-	{
+	} catch (ValueNotFoundException&) {
 		m_memberTable->Declare("this", shared_from_this());
 	}
 	auto boundMethod = std::make_shared<Function>(callable);

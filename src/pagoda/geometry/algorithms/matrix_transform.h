@@ -13,11 +13,11 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class MatrixTransform
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 
-public:
+	public:
 	MatrixTransform(const math::Mat4x4F& matrix) : m_matrix(matrix) {}
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
@@ -35,7 +35,7 @@ public:
 		});
 	}
 
-private:
+	private:
 	math::Mat4x4F m_matrix;
 };
 }  // namespace pagoda::geometry::algorithms

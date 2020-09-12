@@ -14,12 +14,11 @@ namespace pagoda::dynamic
 template<class InstanceType, typename FunctionType>
 struct MemberFunctionCallableBody : public ICallableBody
 {
-public:
+	public:
 	/**
 	 * Constructs the \c MemberFunctionCallableBody with the function in \p function.
 	 */
-	MemberFunctionCallableBody(InstanceType &instance, FunctionType function)
-	    : m_instance(instance), m_function(function)
+	MemberFunctionCallableBody(InstanceType &instance, FunctionType function) : m_instance(instance), m_function(function)
 	{
 	}
 	virtual ~MemberFunctionCallableBody() {}
@@ -36,7 +35,7 @@ public:
 	void SetClosure(const std::shared_ptr<DynamicValueTable> &closure) override { m_closure = closure; }
 	const std::shared_ptr<DynamicValueTable> &GetClosure() const override { return m_closure; }
 
-private:
+	private:
 	InstanceType &m_instance;
 	FunctionType m_function;
 	std::shared_ptr<DynamicValueTable> m_closure;

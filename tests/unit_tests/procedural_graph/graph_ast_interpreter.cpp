@@ -1,8 +1,8 @@
+#include <procedural_graph/reader/ast_interpreter.h>
 #include <procedural_graph/reader/graph_definition_node.h>
 #include <procedural_graph/reader/named_argument.h>
 #include <procedural_graph/reader/node_definition_node.h>
 #include <procedural_graph/reader/node_link_node.h>
-#include <procedural_graph/reader/ast_interpreter.h>
 
 #include <procedural_graph/graph.h>
 
@@ -12,17 +12,15 @@ using namespace pagoda;
 
 class AstInterpreterTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp()
 	{
 		m_graph = std::make_shared<Graph>();
 		m_interpreter = std::make_shared<AstInterpreter>(m_graph);
 	}
-	
-	void TearDown()
-	{
-	}
-	
+
+	void TearDown() {}
+
 	GraphPtr m_graph;
 	std::shared_ptr<AstInterpreter> m_interpreter;
 };
@@ -60,7 +58,7 @@ TEST_F(AstInterpreterTest, when_visiting_an_expression_named_argument_should_cre
 TEST_F(AstInterpreterTest, when_visiting_a_node_definition_node_should_create_an_entry_in_the_node_table)
 {
 	NodeDefinitionNode::ConstructionArgumentContainer_t constructionArgs = {
-		"interface":std::make_shared<NamedArgument>("interface", NamedArgument::ArgumentType::String, "out")
+		"interface" : std::make_shared<NamedArgument>("interface", NamedArgument::ArgumentType::String, "out")
 	};
 	NodeDefinitionNode n("name", "InputInterface", constructionArgs);
 	m_interpreter->Visit(&n);
@@ -71,7 +69,7 @@ TEST_F(AstInterpreterTest, when_visiting_a_node_definition_node_should_create_an
 TEST_F(AstInterpreterTest, when_visiting_a_node_definition_node_should_create_a_node_in_the_graph)
 {
 	NodeDefinitionNode::ConstructionArgumentContainer_t constructionArgs = {
-		"interface":std::make_shared<NamedArgument>("interface", NamedArgument::ArgumentType::String, "out")
+		"interface" : std::make_shared<NamedArgument>("interface", NamedArgument::ArgumentType::String, "out")
 	};
 	NodeDefinitionNode n("name", "InputInterface", constructionArgs);
 	m_interpreter->Visit(&n);
@@ -80,18 +78,17 @@ TEST_F(AstInterpreterTest, when_visiting_a_node_definition_node_should_create_a_
 
 TEST_F(AstInterpreterTest, when_visiting_a_node_link_node_should_create_a_link_in_the_graph)
 {
-	for (auto name : {"n1", "n2"})
-	{
+	for (auto name : {"n1", "n2"}) {
 		NodeDefinitionNode::ConstructionArgumentContainer_t constructionArgs = {
-			"interface":std::make_shared<NamedArgument>("interface", NamedArgument::ArgumentType::String, "out")
+			"interface" : std::make_shared<NamedArgument>("interface", NamedArgument::ArgumentType::String, "out")
 		};
 		NodeDefinitionNode n(name, "InputInterface", constructionArgs);
 		m_interpreter->Visit(&n);
 	}
-	
+
 	NodeLinkNode link(NodeLinkNode::NodeLinkContainer_t{"n1", "n2"});
 	m_interpreter->Visit(&link);
-	
+
 	auto n1 = m_interpreter->GetNodeTable()["n1"];
 	auto n2 = m_interpreter->GetNodeTable()["n2"];
 	EXPECT_EQ(m_graph->CreateEdge(n1, n2), Graph::EdgeCreated::EdgeExists);

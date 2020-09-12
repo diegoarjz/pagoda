@@ -26,7 +26,7 @@ const std::string ScopeTextureProjection::s_inputGeometry("in");
 const std::string ScopeTextureProjection::s_outputGeometry("out");
 
 ScopeTextureProjection::ScopeTextureProjection(objects::ProceduralObjectSystemPtr objectSystem)
-    : ProceduralOperation(objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	CreateInputInterface(s_inputGeometry);
 	CreateOutputInterface(s_outputGeometry);
@@ -51,8 +51,7 @@ void ScopeTextureProjection::DoWork()
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(s_inputGeometry))
-	{
+	while (HasInput(s_inputGeometry)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);
 
@@ -81,22 +80,17 @@ void ScopeTextureProjection::DoWork()
 		float vScale = get_value_as<float>(*GetValue("scale_v"));
 
 		std::string axis = get_value_as<std::string>(*GetValue("axis"));
-		if (axis == "x")
-		{
+		if (axis == "x") {
 			uAxis = scope.GetAxis('y');
 			vAxis = scope.GetAxis('z');
 			uScale *= Y(scopeSize);
 			vScale *= Z(scopeSize);
-		}
-		else if (axis == "y")
-		{
+		} else if (axis == "y") {
 			uAxis = scope.GetAxis('x');
 			vAxis = scope.GetAxis('z');
 			uScale *= X(scopeSize);
 			vScale *= Z(scopeSize);
-		}
-		else if (axis == "z")
-		{
+		} else if (axis == "z") {
 			uAxis = scope.GetAxis('x');
 			vAxis = scope.GetAxis('y');
 			uScale *= X(scopeSize);
@@ -108,8 +102,7 @@ void ScopeTextureProjection::DoWork()
 		ptp.SetOffset(get_value_as<float>(*GetValue("offset_u")), get_value_as<float>(*GetValue("offset_v")));
 		ptp.SetClamp(get_value_as<bool>(*GetValue("clamp")));
 
-		for (auto i = outGeometry->PointsBegin(); i != outGeometry->PointsEnd(); ++i)
-		{
+		for (auto i = outGeometry->PointsBegin(); i != outGeometry->PointsEnd(); ++i) {
 			outGeometry->GetVertexAttributes(*i).m_texCoords = ptp.GetProjection(outGeometry->GetPosition(*i));
 		}
 	}

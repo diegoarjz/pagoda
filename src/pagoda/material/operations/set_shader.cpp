@@ -41,14 +41,11 @@ void SetShader::DoWork()
 
 	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
-	while (HasInput(inputObject))
-	{
+	while (HasInput(inputObject)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
-		std::shared_ptr<MaterialComponent> materialComponent =
-		    materialSystem->GetComponentAs<MaterialComponent>(outObject);
-		if (materialComponent == nullptr)
-		{
+		std::shared_ptr<MaterialComponent> materialComponent = materialSystem->GetComponentAs<MaterialComponent>(outObject);
+		if (materialComponent == nullptr) {
 			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 		}
 
@@ -57,24 +54,15 @@ void SetShader::DoWork()
 
 		std::string type = get_value_as<std::string>(*GetValue("type"));
 		Material::ShaderType shaderType = Material::ShaderType::Vertex;
-		if (type == "vertex")
-		{
+		if (type == "vertex") {
 			shaderType = Material::ShaderType::Vertex;
-		}
-		else if (type == "tesselation")
-		{
+		} else if (type == "tesselation") {
 			shaderType = Material::ShaderType::Tesselation;
-		}
-		else if (type == "geometry")
-		{
+		} else if (type == "geometry") {
 			shaderType = Material::ShaderType::Geometry;
-		}
-		else if (type == "fragment")
-		{
+		} else if (type == "fragment") {
 			shaderType = Material::ShaderType::Fragment;
-		}
-		else
-		{
+		} else {
 			throw Exception("Unknown shader type '" + type + "'.");
 		}
 
@@ -82,4 +70,3 @@ void SetShader::DoWork()
 	}
 }
 }  // namespace pagoda::material::operations
-

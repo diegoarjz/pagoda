@@ -17,7 +17,7 @@ using ProceduralComponentPtr = std::shared_ptr<ProceduralComponent>;
  */
 class ProceduralComponentSystemBase
 {
-public:
+	public:
 	ProceduralComponentSystemBase(const std::string &name);
 	virtual ~ProceduralComponentSystemBase();
 
@@ -39,7 +39,7 @@ public:
 		return std::dynamic_pointer_cast<C>(CreateComponent(object));
 	}
 
-private:
+	private:
 	const std::string m_systemName;
 };
 }  // namespace pagoda::objects

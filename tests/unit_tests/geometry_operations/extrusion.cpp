@@ -22,7 +22,7 @@ using GeometryPtr = std::shared_ptr<GeometryType>;
 
 class ExtrusionTest : public PagodaTestFixture<::testing::Test>
 {
-public:
+	public:
 	void SetUp() {}
 
 	void TearDown() {}

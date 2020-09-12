@@ -16,10 +16,10 @@ namespace pagoda::dynamic
 template<class T, typename N>
 class UnableToCastToNative : public common::exception::Exception
 {
-public:
+	public:
 	UnableToCastToNative()
-	    : common::exception::Exception("Unable to cast dynamic value of type " + T::s_typeInfo->GetTypeName() +
-	                                   " to native type " + native_value_name<N>::GetName())
+	  : common::exception::Exception("Unable to cast dynamic value of type " + T::s_typeInfo->GetTypeName() +
+	                                 " to native type " + native_value_name<N>::GetName())
 	{
 	}
 	virtual ~UnableToCastToNative() {}
@@ -28,7 +28,7 @@ public:
 template<class T>
 class convert_to_native_visitor : public ValueVisitor<typename std::remove_reference<T>::type>
 {
-public:
+	public:
 	T operator()(Expression& e)
 	{
 		auto evaluated = e.Evaluate();

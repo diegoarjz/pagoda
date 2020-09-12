@@ -14,7 +14,7 @@ namespace pagoda::geometry::operations
 {
 class RepeatSplit : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string inputGeometry;
 	static const std::string outputGeometry;
 	static const char *name;
@@ -24,7 +24,7 @@ public:
 
 	void DoWork() override;
 
-private:
+	private:
 	std::vector<math::Plane<float>> CreatePlanes(const core::Scope &scope, const float &size, const std::string &axis,
 	                                             bool adjust);
 };

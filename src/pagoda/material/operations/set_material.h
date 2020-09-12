@@ -7,7 +7,7 @@ namespace pagoda::material::operations
 {
 class SetMaterial : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string inputObject;
 	static const std::string outputObject;
 

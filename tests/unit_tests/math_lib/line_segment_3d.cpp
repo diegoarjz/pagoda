@@ -38,4 +38,3 @@ TEST(LineSegment3D, when_comparing_two_different_line_segments_should_return_not
 	ASSERT_FALSE(l1 == l2);
 	ASSERT_TRUE(l1 != l2);
 }
-

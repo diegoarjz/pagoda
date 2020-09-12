@@ -8,7 +8,7 @@ namespace ast
 {
 class SetExpression : public Expression
 {
-public:
+	public:
 	SetExpression() = default;
 	SetExpression(const ExpressionPtr &lhs, const IdentifierPtr &identifier, const ExpressionPtr &rhs);
 	virtual ~SetExpression();
@@ -19,7 +19,7 @@ public:
 	const IdentifierPtr GetIdentifier() const { return m_identifier; }
 	const ExpressionPtr &GetRhs() const { return m_rhs; }
 
-private:
+	private:
 	ExpressionPtr m_lhs;
 	IdentifierPtr m_identifier;
 	ExpressionPtr m_rhs;

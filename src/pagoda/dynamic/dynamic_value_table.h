@@ -14,7 +14,7 @@ using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
  */
 class DynamicValueTable
 {
-public:
+	public:
 	/**
 	 * An entry for the table.
 	 */
@@ -68,7 +68,7 @@ public:
 
 	void DumpSymbols(std::ostream &out) const;
 
-private:
+	private:
 	Entry &FindValue(const std::string &name);
 
 	std::unordered_map<std::string, Entry> m_values;

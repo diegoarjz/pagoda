@@ -11,7 +11,7 @@ using ProceduralObjectWeakPtr = std::weak_ptr<ProceduralObject>;
 
 class ProceduralComponent
 {
-public:
+	public:
 	virtual ~ProceduralComponent(){};
 
 	void SetParentObject(ProceduralObjectPtr parent);
@@ -19,7 +19,7 @@ public:
 
 	virtual std::string GetType() const = 0;
 
-protected:
+	protected:
 	ProceduralComponent(){};
 	ProceduralObjectWeakPtr parent_object;
 };  // class ProceduralComponent

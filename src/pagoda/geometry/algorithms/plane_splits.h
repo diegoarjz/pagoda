@@ -8,12 +8,12 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class PlaneSplits
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 	using Index_t = typename Geometry::Index_t;
 
-public:
+	public:
 	PlaneSplits(const std::vector<math::Plane<float>> &planes) : m_planes(planes) {}
 
 	template<class Container>
@@ -26,28 +26,25 @@ public:
 		auto currentGeometry = std::make_shared<Geometry>();
 		*currentGeometry = *geometryIn;
 
-		for (const auto &plane : m_planes)
-		{
+		for (const auto &plane : m_planes) {
 			Clip<Geometry> clip(plane);
 			auto frontGeometry = std::make_shared<Geometry>();
 			auto backGeometry = std::make_shared<Geometry>();
 
 			clip.Execute(currentGeometry, frontGeometry, backGeometry);
 
-			if (frontGeometry->GetFaceCount() > 0)
-			{
+			if (frontGeometry->GetFaceCount() > 0) {
 				outGeometries.push_back(frontGeometry);
 			}
 			currentGeometry = backGeometry;
 		}
 
-		if (currentGeometry->GetFaceCount() > 0)
-		{
+		if (currentGeometry->GetFaceCount() > 0) {
 			outGeometries.push_back(currentGeometry);
 		}
 	}
 
-private:
+	private:
 	std::vector<math::Plane<float>> m_planes;
 };
 }  // namespace pagoda::geometry::algorithms

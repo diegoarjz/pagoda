@@ -6,14 +6,14 @@ namespace pagoda::graph::traversal
 {
 class Linear : public Traversal
 {
-public:
+	public:
 	Linear(Graph& graph);
 
 	NodePtr Get() override;
 	bool Advance() override;
 	bool HasNext() override;
 
-private:
+	private:
 	NodeSet::iterator m_iterator;
 };
 }  // namespace pagoda::graph::traversal

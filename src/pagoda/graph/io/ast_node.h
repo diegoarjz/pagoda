@@ -12,7 +12,7 @@ class AstNodeVisitor;
  */
 class AstNode : public std::enable_shared_from_this<AstNode>
 {
-public:
+	public:
 	/// Type pointing to a position within the graph format string.
 	using Offset_t = std::size_t;
 	/// Type indicating a range between two positions within the graph format string.
@@ -66,7 +66,7 @@ public:
 	 */
 	virtual void AcceptVisitor(AstNodeVisitor *) = 0;
 
-private:
+	private:
 	Offset_t m_startOffset;  ///< Offset to the start of this node in the text
 	Offset_t m_endOffset;    ///< Offset to the end of this node in the text
 };

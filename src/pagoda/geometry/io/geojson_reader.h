@@ -21,7 +21,7 @@ namespace pagoda::geometry::io
  */
 class GeoJsonReader
 {
-public:
+	public:
 	/**
 	 * Represents a feature.
 	 */
@@ -45,7 +45,7 @@ public:
 	 */
 	void SetReferenceCoordinate(const math::Vec2F &coordinate);
 
-private:
+	private:
 	nlohmann::json m_json;
 	std::optional<math::Vec2F> m_referenceCoordinate;
 };

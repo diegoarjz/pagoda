@@ -19,12 +19,9 @@ ast::ProgramPtr Parser::Parse(const std::string &source)
 	grammar<parser_iterator> parser;
 	ast::ProgramPtr program;
 
-	try
-	{
+	try {
 		boost::spirit::qi::phrase_parse(begin, end, parser, boost::spirit::qi::space, program);
-	}
-	catch (boost::spirit::qi::expectation_failure<parser_iterator> const &x)
-	{
+	} catch (boost::spirit::qi::expectation_failure<parser_iterator> const &x) {
 		std::cout << "Expected: " << x.what_;
 		std::cout << " found: " << std::string(x.first, x.last);
 		std::cout << " (line " << boost::spirit::get_line(x.first) << ")" << std::endl;

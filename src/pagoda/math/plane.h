@@ -12,7 +12,7 @@ namespace pagoda::math
 template<class Rep>
 class Plane
 {
-public:
+	public:
 	using VectorType = boost::qvm::vec<Rep, 3>;
 	using PointType = boost::qvm::vec<Rep, 3>;
 
@@ -107,8 +107,7 @@ public:
 	PlaneSide GetPlaneSide(const VectorType &point)
 	{
 		auto dot = boost::qvm::dot(GetNormal(), point - GetPoint());
-		if (dot == Rep(0))
-		{
+		if (dot == Rep(0)) {
 			return PlaneSide::Contained;
 		}
 		return dot > Rep(0) ? PlaneSide::Front : PlaneSide::Back;
@@ -117,7 +116,7 @@ public:
 	bool operator==(const Plane<Rep> &o) const { return m_normal == o.m_normal && m_distance == o.m_distance; }
 	bool operator!=(const Plane<Rep> &o) const { return !(*this == o); }
 
-private:
+	private:
 	VectorType m_normal;  ///< Plane Normal
 	Rep m_distance;       ///< Distance to origin
 };
@@ -144,12 +143,10 @@ std::ostream &operator<<(std::ostream &o, const Plane<Rep> &plane)
 template<class Rep>
 std::string to_string(const typename Plane<Rep>::PlaneSide &side)
 {
-	if (side == Plane<Rep>::PlaneSide::Front)
-	{
+	if (side == Plane<Rep>::PlaneSide::Front) {
 		return "front";
 	}
-	if (side == Plane<Rep>::PlaneSide::Back)
-	{
+	if (side == Plane<Rep>::PlaneSide::Back) {
 		return "back";
 	}
 	return "contained";

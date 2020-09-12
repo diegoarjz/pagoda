@@ -14,11 +14,11 @@ namespace pagoda::geometry::core
  */
 class SplitPointTopology
 {
-public:
+	public:
 	using Index_t = uint32_t;             ///< Type used by indices.
 	static const Index_t s_invalidIndex;  ///< Indicate an invalid index.
 
-private:
+	private:
 	/**
 	 * Represents a handle in that references a topology component.
 	 */
@@ -28,7 +28,7 @@ private:
 		Index_t GetIndex() const { return m_index; }
 		operator Index_t() const { return m_index; }
 
-	protected:
+protected:
 		Index_t m_index;
 	};
 
@@ -55,10 +55,7 @@ private:
 	struct SplitPoint
 	{
 		SplitPoint()
-		    : m_point(s_invalidIndex),
-		      m_face(s_invalidIndex),
-		      m_incomingEdge(s_invalidIndex),
-		      m_outgoingEdge(s_invalidIndex)
+		  : m_point(s_invalidIndex), m_face(s_invalidIndex), m_incomingEdge(s_invalidIndex), m_outgoingEdge(s_invalidIndex)
 		{
 		}
 
@@ -92,13 +89,13 @@ private:
 	using EdgeContainer_t = IndexedContainer<Index_t, Edge>;
 	using FaceContainer_t = IndexedContainer<Index_t, Face>;
 
-public:
+	public:
 	/**
 	 * Handle to a \c Point.
 	 */
 	struct PointHandle : public Handle
 	{
-		PointHandle(const Index_t &index=s_invalidIndex) : Handle(index) {}
+		PointHandle(const Index_t &index = s_invalidIndex) : Handle(index) {}
 
 		/**
 		 * Implicit cast to an \c Index_t
@@ -354,7 +351,7 @@ public:
 	template<typename ContainerType, typename HandleType>
 	class Iterator
 	{
-	public:
+public:
 		Iterator(const typename ContainerType::iterator &iter) : m_currentIterator(iter) {}
 
 		HandleType operator*() { return HandleType((*m_currentIterator).m_index); }
@@ -377,7 +374,7 @@ public:
 
 		bool operator!=(const Iterator &other) { return m_currentIterator != other.m_currentIterator; }
 
-	private:
+private:
 		typename ContainerType::iterator m_currentIterator;
 	};
 
@@ -399,7 +396,7 @@ public:
 
 	class PointEdgeIterator
 	{
-	public:
+public:
 		PointEdgeIterator(const std::unordered_set<Index_t>::iterator &iter) : m_currentIterator(iter) {}
 
 		EdgeHandle operator*() { return EdgeHandle(*m_currentIterator); }
@@ -420,7 +417,7 @@ public:
 		bool operator==(const PointEdgeIterator &other) { return m_currentIterator == other.m_currentIterator; }
 		bool operator!=(const PointEdgeIterator &other) { return m_currentIterator != other.m_currentIterator; }
 
-	private:
+private:
 		std::unordered_set<Index_t>::iterator m_currentIterator;
 	};
 
@@ -429,9 +426,9 @@ public:
 
 	class PointSplitPointIterator
 	{
-	public:
+public:
 		PointSplitPointIterator(const SplitPointTopology *topology, const PointEdgeIterator &pointEdgeIterator)
-		    : m_topology(topology), m_currentIterator(pointEdgeIterator)
+		  : m_topology(topology), m_currentIterator(pointEdgeIterator)
 		{
 		}
 
@@ -453,7 +450,7 @@ public:
 		bool operator==(const PointSplitPointIterator &other) { return m_currentIterator == other.m_currentIterator; }
 		bool operator!=(const PointSplitPointIterator &other) { return m_currentIterator != other.m_currentIterator; }
 
-	private:
+private:
 		const SplitPointTopology *m_topology;
 		PointEdgeIterator m_currentIterator;
 	};
@@ -463,9 +460,9 @@ public:
 
 	class PointFaceIterator
 	{
-	public:
+public:
 		PointFaceIterator(const SplitPointTopology *topology, const PointEdgeIterator &pointEdgeIterator)
-		    : m_topology(topology), m_currentIterator(pointEdgeIterator)
+		  : m_topology(topology), m_currentIterator(pointEdgeIterator)
 		{
 		}
 
@@ -487,7 +484,7 @@ public:
 		bool operator==(const PointFaceIterator &other) { return m_currentIterator == other.m_currentIterator; }
 		bool operator!=(const PointFaceIterator &other) { return m_currentIterator != other.m_currentIterator; }
 
-	private:
+private:
 		const SplitPointTopology *m_topology;
 		PointEdgeIterator m_currentIterator;
 	};
@@ -497,12 +494,10 @@ public:
 
 	class FaceEdgeCirculator
 	{
-	public:
+public:
 		FaceEdgeCirculator(const SplitPointTopology *topology, const FaceHandle &faceHandle)
-		    : m_topology(topology),
-		      m_currentEdge(m_topology->GetEdge(faceHandle)),
-		      m_lastEdge(m_currentEdge),
-		      m_initialPosition(true)
+		  : m_topology(topology), m_currentEdge(m_topology->GetEdge(faceHandle)), m_lastEdge(m_currentEdge),
+		    m_initialPosition(true)
 		{
 		}
 
@@ -529,7 +524,7 @@ public:
 		bool operator==(const FaceEdgeCirculator &other) { return m_currentEdge == other.m_currentEdge; }
 		bool operator!=(const FaceEdgeCirculator &other) { return m_currentEdge != other.m_currentEdge; }
 
-	private:
+private:
 		const SplitPointTopology *m_topology;
 		EdgeHandle m_currentEdge;
 		EdgeHandle m_lastEdge;
@@ -540,9 +535,9 @@ public:
 
 	class FaceSplitPointCirculator
 	{
-	public:
+public:
 		FaceSplitPointCirculator(const SplitPointTopology *topology, const FaceEdgeCirculator &circulator)
-		    : m_topology(topology), m_currentCirculator(circulator)
+		  : m_topology(topology), m_currentCirculator(circulator)
 		{
 		}
 
@@ -564,16 +559,10 @@ public:
 			return *this;
 		}
 
-		bool operator==(const FaceSplitPointCirculator &other)
-		{
-			return m_currentCirculator == other.m_currentCirculator;
-		}
-		bool operator!=(const FaceSplitPointCirculator &other)
-		{
-			return m_currentCirculator != other.m_currentCirculator;
-		}
+		bool operator==(const FaceSplitPointCirculator &other) { return m_currentCirculator == other.m_currentCirculator; }
+		bool operator!=(const FaceSplitPointCirculator &other) { return m_currentCirculator != other.m_currentCirculator; }
 
-	private:
+private:
 		const SplitPointTopology *m_topology;
 		FaceEdgeCirculator m_currentCirculator;
 	};
@@ -582,9 +571,9 @@ public:
 
 	class FacePointCirculator
 	{
-	public:
+public:
 		FacePointCirculator(const SplitPointTopology *topology, const FaceEdgeCirculator &circulator)
-		    : m_topology(topology), m_currentCirculator(circulator)
+		  : m_topology(topology), m_currentCirculator(circulator)
 		{
 		}
 
@@ -592,14 +581,8 @@ public:
 
 		operator bool() const { return IsValid(); }
 
-		PointHandle operator*()
-		{
-			return m_topology->GetPoint(m_topology->GetSource((*m_currentCirculator).GetIndex()));
-		}
-		PointHandle operator->()
-		{
-			return m_topology->GetPoint(m_topology->GetSource((*m_currentCirculator).GetIndex()));
-		}
+		PointHandle operator*() { return m_topology->GetPoint(m_topology->GetSource((*m_currentCirculator).GetIndex())); }
+		PointHandle operator->() { return m_topology->GetPoint(m_topology->GetSource((*m_currentCirculator).GetIndex())); }
 
 		FacePointCirculator &operator++()
 		{
@@ -615,7 +598,7 @@ public:
 		bool operator==(const FacePointCirculator &other) { return m_currentCirculator == other.m_currentCirculator; }
 		bool operator!=(const FacePointCirculator &other) { return m_currentCirculator != other.m_currentCirculator; }
 
-	private:
+private:
 		const SplitPointTopology *m_topology;
 		FaceEdgeCirculator m_currentCirculator;
 	};
@@ -624,7 +607,7 @@ public:
 
 	void DumpToStream(std::ostream &outStream);
 
-private:
+	private:
 	template<int size>
 	using IndexPointPairArray_t = std::array<PointContainer_t::IndexValuePair, size>;
 	template<int size>

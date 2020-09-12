@@ -11,7 +11,7 @@ namespace pagoda
 {
 class AstVisitor
 {
-public:
+	public:
 	virtual void Visit(ast::AnonymousMethodPtr) = 0;
 	virtual void Visit(ast::ArithmeticOpPtr) = 0;
 	virtual void Visit(ast::AssignmentPtr) = 0;

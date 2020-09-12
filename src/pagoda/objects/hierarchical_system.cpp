@@ -19,13 +19,10 @@ void HierarchicalSystem::SetParent(std::shared_ptr<HierarchicalComponent> parent
 
 	child->SetParent(parent);
 
-	if (parent != nullptr)
-	{
+	if (parent != nullptr) {
 		// remove child from root nodes
 		root_components.erase(child);
-	}
-	else
-	{
+	} else {
 		// add child to root nodes
 		root_components.insert(child);
 	}

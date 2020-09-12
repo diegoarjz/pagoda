@@ -28,8 +28,7 @@ TYPED_TEST(RangeTest, test_with_end_value)
 
 	auto end = range.end();
 	TypeParam i(0);
-	for (auto iter = range.begin(); iter != end; ++iter)
-	{
+	for (auto iter = range.begin(); iter != end; ++iter) {
 		EXPECT_EQ(*iter, i++);
 	}
 	EXPECT_EQ(i, 1);
@@ -41,8 +40,7 @@ TYPED_TEST(RangeTest, test_with_start_and_end_value)
 
 	auto end = range.end();
 	TypeParam i(0);
-	for (auto iter = range.begin(); iter != end; ++iter)
-	{
+	for (auto iter = range.begin(); iter != end; ++iter) {
 		EXPECT_EQ(*iter, i++);
 	}
 	EXPECT_EQ(i, 10);
@@ -54,8 +52,7 @@ TYPED_TEST(RangeTest, test_with_start_end_and_increment_value)
 
 	auto end = range.end();
 	TypeParam i(0);
-	for (auto iter = range.begin(); iter != end; ++iter)
-	{
+	for (auto iter = range.begin(); iter != end; ++iter) {
 		EXPECT_EQ(*iter, i);
 		i += 2;
 	}
@@ -79,8 +76,7 @@ TYPED_TEST(RangeTest, test_range_iteration)
 	Range<TypeParam> range(TypeParam(10));
 
 	TypeParam i(0);
-	for (auto v : range)
-	{
+	for (auto v : range) {
 		EXPECT_EQ(v, i++);
 	}
 	EXPECT_EQ(i, 10);
@@ -91,8 +87,7 @@ TYPED_TEST(RangeTest, test_range_iteration_reference)
 	Range<TypeParam> range(TypeParam(10));
 
 	TypeParam i(0);
-	for (auto &v : range)
-	{
+	for (auto &v : range) {
 		EXPECT_EQ(v, i++);
 	}
 	EXPECT_EQ(i, 10);
@@ -103,8 +98,7 @@ TYPED_TEST(RangeTest, test_range_iteration_const_reference)
 	Range<TypeParam> range(TypeParam(10));
 
 	TypeParam i(0);
-	for (const auto &v : range)
-	{
+	for (const auto &v : range) {
 		EXPECT_EQ(v, i++);
 	}
 	EXPECT_EQ(i, 10);
@@ -115,8 +109,7 @@ TYPED_TEST(RangeTest, test_negative)
 	Range<TypeParam> range(TypeParam(-10), TypeParam(0));
 
 	TypeParam i(-10);
-	for (auto v : range)
-	{
+	for (auto v : range) {
 		EXPECT_EQ(v, i++);
 	}
 	EXPECT_EQ(i, 0);
@@ -127,8 +120,7 @@ TYPED_TEST(RangeTest, test_negative_increments)
 	Range<TypeParam> range(TypeParam(0), TypeParam(-10), TypeParam(-1));
 
 	TypeParam i(0);
-	for (auto v : range)
-	{
+	for (auto v : range) {
 		EXPECT_EQ(v, i--);
 	}
 	EXPECT_EQ(i, TypeParam(-10));

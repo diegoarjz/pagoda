@@ -25,7 +25,7 @@ namespace pagoda::graph
 {
 class Graph::Impl
 {
-private:
+	private:
 	using NodeWeakPtrSet = std::unordered_set<NodeWeakPtr, NodeWeakPtrHasher, NodeWeakPtrEqual>;
 
 	struct Adjacency
@@ -35,7 +35,7 @@ private:
 	};
 	using AdjacencyContainer = std::unordered_map<NodeIdentifier_t, Adjacency>;
 
-public:
+	public:
 	Impl(NodeFactoryPtr nodeFactory, Graph *graph) : m_nextNodeId(0), m_graph(graph), m_nodeFactory(nodeFactory) {}
 
 	void DestroyNode(const NodeIdentifier_t &nodeName)
@@ -44,13 +44,11 @@ public:
 		NodeSet nodeInNodes = GetInNodes(nodeName);
 		NodeSet nodeOutNodes = GetOutNodes(nodeName);
 
-		for (auto n : nodeInNodes)
-		{
+		for (auto n : nodeInNodes) {
 			DestroyEdge(n->GetName(), nodeName);
 		}
 
-		for (auto n : nodeOutNodes)
-		{
+		for (auto n : nodeOutNodes) {
 			DestroyEdge(nodeName, n->GetName());
 		}
 
@@ -62,8 +60,7 @@ public:
 	NodePtr GetNode(const NodeIdentifier_t &name) const
 	{
 		auto iter = m_nodesByIdentifier.find(name);
-		if (iter == m_nodesByIdentifier.end())
-		{
+		if (iter == m_nodesByIdentifier.end()) {
 			throw common::exception::Exception("Node not found in graph: " + name);
 			return nullptr;
 		}
@@ -78,8 +75,7 @@ public:
 		auto out_link_inserted = source_node_out.insert(GetNode(target_node));
 		auto in_link_inserted = target_node_in.insert(GetNode(source_node));
 
-		if (!out_link_inserted.second || !in_link_inserted.second)
-		{
+		if (!out_link_inserted.second || !in_link_inserted.second) {
 			return EdgeCreated::EdgeExists;
 		}
 
@@ -94,11 +90,9 @@ public:
 		size_t out_links_removed = source_node_out.erase(GetNode(target_node));
 		size_t in_links_removed = target_node_in.erase(GetNode(source_node));
 
-		DBG_ASSERT_MSG(out_links_removed == in_links_removed,
-		               "Mismatch between number of removed in links and out links");
+		DBG_ASSERT_MSG(out_links_removed == in_links_removed, "Mismatch between number of removed in links and out links");
 
-		return out_links_removed > 0 && in_links_removed > 0 ? EdgeDestroyed::Destroyed
-		                                                     : EdgeDestroyed::EdgeDoesntExist;
+		return out_links_removed > 0 && in_links_removed > 0 ? EdgeDestroyed::Destroyed : EdgeDestroyed::EdgeDoesntExist;
 	}
 
 	std::size_t GetNodeCount() const { return m_nodes.size(); }
@@ -131,10 +125,8 @@ public:
 	{
 		IScheduler *scheduler = GetScheduler();
 		scheduler->Initialize();
-		while (true)
-		{
-			if (!scheduler->Step())
-			{
+		while (true) {
+			if (!scheduler->Step()) {
 				break;
 			}
 		}
@@ -146,18 +138,15 @@ public:
 	NodeIdentifier_t CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName)
 	{
 		auto node = m_nodeFactory->Create(nodeType);
-		if (node == nullptr)
-		{
+		if (node == nullptr) {
 			throw UnknownNodeTypeException(nodeType);
 		}
 
 		auto name = nodeName;
-		if (m_nodesByIdentifier.find(name) != m_nodesByIdentifier.end())
-		{
+		if (m_nodesByIdentifier.find(name) != m_nodesByIdentifier.end()) {
 			std::size_t counter = 1;
 			std::string availableName = name + std::to_string(counter);
-			while (m_nodesByIdentifier.find(availableName) != m_nodesByIdentifier.end())
-			{
+			while (m_nodesByIdentifier.find(availableName) != m_nodesByIdentifier.end()) {
 				availableName = name + std::to_string(++counter);
 			}
 			name = availableName;
@@ -176,8 +165,7 @@ public:
 	                                   const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
 	{
 		auto node = GetNode(nodeName);
-		if (node == nullptr)
-		{
+		if (node == nullptr) {
 			return;
 		}
 		node->SetConstructionArguments(args);
@@ -187,8 +175,7 @@ public:
 	                                const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
 	{
 		auto node = GetNode(nodeName);
-		if (node == nullptr)
-		{
+		if (node == nullptr) {
 			return;
 		}
 		node->SetExecutionArguments(args);
@@ -199,11 +186,9 @@ public:
 		START_PROFILE;
 
 		traversal::Linear t(*m_graph);
-		while (t.HasNext())
-		{
+		while (t.HasNext()) {
 			NodePtr n = t.Get();
-			if (q.Matches(n))
-			{
+			if (q.Matches(n)) {
 				q.AddNode(n);
 			}
 			t.Advance();
@@ -212,11 +197,10 @@ public:
 
 	NodeSet &getNodes() { return m_nodes; }
 
-private:
+	private:
 	IScheduler *GetScheduler()
 	{
-		if (m_scheduler == nullptr)
-		{
+		if (m_scheduler == nullptr) {
 			m_scheduler = Graph::GetSchedulerFactory()(*m_graph);
 		}
 		return m_scheduler.get();

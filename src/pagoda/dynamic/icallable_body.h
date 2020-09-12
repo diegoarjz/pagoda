@@ -14,7 +14,7 @@ class DynamicValueTable;
 
 class ICallableBody
 {
-public:
+	public:
 	virtual void Call(const std::vector<DynamicValueBasePtr>& args) = 0;
 	virtual void SetClosure(const std::shared_ptr<DynamicValueTable>&) = 0;
 	virtual const std::shared_ptr<DynamicValueTable>& GetClosure() const = 0;

@@ -15,4 +15,3 @@ auto make_member_function(ReturnType (C::*p)(Args...)) -> std::function<ReturnTy
 }
 
 }  // namespace pagoda::dynamic
-

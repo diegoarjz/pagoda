@@ -15,9 +15,9 @@ namespace pagoda::geometry::core
 template<class IndexType>
 class IndexedDeletedException : public common::exception::Exception
 {
-public:
+	public:
 	IndexedDeletedException(const IndexType& i)
-	    : common::exception::Exception("Tried to access deleted index " + std::to_string(i))
+	  : common::exception::Exception("Tried to access deleted index " + std::to_string(i))
 	{
 	}
 };
@@ -25,10 +25,10 @@ public:
 template<class IndexType, class ValueType>
 class IndexedContainer
 {
-private:
+	private:
 	using IndexedContainer_t = IndexedContainer<IndexType, ValueType>;
 
-public:
+	public:
 	struct IndexValuePair
 	{
 		IndexValuePair(const IndexType& i, ValueType& v) : m_index(i), m_value(v) {}
@@ -45,8 +45,7 @@ public:
 	{
 		START_PROFILE;
 		DBG_ASSERT(index < m_container.size());
-		if (!m_validIndex[index])
-		{
+		if (!m_validIndex[index]) {
 			throw IndexedDeletedException(index);
 		}
 		return m_container.at(index);
@@ -56,8 +55,7 @@ public:
 	{
 		START_PROFILE;
 		DBG_ASSERT(index < m_container.size());
-		if (!m_validIndex[index])
-		{
+		if (!m_validIndex[index]) {
 			throw IndexedDeletedException(index);
 		}
 		return m_container.at(index);
@@ -82,8 +80,7 @@ public:
 	ValueType& GetOrCreate(const IndexType& index, const ValueType& v = ValueType())
 	{
 		START_PROFILE;
-		if (HasIndex(index))
-		{
+		if (HasIndex(index)) {
 			return Get(index);
 		}
 
@@ -93,8 +90,7 @@ public:
 
 	void Delete(const IndexType& index)
 	{
-		if (m_container.size() <= index)
-		{
+		if (m_container.size() <= index) {
 			return;
 		}
 		--m_count;
@@ -107,9 +103,9 @@ public:
 
 	class iterator
 	{
-	public:
+public:
 		iterator(IndexedContainer_t& container, const std::size_t& index)
-		    : m_container(container), m_currentIndex(FindNextValid(index))
+		  : m_container(container), m_currentIndex(FindNextValid(index))
 		{
 		}
 
@@ -134,13 +130,11 @@ public:
 
 		bool operator!=(const iterator& other) { return m_currentIndex != other.m_currentIndex; }
 
-	private:
+private:
 		std::size_t FindNextValid(const std::size_t index) const
 		{
-			for (auto i = index; i < m_container.m_container.size(); ++i)
-			{
-				if (m_container.m_validIndex[i])
-				{
+			for (auto i = index; i < m_container.m_container.size(); ++i) {
+				if (m_container.m_validIndex[i]) {
 					return i;
 				}
 			}
@@ -154,11 +148,10 @@ public:
 	iterator begin() { return iterator(*this, 0); }
 	iterator end() { return iterator(*this, m_container.size()); }
 
-private:
+	private:
 	IndexType CreateAtIndex(const IndexType& index, const ValueType& v)
 	{
-		if (m_container.size() <= index)
-		{
+		if (m_container.size() <= index) {
 			m_container.resize(index * 2 + 1);
 			m_validIndex.resize(index * 2 + 1);
 		}
@@ -171,8 +164,7 @@ private:
 
 	IndexType CreateIndex()
 	{
-		while (m_nextIndex < m_container.size() && m_validIndex[m_nextIndex])
-		{
+		while (m_nextIndex < m_container.size() && m_validIndex[m_nextIndex]) {
 			++m_nextIndex;
 		}
 		return m_nextIndex;
@@ -187,7 +179,7 @@ private:
 template<class IndexType, class ValueType>
 class AssociativeIndexedContainer
 {
-public:
+	public:
 	using IndexValuePair_t = std::pair<IndexType, ValueType&>;
 	using ContainerType = std::unordered_map<IndexType, ValueType>;
 	using iterator = typename ContainerType::iterator;
@@ -238,8 +230,7 @@ public:
 	ValueType& GetOrCreate(const IndexType& index, const ValueType& v = ValueType())
 	{
 		START_PROFILE;
-		if (HasIndex(index))
-		{
+		if (HasIndex(index)) {
 			return Get(index);
 		}
 		m_container[index] = v;
@@ -258,7 +249,7 @@ public:
 	const_iterator begin() const { return m_container.begin(); }
 	const_iterator end() const { return m_container.end(); }
 
-private:
+	private:
 	IndexType CreateIndex() { return m_nextIndex++; }
 
 	IndexType m_nextIndex;

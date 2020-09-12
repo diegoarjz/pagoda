@@ -8,7 +8,7 @@ using namespace pagoda::dynamic;
 
 class ExpressionTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp() {}
 
 	void TearDown() {}
@@ -19,8 +19,7 @@ TEST_F(ExpressionTest, when_creating_an_expression_should_be_able_to_resolve_var
 	auto expression = Expression::CreateExpression("a + b;");
 	auto variables = expression->GetVariables();
 	ASSERT_EQ(variables.size(), 2);
-	for (auto v : std::vector<std::string>{"a", "b"})
-	{
+	for (auto v : std::vector<std::string>{"a", "b"}) {
 		ASSERT_NE(std::find(std::begin(variables), std::end(variables), v), std::end(variables));
 	}
 }

@@ -5,7 +5,7 @@ namespace pagoda::graph
 {
 class IScheduler
 {
-public:
+	public:
 	virtual ~IScheduler() = default;
 
 	virtual void Initialize() = 0;

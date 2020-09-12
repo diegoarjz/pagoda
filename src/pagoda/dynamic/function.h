@@ -8,7 +8,7 @@ namespace pagoda::dynamic
 {
 class Function : public DynamicValueBase, public ICallable
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	/**
@@ -36,7 +36,7 @@ public:
 	void SetClosure(const std::shared_ptr<DynamicValueTable>&) override;
 	const std::shared_ptr<DynamicValueTable>& GetClosure() const override;
 
-private:
+	private:
 	std::shared_ptr<ICallableBody> m_callableBody;
 	std::string m_callableName;
 	std::size_t m_arity;

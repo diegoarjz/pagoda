@@ -49,4 +49,3 @@ TEST(LineVsLineSegmentNearestPoints, when_they_are_colinear_should_return_the_sa
 	auto n = nearest_points(l1, l2);
 	EXPECT_TRUE(n.m_point1 == n.m_point2);
 }
-

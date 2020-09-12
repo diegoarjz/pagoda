@@ -53,8 +53,7 @@ TEST(VecBase, when_dereferencing_should_return_an_array)
 
 	float expected[] = {2, 3, 1};
 
-	for (auto j = 0u; j < 3; ++j)
-	{
+	for (auto j = 0u; j < 3; ++j) {
 		EXPECT_EQ(elementPtr[j], expected[j]);
 	}
 }

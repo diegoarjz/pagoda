@@ -50,7 +50,7 @@ template<class Topology = SplitPointTopology, class F = DefaultFaceAttributes, c
          class V = DefaultVertexAttributes>
 class GeometryBase : public Topology
 {
-public:
+	public:
 	using Index_t = typename Topology::Index_t;
 	using PositionIndex_t = typename Topology::PointHandle;
 	using FaceAttributes = F;
@@ -61,20 +61,15 @@ public:
 	template<class T>
 	SplitPointTopology::FaceHandle CreateFaceFromPositions(const T &positions)
 	{
-		auto face =
-		    SplitPointTopology::CreateFace(std::vector<SplitPointTopology::PointHandle>(positions.size())).m_face;
+		auto face = SplitPointTopology::CreateFace(std::vector<SplitPointTopology::PointHandle>(positions.size())).m_face;
 		std::size_t i = 0;
-		for (auto circ = this->FacePointCirculatorBegin(face); circ.IsValid(); ++circ)
-		{
+		for (auto circ = this->FacePointCirculatorBegin(face); circ.IsValid(); ++circ) {
 			GetPosition(*circ) = positions[i++];
 		}
 		return face;
 	}
 
-	void SetPosition(const PositionIndex_t &index, const PositionType &p)
-	{
-		m_vertexPositions.GetOrCreate(index, p) = p;
-	}
+	void SetPosition(const PositionIndex_t &index, const PositionType &p) { m_vertexPositions.GetOrCreate(index, p) = p; }
 
 	PositionType &GetPosition(const PositionIndex_t &index) { return m_vertexPositions.GetOrCreate(index); }
 
@@ -85,7 +80,7 @@ public:
 	EdgeAttributes &GetEdgeAttributes(const Index_t &edge) { return m_edgeAttributes.GetOrCreate(edge); }
 	FaceAttributes &GetFaceAttributes(const Index_t &face) { return m_faceAttributes.GetOrCreate(face); }
 
-private:
+	private:
 	AssociativeIndexedContainer<Index_t, PositionType> m_vertexPositions;
 	AssociativeIndexedContainer<Index_t, VertexAttributes> m_vertexAttributes;
 	AssociativeIndexedContainer<Index_t, EdgeAttributes> m_edgeAttributes;

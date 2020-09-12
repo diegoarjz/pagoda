@@ -30,8 +30,8 @@ DynamicPlane::DynamicPlane(const Plane<float>& plane) : BuiltinClass(s_typeInfo)
 }
 
 DynamicPlane::DynamicPlane(Vector3Ptr point, Vector3Ptr normal)
-    : BuiltinClass(s_typeInfo),
-      m_nativePlane(Plane<float>::FromPointAndNormal(static_cast<Vec3F>(*point), static_cast<Vec3F>(*normal)))
+  : BuiltinClass(s_typeInfo),
+    m_nativePlane(Plane<float>::FromPointAndNormal(static_cast<Vec3F>(*point), static_cast<Vec3F>(*normal)))
 {
 	RegisterMembers();
 }
@@ -78,4 +78,3 @@ void DynamicPlane::RegisterMembers()
 	RegisterMemberFunction(this, "GetDistanceToOrigin", make_member_function(&DynamicPlane::GetDistanceToOrigin));
 }
 }  // namespace pagoda
-

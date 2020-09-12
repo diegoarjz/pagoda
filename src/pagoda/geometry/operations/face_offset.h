@@ -6,7 +6,7 @@ namespace pagoda::geometry::operations
 {
 class FaceOffsetOperation : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const char* name;
 	static const std::string inputGeometry;
 	static const std::string outputInnerGeometry;

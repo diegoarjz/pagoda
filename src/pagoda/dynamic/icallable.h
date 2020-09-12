@@ -14,7 +14,7 @@ using DynamicValueTablePtr = std::shared_ptr<DynamicValueTable>;
  */
 class ICallable
 {
-public:
+	public:
 	virtual void SetCallableName(const std::string&) = 0;
 	virtual const std::string& GetCallableName() const = 0;
 

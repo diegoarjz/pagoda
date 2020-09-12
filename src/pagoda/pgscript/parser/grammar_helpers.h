@@ -68,8 +68,8 @@ ast::ClassDeclarationPtr make_class_declaration(ast::IdentifierPtr identifier,
                                                 std::vector<ast::FunctionDeclarationPtr> methods);
 
 ast::StatementPtr make_for_loop(
-    const boost::optional<boost::variant<ast::VarDeclPtr, ast::ExpressionStatementPtr>> &init,
-    const boost::optional<ast::ExpressionPtr> &condition, const boost::optional<ast::ExpressionPtr> &increment,
-    const ast::StatementPtr body);
+  const boost::optional<boost::variant<ast::VarDeclPtr, ast::ExpressionStatementPtr>> &init,
+  const boost::optional<ast::ExpressionPtr> &condition, const boost::optional<ast::ExpressionPtr> &increment,
+  const ast::StatementPtr body);
 
 }  // namespace pagoda

@@ -21,7 +21,7 @@ using NodeLinkNodePtr = std::shared_ptr<NodeLinkNode>;
  */
 class GraphDefinitionNode : public AstNode
 {
-public:
+	public:
 	/// Type used to store \c GraphStatementNode.
 	using StatementContainer_t = std::vector<GraphStatementNodePtr>;
 	/// Type used to iterate over \c StatementContainer_t
@@ -102,7 +102,7 @@ public:
 	 */
 	void AcceptVisitor(AstNodeVisitor *visitor) override;
 
-private:
+	private:
 	/// The graph statements.
 	std::vector<GraphStatementNodePtr> m_graphStatements;
 };

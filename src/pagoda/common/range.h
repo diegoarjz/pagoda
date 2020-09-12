@@ -11,10 +11,10 @@ namespace pagoda::common
 template<typename T>
 class Range
 {
-public:
+	public:
 	class iterator
 	{
-	public:
+public:
 		iterator(const Range<T>& r, const T& start_value) : current_value(start_value), range(r) {}
 
 		bool operator==(const iterator& rhs) const { return current_value == rhs.current_value; }
@@ -35,7 +35,7 @@ public:
 
 		const T& operator*() { return current_value; }
 
-	private:
+private:
 		T current_value;
 		Range<T> range;
 	};  // class iterator
@@ -43,7 +43,7 @@ public:
 	explicit Range(const T& end) : Range(T(), end, 1) {}
 	Range(const T& start, const T& end) : Range(start, end, 1) {}
 	Range(const T& start, const T& end, const T& increment)
-	    : m_rageStart(start), m_rangeEnd(end), m_rangeIncrement(increment)
+	  : m_rageStart(start), m_rangeEnd(end), m_rangeIncrement(increment)
 	{
 	}
 
@@ -51,7 +51,7 @@ public:
 
 	iterator end() { return iterator(*this, m_rangeEnd); }
 
-private:
+	private:
 	T m_rageStart;
 	T m_rangeEnd;
 	T m_rangeIncrement;

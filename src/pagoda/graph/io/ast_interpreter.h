@@ -22,7 +22,7 @@ namespace pagoda::graph::io
  */
 class AstInterpreter : public AstNodeVisitor
 {
-public:
+	public:
 	AstInterpreter(GraphPtr graph);
 
 	void Visit(GraphDefinitionNode *graphDefinition) override;
@@ -32,7 +32,7 @@ public:
 
 	const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &GetCurrentNamedArguments() const;
 
-private:
+	private:
 	GraphPtr m_graph;
 
 	std::unordered_map<std::string, dynamic::DynamicValueBasePtr> m_currentNamedParameters;

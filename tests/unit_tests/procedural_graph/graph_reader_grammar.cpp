@@ -14,7 +14,7 @@ using namespace pagoda::graph::io;
 
 class GraphReaderGrammarTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp() {}
 	void TearDown() {}
 
@@ -25,8 +25,7 @@ TEST_F(GraphReaderGrammarTest, test_literal_floats)
 {
 	std::pair<std::string, float> literals[] = {{"123.0", 123.0}, {"0.0", 0.0}, {"-123.0", -123.0}};
 
-	for (auto p : literals)
-	{
+	for (auto p : literals) {
 		std::string in = std::get<0>(p);
 		boost::variant<std::string, float> l;
 		std::string::const_iterator begin = std::begin(in);
@@ -43,8 +42,7 @@ TEST_F(GraphReaderGrammarTest, test_literal_strings)
 {
 	std::pair<std::string, std::string> literals[] = {{"\"A\"", "A"}};
 
-	for (auto p : literals)
-	{
+	for (auto p : literals) {
 		boost::variant<std::string, float> l;
 		std::string::const_iterator begin = std::begin(std::get<0>(p));
 		std::string::const_iterator end = std::end(std::get<0>(p));
@@ -60,8 +58,7 @@ TEST_F(GraphReaderGrammarTest, test_literal_failure)
 {
 	std::string literals[] = {"A", "-a12"};
 
-	for (auto p : literals)
-	{
+	for (auto p : literals) {
 		boost::variant<std::string, float> l;
 		std::string::const_iterator begin = std::begin(p);
 		std::string::const_iterator end = std::end(p);
@@ -75,8 +72,7 @@ TEST_F(GraphReaderGrammarTest, test_identifier)
 {
 	std::string identifiers[] = {"abc", "_abc", "abc_", "ab_c", "_123", "_"};
 
-	for (auto p : identifiers)
-	{
+	for (auto p : identifiers) {
 		std::string i;
 		std::string::const_iterator begin = std::begin(p);
 		std::string::const_iterator end = std::end(p);
@@ -92,8 +88,7 @@ TEST_F(GraphReaderGrammarTest, test_identifier_fail)
 {
 	std::string identifiers[] = {"1", "123", "1abc", "-"};
 
-	for (auto p : identifiers)
-	{
+	for (auto p : identifiers) {
 		std::string i;
 		std::string::const_iterator begin = std::begin(p);
 		std::string::const_iterator end = std::end(p);
@@ -107,8 +102,7 @@ TEST_F(GraphReaderGrammarTest, test_expression)
 {
 	std::pair<std::string, std::string> expressions[] = {{"$<a;>$", "a;"}, {"$<1+2;>$", "1+2;"}};
 
-	for (auto e : expressions)
-	{
+	for (auto e : expressions) {
 		std::string out;
 		std::string::const_iterator begin = std::begin(std::get<0>(e));
 		std::string::const_iterator end = std::end(std::get<0>(e));
@@ -124,8 +118,7 @@ TEST_F(GraphReaderGrammarTest, test_named_simple_arg)
 {
 	std::string args[] = {"a : \"abc\"", "b:123.0"};
 
-	for (auto a : args)
-	{
+	for (auto a : args) {
 		NamedArgumentPtr out;
 		std::string::const_iterator begin = std::begin(a);
 		std::string::const_iterator end = std::end(a);
@@ -169,8 +162,7 @@ TEST_F(GraphReaderGrammarTest, test_construction_args)
 	std::string args[] = {"", "a : \"abc\", b:123.0", "b:123.0"};
 	std::size_t expectedSizes[] = {0, 2, 1};
 
-	for (auto i = 0u; i < 3; ++i)
-	{
+	for (auto i = 0u; i < 3; ++i) {
 		auto a = args[i];
 		std::vector<NamedArgumentPtr> out;
 		std::string::const_iterator begin = std::begin(a);
@@ -187,8 +179,7 @@ TEST_F(GraphReaderGrammarTest, test_named_expression_arg)
 {
 	std::string args[] = {"a : \"abc\"", "b:123.0", "c:$<1+2;>$"};
 
-	for (auto a : args)
-	{
+	for (auto a : args) {
 		NamedArgumentPtr out;
 		std::string::const_iterator begin = std::begin(a);
 		std::string::const_iterator end = std::end(a);
@@ -246,8 +237,7 @@ TEST_F(GraphReaderGrammarTest, test_execution_args)
 	std::string args[] = {"", "a : \"abc\", b:123.0, c:$<a*b;>$", "b:123.0"};
 	std::size_t expectedSizes[] = {0, 3, 1};
 
-	for (auto i = 0u; i < 3; ++i)
-	{
+	for (auto i = 0u; i < 3; ++i) {
 		auto a = args[i];
 		std::vector<NamedArgumentPtr> out;
 		std::string::const_iterator begin = std::begin(a);
@@ -264,8 +254,7 @@ TEST_F(GraphReaderGrammarTest, test_node_definition)
 {
 	std::string def[] = {"n = Operation(a:1,b:2)", "n = Operation(a:1){}", "n = Operation(a:1){a:$<1+1;>$}"};
 
-	for (auto a : def)
-	{
+	for (auto a : def) {
 		NodeDefinitionNodePtr out;
 		std::string::const_iterator begin = std::begin(a);
 		std::string::const_iterator end = std::end(a);
@@ -295,8 +284,7 @@ TEST_F(GraphReaderGrammarTest, test_node_links)
 {
 	std::string links[] = {"n1 -> n2;", "n1->n2->n3;"};
 
-	for (auto a : links)
-	{
+	for (auto a : links) {
 		NodeLinkNodePtr out;
 		std::string::const_iterator begin = std::begin(a);
 		std::string::const_iterator end = std::end(a);
@@ -320,8 +308,7 @@ TEST_F(GraphReaderGrammarTest, test_node_links_construction)
 
 	std::string expectedNodeNames[] = {"n1", "n2", "n3"};
 	uint32_t i = 0;
-	for (const auto &n : out->GetLinkedNodes())
-	{
+	for (const auto &n : out->GetLinkedNodes()) {
 		EXPECT_EQ(n, expectedNodeNames[i++]);
 	}
 }

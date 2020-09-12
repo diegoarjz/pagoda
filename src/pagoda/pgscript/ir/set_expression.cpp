@@ -7,7 +7,7 @@ namespace pagoda
 namespace ast
 {
 SetExpression::SetExpression(const ExpressionPtr &lhs, const IdentifierPtr &identifier, const ExpressionPtr &rhs)
-    : m_lhs(lhs), m_identifier(identifier), m_rhs(rhs)
+  : m_lhs(lhs), m_identifier(identifier), m_rhs(rhs)
 {
 }
 SetExpression::~SetExpression() {}

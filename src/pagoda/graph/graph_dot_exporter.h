@@ -14,7 +14,7 @@ using NodePtr = std::shared_ptr<Node>;
 
 class GraphDotExporter
 {
-public:
+	public:
 	/**
 	 * Defines how the nodes in the graph should be ranked.
 	 */
@@ -72,7 +72,7 @@ public:
 	 */
 	void Export(std::ostream &outStream);
 
-private:
+	private:
 	/**
 	 * The information about how to export a \c Node.
 	 */

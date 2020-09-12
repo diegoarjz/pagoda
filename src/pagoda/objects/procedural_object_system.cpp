@@ -31,14 +31,13 @@ std::shared_ptr<ProceduralObject> ProceduralObjectSystem::CreateProceduralObject
 }
 
 std::shared_ptr<ProceduralObject> ProceduralObjectSystem::CloneProceduralObject(
-    std::shared_ptr<ProceduralObject>& toClone)
+  std::shared_ptr<ProceduralObject>& toClone)
 {
 	START_PROFILE;
 
 	auto object = CreateProceduralObject();
 
-	for (auto& system : m_proceduralComponentSystems)
-	{
+	for (auto& system : m_proceduralComponentSystems) {
 		system.second->CloneComponent(toClone, object);
 	}
 
@@ -52,8 +51,7 @@ bool ProceduralObjectSystem::RegisterProceduralComponentSystem(std::shared_ptr<P
 	LOG_TRACE(Core, "Registering ProceduralComponentSystem with name " << system->GetComponentSystemTypeName().c_str());
 	auto system_type = system->GetComponentSystemTypeName();
 
-	if (m_proceduralComponentSystems.find(system_type) != std::end(m_proceduralComponentSystems))
-	{
+	if (m_proceduralComponentSystems.find(system_type) != std::end(m_proceduralComponentSystems)) {
 		return false;
 	}
 
@@ -71,8 +69,7 @@ bool ProceduralObjectSystem::UnregisterProceduralComponentSystem(std::shared_ptr
 	               "Unregistering a ComponentSystem while there are procedural objects may cause incorrect behaviour.");
 
 	auto iteratorToSystems = m_proceduralComponentSystems.find(system_type);
-	if (iteratorToSystems == std::end(m_proceduralComponentSystems))
-	{
+	if (iteratorToSystems == std::end(m_proceduralComponentSystems)) {
 		return false;
 	}
 
@@ -86,8 +83,7 @@ std::shared_ptr<ProceduralComponentSystemBase> ProceduralObjectSystem::GetCompon
 
 	auto iteratorToSystems = m_proceduralComponentSystems.find(systemName);
 
-	if (iteratorToSystems == std::end(m_proceduralComponentSystems))
-	{
+	if (iteratorToSystems == std::end(m_proceduralComponentSystems)) {
 		return nullptr;
 	}
 
@@ -98,13 +94,11 @@ void ProceduralObjectSystem::KillProceduralObject(std::shared_ptr<ProceduralObje
 {
 	START_PROFILE;
 
-	if (proceduralObject == nullptr)
-	{
+	if (proceduralObject == nullptr) {
 		return;
 	}
 
-	for (auto& system : m_proceduralComponentSystems)
-	{
+	for (auto& system : m_proceduralComponentSystems) {
 		system.second->KillProceduralComponent(proceduralObject);
 	}
 

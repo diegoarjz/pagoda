@@ -16,7 +16,7 @@ namespace ast
 {
 class AstNode : public std::enable_shared_from_this<AstNode>
 {
-public:
+	public:
 	AstNode() = default;
 	virtual ~AstNode(){};
 
@@ -25,7 +25,7 @@ public:
 
 	virtual void AcceptVisitor(AstVisitor *) = 0;
 
-private:
+	private:
 };
 
 struct Expression : public AstNode
@@ -43,7 +43,7 @@ struct Float : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	float m_number;
 };
 using FloatPtr = std::shared_ptr<Float>;
@@ -57,7 +57,7 @@ struct Integer : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	int m_number;
 };
 using IntegerPtr = std::shared_ptr<Integer>;
@@ -72,7 +72,7 @@ struct String : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	std::string m_string;
 };
 using StringPtr = std::shared_ptr<String>;
@@ -87,7 +87,7 @@ struct Identifier : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	std::string m_identifier;
 };
 using IdentifierPtr = std::shared_ptr<Identifier>;
@@ -101,7 +101,7 @@ struct Boolean : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	bool m_boolean;
 };
 using BooleanPtr = std::shared_ptr<Boolean>;
@@ -124,7 +124,7 @@ struct ArithmeticOp : public Expression
 	};
 
 	ArithmeticOp(const types op, const ExpressionPtr lhs, const ExpressionPtr rhs)
-	    : m_operation(op), m_lhs(lhs), m_rhs(rhs)
+	  : m_operation(op), m_lhs(lhs), m_rhs(rhs)
 	{
 	}
 	virtual ~ArithmeticOp();
@@ -135,7 +135,7 @@ struct ArithmeticOp : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	types m_operation;
 	ExpressionPtr m_lhs;
 	ExpressionPtr m_rhs;
@@ -158,7 +158,7 @@ struct Unary : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	types m_operation;
 	const ExpressionPtr m_expression;
 };
@@ -177,7 +177,7 @@ struct ComparisonOp : public Expression
 	};
 
 	ComparisonOp(const types op, const ExpressionPtr lhs, const ExpressionPtr rhs)
-	    : m_operation(op), m_lhs(lhs), m_rhs(rhs)
+	  : m_operation(op), m_lhs(lhs), m_rhs(rhs)
 	{
 	}
 	virtual ~ComparisonOp();
@@ -187,7 +187,7 @@ struct ComparisonOp : public Expression
 	const ExpressionPtr &GetRhs() const { return m_rhs; }
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	types m_operation;
 	ExpressionPtr m_lhs;
 	ExpressionPtr m_rhs;
@@ -202,9 +202,7 @@ struct LogicOp : public Expression
 		Or
 	};
 
-	LogicOp(const types op, const ExpressionPtr lhs, const ExpressionPtr rhs) : m_operation(op), m_lhs(lhs), m_rhs(rhs)
-	{
-	}
+	LogicOp(const types op, const ExpressionPtr lhs, const ExpressionPtr rhs) : m_operation(op), m_lhs(lhs), m_rhs(rhs) {}
 	virtual ~LogicOp();
 
 	const types &GetOperationType() const { return m_operation; }
@@ -213,7 +211,7 @@ struct LogicOp : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	types m_operation;
 	ExpressionPtr m_lhs;
 	ExpressionPtr m_rhs;
@@ -223,7 +221,7 @@ using LogicOpPtr = std::shared_ptr<LogicOp>;
 struct Assignment : public Expression
 {
 	Assignment(const std::shared_ptr<Identifier> &identifier, const ExpressionPtr &rhs)
-	    : m_identifier(identifier), m_rhs(rhs)
+	  : m_identifier(identifier), m_rhs(rhs)
 	{
 	}
 	virtual ~Assignment();
@@ -232,7 +230,7 @@ struct Assignment : public Expression
 	const ExpressionPtr &GetRhs() const { return m_rhs; }
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	std::shared_ptr<Identifier> m_identifier;
 	ExpressionPtr m_rhs;
 };
@@ -240,7 +238,7 @@ using AssignmentPtr = std::shared_ptr<Assignment>;
 
 class Statement : public AstNode
 {
-public:
+	public:
 	Statement() = default;
 };
 using StatementPtr = std::shared_ptr<Statement>;
@@ -254,7 +252,7 @@ struct ExpressionStatement : public Statement
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	ExpressionPtr m_expression;
 };
 using ExpressionStatementPtr = std::shared_ptr<ExpressionStatement>;
@@ -262,7 +260,7 @@ using ExpressionStatementPtr = std::shared_ptr<ExpressionStatement>;
 struct IfStatement : public Statement
 {
 	IfStatement(ExpressionPtr condition, StatementPtr trueStatement, StatementPtr falseStatement)
-	    : m_condition(condition), m_trueStatement(trueStatement), m_falseStatement(falseStatement)
+	  : m_condition(condition), m_trueStatement(trueStatement), m_falseStatement(falseStatement)
 	{
 	}
 	virtual ~IfStatement();
@@ -273,7 +271,7 @@ struct IfStatement : public Statement
 	void SetFalseStatement(StatementPtr &falseStatement) { m_falseStatement = falseStatement; }
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	ExpressionPtr m_condition;
 	StatementPtr m_trueStatement;
 	StatementPtr m_falseStatement;
@@ -290,7 +288,7 @@ struct Loop : public Statement
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	ExpressionPtr m_condition;
 	StatementPtr m_body;
 };
@@ -299,7 +297,7 @@ using LoopPtr = std::shared_ptr<Loop>;
 struct VarDecl : public Statement
 {
 	VarDecl(const std::shared_ptr<Identifier> &identifier, const ExpressionPtr &rhs)
-	    : m_identifier(identifier), m_rhs(rhs)
+	  : m_identifier(identifier), m_rhs(rhs)
 	{
 	}
 	virtual ~VarDecl();
@@ -308,7 +306,7 @@ struct VarDecl : public Statement
 	const ExpressionPtr &GetRhs() const { return m_rhs; }
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	std::shared_ptr<Identifier> m_identifier;
 	ExpressionPtr m_rhs;
 };
@@ -324,7 +322,7 @@ struct StatementBlock : public Statement
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	std::vector<StatementPtr> m_statements;
 };
 using StatementBlockPtr = std::shared_ptr<StatementBlock>;
@@ -340,7 +338,7 @@ struct Call : public Expression
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	ExpressionPtr m_callee;
 	std::vector<ExpressionPtr> m_arguments;
 };
@@ -355,14 +353,14 @@ struct Return : public Statement
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	ExpressionPtr m_returnValue;
 };
 using ReturnPtr = std::shared_ptr<Return>;
 
 class Program : public AstNode
 {
-public:
+	public:
 	Program() = default;
 	explicit Program(const std::vector<StatementPtr> &statements) : m_statements(statements) {}
 	virtual ~Program();
@@ -371,7 +369,7 @@ public:
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	std::vector<StatementPtr> m_statements;
 };
 using ProgramPtr = std::shared_ptr<Program>;

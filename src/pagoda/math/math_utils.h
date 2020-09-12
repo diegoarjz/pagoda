@@ -5,7 +5,7 @@ namespace pagoda::math
 template<class T>
 class MathUtils
 {
-public:
+	public:
 	static constexpr T pi = T(3.14159265358979323846);
 	static constexpr T half_pi = T(3.14159265358979323846) / 2;
 	static constexpr T two_pi = T(3.14159265358979323846) * 2;

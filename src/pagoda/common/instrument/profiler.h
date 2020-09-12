@@ -24,7 +24,7 @@ namespace pagoda::common::instrument
  */
 class ProfilerManager
 {
-public:
+	public:
 	/// Clock used to measure times
 	using Clock = boost::chrono::thread_clock;
 	/// The time point type used
@@ -47,7 +47,7 @@ public:
 		TimePoint m_lastTime;
 	};  // struct ProfileEntry
 
-private:
+	private:
 	/**
 	 * Sorts ProfilerEntries in the m_profileLog.
 	 */
@@ -56,7 +56,7 @@ private:
 		bool operator()(const ProfileEntry& lhs, const ProfileEntry& rhs) const;
 	};  // struct ProfileSorter
 
-public:
+	public:
 	using ProfileLog = std::set<ProfileEntry, ProfileSorter>;
 
 	/**
@@ -87,7 +87,7 @@ public:
 		m_profileStack = std::stack<ProfileEntry*>();
 	}
 
-private:
+	private:
 	ProfilerManager();
 	~ProfilerManager();
 
@@ -104,13 +104,13 @@ private:
  */
 class Profiler
 {
-public:
+	public:
 	Profiler(const char* name, const char* file, const int line);
 	~Profiler();
 
 	void EndProfile();
 
-private:
+	private:
 	bool m_onStack;
 };  // class Profiler
 
@@ -122,7 +122,7 @@ private:
  */
 class OneShotProfiler
 {
-public:
+	public:
 	/// Clock used to measure times
 	using Clock = boost::chrono::thread_clock;
 	/// The time point type used
@@ -140,7 +140,7 @@ public:
 	explicit OneShotProfiler(const char* name);
 	~OneShotProfiler();
 
-private:
+	private:
 	TimePoint m_start;
 	const char* m_name;
 };  // class OneShotProfiler
@@ -153,13 +153,13 @@ private:
 class ProfilerLogger
 {
 	/* TODO: These classes shouldn't really be called loggers... */
-public:
+	public:
 	ProfilerLogger(const ProfilerManager* manager);
 	virtual ~ProfilerLogger();
 
 	virtual void Log(std::size_t nLines = 0) = 0;
 
-protected:
+	protected:
 	const ProfilerManager* m_manager;
 };  // class ProfilerLogger
 
@@ -169,7 +169,7 @@ protected:
  */
 class ConsoleProfilerLogger : public ProfilerLogger
 {
-public:
+	public:
 	explicit ConsoleProfilerLogger(const ProfilerManager* manager);
 	virtual ~ConsoleProfilerLogger();
 

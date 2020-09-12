@@ -21,12 +21,12 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class Extrusion
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 	using Index_t = typename Geometry::Index_t;
 
-public:
+	public:
 	/**
 	 * Defines the extrusion amount for the Extrusion.
 	 */
@@ -48,11 +48,10 @@ public:
 			pointsMap[p] = builder.AddPoint(geometry->GetPosition(p));
 		});
 
-		algorithms::EachFace(geometryIn.get(), [this, &pointsMap, &builder](G *geometry,
-		                                                                    const typename G::FaceHandle &f) {
+		algorithms::EachFace(geometryIn.get(), [this, &pointsMap, &builder](G *geometry, const typename G::FaceHandle &f) {
 			uint32_t bottomFaceSize = 0;
 			algorithms::EachPointAroundFace(
-			    geometry, f, [&bottomFaceSize](G *geometry, const typename G::PointHandle &p) { ++bottomFaceSize; });
+			  geometry, f, [&bottomFaceSize](G *geometry, const typename G::PointHandle &p) { ++bottomFaceSize; });
 
 			auto extrusionVector = m_extrusionAMount * face_normal<Geometry>(geometry, f);
 			auto bottomFace = builder.StartFace(bottomFaceSize);
@@ -66,7 +65,7 @@ public:
 
 			algorithms::EachPointAroundFace(geometry, f,
 			                                [&extrusionVector, &builder, &bottomIndices, &topIndices, &pointsMap](
-			                                    G *geometry, const typename G::PointHandle &p) {
+			                                  G *geometry, const typename G::PointHandle &p) {
 				                                auto bottomPosition = geometry->GetPosition(p);
 				                                auto topPosition = bottomPosition + extrusionVector;
 
@@ -74,13 +73,11 @@ public:
 				                                topIndices.push_back(builder.AddPoint(topPosition));
 			                                });
 
-			for (auto i = 0u; i < topIndices.size(); ++i)
-			{
+			for (auto i = 0u; i < topIndices.size(); ++i) {
 				topFace.AddIndex(topIndices[i]);
 			}
 
-			for (auto i = 0u; i < topIndices.size(); ++i)
-			{
+			for (auto i = 0u; i < topIndices.size(); ++i) {
 				auto &sideFace = sideFaces[i];
 				sideFace.AddIndex(bottomIndices[i]);
 				sideFace.AddIndex(bottomIndices[(i + 1) % bottomFaceSize]);
@@ -88,21 +85,19 @@ public:
 				sideFace.AddIndex(topIndices[i]);
 			}
 
-			for (int32_t i = bottomIndices.size() - 1; i >= 0; --i)
-			{
+			for (int32_t i = bottomIndices.size() - 1; i >= 0; --i) {
 				bottomFace.AddIndex(bottomIndices[i]);
 			}
 
 			bottomFace.CloseFace();
-			for (auto &f : sideFaces)
-			{
+			for (auto &f : sideFaces) {
 				f.CloseFace();
 			}
 			topFace.CloseFace();
 		});
 	}
 
-private:
+	private:
 	/// The extrusion amount.
 	float m_extrusionAMount;
 };  // class Extrusion

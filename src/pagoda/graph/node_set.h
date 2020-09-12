@@ -24,12 +24,12 @@ struct NodePtrCompare
 
 class NodeSet : public std::set<NodePtr, NodePtrCompare>
 {
-public:
+	public:
 	void ForEach(std::function<void(NodePtr)> handle);
 	void ForEachUntil(std::function<bool(NodePtr)> handle);
 	void ExecuteQuery(query::Query &q);
 
-private:
+	private:
 };
 }  // namespace pagoda::graph
 

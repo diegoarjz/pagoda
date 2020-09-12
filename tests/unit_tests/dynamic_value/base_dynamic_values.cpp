@@ -208,4 +208,3 @@ TEST(TypeInfo, test_runtime_types)
 	EXPECT_EQ(String::s_typeInfo, String().GetTypeInfo());
 	EXPECT_EQ(NullObject::s_typeInfo, NullObject().GetTypeInfo());
 }
-

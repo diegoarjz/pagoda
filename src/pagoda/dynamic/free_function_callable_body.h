@@ -14,7 +14,7 @@ namespace pagoda::dynamic
 template<typename FunctionType>
 struct FreeFunctionCallableBody : public ICallableBody
 {
-public:
+	public:
 	/**
 	 * Constructs the \c FreeFunctionCallableBody with the function in \p function.
 	 */
@@ -30,7 +30,7 @@ public:
 	void SetClosure(const std::shared_ptr<DynamicValueTable>& closure) override { m_closure = closure; }
 	const std::shared_ptr<DynamicValueTable>& GetClosure() const override { return m_closure; }
 
-private:
+	private:
 	FunctionType m_function;
 	std::shared_ptr<DynamicValueTable> m_closure;
 };

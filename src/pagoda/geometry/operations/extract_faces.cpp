@@ -35,8 +35,7 @@ void ExtractFaces::DoWork()
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	ExplodeToFaces<Geometry> explodeToFaces;
-	while (HasInput(s_inputGeometry))
-	{
+	while (HasInput(s_inputGeometry)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
 
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -46,25 +45,21 @@ void ExtractFaces::DoWork()
 		explodeToFaces.Execute(inGeometry, explodedFaces);
 
 		auto inScopeZAxis = inGeometryComponent->GetScope().GetZAxis();
-		for (auto &g : explodedFaces)
-		{
+		for (auto &g : explodedFaces) {
 			auto faceNormal = g->GetFaceAttributes(*g->FacesBegin()).m_normal;
 
 			auto outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 
 			outGeometryComponent->SetGeometry(g);
-			if (boost::qvm::dot(faceNormal, inScopeZAxis) == 0)
-			{
+			if (boost::qvm::dot(faceNormal, inScopeZAxis) == 0) {
 				Mat3x3F constrainedRotation;
 				auto xAxis = boost::qvm::normalized(boost::qvm::cross(inScopeZAxis, faceNormal));
 				boost::qvm::col<0>(constrainedRotation) = xAxis;
 				boost::qvm::col<1>(constrainedRotation) = inScopeZAxis;
 				boost::qvm::col<2>(constrainedRotation) = faceNormal;
 				outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(g, constrainedRotation));
-			}
-			else
-			{
+			} else {
 				outGeometryComponent->SetScope(Scope::FromGeometry(g));
 			}
 		}

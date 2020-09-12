@@ -11,17 +11,17 @@ namespace pagoda::graph::io
  */
 class GraphStatementNode : public AstNode
 {
-public:
+	public:
 	GraphStatementNode() : AstNode() {}
 
 	GraphStatementNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset)
-	    : AstNode(startOffset, endOffset)
+	  : AstNode(startOffset, endOffset)
 	{
 	}
 
 	GraphStatementNode(const AstNode::NodeRange_t &range) : AstNode(range) {}
 
-private:
+	private:
 };
 
 using GraphStatementNodePtr = std::shared_ptr<GraphStatementNode>;

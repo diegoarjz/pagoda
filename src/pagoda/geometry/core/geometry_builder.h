@@ -30,7 +30,7 @@ namespace pagoda::geometry::core
 template<class Geometry>
 class GeometryBuilderT
 {
-private:
+	private:
 	/// The Geometry index type
 	using Index_t = typename Geometry::Index_t;
 	/// The Geometry position type.
@@ -44,7 +44,7 @@ private:
 		PointData(const PositionType &pos) : m_position(pos), m_index(Geometry::s_invalidIndex) {}
 		PointData(const PointData &o) : m_position(o.m_position), m_attributes(o.m_attributes), m_index(o.m_index) {}
 		PointData(const PositionType &pos, const VertexAttributes &v)
-		    : m_position(pos), m_attributes(v), m_index(Geometry::s_invalidIndex)
+		  : m_position(pos), m_attributes(v), m_index(Geometry::s_invalidIndex)
 		{
 		}
 
@@ -55,14 +55,14 @@ private:
 		Index_t m_index;
 	};
 
-public:
+	public:
 	/**
 	 * Helper class to build faces in a geometry.
 	 * Allows to add point indices to the face incrementally.
 	 */
 	class FaceBuilder
 	{
-	public:
+public:
 		/// The Geometry index type
 		using Index_t = typename Geometry::Index_t;
 
@@ -70,11 +70,10 @@ public:
 		 * Constructs a FaceBuilder with all the parameters.
 		 */
 		FaceBuilder(GeometryBuilder *builder, std::shared_ptr<Geometry> &geom, uint32_t numPoints = 0)
-		    : m_builder(builder), m_geometry(geom)
+		  : m_builder(builder), m_geometry(geom)
 		{
 			LOG_TRACE(GeometryCore, "Created FaceBuilder with " << numPoints << " points");
-			if (numPoints > 0)
-			{
+			if (numPoints > 0) {
 				m_faceIndices.reserve(numPoints);
 			}
 		}
@@ -86,8 +85,7 @@ public:
 		void AddIndex(const Index_t &index)
 		{
 			LOG_TRACE(GeometryCore, "Adding index " << index << " to face builder.");
-			DBG_ASSERT_MSG(m_faceIndices.size() <= m_faceIndices.capacity(),
-			               "Trying to add a vertex index past the end");
+			DBG_ASSERT_MSG(m_faceIndices.size() <= m_faceIndices.capacity(), "Trying to add a vertex index past the end");
 
 			m_faceIndices.push_back(index);
 		}
@@ -112,8 +110,7 @@ public:
 
 			std::vector<typename Geometry::PointHandle> points;
 			points.reserve(m_faceIndices.size());
-			for (const auto &i : m_faceIndices)
-			{
+			for (const auto &i : m_faceIndices) {
 				points.emplace_back(m_builder->m_pointData[i].m_index);
 			}
 
@@ -170,8 +167,7 @@ public:
 
 		std::vector<FaceBuilder> face_builders;
 
-		for (auto i = 0u; i < num_faces; ++i)
-		{
+		for (auto i = 0u; i < num_faces; ++i) {
 			face_builders.emplace_back(this, m_geometry, num_points);
 		}
 
@@ -190,8 +186,7 @@ public:
 
 		std::vector<FaceBuilder> face_builders;
 
-		for (auto size : sizes)
-		{
+		for (auto size : sizes) {
 			face_builders.emplace_back(this, m_geometry, size);
 		}
 
@@ -225,7 +220,7 @@ public:
 	 */
 	std::shared_ptr<Geometry> GetGeometry() { return m_geometry; }
 
-private:
+	private:
 	/// The Geometry to build.
 	std::shared_ptr<Geometry> m_geometry;
 	std::unordered_map<Index_t, PointData> m_pointData;

@@ -9,7 +9,7 @@ namespace pagoda::dynamic
 const TypeInfoPtr Function::s_typeInfo = std::make_shared<TypeInfo>("Function");
 
 Function::Function(std::shared_ptr<ICallableBody> callableBody)
-    : DynamicValueBase(s_typeInfo), m_callableBody(callableBody), m_callableName("")
+  : DynamicValueBase(s_typeInfo), m_callableBody(callableBody), m_callableName("")
 {
 }
 
@@ -37,12 +37,9 @@ const std::shared_ptr<DynamicValueTable>& Function::GetClosure() const { return 
 
 DynamicValueBasePtr Function::Call(const std::vector<DynamicValueBasePtr>& args)
 {
-	try
-	{
+	try {
 		m_callableBody->Call(args);
-	}
-	catch (DynamicValueBasePtr& returnValue)
-	{
+	} catch (DynamicValueBasePtr& returnValue) {
 		return returnValue;
 	}
 	return std::make_shared<NullObject>();

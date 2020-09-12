@@ -12,7 +12,7 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
  */
 class Boolean : public DynamicValueBase
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	/**
@@ -41,7 +41,7 @@ public:
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
-private:
+	private:
 	bool m_value;
 };
 using BooleanPtr = std::shared_ptr<Boolean>;

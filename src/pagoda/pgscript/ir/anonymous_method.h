@@ -10,7 +10,7 @@ namespace ast
 {
 class AnonymousMethod : public Expression
 {
-public:
+	public:
 	AnonymousMethod() = default;
 	AnonymousMethod(const ExpressionPtr &instance, const StatementBlockPtr body);
 	virtual ~AnonymousMethod();
@@ -20,7 +20,7 @@ public:
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	ExpressionPtr m_instance;
 	StatementBlockPtr m_body;
 };

@@ -12,9 +12,8 @@ using mt = MathUtils<float>;
 TEST(ConversionTests, RadiansToDegrees)
 {
 	std::vector<std::pair<float, float>> data = {
-	    {0, 0}, {mt::half_pi, 90}, {mt::pi, 180}, {mt::pi + mt::half_pi, 270}, {mt::two_pi, 360}};
-	for (auto d : data)
-	{
+	  {0, 0}, {mt::half_pi, 90}, {mt::pi, 180}, {mt::pi + mt::half_pi, 270}, {mt::two_pi, 360}};
+	for (auto d : data) {
 		EXPECT_EQ(mt::radians_to_degrees(std::get<0>(d)), std::get<1>(d));
 	}
 }
@@ -22,9 +21,8 @@ TEST(ConversionTests, RadiansToDegrees)
 TEST(ConversionTests, DegreesToRadians)
 {
 	std::vector<std::pair<float, float>> data = {
-	    {0, 0}, {mt::half_pi, 90}, {mt::pi, 180}, {mt::pi + mt::half_pi, 270}, {mt::two_pi, 360}};
-	for (auto d : data)
-	{
+	  {0, 0}, {mt::half_pi, 90}, {mt::pi, 180}, {mt::pi + mt::half_pi, 270}, {mt::two_pi, 360}};
+	for (auto d : data) {
 		EXPECT_EQ(mt::degrees_to_radians(std::get<1>(d)), std::get<0>(d));
 	}
 }

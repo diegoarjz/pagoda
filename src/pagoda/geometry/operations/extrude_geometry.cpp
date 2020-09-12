@@ -40,8 +40,7 @@ void ExtrudeGeometry::DoWork()
 	START_PROFILE;
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(input_geometry))
-	{
+	while (HasInput(input_geometry)) {
 		ProceduralObjectPtr in_object = GetInputProceduralObject(input_geometry);
 		UpdateValue("extrusion_amount");
 
@@ -51,9 +50,9 @@ void ExtrudeGeometry::DoWork()
 		// Geometry
 		ProceduralObjectPtr out_object = CreateOutputProceduralObject(in_object, output_geometry);
 		std::shared_ptr<GeometryComponent> geometry_component =
-		    geometrySystem->CreateComponentAs<GeometryComponent>(out_object);
+		  geometrySystem->CreateComponentAs<GeometryComponent>(out_object);
 		std::shared_ptr<GeometryComponent> in_geometry_component =
-		    geometrySystem->GetComponentAs<GeometryComponent>(in_object);
+		  geometrySystem->GetComponentAs<GeometryComponent>(in_object);
 		GeometryPtr in_geometry = in_geometry_component->GetGeometry();
 
 		auto out_geometry = std::make_shared<Geometry>();
@@ -61,7 +60,7 @@ void ExtrudeGeometry::DoWork()
 
 		geometry_component->SetGeometry(out_geometry);
 		geometry_component->SetScope(
-		    Scope::FromGeometryAndConstrainedRotation(out_geometry, in_geometry_component->GetScope().GetRotation()));
+		  Scope::FromGeometryAndConstrainedRotation(out_geometry, in_geometry_component->GetScope().GetRotation()));
 	}
 }
 }  // namespace pagoda::geometry::operations

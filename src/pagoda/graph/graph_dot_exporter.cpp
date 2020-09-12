@@ -10,7 +10,7 @@
 namespace pagoda::graph
 {
 GraphDotExporter::GraphDotExporter(GraphPtr graph)
-    : m_graph(graph), m_rankBy(RankBy::None), m_rankDirection(RankDirection::LeftToRight), m_showParameters(false)
+  : m_graph(graph), m_rankBy(RankBy::None), m_rankDirection(RankDirection::LeftToRight), m_showParameters(false)
 {
 }
 
@@ -36,18 +36,15 @@ void GraphDotExporter::Export(std::ostream &outStream)
 	outStream << "\trankdir=" << (m_rankDirection == RankDirection::LeftToRight ? "LR" : "TB") << ";\n";
 	outStream << "\tnode [shape=plaintext fontname=\"Sans serif\" fontsize=\"8\"];\n";
 
-	for (auto n : nodes)
-	{
+	for (auto n : nodes) {
 		auto node = n.m_node;
 		// TODO: Rank
 		outStream << "\t" << node->GetName() << " [ label=<\n";
 		outStream << "<table border=\"1\" cellborder=\"0\" cellspacing=\"1\">\n";
 		outStream << "<tr><td align=\"left\"><b>" << node->GetName() << "</b></td></tr>\n";
 
-		if (m_showParameters)
-		{
-			for (auto parIter = node->GetMembersBegin(); parIter != node->GetMembersEnd(); ++parIter)
-			{
+		if (m_showParameters) {
+			for (auto parIter = node->GetMembersBegin(); parIter != node->GetMembersEnd(); ++parIter) {
 				outStream << "<tr><td>" << parIter->first << "</td></tr>\n";
 			}
 		}
@@ -57,8 +54,7 @@ void GraphDotExporter::Export(std::ostream &outStream)
 		auto outNodes = m_graph->GetNodeOutputNodes(node->GetName());
 		std::string sourceNodeName = node->GetName();
 
-		for (auto outNode : outNodes)
-		{
+		for (auto outNode : outNodes) {
 			std::string targetNodeName = outNode->GetName();
 			outStream << "\t" << sourceNodeName << " -> " << targetNodeName << ";" << std::endl;
 		}
@@ -72,10 +68,8 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 	std::vector<NodeExportInfo> nodes;
 	nodes.reserve(m_graph->GetNodeCount());
 
-	switch (m_rankBy)
-	{
-		case RankBy::None:
-		{
+	switch (m_rankBy) {
+		case RankBy::None: {
 			NodeSet allNodes;
 			query::Query q(*m_graph, allNodes);
 			m_graph->ExecuteQuery(q);
@@ -84,8 +78,7 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 			});
 			break;
 		}
-		case RankBy::Depth:
-		{
+		case RankBy::Depth: {
 			std::unordered_map<NodePtr, uint32_t> depths;
 			/*
 			BreadthFirstNodeVisitor<decltype(delegate)> visitor(*m_graph, delegate);
@@ -93,10 +86,8 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 			*/
 			traversal::Forward(*m_graph).ForEach([&depths, this](NodePtr n) {
 				auto thisNodeDepth = depths.emplace(n, 0).first->second;
-				for (auto outNode : this->m_graph->GetNodeOutputNodes(n->GetName()))
-				{
-					if (depths[outNode] <= thisNodeDepth)
-					{
+				for (auto outNode : this->m_graph->GetNodeOutputNodes(n->GetName())) {
+					if (depths[outNode] <= thisNodeDepth) {
 						depths[outNode] = thisNodeDepth + 1;
 					}
 				}
@@ -109,15 +100,13 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 
 			break;
 		}
-		case RankBy::ExecutionOrder:
-		{
+		case RankBy::ExecutionOrder: {
 			ExecutionQueue q(*m_graph);
 			NodePtr n;
 			uint32_t rank = 0;
 			auto inserter = std::back_inserter(nodes);
 
-			while ((n = q.GetNextNode()) != nullptr)
-			{
+			while ((n = q.GetNextNode()) != nullptr) {
 				inserter = NodeExportInfo{n, rank++};
 			}
 
@@ -125,11 +114,9 @@ std::vector<GraphDotExporter::NodeExportInfo> GraphDotExporter::GetNodes()
 		}
 	};
 
-	std::sort(nodes.begin(), nodes.end(), [](const NodeExportInfo &n1, const NodeExportInfo &n2) {
-		return n1.m_node->GetId() < n2.m_node->GetId();
-	});
+	std::sort(nodes.begin(), nodes.end(),
+	          [](const NodeExportInfo &n1, const NodeExportInfo &n2) { return n1.m_node->GetId() < n2.m_node->GetId(); });
 
 	return nodes;
 }
 }  // namespace pagoda::graph
-

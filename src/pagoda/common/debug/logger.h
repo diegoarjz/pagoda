@@ -12,7 +12,7 @@ namespace pagoda::common::debug
 {
 class Logger
 {
-public:
+	public:
 	enum class TraceLogs
 	{
 		Core,
@@ -53,7 +53,7 @@ public:
 	static void Shutdown();
 	static bool IsTraceEnabled(const TraceLogs &trace);
 
-private:
+	private:
 	static std::unique_ptr<Logger> sTrace;
 	static std::unique_ptr<Logger> sDebug;
 	static std::unique_ptr<Logger> sInfo;
@@ -81,39 +81,38 @@ private:
 };  // class Logger
 
 #define LOG_TRACE(TRACE, message)                                                                       \
-	if (pagoda::common::debug::Logger::IsTraceEnabled(pagoda::common::debug::Logger::TraceLogs::TRACE)) \
-	{                                                                                                   \
-		std::stringstream _logger_ss_;                                                                  \
-		_logger_ss_ << #TRACE ": " << message;                                                          \
-		pagoda::common::debug::Logger::trace()->Log(_logger_ss_.str());                                 \
+	if (pagoda::common::debug::Logger::IsTraceEnabled(pagoda::common::debug::Logger::TraceLogs::TRACE)) { \
+		std::stringstream _logger_ss_;                                                                      \
+		_logger_ss_ << #TRACE ": " << message;                                                              \
+		pagoda::common::debug::Logger::trace()->Log(_logger_ss_.str());                                     \
 	}
 
-#define LOG_DEBUG(message)                                              \
-	{                                                                   \
+#define LOG_DEBUG(message)                                          \
+	{                                                                 \
 		std::stringstream _logger_ss_;                                  \
 		_logger_ss_ << "Debug: " << message;                            \
 		pagoda::common::debug::Logger::debug()->Log(_logger_ss_.str()); \
 	}
-#define LOG_INFO(message)                                               \
-	{                                                                   \
+#define LOG_INFO(message)                                           \
+	{                                                                 \
 		std::stringstream _logger_ss_;                                  \
 		_logger_ss_ << "Info: " << message;                             \
 		pagoda::common::debug::Logger::debug()->Log(_logger_ss_.str()); \
 	}
-#define LOG_WARNING(message)                                            \
-	{                                                                   \
+#define LOG_WARNING(message)                                        \
+	{                                                                 \
 		std::stringstream _logger_ss_;                                  \
 		_logger_ss_ << "Warning: " << message;                          \
 		pagoda::common::debug::Logger::debug()->Log(_logger_ss_.str()); \
 	}
-#define LOG_ERROR(message)                                              \
-	{                                                                   \
+#define LOG_ERROR(message)                                          \
+	{                                                                 \
 		std::stringstream _logger_ss_;                                  \
 		_logger_ss_ << "Error: " << message;                            \
 		pagoda::common::debug::Logger::debug()->Log(_logger_ss_.str()); \
 	}
-#define LOG_FATAL(message)                                              \
-	{                                                                   \
+#define LOG_FATAL(message)                                          \
+	{                                                                 \
 		std::stringstream _logger_ss_;                                  \
 		_logger_ss_ << "Fatal: " << message;                            \
 		pagoda::common::debug::Logger::debug()->Log(_logger_ss_.str()); \

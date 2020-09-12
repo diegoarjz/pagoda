@@ -8,7 +8,7 @@ namespace pagoda::graph
 {
 class ConstructionArgumentNotFound : public common::exception::Exception
 {
-public:
+	public:
 	ConstructionArgumentNotFound(const std::string nodeName, const uint32_t nodeId, const std::string &argName);
 };
 }  // namespace pagoda::graph

@@ -9,10 +9,8 @@ TEST(MatrixBase, when_constructing_with_default_constructor_should_set_all_eleme
 {
 	MatrixBase<3, 3, float> zero;
 
-	for (auto r = 0; r < 3; ++r)
-	{
-		for (auto c = 0; c < 3; ++c)
-		{
+	for (auto r = 0; r < 3; ++r) {
+		for (auto c = 0; c < 3; ++c) {
 			ASSERT_EQ(zero.Value(c, r), 0);
 		}
 	}
@@ -22,16 +20,11 @@ TEST(MatrixBase, when_constructing_with_diagonal_constructor_should_set_diagonal
 {
 	MatrixBase<3, 3, float> diag(1);
 
-	for (auto r = 0; r < 3; ++r)
-	{
-		for (auto c = 0; c < 3; ++c)
-		{
-			if (c == r)
-			{
+	for (auto r = 0; r < 3; ++r) {
+		for (auto c = 0; c < 3; ++c) {
+			if (c == r) {
 				ASSERT_EQ(diag.Value(c, r), 1);
-			}
-			else
-			{
+			} else {
 				ASSERT_EQ(diag.Value(c, r), 0);
 			}
 		}

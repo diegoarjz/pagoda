@@ -7,7 +7,7 @@ namespace pagoda
 namespace ast
 {
 AnonymousMethod::AnonymousMethod(const ExpressionPtr &instance, const StatementBlockPtr body)
-    : m_instance(instance), m_body(body)
+  : m_instance(instance), m_body(body)
 {
 }
 AnonymousMethod::~AnonymousMethod() {}

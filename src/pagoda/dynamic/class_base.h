@@ -17,7 +17,7 @@ using FunctionPtr = std::shared_ptr<Function>;
  */
 class ClassBase
 {
-public:
+	public:
 	ClassBase(const std::string &name);
 
 	void RegisterMember(const std::string &name, DynamicValueBasePtr v);
@@ -32,7 +32,7 @@ public:
 	virtual FunctionPtr Bind(std::shared_ptr<ICallableBody> callable,
 	                         std::shared_ptr<DynamicValueTable> globals = nullptr) = 0;
 
-protected:
+	protected:
 	std::shared_ptr<DynamicValueTable> m_memberTable;
 };
 }  // namespace pagoda::dynamic

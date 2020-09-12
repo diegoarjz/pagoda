@@ -12,7 +12,7 @@ using namespace pagoda::dynamic;
 
 class C
 {
-public:
+	public:
 	C() : m_called(false) {}
 
 	void f() { m_called = true; }

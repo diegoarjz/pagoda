@@ -10,12 +10,12 @@ NodeLinkNode::NodeLinkNode(const NodeLinkContainer_t &linkedNodes) : m_linkedNod
 
 NodeLinkNode::NodeLinkNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset,
                            const NodeLinkContainer_t &linkedNodes)
-    : GraphStatementNode(startOffset, endOffset), m_linkedNodes(linkedNodes)
+  : GraphStatementNode(startOffset, endOffset), m_linkedNodes(linkedNodes)
 {
 }
 
 NodeLinkNode::NodeLinkNode(const AstNode::NodeRange_t &range, const NodeLinkContainer_t &linkedNodes)
-    : GraphStatementNode(range), m_linkedNodes(linkedNodes)
+  : GraphStatementNode(range), m_linkedNodes(linkedNodes)
 {
 }
 

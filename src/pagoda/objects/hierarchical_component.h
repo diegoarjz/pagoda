@@ -10,7 +10,7 @@ namespace pagoda::objects
 {
 class HierarchicalComponent : public ProceduralComponent, public std::enable_shared_from_this<HierarchicalComponent>
 {
-public:
+	public:
 	static std::string GetComponentSystemName();
 
 	virtual ~HierarchicalComponent(){};
@@ -24,7 +24,7 @@ public:
 
 	friend class HierarchicalSystem;
 
-private:
+	private:
 	void SetParent(std::shared_ptr<HierarchicalComponent> parent);
 
 	std::weak_ptr<HierarchicalComponent> parent;

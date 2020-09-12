@@ -11,7 +11,7 @@ namespace pagoda::math
 template<class Rep>
 class LineSegment3D
 {
-public:
+	public:
 	using VectorType = boost::qvm::vec<Rep, 3>;
 
 	/**
@@ -44,7 +44,7 @@ public:
 
 	bool operator!=(const LineSegment3D<Rep>& other) const { return !(*this == other); }
 
-private:
+	private:
 	VectorType m_point;          ///< The origin point in this line segment (t == 0)
 	VectorType m_supportVector;  ///< This line's supporting vector
 };

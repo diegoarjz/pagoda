@@ -76,8 +76,7 @@ void GeometrySystem::Registration(Pagoda* pagoda)
 		                           [objectSystem]() { return std::make_shared<TriangulateGeometry>(objectSystem); });
 		operationFactory->Register("ClipGeometry",
 		                           [objectSystem]() { return std::make_shared<ClipGeometry>(objectSystem); });
-		operationFactory->Register("RepeatSplit",
-		                           [objectSystem]() { return std::make_shared<RepeatSplit>(objectSystem); });
+		operationFactory->Register("RepeatSplit", [objectSystem]() { return std::make_shared<RepeatSplit>(objectSystem); });
 		operationFactory->Register("ExtractFaces",
 		                           [objectSystem]() { return std::make_shared<ExtractFaces>(objectSystem); });
 		operationFactory->Register("Translate", [objectSystem]() { return std::make_shared<Translate>(objectSystem); });
@@ -86,8 +85,7 @@ void GeometrySystem::Registration(Pagoda* pagoda)
 		operationFactory->Register("Rotate", [objectSystem]() { return std::make_shared<Rotate>(objectSystem); });
 		operationFactory->Register("ScopeTextureProjection",
 		                           [objectSystem]() { return std::make_shared<ScopeTextureProjection>(objectSystem); });
-		operationFactory->Register("ReadGeoJson",
-		                           [objectSystem]() { return std::make_shared<ReadGeoJson>(objectSystem); });
+		operationFactory->Register("ReadGeoJson", [objectSystem]() { return std::make_shared<ReadGeoJson>(objectSystem); });
 	}
 }
 }  // namespace pagoda::geometry

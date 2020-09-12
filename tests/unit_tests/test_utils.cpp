@@ -25,22 +25,18 @@ ExpectAssert::~ExpectAssert()
 bool ExpectAssert::Asserted() { return g_asserted; }
 
 MatchFile::MatchFile(const boost::filesystem::path &filePath, bool saveFile)
-    : m_filePath(filePath), m_saveFile(saveFile)
+  : m_filePath(filePath), m_saveFile(saveFile)
 {
-	try
-	{
+	try {
 		m_fileContents = pagoda::common::fs::LoadFileToString(filePath.string());
-	}
-	catch (...)
-	{
+	} catch (...) {
 		EXPECT_TRUE(false) << "Could not open file " << filePath.string();
 	}
 }
 
 bool MatchFile::Match(const std::string &in)
 {
-	if (m_saveFile)
-	{
+	if (m_saveFile) {
 		pagoda::common::fs::CreateDirectories(m_filePath.parent_path());
 		pagoda::common::fs::WriteStringToFile(m_filePath.string(), in);
 		m_fileContents = in;

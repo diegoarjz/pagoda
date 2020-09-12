@@ -7,7 +7,7 @@ namespace pagoda::material::operations
 {
 class SetMaterialAttribute : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string inputObject;
 	static const std::string outputObject;
 
@@ -17,4 +17,3 @@ public:
 	void DoWork() override;
 };
 }  // namespace pagoda::material::operations
-

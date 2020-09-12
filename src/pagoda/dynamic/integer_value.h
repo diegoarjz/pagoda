@@ -17,7 +17,7 @@ class String;
  */
 class Integer : public DynamicValueBase
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	/**
@@ -84,7 +84,7 @@ public:
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
-private:
+	private:
 	int m_value;
 };
 using IntegerPtr = std::shared_ptr<Integer>;

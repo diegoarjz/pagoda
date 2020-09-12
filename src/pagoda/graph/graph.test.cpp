@@ -17,7 +17,7 @@ using namespace pagoda::graph;
 
 class GraphSimpleOperationsTest : public ::testing::Test
 {
-protected:
+	protected:
 	virtual void SetUp()
 	{
 		graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
@@ -152,8 +152,7 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_input_nodes_should_re
 	this->graph->ExecuteQuery(q);
 
 	ASSERT_EQ(input_nodes.size(), 3);
-	for (auto n : input_nodes)
-	{
+	for (auto n : input_nodes) {
 		EXPECT_EQ(this->graph->GetNodeInputNodes(n->GetName()).size(), 0);
 	}
 }
@@ -188,8 +187,7 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_output_nodes_should_r
 	this->graph->ExecuteQuery(q);
 
 	ASSERT_EQ(output_nodes.size(), 3);
-	for (auto n : output_nodes)
-	{
+	for (auto n : output_nodes) {
 		EXPECT_EQ(this->graph->GetNodeInputNodes(n->GetName()).size(), 0);
 	}
 }
@@ -219,7 +217,7 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_a_node_making_it_an_output_node
 
 class GraphNodeCreationByName : public ::testing::Test
 {
-protected:
+	protected:
 	virtual void SetUp() { m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory()); }
 
 	std::shared_ptr<Graph> m_graph;
@@ -254,4 +252,3 @@ TEST_F(GraphNodeCreationByName, when_creating_node_by_name_should_be_able_to_get
 	node = m_graph->GetNode(m_graph->CreateNode(InputInterfaceNode::name));
 	EXPECT_EQ(m_graph->GetNode(InputInterfaceNode::name), node);
 }
-

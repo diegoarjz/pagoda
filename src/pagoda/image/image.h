@@ -20,7 +20,7 @@ class ImageReaderFactory;
 
 class Image
 {
-public:
+	public:
 	using Dimensions = std::pair<std::size_t, std::size_t>;
 
 	Image(const boost::filesystem::path& file);
@@ -31,7 +31,7 @@ public:
 
 	void CopyImageData(std::vector<uint8_t>& data);
 
-private:
+	private:
 	std::shared_ptr<core::ImageImplementation> m_implementation;
 
 	static core::ImageImplementationFactory* GetImageImplementationFactory();

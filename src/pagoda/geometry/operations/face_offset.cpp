@@ -42,8 +42,7 @@ void FaceOffsetOperation::DoWork()
 	START_PROFILE;
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(inputGeometry))
-	{
+	while (HasInput(inputGeometry)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 		UpdateValue("amount");
 
@@ -54,34 +53,31 @@ void FaceOffsetOperation::DoWork()
 		std::vector<GeometryPtr> outerGeometries;
 
 		std::shared_ptr<GeometryComponent> inGeometryComponent =
-		    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+		  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 
 		offset.Execute(inGeometry, std::back_inserter(innerGeometries), std::back_inserter(outerGeometries));
 
-		for (const auto& i : innerGeometries)
-		{
+		for (const auto& i : innerGeometries) {
 			ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputInnerGeometry);
 			outObject->RegisterOrSetMember("offset_tag", std::make_shared<String>("inner"));
 
 			std::shared_ptr<GeometryComponent> geometryComponent =
-			    geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+			  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 			geometryComponent->SetGeometry(i);
 			geometryComponent->SetScope(
-			    Scope::FromGeometryAndConstrainedRotation(i, inGeometryComponent->GetScope().GetRotation()));
+			  Scope::FromGeometryAndConstrainedRotation(i, inGeometryComponent->GetScope().GetRotation()));
 		}
 
-		for (const auto& i : outerGeometries)
-		{
+		for (const auto& i : outerGeometries) {
 			ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputOuterGeometry);
 			outObject->RegisterOrSetMember("offset_tag", std::make_shared<String>("outer"));
 
 			std::shared_ptr<GeometryComponent> geometryComponent =
-			    geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+			  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 			geometryComponent->SetGeometry(i);
 			geometryComponent->SetScope(Scope::FromGeometry(i));
 		}
 	}
 }
 }  // namespace pagoda::geometry::operations
-

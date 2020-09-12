@@ -74,10 +74,8 @@ TEST(PlaneVsLineIntersectionTest, has_intersection_test)
     };
 	// clang-format on
 
-	for (const auto &t : tests)
-	{
+	for (const auto &t : tests) {
 		auto i = intersection(std::get<0>(t), std::get<1>(t));
 		EXPECT_TRUE(i.m_intersection == std::get<2>(t));
 	}
 }
-

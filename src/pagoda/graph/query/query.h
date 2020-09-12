@@ -33,7 +33,7 @@ namespace pagoda::graph::query
  */
 class Query
 {
-public:
+	public:
 	/// Function type to handle each \c Node that matches a \c Query.
 	using QueryHandle_t = std::function<void(NodePtr)>;
 
@@ -50,11 +50,11 @@ public:
 
 	const std::string& GetQueryHash() const;
 
-protected:
+	protected:
 	Graph& m_graph;
 	QueryHandle_t m_queryHandle;
 
-private:
+	private:
 	void AddNode(NodePtr n);
 
 	friend class pagoda::graph::Graph;

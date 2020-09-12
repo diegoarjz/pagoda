@@ -8,7 +8,7 @@ namespace ast
 {
 class GetExpression : public Expression
 {
-public:
+	public:
 	GetExpression() = default;
 	GetExpression(const ExpressionPtr &lhs, const IdentifierPtr &identifier);
 	virtual ~GetExpression();
@@ -18,7 +18,7 @@ public:
 	const ExpressionPtr &GetLhs() const { return m_lhs; }
 	const IdentifierPtr GetIdentifier() const { return m_identifier; }
 
-private:
+	private:
 	ExpressionPtr m_lhs;
 	IdentifierPtr m_identifier;
 };

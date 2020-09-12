@@ -30,7 +30,7 @@ class GeometryComponent;
  */
 class GeometrySystem : public objects::ProceduralComponentSystem<GeometryComponent>
 {
-public:
+	public:
 	static const std::string GetComponentSystemName();
 
 	GeometrySystem();
@@ -41,7 +41,7 @@ public:
 	 */
 	static void Registration(Pagoda* pagoda);
 
-protected:
+	protected:
 	void DoClone(std::shared_ptr<GeometryComponent> from, std::shared_ptr<GeometryComponent> to) override;
 
 };  // class GeometrySystem

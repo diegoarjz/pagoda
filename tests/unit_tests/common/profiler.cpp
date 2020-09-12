@@ -68,8 +68,7 @@ TEST(Profiler, multiple_calls_should_increment_count)
 	const char* file = "file2";
 	const int line = 2;
 
-	for (uint32_t i = 0; i < 2; ++i)
-	{
+	for (uint32_t i = 0; i < 2; ++i) {
 		Profiler p(name, file, line);
 		auto entry = *manager->GetLogData().begin();
 		EXPECT_EQ(entry.m_calls, i + 1);
@@ -84,8 +83,7 @@ TEST(Profiler, multiple_calls_should_not_create_new_entries)
 	const char* file = "file2";
 	const int line = 2;
 
-	for (uint32_t i = 0; i < 2; ++i)
-	{
+	for (uint32_t i = 0; i < 2; ++i) {
 		Profiler p(name, file, line);
 	}
 

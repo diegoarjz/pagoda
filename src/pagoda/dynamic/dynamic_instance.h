@@ -23,7 +23,7 @@ class DynamicValueTable;
  */
 class DynamicInstance : public DynamicValueBase, public ClassBase
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	explicit DynamicInstance(DynamicClassPtr klass);
@@ -35,7 +35,7 @@ public:
 	FunctionPtr Bind(std::shared_ptr<ICallableBody> callable,
 	                 std::shared_ptr<DynamicValueTable> globals = nullptr) override;
 
-private:
+	private:
 	DynamicClassPtr m_class;
 };
 

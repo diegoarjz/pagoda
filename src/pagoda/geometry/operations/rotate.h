@@ -6,7 +6,7 @@ namespace pagoda::geometry::operations
 {
 class Rotate : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string s_inputGeometry;
 	static const std::string s_outputGeometry;
 

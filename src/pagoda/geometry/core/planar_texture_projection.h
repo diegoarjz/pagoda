@@ -6,7 +6,7 @@ namespace pagoda::geometry::core
 {
 class PlanarTextureProjection
 {
-public:
+	public:
 	PlanarTextureProjection(const math::Vec3F &origin, const math::Vec3F &uAxis, const math::Vec3F &vAxis);
 
 	void SetOffset(const float &u, const float &v);
@@ -15,7 +15,7 @@ public:
 
 	math::Vec2F GetProjection(const math::Vec3F &p);
 
-private:
+	private:
 	math::Vec3F m_origin;
 	math::Vec3F m_uAxis;
 	math::Vec3F m_vAxis;

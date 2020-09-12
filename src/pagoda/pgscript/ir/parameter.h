@@ -8,7 +8,7 @@ namespace ast
 {
 class Parameter : public AstNode
 {
-public:
+	public:
 	explicit Parameter(const std::string& identifier);
 	virtual ~Parameter() {}
 
@@ -18,7 +18,7 @@ public:
 
 	void AcceptVisitor(AstVisitor*) override;
 
-private:
+	private:
 	std::string m_identifierName;
 	boost::optional<std::string> m_typeName;
 };

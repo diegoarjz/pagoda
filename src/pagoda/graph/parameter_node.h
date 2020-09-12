@@ -13,7 +13,7 @@ namespace pagoda::graph
  */
 class ParameterNode : public Node
 {
-public:
+	public:
 	static const char *name;
 
 	ParameterNode();

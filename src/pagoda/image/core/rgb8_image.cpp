@@ -19,8 +19,7 @@ RGB8Image::~RGB8Image() {}
 
 ImageImplementation::Dimensions RGB8Image::GetDimensions() const
 {
-	if (!IsLoaded())
-	{
+	if (!IsLoaded()) {
 		throw common::exception::Exception("Trying to get RGB8Image dimensions but image not loaded");
 	}
 	auto dim = m_imageData->dimensions();
@@ -31,13 +30,11 @@ bool RGB8Image::IsLoaded() const { return m_imageData != nullptr; }
 
 void RGB8Image::Load()
 {
-	if (IsLoaded())
-	{
+	if (IsLoaded()) {
 		return;
 	}
 
-	if (m_reader == nullptr)
-	{
+	if (m_reader == nullptr) {
 		throw common::exception::Exception("Trying to load an RGB8Image but reader not set.");
 	}
 

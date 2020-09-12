@@ -17,7 +17,7 @@ namespace pagoda::geometry::algorithms
  */
 class ExtrusionProfile
 {
-public:
+	public:
 	ExtrusionProfile(const size_t &num_points);
 
 	void AddPoint(const math_lib::Vec2F &point);
@@ -25,7 +25,7 @@ public:
 	std::vector<math_lib::Vec2F>::const_iterator cbegin() { return profile.cbegin(); }
 	std::vector<math_lib::Vec2F>::const_iterator cend() { return profile.cend(); }
 
-private:
+	private:
 	std::vector<math_lib::Vec2F> profile;
 };  // class ExtrusionProfile
 }  // namespace pagoda::geometry::algorithms

@@ -7,7 +7,7 @@ namespace pagoda::geometry::operations
 {
 class ReadGeoJson : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string outputGeometry;
 
 	ReadGeoJson(objects::ProceduralObjectSystemPtr objectSystem);

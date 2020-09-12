@@ -21,8 +21,7 @@ bool Forward::Advance()
 	m_nodesToVisit.pop();
 	NodeSet outNodes;
 	GetOutputNodes(front, std::inserter(outNodes, std::end(outNodes)));
-	for (auto n : outNodes)
-	{
+	for (auto n : outNodes) {
 		m_nodesToVisit.push(n);
 	}
 	return HasNext();

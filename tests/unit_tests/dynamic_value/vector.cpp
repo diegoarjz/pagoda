@@ -37,8 +37,7 @@ TEST(Vector3, test_members)
 	Vector3 v(Vec3F{1, 2, 3});
 
 	uint32_t i = 1;
-	for (auto name : {"GetX", "GetY", "GetZ"})
-	{
+	for (auto name : {"GetX", "GetY", "GetZ"}) {
 		auto m = v.GetMember(name);
 		ASSERT_NE(m, nullptr);
 		auto f = std::dynamic_pointer_cast<Function>(m);

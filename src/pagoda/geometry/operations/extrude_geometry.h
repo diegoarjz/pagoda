@@ -7,7 +7,7 @@ namespace pagoda::geometry::operations
 {
 class ExtrudeGeometry : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const char* name;
 	static const std::string input_geometry;
 	static const std::string output_geometry;

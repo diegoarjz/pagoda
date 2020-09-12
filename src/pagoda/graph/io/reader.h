@@ -19,14 +19,14 @@ namespace pagoda::graph::io
 {
 class GraphReader
 {
-public:
+	public:
 	GraphReader(NodeFactoryPtr nodeFactory);
 	~GraphReader();
 
 	GraphPtr Read(const std::string &str);
 	const ParseResult &GetParseResult() const;
 
-private:
+	private:
 	struct Impl;
 	std::unique_ptr<Impl> m_implementation;
 };

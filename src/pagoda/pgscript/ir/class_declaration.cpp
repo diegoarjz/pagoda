@@ -7,7 +7,7 @@ namespace pagoda
 namespace ast
 {
 ClassDeclaration::ClassDeclaration(const IdentifierPtr &identifier, const std::vector<FunctionDeclarationPtr> &methods)
-    : m_identifier(identifier), m_methods(methods)
+  : m_identifier(identifier), m_methods(methods)
 {
 }
 

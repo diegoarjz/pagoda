@@ -11,11 +11,11 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class CreateBox
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 
-public:
+	public:
 	CreateBox(const float &xSize, const float &ySize, const float &zSize)
 	{
 		float halfXSize = 0.5f * xSize;
@@ -44,9 +44,9 @@ public:
 
 		core::GeometryBuilderT<Geometry> builder(geometryOut);
 		std::array<typename Geometry::Index_t, 8> pointIndices = {
-		    builder.AddPoint(m_points[0]), builder.AddPoint(m_points[1]), builder.AddPoint(m_points[2]),
-		    builder.AddPoint(m_points[3]), builder.AddPoint(m_points[4]), builder.AddPoint(m_points[5]),
-		    builder.AddPoint(m_points[6]), builder.AddPoint(m_points[7]),
+		  builder.AddPoint(m_points[0]), builder.AddPoint(m_points[1]), builder.AddPoint(m_points[2]),
+		  builder.AddPoint(m_points[3]), builder.AddPoint(m_points[4]), builder.AddPoint(m_points[5]),
+		  builder.AddPoint(m_points[6]), builder.AddPoint(m_points[7]),
 		};
 
 		// Bottom face
@@ -98,7 +98,7 @@ public:
 		face.CloseFace();
 	}
 
-private:
+	private:
 	std::array<math::Vec3F, 8> m_points;
 };
 

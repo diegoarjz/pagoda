@@ -11,7 +11,7 @@ DynamicValueTable::DynamicValueTable(const std::string &tableName) : m_tableName
 
 DynamicValueTable::DynamicValueTable(const std::string &tableName,
                                      const std::shared_ptr<DynamicValueTable> &parentTable)
-    : m_parentTable(parentTable), m_tableName(tableName)
+  : m_parentTable(parentTable), m_tableName(tableName)
 {
 }
 
@@ -36,13 +36,11 @@ typename DynamicValueTable::iterator DynamicValueTable::end() { return std::end(
 void DynamicValueTable::DumpSymbols(std::ostream &out) const
 {
 	out << "Symbols for " << m_tableName << ":" << std::endl;
-	for (auto value : m_values)
-	{
+	for (auto value : m_values) {
 		out << value.first << ": " << value.second.m_value->ToString() << std::endl;
 	}
 
-	if (!m_parentTable.expired())
-	{
+	if (!m_parentTable.expired()) {
 		m_parentTable.lock()->DumpSymbols(out);
 	}
 }
@@ -50,12 +48,10 @@ void DynamicValueTable::DumpSymbols(std::ostream &out) const
 typename DynamicValueTable::Entry &DynamicValueTable::FindValue(const std::string &name)
 {
 	auto iter = m_values.find(name);
-	if (iter != std::end(m_values))
-	{
+	if (iter != std::end(m_values)) {
 		return iter->second;
 	}
-	if (!m_parentTable.expired())
-	{
+	if (!m_parentTable.expired()) {
 		return m_parentTable.lock()->FindValue(name);
 	}
 	throw ValueNotFoundException(name);

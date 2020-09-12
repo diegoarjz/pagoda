@@ -13,13 +13,13 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class CreateSphere
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 
-public:
+	public:
 	CreateSphere(const float &radius, uint32_t slices, uint32_t stacks)
-	    : m_radius(radius), m_slices(slices), m_stacks(stacks)
+	  : m_radius(radius), m_slices(slices), m_stacks(stacks)
 	{
 	}
 
@@ -46,22 +46,18 @@ public:
 
 		core::GeometryBuilderT<Geometry> builder(geometryOut);
 
-		for (auto st = 0u; st < m_stacks; ++st, theta += stackIncrementAngle)
-		{
-			for (auto sl = 0u; sl < m_slices; ++sl, omega += sliceIncrementAngle)
-			{
+		for (auto st = 0u; st < m_stacks; ++st, theta += stackIncrementAngle) {
+			for (auto sl = 0u; sl < m_slices; ++sl, omega += sliceIncrementAngle) {
 				auto sinTheta = std::sin(theta);
 				points.push_back(builder.AddPoint(
-				    m_radius * math::Vec3F{sinTheta * std::cos(omega), sinTheta * std::sin(omega), std::cos(theta)}));
+				  m_radius * math::Vec3F{sinTheta * std::cos(omega), sinTheta * std::sin(omega), std::cos(theta)}));
 			}
 		}
 		auto topIndex = builder.AddPoint(top);
 		auto bottomIndex = builder.AddPoint(bottom);
 
-		for (auto st = 0u; st < m_stacks - 1; ++st)
-		{
-			for (auto sl = 0u; sl < m_slices; ++sl)
-			{
+		for (auto st = 0u; st < m_stacks - 1; ++st) {
+			for (auto sl = 0u; sl < m_slices; ++sl) {
 				auto p1 = sl + st * m_slices;
 				auto p2 = sl + (st + 1) * m_slices;
 				auto p3 = (sl + 1) % m_slices + (st + 1) * m_slices;
@@ -76,8 +72,7 @@ public:
 			}
 		}
 
-		for (auto sl = 0u; sl < m_slices; ++sl)
-		{
+		for (auto sl = 0u; sl < m_slices; ++sl) {
 			auto topFace = builder.StartFace(3);
 			topFace.AddIndex(topIndex);
 			topFace.AddIndex(points[sl]);
@@ -92,7 +87,7 @@ public:
 		}
 	}
 
-private:
+	private:
 	float m_radius;
 	uint32_t m_slices;
 	uint32_t m_stacks;

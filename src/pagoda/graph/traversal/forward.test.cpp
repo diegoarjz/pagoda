@@ -11,7 +11,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 class ForwardTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp()
 	{
 		m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
@@ -34,8 +34,7 @@ TEST_F(ForwardTest, when_visiting_should_call_the_delegate_for_each_node)
 	std::set<NodePtr> visitedNodes;
 	traversal::Forward forward(*m_graph);
 	forward.ForEach([&visitedNodes](NodePtr n) { visitedNodes.insert(n); });
-	for (auto n : m_nodes)
-	{
+	for (auto n : m_nodes) {
 		EXPECT_NE(std::find(visitedNodes.begin(), visitedNodes.end(), n), visitedNodes.end());
 	}
 }
@@ -60,4 +59,3 @@ TEST_F(ForwardTest, when_visiting_should_visit_the_nodes_in_breadth_first_order)
 	EXPECT_EQ(visitedNodes[3]->GetName(), "d");
 	EXPECT_EQ(visitedNodes[4]->GetName(), "c");
 }
-

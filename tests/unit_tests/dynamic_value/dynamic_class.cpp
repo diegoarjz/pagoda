@@ -13,7 +13,7 @@ using namespace pagoda::dynamic;
 
 class TestCallableBody : public ICallableBody
 {
-public:
+	public:
 	TestCallableBody() : m_called(false) {}
 	virtual ~TestCallableBody() {}
 
@@ -27,7 +27,7 @@ public:
 
 class DynamicClassTest : public ::testing::Test
 {
-public:
+	public:
 	void SetUp() override
 	{
 		m_constructorCallable = std::make_shared<TestCallableBody>();
@@ -59,4 +59,3 @@ TEST_F(DynamicClassTest, when_creating_an_instance_from_a_class_its_type_info_sh
 	auto typeInfo = instance->GetTypeInfo();
 	EXPECT_EQ(typeInfo->GetTypeName(), "TestClass");
 }
-

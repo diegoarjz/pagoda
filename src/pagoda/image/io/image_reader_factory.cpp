@@ -18,8 +18,7 @@ ImageReaderFactory::~ImageReaderFactory() {}
 std::shared_ptr<ImageReader> ImageReaderFactory::CreateFromFilePath(const boost::filesystem::path &p)
 {
 	auto reader = Create(p.extension().string().substr(1));
-	if (reader != nullptr)
-	{
+	if (reader != nullptr) {
 		reader->SetFilePath(p);
 	}
 	return reader;

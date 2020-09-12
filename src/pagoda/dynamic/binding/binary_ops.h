@@ -13,10 +13,10 @@ namespace pagoda::dynamic
 template<class LHS, class RHS>
 class UndefinedBinaryOperator : public common::exception::Exception
 {
-public:
+	public:
 	UndefinedBinaryOperator(const std::string &op)
-	    : common::exception::Exception("Undefined " + op + " operator between " + LHS::s_typeInfo->GetTypeName() +
-	                                   " and " + RHS::s_typeInfo->GetTypeName())
+	  : common::exception::Exception("Undefined " + op + " operator between " + LHS::s_typeInfo->GetTypeName() + " and " +
+	                                 RHS::s_typeInfo->GetTypeName())
 	{
 	}
 };

@@ -27,7 +27,7 @@ const std::string SetMaterialAttribute::inputObject("in");
 const std::string SetMaterialAttribute::outputObject("out");
 
 SetMaterialAttribute::SetMaterialAttribute(objects::ProceduralObjectSystemPtr objectSystem)
-    : ProceduralOperation(objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	CreateInputInterface(inputObject);
 	CreateOutputInterface(outputObject);
@@ -48,14 +48,11 @@ void SetMaterialAttribute::DoWork()
 
 	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
-	while (HasInput(inputObject))
-	{
+	while (HasInput(inputObject)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
-		std::shared_ptr<MaterialComponent> materialComponent =
-		    materialSystem->GetComponentAs<MaterialComponent>(outObject);
-		if (materialComponent == nullptr)
-		{
+		std::shared_ptr<MaterialComponent> materialComponent = materialSystem->GetComponentAs<MaterialComponent>(outObject);
+		if (materialComponent == nullptr) {
 			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 		}
 
@@ -64,8 +61,7 @@ void SetMaterialAttribute::DoWork()
 
 		DynamicValueBasePtr v = GetValue("value");
 		ExpressionPtr e = std::dynamic_pointer_cast<Expression>(v);
-		if (e != nullptr)
-		{
+		if (e != nullptr) {
 			v = e->Evaluate();
 		}
 
@@ -74,4 +70,3 @@ void SetMaterialAttribute::DoWork()
 	}
 }
 }  // namespace pagoda::material::operations
-

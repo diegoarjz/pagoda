@@ -12,7 +12,7 @@ namespace pagoda::graph::io
  */
 class NamedArgument : public AstNode
 {
-public:
+	public:
 	/**
 	 * Types of Arguments.
 	 * Should match the types of \c DynamicValueBasePtr.
@@ -88,7 +88,7 @@ public:
 	 */
 	void AcceptVisitor(AstNodeVisitor *visitor) override;
 
-private:
+	private:
 	std::string m_name;           ///< The name for this \c NamedArgument
 	ArgumentType m_argumentType;  ///< The type of the \c NamedArgument
 	std::string m_argumentValue;  ///< The string representation of the value of the \c NamedArgument

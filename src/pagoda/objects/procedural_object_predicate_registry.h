@@ -14,11 +14,11 @@ using ProceduralObjectPredicatePtr = std::shared_ptr<ProceduralObjectPredicate>;
  */
 class ProceduralObjectPredicateRegistry
 {
-public:
+	public:
 	void Register(const std::string &name, ProceduralObjectPredicatePtr predicate);
 	ProceduralObjectPredicatePtr Get(const std::string &name);
 
-private:
+	private:
 	std::unordered_map<std::string, ProceduralObjectPredicatePtr> m_registry;
 };
 

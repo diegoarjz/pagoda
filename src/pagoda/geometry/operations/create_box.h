@@ -7,7 +7,7 @@ namespace pagoda::geometry::operations
 {
 class CreateBoxGeometry : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string outputGeometry;
 	static const char* name;
 

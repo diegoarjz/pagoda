@@ -15,7 +15,7 @@ namespace pagoda::dynamic
 const TypeInfoPtr DynamicClass::typeInfo = std::make_shared<TypeInfo>("DynamicClass");
 
 DynamicClass::DynamicClass(const std::string& className)
-    : DynamicValueBase(typeInfo), ClassBase(className), m_className(className)
+  : DynamicValueBase(typeInfo), ClassBase(className), m_className(className)
 {
 }
 
@@ -50,20 +50,16 @@ const std::shared_ptr<DynamicValueTable>& DynamicClass::GetClosure() const { ret
 
 DynamicValueBasePtr DynamicClass::Call(const std::vector<DynamicValueBasePtr>& args)
 {
-	if (!m_callableBody)
-	{
+	if (!m_callableBody) {
 		throw CallableBodyNotSet(ToString());
 	}
 
 	auto instance = std::make_shared<DynamicInstance>(std::dynamic_pointer_cast<DynamicClass>(shared_from_this()));
-	try
-	{
+	try {
 		// Bind the constructor body to the instance and call the bound constructor
 		auto boundConstructor = instance->Bind(m_callableBody);
 		boundConstructor->Call(args);
-	}
-	catch (DynamicValueBasePtr& returnValue)
-	{
+	} catch (DynamicValueBasePtr& returnValue) {
 	}
 	return instance;
 }

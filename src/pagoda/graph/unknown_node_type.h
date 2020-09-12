@@ -8,7 +8,7 @@ namespace pagoda::graph
 {
 class UnknownNodeTypeException : public common::exception::Exception
 {
-public:
+	public:
 	UnknownNodeTypeException(const std::string &nodeType);
 };
 }  // namespace pagoda::graph

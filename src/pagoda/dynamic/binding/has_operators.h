@@ -20,7 +20,7 @@ class has_add_operator
 	template<typename C, typename R>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T, T>(0)) == sizeof(yes) || sizeof(test<T, V>(0)) == sizeof(yes))
@@ -42,7 +42,7 @@ class has_sub_operator
 	template<typename C, typename R>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T, T>(0)) == sizeof(yes) || sizeof(test<T, V>(0)) == sizeof(yes))
@@ -64,7 +64,7 @@ class has_mul_operator
 	template<typename C, typename R>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T, T>(0)) == sizeof(yes) || sizeof(test<T, V>(0)) == sizeof(yes))
@@ -86,7 +86,7 @@ class has_div_operator
 	template<typename C, typename R>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T, T>(0)) == sizeof(yes) || sizeof(test<T, V>(0)) == sizeof(yes))
@@ -112,7 +112,7 @@ class has_eq_operator
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T>(0)) == sizeof(yes))
@@ -134,7 +134,7 @@ class has_neq_operator
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T>(0)) == sizeof(yes))
@@ -156,7 +156,7 @@ class has_lt_operator
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T>(0)) == sizeof(yes))
@@ -178,7 +178,7 @@ class has_lte_operator
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T>(0)) == sizeof(yes))
@@ -200,7 +200,7 @@ class has_gt_operator
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T>(0)) == sizeof(yes))
@@ -222,7 +222,7 @@ class has_gte_operator
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T>(0)) == sizeof(yes))
@@ -244,7 +244,7 @@ class has_minus_operator
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T>(0)) == sizeof(yes))
@@ -266,7 +266,7 @@ class has_negate_operator
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = (sizeof(test<T>(0)) == sizeof(yes))

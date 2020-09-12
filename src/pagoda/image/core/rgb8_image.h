@@ -10,7 +10,7 @@ namespace pagoda::image::core
 {
 class RGB8Image : public ImageImplementation
 {
-public:
+	public:
 	RGB8Image();
 	virtual ~RGB8Image();
 
@@ -21,7 +21,7 @@ public:
 
 	void SetImageReader(std::shared_ptr<io::ImageReader> reader) override;
 
-private:
+	private:
 	std::unique_ptr<boost::gil::rgb8_image_t> m_imageData;
 	std::shared_ptr<io::ImageReader> m_reader;
 };

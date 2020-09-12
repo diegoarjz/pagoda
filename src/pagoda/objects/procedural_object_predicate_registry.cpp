@@ -12,8 +12,7 @@ void ProceduralObjectPredicateRegistry::Register(const std::string &name, Proced
 ProceduralObjectPredicatePtr ProceduralObjectPredicateRegistry::Get(const std::string &name)
 {
 	auto iter = m_registry.find(name);
-	if (iter == m_registry.end())
-	{
+	if (iter == m_registry.end()) {
 		return nullptr;
 	}
 	return iter->second;

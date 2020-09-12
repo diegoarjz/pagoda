@@ -11,7 +11,7 @@ using namespace pagoda::graph;
 
 class ExecutionQueueTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp()
 	{
 		m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
@@ -82,8 +82,7 @@ TEST_F(ExecutionQueueTest, when_iterating_the_nodes_should_only_visit_them_once)
 
 	NodePtr n = q.GetNextNode();
 
-	while (n != nullptr)
-	{
+	while (n != nullptr) {
 		ASSERT_EQ(visitedNodes.find(n), std::end(visitedNodes));
 		visitedNodes.insert(n);
 		n = q.GetNextNode();

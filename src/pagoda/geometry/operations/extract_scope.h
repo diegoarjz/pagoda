@@ -7,7 +7,7 @@ namespace pagoda::geometry::operations
 {
 class ExtractScope : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string inputGeometry;
 	static const std::string outputGeometry;
 	static const char* name;
@@ -19,4 +19,3 @@ public:
 };
 }  // namespace pagoda::geometry::operations
 #endif
-

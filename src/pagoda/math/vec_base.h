@@ -16,8 +16,7 @@ template<int Size, class Rep>
 std::ostream& operator<<(std::ostream& o, const boost::qvm::vec<Rep, Size>& vec)
 {
 	o << "[";
-	for (auto i = 0u; i < Size; ++i)
-	{
+	for (auto i = 0u; i < Size; ++i) {
 		o << vec.a[i] << ",";
 	}
 	o << "]";

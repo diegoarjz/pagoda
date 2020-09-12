@@ -11,7 +11,7 @@ namespace pagoda::math
 template<class Rep>
 class Line3D
 {
-public:
+	public:
 	using VectorType = boost::qvm::vec<Rep, 3>;
 
 	/**
@@ -32,7 +32,7 @@ public:
 	 * Constructs the 3D line going through the \p point and with the \p normalizedDirection direction.
 	 */
 	Line3D(const VectorType& point, const VectorType& normalizedDirection)
-	    : m_point(point), m_direction(normalizedDirection)
+	  : m_point(point), m_direction(normalizedDirection)
 	{
 	}
 
@@ -52,7 +52,7 @@ public:
 
 	bool operator!=(const Line3D<Rep>& other) const { return !(*this == other); }
 
-private:
+	private:
 	VectorType m_point;      ///< A point in this line
 	VectorType m_direction;  ///< The line's normalized direction
 };

@@ -18,7 +18,7 @@ namespace pagoda::graph
 {
 class InputInterfaceNode : public Node
 {
-public:
+	public:
 	static const char* name;
 
 	InputInterfaceNode();
@@ -34,7 +34,7 @@ public:
 
 	const std::list<pagoda::objects::ProceduralObjectPtr>& GetProceduralObjects() const { return m_proceduralObjects; }
 
-private:
+	private:
 	std::string m_interfaceName;
 	std::list<pagoda::objects::ProceduralObjectPtr> m_proceduralObjects;
 };  // class OperationExecution

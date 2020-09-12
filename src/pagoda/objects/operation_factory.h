@@ -9,7 +9,7 @@ namespace pagoda::objects
 {
 class OperationFactory : public common::Factory<ProceduralOperation>
 {
-public:
+	public:
 	OperationFactory();
 	virtual ~OperationFactory();
 };

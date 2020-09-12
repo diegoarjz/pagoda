@@ -3,7 +3,7 @@
 namespace pagoda::objects
 {
 ProceduralObjectPredicate::ProceduralObjectPredicate(ProceduralObjectSystemPtr objectSystem)
-    : m_objectSystem(objectSystem)
+  : m_objectSystem(objectSystem)
 {
 }
 }  // namespace pagoda::objects

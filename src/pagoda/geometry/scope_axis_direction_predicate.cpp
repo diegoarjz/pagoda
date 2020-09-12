@@ -21,10 +21,8 @@ using namespace geometry::core;
 
 ScopeAxisDirectionPredicate::ScopeAxisDirectionPredicate(ProceduralObjectSystemPtr objectSystem, char scopeAxis,
                                                          const Vec3F& direction, const Degrees<float>& tolerance)
-    : ProceduralObjectPredicate(objectSystem),
-      m_scopeAxis(scopeAxis),
-      m_direction(normalized(direction)),
-      m_tolerance(tolerance)
+  : ProceduralObjectPredicate(objectSystem), m_scopeAxis(scopeAxis), m_direction(normalized(direction)),
+    m_tolerance(tolerance)
 {
 	m_geometrySystem = objectSystem->GetComponentSystem<GeometrySystem>();
 }
@@ -34,16 +32,14 @@ ScopeAxisDirectionPredicate::~ScopeAxisDirectionPredicate() {}
 bool ScopeAxisDirectionPredicate::operator()(const ProceduralObjectPtr object)
 {
 	auto geometryComponent = m_geometrySystem->GetComponentAs<GeometryComponent>(object);
-	if (geometryComponent == nullptr)
-	{
+	if (geometryComponent == nullptr) {
 		return false;
 	}
 	Scope scope = geometryComponent->GetScope();
 	Vec3F axis = scope.GetAxis(m_scopeAxis);
 
 	auto angle = std::acos(boost::qvm::dot(axis, m_direction));
-	if (angle <= static_cast<float>(Radians<float>(m_tolerance)))
-	{
+	if (angle <= static_cast<float>(Radians<float>(m_tolerance))) {
 		return true;
 	}
 

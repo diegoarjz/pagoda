@@ -28,8 +28,7 @@ Split::Split(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objec
 	std::unordered_map<std::string, DynamicValueBasePtr> values = {{"axis", std::make_shared<String>("x")},
 	                                                               {"split_count", std::make_shared<Integer>(0)}};
 
-	for (uint32_t i = 1u; i <= 32; ++i)
-	{
+	for (uint32_t i = 1u; i <= 32; ++i) {
 		values.emplace("split_" + std::to_string(i), std::make_shared<Integer>(0));
 	}
 
@@ -45,8 +44,7 @@ std::vector<Plane<float>> createPlanes(const Scope &scope, const std::vector<flo
 	LOG_TRACE(ProceduralObjects, "Creating split planes.");
 	LOG_TRACE(ProceduralObjects, "axis: " << axis);
 #ifdef DEBUG
-	for (const auto &s : sizes)
-	{
+	for (const auto &s : sizes) {
 		LOG_TRACE(ProceduralObjects, " size: " << s);
 	}
 #endif
@@ -54,18 +52,13 @@ std::vector<Plane<float>> createPlanes(const Scope &scope, const std::vector<flo
 	auto scopeAxis = scope.GetAxis(axis);
 	Plane<float> scopePlane;
 	float scopeSize;
-	if (axis == "x")
-	{
+	if (axis == "x") {
 		scopePlane = scope.GetYZPlane();
 		scopeSize = X(scope.GetSize());
-	}
-	else if (axis == "y")
-	{
+	} else if (axis == "y") {
 		scopePlane = scope.GetXZPlane();
 		scopeSize = Y(scope.GetSize());
-	}
-	else
-	{
+	} else {
 		scopePlane = scope.GetXYPlane();
 		scopeSize = Z(scope.GetSize());
 	}
@@ -76,8 +69,7 @@ std::vector<Plane<float>> createPlanes(const Scope &scope, const std::vector<flo
 	auto translationVector = scopeAxis;
 	scopeAxis = -1 * scopeAxis;
 
-	for (auto i = 1u; i < sizes.size() && currentDistance < scopeSize; ++i)
-	{
+	for (auto i = 1u; i < sizes.size() && currentDistance < scopeSize; ++i) {
 		auto currentPoint = scopePlane.GetPoint() + currentDistance * translationVector;
 		planes.push_back(Plane<float>::FromPointAndNormal(currentPoint, scopeAxis));
 		currentDistance += sizes[i];
@@ -96,15 +88,13 @@ void Split::DoWork()
 	auto splitCount = get_value_as<int>(*GetValue("split_count"));
 
 	std::vector<std::string> outInterfaces;
-	for (auto i = 1; i <= splitCount; ++i)
-	{
+	for (auto i = 1; i <= splitCount; ++i) {
 		std::string outInterface("split_" + std::to_string(i));
 		CreateOutputInterface(outInterface);
 		outInterfaces.push_back(outInterface);
 	}
 
-	while (HasInput(s_inputGeometry))
-	{
+	while (HasInput(s_inputGeometry)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
 		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
@@ -112,8 +102,7 @@ void Split::DoWork()
 
 		std::vector<float> sizes;
 		sizes.reserve(splitCount);
-		for (auto i = 1; i <= splitCount; ++i)
-		{
+		for (auto i = 1; i <= splitCount; ++i) {
 			std::string splitSizeName = "split_" + std::to_string(i);
 			UpdateValue(splitSizeName);
 			sizes.push_back(get_value_as<float>(*GetValue(splitSizeName)));
@@ -123,14 +112,13 @@ void Split::DoWork()
 		std::vector<GeometryPtr> splitGeometries;
 		planeSplit.Execute(inGeometry, splitGeometries);
 
-		for (auto i = 0u; i < static_cast<uint32_t>(splitCount) && i < splitGeometries.size(); ++i)
-		{
+		for (auto i = 0u; i < static_cast<uint32_t>(splitCount) && i < splitGeometries.size(); ++i) {
 			auto outProceduralObject = CreateOutputProceduralObject(inObject, outInterfaces[i]);
 			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outProceduralObject);
 
 			outGeometryComponent->SetGeometry(splitGeometries[i]);
 			outGeometryComponent->SetScope(
-			    Scope::FromGeometryAndConstrainedRotation(splitGeometries[i], inScope.GetRotation()));
+			  Scope::FromGeometryAndConstrainedRotation(splitGeometries[i], inScope.GetRotation()));
 		}
 	}
 }

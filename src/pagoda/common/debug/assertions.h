@@ -13,7 +13,7 @@ namespace pagoda::common::debug
  */
 class Fail
 {
-public:
+	public:
 	/**
 	 * Fail behaviour for an assertion.
 	 * This is returned by the FailHandler and its purpose is
@@ -30,8 +30,8 @@ public:
 	 * Type alias to a fail handler function.
 	 * The implementation already provides a default one.
 	 */
-	using FailHandler = std::add_pointer<FailBehaviour(const char *condition, const char *file, const int line,
-	                                                   const char *message)>::type;
+	using FailHandler =
+	  std::add_pointer<FailBehaviour(const char *condition, const char *file, const int line, const char *message)>::type;
 
 	/**
 	 * Installs a FailHandler function.
@@ -47,7 +47,7 @@ public:
 	 */
 	static FailBehaviour ReportFail(const char *condition, const char *file, const int line, const char *message, ...);
 
-private:
+	private:
 	/// The currently installed handler
 	static FailHandler sFailHandler;
 };  // class Fail
@@ -65,48 +65,40 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 /**
  * Assertion that will only be called in DEBUG mode.
  */
-#define DBG_ASSERT(cond)                                                                   \
-	do                                                                                     \
-	{                                                                                      \
-		if (!(cond))                                                                       \
-		{                                                                                  \
+#define DBG_ASSERT(cond)                                                             \
+	do {                                                                               \
+		if (!(cond)) {                                                                   \
 			if (::pagoda::common::debug::Fail::ReportFail(#cond, __FILE__, __LINE__, 0) == \
-			    ::pagoda::common::debug::Fail::FailBehaviour::Halt)                        \
-			{                                                                              \
-				HALT;                                                                      \
+			    ::pagoda::common::debug::Fail::FailBehaviour::Halt) {                      \
+				HALT;                                                                        \
 			}                                                                              \
-		}                                                                                  \
+		}                                                                                \
 	} while (0)
 
 /**
  * Assertion that will only be called in DEBUG mode.
  * Allows to print a custom message.
  */
-#define DBG_ASSERT_MSG(cond, ...)                                                                    \
-	do                                                                                               \
-	{                                                                                                \
-		if (!(cond))                                                                                 \
-		{                                                                                            \
+#define DBG_ASSERT_MSG(cond, ...)                                                              \
+	do {                                                                                         \
+		if (!(cond)) {                                                                             \
 			if (::pagoda::common::debug::Fail::ReportFail(#cond, __FILE__, __LINE__, __VA_ARGS__) == \
-			    ::pagoda::common::debug::Fail::FailBehaviour::Halt)                                  \
-			{                                                                                        \
-				HALT;                                                                                \
+			    ::pagoda::common::debug::Fail::FailBehaviour::Halt) {                                \
+				HALT;                                                                                  \
 			}                                                                                        \
-		}                                                                                            \
+		}                                                                                          \
 	} while (0)
 
 #else
 
 #define DBG_ASSERT(cond) \
-	do                   \
-	{                    \
-		UNUSED(cond);    \
+	do {                   \
+		UNUSED(cond);        \
 	} while (0)
 
 #define DBG_ASSERT_MSG(cond, ...) \
-	do                            \
-	{                             \
-		UNUSED(cond);             \
+	do {                            \
+		UNUSED(cond);                 \
 	} while (0)
 
 #endif
@@ -114,34 +106,28 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 /**
  * Assertion that will always be called.
  */
-#define CRITICAL_ASSERT(cond)                                                                           \
-	do                                                                                                  \
-	{                                                                                                   \
-		if (!(cond))                                                                                    \
-		{                                                                                               \
+#define CRITICAL_ASSERT(cond)                                                                     \
+	do {                                                                                            \
+		if (!(cond)) {                                                                                \
 			if (::pagoda::common::debug::Fail::ReportFail("CRITICAL! " #cond, __FILE__, __LINE__, 0) == \
-			    ::pagoda::common::debug::Fail::FailBehaviour::Halt)                                     \
-			{                                                                                           \
-				HALT;                                                                                   \
+			    ::pagoda::common::debug::Fail::FailBehaviour::Halt) {                                   \
+				HALT;                                                                                     \
 			}                                                                                           \
-		}                                                                                               \
+		}                                                                                             \
 	} while (0)
 
 /**
  * Assertion that will always be called.
  * Allows to print a custom message.
  */
-#define CRITICAL_ASSERT_MSG(cond, ...)                                                                            \
-	do                                                                                                            \
-	{                                                                                                             \
-		if (!(cond))                                                                                              \
-		{                                                                                                         \
+#define CRITICAL_ASSERT_MSG(cond, ...)                                                                      \
+	do {                                                                                                      \
+		if (!(cond)) {                                                                                          \
 			if (::pagoda::common::debug::Fail::ReportFail("CRITICAL! " #cond, __FILE__, __LINE__, __VA_ARGS__) == \
-			    ::pagoda::common::debug::Fail::FailBehaviour::Halt)                                               \
-			{                                                                                                     \
-				HALT;                                                                                             \
+			    ::pagoda::common::debug::Fail::FailBehaviour::Halt) {                                             \
+				HALT;                                                                                               \
 			}                                                                                                     \
-		}                                                                                                         \
+		}                                                                                                       \
 	} while (0)
 
 #endif

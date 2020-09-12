@@ -6,7 +6,7 @@ using namespace dynamic;
 
 ScriptCallableBody::ScriptCallableBody(ast::IdentifierPtr identifier, ast::StatementBlockPtr body,
                                        const std::vector<ast::ParameterPtr> &parameters)
-    : m_body(body), m_functionIdentifier(identifier), m_parameters(parameters)
+  : m_body(body), m_functionIdentifier(identifier), m_parameters(parameters)
 {
 }
 ScriptCallableBody::~ScriptCallableBody() {}

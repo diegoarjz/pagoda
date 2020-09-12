@@ -47,7 +47,7 @@ class Query;
  */
 class Graph
 {
-public:
+	public:
 	using SchedulerFactoryFunction_t = std::function<std::unique_ptr<IScheduler>(Graph &)>;
 
 	static void SetSchedulerFactory(const SchedulerFactoryFunction_t &factoryFunction);
@@ -202,7 +202,7 @@ public:
 	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
 	                                const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args);
 
-private:
+	private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
 
@@ -216,4 +216,3 @@ private:
 using GraphPtr = std::shared_ptr<Graph>;
 
 }  // namespace pagoda::graph
-

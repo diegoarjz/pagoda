@@ -6,12 +6,12 @@ namespace pagoda::common::exception
 {
 class Exception
 {
-public:
+	public:
 	Exception(const std::string exceptionMessage);
 
 	const std::string& What() const;
 
-private:
+	private:
 	const std::string m_message;
 };
 }  // namespace pagoda::common::exception

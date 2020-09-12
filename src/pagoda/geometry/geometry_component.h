@@ -11,7 +11,7 @@ namespace pagoda::geometry
 {
 class GeometryComponent : public objects::ProceduralComponent
 {
-public:
+	public:
 	static std::string GetComponentSystemName();
 
 	virtual ~GeometryComponent(){};
@@ -22,7 +22,7 @@ public:
 	const geometry::core::Scope& GetScope() const;
 	void SetScope(const geometry::core::Scope& scope);
 
-private:
+	private:
 	core::GeometryPtr geometry;
 	geometry::core::Scope m_scope;
 };  // class GeometryComponent

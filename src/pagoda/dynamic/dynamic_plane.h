@@ -15,7 +15,7 @@ using Vector3Ptr = std::shared_ptr<Vector3>;
 
 class DynamicPlane : public BuiltinClass
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	static std::shared_ptr<DynamicPlane> DynamicConstructor(const std::vector<DynamicValueBasePtr>& args);
@@ -43,7 +43,7 @@ public:
 	Vector3Ptr GetVector2();
 	FloatValuePtr GetDistanceToOrigin();
 
-private:
+	private:
 	void RegisterMembers();
 
 	math::Plane<float> m_nativePlane;

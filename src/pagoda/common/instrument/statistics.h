@@ -24,7 +24,7 @@ namespace pagoda::common::instrument
  */
 class StatisticsManager
 {
-public:
+	public:
 	struct StatsGroup;
 
 	using NameType = std::string;
@@ -84,7 +84,7 @@ public:
 	 */
 	void Write(std::ostream &outStream);
 
-private:
+	private:
 	StatsGroupContainerType m_statsGroup;
 };  // class StatisticsManager
 
@@ -96,7 +96,7 @@ private:
  */
 struct OneShotProfilerStats : public StatisticsManager::StatsGroup
 {
-public:
+	public:
 	static OneShotProfilerStats *Instance();
 
 	void Write(std::ostream &outStream) final;
@@ -109,13 +109,10 @@ public:
 		auto iter = m_stats.find(containerName);
 
 		std::shared_ptr<StatsContainerType> container;
-		if (iter == m_stats.end())
-		{
+		if (iter == m_stats.end()) {
 			container = std::make_shared<StatsContainerType>(containerName);
 			m_stats.emplace(containerName, container);
-		}
-		else
-		{
+		} else {
 			container = std::dynamic_pointer_cast<StatsContainerType>(m_stats[containerName]);
 		}
 
@@ -123,7 +120,7 @@ public:
 	}
 	std::map<std::string, std::shared_ptr<StatisticsManager::StatsContainer>> m_stats;
 
-private:
+	private:
 	OneShotProfilerStats() { StatisticsManager::Instance()->AddGroup(this); }
 };  // struct OneShotProfilerStats
 

@@ -9,7 +9,7 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
 class NullObject : public DynamicValueBase
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	NullObject();

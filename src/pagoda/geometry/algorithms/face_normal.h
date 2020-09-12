@@ -26,8 +26,7 @@ inline typename Geometry::PositionType face_normal(Geometry *geometry, const typ
 	                                     });
 
 #ifdef DEBUG
-	if (boost::qvm::mag_sqr(normal) == 0)
-	{
+	if (boost::qvm::mag_sqr(normal) == 0) {
 		LOG_ERROR("Normal's magnitude is 0");
 		algorithms::EachPointAroundFace(geometry, face, [](Geometry *g, const typename Geometry::PointHandle &p) {
 			auto pos = g->GetPosition(p);

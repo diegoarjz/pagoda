@@ -12,7 +12,7 @@ using IntegerPtr = std::shared_ptr<Integer>;
  */
 class FloatValue : public DynamicValueBase
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	/**
@@ -79,7 +79,7 @@ public:
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
-private:
+	private:
 	float m_value;
 };
 using FloatValuePtr = std::shared_ptr<FloatValue>;

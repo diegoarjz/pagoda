@@ -12,7 +12,7 @@ namespace pagoda::dynamic
  */
 class TypeInfo : public DynamicValueBase
 {
-public:
+	public:
 	/// A \c TypeInfo is also a \c DynamicValueBase so it must have its own type.
 	static const std::shared_ptr<TypeInfo> s_typeInfo;
 
@@ -32,7 +32,7 @@ public:
 
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
-private:
+	private:
 	std::string m_typeName;
 };
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;

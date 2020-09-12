@@ -9,7 +9,7 @@ namespace pagoda::graph
 {
 class NodeFactory : public common::Factory<Node>
 {
-public:
+	public:
 	NodeFactory();
 	virtual ~NodeFactory();
 };

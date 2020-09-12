@@ -15,7 +15,7 @@ using NodePtr = std::shared_ptr<Node>;
  */
 class ExecutionQueue
 {
-public:
+	public:
 	/**
 	 * Constructs the \c ExecutionQueue from a \c Graph.
 	 */
@@ -39,7 +39,7 @@ public:
 	 */
 	std::size_t GetNodeCount() const;
 
-private:
+	private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
 };

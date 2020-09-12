@@ -5,7 +5,7 @@
 namespace pagoda::geometry::core
 {
 const SplitPointTopology::Index_t SplitPointTopology::s_invalidIndex =
-    std::numeric_limits<SplitPointTopology::Index_t>::max();
+  std::numeric_limits<SplitPointTopology::Index_t>::max();
 
 std::size_t SplitPointTopology::GetFaceCount() const { return m_faces.Count(); }
 std::size_t SplitPointTopology::GetPointCount() const { return m_points.Count(); }
@@ -65,8 +65,7 @@ SplitPointTopology::EdgeHandleSet SplitPointTopology::GetOutEdges(const PointHan
 	EdgeHandleSet result;
 	const auto &point = m_points.Get(p);
 
-	for (const auto &e : point.m_edges)
-	{
+	for (const auto &e : point.m_edges) {
 		result.insert(e);
 	}
 
@@ -179,8 +178,7 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointH
 	LOG_TRACE(GeometryCore,
 	          "Creating a face with points " << p0.GetIndex() << "," << p1.GetIndex() << " and " << p2.GetIndex());
 	auto getOrCreatePoint = [this](const PointHandle &p) {
-		if (p.GetIndex() == s_invalidIndex)
-		{
+		if (p.GetIndex() == s_invalidIndex) {
 			return m_points.Create();
 		}
 		return p.GetIndex();
@@ -203,8 +201,7 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const std::v
 	LOG_TRACE(GeometryCore, "Creating face with multiple points.");
 
 	auto getOrCreatePoint = [this](const PointHandle &p) {
-		if (p.GetIndex() == s_invalidIndex)
-		{
+		if (p.GetIndex() == s_invalidIndex) {
 			return m_points.Create();
 		}
 		return p.GetIndex();
@@ -217,14 +214,13 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const std::v
 	EdgeHandleArray_t edges;
 	edges.reserve(points.size());
 
-	for (const auto &p : points)
-	{
+	for (const auto &p : points) {
 		facePoints.emplace_back(getOrCreatePoint(p));
 		splitPoints.emplace_back(m_splitPoints.Create());
 		edges.emplace_back(m_edges.Create());
 	}
 
-    return CreateFace(facePoints, splitPoints, edges);
+	return CreateFace(facePoints, splitPoints, edges);
 }
 
 SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointHandleArray_t &points,
@@ -235,18 +231,15 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointH
 	LOG_TRACE(GeometryCore, "Creating a face");
 #ifdef DEBUG
 	LOG_TRACE(GeometryCore, "Points");
-	for (const auto &p : points)
-	{
+	for (const auto &p : points) {
 		LOG_TRACE(GeometryCore, " Point " << p);
 	}
 	LOG_TRACE(GeometryCore, "SplitPoints");
-	for (const auto &s : splitPoints)
-	{
+	for (const auto &s : splitPoints) {
 		LOG_TRACE(GeometryCore, " SplitPoint " << s);
 	}
 	LOG_TRACE(GeometryCore, "Edges");
-	for (const auto &e : edges)
-	{
+	for (const auto &e : edges) {
 		LOG_TRACE(GeometryCore, " Edge " << e);
 	}
 #endif
@@ -256,18 +249,17 @@ SplitPointTopology::CreateFaceResult SplitPointTopology::CreateFace(const PointH
 
 	// Connect the elements
 	auto size = points.size();
-	for (uint32_t i = 0; i < size; ++i)
-	{
+	for (uint32_t i = 0; i < size; ++i) {
 		AddEdge(points[i], edges[i]);
 		SetOutgoingEdge(m_splitPoints.Get(splitPoints[i]), m_edges.Get(edges[i]), splitPoints[i], edges[i]);
 		SetIncomingEdge(m_splitPoints.Get(splitPoints[i]), m_edges.Get(edges[(i - 1) % size]), splitPoints[i],
 		                edges[(i - 1) % size]);
 		SetPoint(m_splitPoints.Get(splitPoints[i]), m_points.Get(points[i]), splitPoints[i], points[i]);
 		SetFace(m_splitPoints.Get(splitPoints[i]), face.m_value, splitPoints[i], face.m_index);
-		SetIncomingEdge(m_splitPoints.Get(splitPoints[(i + 1) % size]), m_edges.Get(edges[i]),
-		                splitPoints[(i + 1) % size], edges[i]);
+		SetIncomingEdge(m_splitPoints.Get(splitPoints[(i + 1) % size]), m_edges.Get(edges[i]), splitPoints[(i + 1) % size],
+		                edges[i]);
 	}
-    face.m_value.m_splitPoint = splitPoints[0];
+	face.m_value.m_splitPoint = splitPoints[0];
 
 #ifdef DEBUG
 	LOG_TRACE(GeometryCore, "CreateFace: IsValid: " << IsValid());
@@ -414,8 +406,7 @@ SplitPointTopology::SplitPointHandle SplitPointTopology::CollapseEdge(const Edge
 	m_splitPoints.Delete(splitPointB);
 	m_edges.Delete(e);
 	pointB.m_edges.erase(e);
-	if (pointB.m_edges.size() == 0)
-	{
+	if (pointB.m_edges.size() == 0) {
 		m_points.Delete(pointHandleB);
 	}
 
@@ -470,8 +461,7 @@ SplitPointTopology::FaceHandle SplitPointTopology::SplitFace(const FaceHandle &f
 	// 3. Iterate over the edges from e1 to e0 (The edges in the new face)
 	auto currentEdge = GetNextEdge(e1);
 	auto lastEdge = GetPrevEdge(e0);
-	while (currentEdge != lastEdge)
-	{
+	while (currentEdge != lastEdge) {
 		LOG_TRACE(GeometryCore, "Iterating edge " << currentEdge);
 		// 3.1 Set all the split points to the new face
 		SplitPointHandle splitPointHandle = GetDestination(currentEdge);
@@ -526,8 +516,7 @@ void SplitPointTopology::DeleteFace(const FaceHandle &f)
 	PointHandleSet pointsToDelete;
 	SplitPointHandleSet splitPointsToDelete;
 	EdgeHandleSet edgesToDelete;
-	for (auto iter = FaceSplitPointCirculatorBegin(f); iter; ++iter)
-	{
+	for (auto iter = FaceSplitPointCirculatorBegin(f); iter; ++iter) {
 		Index_t splitPointIndex = (*iter).GetIndex();
 		LOG_TRACE(GeometryCore, " Iterating on SplitPoint " << splitPointIndex);
 
@@ -538,8 +527,7 @@ void SplitPointTopology::DeleteFace(const FaceHandle &f)
 		LOG_TRACE(GeometryCore,
 		          "  Point " << splitPoint.m_point << " still has " << point.m_edges.size() << " outgoing edges");
 
-		if (point.m_edges.size() == 0)
-		{
+		if (point.m_edges.size() == 0) {
 			LOG_TRACE(GeometryCore, "   Adding to delete list");
 			pointsToDelete.insert(splitPoint.m_point);
 		}
@@ -547,18 +535,15 @@ void SplitPointTopology::DeleteFace(const FaceHandle &f)
 		edgesToDelete.insert(splitPoint.m_outgoingEdge);
 	}
 
-	for (auto &p : pointsToDelete)
-	{
+	for (auto &p : pointsToDelete) {
 		LOG_TRACE(GeometryCore, " Deleting Point " << p);
 		m_points.Delete(p);
 	}
-	for (auto &sp : splitPointsToDelete)
-	{
+	for (auto &sp : splitPointsToDelete) {
 		LOG_TRACE(GeometryCore, " Deleting Split Point " << sp);
 		m_splitPoints.Delete(sp);
 	}
-	for (auto &e : edgesToDelete)
-	{
+	for (auto &e : edgesToDelete) {
 		LOG_TRACE(GeometryCore, " Deleting Edge " << e);
 		m_edges.Delete(e);
 	}
@@ -574,12 +559,10 @@ void SplitPointTopology::DeletePoint(const PointHandle &p)
 	START_PROFILE;
 	LOG_TRACE(GeometryCore, "Deleting Point " << p);
 	EdgeHandleSet edgesToDelete;
-	for (auto iter = PointEdgesBegin(p); iter != PointEdgesEnd(p); ++iter)
-	{
+	for (auto iter = PointEdgesBegin(p); iter != PointEdgesEnd(p); ++iter) {
 		edgesToDelete.insert((*iter).GetIndex());
 	}
-	for (const auto &e : edgesToDelete)
-	{
+	for (const auto &e : edgesToDelete) {
 		DeleteEdge(e);
 	}
 #ifdef DEBUG
@@ -624,14 +607,12 @@ SplitPointTopology::EdgeHandleSet SplitPointTopology::GetEdges(const PointHandle
 	std::unordered_set<Index_t> edgesToCheck = point0.m_edges;
 	edgesToCheck.insert(std::begin(point1.m_edges), std::end(point1.m_edges));
 
-	for (const auto &edgeIndex : edgesToCheck)
-	{
+	for (const auto &edgeIndex : edgesToCheck) {
 		const Index_t sourcePointIndex = GetPoint(GetSource(edgeIndex));
 		const Index_t destinationPointIndex = GetPoint(GetDestination(edgeIndex));
 
 		if ((sourcePointIndex == p0 && destinationPointIndex == p1) ||
-		    (sourcePointIndex == p1 && destinationPointIndex == p0))
-		{
+		    (sourcePointIndex == p1 && destinationPointIndex == p0)) {
 			edges.insert(EdgeHandle(edgeIndex));
 		}
 	}
@@ -646,8 +627,7 @@ SplitPointTopology::FaceHandleSet SplitPointTopology::GetFaces(const PointHandle
 	FaceHandleSet faces;
 
 	const Point &point = m_points.Get(p);
-	for (const auto &edge : point.m_edges)
-	{
+	for (const auto &edge : point.m_edges) {
 		faces.insert(GetFace(EdgeHandle(edge)));
 	}
 	return faces;
@@ -660,8 +640,7 @@ SplitPointTopology::FaceHandleSet SplitPointTopology::GetFaces(const PointHandle
 	FaceHandleSet faces;
 	EdgeHandleSet edges = GetEdges(p0, p1);
 
-	for (const auto &e : edges)
-	{
+	for (const auto &e : edges) {
 		const auto &sourceSplitPoint = m_splitPoints.Get(GetSource(e));
 		faces.insert(sourceSplitPoint.m_face);
 	}
@@ -741,23 +720,19 @@ SplitPointTopology::FacePointCirculator SplitPointTopology::FacePointCirculatorB
 bool SplitPointTopology::IsValid()
 {
 	bool isValid = true;
-	for (const auto &p : m_points)
-	{
+	for (const auto &p : m_points) {
 		isValid = isValid && ValidatePoint(p.m_index);
 	}
 
-	for (const auto &s : m_splitPoints)
-	{
+	for (const auto &s : m_splitPoints) {
 		isValid = isValid && ValidateSplitPoint(s.m_index);
 	}
 
-	for (const auto &e : m_edges)
-	{
+	for (const auto &e : m_edges) {
 		isValid = isValid && ValidateEdge(e.m_index);
 	}
 
-	for (const auto &f : m_faces)
-	{
+	for (const auto &f : m_faces) {
 		isValid = isValid && ValidateFace(f.m_index);
 	}
 
@@ -767,25 +742,19 @@ bool SplitPointTopology::IsValid()
 
 bool SplitPointTopology::ValidatePoint(const Index_t &p)
 {
-	if (!m_points.HasIndex(p))
-	{
+	if (!m_points.HasIndex(p)) {
 		LOG_ERROR("Point " << p << " doesn't exist");
 		return false;
 	}
 
 	bool isValid = true;
 	// Check that all edges exist
-	for (const auto &e : m_points.Get(p).m_edges)
-	{
-		if (!m_edges.HasIndex(e))
-		{
+	for (const auto &e : m_points.Get(p).m_edges) {
+		if (!m_edges.HasIndex(e)) {
 			isValid = false;
 			LOG_ERROR("Edge " << e << " doesn't exist for point " << p);
-		}
-		else
-		{
-			if (GetPoint(GetSource(e)).GetIndex() != p)
-			{
+		} else {
+			if (GetPoint(GetSource(e)).GetIndex() != p) {
 				LOG_ERROR("Edge " << e << " referenced by point " << p << " is not an outgoing edge for this point.");
 				isValid = false;
 			}
@@ -796,8 +765,7 @@ bool SplitPointTopology::ValidatePoint(const Index_t &p)
 
 bool SplitPointTopology::ValidateSplitPoint(const Index_t &s)
 {
-	if (!m_splitPoints.HasIndex(s))
-	{
+	if (!m_splitPoints.HasIndex(s)) {
 		LOG_ERROR("Split Point " << s << " doesn't exist.");
 		return false;
 	}
@@ -806,13 +774,11 @@ bool SplitPointTopology::ValidateSplitPoint(const Index_t &s)
 	const SplitPoint &splitPoint = m_splitPoints.Get(s);
 
 	// Check that the incoming and outgoing edges exist
-	if (!m_edges.HasIndex(splitPoint.m_incomingEdge))
-	{
+	if (!m_edges.HasIndex(splitPoint.m_incomingEdge)) {
 		LOG_ERROR("Incoming Edge " << splitPoint.m_incomingEdge << " doesn't exist for Split Point " << s);
 		isValid = false;
 	}
-	if (!m_edges.HasIndex(splitPoint.m_outgoingEdge))
-	{
+	if (!m_edges.HasIndex(splitPoint.m_outgoingEdge)) {
 		LOG_ERROR("Outgoing Edge " << splitPoint.m_outgoingEdge << " doesn't exist for Split Point " << s);
 		isValid = false;
 	}
@@ -820,29 +786,25 @@ bool SplitPointTopology::ValidateSplitPoint(const Index_t &s)
 	// Check that the edges reference the split point
 	Edge incomingEdge = m_edges.Get(splitPoint.m_incomingEdge);
 	Edge outgoingEdge = m_edges.Get(splitPoint.m_outgoingEdge);
-	if (incomingEdge.m_destination != s)
-	{
+	if (incomingEdge.m_destination != s) {
 		LOG_ERROR("Incoming Edge " << splitPoint.m_incomingEdge << " of Split Point " << s << " references Split Point "
 		                           << incomingEdge.m_destination);
 		isValid = false;
 	}
-	if (outgoingEdge.m_source != s)
-	{
+	if (outgoingEdge.m_source != s) {
 		LOG_ERROR("Outgoing Edge " << splitPoint.m_outgoingEdge << " of Split Point " << s << " references Split Point "
 		                           << outgoingEdge.m_source);
 		isValid = false;
 	}
 
 	// Check that the face exists
-	if (!m_faces.HasIndex(splitPoint.m_face))
-	{
+	if (!m_faces.HasIndex(splitPoint.m_face)) {
 		LOG_ERROR("Face " << splitPoint.m_face << " for Split Point " << s << " doesn't exist");
 		isValid = false;
 	}
 
 	// Check that the point exists
-	if (!m_points.HasIndex(splitPoint.m_point))
-	{
+	if (!m_points.HasIndex(splitPoint.m_point)) {
 		LOG_ERROR("Point " << splitPoint.m_point << " for Split Point " << s << " doesn't exist");
 		isValid = false;
 	}
@@ -852,8 +814,7 @@ bool SplitPointTopology::ValidateSplitPoint(const Index_t &s)
 
 bool SplitPointTopology::ValidateEdge(const Index_t &e)
 {
-	if (!m_edges.HasIndex(e))
-	{
+	if (!m_edges.HasIndex(e)) {
 		LOG_ERROR("Edge " << e << " doesn't exist");
 		return false;
 	}
@@ -862,13 +823,11 @@ bool SplitPointTopology::ValidateEdge(const Index_t &e)
 	Edge &edge = m_edges.Get(e);
 
 	// Check that the split points exist.
-	if (!m_splitPoints.HasIndex(edge.m_source))
-	{
+	if (!m_splitPoints.HasIndex(edge.m_source)) {
 		LOG_ERROR("Source Split Point " << edge.m_source << " for Edge " << e << " doesn't exist");
 		isValid = false;
 	}
-	if (!m_splitPoints.HasIndex(edge.m_destination))
-	{
+	if (!m_splitPoints.HasIndex(edge.m_destination)) {
 		LOG_ERROR("Destination Split Point " << edge.m_destination << " for Edge " << e << " doesn't exist");
 		isValid = false;
 	}
@@ -876,14 +835,12 @@ bool SplitPointTopology::ValidateEdge(const Index_t &e)
 	// Check that the split points reference this edge.
 	SplitPoint &source = m_splitPoints.Get(edge.m_source);
 	SplitPoint &destination = m_splitPoints.Get(edge.m_destination);
-	if (source.m_outgoingEdge != e)
-	{
+	if (source.m_outgoingEdge != e) {
 		LOG_ERROR("Source Split Point " << edge.m_source << " doesn't reference Edge " << e << " (references "
 		                                << source.m_outgoingEdge << ")");
 		isValid = false;
 	}
-	if (destination.m_incomingEdge != e)
-	{
+	if (destination.m_incomingEdge != e) {
 		LOG_ERROR("Destination Split Point " << edge.m_destination << " doesn't reference Edge " << e << " (references "
 		                                     << destination.m_incomingEdge << ")");
 		isValid = false;
@@ -891,8 +848,7 @@ bool SplitPointTopology::ValidateEdge(const Index_t &e)
 
 	// Check that the edge is in the set of edges of the source point
 	Point &point = m_points.Get(GetPoint(edge.m_source));
-	if (point.m_edges.find(e) == std::end(point.m_edges))
-	{
+	if (point.m_edges.find(e) == std::end(point.m_edges)) {
 		LOG_ERROR("Edge " << e << " is not in the set of outgoing edges of Point " << GetPoint(edge.m_source));
 		isValid = false;
 	}
@@ -902,8 +858,7 @@ bool SplitPointTopology::ValidateEdge(const Index_t &e)
 
 bool SplitPointTopology::ValidateFace(const Index_t &f)
 {
-	if (!m_faces.HasIndex(f))
-	{
+	if (!m_faces.HasIndex(f)) {
 		LOG_ERROR("Face " << f << " doesn't exist");
 		return false;
 	}
@@ -912,21 +867,18 @@ bool SplitPointTopology::ValidateFace(const Index_t &f)
 	Face &face = m_faces.Get(f);
 
 	// Check that the split point exists.
-	if (!m_splitPoints.HasIndex(face.m_splitPoint))
-	{
+	if (!m_splitPoints.HasIndex(face.m_splitPoint)) {
 		LOG_ERROR("Split Point " << face.m_splitPoint << " for Face " << f << " doesn't exist");
 	}
 
 	Index_t currentSplitPointIndex = GetNextSplitPoint(SplitPointHandle(face.m_splitPoint));
 	uint32_t splitPointCount = 1;
 
-	while (currentSplitPointIndex != face.m_splitPoint)
-	{
+	while (currentSplitPointIndex != face.m_splitPoint) {
 		const SplitPoint &splitPoint = m_splitPoints.Get(currentSplitPointIndex);
 
 		// Check that all split points point to this face.
-		if (splitPoint.m_face != f)
-		{
+		if (splitPoint.m_face != f) {
 			LOG_ERROR("Split Point " << currentSplitPointIndex << " doesn't reference Face " << f << " (references "
 			                         << splitPoint.m_face << ")");
 			isValid = false;
@@ -935,8 +887,7 @@ bool SplitPointTopology::ValidateFace(const Index_t &f)
 		++splitPointCount;
 		currentSplitPointIndex = GetNextSplitPoint(SplitPointHandle(currentSplitPointIndex));
 
-		if (splitPointCount >= 100)
-		{
+		if (splitPointCount >= 100) {
 			LOG_ERROR("Possible infinite loop in Face " << f);
 			isValid = false;
 			break;
@@ -944,8 +895,7 @@ bool SplitPointTopology::ValidateFace(const Index_t &f)
 	}
 
 	// Check that there are at least 3 points in this face.
-	if (splitPointCount < 3)
-	{
+	if (splitPointCount < 3) {
 		LOG_ERROR("Face " << f << " has less than 3 Split Points. It has " << splitPointCount << " Split Points.");
 		isValid = false;
 	}
@@ -957,11 +907,9 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 {
 	outStream << "IsValid: " << (IsValid() ? "true" : "false") << std::endl;
 	outStream << "Points:" << std::endl;
-	for (const auto &p : m_points)
-	{
+	for (const auto &p : m_points) {
 		outStream << " " << p.m_index << " Edges: ";
-		for (const auto &e : p.m_value.m_edges)
-		{
+		for (const auto &e : p.m_value.m_edges) {
 			outStream << e << ", ";
 		}
 		outStream << std::endl;
@@ -969,8 +917,7 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 	outStream << std::endl;
 
 	outStream << "SplitPoints:" << std::endl;
-	for (const auto &sp : m_splitPoints)
-	{
+	for (const auto &sp : m_splitPoints) {
 		outStream << " " << sp.m_index << ": ";
 		outStream << " P: " << sp.m_value.m_point;
 		outStream << " F: " << sp.m_value.m_face;
@@ -981,8 +928,7 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 	outStream << std::endl;
 
 	outStream << "Edges:" << std::endl;
-	for (const auto &e : m_edges)
-	{
+	for (const auto &e : m_edges) {
 		outStream << " " << e.m_index << ": ";
 		outStream << e.m_value.m_source << " -> " << e.m_value.m_destination;
 		outStream << std::endl;
@@ -990,8 +936,7 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 	outStream << std::endl;
 
 	outStream << "Faces:" << std::endl;
-	for (const auto &f : m_faces)
-	{
+	for (const auto &f : m_faces) {
 		outStream << " " << f.m_index << ": ";
 		outStream << "  SP: " << f.m_value.m_splitPoint;
 		outStream << std::endl;

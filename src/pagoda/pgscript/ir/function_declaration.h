@@ -12,7 +12,7 @@ using ParameterPtr = std::shared_ptr<Parameter>;
 struct FunctionDeclaration : public Statement
 {
 	FunctionDeclaration(IdentifierPtr funIdentifier, const std::vector<ParameterPtr> &params, StatementBlockPtr body)
-	    : m_functionIdentifier(funIdentifier), m_parameters(params), m_functionBody(body)
+	  : m_functionIdentifier(funIdentifier), m_parameters(params), m_functionBody(body)
 	{
 	}
 	virtual ~FunctionDeclaration();
@@ -23,7 +23,7 @@ struct FunctionDeclaration : public Statement
 
 	void AcceptVisitor(AstVisitor *v) override;
 
-private:
+	private:
 	IdentifierPtr m_functionIdentifier;
 	std::vector<ParameterPtr> m_parameters;
 	StatementBlockPtr m_functionBody;

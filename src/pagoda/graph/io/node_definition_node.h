@@ -16,7 +16,7 @@ using NamedArgumentPtr = std::shared_ptr<NamedArgument>;
  */
 class NodeDefinitionNode : public GraphStatementNode
 {
-public:
+	public:
 	/// Storage type for construction arguments
 	using ConstructionArgumentContainer_t = std::vector<NamedArgumentPtr>;
 	/// Storage type for execution arguments
@@ -30,16 +30,14 @@ public:
 	/**
 	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args.
 	 */
-	NodeDefinitionNode(const std::string &name, const std::string &nodeType,
-	                   const ConstructionArgumentContainer_t &args);
+	NodeDefinitionNode(const std::string &name, const std::string &nodeType, const ConstructionArgumentContainer_t &args);
 
 	/**
 	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args, passing \p startOffset and \p
 	 * endOffset to the respective \c AstNode constructor.
 	 */
-	NodeDefinitionNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset,
-	                   const std::string &name, const std::string &nodeType,
-	                   const ConstructionArgumentContainer_t &args);
+	NodeDefinitionNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset, const std::string &name,
+	                   const std::string &nodeType, const ConstructionArgumentContainer_t &args);
 
 	/**
 	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args, passing \p nodeRange to the
@@ -137,7 +135,7 @@ public:
 	 */
 	void AcceptVisitor(AstNodeVisitor *visitor) override;
 
-private:
+	private:
 	std::string m_nodeName;                                   ///< The graph's \c Node name.
 	std::string m_nodeType;                                   ///< The type of node to create.
 	ConstructionArgumentContainer_t m_constructionArguments;  ///< The construction arguments.

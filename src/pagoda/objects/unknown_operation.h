@@ -8,8 +8,7 @@ namespace pagoda::objects
 {
 class UnknownOperation : public common::exception::Exception
 {
-public:
+	public:
 	UnknownOperation(const std::string operationName);
 };
 }  // namespace pagoda::objects
-

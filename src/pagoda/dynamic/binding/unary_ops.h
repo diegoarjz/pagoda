@@ -14,9 +14,9 @@ namespace pagoda::dynamic
 template<class T>
 class UndefinedNegateOperator : public common::exception::Exception
 {
-public:
+	public:
 	UndefinedNegateOperator()
-	    : common::exception::Exception("Undefined negate operator for " + T::s_typeInfo->GetTypeName() + " type")
+	  : common::exception::Exception("Undefined negate operator for " + T::s_typeInfo->GetTypeName() + " type")
 	{
 	}
 };
@@ -45,9 +45,9 @@ struct negate
 template<class T>
 class UndefinedMinusOperator : public common::exception::Exception
 {
-public:
+	public:
 	UndefinedMinusOperator()
-	    : common::exception::Exception("Undefined minus operator for " + T::s_typeInfo->GetTypeName() + " type")
+	  : common::exception::Exception("Undefined minus operator for " + T::s_typeInfo->GetTypeName() + " type")
 	{
 	}
 };

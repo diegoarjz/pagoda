@@ -52,12 +52,9 @@ Vec3F Scope::GetZAxis() const { return boost::qvm::col<2>(m_rotation); }
 
 Vec3F Scope::GetAxis(const std::string &axisName) const
 {
-	if (axisName == "x")
-	{
+	if (axisName == "x") {
 		return GetXAxis();
-	}
-	else if (axisName == "y")
-	{
+	} else if (axisName == "y") {
 		return GetYAxis();
 	}
 	CRITICAL_ASSERT_MSG(axisName == "z", "Axis name must be one of x, y or z.");
@@ -66,8 +63,7 @@ Vec3F Scope::GetAxis(const std::string &axisName) const
 
 Vec3F Scope::GetAxis(char axisName) const
 {
-	switch (axisName)
-	{
+	switch (axisName) {
 		case 'x':
 			return GetXAxis();
 		case 'y':
@@ -104,8 +100,7 @@ Vec3F Scope::GetWorldPoint(const BoxPoints &p) const { return LocalPointInWorld(
 std::array<Vec3F, 8> Scope::GetWorldPoints() const
 {
 	std::array<Vec3F, 8> boxPoints;
-	for (int i = 0; i < 8; ++i)
-	{
+	for (int i = 0; i < 8; ++i) {
 		boxPoints[i] = GetWorldPoint(static_cast<BoxPoints>(i));
 	}
 	return boxPoints;

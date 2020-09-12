@@ -13,7 +13,7 @@ namespace pagoda::image::core
 {
 class ImageImplementation
 {
-public:
+	public:
 	using Dimensions = std::pair<std::size_t, std::size_t>;
 
 	virtual ~ImageImplementation() {}

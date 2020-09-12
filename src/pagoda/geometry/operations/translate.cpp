@@ -43,8 +43,7 @@ void Translate::DoWork()
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(s_inputGeometry))
-	{
+	while (HasInput(s_inputGeometry)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);
 
@@ -65,12 +64,9 @@ void Translate::DoWork()
 		auto z = get_value_as<float>(*GetValue("z"));
 		auto inWorldCoordinates = get_value_as<std::string>(*GetValue("world")) == "true";
 		Mat4x4F matrix;
-		if (inWorldCoordinates)
-		{
+		if (inWorldCoordinates) {
 			matrix = boost::qvm::translation_mat(Vec3F{x, y, z});
-		}
-		else
-		{
+		} else {
 			matrix = boost::qvm::translation_mat(inScope.GetLocalVector(Vec3F{x, y, z}));
 		}
 		MatrixTransform<Geometry> transform(matrix);

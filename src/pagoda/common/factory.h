@@ -15,7 +15,7 @@ namespace pagoda::common
 template<class ObjectType, class KeyType = std::string>
 class Factory
 {
-public:
+	public:
 	using PointerType_t = std::shared_ptr<ObjectType>;
 	using FactoryMethod_t = std::function<PointerType_t(void)>;
 
@@ -29,8 +29,7 @@ public:
 
 		auto methods = factoryMethods();
 		auto iter = methods.find(name);
-		if (iter == std::end(methods))
-		{
+		if (iter == std::end(methods)) {
 			// LOG_TRACE(Common, " Element of type " << std::to_string(name) << " not found. Returning nullptr.");
 			return nullptr;
 		}
@@ -43,8 +42,7 @@ public:
 		auto methods = factoryMethods();
 		typeNames.reserve(methods.size());
 
-		for (auto k : methods)
-		{
+		for (auto k : methods) {
 			typeNames.push_back(k.first);
 		}
 
@@ -58,7 +56,7 @@ public:
 		factoryMethods()[name] = method;
 	}
 
-private:
+	private:
 	auto& factoryMethods()
 	{
 		static std::unordered_map<KeyType, FactoryMethod_t> s_factoryMethods;

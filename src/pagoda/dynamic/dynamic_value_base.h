@@ -15,7 +15,7 @@ class ValueVisitorBase;
  */
 class DynamicValueBase : public std::enable_shared_from_this<DynamicValueBase>
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	/**
@@ -36,7 +36,7 @@ public:
 
 	virtual void AcceptVisitor(ValueVisitorBase &visitor) = 0;
 
-private:
+	private:
 	/// This object's type
 	TypeInfoPtr m_typeInfo;
 };

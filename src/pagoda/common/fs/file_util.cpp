@@ -12,8 +12,7 @@ std::string LoadFileToString(const boost::filesystem::path &path)
 {
 	std::string str;
 	std::ifstream file(path.string());
-	if (!file)
-	{
+	if (!file) {
 		throw exception::Exception("Unable to open file '" + path.string() + "' for reading.");
 	}
 	file.seekg(0, std::ios::end);
@@ -27,8 +26,7 @@ std::string LoadFileToString(const boost::filesystem::path &path)
 void WriteStringToFile(const boost::filesystem::path &path, const std::string &contents)
 {
 	std::ofstream file(path.string());
-	if (!file)
-	{
+	if (!file) {
 		throw exception::Exception("Unable to open file '" + path.string() + "' for writing.");
 	}
 	file << contents;
@@ -37,22 +35,16 @@ void WriteStringToFile(const boost::filesystem::path &path, const std::string &c
 
 bool CreateDirectories(const boost::filesystem::path &path)
 {
-	if (path.empty())
-	{
+	if (path.empty()) {
 		return true;
 	}
 
-	try
-	{
+	try {
 		return boost::filesystem::create_directories(path);
-	}
-	catch (const boost::filesystem::filesystem_error &e)
-	{
+	} catch (const boost::filesystem::filesystem_error &e) {
 		LOG_ERROR("File System Error: " << e.what());
 		throw exception::Exception("File System Error. Unable to create directories.");
-	}
-	catch (...)
-	{
+	} catch (...) {
 		throw exception::Exception("Unable to create directories");
 	}
 }

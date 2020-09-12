@@ -23,8 +23,7 @@ void Material::SetTexture(uint32_t slot, const image::ImagePtr texture) { m_text
 image::ImagePtr Material::GetTexture(uint32_t slot) const
 {
 	auto tex = m_textures.find(slot);
-	if (tex == m_textures.end())
-	{
+	if (tex == m_textures.end()) {
 		return nullptr;
 	}
 	return tex->second;
@@ -32,8 +31,7 @@ image::ImagePtr Material::GetTexture(uint32_t slot) const
 
 void Material::TexturesEach(const std::function<void(uint32_t, image::ImagePtr)> &fn) const
 {
-	for (const auto &t : m_textures)
-	{
+	for (const auto &t : m_textures) {
 		fn(t.first, t.second);
 	}
 }
@@ -42,8 +40,7 @@ void Material::SetShaderSource(ShaderType type, const std::string &source) { m_s
 
 void Material::ShadersEach(const std::function<void(ShaderType, const std::string &)> &fn)
 {
-	for (const auto &s : m_shaderSources)
-	{
+	for (const auto &s : m_shaderSources) {
 		fn(s.first, s.second);
 	}
 }
@@ -57,8 +54,7 @@ void Material::SetAttribute(const std::string &name, dynamic::DynamicValueBasePt
 
 void Material::AttributesEach(const std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> &fn) const
 {
-	for (const auto &m : m_materialAttributes)
-	{
+	for (const auto &m : m_materialAttributes) {
 		fn(m.first, m.second);
 	}
 }

@@ -6,7 +6,7 @@ namespace pagoda::graph::query
 {
 class OutputNode : public Query
 {
-public:
+	public:
 	OutputNode(Graph &graph, QueryHandle_t queryHandle);
 	OutputNode(Graph &graph, NodeSet &nodeSet);
 

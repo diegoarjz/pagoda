@@ -18,8 +18,7 @@ TEST(ParameterNode, when_executing_a_parameter_node_should_propagate_the_paramet
 	p->RegisterMember("a", std::make_shared<FloatValue>(123.0f));
 	p->Execute(emptyNodeSet, outNodes);
 
-	for (auto &n : outNodes)
-	{
+	for (auto &n : outNodes) {
 		EXPECT_EQ(get_value_as<float>(*(n->GetMember("a"))), 123.0f);
 	}
 }

@@ -13,14 +13,14 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class CreateRect
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 
-public:
+	public:
 	CreateRect(const float &width, const float &height, const math::Vec3F &xAxis = {1, 0, 0},
 	           const math::Vec3F &yAxis = {0, 1, 0})
-	    : m_width(width), m_height(height), m_xAxis(normalized(xAxis)), m_yAxis(normalized(yAxis))
+	  : m_width(width), m_height(height), m_xAxis(normalized(xAxis)), m_yAxis(normalized(yAxis))
 	{
 		DBG_ASSERT_MSG(width != 0 && height != 0, "Can't create a rect with zero width or height");
 		DBG_ASSERT_MSG(boost::qvm::mag_sqr(xAxis) > 0 && boost::qvm::mag_sqr(yAxis) > 0,
@@ -47,7 +47,7 @@ public:
 		face.CloseFace();
 	}
 
-private:
+	private:
 	float m_width;
 	float m_height;
 	math::Vec3F m_xAxis;

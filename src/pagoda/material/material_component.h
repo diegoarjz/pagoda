@@ -10,7 +10,7 @@ namespace material
 {
 class MaterialComponent : public objects::ProceduralComponent
 {
-public:
+	public:
 	static std::string GetComponentSystemName();
 
 	virtual ~MaterialComponent();
@@ -21,7 +21,7 @@ public:
 	const Material& GetMaterial() const;
 	Material& GetMaterial();
 
-private:
+	private:
 	Material m_material;
 };
 }  // namespace material

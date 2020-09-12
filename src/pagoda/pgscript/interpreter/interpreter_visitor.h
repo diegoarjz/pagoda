@@ -105,7 +105,7 @@ struct interpreter_visitor : public AstVisitor
 	std::shared_ptr<dynamic::DynamicValueTable> GetGlobals() { return m_globals; }
 	dynamic::DynamicValueBasePtr GetLastEvaluatedExpression() const { return m_lastValue; }
 
-private:
+	private:
 	std::stack<dynamic::DynamicValueBasePtr> m_values;
 	std::shared_ptr<dynamic::DynamicValueTable> m_globals;
 	std::shared_ptr<dynamic::DynamicValueTable> m_symbolTable;

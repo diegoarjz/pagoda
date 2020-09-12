@@ -21,7 +21,7 @@ class can_cast_to_native
 	template<typename C>
 	static no test(...);
 
-public:
+	public:
 	enum
 	{
 		value = sizeof(test<T>(0)) == sizeof(yes)

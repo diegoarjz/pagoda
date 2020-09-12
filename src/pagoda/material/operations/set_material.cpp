@@ -30,8 +30,7 @@ SetMaterial::SetMaterial(objects::ProceduralObjectSystemPtr objectSystem) : Proc
 
 	std::unordered_map<std::string, DynamicValueBasePtr> values;
 
-	for (uint32_t i = 0u; i < 8; ++i)
-	{
+	for (uint32_t i = 0u; i < 8; ++i) {
 		values.emplace("texture_" + std::to_string(i), std::make_shared<String>());
 	}
 
@@ -47,20 +46,17 @@ void SetMaterial::DoWork()
 	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(inputObject))
-	{
+	while (HasInput(inputObject)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
 
-		for (uint32_t i = 0u; i < 8; ++i)
-		{
+		for (uint32_t i = 0u; i < 8; ++i) {
 			std::string texture = "texture_" + std::to_string(i);
 			UpdateValue(texture);
 			std::shared_ptr<MaterialComponent> materialComponent =
-			    materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+			  materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 			auto value = GetValue(texture);
-			if (value != nullptr)
-			{
+			if (value != nullptr) {
 				materialComponent->GetMaterial().SetTexture(i, get_value_as<std::string>(*value));
 			}
 		}

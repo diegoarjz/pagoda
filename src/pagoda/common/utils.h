@@ -7,9 +7,8 @@ namespace pagoda::common
 {
 /// Suppresses warnings about unused values and guarantees that the code is not
 /// optimised out
-#define UNUSED(x)          \
-	do                     \
-	{                      \
+#define UNUSED(x)      \
+	do {                 \
 		(void)sizeof((x)); \
 	} while (0)
 

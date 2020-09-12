@@ -28,12 +28,10 @@ template<class Rep>
 boost::qvm::vec<Rep, 3> projection(const boost::qvm::vec<Rep, 3> &p, const LineSegment3D<Rep> &ls)
 {
 	auto dot = boost::qvm::dot(p - ls.GetSourcePoint(), ls.GetSupportVector());
-	if (dot <= 0)
-	{
+	if (dot <= 0) {
 		return ls.GetSourcePoint();
 	}
-	if (dot >= 1)
-	{
+	if (dot >= 1) {
 		return ls.GetTargetPoint();
 	}
 	return ls.GetSourcePoint() + ls.GetSupportVector() * dot;

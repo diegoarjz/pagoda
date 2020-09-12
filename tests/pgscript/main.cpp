@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
 #include <pagoda/pagoda.h>
+#include <pagoda/pgscript/interpreter/interpreter.h>
 #include <pagoda/pgscript/ir/ast.h>
 #include <pagoda/pgscript/ir/ast_printer.h>
-#include <pagoda/pgscript/interpreter/interpreter.h>
 #include <pagoda/pgscript/parser/parser.h>
 
 #include <pagoda/dynamic/dynamic_plane.h>
@@ -26,7 +26,7 @@ using namespace pagoda::dynamic;
 
 class RegressionTest
 {
-public:
+	public:
 	static void SetExecutablePath(const std::string& path)
 	{
 		s_testFilesDirectory = boost::filesystem::path(path).remove_filename();
@@ -59,14 +59,11 @@ public:
 		std::stringstream ss;
 		AstPrinter printer(ss);
 		m_program->AcceptVisitor(&printer);
-		if (s_write)
-		{
+		if (s_write) {
 			fs::WriteStringToFile(GetASTFile().string(), ss.str());
 			fs::WriteStringToFile(GetStdOutFile().string(), myStdout.str());
 			fs::WriteStringToFile(GetStdErrFile().string(), myStderr.str());
-		}
-		else
-		{
+		} else {
 			std::string expectedAst = fs::LoadFileToString(GetASTFile().string());
 			std::string expectedOut = fs::LoadFileToString(GetStdOutFile().string());
 			std::string expectedErr = fs::LoadFileToString(GetStdErrFile().string());
@@ -82,7 +79,7 @@ public:
 	boost::filesystem::path GetStdOutFile() const { return (m_testDir / "out.txt"); }
 	boost::filesystem::path GetStdErrFile() const { return (m_testDir / "err.txt"); }
 
-private:
+	private:
 	static boost::filesystem::path s_testFilesDirectory;
 	static bool s_write;
 	std::string m_regressionTestName;
@@ -94,20 +91,17 @@ private:
 boost::filesystem::path RegressionTest::s_testFilesDirectory = "";
 bool RegressionTest::s_write = false;
 
-#define REGRESSION_TEST(NAME, EXPECTED)                        \
-	TEST(RegressionTestCase, NAME)                             \
-	{                                                          \
-		try                                                    \
-		{                                                      \
+#define REGRESSION_TEST(NAME, EXPECTED)                  \
+	TEST(RegressionTestCase, NAME)                         \
+	{                                                      \
+		try {                                                \
 			RegressionTest r(#NAME);                           \
 			r.Match(EXPECTED);                                 \
-		}                                                      \
-		catch (pagoda::common::exception::Exception & e)       \
-		{                                                      \
+		} catch (pagoda::common::exception::Exception & e) { \
 			LOG_ERROR("Exception caught while running test:"); \
 			LOG_ERROR(e.What());                               \
 			throw;                                             \
-		}                                                      \
+		}                                                    \
 	}
 
 REGRESSION_TEST(float_operations, std::make_shared<FloatValue>(2.5f))
@@ -126,7 +120,7 @@ int main(int argc, char* argv[])
 	auto returnVal = RUN_ALL_TESTS();
 
 	pagoda::common::instrument::ConsoleProfilerLogger consoleLogger(
-	    pagoda::common::instrument::ProfilerManager::Instance());
+	  pagoda::common::instrument::ProfilerManager::Instance());
 	consoleLogger.Log(20);
 
 	return returnVal;

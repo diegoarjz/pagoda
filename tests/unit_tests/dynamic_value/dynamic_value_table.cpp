@@ -12,7 +12,7 @@ using namespace pagoda::dynamic;
 
 class DynamicValueTableTest : public ::testing::Test
 {
-public:
+	public:
 	void SetUp() override
 	{
 		m_table = std::make_shared<DynamicValueTable>("table");
@@ -46,12 +46,9 @@ TEST_F(DynamicValueTableTest, when_assigning_a_value_should_update_its_value)
 
 TEST_F(DynamicValueTableTest, when_assigning_a_value_that_hasnt_been_declared_should_throw)
 {
-	try
-	{
+	try {
 		m_table->Assign("b", std::make_shared<Boolean>(false));
-	}
-	catch (ValueNotFoundException &e)
-	{
+	} catch (ValueNotFoundException &e) {
 		return;
 	}
 	FAIL() << "Should have thrown";
@@ -59,12 +56,9 @@ TEST_F(DynamicValueTableTest, when_assigning_a_value_that_hasnt_been_declared_sh
 
 TEST_F(DynamicValueTableTest, when_getting_a_value_that_hasnt_been_assigned_should_throw)
 {
-	try
-	{
+	try {
 		auto b = m_table->Get("b");
-	}
-	catch (ValueNotFoundException &e)
-	{
+	} catch (ValueNotFoundException &e) {
 		return;
 	}
 	FAIL() << "Should have thrown";
@@ -78,4 +72,3 @@ TEST_F(DynamicValueTableTest, when_getting_a_value_should_search_in_parent_table
 	ASSERT_NE(b, nullptr);
 	ASSERT_TRUE(static_cast<bool>(*b));
 }
-

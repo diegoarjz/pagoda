@@ -12,7 +12,7 @@ class NodeLinkNode;
  */
 class AstNodeVisitor
 {
-public:
+	public:
 	virtual void Visit(GraphDefinitionNode *graphDefinition) = 0;
 	virtual void Visit(NamedArgument *namedArgument) = 0;
 	virtual void Visit(NodeDefinitionNode *nodeDefinition) = 0;

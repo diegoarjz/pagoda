@@ -55,7 +55,7 @@ using namespace material::operations;
 
 class Pagoda::Impl
 {
-public:
+	public:
 	Impl(Pagoda *pagoda) : m_pagoda(pagoda), m_initialized(false) {}
 
 	~Impl()
@@ -99,8 +99,7 @@ public:
 
 	void Init()
 	{
-		if (m_initialized)
-		{
+		if (m_initialized) {
 			return;
 		}
 		m_initialized = true;
@@ -123,37 +122,30 @@ public:
 			m_nodeFactory->Register("InputInterface", []() { return std::make_shared<InputInterfaceNode>(); });
 			m_nodeFactory->Register("OutputInterface", []() { return std::make_shared<OutputInterfaceNode>(); });
 			m_nodeFactory->Register("Parameter", []() { return std::make_shared<ParameterNode>(); });
-			m_nodeFactory->Register("Operation",
-			                        [this]() { return std::make_shared<OperationNode>(m_operationFactory); });
+			m_nodeFactory->Register("Operation", [this]() { return std::make_shared<OperationNode>(m_operationFactory); });
 		}
 
 		// Register Predicates
 		{
-			m_predicateRegistry->Register(
-			    "front", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
-			                                                           boost::qvm::vec<float, 3>{1, 0, 0}));
-			m_predicateRegistry->Register(
-			    "back", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
-			                                                          boost::qvm::vec<float, 3>{-1, 0, 0}));
+			m_predicateRegistry->Register("front", std::make_shared<ScopeAxisDirectionPredicate>(
+			                                         m_proceduralObjectSystem, 'z', boost::qvm::vec<float, 3>{1, 0, 0}));
+			m_predicateRegistry->Register("back", std::make_shared<ScopeAxisDirectionPredicate>(
+			                                        m_proceduralObjectSystem, 'z', boost::qvm::vec<float, 3>{-1, 0, 0}));
 			m_predicateRegistry->Register("up", std::make_shared<ScopeAxisDirectionPredicate>(
-			                                        m_proceduralObjectSystem, 'z', boost::qvm::vec<float, 3>{0, 0, 1}));
-			m_predicateRegistry->Register(
-			    "down", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
-			                                                          boost::qvm::vec<float, 3>{0, 0, -1}));
+			                                      m_proceduralObjectSystem, 'z', boost::qvm::vec<float, 3>{0, 0, 1}));
+			m_predicateRegistry->Register("down", std::make_shared<ScopeAxisDirectionPredicate>(
+			                                        m_proceduralObjectSystem, 'z', boost::qvm::vec<float, 3>{0, 0, -1}));
 
-			m_predicateRegistry->Register(
-			    "left", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
-			                                                          boost::qvm::vec<float, 3>{0, 1, 0}));
-			m_predicateRegistry->Register(
-			    "right", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'z',
-			                                                           boost::qvm::vec<float, 3>{0, -1, 0}));
-			m_predicateRegistry->Register(
-			    "side", std::make_shared<ScopeAxisDirectionPredicate>(m_proceduralObjectSystem, 'y',
-			                                                          boost::qvm::vec<float, 3>{0, 0, 1}));
+			m_predicateRegistry->Register("left", std::make_shared<ScopeAxisDirectionPredicate>(
+			                                        m_proceduralObjectSystem, 'z', boost::qvm::vec<float, 3>{0, 1, 0}));
+			m_predicateRegistry->Register("right", std::make_shared<ScopeAxisDirectionPredicate>(
+			                                         m_proceduralObjectSystem, 'z', boost::qvm::vec<float, 3>{0, -1, 0}));
+			m_predicateRegistry->Register("side", std::make_shared<ScopeAxisDirectionPredicate>(
+			                                        m_proceduralObjectSystem, 'y', boost::qvm::vec<float, 3>{0, 0, 1}));
 		}
 	}
 
-private:
+	private:
 	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 	OperationFactoryPtr m_operationFactory;
 	NodeFactoryPtr m_nodeFactory;

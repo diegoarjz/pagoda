@@ -18,12 +18,12 @@ struct ExpectAssert
 
 class MatchFile
 {
-public:
+	public:
 	MatchFile(const boost::filesystem::path &filePath, bool saveFile = false);
 
 	bool Match(const std::string &in);
 
-private:
+	private:
 	std::string m_fileContents;
 	boost::filesystem::path m_filePath;
 	bool m_saveFile;
@@ -31,14 +31,14 @@ private:
 
 class PagodaTestFixtureBase
 {
-public:
+	public:
 	static void SetExecutablePath(const std::string &path);
 	static boost::filesystem::path GetExecutablePath();
 	static boost::filesystem::path GetExecutableDirectory();
 	static void SetShouldWriteFiles(const bool &write);
 	static bool GetShouldWriteFiles();
 
-private:
+	private:
 	static boost::filesystem::path s_executablePath;
 	static boost::filesystem::path s_executableDirectory;
 	static bool s_writeFiles;
@@ -47,7 +47,7 @@ private:
 template<class F>
 class PagodaTestFixture : public PagodaTestFixtureBase, public F
 {
-public:
+	public:
 	boost::filesystem::path GetTestFilesDir() const
 	{
 		return PagodaTestFixtureBase::GetExecutableDirectory() /= "test_files";

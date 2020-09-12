@@ -8,7 +8,7 @@ namespace pagoda::geometry::operations
 {
 class TriangulateGeometry : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string sInputGeometry;
 	static const std::string sOutputGeometry;
 	static const char* name;

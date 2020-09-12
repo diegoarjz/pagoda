@@ -16,7 +16,7 @@ class HierarchicalComponent;
 
 class HierarchicalSystem : public ProceduralComponentSystem<HierarchicalComponent>
 {
-public:
+	public:
 	using Component_t = HierarchicalComponent;
 
 	static const std::string GetComponentSystemName();
@@ -31,10 +31,10 @@ public:
 	 */
 	static void Registration(Pagoda *pagoda);
 
-protected:
+	protected:
 	void DoClone(std::shared_ptr<HierarchicalComponent> from, std::shared_ptr<HierarchicalComponent> to) override;
 
-private:
+	private:
 	struct HierarchicalComponentWeakPtrHasher
 	{
 		size_t operator()(const std::weak_ptr<HierarchicalComponent> &ptr) const
@@ -54,7 +54,7 @@ private:
 
 	std::unordered_set<std::weak_ptr<HierarchicalComponent>, HierarchicalComponentWeakPtrHasher,
 	                   HierarchicalComponentEqual>
-	    root_components;
+	  root_components;
 };  // class GeometrySystem
 using HierarchicalSystemPtr = std::shared_ptr<HierarchicalSystem>;
 using HierarchicalSystemWeakPtr = std::weak_ptr<HierarchicalSystem>;

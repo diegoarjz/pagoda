@@ -11,12 +11,9 @@ void ClassBase::RegisterMember(const std::string &name, DynamicValueBasePtr v) {
 void ClassBase::SetMember(const std::string &name, DynamicValueBasePtr v) { m_memberTable->Assign(name, v); }
 void ClassBase::RegisterOrSetMember(const std::string &name, DynamicValueBasePtr v)
 {
-	try
-	{
+	try {
 		m_memberTable->Assign(name, v);
-	}
-	catch (ValueNotFoundException &)
-	{
+	} catch (ValueNotFoundException &) {
 		m_memberTable->Declare(name, v);
 	}
 }

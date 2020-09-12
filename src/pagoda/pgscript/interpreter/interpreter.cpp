@@ -26,8 +26,7 @@ std::shared_ptr<T> constructor_wrapper(const std::vector<DynamicValueBasePtr> &a
 void print(const std::vector<dynamic::DynamicValueBasePtr> &args)
 {
 	auto out = Interpreter::GetStdOutStream();
-	for (const auto &d : args)
-	{
+	for (const auto &d : args) {
 		(*out) << d->ToString();
 	}
 	(*out) << std::endl;
@@ -35,7 +34,7 @@ void print(const std::vector<dynamic::DynamicValueBasePtr> &args)
 
 class Interpreter::Impl
 {
-public:
+	public:
 	Impl()
 	{
 		RegisterBuiltinClass<Vector3>();
@@ -48,12 +47,9 @@ public:
 
 	bool Interpret(const ast::ProgramPtr &program)
 	{
-		try
-		{
+		try {
 			program->AcceptVisitor(&m_visitor);
-		}
-		catch (ValueNotFoundException &e)
-		{
+		} catch (ValueNotFoundException &e) {
 			m_visitor.GetCurrentSymbolTable()->DumpSymbols(std::cout);
 			throw e;
 		}
@@ -63,12 +59,9 @@ public:
 
 	void PushExternalSymbols(std::shared_ptr<DynamicValueTable> &externalSymbols)
 	{
-		if (m_externalSymbols.size() == 0)
-		{
+		if (m_externalSymbols.size() == 0) {
 			m_visitor.GetGlobals()->SetParent(externalSymbols);
-		}
-		else
-		{
+		} else {
 			m_externalSymbols.top()->SetParent(externalSymbols);
 		}
 		m_externalSymbols.push(externalSymbols);
@@ -76,20 +69,16 @@ public:
 
 	void PopExternalSymbols()
 	{
-		if (m_externalSymbols.size() == 0)
-		{
+		if (m_externalSymbols.size() == 0) {
 			return;
 		}
 
 		auto topExternalSymbols = m_externalSymbols.top();
 		m_externalSymbols.pop();
 
-		if (m_externalSymbols.size() == 0)
-		{
+		if (m_externalSymbols.size() == 0) {
 			m_visitor.GetGlobals()->SetParent(nullptr);
-		}
-		else
-		{
+		} else {
 			m_externalSymbols.top()->SetParent(nullptr);
 		}
 	}
@@ -102,7 +91,7 @@ public:
 		using ConstructorFunc_t = std::function<std::shared_ptr<T>(const std::vector<DynamicValueBasePtr> &)>;
 		using FreeFunctionCallableBody_t = FreeFunctionCallableBody<ConstructorFunc_t>;
 		std::shared_ptr<FreeFunctionCallableBody_t> constructor =
-		    std::make_shared<FreeFunctionCallableBody_t>(constructor_wrapper<T>);
+		  std::make_shared<FreeFunctionCallableBody_t>(constructor_wrapper<T>);
 		std::shared_ptr<Function> constructorFunction = std::make_shared<Function>(constructor);
 
 		constructorFunction->SetVariadic(true);
@@ -124,7 +113,7 @@ public:
 	static void SetStdErrStream(std::ostream *o) { m_stderr = o; }
 	static std::ostream *GetStdErrStream() { return m_stderr; }
 
-private:
+	private:
 	std::stack<std::shared_ptr<DynamicValueTable>> m_externalSymbols;
 	interpreter_visitor m_visitor;
 

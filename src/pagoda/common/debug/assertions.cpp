@@ -10,12 +10,10 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 {
 	std::printf("%s:%d - ASSERT FAILED -\n", file, line);
 
-	if (condition != nullptr)
-	{
+	if (condition != nullptr) {
 		std::printf("\tCondition: %s\n", condition);
 	}
-	if (message != nullptr)
-	{
+	if (message != nullptr) {
 		std::printf("\t%s\n", message);
 	}
 
@@ -32,8 +30,7 @@ typename Fail::FailBehaviour Fail::ReportFail(const char *condition, const char 
                                               const char *message, ...)
 {
 	const char *final_message = nullptr;
-	if (message != nullptr)
-	{
+	if (message != nullptr) {
 		char messageBuffer[1024];
 		{
 			va_list args;

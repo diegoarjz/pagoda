@@ -17,12 +17,9 @@ static BooleanPtr f2(BooleanPtr b) { return b; }
 TEST(ReturnFromFunction, test_return_from_function)
 {
 	std::function<BooleanPtr(BooleanPtr)> function = make_free_function(f2);
-	try
-	{
+	try {
 		return_from_function(function, {std::make_shared<Boolean>(true)});
-	}
-	catch (DynamicValueBasePtr &returnValue)
-	{
+	} catch (DynamicValueBasePtr &returnValue) {
 		auto b = std::dynamic_pointer_cast<Boolean>(returnValue);
 		ASSERT_NE(b, nullptr);
 		ASSERT_TRUE(static_cast<bool>(b));
@@ -33,7 +30,7 @@ TEST(ReturnFromFunction, test_return_from_function)
 
 class D
 {
-public:
+	public:
 	D() : m_called(false) {}
 
 	BooleanPtr f1(BooleanPtr b)
@@ -49,12 +46,9 @@ TEST(ReturnFromMemberFunction, test_return_from_member_function)
 {
 	D c;
 	auto function = make_member_function(&D::f1);
-	try
-	{
+	try {
 		return_from_member_function(c, function, {std::make_shared<Boolean>(true)});
-	}
-	catch (DynamicValueBasePtr &returnValue)
-	{
+	} catch (DynamicValueBasePtr &returnValue) {
 		auto b = std::dynamic_pointer_cast<Boolean>(returnValue);
 		ASSERT_NE(b, nullptr);
 		EXPECT_TRUE(static_cast<bool>(b));

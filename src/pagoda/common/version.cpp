@@ -12,8 +12,7 @@ struct Feature
 
 	explicit operator std::string() const
 	{
-		if (m_enabled)
-		{
+		if (m_enabled) {
 			return "+" + m_name;
 		}
 		return "-" + m_name;
@@ -24,14 +23,14 @@ std::vector<Feature> get_features()
 {
 	std::vector<Feature> features = {
 #ifdef PAGODA_PROFILER_ACTIVE
-	    {"Profiler", true},
+	  {"Profiler", true},
 #else
-	    {"Profiler", false},
+	  {"Profiler", false},
 #endif
 #ifdef PAGODA_ENABLE_ASSERTIONS
-	    {"DebugAsserts", true},
+	  {"DebugAsserts", true},
 #else
-	    {"DebugAsserts", false},
+	  {"DebugAsserts", false},
 #endif
 	};
 	return features;
@@ -39,10 +38,8 @@ std::vector<Feature> get_features()
 
 bool has_feature(const std::string &featureName)
 {
-	for (const auto &f : get_features())
-	{
-		if (f.m_name == featureName)
-		{
+	for (const auto &f : get_features()) {
+		if (f.m_name == featureName) {
 			return f.m_enabled;
 		}
 	}
@@ -60,18 +57,15 @@ std::string get_version_information()
 	std::stringstream ss;
 
 	ss << "Pagoda version " << get_version_string();
-	if (!get_build_number().empty())
-	{
+	if (!get_build_number().empty()) {
 		ss << "\n Build Number: " << get_build_number();
 	}
-	if (!get_build_date().empty())
-	{
+	if (!get_build_date().empty()) {
 		ss << "\n Build Date: " << get_build_date();
 	}
 
 	ss << "\n\nConditional features: ";
-	for (const auto &f : get_features())
-	{
+	for (const auto &f : get_features()) {
 		ss << static_cast<std::string>(f) << " ";
 	}
 

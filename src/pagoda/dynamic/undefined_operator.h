@@ -13,14 +13,14 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
 class UndefinedBinaryOperatorException : public common::exception::Exception
 {
-public:
+	public:
 	UndefinedBinaryOperatorException(const std::string &op, const TypeInfoPtr &lhsType, const TypeInfoPtr &rhsType);
 	virtual ~UndefinedBinaryOperatorException();
 
 	const TypeInfoPtr &GetLhsType() const { return m_lhsType; }
 	const TypeInfoPtr &GetRhsType() const { return m_rhsType; }
 
-private:
+	private:
 	std::string m_operatorName;
 	const TypeInfoPtr &m_lhsType;
 	const TypeInfoPtr &m_rhsType;
@@ -28,13 +28,13 @@ private:
 
 class UndefinedUnaryOperatorException : public common::exception::Exception
 {
-public:
+	public:
 	UndefinedUnaryOperatorException(const std::string &op, const TypeInfoPtr &operand);
 	virtual ~UndefinedUnaryOperatorException();
 
 	const TypeInfoPtr &GetOperandType() const { return m_operandType; }
 
-private:
+	private:
 	std::string m_operatorName;
 	const TypeInfoPtr &m_operandType;
 };

@@ -9,14 +9,14 @@ namespace pagoda::graph::traversal
 {
 class Forward : public Traversal
 {
-public:
+	public:
 	Forward(Graph& graph);
 
 	NodePtr Get() override;
 	bool Advance() override;
 	bool HasNext() override;
 
-private:
+	private:
 	std::queue<NodePtr> m_nodesToVisit;
 };
 }  // namespace pagoda::graph::traversal

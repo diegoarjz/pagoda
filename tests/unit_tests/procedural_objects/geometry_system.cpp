@@ -16,7 +16,7 @@ using namespace pagoda;
 
 class GeometrySystemTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp()
 	{
 		geometry_system = std::make_shared<GeometrySystem>();
@@ -25,8 +25,7 @@ protected:
 
 	void TearDown()
 	{
-		if (component != nullptr)
-		{
+		if (component != nullptr) {
 			// geometry_system->KillProceduralComponent(component);
 		}
 	}

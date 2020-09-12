@@ -37,16 +37,15 @@ void TriangulateGeometry::DoWork()
 
 	EarClipping<Geometry> earClipping;
 
-	while (HasInput(sInputGeometry))
-	{
+	while (HasInput(sInputGeometry)) {
 		// Geometry
 		ProceduralObjectPtr inObject = GetInputProceduralObject(sInputGeometry);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, sOutputGeometry);
 
 		std::shared_ptr<GeometryComponent> inGeometryComponent =
-		    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+		  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 		std::shared_ptr<GeometryComponent> outGeometryComponent =
-		    geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+		  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 
 		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 		auto outGeometry = std::make_shared<Geometry>();

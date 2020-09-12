@@ -19,7 +19,7 @@ using GeometryPtr = std::shared_ptr<GeometryType>;
 
 class TriangulateTest : public PagodaTestFixture<::testing::Test>
 {
-public:
+	public:
 	void SetUp()
 	{
 		m_geometry = std::make_shared<GeometryType>();

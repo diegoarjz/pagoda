@@ -16,7 +16,7 @@ class ICallableBody;
  */
 class DynamicClass : public DynamicValueBase, public ClassBase, public ICallable
 {
-public:
+	public:
 	static const TypeInfoPtr typeInfo;
 
 	explicit DynamicClass(const std::string& className);
@@ -50,7 +50,7 @@ public:
 	FunctionPtr Bind(std::shared_ptr<ICallableBody> callable,
 	                 std::shared_ptr<DynamicValueTable> globals = nullptr) override;
 
-private:
+	private:
 	std::string m_className;
 	std::size_t m_arity;
 	bool m_isVariadic;

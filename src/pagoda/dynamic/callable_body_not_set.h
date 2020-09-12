@@ -6,7 +6,7 @@ namespace pagoda::dynamic
 {
 class CallableBodyNotSet : public common::exception::Exception
 {
-public:
+	public:
 	CallableBodyNotSet(const std::string &dynamicValueName);
 };
 }  // namespace pagoda::dynamic

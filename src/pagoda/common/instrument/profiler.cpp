@@ -36,8 +36,7 @@ void ProfilerManager::EnterFunction(const char* name, const char* file, const in
 	entry->m_calls++;
 	entry->m_lastTime = now;
 
-	if (m_profileStack.size() > 0)
-	{
+	if (m_profileStack.size() > 0) {
 		auto stackTop = m_profileStack.top();
 		stackTop->m_time += now - stackTop->m_lastTime;
 	}
@@ -57,22 +56,20 @@ void ProfilerManager::ExitFunction()
 
 	stackTop->m_time += now - stackTop->m_lastTime;
 
-	if (m_profileStack.size() > 0)
-	{
+	if (m_profileStack.size() > 0) {
 		stackTop = m_profileStack.top();
 		stackTop->m_lastTime = now;
 	}
 }
 
 ProfilerManager::ProfileEntry::ProfileEntry(const char* name, const char* file, const int line)
-    : m_name(name), m_file(file), m_line(line), m_calls(0), m_time(0), m_lastTime()
+  : m_name(name), m_file(file), m_line(line), m_calls(0), m_time(0), m_lastTime()
 {
 }
 
 bool ProfilerManager::ProfileSorter::operator()(const ProfileEntry& lhs, const ProfileEntry& rhs) const
 {
-	if (lhs.m_line == rhs.m_line)
-	{
+	if (lhs.m_line == rhs.m_line) {
 		return lhs.m_name > rhs.m_name;
 	}
 
@@ -88,8 +85,7 @@ Profiler::~Profiler() { EndProfile(); }
 
 void Profiler::EndProfile()
 {
-	if (m_onStack)
-	{
+	if (m_onStack) {
 		ProfilerManager::Instance()->ExitFunction();
 		m_onStack = false;
 	}
@@ -102,8 +98,8 @@ OneShotProfiler::~OneShotProfiler()
 {
 	auto now = Clock::now();
 	OneShotProfilerStats::Instance()
-	    ->AddContainer<typename StatisticsManager::AccumulatorContainer<TimeCounter>>(m_name)
-	    ->Log(now - m_start);
+	  ->AddContainer<typename StatisticsManager::AccumulatorContainer<TimeCounter>>(m_name)
+	  ->Log(now - m_start);
 }
 
 ProfilerLogger::ProfilerLogger(const ProfilerManager* manager) : m_manager(manager) {}
@@ -124,37 +120,32 @@ void ConsoleProfilerLogger::Log(std::size_t nLines)
 	sorted_by_time.sort([](const Entry& lhs, const Entry& rhs) { return lhs.m_time > rhs.m_time; });
 
 	std::array<std::size_t, 5> columnsMaxSize;
-	for (auto i = 0u; i < 5; ++i)
-	{
+	for (auto i = 0u; i < 5; ++i) {
 		columnsMaxSize[i] = 0;
 	}
 
 	std::size_t count = 0;
-	for (const auto& e : sorted_by_time)
-	{
+	for (const auto& e : sorted_by_time) {
 		columnsMaxSize[0] = std::max(columnsMaxSize[0], std::strlen(e.m_file));
 		columnsMaxSize[1] = std::max(columnsMaxSize[1], std::to_string(e.m_line).size());
 		columnsMaxSize[2] = std::max(columnsMaxSize[2], std::strlen(e.m_name));
 		columnsMaxSize[3] = std::max(columnsMaxSize[3], std::to_string(e.m_calls).size());
 
 		++count;
-		if (nLines != 0 && count > nLines)
-		{
+		if (nLines != 0 && count > nLines) {
 			break;
 		}
 	}
 
 	count = 0;
-	for (const auto& e : sorted_by_time)
-	{
+	for (const auto& e : sorted_by_time) {
 		std::cout << std::setw(columnsMaxSize[0]) << e.m_file;
 		std::cout << "(" << std::setw(columnsMaxSize[1]) << e.m_line << "): ";
 		std::cout << std::setw(columnsMaxSize[2]) << e.m_name << " ";
 		std::cout << std::setw(columnsMaxSize[3]) << e.m_calls << " ";
 		std::cout << e.m_time << std::endl;
 		++count;
-		if (nLines != 0 && count > nLines)
-		{
+		if (nLines != 0 && count > nLines) {
 			break;
 		}
 	}

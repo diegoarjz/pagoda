@@ -48,11 +48,10 @@ void CreateBoxGeometry::DoWork()
 	createBox.Execute(geometry);
 
 	ProceduralObjectPtr object = CreateOutputProceduralObject(outputGeometry);
-	std::shared_ptr<GeometryComponent> geometry_component =
-	    geometrySystem->CreateComponentAs<GeometryComponent>(object);
+	std::shared_ptr<GeometryComponent> geometry_component = geometrySystem->CreateComponentAs<GeometryComponent>(object);
 
 	geometry_component->SetGeometry(geometry);
 	geometry_component->SetScope(
-	    Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
+	  Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
 }
 }  // namespace pagoda::geometry::operations

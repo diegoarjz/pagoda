@@ -111,8 +111,7 @@ void AstPrinter::Visit(ast::IfStatementPtr i)
 	i->GetCondition()->AcceptVisitor(this);
 	i->GetTrueStatement()->AcceptVisitor(this);
 	auto falseStatement = i->GetFalseStatement();
-	if (falseStatement)
-	{
+	if (falseStatement) {
 		falseStatement->AcceptVisitor(this);
 	}
 	deindent();
@@ -133,8 +132,7 @@ void AstPrinter::Visit(ast::VarDeclPtr v)
 	m_outStream << indentation() << "<VarDecl>" << std::endl;
 	v->GetIdentifier()->AcceptVisitor(this);
 	auto rhs = v->GetRhs();
-	if (rhs)
-	{
+	if (rhs) {
 		rhs->AcceptVisitor(this);
 	}
 	deindent();
@@ -144,8 +142,7 @@ void AstPrinter::Visit(ast::StatementBlockPtr b)
 {
 	indent();
 	m_outStream << indentation() << "<StatementBlock>" << std::endl;
-	for (auto &s : b->GetStatements())
-	{
+	for (auto &s : b->GetStatements()) {
 		s->AcceptVisitor(this);
 	}
 	deindent();
@@ -156,8 +153,7 @@ void AstPrinter::Visit(ast::CallPtr c)
 	indent();
 	m_outStream << indentation() << "<Call>" << std::endl;
 	c->GetCallee()->AcceptVisitor(this);
-	for (auto &arg : c->GetArguments())
-	{
+	for (auto &arg : c->GetArguments()) {
 		arg->AcceptVisitor(this);
 	}
 	deindent();
@@ -168,8 +164,7 @@ void AstPrinter::Visit(ast::FunctionDeclarationPtr f)
 	indent();
 	m_outStream << indentation() << "<FunctionDeclaration>" << std::endl;
 	f->GetIdentifier()->AcceptVisitor(this);
-	for (auto &par : f->GetParameters())
-	{
+	for (auto &par : f->GetParameters()) {
 		par->AcceptVisitor(this);
 	}
 	f->GetFunctionBody()->AcceptVisitor(this);
@@ -180,12 +175,9 @@ void AstPrinter::Visit(ast::ParameterPtr par)
 {
 	indent();
 	m_outStream << indentation() << "<Parameter:" << par->GetIdentifier() << "(";
-	if (par->GetParameterType())
-	{
+	if (par->GetParameterType()) {
 		m_outStream << *(par->GetParameterType());
-	}
-	else
-	{
+	} else {
 		m_outStream << "any";
 	}
 	m_outStream << ")>" << std::endl;
@@ -197,8 +189,7 @@ void AstPrinter::Visit(ast::ReturnPtr r)
 	indent();
 	m_outStream << indentation() << "<Return>" << std::endl;
 	auto expression = r->GetReturnExpression();
-	if (expression)
-	{
+	if (expression) {
 		expression->AcceptVisitor(this);
 	}
 	deindent();
@@ -210,8 +201,7 @@ void AstPrinter::Visit(ast::ClassDeclarationPtr classDecl)
 	m_outStream << indentation() << "<ClassDecl>" << std::endl;
 	classDecl->GetIdentifier()->AcceptVisitor(this);
 
-	for (const auto &m : classDecl->GetMethods())
-	{
+	for (const auto &m : classDecl->GetMethods()) {
 		m->AcceptVisitor(this);
 	}
 	deindent();
@@ -248,8 +238,7 @@ void AstPrinter::Visit(ast::SetExpressionPtr e)
 void AstPrinter::Visit(ast::ProgramPtr p)
 {
 	m_outStream << "<Program>" << std::endl;
-	for (auto &s : p->GetStatements())
-	{
+	for (auto &s : p->GetStatements()) {
 		s->AcceptVisitor(this);
 	}
 }

@@ -12,12 +12,12 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class Clip
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 	using Index_t = typename Geometry::Index_t;
 
-public:
+	public:
 	Clip(const math::Plane<float> &plane) : m_plane(plane) {}
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr front, GeometryPtr back)
@@ -31,8 +31,7 @@ public:
 		SplitEdges(front);
 
 		auto facesEnd = front->FacesEnd();
-		for (auto fIter = front->FacesBegin(); fIter != facesEnd; ++fIter)
-		{
+		for (auto fIter = front->FacesBegin(); fIter != facesEnd; ++fIter) {
 			ClipFace(front, *fIter);
 		}
 
@@ -40,21 +39,16 @@ public:
 		std::map<Index_t, Index_t> pointsToBuilderIndex;
 
 		std::set<Index_t> facesToDelete;
-		for (auto fIter = front->FacesBegin(); fIter != front->FacesEnd(); ++fIter)
-		{
-			if (m_faceSide[*fIter] == math::Plane<float>::PlaneSide::Back)
-			{
+		for (auto fIter = front->FacesBegin(); fIter != front->FacesEnd(); ++fIter) {
+			if (m_faceSide[*fIter] == math::Plane<float>::PlaneSide::Back) {
 				LOG_TRACE(GeometryOperations, "Face " << *fIter << " is behind the plane");
 				facesToDelete.insert(*fIter);
 
 				auto faceBuilder = builder.StartFace();
-				for (auto fpCirc = front->FacePointCirculatorBegin(*fIter); fpCirc; ++fpCirc)
-				{
+				for (auto fpCirc = front->FacePointCirculatorBegin(*fIter); fpCirc; ++fpCirc) {
 					auto mapIter = pointsToBuilderIndex.find(*fpCirc);
-					if (mapIter == std::end(pointsToBuilderIndex))
-					{
-						mapIter =
-						    pointsToBuilderIndex.emplace(*fpCirc, builder.AddPoint(front->GetPosition(*fpCirc))).first;
+					if (mapIter == std::end(pointsToBuilderIndex)) {
+						mapIter = pointsToBuilderIndex.emplace(*fpCirc, builder.AddPoint(front->GetPosition(*fpCirc))).first;
 					}
 
 					faceBuilder.AddIndex(mapIter->second);
@@ -62,13 +56,12 @@ public:
 				faceBuilder.CloseFace();
 			}
 		}
-		for (const auto &f : facesToDelete)
-		{
+		for (const auto &f : facesToDelete) {
 			front->DeleteFace(f);
 		}
 	}
 
-private:
+	private:
 	void ClipFace(GeometryPtr geometry, const core::SplitPointTopology::FaceHandle &face)
 	{
 		START_PROFILE;
@@ -79,16 +72,11 @@ private:
 		std::pair<Index_t, Index_t> currentEdgeToSplit;
 		uint16_t state = 0;
 
-		for (auto feIter = geometry->FaceEdgeCirculatorBegin(face); feIter; ++feIter)
-		{
-			if (m_newEdges.find(*feIter) != std::end(m_newEdges))
-			{
-				if (state == 0)
-				{
+		for (auto feIter = geometry->FaceEdgeCirculatorBegin(face); feIter; ++feIter) {
+			if (m_newEdges.find(*feIter) != std::end(m_newEdges)) {
+				if (state == 0) {
 					std::get<0>(currentEdgeToSplit) = *feIter;
-				}
-				else
-				{
+				} else {
 					std::get<1>(currentEdgeToSplit) = geometry->GetPrevEdge(*feIter);
 					splitFaceEdges.push_back(currentEdgeToSplit);
 				}
@@ -97,8 +85,7 @@ private:
 			}
 		}
 
-		for (const auto &e : splitFaceEdges)
-		{
+		for (const auto &e : splitFaceEdges) {
 			LOG_TRACE(GeometryOperations,
 			          "Splitting face " << face << " from edge " << std::get<0>(e) << " to edge " << std::get<1>(e));
 			auto newFace = geometry->SplitFace(face, std::get<0>(e), std::get<1>(e));
@@ -106,21 +93,16 @@ private:
 			m_faceSide[newFace] = faceSide;
 
 #ifdef DEBUG
-			for (const auto &f : {face, newFace})
-			{
+			for (const auto &f : {face, newFace}) {
 				LOG_TRACE(GeometryOperations, "Into face " << f);
 			}
 #endif
 
-			if (faceSide == math::Plane<float>::PlaneSide::Front)
-			{
+			if (faceSide == math::Plane<float>::PlaneSide::Front) {
 				m_faceSide[face] = math::Plane<float>::PlaneSide::Back;
-			}
-			else if (faceSide == math::Plane<float>::PlaneSide::Back)
-			{
+			} else if (faceSide == math::Plane<float>::PlaneSide::Back) {
 				m_faceSide[face] = math::Plane<float>::PlaneSide::Front;
-			}
-			else  // Contained
+			} else  // Contained
 			{
 				m_faceSide[face] = math::Plane<float>::PlaneSide::Front;
 			}
@@ -130,12 +112,10 @@ private:
 	typename math::Plane<float>::PlaneSide CheckFaceSide(GeometryPtr geometry, const Index_t &face)
 	{
 		typename math::Plane<float>::PlaneSide planeSide;
-		for (auto fpIter = geometry->FacePointCirculatorBegin(face); fpIter; ++fpIter)
-		{
+		for (auto fpIter = geometry->FacePointCirculatorBegin(face); fpIter; ++fpIter) {
 			auto pos = geometry->GetPosition(*fpIter);
 			planeSide = m_plane.GetPlaneSide(pos);
-			if (planeSide != math::Plane<float>::PlaneSide::Contained)
-			{
+			if (planeSide != math::Plane<float>::PlaneSide::Contained) {
 				break;
 			}
 		}
@@ -147,8 +127,7 @@ private:
 		START_PROFILE;
 
 		auto pointsEnd = geometry->PointsEnd();
-		for (auto pIter = geometry->PointsBegin(); pIter != pointsEnd; ++pIter)
-		{
+		for (auto pIter = geometry->PointsBegin(); pIter != pointsEnd; ++pIter) {
 			auto pos = geometry->GetPosition(*pIter);
 			auto planeSide = m_plane.GetPlaneSide(pos);
 			m_pointsSide[*pIter] = planeSide;
@@ -162,13 +141,11 @@ private:
 		std::map<Index_t, typename Geometry::PositionType> edgesToSplit;
 
 		auto edgesEnd = geometry->EdgesEnd();
-		for (auto eIter = geometry->EdgesBegin(); eIter != edgesEnd; ++eIter)
-		{
+		for (auto eIter = geometry->EdgesBegin(); eIter != edgesEnd; ++eIter) {
 			auto sourcePoint = geometry->GetPoint(geometry->GetSource(*eIter));
 			auto destPoint = geometry->GetPoint(geometry->GetDestination(*eIter));
 
-			if (!SameSide(sourcePoint, destPoint))
-			{
+			if (!SameSide(sourcePoint, destPoint)) {
 				auto sourcePos = geometry->GetPosition(sourcePoint);
 				auto destPos = geometry->GetPosition(destPoint);
 
@@ -176,20 +153,16 @@ private:
 				auto edgeIntersection = math::intersection(m_plane, line);
 
 				auto edgesBetweenPoints = geometry->GetEdges(sourcePoint, destPoint);
-				for (const auto &e : edgesBetweenPoints)
-				{
+				for (const auto &e : edgesBetweenPoints) {
 					edgesToSplit[e] = edgeIntersection.m_intersection;
 				}
-			}
-			else if (m_pointsSide[sourcePoint] == math::Plane<float>::PlaneSide::Back)
-			{
+			} else if (m_pointsSide[sourcePoint] == math::Plane<float>::PlaneSide::Back) {
 				// It's a face behind the plane
 				m_faceSide[geometry->GetFace(*eIter)] = math::Plane<float>::PlaneSide::Back;
 			}
 		}
 
-		for (const auto &e : edgesToSplit)
-		{
+		for (const auto &e : edgesToSplit) {
 			auto splitPoint = geometry->SplitEdge(e.first);
 			auto newEdge = geometry->GetOutEdge(splitPoint);
 			m_newEdges.insert(newEdge);

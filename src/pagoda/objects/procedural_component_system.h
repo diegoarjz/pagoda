@@ -25,7 +25,7 @@ using ProceduralComponentPtr = std::shared_ptr<ProceduralComponent>;
 template<class C>
 class ProceduralComponentSystem : public ProceduralComponentSystemBase
 {
-public:
+	public:
 	/// Type of \c ProceduralComponent managed by this \c ProceduralComponentSystem.
 	using Component_t = C;
 
@@ -54,8 +54,7 @@ public:
 		DBG_ASSERT_MSG(object != nullptr, "Can't get a component (%s) for a null ProceduralObject",
 		               GetComponentSystemTypeName().c_str());
 		auto component = m_components.find(object);
-		if (component == std::end(m_components))
-		{
+		if (component == std::end(m_components)) {
 			return nullptr;
 		}
 		return component->second;
@@ -64,8 +63,7 @@ public:
 	void CloneComponent(ProceduralObjectPtr from, ProceduralObjectPtr to) override
 	{
 		auto originalComponent = GetComponentAs<Component_t>(from);
-		if (originalComponent == nullptr)
-		{
+		if (originalComponent == nullptr) {
 			// no component to be cloned so nothing to be done
 			return;
 		}
@@ -78,10 +76,10 @@ public:
 	 */
 	void KillProceduralComponent(ProceduralObjectPtr object) override { m_components.erase(object); }
 
-protected:
+	protected:
 	virtual void DoClone(std::shared_ptr<Component_t> from, std::shared_ptr<Component_t> to) = 0;
 
-private:
+	private:
 	/// Stores the \c ProceduralComponent for each \c ProceduralObject.
 	std::unordered_map<ProceduralObjectPtr, std::shared_ptr<Component_t>> m_components;
 };  // class ProceduralComponentSystem

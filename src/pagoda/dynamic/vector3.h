@@ -13,7 +13,7 @@ class Integer;
 
 class Vector3 : public BuiltinClass
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	static std::shared_ptr<Vector3> DynamicConstructor(const std::vector<DynamicValueBasePtr>& args);
@@ -48,7 +48,7 @@ public:
 	FloatValuePtr GetY();
 	FloatValuePtr GetZ();
 
-private:
+	private:
 	void RegisterMembers();
 
 	math::Vec3F m_nativeVector;

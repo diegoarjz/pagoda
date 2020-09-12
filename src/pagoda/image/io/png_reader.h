@@ -8,14 +8,14 @@ namespace pagoda::image::io
 {
 class PngReader : public ImageReader
 {
-public:
+	public:
 	PngReader();
 	virtual ~PngReader();
 
 	void SetFilePath(const boost::filesystem::path& p) override;
 	void Read(boost::gil::rgb8_image_t& img) override;
 
-private:
+	private:
 	boost::filesystem::path m_filePath;
 };
 }  // namespace pagoda::image::io

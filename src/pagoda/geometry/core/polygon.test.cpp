@@ -23,8 +23,7 @@ TEST(PolygonTest, should_be_able_to_transform_the_points)
 	p.Transform([](const Vec3F& p) { return p + Vec3F{1, 0, 0}; });
 	std::vector<Vec3F> expected{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}};
 	uint32_t i = 0;
-	for (const auto& point : p.GetPoints())
-	{
+	for (const auto& point : p.GetPoints()) {
 		EXPECT_TRUE(point == expected[i++]);
 	}
 }

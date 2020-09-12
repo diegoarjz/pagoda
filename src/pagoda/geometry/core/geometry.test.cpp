@@ -9,7 +9,7 @@ using namespace geometry::core;
 
 class GeometryTest : public ::testing::Test
 {
-protected:
+	protected:
 	virtual void SetUp()
 	{
 		m_geometry = std::make_shared<GeometryBase<>>();
@@ -30,4 +30,3 @@ TEST_F(GeometryTest, when_created_should_be_empty)
 	EXPECT_EQ(emptyGeometry->GetSplitPointCount(), 0);
 	EXPECT_EQ(emptyGeometry->GetPointCount(), 0);
 }
-

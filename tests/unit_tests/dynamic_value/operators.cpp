@@ -35,12 +35,9 @@ TEST(UnaryOperators, test_invalid_negate_operator)
 {
 	FloatValue v(123.0f);
 	unary_ops_dispatcher<negate> dispatcher;
-	try
-	{
+	try {
 		apply_visitor(dispatcher, v);
-	}
-	catch (UndefinedNegateOperator<FloatValue> &)
-	{
+	} catch (UndefinedNegateOperator<FloatValue> &) {
 		return;
 	}
 	FAIL() << "Should have thrown";
@@ -59,12 +56,9 @@ TEST(UnaryOperators, test_invalid_minus_operator)
 {
 	Boolean v(true);
 	unary_ops_dispatcher<minus> dispatcher;
-	try
-	{
+	try {
 		apply_visitor(dispatcher, v);
-	}
-	catch (UndefinedMinusOperator<Boolean> &)
-	{
+	} catch (UndefinedMinusOperator<Boolean> &) {
 		return;
 	}
 	FAIL() << "Should have thrown";
@@ -88,12 +82,9 @@ TEST(BinaryOperators, test_invalid_add_operator)
 
 	binary_op_dispatcher<add> dispatcher(f1, b);
 
-	try
-	{
+	try {
 		apply_visitor(dispatcher, *f1);
-	}
-	catch (UndefinedBinaryOperator<FloatValue, Boolean> &)
-	{
+	} catch (UndefinedBinaryOperator<FloatValue, Boolean> &) {
 		return;
 	}
 	FAIL() << "Should have thrown";

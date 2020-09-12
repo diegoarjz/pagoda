@@ -16,7 +16,7 @@ using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
  */
 class ProceduralObjectPredicate
 {
-public:
+	public:
 	ProceduralObjectPredicate(ProceduralObjectSystemPtr objectSystem);
 
 	/**
@@ -30,7 +30,7 @@ public:
 	 */
 	virtual std::string ToString() = 0;
 
-protected:
+	protected:
 	ProceduralObjectSystemPtr m_objectSystem;
 };
 }  // namespace pagoda::objects

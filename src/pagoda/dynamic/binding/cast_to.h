@@ -17,9 +17,9 @@ namespace pagoda::dynamic
 template<class T, class C>
 class UnableToCast : public common::exception::Exception
 {
-public:
+	public:
 	UnableToCast()
-	    : common::exception::Exception("Unable to cast " + type_name<T>::GetName() + " to " + type_name<C>::GetName())
+	  : common::exception::Exception("Unable to cast " + type_name<T>::GetName() + " to " + type_name<C>::GetName())
 	{
 	}
 };
@@ -43,11 +43,10 @@ typename std::enable_if<can_cast_to_native<D, T>::value, T>::type cast_to(std::s
  */
 template<typename T, typename D>
 typename std::enable_if<std::is_base_of<D, T>::value, std::shared_ptr<T>>::type cast_to(
-    std::shared_ptr<D>& dynamicValue)
+  std::shared_ptr<D>& dynamicValue)
 {
 	auto ptr = std::dynamic_pointer_cast<T>(dynamicValue);
-	if (!ptr)
-	{
+	if (!ptr) {
 		throw UnableToCast<D, T>();
 	}
 	return ptr;
@@ -58,11 +57,10 @@ typename std::enable_if<std::is_base_of<D, T>::value, std::shared_ptr<T>>::type 
  */
 template<typename T, typename D>
 typename std::enable_if<std::is_base_of<typename D::element_type, typename T::element_type>::value, T>::type cast_to(
-    D& dynamicValue)
+  D& dynamicValue)
 {
 	auto ptr = std::dynamic_pointer_cast<typename T::element_type>(dynamicValue);
-	if (!ptr)
-	{
+	if (!ptr) {
 		throw UnableToCast<typename D::element_type, T>();
 	}
 	return ptr;

@@ -11,7 +11,7 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class EarClipping
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 	using Index_t = typename Geometry::Index_t;
@@ -19,7 +19,7 @@ private:
 	struct VertexLinkedListNode
 	{
 		VertexLinkedListNode(const Index_t splitPoint, const math::Vec3F &position)
-		    : m_splitPoint(splitPoint), m_position(position)
+		  : m_splitPoint(splitPoint), m_position(position)
 		{
 		}
 
@@ -31,9 +31,8 @@ private:
 
 	struct Triangle
 	{
-		Triangle(typename Geometry::PointHandle p0, typename Geometry::PointHandle p1,
-		         typename Geometry::PointHandle p2)
-		    : m_p0(p0), m_p1(p1), m_p2(p2)
+		Triangle(typename Geometry::PointHandle p0, typename Geometry::PointHandle p1, typename Geometry::PointHandle p2)
+		  : m_p0(p0), m_p1(p1), m_p2(p2)
 		{
 		}
 
@@ -50,7 +49,7 @@ private:
 		}
 	};
 
-public:
+	public:
 	EarClipping() {}
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
@@ -59,8 +58,7 @@ public:
 
 		std::vector<Triangle> triangles;
 
-		for (auto faceIter = geometryIn->FacesBegin(); faceIter != geometryIn->FacesEnd(); ++faceIter)
-		{
+		for (auto faceIter = geometryIn->FacesBegin(); faceIter != geometryIn->FacesEnd(); ++faceIter) {
 			std::vector<VertexLinkedListNode> vertexLinkedList;
 			math::Vec3F faceNormal = geometryIn->GetFaceAttributes(*faceIter).m_normal;
 
@@ -68,14 +66,12 @@ public:
 			std::set<VertexLinkedListNode *, Sorter> convexVertices;
 			std::set<VertexLinkedListNode *, Sorter> earTips;
 
-			for (auto fspIter = geometryIn->FaceSplitPointCirculatorBegin(*faceIter); fspIter; ++fspIter)
-			{
+			for (auto fspIter = geometryIn->FaceSplitPointCirculatorBegin(*faceIter); fspIter; ++fspIter) {
 				math::Vec3F curr = geometryIn->GetPosition(geometryIn->GetPoint(*fspIter));
 				vertexLinkedList.emplace_back(*fspIter, curr);
 			}
 
-			for (auto i = 0u; i < vertexLinkedList.size(); ++i)
-			{
+			for (auto i = 0u; i < vertexLinkedList.size(); ++i) {
 				auto prevIndex = i == 0 ? vertexLinkedList.size() - 1 : i - 1;
 				auto nextIndex = (i + 1) % vertexLinkedList.size();
 				vertexLinkedList[i].m_next = &(vertexLinkedList[nextIndex]);
@@ -86,28 +82,22 @@ public:
 				math::Vec3F next = vertexLinkedList[i].m_next->m_position;
 
 				auto dot = boost::qvm::dot(boost::qvm::cross((next - curr), (prev - curr)), faceNormal);
-				if (dot < 0)
-				{
+				if (dot < 0) {
 					reflexVertices.insert(&(vertexLinkedList[i]));
-				}
-				else if (dot > 0)
-				{
+				} else if (dot > 0) {
 					convexVertices.insert(&(vertexLinkedList[i]));
 				}
 			}
 
-			for (const auto &n : convexVertices)
-			{
-				if (isEar(*n, reflexVertices))
-				{
+			for (const auto &n : convexVertices) {
+				if (isEar(*n, reflexVertices)) {
 					earTips.insert(n);
 				}
 			}
 
 			uint32_t trianglesFound = 0;
 			// in a polygon with n vertices there are always n-2 trianges.
-			while (!earTips.empty() && trianglesFound < vertexLinkedList.size() - 2)
-			{
+			while (!earTips.empty() && trianglesFound < vertexLinkedList.size() - 2) {
 				VertexLinkedListNode *tip = *earTips.begin();
 				earTips.erase(tip);
 				++trianglesFound;
@@ -121,8 +111,7 @@ public:
 				tip->m_next = nullptr;
 				tip->m_prev = nullptr;
 
-				for (const auto &adj : {prev, next})
-				{
+				for (const auto &adj : {prev, next}) {
 					bool isConvex = false;
 
 					math::Vec3F prevPos = adj->m_prev->m_position;
@@ -130,26 +119,19 @@ public:
 					math::Vec3F nextPos = adj->m_next->m_position;
 
 					auto dot = boost::qvm::dot(boost::qvm::cross((nextPos - currPos), (prevPos - currPos)), faceNormal);
-					if (dot < 0)
-					{
+					if (dot < 0) {
 						reflexVertices.insert(adj);
 						convexVertices.erase(adj);
-					}
-					else if (dot > 0)
-					{
+					} else if (dot > 0) {
 						convexVertices.insert(adj);
 						reflexVertices.erase(adj);
 						isConvex = true;
 					}
 
-					if (isConvex)
-					{
-						if (isEar(*adj, reflexVertices))
-						{
+					if (isConvex) {
+						if (isEar(*adj, reflexVertices)) {
 							earTips.insert(adj);
-						}
-						else
-						{
+						} else {
 							earTips.erase(adj);
 						}
 					}
@@ -166,14 +148,12 @@ public:
 		core::GeometryBuilderT<Geometry> builder(geometryOut);
 		std::unordered_map<Index_t, Index_t> pointsMap;
 		auto pointEndIter = geometryIn->PointsEnd();
-		for (auto pointIter = geometryIn->PointsBegin(); pointIter != pointEndIter; ++pointIter)
-		{
+		for (auto pointIter = geometryIn->PointsBegin(); pointIter != pointEndIter; ++pointIter) {
 			auto vertPos = geometryIn->GetPosition(*pointIter);
 			pointsMap[*pointIter] = builder.AddPoint(vertPos, geometryIn->GetVertexAttributes(*pointIter));
 		}
 
-		for (const auto &t : triangles)
-		{
+		for (const auto &t : triangles) {
 			auto faceBuilder = builder.StartFace(3);
 			faceBuilder.AddIndex(pointsMap[t.m_p0]);
 			faceBuilder.AddIndex(pointsMap[t.m_p1]);
@@ -182,23 +162,20 @@ public:
 		}
 	}
 
-private:
+	private:
 	bool isEar(VertexLinkedListNode &v, std::set<VertexLinkedListNode *, Sorter> reflexVertices)
 	{
 		math::Vec3F p0 = v.m_prev->m_position;
 		math::Vec3F p1 = v.m_position;
 		math::Vec3F p2 = v.m_next->m_position;
 
-		for (const auto rv : reflexVertices)
-		{
+		for (const auto rv : reflexVertices) {
 			if (rv->m_splitPoint == v.m_splitPoint || rv->m_splitPoint == v.m_prev->m_splitPoint ||
-			    rv->m_splitPoint == v.m_next->m_splitPoint)
-			{
+			    rv->m_splitPoint == v.m_next->m_splitPoint) {
 				continue;
 			}
 
-			if (pointInsideTriangle(rv->m_position, p0, p1, p2))
-			{
+			if (pointInsideTriangle(rv->m_position, p0, p1, p2)) {
 				return false;
 			}
 		}

@@ -18,9 +18,9 @@ TEST(ProceduralObject, hierarchical_component_set_parent)
 	auto proceduralObject2 = std::make_shared<ProceduralObject>();
 	auto hierarchical_system = std::make_shared<HierarchicalSystem>();
 	auto parent =
-	    std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject));
+	  std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject));
 	auto child =
-	    std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject2));
+	  std::dynamic_pointer_cast<HierarchicalComponent>(hierarchical_system->CreateComponent(proceduralObject2));
 
 	hierarchical_system->SetParent(parent, child);
 	EXPECT_EQ(child->GetParent(), parent);
@@ -35,13 +35,12 @@ TEST(ProceduralObject, hierarchical_component_set_parent)
 
 class ProceduralObjectSystemTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp() { procedural_object_system = std::make_shared<ProceduralObjectSystem>(); }
 
 	void TearDown()
 	{
-		if (procedural_object != nullptr)
-		{
+		if (procedural_object != nullptr) {
 			procedural_object_system->KillProceduralObject(procedural_object);
 		}
 	}

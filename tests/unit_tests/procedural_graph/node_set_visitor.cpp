@@ -12,7 +12,7 @@ using namespace pagoda::graph;
 
 class NodeTypeFilterTest : public ::testing::Test
 {
-protected:
+	protected:
 	virtual void SetUp()
 	{
 		m_inputInterfaceNode = std::make_shared<InputInterfaceNode>();

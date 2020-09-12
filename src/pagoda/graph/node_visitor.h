@@ -11,7 +11,7 @@ class ParameterNode;
 
 class NodeVisitor
 {
-public:
+	public:
 	virtual void Visit(std::shared_ptr<OperationNode> n) = 0;
 	virtual void Visit(std::shared_ptr<InputInterfaceNode> n) = 0;
 	virtual void Visit(std::shared_ptr<OutputInterfaceNode> n) = 0;

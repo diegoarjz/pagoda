@@ -24,7 +24,7 @@ using GeometryPtr = std::shared_ptr<GeometryType>;
 
 class EarClippingTest : public PagodaTestFixture<::testing::Test>
 {
-public:
+	public:
 	void SetUp()
 	{
 		m_geometry = std::make_shared<GeometryType>();
@@ -115,8 +115,7 @@ TEST_F(EarClippingTest, test_triangulate_star)
 	GeometryBuilderT<GeometryType> builder(m_geometry);
 	auto face = builder.StartFace(slices);
 	float a = 0.0;
-	for (auto i = 0u; i < slices; ++i)
-	{
+	for (auto i = 0u; i < slices; ++i) {
 		auto r = i % 2 == 0 ? outerRadius : innerRadius;
 		face.AddIndex(builder.AddPoint(r * Vec3F{std::cos(a), std::sin(a), 0}));
 		a += MathUtils<float>::two_pi / slices;

@@ -19,7 +19,7 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
  */
 class Expression : public DynamicValueBase
 {
-public:
+	public:
 	static const TypeInfoPtr s_typeInfo;
 
 	/**
@@ -74,7 +74,7 @@ public:
 
 	DynamicValueBasePtr Evaluate();
 
-private:
+	private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
 };

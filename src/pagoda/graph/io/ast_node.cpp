@@ -5,12 +5,12 @@ namespace pagoda::graph::io
 AstNode::AstNode() : AstNode(0, 0) {}
 
 AstNode::AstNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset)
-    : m_startOffset(startOffset), m_endOffset(endOffset)
+  : m_startOffset(startOffset), m_endOffset(endOffset)
 {
 }
 
 AstNode::AstNode(const AstNode::NodeRange_t &nodeRange)
-    : m_startOffset(std::get<0>(nodeRange)), m_endOffset(std::get<1>(nodeRange))
+  : m_startOffset(std::get<0>(nodeRange)), m_endOffset(std::get<1>(nodeRange))
 {
 }
 

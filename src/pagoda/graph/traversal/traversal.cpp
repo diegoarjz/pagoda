@@ -9,16 +9,14 @@ Traversal::Traversal(Graph& graph) : m_graph(graph) {}
 
 void Traversal::GetInputNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter)
 {
-	for (NodePtr n : m_graph.GetNodeInputNodes(node->GetName()))
-	{
+	for (NodePtr n : m_graph.GetNodeInputNodes(node->GetName())) {
 		inserter = n;
 	}
 }
 
 void Traversal::GetOutputNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter)
 {
-	for (NodePtr n : m_graph.GetNodeOutputNodes(node->GetName()))
-	{
+	for (NodePtr n : m_graph.GetNodeOutputNodes(node->GetName())) {
 		inserter = n;
 	}
 }
@@ -33,10 +31,8 @@ NodeSet& Traversal::GetNodes() const { return m_graph.getNodes(); }
 
 void Traversal::ForEachUntil(std::function<bool(NodePtr)> handle)
 {
-	while (HasNext())
-	{
-		if (!handle(Get()))
-		{
+	while (HasNext()) {
+		if (!handle(Get())) {
 			break;
 		}
 		Advance();
@@ -45,8 +41,7 @@ void Traversal::ForEachUntil(std::function<bool(NodePtr)> handle)
 
 void Traversal::ForEach(std::function<void(NodePtr)> handle)
 {
-	while (HasNext())
-	{
+	while (HasNext()) {
 		handle(Get());
 		Advance();
 	}

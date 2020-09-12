@@ -15,7 +15,7 @@ using namespace pagoda::math;
 
 class TraverseTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp()
 	{
 		m_geometry = std::make_shared<core::Geometry>();
@@ -44,11 +44,9 @@ protected:
         };
 		// clang-format on
 
-		for (auto f = 0u; f < 6; ++f)
-		{
+		for (auto f = 0u; f < 6; ++f) {
 			auto faceBuilder = builder.StartFace(4);
-			for (auto fp = 0u; fp < 4; ++fp)
-			{
+			for (auto fp = 0u; fp < 4; ++fp) {
 				faceBuilder.AddIndex(points[faces[f][fp]]);
 			}
 			faceBuilder.CloseFace();
@@ -82,7 +80,7 @@ TEST_F(TraverseTest, should_traverse_all_points)
 TEST_F(TraverseTest, should_traverse_all_edges)
 {
 	std::vector<uint32_t> expected(
-	    {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23});
+	  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23});
 
 	uint32_t index = 0;
 	algorithms::EachEdge<core::Geometry>(m_geometry.get(),
@@ -94,13 +92,13 @@ TEST_F(TraverseTest, should_traverse_all_edges)
 TEST_F(TraverseTest, should_traverse_all_split_points)
 {
 	std::vector<uint32_t> expected(
-	    {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23});
+	  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23});
 
 	uint32_t index = 0;
 	algorithms::EachSplitPoint<core::Geometry>(
-	    m_geometry.get(), [&index, &expected](core::Geometry *g, const core::Geometry::SplitPointHandle &s) {
-		    EXPECT_EQ(s.GetIndex(), expected[index++]);
-	    });
+	  m_geometry.get(), [&index, &expected](core::Geometry *g, const core::Geometry::SplitPointHandle &s) {
+		  EXPECT_EQ(s.GetIndex(), expected[index++]);
+	  });
 }
 
 TEST_F(TraverseTest, should_circulate_all_points_around_each_face)
@@ -109,9 +107,10 @@ TEST_F(TraverseTest, should_circulate_all_points_around_each_face)
 
 	uint32_t index = 0;
 	algorithms::EachPointAroundEachFace<core::Geometry>(
-	    m_geometry.get(),
-	    [&index, &expected](core::Geometry *g, const core::Geometry::FaceHandle &f,
-	                        const core::Geometry::PointHandle &p) { EXPECT_EQ(p.GetIndex(), expected[index++]); });
+	  m_geometry.get(),
+	  [&index, &expected](core::Geometry *g, const core::Geometry::FaceHandle &f, const core::Geometry::PointHandle &p) {
+		  EXPECT_EQ(p.GetIndex(), expected[index++]);
+	  });
 }
 
 TEST_F(TraverseTest, should_circulate_all_points_around_a_face)
@@ -119,26 +118,25 @@ TEST_F(TraverseTest, should_circulate_all_points_around_a_face)
 	std::vector<uint32_t> expected({0, 1, 2, 3, 0, 3, 4, 5, 3, 2, 6, 4, 2, 1, 7, 6, 1, 0, 5, 7, 5, 4, 6, 7});
 
 	uint32_t index = 0;
-	algorithms::EachFace<core::Geometry>(
-	    m_geometry.get(), [&index, &expected](core::Geometry *g, const core::Geometry::FaceHandle &f) {
-		    algorithms::EachPointAroundFace(
-		        g, f, [&index, &expected](core::Geometry *, const core::Geometry::PointHandle &p) {
-			        EXPECT_EQ(p.GetIndex(), expected[index++]);
-		        });
-	    });
+	algorithms::EachFace<core::Geometry>(m_geometry.get(), [&index, &expected](core::Geometry *g,
+	                                                                           const core::Geometry::FaceHandle &f) {
+		algorithms::EachPointAroundFace(g, f, [&index, &expected](core::Geometry *, const core::Geometry::PointHandle &p) {
+			EXPECT_EQ(p.GetIndex(), expected[index++]);
+		});
+	});
 }
 
 TEST_F(TraverseTest, should_circulate_all_split_points_around_a_face)
 {
 	std::vector<uint32_t> expected(
-	    {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23});
+	  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23});
 
 	uint32_t index = 0;
 	algorithms::EachFace<core::Geometry>(
-	    m_geometry.get(), [&index, &expected](core::Geometry *g, const core::Geometry::FaceHandle &f) {
-		    algorithms::EachSplitPointAroundFace(
-		        g, f, [&index, &expected](core::Geometry *, const core::Geometry::SplitPointHandle &p) {
-			        EXPECT_EQ(p.GetIndex(), expected[index++]);
-		        });
-	    });
+	  m_geometry.get(), [&index, &expected](core::Geometry *g, const core::Geometry::FaceHandle &f) {
+		  algorithms::EachSplitPointAroundFace(
+		    g, f, [&index, &expected](core::Geometry *, const core::Geometry::SplitPointHandle &p) {
+			    EXPECT_EQ(p.GetIndex(), expected[index++]);
+		    });
+	  });
 }

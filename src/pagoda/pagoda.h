@@ -23,7 +23,7 @@ using GraphPtr = std::shared_ptr<Graph>;
  */
 class Pagoda
 {
-public:
+	public:
 	/**
 	 * Default constructor. Initializes pagoda.
 	 */
@@ -64,7 +64,7 @@ public:
 	 */
 	graph::GraphPtr CreateGraphFromFile(const std::string& filePath);
 
-private:
+	private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
 };

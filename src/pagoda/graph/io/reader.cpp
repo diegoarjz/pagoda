@@ -35,8 +35,7 @@ struct GraphReader::Impl
 
 		bool result = boost::spirit::qi::phrase_parse(begin, end, grammar, boost::spirit::qi::space, graph_def);
 
-		if (!result || begin != end)
-		{
+		if (!result || begin != end) {
 			throw common::exception::Exception("Syntax error while reading graph file. Starting in\n " +
 			                                   std::string(begin, end));
 			m_currentParseResult.status = ParseResult::Status::UnknownError;
@@ -50,13 +49,13 @@ struct GraphReader::Impl
 	}
 	const ParseResult &GetParseResult() const { return m_currentParseResult; }
 
-private:
+	private:
 	NodeFactoryPtr m_nodeFactory;
 	ParseResult m_currentParseResult;
 };
 
 GraphReader::GraphReader(NodeFactoryPtr nodeFactory)
-    : m_implementation(std::make_unique<GraphReader::Impl>(nodeFactory))
+  : m_implementation(std::make_unique<GraphReader::Impl>(nodeFactory))
 {
 }
 GraphReader::~GraphReader() {}

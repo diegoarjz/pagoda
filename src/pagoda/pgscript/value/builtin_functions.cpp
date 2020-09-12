@@ -12,8 +12,7 @@ using namespace dynamic;
 
 void print(const std::vector<DynamicValueBasePtr> &args)
 {
-	for (auto &a : args)
-	{
+	for (auto &a : args) {
 		std::cout << a->ToString();
 	}
 	std::cout << std::endl;

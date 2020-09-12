@@ -21,8 +21,7 @@ AstInterpreter::AstInterpreter(GraphPtr graph) : m_graph(graph) {}
 
 void AstInterpreter::Visit(GraphDefinitionNode *graphDefinition)
 {
-	for (const auto &statement : *graphDefinition)
-	{
+	for (const auto &statement : *graphDefinition) {
 		statement->AcceptVisitor(this);
 	}
 }
@@ -30,26 +29,20 @@ void AstInterpreter::Visit(GraphDefinitionNode *graphDefinition)
 void AstInterpreter::Visit(NamedArgument *namedArgument)
 {
 	DynamicValueBasePtr param;
-	switch (namedArgument->GetArgumentType())
-	{
-		case NamedArgument::ArgumentType::String:
-		{
+	switch (namedArgument->GetArgumentType()) {
+		case NamedArgument::ArgumentType::String: {
 			param = std::make_shared<String>(namedArgument->GetArgumentValue());
 			break;
 		}
-		case NamedArgument::ArgumentType::Float:
-		{
-			param =
-			    std::make_shared<FloatValue>(static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str())));
+		case NamedArgument::ArgumentType::Float: {
+			param = std::make_shared<FloatValue>(static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str())));
 			break;
 		}
-		case NamedArgument::ArgumentType::Integer:
-		{
+		case NamedArgument::ArgumentType::Integer: {
 			param = std::make_shared<Integer>(static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str())));
 			break;
 		}
-		case NamedArgument::ArgumentType::Expression:
-		{
+		case NamedArgument::ArgumentType::Expression: {
 			param = Expression::CreateExpression(namedArgument->GetArgumentValue());
 			break;
 		}
@@ -60,8 +53,7 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 {
 	m_currentNamedParameters.clear();
-	for (const auto &namedArgument : nodeDefinition->GetConstructionArguments())
-	{
+	for (const auto &namedArgument : nodeDefinition->GetConstructionArguments()) {
 		namedArgument->AcceptVisitor(this);
 	}
 
@@ -70,8 +62,7 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	m_graph->SetNodeConstructionParameters(nodeName, m_currentNamedParameters);
 
 	m_currentNamedParameters.clear();
-	for (const auto &namedArgument : nodeDefinition->GetExecutionArguments())
-	{
+	for (const auto &namedArgument : nodeDefinition->GetExecutionArguments()) {
 		namedArgument->AcceptVisitor(this);
 	}
 	m_graph->SetNodeExecutionParameters(nodeName, m_currentNamedParameters);
@@ -83,8 +74,7 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 	auto prevNodeName = nodeLink->begin();
 	auto currentNodeName = std::next(prevNodeName);
 
-	while (currentNodeName != end)
-	{
+	while (currentNodeName != end) {
 		/*
 		if (prevNode == nullptr || currNode == nullptr)
 		{
@@ -107,4 +97,3 @@ const std::unordered_map<std::string, DynamicValueBasePtr> &AstInterpreter::GetC
 }
 
 }  // namespace pagoda::graph::io
-

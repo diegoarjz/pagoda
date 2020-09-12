@@ -19,7 +19,7 @@ using namespace pagoda::geometry;
 
 class ProceduralObjectPredicateTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp()
 	{
 		m_objectSystem = std::make_shared<ProceduralObjectSystem>();

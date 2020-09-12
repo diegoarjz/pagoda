@@ -7,7 +7,7 @@ namespace pagoda::geometry::operations
 {
 class ClipGeometry : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string inputGeometry;
 	static const std::string frontGeometry;
 	static const std::string backGeometry;

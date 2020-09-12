@@ -19,7 +19,7 @@ namespace material
 {
 class Material
 {
-public:
+	public:
 	enum class ShaderType
 	{
 		Vertex,
@@ -42,7 +42,7 @@ public:
 	void SetAttribute(const std::string &name, dynamic::DynamicValueBasePtr value);
 	void AttributesEach(const std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> &fn) const;
 
-private:
+	private:
 	std::unordered_map<uint32_t, image::ImagePtr> m_textures;
 	std::unordered_map<ShaderType, std::string> m_shaderSources;
 	std::unordered_map<std::string, dynamic::DynamicValueBasePtr> m_materialAttributes;

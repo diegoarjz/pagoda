@@ -12,17 +12,15 @@ void HierarchicalComponent::SetParent(std::shared_ptr<HierarchicalComponent> par
 {
 	START_PROFILE;
 
-	if (this->parent.lock() != nullptr)
-	{
+	if (this->parent.lock() != nullptr) {
 		// Remove from children
 		this->parent.lock()->children.remove_if(
-		    [this](std::weak_ptr<HierarchicalComponent> wp) { return this == wp.lock().get(); });
+		  [this](std::weak_ptr<HierarchicalComponent> wp) { return this == wp.lock().get(); });
 	}
 
 	this->parent = parent;
 
-	if (this->parent.lock() != nullptr)
-	{
+	if (this->parent.lock() != nullptr) {
 		this->parent.lock()->children.push_back(shared_from_this());
 	}
 }

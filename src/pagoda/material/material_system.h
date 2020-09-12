@@ -23,7 +23,7 @@ class MaterialComponent;
 
 class MaterialSystem : public objects::ProceduralComponentSystem<MaterialComponent>
 {
-public:
+	public:
 	static const std::string GetComponentSystemName();
 
 	MaterialSystem();
@@ -37,10 +37,10 @@ public:
 	 */
 	static void Registration(Pagoda *pagoda);
 
-protected:
+	protected:
 	void DoClone(std::shared_ptr<MaterialComponent> from, std::shared_ptr<MaterialComponent> to) override;
 
-private:
+	private:
 	std::unordered_map<std::string, Material> m_namedMaterials;
 };
 }  // namespace material

@@ -22,7 +22,7 @@ struct grammar : boost::spirit::qi::grammar<Iterator, ast::ProgramPtr(), boost::
 	}
 
 	static auto typed_kw(char const *keyword)
-	    -> boost::spirit::qi::rule<Iterator, std::string(), boost::spirit::qi::space_type>
+	  -> boost::spirit::qi::rule<Iterator, std::string(), boost::spirit::qi::space_type>
 	{
 		using namespace boost::spirit;
 		return lexeme[(qi::string(keyword) >> !(qi::alnum | qi::char_('_')))[_val = qi::_1]];
@@ -105,8 +105,8 @@ struct grammar : boost::spirit::qi::grammar<Iterator, ast::ProgramPtr(), boost::
 		/*
 		 * statement_block -> "{" declaration* "}"
 		 */
-		statement_block = qi::char_('{')[_val = bind(make_statement_block)] >>
-		                  *(declaration[bind(add_statement, _val, qi::_1)]) >> '}';
+		statement_block =
+		  qi::char_('{')[_val = bind(make_statement_block)] >> *(declaration[bind(add_statement, _val, qi::_1)]) >> '}';
 
 		/*
 		 * expression_statement -> expression ";"
@@ -117,20 +117,20 @@ struct grammar : boost::spirit::qi::grammar<Iterator, ast::ProgramPtr(), boost::
 		 * if_statement -> "if" "(" expression ")" statement ("else" statement)?
 		 */
 		if_statement =
-		    (qi::lit("if") >> '(' >> expression >> ')' >> statement)[_val = bind(make_if_statement, qi::_1, qi::_2)] >>
-		    -(qi::lit("else") >> statement[_val = bind(add_else_statement, _val, qi::_1)]);
+		  (qi::lit("if") >> '(' >> expression >> ')' >> statement)[_val = bind(make_if_statement, qi::_1, qi::_2)] >>
+		  -(qi::lit("else") >> statement[_val = bind(add_else_statement, _val, qi::_1)]);
 
 		/*
 		 *  while_loop -> "while" "(" expression ")" statement
 		 */
 		while_loop =
-		    (qi::lit("while") >> '(' >> expression >> ')' >> statement)[_val = bind(make_while_loop, qi::_1, qi::_2)];
+		  (qi::lit("while") >> '(' >> expression >> ')' >> statement)[_val = bind(make_while_loop, qi::_1, qi::_2)];
 
 		/*
 		 * for_loop -> "for" "(" (var_decl | expression | ";")? expression? ";" expression? ")" statement
 		 */
-		for_loop = (qi::lit("for") >> '(' >> (var_decl | expression_statement | ';') >> -expression >> ';' >>
-		            -expression >> ')' >> statement)[_val = bind(make_for_loop, qi::_1, qi::_2, qi::_3, qi::_4)];
+		for_loop = (qi::lit("for") >> '(' >> (var_decl | expression_statement | ';') >> -expression >> ';' >> -expression >>
+		            ')' >> statement)[_val = bind(make_for_loop, qi::_1, qi::_2, qi::_3, qi::_4)];
 
 		/*
 		 * expression -> assignment;
@@ -141,39 +141,39 @@ struct grammar : boost::spirit::qi::grammar<Iterator, ast::ProgramPtr(), boost::
 		 * assignment -> identifier "=" assignment | logic_or
 		 */
 		assignment =
-		    (identifier >> '=' >> assignment)[_val = bind(make_assignment, qi::_1, qi::_2)] | logic_or[_val = qi::_1];
+		  (identifier >> '=' >> assignment)[_val = bind(make_assignment, qi::_1, qi::_2)] | logic_or[_val = qi::_1];
 
 		/*
 		 * logic_or -> logic_and ( "or" logic_and )*
 		 */
-		logic_or = logic_and[_val = qi::_1] >>
-		           *((qi::string("or") >> logic_and)[_val = bind(make_logic_op, qi::_1, _val, qi::_2)]);
+		logic_or =
+		  logic_and[_val = qi::_1] >> *((qi::string("or") >> logic_and)[_val = bind(make_logic_op, qi::_1, _val, qi::_2)]);
 
 		/*
 		 * logic_and -> equality ( "and" equality )*
 		 */
-		logic_and = equality[_val = qi::_1] >>
-		            *((qi::string("and") >> equality)[_val = bind(make_logic_op, qi::_1, _val, qi::_2)]);
+		logic_and =
+		  equality[_val = qi::_1] >> *((qi::string("and") >> equality)[_val = bind(make_logic_op, qi::_1, _val, qi::_2)]);
 
 		/*
 		 * equality -> comparison (("==" | "!=") comparison )*
 		 */
-		equality = comparison[_val = qi::_1] >> *(((qi::string("==") | qi::string("!=")) >>
-		                                           comparison)[_val = bind(make_comparison_op, qi::_1, _val, qi::_2)]);
+		equality =
+		  comparison[_val = qi::_1] >>
+		  *(((qi::string("==") | qi::string("!=")) >> comparison)[_val = bind(make_comparison_op, qi::_1, _val, qi::_2)]);
 
 		/*
 		 * comparison -> addition ((">" | ">=" | "<" | "<=") addition)*
 		 */
 		comparison =
-		    addition[_val = qi::_1] >> *(((qi::string(">=") | qi::string(">") | qi::string("<=") | qi::string("<")) >>
-		                                  addition)[_val = bind(make_comparison_op, qi::_1, _val, qi::_2)]);
+		  addition[_val = qi::_1] >> *(((qi::string(">=") | qi::string(">") | qi::string("<=") | qi::string("<")) >>
+		                                addition)[_val = bind(make_comparison_op, qi::_1, _val, qi::_2)]);
 
 		/*
 		 * addition -> multiplication (("+"|"-") multiplication)*
 		 */
-		addition =
-		    multiplication[_val = qi::_1] >>
-		    *(((char_('+') | char_('-')) >> multiplication)[_val = bind(make_arithmetic_op, qi::_1, _val, qi::_2)]);
+		addition = multiplication[_val = qi::_1] >>
+		           *(((char_('+') | char_('-')) >> multiplication)[_val = bind(make_arithmetic_op, qi::_1, _val, qi::_2)]);
 
 		/*
 		 * multiplication -> unary (("*"|"/") unary)*
@@ -203,8 +203,7 @@ struct grammar : boost::spirit::qi::grammar<Iterator, ast::ProgramPtr(), boost::
 		 * primary -> "true" | "false" | "null" | Float | string | identifier
 		 *            | "(" expression ")"
 		 */
-		primary = kw_true[_val = bind(make_true)] | kw_false[_val = bind(make_false)] |
-		          kw_null[_val = bind(make_null)] |
+		primary = kw_true[_val = bind(make_true)] | kw_false[_val = bind(make_false)] | kw_null[_val = bind(make_null)] |
 		          (number[_val = qi::_1] | string[_val = qi::_1] | identifier[_val = qi::_1]) |
 		          ('(' >> expression[_val = qi::_1] > ')');
 

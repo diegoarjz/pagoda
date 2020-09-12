@@ -46,8 +46,7 @@ void CreateRectGeometry::DoWork()
 	math::Vec3F rectXAxis;
 	math::Vec3F rectYAxis;
 
-	switch (planeName[0])
-	{
+	switch (planeName[0]) {
 		case 'x':
 			rectXAxis = math::Vec3F{0, 1, 0};
 			rectYAxis = math::Vec3F{0, 0, 1};
@@ -62,7 +61,7 @@ void CreateRectGeometry::DoWork()
 			break;
 		default:
 			throw common::exception::Exception(
-			    "The 'plane' parameter in create rect must be one of 'x', 'y', or 'z'. It was '" + planeName + "'");
+			  "The 'plane' parameter in create rect must be one of 'x', 'y', or 'z'. It was '" + planeName + "'");
 	}
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
@@ -72,11 +71,10 @@ void CreateRectGeometry::DoWork()
 	create_rect.Execute(geometry);
 
 	ProceduralObjectPtr object = CreateOutputProceduralObject(output_geometry);
-	std::shared_ptr<GeometryComponent> geometry_component =
-	    geometrySystem->CreateComponentAs<GeometryComponent>(object);
+	std::shared_ptr<GeometryComponent> geometry_component = geometrySystem->CreateComponentAs<GeometryComponent>(object);
 
 	geometry_component->SetGeometry(geometry);
 	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
-	    geometry, math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
+	  geometry, math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
 }
 }  // namespace pagoda::geometry::operations

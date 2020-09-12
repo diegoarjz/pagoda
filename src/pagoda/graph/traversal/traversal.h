@@ -13,7 +13,7 @@ namespace pagoda::graph::traversal
 {
 class Traversal
 {
-public:
+	public:
 	virtual NodePtr Get() = 0;
 	virtual bool Advance() = 0;
 	virtual bool HasNext() = 0;
@@ -21,7 +21,7 @@ public:
 	void ForEachUntil(std::function<bool(NodePtr)> handle);
 	void ForEach(std::function<void(NodePtr)> handle);
 
-protected:
+	protected:
 	Traversal(Graph& graph);
 
 	void GetInputNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter);
@@ -29,7 +29,7 @@ protected:
 	void GetAdjacentNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter);
 	NodeSet& GetNodes() const;
 
-private:
+	private:
 	Graph& m_graph;
 };
 }  // namespace pagoda::graph::traversal

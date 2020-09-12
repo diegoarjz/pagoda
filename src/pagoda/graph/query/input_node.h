@@ -6,7 +6,7 @@ namespace pagoda::graph::query
 {
 class InputNode : public Query
 {
-public:
+	public:
 	InputNode(Graph &graph, QueryHandle_t queryHandle);
 	InputNode(Graph &graph, NodeSet &nodeSet);
 

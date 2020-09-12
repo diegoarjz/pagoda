@@ -5,19 +5,19 @@
 namespace pagoda::graph::io
 {
 NamedArgument::NamedArgument(const std::string& name, const ArgumentType type, const std::string& value)
-    : m_name(name), m_argumentType(type), m_argumentValue(value)
+  : m_name(name), m_argumentType(type), m_argumentValue(value)
 {
 }
 
 NamedArgument::NamedArgument(const AstNode::Offset_t& startOffset, const AstNode::Offset_t& endOffset,
                              const std::string& name, const NamedArgument::ArgumentType type, const std::string& value)
-    : AstNode(startOffset, endOffset), m_name(name), m_argumentType(type), m_argumentValue(value)
+  : AstNode(startOffset, endOffset), m_name(name), m_argumentType(type), m_argumentValue(value)
 {
 }
 
 NamedArgument::NamedArgument(const AstNode::NodeRange_t& range, const std::string& name,
                              const NamedArgument::ArgumentType type, const std::string& value)
-    : AstNode(range), m_name(name), m_argumentType(type), m_argumentValue(value)
+  : AstNode(range), m_name(name), m_argumentType(type), m_argumentValue(value)
 {
 }
 

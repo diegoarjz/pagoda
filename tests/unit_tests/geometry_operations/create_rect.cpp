@@ -20,7 +20,7 @@ using GeometryPtr = std::shared_ptr<GeometryType>;
 
 class CreateRectTest : public PagodaTestFixture<::testing::Test>
 {
-public:
+	public:
 	void SetUp() {}
 
 	void TearDown() {}
@@ -41,10 +41,8 @@ TEST_F(CreateRectTest, create_rect)
 	EXPECT_EQ(out->GetEdgeCount(), 4);
 
 	auto i = 0u;
-	for (auto fIter = out->FacesBegin(); fIter != out->FacesEnd(); ++fIter)
-	{
-		for (auto fvCirc = out->FacePointCirculatorBegin(*fIter); fvCirc; ++fvCirc)
-		{
+	for (auto fIter = out->FacesBegin(); fIter != out->FacesEnd(); ++fIter) {
+		for (auto fvCirc = out->FacePointCirculatorBegin(*fIter); fvCirc; ++fvCirc) {
 			EXPECT_TRUE(out->GetPosition(*fvCirc) == expected[i]);
 			++i;
 		}

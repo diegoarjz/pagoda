@@ -9,7 +9,7 @@
 
 namespace pagoda
 {
-    class Pagoda;
+class Pagoda;
 }
 
 namespace pagoda::objects
@@ -25,7 +25,7 @@ class ProceduralObjectPredicateRegistry;
  */
 class ProceduralObjectSystem
 {
-public:
+	public:
 	ProceduralObjectSystem();
 	~ProceduralObjectSystem();
 
@@ -39,16 +39,14 @@ public:
 	template<class System>
 	bool UnregisterProceduralComponentSystem()
 	{
-		DBG_ASSERT_MSG(
-		    m_proceduralObjects.size() == 0,
-		    "Unregistering a ComponentSystem while there are procedural objects may cause incorrect behaviour.");
+		DBG_ASSERT_MSG(m_proceduralObjects.size() == 0,
+		               "Unregistering a ComponentSystem while there are procedural objects may cause incorrect behaviour.");
 		START_PROFILE;
 
 		std::string type = System::GetComponentSystem();
 
 		auto iteratorToSystems = m_proceduralComponentSystems.find(type);
-		if (iteratorToSystems == std::end(m_proceduralComponentSystems))
-		{
+		if (iteratorToSystems == std::end(m_proceduralComponentSystems)) {
 			return false;
 		}
 
@@ -69,19 +67,21 @@ public:
 		return m_proceduralObjects;
 	}
 
-    void SetPredicateRegistry(std::shared_ptr<ProceduralObjectPredicateRegistry> registry) { m_predicateRegistry = registry; }
-    std::shared_ptr<ProceduralObjectPredicateRegistry> GetPredicateRegistry() const { return m_predicateRegistry; }
+	void SetPredicateRegistry(std::shared_ptr<ProceduralObjectPredicateRegistry> registry)
+	{
+		m_predicateRegistry = registry;
+	}
+	std::shared_ptr<ProceduralObjectPredicateRegistry> GetPredicateRegistry() const { return m_predicateRegistry; }
 
-    static void Registration(Pagoda* pagoda);
+	static void Registration(Pagoda* pagoda);
 
-private:
+	private:
 	std::unordered_set<std::shared_ptr<ProceduralObject>> m_proceduralObjects;
 	std::unordered_map<std::string, std::shared_ptr<ProceduralComponentSystemBase>> m_proceduralComponentSystems;
-    std::shared_ptr<ProceduralObjectPredicateRegistry> m_predicateRegistry;
+	std::shared_ptr<ProceduralObjectPredicateRegistry> m_predicateRegistry;
 };  // class ProceduralObjectSystem
 
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
 using ProceduralObjectSystemWeakPtr = std::weak_ptr<ProceduralObjectSystem>;
 
 }  // namespace pagoda::objects
-

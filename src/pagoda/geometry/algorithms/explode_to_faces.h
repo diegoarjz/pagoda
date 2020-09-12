@@ -13,11 +13,11 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class ExplodeToFaces
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 
-public:
+	public:
 	ExplodeToFaces() {}
 
 	template<class Container>

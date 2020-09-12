@@ -6,7 +6,7 @@ namespace pagoda::common::exception
 {
 class Unimplemented : public Exception
 {
-public:
+	public:
 	Unimplemented(const char *file, const char *function, uint32_t line);
 };
 

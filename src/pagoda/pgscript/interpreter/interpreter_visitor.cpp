@@ -33,7 +33,7 @@ namespace pagoda
 // clang-format on
 
 interpreter_visitor::interpreter_visitor()
-    : m_globals(std::make_shared<DynamicValueTable>("Global")), m_symbolTable(m_globals)
+  : m_globals(std::make_shared<DynamicValueTable>("Global")), m_symbolTable(m_globals)
 {
 }
 
@@ -59,28 +59,23 @@ void interpreter_visitor::Visit(ast::ArithmeticOpPtr op)
 	auto lhs = PopValue();
 	auto rhs = PopValue();
 
-	switch (op->GetOperationType())
-	{
-		case ast::ArithmeticOp::types::Add:
-		{
+	switch (op->GetOperationType()) {
+		case ast::ArithmeticOp::types::Add: {
 			binary_op_dispatcher<add> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
-		case ast::ArithmeticOp::types::Sub:
-		{
+		case ast::ArithmeticOp::types::Sub: {
 			binary_op_dispatcher<sub> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
-		case ast::ArithmeticOp::types::Mul:
-		{
+		case ast::ArithmeticOp::types::Mul: {
 			binary_op_dispatcher<mul> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
-		case ast::ArithmeticOp::types::Div:
-		{
+		case ast::ArithmeticOp::types::Div: {
 			binary_op_dispatcher<dynamic::div> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
@@ -93,16 +88,13 @@ void interpreter_visitor::Visit(ast::UnaryPtr u)
 	u->GetRhs()->AcceptVisitor(this);
 	auto rhs = PopValue();
 
-	switch (u->GetOperationType())
-	{
-		case ast::Unary::types::Neg:
-		{
+	switch (u->GetOperationType()) {
+		case ast::Unary::types::Neg: {
 			unary_ops_dispatcher<negate> v;
 			PushValue(apply_visitor(v, *rhs));
 			break;
 		}
-		case ast::Unary::types::Min:
-		{
+		case ast::Unary::types::Min: {
 			unary_ops_dispatcher<minus> v;
 			PushValue(apply_visitor(v, *rhs));
 			break;
@@ -117,40 +109,33 @@ void interpreter_visitor::Visit(ast::ComparisonOpPtr op)
 	auto lhs = PopValue();
 	auto rhs = PopValue();
 
-	switch (op->GetOperationType())
-	{
-		case ast::ComparisonOp::types::Eq:
-		{
+	switch (op->GetOperationType()) {
+		case ast::ComparisonOp::types::Eq: {
 			binary_op_dispatcher<eq> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
-		case ast::ComparisonOp::types::Ne:
-		{
+		case ast::ComparisonOp::types::Ne: {
 			binary_op_dispatcher<neq> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
-		case ast::ComparisonOp::types::Gt:
-		{
+		case ast::ComparisonOp::types::Gt: {
 			binary_op_dispatcher<gt> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
-		case ast::ComparisonOp::types::Gte:
-		{
+		case ast::ComparisonOp::types::Gte: {
 			binary_op_dispatcher<gte> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
-		case ast::ComparisonOp::types::Lt:
-		{
+		case ast::ComparisonOp::types::Lt: {
 			binary_op_dispatcher<lt> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
 		}
-		case ast::ComparisonOp::types::Lte:
-		{
+		case ast::ComparisonOp::types::Lte: {
 			binary_op_dispatcher<lte> v(lhs, rhs);
 			PushValue(apply_visitor(v, *lhs));
 			break;
@@ -165,12 +150,9 @@ void interpreter_visitor::Visit(ast::LogicOpPtr op)
 	auto lhs = PopValue();
 
 	auto lhs_true = get_value_as<bool>(*lhs);
-	switch (op->GetOperationType())
-	{
-		case ast::LogicOp::types::And:
-		{
-			if (lhs_true)
-			{
+	switch (op->GetOperationType()) {
+		case ast::LogicOp::types::And: {
+			if (lhs_true) {
 				op->GetRhs()->AcceptVisitor(this);
 				auto rhs = PopValue();
 				PushValue(std::make_shared<Boolean>(get_value_as<bool>(*rhs)));
@@ -179,10 +161,8 @@ void interpreter_visitor::Visit(ast::LogicOpPtr op)
 			PushValue(std::make_shared<Boolean>(false));
 			break;
 		}
-		case ast::LogicOp::types::Or:
-		{
-			if (lhs_true)
-			{
+		case ast::LogicOp::types::Or: {
+			if (lhs_true) {
 				PushValue(std::make_shared<Boolean>(true));
 				return;
 			}
@@ -215,24 +195,19 @@ void interpreter_visitor::Visit(ast::IfStatementPtr i)
 
 	auto falseStatement = i->GetFalseStatement();
 
-	if (get_value_as<bool>(*condition))
-	{
+	if (get_value_as<bool>(*condition)) {
 		i->GetTrueStatement()->AcceptVisitor(this);
-	}
-	else if (falseStatement)
-	{
+	} else if (falseStatement) {
 		falseStatement->AcceptVisitor(this);
 	}
 }
 
 void interpreter_visitor::Visit(ast::LoopPtr l)
 {
-	while (true)
-	{
+	while (true) {
 		l->GetCondition()->AcceptVisitor(this);
 		auto condition = PopValue();
-		if (!get_value_as<bool>(*condition))
-		{
+		if (!get_value_as<bool>(*condition)) {
 			break;
 		}
 		l->GetBody()->AcceptVisitor(this);
@@ -243,13 +218,10 @@ void interpreter_visitor::Visit(ast::VarDeclPtr v)
 {
 	auto rhs = v->GetRhs();
 
-	if (rhs)
-	{
+	if (rhs) {
 		rhs->AcceptVisitor(this);
 		GetCurrentSymbolTable()->Declare(v->GetIdentifier()->GetIdentifier(), PopValue());
-	}
-	else
-	{
+	} else {
 		GetCurrentSymbolTable()->Declare(v->GetIdentifier()->GetIdentifier(), std::make_shared<NullObject>());
 	}
 }
@@ -259,8 +231,7 @@ void interpreter_visitor::Visit(ast::StatementBlockPtr b)
 	auto prevSymbolTable = GetCurrentSymbolTable();
 	EnterBlock();
 
-	for (const auto &statement : b->GetStatements())
-	{
+	for (const auto &statement : b->GetStatements()) {
 		statement->AcceptVisitor(this);
 	}
 
@@ -280,12 +251,9 @@ void interpreter_visitor::ExitBlock(const std::shared_ptr<DynamicValueTable> &pr
 void interpreter_visitor::EnterFunction(const ICallablePtr &callable)
 {
 	auto closure = callable->GetClosure();
-	if (closure)
-	{
+	if (closure) {
 		m_symbolTable = std::make_shared<DynamicValueTable>(callable->GetCallableName(), closure);
-	}
-	else
-	{
+	} else {
 		m_symbolTable = std::make_shared<DynamicValueTable>(callable->GetCallableName(), m_globals);
 	}
 }
@@ -302,14 +270,12 @@ void interpreter_visitor::Visit(ast::CallPtr c)
 	auto callee = std::dynamic_pointer_cast<ICallable>(popped);
 
 	std::vector<DynamicValueBasePtr> args;
-	for (auto &a : c->GetArguments())
-	{
+	for (auto &a : c->GetArguments()) {
 		a->AcceptVisitor(this);
 		args.push_back(PopValue());
 	}
 
-	if (!callee->IsVariadic() && callee->GetArity() != args.size())
-	{
+	if (!callee->IsVariadic() && callee->GetArity() != args.size()) {
 		throw common::exception::Exception("Wrong arity");
 	}
 
@@ -343,8 +309,7 @@ void interpreter_visitor::Visit(ast::ParameterPtr par) { throw common::exception
 void interpreter_visitor::Visit(ast::ReturnPtr r)
 {
 	auto returnExression = r->GetReturnExpression();
-	if (returnExression)
-	{
+	if (returnExression) {
 		returnExression->AcceptVisitor(this);
 		throw static_cast<DynamicValueBasePtr>(PopValue());
 	}
@@ -359,8 +324,7 @@ void interpreter_visitor::Visit(ast::ClassDeclarationPtr c)
 
 	GetCurrentSymbolTable()->Declare(identifier->GetIdentifier(), klass);
 
-	for (auto &m : c->GetMethods())
-	{
+	for (auto &m : c->GetMethods()) {
 		auto identifier = m->GetIdentifier();
 		auto parameters = m->GetParameters();
 		auto body = m->GetFunctionBody();
@@ -418,12 +382,9 @@ void interpreter_visitor::Visit(ast::GetExpressionPtr e)
 
 	auto value = lhs->GetMember(identifier);
 	auto method = std::dynamic_pointer_cast<Function>(value);
-	if (method)
-	{
+	if (method) {
 		PushValue(lhs->Bind(method->GetCallableBody(), m_globals));
-	}
-	else
-	{
+	} else {
 		PushValue(value);
 	}
 }
@@ -442,8 +403,7 @@ void interpreter_visitor::Visit(ast::SetExpressionPtr e)
 
 void interpreter_visitor::Visit(ast::ProgramPtr p)
 {
-	for (const auto &statement : p->GetStatements())
-	{
+	for (const auto &statement : p->GetStatements()) {
 		statement->AcceptVisitor(this);
 	}
 }

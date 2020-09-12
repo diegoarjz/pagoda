@@ -12,11 +12,11 @@ using ProgramPtr = std::shared_ptr<Program>;
 
 class Parser
 {
-public:
+	public:
 	Parser();
 
 	ast::ProgramPtr Parse(const std::string &source);
 
-private:
+	private:
 };
 }  // namespace pagoda

@@ -10,8 +10,7 @@ Variable::Variable(const std::string &compoundVariable)
 {
 	std::size_t curr = compoundVariable.find('.');
 	std::size_t prev = 0;
-	while (curr != std::string::npos)
-	{
+	while (curr != std::string::npos) {
 		m_identifiers.push_back(compoundVariable.substr(prev, curr - prev));
 		prev = curr + 1;
 		curr = compoundVariable.find('.', prev);
@@ -35,8 +34,7 @@ const std::string Variable::ToString() const
 	auto iter = m_identifiers.begin();
 	std::string compound = *iter;
 	++iter;
-	for (/**/; iter != m_identifiers.end(); ++iter)
-	{
+	for (/**/; iter != m_identifiers.end(); ++iter) {
 		compound += '.' + (*iter);
 	}
 

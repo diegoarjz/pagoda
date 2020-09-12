@@ -14,7 +14,7 @@ namespace pagoda::image::core
 {
 class ImageImplementationFactory : public common::Factory<ImageImplementation, ImageType>
 {
-public:
+	public:
 	ImageImplementationFactory();
 	virtual ~ImageImplementationFactory();
 };

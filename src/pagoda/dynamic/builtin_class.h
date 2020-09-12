@@ -10,7 +10,7 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
 class BuiltinClass : public DynamicValueBase, public ClassBase
 {
-public:
+	public:
 	BuiltinClass(const TypeInfoPtr &typeInfo);
 
 	FunctionPtr Bind(std::shared_ptr<ICallableBody> callable, std::shared_ptr<DynamicValueTable> globals = nullptr);

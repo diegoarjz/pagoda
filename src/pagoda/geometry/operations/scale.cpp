@@ -43,8 +43,7 @@ void Scale::DoWork()
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(s_inputGeometry))
-	{
+	while (HasInput(s_inputGeometry)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);
 
@@ -66,22 +65,17 @@ void Scale::DoWork()
 		auto pivotalPointName = get_value_as<std::string>(*GetValue("pivotal_point"));
 
 		Mat4x4F matrix;
-		if (pivotalPointName == "scope_center")
-		{
+		if (pivotalPointName == "scope_center") {
 			Vec3F pivotalPoint = inScope.GetCenterPointInWorld();
 			Mat4x4F translation = boost::qvm::translation_mat(XYZ(pivotalPoint));
 			Mat4x4F scale = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
 			Mat4x4F invTranslation = boost::qvm::translation_mat(XYZ(-pivotalPoint));
 			matrix = translation * scale * invTranslation;
-		}
-		else if (pivotalPointName == "scope_origin")
-		{
+		} else if (pivotalPointName == "scope_origin") {
 			Vec3F pivotalPoint = inScope.GetWorldPoint(Scope::BoxPoints::LowerBottomLeft);
 			matrix = boost::qvm::translation_mat(pivotalPoint) * boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z})) *
 			         boost::qvm::translation_mat(-pivotalPoint);
-		}
-		else if (pivotalPointName == "world_origin")
-		{
+		} else if (pivotalPointName == "world_origin") {
 			matrix = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
 		}
 
@@ -93,4 +87,3 @@ void Scale::DoWork()
 	}
 }
 }  // namespace pagoda::geometry::operations
-

@@ -12,9 +12,9 @@
 #include "value_not_found.h"
 #include "value_visitor.h"
 
+#include <pagoda/pgscript/interpreter/interpreter.h>
 #include <pagoda/pgscript/ir/ast.h>
 #include <pagoda/pgscript/ir/ast_visitor.h>
-#include <pagoda/pgscript/interpreter/interpreter.h>
 #include <pagoda/pgscript/parser/parser.h>
 
 #include <pagoda/common/instrument/profiler.h>
@@ -27,7 +27,7 @@ const TypeInfoPtr Expression::s_typeInfo = std::make_shared<TypeInfo>("Expressio
 
 class ExpressionInterpreter : public Interpreter
 {
-public:
+	public:
 	static ExpressionInterpreter &GetInstance()
 	{
 		static ExpressionInterpreter sInterpreter;
@@ -39,7 +39,7 @@ public:
 		return std::make_shared<DynamicInstance>(m_parameterClass);
 	}
 
-private:
+	private:
 	ExpressionInterpreter() : Interpreter()
 	{
 		// TODO: Add built-in functions
@@ -52,7 +52,7 @@ const DynamicClassPtr ExpressionInterpreter::m_parameterClass = std::make_shared
 
 class ExpressionValidator : public AstVisitor
 {
-public:
+	public:
 	ExpressionValidator() : m_getExpressionCount(0) {}
 
 	void Visit(ast::FloatPtr) override {}
@@ -63,12 +63,9 @@ public:
 
 	void Visit(ast::IdentifierPtr i) override
 	{
-		if (m_getExpressionCount == 0)
-		{
+		if (m_getExpressionCount == 0) {
 			m_symbols.push_back(Variable(i->GetIdentifier()));
-		}
-		else
-		{
+		} else {
 			m_symbols.back().AddIdentifier(i->GetIdentifier());
 		}
 	}
@@ -110,8 +107,7 @@ public:
 		i->GetCondition()->AcceptVisitor(this);
 		i->GetTrueStatement()->AcceptVisitor(this);
 		auto falseStatement = i->GetFalseStatement();
-		if (falseStatement)
-		{
+		if (falseStatement) {
 			falseStatement->AcceptVisitor(this);
 		}
 	}
@@ -126,16 +122,14 @@ public:
 	{
 		v->GetIdentifier()->AcceptVisitor(this);
 		auto rhs = v->GetRhs();
-		if (rhs)
-		{
+		if (rhs) {
 			rhs->AcceptVisitor(this);
 		}
 	}
 
 	void Visit(ast::StatementBlockPtr s) override
 	{
-		for (auto &s : s->GetStatements())
-		{
+		for (auto &s : s->GetStatements()) {
 			s->AcceptVisitor(this);
 		}
 	}
@@ -143,8 +137,7 @@ public:
 	void Visit(ast::CallPtr c) override
 	{
 		c->GetCallee()->AcceptVisitor(this);
-		for (auto &a : c->GetArguments())
-		{
+		for (auto &a : c->GetArguments()) {
 			a->AcceptVisitor(this);
 		}
 	}
@@ -173,8 +166,7 @@ public:
 
 	void Visit(ast::ProgramPtr p) override
 	{
-		for (auto &s : p->GetStatements())
-		{
+		for (auto &s : p->GetStatements()) {
 			s->AcceptVisitor(this);
 		}
 	}
@@ -201,7 +193,7 @@ struct dependent_expression_adder : public ValueVisitor<void>
 
 class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
 {
-public:
+	public:
 	Impl(ast::ProgramPtr &&program) : m_expression(program) {}
 	~Impl() {}
 
@@ -209,13 +201,11 @@ public:
 	{
 		START_PROFILE;
 
-		if (m_lastComputedValue == nullptr)
-		{
+		if (m_lastComputedValue == nullptr) {
 			auto &interpreter = ExpressionInterpreter::GetInstance();
 
 			auto variables = std::make_shared<DynamicValueTable>("variables");
-			for (auto &var : m_variableValues)
-			{
+			for (auto &var : m_variableValues) {
 				const std::list<std::string> &variableIdentifiers = var.first.GetIdentifiers();
 				variables->Declare(variableIdentifiers.front(), EvaluateIfExpression(var.second));
 			}
@@ -234,8 +224,7 @@ public:
 	DynamicValueBasePtr EvaluateIfExpression(const DynamicValueBasePtr &d)
 	{
 		ExpressionPtr e = std::dynamic_pointer_cast<Expression>(d);
-		if (e != nullptr)
-		{
+		if (e != nullptr) {
 			return EvaluateIfExpression(e->Evaluate());
 		}
 		return d;
@@ -264,8 +253,7 @@ public:
 	void SetDirty()
 	{
 		m_lastComputedValue = nullptr;
-		for (const auto &e : m_dependentExpressions)
-		{
+		for (const auto &e : m_dependentExpressions) {
 			e.lock()->SetDirty();
 		}
 	}
@@ -294,8 +282,7 @@ std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expr
 	ExpressionValidator validator;
 	expression->m_implementation->m_expression->AcceptVisitor(&validator);
 
-	for (const auto &v : validator.m_symbols)
-	{
+	for (const auto &v : validator.m_symbols) {
 		expression->m_implementation->m_variables.insert(v);
 	}
 
@@ -336,4 +323,3 @@ void Expression::AcceptVisitor(ValueVisitorBase &visitor) { visitor.Visit(*this)
 
 DynamicValueBasePtr Expression::Evaluate() { return m_implementation->Evaluate(); }
 }  // namespace pagoda::dynamic
-

@@ -38,14 +38,11 @@ void SetTexture::DoWork()
 
 	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
-	while (HasInput(inputObject))
-	{
+	while (HasInput(inputObject)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
 		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
-		std::shared_ptr<MaterialComponent> materialComponent =
-		    materialSystem->GetComponentAs<MaterialComponent>(outObject);
-		if (materialComponent == nullptr)
-		{
+		std::shared_ptr<MaterialComponent> materialComponent = materialSystem->GetComponentAs<MaterialComponent>(outObject);
+		if (materialComponent == nullptr) {
 			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 		}
 

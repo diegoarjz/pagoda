@@ -18,7 +18,7 @@ namespace pagoda::graph
 {
 class OutputInterfaceNode : public Node
 {
-public:
+	public:
 	static const char* name;
 
 	OutputInterfaceNode();
@@ -34,7 +34,7 @@ public:
 	void AddProceduralObject(pagoda::objects::ProceduralObjectPtr object);
 	void AcceptNodeVisitor(NodeVisitor* visitor) override;
 
-private:
+	private:
 	std::string m_interfaceName;
 	std::list<pagoda::objects::ProceduralObjectPtr> m_proceduralObjects;
 };  // class OutputInterfaceNode

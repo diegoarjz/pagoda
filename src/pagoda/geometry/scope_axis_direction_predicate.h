@@ -12,7 +12,7 @@ using GeometrySystemPtr = std::shared_ptr<GeometrySystem>;
 
 class ScopeAxisDirectionPredicate : public objects::ProceduralObjectPredicate
 {
-public:
+	public:
 	/**
 	 * Constructs the predicate with the \p direction and a \p tolerance.
 	 */
@@ -32,7 +32,7 @@ public:
 	 */
 	std::string ToString() override;
 
-private:
+	private:
 	char m_scopeAxis;
 	math::Vec3F m_direction;
 	math::Degrees<float> m_tolerance;

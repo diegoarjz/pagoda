@@ -6,7 +6,7 @@ namespace pagoda::geometry::operations
 {
 class Scale : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string s_inputGeometry;
 	static const std::string s_outputGeometry;
 
@@ -16,4 +16,3 @@ public:
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations
-

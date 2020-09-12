@@ -9,7 +9,7 @@ namespace ast
 {
 class ClassDeclaration : public Statement
 {
-public:
+	public:
 	ClassDeclaration() = default;
 	ClassDeclaration(const IdentifierPtr &identifier, const std::vector<FunctionDeclarationPtr> &methods);
 	virtual ~ClassDeclaration(){};
@@ -19,7 +19,7 @@ public:
 	const IdentifierPtr &GetIdentifier() const { return m_identifier; }
 	const std::vector<FunctionDeclarationPtr> &GetMethods() const { return m_methods; }
 
-private:
+	private:
 	IdentifierPtr m_identifier;
 	std::vector<FunctionDeclarationPtr> m_methods;
 };

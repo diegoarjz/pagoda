@@ -7,14 +7,14 @@ namespace pagoda::graph::io
 GraphDefinitionNode::GraphDefinitionNode() {}
 
 GraphDefinitionNode::GraphDefinitionNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset)
-    : AstNode(startOffset, endOffset)
+  : AstNode(startOffset, endOffset)
 {
 }
 
 GraphDefinitionNode::GraphDefinitionNode(const AstNode::NodeRange_t &range) : AstNode(range) {}
 
 GraphDefinitionNode::GraphDefinitionNode(const GraphDefinitionNode::StatementContainer_t &statements)
-    : m_graphStatements(statements)
+  : m_graphStatements(statements)
 {
 }
 

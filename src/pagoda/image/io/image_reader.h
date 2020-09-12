@@ -8,7 +8,7 @@ namespace pagoda::image::io
 {
 class ImageReader
 {
-public:
+	public:
 	virtual void SetFilePath(const boost::filesystem::path& p) = 0;
 	virtual void Read(boost::gil::rgb8_image_t& img) = 0;
 };

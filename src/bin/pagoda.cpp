@@ -52,79 +52,60 @@ int main(int argc, char* argv[])
 
 	Pagoda pagoda;
 
-	if (!ParseCommandLine(argc, argv, &vm))
-	{
+	if (!ParseCommandLine(argc, argv, &vm)) {
 		return 0;
 	}
 
 	std::string file_path;
 	std::string dot_file;
-	try
-	{
-		if (vm.count("file"))
-		{
+	try {
+		if (vm.count("file")) {
 			file_path = vm["file"].as<std::string>();
 		}
-		if (vm.count("dot"))
-		{
+		if (vm.count("dot")) {
 			dot_file = vm["dot"].as<std::string>();
 		}
-	}
-	catch (po::error& e)
-	{
+	} catch (po::error& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
-	}
-	catch (std::exception& e)
-	{
+	} catch (std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
 	}
 
-	if (file_path.size() > 0)
-	{
-		try
-		{
+	if (file_path.size() > 0) {
+		try {
 			std::shared_ptr<Graph> graph = ReadGraphFromFile(pagoda, file_path);
-			if (graph == nullptr)
-			{
+			if (graph == nullptr) {
 				LOG_FATAL("Unable read a graph file (" << file_path << ")");
 				return 1;
 			}
 
-			if (vm.count("param"))
-			{
+			if (vm.count("param")) {
 				std::vector<std::string> params = vm["param"].as<std::vector<std::string>>();
 				NodeSet nodes;
 				query::Query q(*graph, nodes);
 				graph->ExecuteQuery(q);
-				for (const auto& p : params)
-				{
+				for (const auto& p : params) {
 					SetParameter(nodes, p);
 				}
 			}
 
-			if (vm.count("list"))
-			{
+			if (vm.count("list")) {
 				ListGraph(graph);
 			}
 
-			if (dot_file.size() > 0)
-			{
+			if (dot_file.size() > 0) {
 				WriteDotFile(graph, dot_file);
 			}
 
-			if (vm.count("execute"))
-			{
+			if (vm.count("execute")) {
 				ExecuteGraph(graph);
 			}
-		}
-		catch (const pagoda::common::exception::Exception& e)
-		{
+		} catch (const pagoda::common::exception::Exception& e) {
 			LOG_FATAL("Exception: " << e.What());
 		}
 	}
 
-	if (vm.count("show-profile"))
-	{
+	if (vm.count("show-profile")) {
 		PrintProfile();
 	}
 
@@ -152,8 +133,7 @@ struct PrintVisitor : NodeVisitor
 		std::cout << "    type: " << nodeType << std::endl;
 		auto parametersEnd = n->GetMembersEnd();
 		std::cout << "    parameters:" << std::endl;
-		for (auto iter = n->GetMembersBegin(); iter != parametersEnd; ++iter)
-		{
+		for (auto iter = n->GetMembersBegin(); iter != parametersEnd; ++iter) {
 			std::cout << "    - name: " << iter->first << std::endl;
 			std::cout << "      type: " << iter->second.m_value->GetTypeInfo()->GetTypeName() << std::endl;
 			std::cout << "      value: " << iter->second.m_value->ToString() << std::endl;
@@ -168,8 +148,7 @@ void ListGraph(std::shared_ptr<Graph> graph)
 	std::cout << "nodes:" << std::endl;
 
 	PrintVisitor v;
-	do
-	{
+	do {
 		n->AcceptNodeVisitor(&v);
 		n = q.GetNextNode();
 	} while (n != nullptr);
@@ -181,8 +160,7 @@ struct ParamSetter : ValueVisitorBase
 
 	void Visit(Boolean& v) override
 	{
-		if (m_value != "true" || m_value != "false")
-		{
+		if (m_value != "true" || m_value != "false") {
 			throw pagoda::common::exception::Exception("Unable to set Boolean parameter from " + m_value + " value.");
 		}
 		set_value_from<bool>(v, m_value == "true");
@@ -213,24 +191,19 @@ void SetParameter(const NodeSet& nodes, const std::string& param)
 {
 	static const std::regex paramRegex("^(.+)\\.(.+)=(.+)$");
 	std::smatch matches;
-	if (std::regex_search(param, matches, paramRegex) && matches.size() > 3)
-	{
+	if (std::regex_search(param, matches, paramRegex) && matches.size() > 3) {
 		std::string nodeName = matches.str(1);
 		std::string paramName = matches.str(2);
 		std::string value = matches.str(3);
 		ParamSetter setter(value);
-		for (auto& n : nodes)
-		{
-			if (n->GetName() == nodeName)
-			{
-				LOG_INFO("Overriding parameter '" << paramName << "' in node '" << n->GetName() << "' with value '"
-				                                  << value << "'");
+		for (auto& n : nodes) {
+			if (n->GetName() == nodeName) {
+				LOG_INFO("Overriding parameter '" << paramName << "' in node '" << n->GetName() << "' with value '" << value
+				                                  << "'");
 				n->GetMember(paramName)->AcceptVisitor(setter);
 			}
 		}
-	}
-	else
-	{
+	} else {
 		throw pagoda::common::exception::Exception("Invalid parameter definition: '" + param + "'");
 	}
 }
@@ -247,8 +220,7 @@ void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path)
 
 void PrintProfile()
 {
-	if (!pagoda::common::has_feature("Profiler"))
-	{
+	if (!pagoda::common::has_feature("Profiler")) {
 		LOG_WARNING("Pagoda was compiled without the Profiler feature.");
 		LOG_WARNING(" Please build Pagoda with '-DPAGODA_PROFILER_ACTIVE=ON'.");
 		return;
@@ -256,14 +228,13 @@ void PrintProfile()
 
 	std::cout << "Showing profiling data:" << std::endl;
 	pagoda::common::instrument::ConsoleProfilerLogger consoleLogger(
-	    pagoda::common::instrument::ProfilerManager::Instance());
+	  pagoda::common::instrument::ProfilerManager::Instance());
 	consoleLogger.Log(20);
 }
 
 bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
 {
-	try
-	{
+	try {
 		po::positional_options_description positionalOptions;
 		positionalOptions.add("file", 1);
 
@@ -283,25 +254,19 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
 		po::store(po::command_line_parser(argc, argv).options(desc).positional(positionalOptions).run(), *out_vm);
 		po::notify(*out_vm);
 
-		if (out_vm->count("help"))
-		{
+		if (out_vm->count("help")) {
 			std::cout << "Pagoda command line tool" << std::endl << desc << std::endl;
 			return false;
 		}
 
-		if (out_vm->count("version"))
-		{
+		if (out_vm->count("version")) {
 			std::cout << pagoda::common::get_version_information() << std::endl;
 			return false;
 		}
-	}
-	catch (po::error& e)
-	{
+	} catch (po::error& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
 		return false;
-	}
-	catch (std::exception& e)
-	{
+	} catch (std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
 		return false;
 	}

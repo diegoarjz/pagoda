@@ -20,8 +20,7 @@ void StatisticsManager::AddGroup(StatsGroup *group)
 
 void StatisticsManager::Write(std::ostream &outStream)
 {
-	for (auto &group : m_statsGroup)
-	{
+	for (auto &group : m_statsGroup) {
 		group.second->Write(outStream);
 	}
 }
@@ -36,8 +35,7 @@ void OneShotProfilerStats::Write(std::ostream &outStream)
 {
 	outStream << "\"" << Name() << "\":" << std::endl;
 
-	for (auto &stat : m_stats)
-	{
+	for (auto &stat : m_stats) {
 		outStream << "    \"" << stat.first << "\" : ";
 		stat.second->Write(outStream);
 		outStream << std::endl;

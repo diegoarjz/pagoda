@@ -6,7 +6,7 @@ namespace pagoda::objects::operations
 {
 class Router : public ProceduralOperation
 {
-public:
+	public:
 	Router(ProceduralObjectSystemPtr objectSystem);
 	virtual ~Router();
 

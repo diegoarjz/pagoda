@@ -14,8 +14,7 @@ template<class G, class F>
 void EachEdge(G* geometry, const F& f)
 {
 	auto edgesEnd = geometry->EdgesEnd();
-	for (auto eIter = geometry->EdgesBegin(); eIter != edgesEnd; ++eIter)
-	{
+	for (auto eIter = geometry->EdgesBegin(); eIter != edgesEnd; ++eIter) {
 		f(geometry, *eIter);
 	}
 }
@@ -27,8 +26,7 @@ template<class G, class F>
 void EachSplitPoint(G* geometry, const F& f)
 {
 	auto splitPointsEnd = geometry->SplitPointsEnd();
-	for (auto spIter = geometry->SplitPointsBegin(); spIter != splitPointsEnd; ++spIter)
-	{
+	for (auto spIter = geometry->SplitPointsBegin(); spIter != splitPointsEnd; ++spIter) {
 		f(geometry, *spIter);
 	}
 }
@@ -40,8 +38,7 @@ template<class G, class F>
 void EachFace(G* geometry, const F& f)
 {
 	auto facesEnd = geometry->FacesEnd();
-	for (auto fIter = geometry->FacesBegin(); fIter != facesEnd; ++fIter)
-	{
+	for (auto fIter = geometry->FacesBegin(); fIter != facesEnd; ++fIter) {
 		f(geometry, *fIter);
 	}
 }
@@ -53,8 +50,7 @@ template<class G, class F>
 void EachPoint(G* geometry, const F& f)
 {
 	auto pointsEnd = geometry->PointsEnd();
-	for (auto pIter = geometry->PointsBegin(); pIter != pointsEnd; ++pIter)
-	{
+	for (auto pIter = geometry->PointsBegin(); pIter != pointsEnd; ++pIter) {
 		f(geometry, *pIter);
 	}
 }
@@ -65,8 +61,7 @@ void EachPoint(G* geometry, const F& f)
 template<class G, class F>
 void EachPointAroundFace(G* geometry, const typename G::FaceHandle& face, const F& f)
 {
-	for (auto fpCirc = geometry->FacePointCirculatorBegin(face); fpCirc.IsValid(); ++fpCirc)
-	{
+	for (auto fpCirc = geometry->FacePointCirculatorBegin(face); fpCirc.IsValid(); ++fpCirc) {
 		f(geometry, *fpCirc);
 	}
 }
@@ -78,10 +73,8 @@ template<class G, class F>
 void EachPointAroundEachFace(G* geometry, const F& f)
 {
 	auto facesEnd = geometry->FacesEnd();
-	for (auto fIter = geometry->FacesBegin(); fIter != facesEnd; ++fIter)
-	{
-		for (auto fpCirc = geometry->FacePointCirculatorBegin(*fIter); fpCirc.IsValid(); ++fpCirc)
-		{
+	for (auto fIter = geometry->FacesBegin(); fIter != facesEnd; ++fIter) {
+		for (auto fpCirc = geometry->FacePointCirculatorBegin(*fIter); fpCirc.IsValid(); ++fpCirc) {
 			f(geometry, *fIter, *fpCirc);
 		}
 	}
@@ -93,8 +86,7 @@ void EachPointAroundEachFace(G* geometry, const F& f)
 template<class G, class F>
 void EachSplitPointAroundFace(G* geometry, const typename G::FaceHandle& face, const F& f)
 {
-	for (auto fspCirc = geometry->FaceSplitPointCirculatorBegin(face); fspCirc.IsValid(); ++fspCirc)
-	{
+	for (auto fspCirc = geometry->FaceSplitPointCirculatorBegin(face); fspCirc.IsValid(); ++fspCirc) {
 		f(geometry, *fspCirc);
 	}
 }

@@ -10,7 +10,7 @@ using namespace pagoda::dynamic;
 
 class C
 {
-public:
+	public:
 	C() : m_called(false) {}
 
 	void f() { m_called = true; }
@@ -33,4 +33,3 @@ TEST(MakeMemberFunction, test_make_member_function_with_args_and_return)
 	std::function<BooleanPtr(C*, BooleanPtr)> f = make_member_function(&C::f1);
 	ASSERT_TRUE(static_cast<bool>(f(&c, std::make_shared<Boolean>(true))));
 }
-

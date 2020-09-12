@@ -14,7 +14,7 @@ namespace pagoda::dynamic
  */
 class Variable
 {
-public:
+	public:
 	/**
 	 * Hashes the \c Variable so that it can be used in unordered_sets.
 	 */
@@ -59,7 +59,7 @@ public:
 	bool operator==(const std::string &v) const;
 	bool operator!=(const std::string &v) const;
 
-private:
+	private:
 	std::list<std::string> m_identifiers;  ///< The list of identifiers.
 };
 }  // namespace pagoda::dynamic

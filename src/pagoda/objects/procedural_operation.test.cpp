@@ -9,7 +9,7 @@ using namespace pagoda::objects;
 
 class MockOperation : public ProceduralOperation
 {
-public:
+	public:
 	MockOperation() : ProceduralOperation(nullptr)
 	{
 		CreateInputInterface("in");
@@ -18,7 +18,7 @@ public:
 		RegisterValues({{"abc", std::make_shared<dynamic::FloatValue>(0.0f)}});
 	}
 
-protected:
+	protected:
 	void DoWork() override
 	{
 		//
@@ -27,7 +27,7 @@ protected:
 
 class ProceduralOperationTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp() {}
 
 	void TearDown() {}

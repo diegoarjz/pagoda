@@ -29,16 +29,14 @@ NearestPoints<boost::qvm::vec<Rep, 3>> nearest_points(const Line3D<Rep> &l1, con
 	auto p13 = p1 - p3;
 	auto p43 = p4 - p3;
 
-	if (boost::qvm::mag_sqr(p43) <= 0)
-	{
+	if (boost::qvm::mag_sqr(p43) <= 0) {
 		n.m_point1 = p1;
 		n.m_point2 = p1;
 		return n;
 	}
 
 	auto p21 = p2 - p1;
-	if (boost::qvm::mag_sqr(p2) <= 0)
-	{
+	if (boost::qvm::mag_sqr(p2) <= 0) {
 		n.m_point1 = p1;
 		n.m_point2 = p1;
 		return n;
@@ -51,8 +49,7 @@ NearestPoints<boost::qvm::vec<Rep, 3>> nearest_points(const Line3D<Rep> &l1, con
 	Rep d2121 = boost::qvm::dot(p21, p21);
 
 	Rep denom = d2121 * d4343 - d4321 * d4321;
-	if (std::abs(denom) <= Rep(0))
-	{
+	if (std::abs(denom) <= Rep(0)) {
 		n.m_point1 = p1;
 		n.m_point2 = p1;
 		return n;
@@ -79,16 +76,14 @@ NearestPoints<boost::qvm::vec<Rep, 3>> nearest_points(const Line3D<Rep> &l1, con
 	auto p13 = p1 - p3;
 	auto p43 = p4 - p3;
 
-	if (boost::qvm::mag_sqr(p43) <= 0)
-	{
+	if (boost::qvm::mag_sqr(p43) <= 0) {
 		n.m_point1 = p1;
 		n.m_point2 = p1;
 		return n;
 	}
 
 	auto p21 = p2 - p1;
-	if (boost::qvm::mag_sqr(p2) <= 0)
-	{
+	if (boost::qvm::mag_sqr(p2) <= 0) {
 		n.m_point1 = p1;
 		n.m_point2 = p1;
 		return n;
@@ -101,8 +96,7 @@ NearestPoints<boost::qvm::vec<Rep, 3>> nearest_points(const Line3D<Rep> &l1, con
 	Rep d2121 = boost::qvm::dot(p21, p21);
 
 	Rep denom = d2121 * d4343 - d4321 * d4321;
-	if (std::abs(denom) <= Rep(0))
-	{
+	if (std::abs(denom) <= Rep(0)) {
 		n.m_point1 = p1;
 		n.m_point2 = p1;
 		return n;
@@ -127,4 +121,3 @@ NearestPoints<boost::qvm::vec<Rep, 3>> nearest_points(const LineSegment3D<Rep> &
 }
 }  // namespace pagoda::math
 #endif
-

@@ -24,14 +24,11 @@ TEST(FreeFunctionCallableBody, test_no_args_void_return)
 TEST(FreeFunctionCallableBody, test_args_return)
 {
 	FreeFunctionCallableBody<std::function<BooleanPtr(BooleanPtr)>> f(test_function2);
-	try
-	{
+	try {
 		std::vector<DynamicValueBasePtr> args;
 		args.push_back(std::make_shared<Boolean>(true));
 		f.Call(args);
-	}
-	catch (DynamicValueBasePtr &returnValue)
-	{
+	} catch (DynamicValueBasePtr &returnValue) {
 		auto b = std::dynamic_pointer_cast<Boolean>(returnValue);
 		ASSERT_NE(b, nullptr);
 		EXPECT_TRUE(static_cast<bool>(b));

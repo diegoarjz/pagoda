@@ -13,7 +13,7 @@ using GeometryType = GeometryBase<>;
 
 class GeometryBuilderTest : public ::testing::Test
 {
-protected:
+	protected:
 	virtual void SetUp() { m_geometry = std::make_shared<GeometryType>(); }
 
 	virtual void TearDown() {}
@@ -45,11 +45,9 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 	EXPECT_TRUE(m_geometry->IsValid());
 
 	typename SplitPointTopology::SplitPointHandle currentSplitPoint = GeometryType::s_invalidIndex;
-	for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter)
-	{
+	for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter) {
 		auto position = m_geometry->GetPosition(m_geometry->GetPoint((*iter)));
-		if (position == Vec3F{0, 0, 0})
-		{
+		if (position == Vec3F{0, 0, 0}) {
 			currentSplitPoint = *iter;
 			break;
 		}
@@ -58,8 +56,7 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 	std::array<Vec3F, 5> expected = {Vec3F{0, 0, 0}, Vec3F{1, 0, 0}, Vec3F{1, 1, 0}, Vec3F{0.5f, 0.5f, 0},
 	                                 Vec3F{0, 1, 0}};
 
-	for (auto i = 0u; i < 5; ++i)
-	{
+	for (auto i = 0u; i < 5; ++i) {
 		EXPECT_TRUE(m_geometry->GetPosition(m_geometry->GetPoint(currentSplitPoint)) == expected[i]);
 		currentSplitPoint = m_geometry->GetNextSplitPoint(currentSplitPoint);
 	}

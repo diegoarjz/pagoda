@@ -49,11 +49,10 @@ void ReadGeoJson::DoWork()
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 	GeoJsonReader reader(json);
 	reader.SetReferenceCoordinate(
-	    math::Vec2F{get_value_as<float>(*GetValue("ref_latitude")), get_value_as<float>(*GetValue("ref_longitude"))});
+	  math::Vec2F{get_value_as<float>(*GetValue("ref_latitude")), get_value_as<float>(*GetValue("ref_longitude"))});
 
 	reader.Read([&](GeoJsonReader::Feature &&f) {
-		if (f.m_polygon.GetPointCount() < 3)
-		{
+		if (f.m_polygon.GetPointCount() < 3) {
 			return true;
 		}
 		auto geometry = std::make_shared<Geometry>();
@@ -68,11 +67,10 @@ void ReadGeoJson::DoWork()
 		auto geometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(object);
 
 		geometryComponent->SetGeometry(geometry);
-		geometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
-		    geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
+		geometryComponent->SetScope(
+		  Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
 
-		for (const auto &property : f.m_properties)
-		{
+		for (const auto &property : f.m_properties) {
 			object->RegisterMember(property.first, property.second);
 		}
 

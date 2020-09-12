@@ -11,7 +11,7 @@ namespace pagoda
 {
 class ScriptCallableBody : public dynamic::ICallableBody
 {
-public:
+	public:
 	ScriptCallableBody(ast::IdentifierPtr identifier, ast::StatementBlockPtr body,
 	                   const std::vector<ast::ParameterPtr> &parameters);
 	virtual ~ScriptCallableBody();
@@ -20,7 +20,7 @@ public:
 	void SetClosure(const std::shared_ptr<dynamic::DynamicValueTable> &) override;
 	const std::shared_ptr<dynamic::DynamicValueTable> &GetClosure() const override;
 
-private:
+	private:
 	ast::StatementBlockPtr m_body;
 	ast::IdentifierPtr m_functionIdentifier;
 	std::vector<ast::ParameterPtr> m_parameters;

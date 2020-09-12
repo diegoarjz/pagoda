@@ -10,8 +10,7 @@ ast::IdentifierPtr make_identifier(const std::vector<char> &identifier, const st
 {
 	std::vector<char> concatIdentifiers = identifier;
 	concatIdentifiers.reserve(identifier.size() + identifier2.size());
-	for (auto c : identifier2)
-	{
+	for (auto c : identifier2) {
 		concatIdentifiers.push_back(c);
 	}
 	return std::make_shared<ast::Identifier>(concatIdentifiers);
@@ -34,8 +33,7 @@ ast::Nullptr make_null() { return std::make_shared<ast::Null>(); }
 
 ast::UnaryPtr make_unary_op(char op, const ast::ExpressionPtr &rhs)
 {
-	switch (op)
-	{
+	switch (op) {
 		case '!':
 			return std::make_shared<ast::Unary>(ast::Unary::types::Neg, rhs);
 		case '-':
@@ -46,8 +44,7 @@ ast::UnaryPtr make_unary_op(char op, const ast::ExpressionPtr &rhs)
 
 ast::ArithmeticOpPtr make_arithmetic_op(char op, const ast::ExpressionPtr &lhs, const ast::ExpressionPtr &rhs)
 {
-	switch (op)
-	{
+	switch (op) {
 		case '+':
 			return std::make_shared<ast::ArithmeticOp>(ast::ArithmeticOp::types::Add, lhs, rhs);
 		case '-':
@@ -63,28 +60,22 @@ ast::ArithmeticOpPtr make_arithmetic_op(char op, const ast::ExpressionPtr &lhs, 
 ast::ComparisonOpPtr make_comparison_op(const std::string &op, const ast::ExpressionPtr &lhs,
                                         const ast::ExpressionPtr &rhs)
 {
-	if (op == "==")
-	{
+	if (op == "==") {
 		return std::make_shared<ast::ComparisonOp>(ast::ComparisonOp::types::Eq, lhs, rhs);
 	}
-	if (op == "!=")
-	{
+	if (op == "!=") {
 		return std::make_shared<ast::ComparisonOp>(ast::ComparisonOp::types::Ne, lhs, rhs);
 	}
-	if (op == ">")
-	{
+	if (op == ">") {
 		return std::make_shared<ast::ComparisonOp>(ast::ComparisonOp::types::Gt, lhs, rhs);
 	}
-	if (op == ">=")
-	{
+	if (op == ">=") {
 		return std::make_shared<ast::ComparisonOp>(ast::ComparisonOp::types::Gte, lhs, rhs);
 	}
-	if (op == "<")
-	{
+	if (op == "<") {
 		return std::make_shared<ast::ComparisonOp>(ast::ComparisonOp::types::Lt, lhs, rhs);
 	}
-	if (op == "<=")
-	{
+	if (op == "<=") {
 		return std::make_shared<ast::ComparisonOp>(ast::ComparisonOp::types::Lte, lhs, rhs);
 	}
 	throw common::exception::Exception("Invalid operator");
@@ -92,12 +83,10 @@ ast::ComparisonOpPtr make_comparison_op(const std::string &op, const ast::Expres
 
 ast::LogicOpPtr make_logic_op(const std::string &op, const ast::ExpressionPtr &lhs, const ast::ExpressionPtr &rhs)
 {
-	if (op == "and")
-	{
+	if (op == "and") {
 		return std::make_shared<ast::LogicOp>(ast::LogicOp::types::And, lhs, rhs);
 	}
-	if (op == "or")
-	{
+	if (op == "or") {
 		return std::make_shared<ast::LogicOp>(ast::LogicOp::types::Or, lhs, rhs);
 	}
 	throw common::exception::Exception("Invalid operator");
@@ -137,8 +126,7 @@ void add_statement(ast::StatementBlockPtr &block, ast::StatementPtr &statement) 
 
 ast::VarDeclPtr make_var_decl(ast::IdentifierPtr &identifier, boost::optional<ast::ExpressionPtr> &initializer)
 {
-	if (initializer)
-	{
+	if (initializer) {
 		return std::make_shared<ast::VarDecl>(identifier, initializer.get());
 	}
 	return std::make_shared<ast::VarDecl>(identifier, nullptr);
@@ -153,8 +141,7 @@ ast::CallPtr make_call(const ast::ExpressionPtr &callee, boost::optional<std::ve
 {
 	auto call = std::make_shared<ast::Call>(callee);
 
-	if (args)
-	{
+	if (args) {
 		call->SetArguments(args.get());
 	}
 
@@ -176,8 +163,7 @@ ast::FunctionDeclarationPtr make_function(ast::IdentifierPtr identifier,
                                           boost::optional<std::vector<ast::ParameterPtr>> &parameters,
                                           ast::StatementBlockPtr body)
 {
-	if (parameters)
-	{
+	if (parameters) {
 		return std::make_shared<ast::FunctionDeclaration>(identifier, parameters.get(), body);
 	}
 	return std::make_shared<ast::FunctionDeclaration>(identifier, std::vector<ast::ParameterPtr>{}, body);
@@ -196,8 +182,7 @@ ast::ParameterPtr add_parameter_type(ast::ParameterPtr parameter, ast::Identifie
 
 ast::ReturnPtr make_return_statement(boost::optional<ast::ExpressionPtr> return_expression)
 {
-	if (return_expression)
-	{
+	if (return_expression) {
 		return std::make_shared<ast::Return>(return_expression.get());
 	}
 	return std::make_shared<ast::Return>(nullptr);
@@ -215,14 +200,13 @@ ast::ClassDeclarationPtr make_class_declaration(ast::IdentifierPtr identifier,
 }
 
 ast::StatementPtr make_for_loop(
-    const boost::optional<boost::variant<ast::VarDeclPtr, ast::ExpressionStatementPtr>> &init,
-    const boost::optional<ast::ExpressionPtr> &condition, const boost::optional<ast::ExpressionPtr> &increment,
-    const ast::StatementPtr body)
+  const boost::optional<boost::variant<ast::VarDeclPtr, ast::ExpressionStatementPtr>> &init,
+  const boost::optional<ast::ExpressionPtr> &condition, const boost::optional<ast::ExpressionPtr> &increment,
+  const ast::StatementPtr body)
 {
 	auto outerBlock = std::make_shared<ast::StatementBlock>();
 
-	if (init)
-	{
+	if (init) {
 		struct get_init : public boost::static_visitor<ast::StatementPtr>
 		{
 			ast::StatementPtr operator()(const ast::VarDeclPtr &v) const { return v; }
@@ -237,17 +221,13 @@ ast::StatementPtr make_for_loop(
 	auto innerBlock = std::make_shared<ast::StatementBlock>();
 	innerBlock->AddStatement(body);
 
-	if (increment)
-	{
+	if (increment) {
 		innerBlock->AddStatement(make_expression_statment(increment.get()));
 	}
 
-	if (condition)
-	{
+	if (condition) {
 		loop = std::make_shared<ast::Loop>(condition.get(), innerBlock);
-	}
-	else
-	{
+	} else {
 		loop = std::make_shared<ast::Loop>(make_true(), innerBlock);
 	}
 

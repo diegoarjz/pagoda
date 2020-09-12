@@ -13,7 +13,7 @@ namespace pagoda::geometry::io
 template<class G>
 class GeometryExporter
 {
-protected:
+	protected:
 	/// Convenience alias for the Geometry
 	using Geometry = G;
 	/// Convenience alias for a shared pointer to a Geometry
@@ -25,7 +25,7 @@ protected:
 	/// Convenience alias for Vertex Attributes
 	using VertexAttributes = typename Geometry::VertexAttributes;
 
-public:
+	public:
 	GeometryExporter(GeometryPtr geom) : m_geometry(geom) {}
 
 	/**
@@ -38,23 +38,19 @@ public:
 
 		StartGeometry(outStream);
 
-		for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter)
-		{
+		for (auto iter = m_geometry->SplitPointsBegin(); iter != m_geometry->SplitPointsEnd(); ++iter) {
 			auto pointHandle = m_geometry->GetPoint(*iter);
-			if (geometryToExportMap.find(pointHandle) == std::end(geometryToExportMap))
-			{
+			if (geometryToExportMap.find(pointHandle) == std::end(geometryToExportMap)) {
 				geometryToExportMap[pointHandle] = pointIndex++;
 				auto point = m_geometry->GetPoint(*iter);
 				ExportPoint(outStream, m_geometry->GetPosition(point), m_geometry->GetVertexAttributes(point));
 			}
 		}
 
-		for (auto faceIter = m_geometry->FacesBegin(); faceIter != m_geometry->FacesEnd(); ++faceIter)
-		{
+		for (auto faceIter = m_geometry->FacesBegin(); faceIter != m_geometry->FacesEnd(); ++faceIter) {
 			StartFace(outStream);
 			auto circ = m_geometry->FaceSplitPointCirculatorBegin(*faceIter);
-			while (circ)
-			{
+			while (circ) {
 				FaceAddIndex(outStream, geometryToExportMap[m_geometry->GetPoint(*circ)]);
 				++circ;
 			}
@@ -63,7 +59,7 @@ public:
 		return true;
 	}
 
-protected:
+	protected:
 	virtual void StartGeometry(std::ostream &outStream) = 0;
 	virtual void ExportPoint(std::ostream &outStream, const PositionType &position,
 	                         const VertexAttributes &vAttributes) = 0;
@@ -81,21 +77,21 @@ protected:
 template<class G>
 class ObjExporter : public GeometryExporter<G>
 {
-public:
+	public:
 	/**
 	 * Constructs the GeometryExporter with the given Geometry.
 	 */
 	explicit ObjExporter(typename GeometryExporter<G>::GeometryPtr geom) : GeometryExporter<G>(geom) {}
 
-protected:
+	protected:
 	void StartGeometry(std::ostream &outStream) final {}
 
 	void ExportPoint(std::ostream &outStream, const typename GeometryExporter<G>::PositionType &position,
 	                 const typename GeometryExporter<G>::VertexAttributes &vAttributes) final
 	{
 		outStream << "v " << X(position) << " " << Y(position) << " " << Z(position) << "\n";
-		outStream << "vn " << X(vAttributes.m_normal) << " " << Y(vAttributes.m_normal) << " "
-		          << Z(vAttributes.m_normal) << "\n";
+		outStream << "vn " << X(vAttributes.m_normal) << " " << Y(vAttributes.m_normal) << " " << Z(vAttributes.m_normal)
+		          << "\n";
 		outStream << "vt " << X(vAttributes.m_texCoords) << " " << Y(vAttributes.m_texCoords) << "\n";
 	}
 

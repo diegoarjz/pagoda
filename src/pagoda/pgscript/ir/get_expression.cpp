@@ -7,7 +7,7 @@ namespace pagoda
 namespace ast
 {
 GetExpression::GetExpression(const ExpressionPtr &lhs, const IdentifierPtr &identifier)
-    : m_lhs(lhs), m_identifier(identifier)
+  : m_lhs(lhs), m_identifier(identifier)
 {
 }
 

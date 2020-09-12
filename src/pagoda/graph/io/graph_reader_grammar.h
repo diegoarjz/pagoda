@@ -13,7 +13,7 @@ namespace pagoda::graph::io
 {
 template<class Iterator>
 struct GraphReaderGrammar
-    : boost::spirit::qi::grammar<Iterator, GraphDefinitionNodePtr(), boost::spirit::qi::space_type>
+  : boost::spirit::qi::grammar<Iterator, GraphDefinitionNodePtr(), boost::spirit::qi::space_type>
 {
 	template<typename... Args>
 	using Rule_t = boost::spirit::qi::rule<Args..., boost::spirit::qi::space_type>;

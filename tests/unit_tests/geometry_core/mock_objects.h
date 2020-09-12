@@ -5,7 +5,7 @@
 
 class MockGeometry
 {
-public:
+	public:
 	using Index_t = uint32_t;
 	using PositionType = pagoda::math::Vec3F;
 

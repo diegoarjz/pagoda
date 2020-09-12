@@ -13,7 +13,7 @@ namespace pagoda::graph::io
  */
 class NodeLinkNode : public GraphStatementNode
 {
-public:
+	public:
 	/// Storage type for linked nodes.
 	using NodeLinkContainer_t = std::list<std::string>;
 	/// Iterator over linked nodes.
@@ -77,7 +77,7 @@ public:
 	 */
 	void AcceptVisitor(AstNodeVisitor *visitor) override;
 
-private:
+	private:
 	NodeLinkContainer_t m_linkedNodes;  ///< List of linked nodes.
 };
 }  // namespace pagoda::graph::io

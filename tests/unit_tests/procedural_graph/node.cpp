@@ -11,7 +11,7 @@ using namespace pagoda::graph;
 
 class NodeTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp()
 	{
 		m_operationFactory = std::make_shared<OperationFactory>();

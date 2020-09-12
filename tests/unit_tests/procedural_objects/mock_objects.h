@@ -15,7 +15,7 @@ using namespace pagoda::geometry::core;
 
 class GeometrySystemMock : public GeometrySystem
 {
-public:
+	public:
 	/*
 	MOCK_METHOD2(GetCreateRect, CreateRect<Geometry>(const float&, const float&));
 	MOCK_METHOD1(GetExtrude, Extrusion<Geometry>(const float&));

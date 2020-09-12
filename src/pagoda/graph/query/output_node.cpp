@@ -11,4 +11,3 @@ OutputNode::OutputNode(Graph &graph, NodeSet &nodeSet) : Query(graph, nodeSet) {
 bool OutputNode::Matches(NodePtr n) { return m_graph.GetNodeOutputNodes(n->GetName()).size() == 0; }
 
 }  // namespace pagoda::graph::query
-

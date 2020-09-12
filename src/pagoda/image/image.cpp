@@ -30,8 +30,7 @@ void Image::CopyImageData(std::vector<uint8_t>& data) { m_implementation->CopyIm
 
 ImageImplementationFactory* Image::GetImageImplementationFactory()
 {
-	if (s_implementationFactory == nullptr)
-	{
+	if (s_implementationFactory == nullptr) {
 		s_implementationFactory = std::make_unique<ImageImplementationFactory>();
 	}
 
@@ -41,8 +40,7 @@ ImageImplementationFactory* Image::GetImageImplementationFactory()
 ImageReaderFactory* Image::GetImageReaderFactory()
 {
 	//
-	if (s_imageReaderFactory == nullptr)
-	{
+	if (s_imageReaderFactory == nullptr) {
 		s_imageReaderFactory = std::make_unique<ImageReaderFactory>();
 	}
 

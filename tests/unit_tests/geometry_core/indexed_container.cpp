@@ -11,7 +11,7 @@ using namespace pagoda::geometry::core;
 
 class Value
 {
-public:
+	public:
 	static const Value s_invalidValue;
 
 	Value() : m_value(s_invalidValue.m_value) {}
@@ -67,12 +67,9 @@ TEST(IndexedContainerTest, when_accessing_a_deleted_index_should_throw)
 	IndexedContainer<std::size_t, Value> c;
 	c.Create(1);
 	c.Delete(0);
-	try
-	{
+	try {
 		c.Get(0);
-	}
-	catch (IndexedDeletedException<std::size_t> &e)
-	{
+	} catch (IndexedDeletedException<std::size_t> &e) {
 		return;
 	}
 	FAIL() << "Should have thrown";
@@ -126,8 +123,7 @@ TEST(IndexedContainerTest, when_iterating_should_iterate_indices_in_order)
 	c.Create(3);
 
 	auto i = 0u;
-	for (const auto &el : c)
-	{
+	for (const auto &el : c) {
 		EXPECT_EQ(el.m_index, i);
 		EXPECT_EQ(el.m_value.m_value, i + 1);
 		++i;
@@ -143,8 +139,7 @@ TEST(IndexedContainerTest, when_iterating_should_skip_the_deleted_indices)
 	c.Delete(0);
 
 	auto i = 1u;  // index 0 has been deleted
-	for (const auto el : c)
-	{
+	for (const auto el : c) {
 		EXPECT_EQ(el.m_index, i);
 		EXPECT_EQ(el.m_value.m_value, i + 1);
 		++i;
@@ -158,8 +153,7 @@ TEST(IndexedContainerTest, when_iterating_should_skip_the_invalid_indices)
 	c.Create(2);
 
 	auto i = 0u;
-	for (const auto el : c)
-	{
+	for (const auto el : c) {
 		EXPECT_EQ(el.m_index, i);
 		EXPECT_EQ(el.m_value.m_value, i + 1);
 		++i;
@@ -181,8 +175,7 @@ TEST(IndexedContainerTest, when_changing_values_through_an_iterator_should_chang
 	c.Create(1);
 	c.Create(2);
 
-	for (const auto &el : c)
-	{
+	for (const auto &el : c) {
 		el.m_value = 0;
 	}
 
@@ -196,13 +189,11 @@ TEST(AssociativeIndexedContainersTest, when_iterating_should_visit_all_values)
 
 	std::list<uint32_t> values{0, 1, 2, 3};
 
-	for (auto v : values)
-	{
+	for (auto v : values) {
 		c.Create(v);
 	}
 
-	for (auto &v : c)
-	{
+	for (auto &v : c) {
 		ASSERT_NE(std::find(values.begin(), values.end(), v.second), std::end(values));
 		values.remove(v.second);
 	}

@@ -40,8 +40,7 @@ void ClipGeometry::DoWork()
 
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(inputGeometry))
-	{
+	while (HasInput(inputGeometry)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
 		UpdateValue("plane");
 
@@ -64,9 +63,9 @@ void ClipGeometry::DoWork()
 		clip.Execute(inGeometry, front, back);
 
 		frontGeometryComponent->SetScope(
-		    Scope::FromGeometryAndConstrainedRotation(front, inGeometryComponent->GetScope().GetRotation()));
+		  Scope::FromGeometryAndConstrainedRotation(front, inGeometryComponent->GetScope().GetRotation()));
 		backGeometryComponent->SetScope(
-		    Scope::FromGeometryAndConstrainedRotation(back, inGeometryComponent->GetScope().GetRotation()));
+		  Scope::FromGeometryAndConstrainedRotation(back, inGeometryComponent->GetScope().GetRotation()));
 	}
 }
 }  // namespace pagoda::geometry::operations

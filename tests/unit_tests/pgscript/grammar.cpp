@@ -7,7 +7,7 @@ using namespace pagoda;
 
 class GrammarTest : public ::testing::Test
 {
-protected:
+	protected:
 	using iterator = std::string::iterator;
 	virtual void SetUp() { program = std::make_shared<pagoda::ast::Program>(); }
 

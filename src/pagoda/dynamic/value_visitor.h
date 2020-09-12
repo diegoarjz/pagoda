@@ -30,7 +30,7 @@ struct ValueVisitor
 
 class ValueVisitorBase
 {
-public:
+	public:
 	virtual void Visit(Boolean&) = 0;
 	virtual void Visit(FloatValue&) = 0;
 	virtual void Visit(Integer&) = 0;
@@ -49,7 +49,7 @@ public:
 template<typename R, class V>
 class value_visitor : public ValueVisitorBase
 {
-public:
+	public:
 	explicit value_visitor(V& visitor) : m_visitor(visitor), m_returnValue() {}
 
 	void Visit(Boolean& b) override { m_returnValue = m_visitor(b); }
@@ -75,7 +75,7 @@ public:
 template<class V>
 class value_visitor<void, V> : public ValueVisitorBase
 {
-public:
+	public:
 	explicit value_visitor(V& visitor) : m_visitor(visitor) {}
 
 	void Visit(Boolean& b) override { m_visitor(b); }
@@ -108,7 +108,7 @@ typename VisitorType::return_type apply_visitor(VisitorType& vis, DynamicValueBa
 template<typename T>
 class value_type_visitor : public ValueVisitor<typename std::remove_reference<T>::type>
 {
-public:
+	public:
 	T& operator()(T& t) { return t; }
 
 	template<typename V>

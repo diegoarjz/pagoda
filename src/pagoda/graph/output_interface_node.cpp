@@ -23,11 +23,10 @@ OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName("", 0) {}
 OutputInterfaceNode::~OutputInterfaceNode() {}
 
 void OutputInterfaceNode::SetConstructionArguments(
-    const std::unordered_map<std::string, DynamicValueBasePtr>& constructionArgs)
+  const std::unordered_map<std::string, DynamicValueBasePtr>& constructionArgs)
 {
 	auto interfaceNameIter = constructionArgs.find("interface");
-	if (interfaceNameIter == std::end(constructionArgs))
-	{
+	if (interfaceNameIter == std::end(constructionArgs)) {
 		throw ConstructionArgumentNotFound(GetName(), GetId(), "interface");
 	}
 

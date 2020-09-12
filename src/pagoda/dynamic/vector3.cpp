@@ -20,7 +20,7 @@ const TypeInfoPtr Vector3::s_typeInfo = std::make_shared<TypeInfo>("Vector3");
 std::shared_ptr<Vector3> Vector3::DynamicConstructor(const std::vector<DynamicValueBasePtr>& args)
 {
 	return std::make_shared<Vector3>(
-	    Vec3F{get_value_as<float>(*args[0]), get_value_as<float>(*args[1]), get_value_as<float>(*args[2])});
+	  Vec3F{get_value_as<float>(*args[0]), get_value_as<float>(*args[1]), get_value_as<float>(*args[2])});
 }
 
 Vector3::Vector3() : BuiltinClass(s_typeInfo), m_nativeVector{0, 0, 0} { RegisterMembers(); }

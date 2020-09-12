@@ -25,7 +25,7 @@ using ContextPtr = std::shared_ptr<Context>;
 
 class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>, public dynamic::BuiltinClass
 {
-public:
+	public:
 	static const dynamic::TypeInfoPtr s_typeInfo;
 
 	ProceduralObject();

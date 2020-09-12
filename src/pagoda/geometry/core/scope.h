@@ -19,7 +19,7 @@ namespace pagoda::geometry::core
  */
 class Scope
 {
-public:
+	public:
 	/**
 	 * Names of the points in the box defined by this scope.
 	 *
@@ -107,8 +107,7 @@ public:
 		float maxZ = -std::numeric_limits<float>::max();
 
 		auto pIterEnd = geom->PointsEnd();
-		for (/**/; pIter != pIterEnd; ++pIter)
-		{
+		for (/**/; pIter != pIterEnd; ++pIter) {
 			auto diff = geom->GetPosition(*pIter) - p0;
 			float xProjection = boost::qvm::dot(xAxis, diff);
 			float yProjection = boost::qvm::dot(yAxis, diff);
@@ -152,7 +151,7 @@ public:
 		return Scope::FromGeometryAndConstrainedRotation(geom, rotation);
 	}
 
-private:
+	private:
 	/// Scope position in world coordinates
 	math::Vec3F m_position;
 	/// Scope size in world coordinates

@@ -6,7 +6,7 @@ namespace pagoda::graph
 {
 class UnsupportedNodeLink : common::exception::Exception
 {
-public:
+	public:
 	UnsupportedNodeLink(const std::string &direction, const std::string nodeType);
 };
 }  // namespace pagoda::graph

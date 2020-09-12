@@ -9,7 +9,7 @@ namespace pagoda::dynamic
 {
 class ValueNotFoundException : public common::exception::Exception
 {
-public:
+	public:
 	ValueNotFoundException(const std::string &name);
 };
 }  // namespace pagoda::dynamic

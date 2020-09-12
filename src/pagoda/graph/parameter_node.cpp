@@ -17,7 +17,7 @@ ParameterNode::ParameterNode() {}
 ParameterNode::~ParameterNode() {}
 
 void ParameterNode::SetConstructionArguments(
-    const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
+  const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
 {
 }
 
@@ -31,10 +31,8 @@ void ParameterNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 	START_PROFILE;
 	LOG_TRACE(ProceduralGraph, "Executing ParameterNode " << GetName() << "(" << GetId() << ")");
 
-	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter)
-	{
-		for (const auto &outNode : outNodes)
-		{
+	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter) {
+		for (const auto &outNode : outNodes) {
 			outNode->RegisterOrSetMember(parIter->first, parIter->second.m_value);
 		}
 	}

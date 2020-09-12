@@ -9,11 +9,9 @@ namespace pagoda::math
 template<int NumCols, int NumRows, class Rep>
 std::ostream &operator<<(std::ostream &o, const boost::qvm::mat<Rep, NumRows, NumCols> &mat)
 {
-	for (auto r = 0u; r < NumRows; ++r)
-	{
+	for (auto r = 0u; r < NumRows; ++r) {
 		o << "[";
-		for (auto c = 0u; c < NumCols; ++c)
-		{
+		for (auto c = 0u; c < NumCols; ++c) {
 			o << mat.a[r][c] << " ";
 		}
 		o << "]" << std::endl;

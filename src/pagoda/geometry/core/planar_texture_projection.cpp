@@ -9,7 +9,7 @@ namespace pagoda::geometry::core
 {
 PlanarTextureProjection::PlanarTextureProjection(const math::Vec3F &origin, const math::Vec3F &uAxis,
                                                  const math::Vec3F &vAxis)
-    : m_origin(origin), m_uAxis(uAxis), m_vAxis(vAxis), m_offset{0, 0}, m_scale{1, 1}, m_clamp{false}
+  : m_origin(origin), m_uAxis(uAxis), m_vAxis(vAxis), m_offset{0, 0}, m_scale{1, 1}, m_clamp{false}
 {
 }
 
@@ -35,8 +35,7 @@ math::Vec2F PlanarTextureProjection::GetProjection(const math::Vec3F &p)
 	// clang-format on
 	projected -= m_offset;
 
-	if (m_clamp)
-	{
+	if (m_clamp) {
 		X(projected) = std::min(1.0f, std::max(0.0f, X(projected)));
 		Y(projected) = std::min(1.0f, std::max(0.0f, Y(projected)));
 	}

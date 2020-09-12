@@ -21,7 +21,7 @@ class DynamicValueTable;
 
 class Interpreter
 {
-public:
+	public:
 	Interpreter();
 	~Interpreter();
 
@@ -37,7 +37,7 @@ public:
 	static void SetStdErrStream(std::ostream *o);
 	static std::ostream *GetStdErrStream();
 
-private:
+	private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
 };

@@ -17,17 +17,16 @@ namespace pagoda::graph
 {
 class DefaultScheduler : public IScheduler
 {
-public:
+	public:
 	DefaultScheduler(Graph &graph);
 
 	void Initialize() override;
 	bool Step() override;
 	void Finalize() override;
 
-private:
+	private:
 	Graph &m_graph;
 	std::queue<objects::ProceduralOperation *> m_operationQueue;
 };  // class Scheduler
 }  // namespace pagoda::graph
 #endif
-

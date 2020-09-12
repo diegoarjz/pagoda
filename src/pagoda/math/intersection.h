@@ -41,15 +41,11 @@ Intersection<PlaneIntersectionType, Line3D<Rep>> intersection(const Plane<Rep> &
 	Rep det = boost::qvm::mag_sqr(plane3Normal);
 
 	Intersection<PlaneIntersectionType, Line3D<Rep>> i;
-	if (det == 0)
-	{
-		if (boost::qvm::dot(p1.GetNormal(), (p2.GetPoint() - p1.GetPoint())) == 0)
-		{
+	if (det == 0) {
+		if (boost::qvm::dot(p1.GetNormal(), (p2.GetPoint() - p1.GetPoint())) == 0) {
 			// Coplanar
 			i.m_type = PlaneIntersectionType::Type::Coplanar;
-		}
-		else
-		{
+		} else {
 			// No intersection
 			i.m_type = PlaneIntersectionType::Type::NoIntersection;
 		}
@@ -91,17 +87,13 @@ Intersection<PlaneLineIntersection, boost::qvm::vec<Rep, 3>> intersection(const 
 	Rep denominator = boost::qvm::dot(planeNormal, lineVector);
 	Intersection<PlaneLineIntersection, boost::qvm::vec<Rep, 3>> i;
 
-	if (denominator == 0)
-	{
+	if (denominator == 0) {
 		// Plane and line are parallel
-		if (boost::qvm::dot(planePoint - linePoint, planeNormal) == 0)
-		{
+		if (boost::qvm::dot(planePoint - linePoint, planeNormal) == 0) {
 			// Coplanar
 			i.m_type = PlaneLineIntersection::Type::Coplanar;
 			i.m_intersection = linePoint;
-		}
-		else
-		{
+		} else {
 			// Simply parallel
 			i.m_type = PlaneLineIntersection::Type::NoIntersection;
 		}

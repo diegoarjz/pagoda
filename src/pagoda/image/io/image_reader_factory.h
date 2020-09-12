@@ -11,12 +11,12 @@ namespace pagoda::image::io
 {
 class ImageReaderFactory : public common::Factory<ImageReader>
 {
-public:
+	public:
 	ImageReaderFactory();
 	virtual ~ImageReaderFactory();
 
 	std::shared_ptr<ImageReader> CreateFromFilePath(const boost::filesystem::path &p);
 
-private:
+	private:
 };
 }  // namespace pagoda::image::io

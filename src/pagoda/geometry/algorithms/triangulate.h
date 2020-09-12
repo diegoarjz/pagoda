@@ -16,12 +16,12 @@ namespace pagoda::geometry::algorithms
 template<class G>
 class Triangulate
 {
-private:
+	private:
 	using Geometry = G;
 	using GeometryPtr = std::shared_ptr<Geometry>;
 	using Index_t = typename Geometry::Index_t;
 
-public:
+	public:
 	Triangulate() {}
 
 	void Execute(GeometryPtr geometryIn, GeometryPtr geometryOut)
@@ -35,22 +35,18 @@ public:
 		std::unordered_map<Index_t, Index_t> pointsMap;
 
 		auto pointEndIter = geometryIn->PointsEnd();
-		for (auto pointIter = geometryIn->PointsBegin(); pointIter != pointEndIter; ++pointIter)
-		{
+		for (auto pointIter = geometryIn->PointsBegin(); pointIter != pointEndIter; ++pointIter) {
 			auto vertPos = geometryIn->GetPosition(*pointIter);
 			pointsMap[*pointIter] = builder.AddPoint(vertPos);
 		}
 
-		for (auto faceIter = geometryIn->FacesBegin(); faceIter != geometryIn->FacesEnd(); ++faceIter)
-		{
+		for (auto faceIter = geometryIn->FacesBegin(); faceIter != geometryIn->FacesEnd(); ++faceIter) {
 			std::vector<Index_t> indices;
-			for (auto fpCirc = geometryIn->FacePointCirculatorBegin(*faceIter); fpCirc; ++fpCirc)
-			{
+			for (auto fpCirc = geometryIn->FacePointCirculatorBegin(*faceIter); fpCirc; ++fpCirc) {
 				indices.push_back(pointsMap[*fpCirc]);
 			}
 
-			for (uint32_t i = 2; i < indices.size(); ++i)
-			{
+			for (uint32_t i = 2; i < indices.size(); ++i) {
 				auto faceBuilder = builder.StartFace(3);
 				faceBuilder.AddIndex(indices[0]);
 				faceBuilder.AddIndex(indices[i - 1]);

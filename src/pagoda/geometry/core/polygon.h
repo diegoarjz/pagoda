@@ -13,7 +13,7 @@ namespace pagoda::geometry::core
 template<class T>
 class Polygon
 {
-public:
+	public:
 	/**
 	 * Constructs an empty Polygon.
 	 */
@@ -43,23 +43,19 @@ public:
 
 	void Transform(const std::function<T(const T&)>& f)
 	{
-		for (auto& p : m_points)
-		{
+		for (auto& p : m_points) {
 			p = f(p);
 		}
 	}
 
 	bool operator==(const Polygon& o) const
 	{
-		if (GetPointCount() != o.GetPointCount())
-		{
+		if (GetPointCount() != o.GetPointCount()) {
 			return false;
 		}
 
-		for (auto i = 0u; i < GetPointCount(); ++i)
-		{
-			if (m_points[i] != o.m_points[i])
-			{
+		for (auto i = 0u; i < GetPointCount(); ++i) {
+			if (m_points[i] != o.m_points[i]) {
 				return false;
 			}
 		}
@@ -67,7 +63,7 @@ public:
 	}
 	bool operator!=(const Polygon& o) { return !(*this == o); }
 
-private:
+	private:
 	std::vector<T> m_points;
 };
 

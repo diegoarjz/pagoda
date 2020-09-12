@@ -6,7 +6,7 @@ namespace pagoda::geometry::operations
 {
 class Split : public objects::ProceduralOperation
 {
-public:
+	public:
 	static const std::string s_inputGeometry;
 
 	Split(objects::ProceduralObjectSystemPtr objectSystem);

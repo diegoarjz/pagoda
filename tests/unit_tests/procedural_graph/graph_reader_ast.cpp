@@ -14,11 +14,11 @@ using namespace pagoda::graph::io;
  * **********/
 class StubAstNode : public AstNode
 {
-public:
+	public:
 	StubAstNode() : AstNode() {}
 
 	StubAstNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset)
-	    : AstNode(startOffset, endOffset)
+	  : AstNode(startOffset, endOffset)
 	{
 	}
 
@@ -29,7 +29,7 @@ public:
 
 class AstNodeTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp() {}
 
 	void TearDown() {}
@@ -76,7 +76,7 @@ TEST_F(AstNodeTest, when_getting_the_range_should_get_a_correct_range)
  * ***********************/
 class GraphDefinitionNodeTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp() { m_statements = {std::make_shared<NodeDefinitionNode>(), std::make_shared<NodeLinkNode>()}; }
 	void TearDown() {}
 
@@ -84,8 +84,7 @@ protected:
 	                                const std::vector<GraphStatementNodePtr> &expected)
 	{
 		ASSERT_EQ(actual.size(), expected.size());
-		for (auto i = 0u; i < actual.size(); ++i)
-		{
+		for (auto i = 0u; i < actual.size(); ++i) {
 			EXPECT_EQ(actual[i], expected[i]);
 		}
 	}
@@ -102,8 +101,7 @@ TEST_F(GraphDefinitionNodeTest, when_constructing_with_statements_should_set_the
 TEST_F(GraphDefinitionNodeTest, when_adding_statements_should_store_the_graph_statements)
 {
 	auto g = std::make_shared<GraphDefinitionNode>();
-	for (const auto &s : m_statements)
-	{
+	for (const auto &s : m_statements) {
 		g->AddGraphStatementNode(s);
 	}
 	expectEqualGraphStatements(g->GetGraphStatementNodes(), m_statements);
@@ -142,7 +140,7 @@ TEST_F(GraphDefinitionNodeTest, when_iterating_over_a_graph_definition_node_shou
  * ****************/
 class NamedArgumentTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp() {}
 
 	void TearDown() {}
@@ -172,13 +170,11 @@ TEST_F(NamedArgumentTest, when_setting_name_type_and_value_should_store_them)
  * *********************/
 class NodeDefinitionNodeTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp()
 	{
-		constructionArgs.push_back(
-		    std::make_shared<NamedArgument>("arg", NamedArgument::ArgumentType::String, "value"));
-		executionArgs.push_back(
-		    std::make_shared<NamedArgument>("execArg", NamedArgument::ArgumentType::String, "value"));
+		constructionArgs.push_back(std::make_shared<NamedArgument>("arg", NamedArgument::ArgumentType::String, "value"));
+		executionArgs.push_back(std::make_shared<NamedArgument>("execArg", NamedArgument::ArgumentType::String, "value"));
 	}
 
 	void TearDown() {}
@@ -189,8 +185,7 @@ protected:
 		ASSERT_EQ(t1.size(), t2.size());
 		auto t1Iter = std::begin(t1);
 		auto t2Iter = std::begin(t2);
-		for (auto i = 0u; i < t1.size(); ++i, ++t1Iter, ++t2Iter)
-		{
+		for (auto i = 0u; i < t1.size(); ++i, ++t1Iter, ++t2Iter) {
 			EXPECT_EQ(*t1Iter, *t2Iter);
 		}
 	}
@@ -220,8 +215,8 @@ TEST_F(NodeDefinitionNodeTest,
 
 TEST_F(NodeDefinitionNodeTest, when_constructing_with_range_name_node_type_and_construction_arguments_should_store_them)
 {
-	auto n = std::make_shared<NodeDefinitionNode>(std::make_pair(std::size_t(0), std::size_t(1)), "nodeName",
-	                                              "Operation", constructionArgs);
+	auto n = std::make_shared<NodeDefinitionNode>(std::make_pair(std::size_t(0), std::size_t(1)), "nodeName", "Operation",
+	                                              constructionArgs);
 	EXPECT_EQ(n->GetNodeName(), "nodeName");
 	EXPECT_EQ(n->GetNodeType(), "Operation");
 	expectEqualArgs(n->GetConstructionArguments(), constructionArgs);
@@ -230,48 +225,43 @@ TEST_F(NodeDefinitionNodeTest, when_constructing_with_range_name_node_type_and_c
 
 TEST_F(NodeDefinitionNodeTest, when_setting_the_construction_arguments_should_store_them)
 {
-	auto n = std::make_shared<NodeDefinitionNode>(std::make_pair(std::size_t(0), std::size_t(1)), "nodeName",
-	                                              "Operation", NodeDefinitionNode::ConstructionArgumentContainer_t{});
+	auto n = std::make_shared<NodeDefinitionNode>(std::make_pair(std::size_t(0), std::size_t(1)), "nodeName", "Operation",
+	                                              NodeDefinitionNode::ConstructionArgumentContainer_t{});
 	n->SetConstructionArguments(constructionArgs);
 	expectEqualArgs(n->GetConstructionArguments(), constructionArgs);
 }
 
 TEST_F(NodeDefinitionNodeTest, when_setting_the_execution_arguments_should_store_them)
 {
-	auto n =
-	    std::make_shared<NodeDefinitionNode>(0, 0, "n", "o", NodeDefinitionNode::ConstructionArgumentContainer_t{});
+	auto n = std::make_shared<NodeDefinitionNode>(0, 0, "n", "o", NodeDefinitionNode::ConstructionArgumentContainer_t{});
 	n->SetExecutionArguments(executionArgs);
 	expectEqualArgs(n->GetExecutionArguments(), executionArgs);
 }
 
 TEST_F(NodeDefinitionNodeTest, when_adding_a_construction_arg_should_store_it)
 {
-	auto n =
-	    std::make_shared<NodeDefinitionNode>(0, 0, "n", "o", NodeDefinitionNode::ConstructionArgumentContainer_t{});
+	auto n = std::make_shared<NodeDefinitionNode>(0, 0, "n", "o", NodeDefinitionNode::ConstructionArgumentContainer_t{});
 	n->AddConstructionArgument(constructionArgs[0]);
 	expectEqualArgs(n->GetConstructionArguments(), constructionArgs);
 }
 
 TEST_F(NodeDefinitionNodeTest, when_adding_an_execution_arg_should_store_it)
 {
-	auto n =
-	    std::make_shared<NodeDefinitionNode>(0, 0, "n", "0", NodeDefinitionNode::ConstructionArgumentContainer_t{});
+	auto n = std::make_shared<NodeDefinitionNode>(0, 0, "n", "0", NodeDefinitionNode::ConstructionArgumentContainer_t{});
 	n->AddExecutionArgument(executionArgs[0]);
 	expectEqualArgs(n->GetExecutionArguments(), executionArgs);
 }
 
 TEST_F(NodeDefinitionNodeTest, when_creating_a_construction_arg_should_store_it)
 {
-	auto n =
-	    std::make_shared<NodeDefinitionNode>(0, 0, "n", "0", NodeDefinitionNode::ConstructionArgumentContainer_t{});
+	auto n = std::make_shared<NodeDefinitionNode>(0, 0, "n", "0", NodeDefinitionNode::ConstructionArgumentContainer_t{});
 	auto a = n->CreateConstructionArgument("a", NamedArgument::ArgumentType::String, "abc");
 	expectEqualArgs(n->GetConstructionArguments(), {a});
 }
 
 TEST_F(NodeDefinitionNodeTest, when_creating_an_execution_arg_should_store_it)
 {
-	auto n =
-	    std::make_shared<NodeDefinitionNode>(0, 0, "n", "0", NodeDefinitionNode::ConstructionArgumentContainer_t{});
+	auto n = std::make_shared<NodeDefinitionNode>(0, 0, "n", "0", NodeDefinitionNode::ConstructionArgumentContainer_t{});
 	auto a = n->CreateExecutionArgument("a", NamedArgument::ArgumentType::String, "abc");
 	expectEqualArgs(n->GetExecutionArguments(), {a});
 }
@@ -282,20 +272,18 @@ TEST_F(NodeDefinitionNodeTest, when_creating_an_execution_arg_should_store_it)
 
 class NodeLinkNodeTest : public ::testing::Test
 {
-protected:
+	protected:
 	void SetUp() { m_linkedNodes = {"n1", "n2", "n3"}; }
 
 	void TearDown() {}
 
-	void expectEqualLinkedNodes(const NodeLinkNode::NodeLinkContainer_t &t1,
-	                            const NodeLinkNode::NodeLinkContainer_t &t2)
+	void expectEqualLinkedNodes(const NodeLinkNode::NodeLinkContainer_t &t1, const NodeLinkNode::NodeLinkContainer_t &t2)
 	{
 		ASSERT_EQ(t1.size(), t2.size());
 
 		auto t1Iter = std::begin(t1);
 		auto t2Iter = std::begin(t2);
-		for (auto i = 0u; i < t1.size(); ++i, ++t1Iter, ++t2Iter)
-		{
+		for (auto i = 0u; i < t1.size(); ++i, ++t1Iter, ++t2Iter) {
 			EXPECT_EQ(*t1Iter, *t2Iter);
 		}
 	}
@@ -325,8 +313,7 @@ TEST_F(NodeLinkNodeTest, when_setting_linked_nodes_should_store_them)
 TEST_F(NodeLinkNodeTest, when_adding_a_linked_node_should_store_it)
 {
 	auto n = std::make_shared<NodeLinkNode>(0, 1, NodeLinkNode::NodeLinkContainer_t{});
-	for (auto l : m_linkedNodes)
-	{
+	for (auto l : m_linkedNodes) {
 		n->AddLinkedNode(l);
 	}
 	expectEqualLinkedNodes(n->GetLinkedNodes(), m_linkedNodes);
@@ -338,4 +325,3 @@ TEST_F(NodeLinkNodeTest, when_iterating_over_should_access_the_linked_nodes_in_o
 	NodeLinkNode::NodeLinkContainer_t c(n->begin(), n->end());  // does the same as iterating
 	expectEqualLinkedNodes(c, m_linkedNodes);
 }
-
