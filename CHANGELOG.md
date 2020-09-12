@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Query nodes in a graph:
     - *InputNode* finds nodes that don't have upstream nodes.
     - *OutputNode* finds nodes that don't have downstream nodes.
+    - Type finds nodes based on their c++ type.
 - Traversal operations for geometry, providing a cleaner interface for
   operating on geometries.
 - GeoJSON Reader.
@@ -30,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restrutctured the code to use the Pitchfork Layout model.
 - System registration (e.g., Geometry and Material) is now performed by each
   system. The core systems are automatically registered.
+- Procedural operations are scheduled at the operation level instead of at the
+  node graph level
 
 ## [0.1.0] - 2020-04-28
 
