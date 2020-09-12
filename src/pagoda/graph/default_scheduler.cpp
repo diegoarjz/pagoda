@@ -78,7 +78,6 @@ void DefaultScheduler::Initialize()
 
 	// Set the OnNeedsUpdate handler to push the operation on the queue
 	query::Type<OperationNode> operationNodes(m_graph, [&](NodePtr n) {
-		n->SetExpressionVariables();
 		auto op = std::dynamic_pointer_cast<OperationNode>(n)->GetOperation();
 		op->OnNeedsUpdate([&](ProceduralOperation *op) { m_operationQueue.push(op); });
 	});
