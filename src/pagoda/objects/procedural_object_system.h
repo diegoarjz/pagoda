@@ -7,10 +7,16 @@
 #include <unordered_map>
 #include <unordered_set>
 
+namespace pagoda
+{
+    class Pagoda;
+}
+
 namespace pagoda::objects
 {
 class ProceduralObject;
 class ProceduralComponentSystemBase;
+class ProceduralObjectPredicateRegistry;
 
 /**
  * Manages all \c ProceduralObject.
@@ -63,9 +69,15 @@ public:
 		return m_proceduralObjects;
 	}
 
+    void SetPredicateRegistry(std::shared_ptr<ProceduralObjectPredicateRegistry> registry) { m_predicateRegistry = registry; }
+    std::shared_ptr<ProceduralObjectPredicateRegistry> GetPredicateRegistry() const { return m_predicateRegistry; }
+
+    static void Registration(Pagoda* pagoda);
+
 private:
 	std::unordered_set<std::shared_ptr<ProceduralObject>> m_proceduralObjects;
 	std::unordered_map<std::string, std::shared_ptr<ProceduralComponentSystemBase>> m_proceduralComponentSystems;
+    std::shared_ptr<ProceduralObjectPredicateRegistry> m_predicateRegistry;
 };  // class ProceduralObjectSystem
 
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;

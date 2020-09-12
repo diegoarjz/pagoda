@@ -9,7 +9,8 @@ extract_faces = Operation(operation: "ExtractFaces") {}
 extract_faces_out = OutputInterface(interface: "out")
 extract_faces_in -> extract_faces -> extract_faces_out;
 
-router = Router() {
+router_in = InputInterface(interface: "in")
+router = Operation(operation: "Router") {
     export_up_in: "up",
     export_down_in: "down",
     export_left_in: "left",
@@ -17,6 +18,21 @@ router = Router() {
     export_front_in: "front",
     export_back_in: "back"
 }
+router_up = OutputInterface(interface: "export_up_in")
+router_down = OutputInterface(interface: "export_down_in")
+router_left = OutputInterface(interface: "export_left_in")
+router_right = OutputInterface(interface: "export_right_in")
+router_front = OutputInterface(interface: "export_front_in")
+router_back = OutputInterface(interface: "export_back_in")
+router_none = OutputInterface(interface: "none")
+router_in -> router;
+router -> router_up;
+router -> router_down;
+router -> router_left;
+router -> router_right;
+router -> router_front;
+router -> router_back;
+router -> router_none;
 
 export_up_in = InputInterface(interface: "in")
 export_up = Operation(operation: "ExportGeometry") {
@@ -61,11 +77,12 @@ export_none = Operation(operation: "ExportGeometry") {
 export_none_in -> export_none;
 
 create_box_out -> extract_faces_in;
-extract_faces_out -> router;
-router -> export_up_in;
-router -> export_down_in;
-router -> export_left_in;
-router -> export_right_in;
-router -> export_front_in;
-router -> export_back_in;
-router -> export_none_in;
+extract_faces_out -> router_in;
+router_up -> export_up_in;
+router_down -> export_down_in;
+router_left -> export_left_in;
+router_right -> export_right_in;
+router_front -> export_front_in;
+router_back -> export_back_in;
+router_none -> export_none_in;
+

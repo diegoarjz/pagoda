@@ -1,4 +1,6 @@
 set(OBJECTS_SRCS
+    "operations/router.cpp"
+    "operations/router.h"
     "hierarchical_component.cpp"
     "hierarchical_component.h"
     "hierarchical_system.cpp"
@@ -12,7 +14,6 @@ set(OBJECTS_SRCS
     "procedural_component_system_base.h"
     "procedural_object.cpp"
     "procedural_object.h"
-    "procedural_object_mask.h"
     "procedural_object_predicate.cpp"
     "procedural_object_predicate.h"
     "procedural_object_predicate_registry.cpp"
@@ -21,8 +22,6 @@ set(OBJECTS_SRCS
     "procedural_object_system.h"
     "procedural_operation.cpp"
     "procedural_operation.h"
-    "procedural_operation_object_interface.cpp"
-    "procedural_operation_object_interface.h"
     "unknown_operation.cpp"
     "unknown_operation.h"
 )
@@ -70,6 +69,7 @@ target_link_libraries(
 
 set(GEOMETRY_UNIT_TESTS
     "procedural_object.test.cpp"
+    "procedural_operation.test.cpp"
 )
 
 foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})

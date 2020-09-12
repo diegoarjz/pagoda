@@ -2,12 +2,14 @@
 #define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
 
 #include "procedural_component.h"
-#include "procedural_operation_object_interface.h"
 
 #include <pagoda/common/factory.h>
 #include <pagoda/dynamic/builtin_class.h>
+#include <cstddef>
+#include <memory>
 
-#include <bitset>
+#include <boost/signals2.hpp>
+
 #include <list>
 #include <string>
 #include <unordered_map>
@@ -20,6 +22,8 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
 namespace pagoda::objects
 {
+class ProceduralObject;
+using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 class ProceduralObjectSystem;
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
 
@@ -32,7 +36,7 @@ using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
  * Has input and output \c ProceduralOperationObjectInterface which is used to pass
  * input and output procedural objects.
  */
-class ProceduralOperation : public std::enable_shared_from_this<ProceduralOperation>, public dynamic::BuiltinClass
+class ProceduralOperation : public dynamic::BuiltinClass
 {
 public:
 	static const dynamic::TypeInfoPtr s_typeInfo;
@@ -45,18 +49,20 @@ public:
 	 */
 	void Execute();
 
-	/**
-	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
-	 */
-	bool PushProceduralObject(const std::string& interface, ProceduralObjectPtr procedural_object);
-	/**
-	 * Pops a \c ProceduralObject from the output interface with the given \p interface
-	 */
-	ProceduralObjectPtr PopProceduralObject(const std::string& interface) const;
+	bool HasInputInterface(const std::string& name) const;
+	bool HasOutputInterface(const std::string& name) const;
+
+	void LinkInputInterface(const std::string& inputInterface, const std::string& outputInterface,
+	                        const std::shared_ptr<ProceduralOperation>& op);
 
 	std::string ToString() const override;
 
 	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
+
+	using InterfaceHandler_t = void(ProceduralOperation*, const std::string&, ProceduralObjectPtr);
+	void OnOutputObjectCreated(const std::string& interface, const std::function<InterfaceHandler_t>& handler);
+	void OnProgress(const std::function<void(const std::size_t&, const std::size_t)>& handler);
+	void OnNeedsUpdate(const std::function<void(ProceduralOperation*)>& handler);
 
 protected:
 	/**
@@ -93,10 +99,46 @@ protected:
 	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 
 private:
-	using InterfaceContainer_t = std::unordered_map<std::string, std::unique_ptr<ProceduralOperationObjectInterface>>;
+	/**
+	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
+	 */
+	bool PushProceduralObject(const std::string& interface, ProceduralObjectPtr procedural_object);
+	/**
+	 * Pops a \c ProceduralObject from the output interface with the given \p interface
+	 */
+	ProceduralObjectPtr PopProceduralObject(const std::string& interface);
 
-	InterfaceContainer_t input_interfaces;
-	InterfaceContainer_t output_interfaces;
+	struct Interface
+	{
+		std::list<ProceduralObjectPtr> m_objects;
+		boost::signals2::signal<InterfaceHandler_t> m_signal;
+		std::list<std::shared_ptr<ProceduralOperation>> m_operations;
+
+		void Add(ProceduralObjectPtr o) { m_objects.push_back(o); }
+		ProceduralObjectPtr GetFront()
+		{
+			if (m_objects.empty())
+			{
+				return nullptr;
+			}
+			auto object = m_objects.front();
+			m_objects.pop_front();
+			return object;
+		}
+		bool HasObjects() const { return !m_objects.empty(); }
+	};
+
+	using InterfaceContainer_t = std::unordered_map<std::string, Interface>;
+
+	boost::signals2::signal<void(const std::size_t&, const std::size_t)> m_progressHandlers;
+	boost::signals2::signal<void(ProceduralOperation*)> m_needUpdateHandlers;
+	bool m_needsUpdate;
+
+	InterfaceContainer_t m_inputInterfaces;
+	InterfaceContainer_t m_outputInterfaces;
+
+	std::size_t m_pendingObjects;
+	std::size_t m_processedObjects;
 
 };  // class ProceduralOperation
 }  // namespace pagoda::objects

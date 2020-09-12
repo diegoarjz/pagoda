@@ -25,7 +25,7 @@ class NodeVisitor;
  */
 class Node : public dynamic::BuiltinClass
 {
-public:
+	public:
 	static const dynamic::TypeInfoPtr s_typeInfo;
 
 	Node();
@@ -38,7 +38,7 @@ public:
 	 * Sets the construction arguments from \p arguments.
 	 */
 	virtual void SetConstructionArguments(
-	    const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &arguments) = 0;
+	  const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &arguments) = 0;
 
 	/**
 	 * Sets the execution arguments from \p arguments.
@@ -64,13 +64,6 @@ public:
 	const std::string &GetName() const;
 
 	/**
-	 * Sets all the expression variables.
-	 *
-	 * Values are fetched from the \c Node's parameter \c Context.
-	 */
-	virtual void SetExpressionVariables();
-
-	/**
 	 * Accepts a \c NodeVisitor.
 	 */
 	virtual void AcceptNodeVisitor(NodeVisitor *visitor) = 0;
@@ -89,7 +82,7 @@ public:
 
 	void AcceptVisitor(dynamic::ValueVisitorBase &visitor) override;
 
-private:
+	private:
 	std::string m_nodeName;
 	uint32_t m_nodeId;
 };  // class Node

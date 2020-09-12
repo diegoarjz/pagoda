@@ -1,4 +1,5 @@
 #include "export_geometry.h"
+#include "boost/filesystem/file_status.hpp"
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/io/geometry_exporter.h>
@@ -6,10 +7,11 @@
 #include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/common/fs/file_util.h>
+
 #include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/dynamic/set_value_from.h>
 
-#include <boost/filesystem/path.hpp>
+#include <boost/filesystem.hpp>
 
 #include <fstream>
 
@@ -20,10 +22,11 @@ using namespace geometry::core;
 using namespace geometry::io;
 using namespace dynamic;
 
-const char* ExportGeometry::name = "ExportGeometry";
+const char *ExportGeometry::name = "ExportGeometry";
 const std::string ExportGeometry::inputGeometry("in");
 
-ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem), m_objectCount(0)
 {
 	CreateInputInterface(inputGeometry);
 
@@ -36,12 +39,10 @@ void ExportGeometry::DoWork()
 {
 	START_PROFILE;
 
-	int objectCount = 0;
 	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(inputGeometry))
-	{
-		set_value_from<int>(*GetValue("count"), objectCount);
+	while (HasInput(inputGeometry)) {
+		set_value_from<int>(*GetValue("count"), m_objectCount);
 		UpdateValue("path");
 
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
@@ -57,7 +58,7 @@ void ExportGeometry::DoWork()
 		exporter.Export(out_file);
 		out_file.close();
 
-		++objectCount;
+		++m_objectCount;
 	}
 }
 

@@ -11,7 +11,6 @@
 #include <pagoda/graph/operation_node.h>
 #include <pagoda/graph/output_interface_node.h>
 #include <pagoda/graph/parameter_node.h>
-#include <pagoda/graph/router_node.h>
 
 #include <pagoda/geometry/operations/clip_geometry.h>
 #include <pagoda/geometry/operations/create_box.h>
@@ -111,7 +110,9 @@ public:
 		m_proceduralObjectSystem = std::make_shared<ProceduralObjectSystem>();
 		m_operationFactory = std::make_shared<OperationFactory>();
 		m_predicateRegistry = std::make_shared<ProceduralObjectPredicateRegistry>();
+		m_proceduralObjectSystem->SetPredicateRegistry(m_predicateRegistry);
 
+		ProceduralObjectSystem::Registration(m_pagoda);
 		HierarchicalSystem::Registration(m_pagoda);
 		GeometrySystem::Registration(m_pagoda);
 		MaterialSystem::Registration(m_pagoda);
@@ -124,7 +125,6 @@ public:
 			m_nodeFactory->Register("Parameter", []() { return std::make_shared<ParameterNode>(); });
 			m_nodeFactory->Register("Operation",
 			                        [this]() { return std::make_shared<OperationNode>(m_operationFactory); });
-			m_nodeFactory->Register("Router", [this]() { return std::make_shared<RouterNode>(m_predicateRegistry); });
 		}
 
 		// Register Predicates

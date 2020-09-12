@@ -26,17 +26,15 @@ OperationNode::OperationNode(OperationFactoryPtr operationFactory) : m_operation
 OperationNode::~OperationNode() {}
 
 void OperationNode::SetConstructionArguments(
-    const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
+  const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
 {
 	auto operationIter = constructionArgs.find("operation");
-	if (operationIter == std::end(constructionArgs))
-	{
+	if (operationIter == std::end(constructionArgs)) {
 		throw ConstructionArgumentNotFound(GetName(), GetId(), "operation");
 	}
 
 	auto operation = m_operationFactory->Create(get_value_as<std::string>(*operationIter->second));
-	if (operation == nullptr)
-	{
+	if (operation == nullptr) {
 		throw UnknownOperation(get_value_as<std::string>(*operationIter->second));
 	}
 
@@ -54,60 +52,12 @@ void OperationNode::AcceptNodeVisitor(NodeVisitor *visitor)
 	visitor->Visit(std::dynamic_pointer_cast<OperationNode>(shared_from_this()));
 }
 
-namespace
-{
-class out_visitor : public NodeVisitor
-{
-public:
-	out_visitor(ProceduralOperationPtr operation) : m_operation(operation) {}
-
-	void Visit(std::shared_ptr<OperationNode> n) override { throw UnsupportedNodeLink("output", "OperationNode"); }
-
-	void Visit(std::shared_ptr<InputInterfaceNode> n) override
-	{
-		throw UnsupportedNodeLink("output", "InputInterfaceNode");
-	}
-
-	void Visit(std::shared_ptr<OutputInterfaceNode> n) override
-	{
-		auto interface = n->GetInterfaceName();
-		ProceduralObjectPtr object = nullptr;
-		while ((object = m_operation->PopProceduralObject(interface)) != nullptr)
-		{
-			n->AddProceduralObject(object);
-		}
-	}
-
-	void Visit(std::shared_ptr<ParameterNode> n) override { throw UnsupportedNodeLink("output", "ParameterNode"); }
-
-	void Visit(std::shared_ptr<RouterNode> n) override { throw UnsupportedNodeLink("input", "RouterNode"); }
-
-	ProceduralOperationPtr m_operation;
-};
-}  // namespace
-
 void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	LOG_TRACE(ProceduralGraph, "Executing OperationNode " << GetName() << "(" << GetId() << ")");
-	for (auto parIter = m_operation->GetMembersBegin(); parIter != m_operation->GetMembersEnd(); ++parIter)
-	{
-		try
-		{
-			auto nodeParameter = GetMember(parIter->first);
-			m_operation->SetMember(parIter->first, GetMember(parIter->first));
-		}
-		catch (ValueNotFoundException &e)
-		{
-			LOG_TRACE(ProceduralGraph, "Operation parameter " << parIter->first << " not found in Node " << GetName());
-		}
-	}
-
-	m_operation->Execute();
-
-	out_visitor v(m_operation);
-	for (auto n : outNodes)
-	{
-		n->AcceptNodeVisitor(&v);
+	// Copy all parameters registered in this node to the operation
+	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter) {
+		m_operation->RegisterOrSetMember(parIter->first, GetMember(parIter->first));
 	}
 }
 
