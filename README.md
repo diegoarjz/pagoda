@@ -67,38 +67,25 @@ The most simple procedural graph might be one that just creates a rectangle.
 This is illustrated in the following snippet:
 
 ```
-create_rect = Operation(operation: "CreateRectGeometry") { width: 10, height: 10 }
-create_rect_out = OutputInterface(interface: "out")
-create_rect -> create_rect_out;
-
-export_in = InputInterface(interface: "in")
-export = Operation(operation: "ExportGeometry") { path: "rect.geom" }
-export_in -> export;
-
-create_rect_out -> export_in;
+create_rect = CreateRectGeometry { width: 10, height: 10 }
+export = ExportGeometry { path: "rect.obj" }
+create_rect>out -> in<export;
 ```
 
-Creating a node is similar to constructing an object in object oriented
-programming. You call the constructor of the node's type (e.g., Operation or
-OutputInterface) with some parameters inside the round brackets (the
-construction arguments). Because all nodes can contain parameters (influencing
-the node's execution) you specify these inside the curly brackets (the
-execution parameters).
+Creating an operation node is done by stating the operation name (e.g.
+CreateRectGeometry) followed by its parameters in curly braces.  Nodes are
+assigned to names which are then used to create links between them, defining
+how objects will flow from one node to the next.
 
-Nodes can be assigned to names which are then used to create links between
-nodes.
+So, for example, in the first line, you create a _CreateRectGeometry_ operation
+which, when executed, will create a 10x10 square.
 
-So, for example, in the first line, you create an _Operation_ node whose
-operation is a _CreateRectGeometry_. When the node is executed the execution
-parameters will be passed to the operation, which will create a 10x10 square.
+Similarly the second line creates an _ExportGeometry_ operation which will
+write geometries to the file specified by its `path` parameter.
 
-On the second line, an _OutputInterface_ node is created. Since the
-_OutputInterface_ nodes don't require execution parameters the curly brackets
-were omitted. The third line links both nodes.
-
-Similarly, lines four to six create an Operation node to export the geometry
-and its input interface. The final line links the output of the create_rect
-operation and the export geometry.
+Operations can have mulitple named input and output interfaces. You will
+usually link an output interface of an upstream node to the input interface of
+a downstream node as is done in the third line.
 
 To execute this node you can run the following on the command line:
 

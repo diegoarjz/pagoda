@@ -61,7 +61,6 @@ class Graph::Impl
 	{
 		auto iter = m_nodesByIdentifier.find(name);
 		if (iter == m_nodesByIdentifier.end()) {
-			throw common::exception::Exception("Node not found in graph: " + name);
 			return nullptr;
 		}
 		return iter->second.lock();
@@ -212,9 +211,25 @@ class Graph::Impl
 		               [](NodeWeakPtr n) { return n.lock(); });
 	}
 
-	NodeWeakPtrSet &InNodes(NodeIdentifier_t node) { return m_adjacencies.find(node)->second.m_inLinks; }
+	NodeWeakPtrSet &InNodes(NodeIdentifier_t node)
+	{
+		auto adjacenies = m_adjacencies.find(node);
+		if (adjacenies == m_adjacencies.end()) {
+			throw common::exception::Exception("Node '" + node + "' not found in graph");
+		}
 
-	NodeWeakPtrSet &OutNodes(NodeIdentifier_t node) { return m_adjacencies.find(node)->second.m_outLinks; }
+		return adjacenies->second.m_inLinks;
+	}
+
+	NodeWeakPtrSet &OutNodes(NodeIdentifier_t node)
+	{
+		auto adjacenies = m_adjacencies.find(node);
+		if (adjacenies == m_adjacencies.end()) {
+			throw common::exception::Exception("Node '" + node + "' not found in graph");
+		}
+
+		return adjacenies->second.m_outLinks;
+	}
 
 	uint32_t m_nextNodeId;
 	NodeSet m_nodes;

@@ -33,6 +33,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   system. The core systems are automatically registered.
 - Procedural operations are scheduled at the operation level instead of at the
   node graph level
+- Simplified graph file syntax, making it less repetitive:
+  - Can create in/out interface nodes while creating node links with the
+    following syntax `node1>out -> in<node2>out -> in<node3;`
+  - Can create operation nodes with just the operation name. E.g.
+    `n = ExtrudeGeometry { extrusion_amount : 10 }`
 
 ## [0.1.0] - 2020-04-28
 
