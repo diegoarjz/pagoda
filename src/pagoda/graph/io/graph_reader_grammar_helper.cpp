@@ -4,7 +4,10 @@
 #include "graph_statement_node.h"
 #include "named_argument.h"
 #include "node_definition_node.h"
+#include "node_link_definition.h"
 #include "node_link_node.h"
+
+#include <memory>
 
 namespace pagoda::graph::io
 {
@@ -36,6 +39,16 @@ NodeDefinitionNodePtr CreateNodeDefinition(std::string &name, std::string &type,
 	return std::make_shared<NodeDefinitionNode>(name, type, constructionArgs);
 }
 
+NodeDefinitionNodePtr CreateOperationDefinition(std::string &name, std::string &operation,
+                                                std::vector<NamedArgumentPtr> &executionArgs)
+{
+	NodeDefinitionNode::ConstructionArgumentContainer_t construction = {
+	  std::make_shared<NamedArgument>("operation", NamedArgument::ArgumentType::String, operation)};
+	auto node = std::make_shared<NodeDefinitionNode>(name, "Operation", construction);
+	node->SetExecutionArguments(executionArgs);
+	return node;
+}
+
 NodeDefinitionNodePtr SetExecutionArguments(NodeDefinitionNodePtr nodeDefinition,
                                             std::vector<NamedArgumentPtr> &executionArgs)
 {
@@ -43,9 +56,17 @@ NodeDefinitionNodePtr SetExecutionArguments(NodeDefinitionNodePtr nodeDefinition
 	return nodeDefinition;
 }
 
+NodeLinkDefinitionPtr CreateLinkDefinition() { return std::make_shared<NodeLinkDefinition>(); }
+void SetInputInterface(NodeLinkDefinitionPtr n, const std::string &name) { n->SetInputInterface(name); }
+void SetNodeName(NodeLinkDefinitionPtr n, const std::string &name) { n->SetNodeName(name); }
+void SetOutputInterface(NodeLinkDefinitionPtr n, const std::string &name) { n->SetOutputInterface(name); }
+
 NodeLinkNodePtr CreateNodeLink() { return std::make_shared<NodeLinkNode>(); }
 
-void AddLinkedNode(NodeLinkNodePtr linkedNodes, std::string &nodeName) { linkedNodes->AddLinkedNode(nodeName); }
+void AddLinkedNode(NodeLinkNodePtr linkedNodes, NodeLinkDefinitionPtr &linkDefinition)
+{
+	linkedNodes->AddLinkedNode(linkDefinition);
+}
 
 GraphDefinitionNodePtr CreateGraphDefinition() { return std::make_shared<GraphDefinitionNode>(); }
 

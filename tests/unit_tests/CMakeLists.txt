@@ -41,9 +41,7 @@ set(test_srcs
     "procedural_graph/node.cpp"
     "procedural_graph/node_set_visitor.cpp"
     "procedural_graph/execution_queue.cpp"
-    "procedural_graph/graph_reader_grammar.cpp"
     "procedural_graph/parameter_node.cpp"
-    "procedural_graph/graph_reader_ast.cpp"
     "pgscript/grammar.cpp"
     )
 

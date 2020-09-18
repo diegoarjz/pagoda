@@ -14,6 +14,8 @@ set(GRAPH_SRCS
     "io/named_argument.h"
     "io/node_definition_node.cpp"
     "io/node_definition_node.h"
+    "io/node_link_definition.cpp"
+    "io/node_link_definition.h"
     "io/node_link_node.cpp"
     "io/node_link_node.h"
     "io/parse_result.h"
@@ -107,6 +109,14 @@ target_link_libraries(
 
 set(GEOMETRY_UNIT_TESTS
     "graph.test.cpp"
+    "io/ast_interpreter.test.cpp"
+    "io/ast_node.test.cpp"
+    "io/graph_definition_node.test.cpp"
+    "io/graph_reader_grammar.test.cpp"
+    "io/named_argument.test.cpp"
+    "io/node_definition_node.test.cpp"
+    "io/node_link_definition.test.cpp"
+    "io/node_link_node.test.cpp"
     "traversal/forward.test.cpp"
     "traversal/linear.test.cpp"
 )

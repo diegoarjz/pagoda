@@ -1,6 +1,7 @@
 #include <pagoda/graph/io/graph_reader_grammar.h>
 #include <pagoda/graph/io/named_argument.h>
 #include <pagoda/graph/io/node_definition_node.h>
+#include <pagoda/graph/io/node_link_definition.h>
 #include <pagoda/graph/io/node_link_node.h>
 
 #include <boost/spirit/include/qi.hpp>
@@ -280,6 +281,19 @@ TEST_F(GraphReaderGrammarTest, test_node_definition_construction)
 	EXPECT_EQ(out->GetExecutionArguments().size(), 1);
 }
 
+TEST_F(GraphReaderGrammarTest, test_simplified_operation_node_definition)
+{
+	std::string def = "n = Extrusion{a:1,b:2}";
+
+	NodeDefinitionNodePtr out;
+	std::string::const_iterator begin = std::begin(def);
+	std::string::const_iterator end = std::end(def);
+	bool r = qi::phrase_parse(begin, end, m_grammar.operation_definition, qi::space, out);
+
+	EXPECT_TRUE(r);
+	EXPECT_EQ(begin, end) << "Should have matched " << def;
+}
+
 TEST_F(GraphReaderGrammarTest, test_node_links)
 {
 	std::string links[] = {"n1 -> n2;", "n1->n2->n3;"};
@@ -309,6 +323,17 @@ TEST_F(GraphReaderGrammarTest, test_node_links_construction)
 	std::string expectedNodeNames[] = {"n1", "n2", "n3"};
 	uint32_t i = 0;
 	for (const auto &n : out->GetLinkedNodes()) {
-		EXPECT_EQ(n, expectedNodeNames[i++]);
+		EXPECT_EQ(n->GetNodeName(), expectedNodeNames[i++]);
 	}
+}
+
+TEST_F(GraphReaderGrammarTest, test_node_link_definition)
+{
+	std::string a = "in:n2:out";
+	NodeLinkDefinitionPtr out;
+	std::string::const_iterator begin = std::begin(a);
+	std::string::const_iterator end = std::end(a);
+	qi::phrase_parse(begin, end, m_grammar.link_definition, qi::space, out);
+
+	ASSERT_NE(out, nullptr);
 }

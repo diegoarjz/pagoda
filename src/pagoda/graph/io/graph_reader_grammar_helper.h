@@ -10,6 +10,8 @@ class NamedArgument;
 using NamedArgumentPtr = std::shared_ptr<NamedArgument>;
 class NodeDefinitionNode;
 using NodeDefinitionNodePtr = std::shared_ptr<NodeDefinitionNode>;
+class NodeLinkDefinition;
+using NodeLinkDefinitionPtr = std::shared_ptr<NodeLinkDefinition>;
 class NodeLinkNode;
 using NodeLinkNodePtr = std::shared_ptr<NodeLinkNode>;
 class GraphDefinitionNode;
@@ -25,12 +27,19 @@ NamedArgumentPtr CreateExpressionNamedArgument(std::string &name, std::string &e
 NodeDefinitionNodePtr CreateNodeDefinition(std::string &name, std::string &type,
                                            std::vector<NamedArgumentPtr> &constructionArgs);
 
+NodeDefinitionNodePtr CreateOperationDefinition(std::string &name, std::string &operation,
+                                                std::vector<NamedArgumentPtr> &executionArgs);
+
 NodeDefinitionNodePtr SetExecutionArguments(NodeDefinitionNodePtr nodeDefinition,
                                             std::vector<NamedArgumentPtr> &executionArgs);
 
 NodeLinkNodePtr CreateNodeLink();
 
-void AddLinkedNode(NodeLinkNodePtr linkedNodes, std::string &nodeName);
+NodeLinkDefinitionPtr CreateLinkDefinition();
+void SetInputInterface(NodeLinkDefinitionPtr n, const std::string &name);
+void SetNodeName(NodeLinkDefinitionPtr n, const std::string &name);
+void SetOutputInterface(NodeLinkDefinitionPtr n, const std::string &name);
+void AddLinkedNode(NodeLinkNodePtr linkedNodes, NodeLinkDefinitionPtr &linkDefinition);
 
 GraphDefinitionNodePtr CreateGraphDefinition();
 

@@ -24,11 +24,13 @@ class AstInterpreter : public AstNodeVisitor
 {
 	public:
 	AstInterpreter(GraphPtr graph);
+	virtual ~AstInterpreter();
 
 	void Visit(GraphDefinitionNode *graphDefinition) override;
 	void Visit(NamedArgument *namedArgument) override;
 	void Visit(NodeDefinitionNode *nodeDefinition) override;
 	void Visit(NodeLinkNode *nodeLink) override;
+	void Visit(NodeLinkDefinition *nodeLinkDefinition) override;
 
 	const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &GetCurrentNamedArguments() const;
 

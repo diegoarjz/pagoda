@@ -4,10 +4,14 @@
 #include "graph_statement_node.h"
 
 #include <list>
+#include <memory>
 #include <string>
 
 namespace pagoda::graph::io
 {
+class NodeLinkDefinition;
+using NodeLinkDefinitionPtr = std::shared_ptr<NodeLinkDefinition>;
+
 /**
  * Represents node links in the graph format.
  */
@@ -15,7 +19,7 @@ class NodeLinkNode : public GraphStatementNode
 {
 	public:
 	/// Storage type for linked nodes.
-	using NodeLinkContainer_t = std::list<std::string>;
+	using NodeLinkContainer_t = std::list<std::shared_ptr<NodeLinkDefinition>>;
 	/// Iterator over linked nodes.
 	using NodeLinkContainerIterator_t = NodeLinkContainer_t::iterator;
 
@@ -61,6 +65,11 @@ class NodeLinkNode : public GraphStatementNode
 	 * Adds a linked node.
 	 */
 	void AddLinkedNode(const std::string &nodeName);
+
+	/**
+	 * Adds a linked node.
+	 */
+	void AddLinkedNode(NodeLinkDefinitionPtr linkDefinition);
 
 	/**
 	 * Returns an iterator to the beginning of the linked nodes.

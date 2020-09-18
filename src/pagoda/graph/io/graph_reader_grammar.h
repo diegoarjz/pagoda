@@ -25,6 +25,7 @@ struct GraphReaderGrammar
 		 * node_definition -> identifier = identifier
 		 *                      "(" construction_args ")"
 		 *                      ("{" execution_args "}")?
+		 * operation_definition -> identifier = identifier "{" execution_args "}"
 		 * identifier -> ("_" | alpha) (alnum | "_")*
 		 * literal -> quoted_string | float
 		 * expression -> "$<" expression_body ">$"
@@ -33,7 +34,8 @@ struct GraphReaderGrammar
 		 * named_simple_arg -> identifier ":" literal
 		 * execution_args -> (named_expression_arg ("," named_expression_arg)*)?
 		 * named_expression_arg -> identifier ":" ( expression | literal )
-		 * node_links -> identifier "->" identifier ("->" identifier)*
+		 * link_definition -> (identifier:)?identifier(:identifier)?
+		 * node_links -> link_definition "->" link_definition ("->" link_definition)*
 		 */
 
 		using namespace boost::spirit;
@@ -96,12 +98,28 @@ struct GraphReaderGrammar
                 '(' >> construction_args >> ')') [ _val = bind(CreateNodeDefinition, boost::spirit::_1, boost::spirit::_2, boost::spirit::_3) ] >>
                 -(('{' >> execution_args >> '}') [ _val = bind(SetExecutionArguments, _val, boost::spirit::_1) ]);
 
+    /*
+		 *operation_definition -> identifier = identifier "{" execution_args "}"
+     */
+    operation_definition = (identifier >> '=' >> identifier >> "{" >> execution_args >> "}")
+                           [
+                            _val = bind(CreateOperationDefinition, boost::spirit::_1, boost::spirit::_2, boost::spirit::_3)
+                           ];
+
+    /*
+     * link_definition -> (identifier:)?identifier(:identifier)?
+     */
+    link_definition = eps[_val = bind(CreateLinkDefinition)] >>
+                      (-(identifier >> '<') [bind(SetInputInterface, _val, boost::spirit::_1)] >>
+                      identifier [bind(SetNodeName, _val, boost::spirit::_1)] >>
+                      -('>' >> identifier) [bind(SetOutputInterface, _val, boost::spirit::_1)]);
+
 		/*
-		 * node_links -> identifier "->" identifier ("->" identifier)*
+		 * node_links -> link_definition "->" link_definition ("->" link_definition)*
 		 */
 		node_links = eps[ _val = bind(CreateNodeLink) ] >>
-                     identifier[ bind(AddLinkedNode, _val, boost::spirit::_1) ] >> "->" >>
-                     (identifier[ bind(AddLinkedNode, _val, boost::spirit::_1) ] % "->") > ';';
+                     link_definition[ bind(AddLinkedNode, _val, boost::spirit::_1) ] >> "->" >>
+                     (link_definition[ bind(AddLinkedNode, _val, boost::spirit::_1) ] % "->") > ';';
 
 		/*
 		 * graph_definition -> (node_definition | node_links)*
@@ -109,6 +127,7 @@ struct GraphReaderGrammar
 		graph_definition = eps[ _val = bind(CreateGraphDefinition) ] >>
                            *(
                             node_definition[ bind(AddNodeDefinition, _val, boost::spirit::_1) ] |
+                            operation_definition[ bind(AddNodeDefinition, _val, boost::spirit::_1)] |
                             node_links[ bind(AddNodeLinks, _val, boost::spirit::_1) ]
                             );
 
@@ -125,6 +144,8 @@ struct GraphReaderGrammar
 	Rule_t<Iterator, NamedArgumentPtr()> named_expression_arg;
 	Rule_t<Iterator, std::vector<NamedArgumentPtr>()> execution_args;
 	Rule_t<Iterator, NodeDefinitionNodePtr()> node_definition;
+	Rule_t<Iterator, NodeDefinitionNodePtr()> operation_definition;
+	Rule_t<Iterator, NodeLinkDefinitionPtr()> link_definition;
 	Rule_t<Iterator, NodeLinkNodePtr()> node_links;
 	Rule_t<Iterator, GraphDefinitionNodePtr()> graph_definition;
 };

@@ -7,6 +7,8 @@ class GraphDefinitionNode;
 class NamedArgument;
 class NodeDefinitionNode;
 class NodeLinkNode;
+class NodeLinkDefinition;
+
 /**
  * Implements logic to iterate over an \c AstNode tree.
  */
@@ -17,6 +19,7 @@ class AstNodeVisitor
 	virtual void Visit(NamedArgument *namedArgument) = 0;
 	virtual void Visit(NodeDefinitionNode *nodeDefinition) = 0;
 	virtual void Visit(NodeLinkNode *nodeLink) = 0;
+	virtual void Visit(NodeLinkDefinition *nodeLinkDefinition) = 0;
 };
 }  // namespace pagoda::graph::io
 
