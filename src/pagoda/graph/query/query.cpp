@@ -5,14 +5,19 @@
 
 namespace pagoda::graph::query
 {
-Query::Query(Graph& graph, QueryHandle_t queryHandle) : m_graph(graph), m_queryHandle(queryHandle) {}
+Query::Query() : m_graph{nullptr} {}
+Query::Query(Graph& graph, QueryHandle_t queryHandle) : m_graph(&graph), m_queryHandle(queryHandle) {}
 Query::Query(Graph& graph, NodeSet& nodeSet)
-  : m_graph(graph), m_queryHandle([&nodeSet](NodePtr n) { nodeSet.insert(n); })
+  : m_graph(&graph), m_queryHandle([&nodeSet](NodePtr n) { nodeSet.insert(n); })
 {
 }
 
+Query::~Query() {}
+
 bool Query::Matches(NodePtr n) { return true; }
 void Query::AddNode(NodePtr n) { m_queryHandle(n); }
+
+void Query::SetGraph(Graph* graph) { m_graph = graph; }
 
 const std::string& Query::GetQueryHash() const
 {

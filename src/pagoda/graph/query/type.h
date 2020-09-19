@@ -12,6 +12,7 @@ template<class T>
 class Type : public Query
 {
 	public:
+	Type() {}
 	Type(Graph &graph, QueryHandle_t queryHandle) : Query(graph, queryHandle) {}
 	Type(Graph &graph, NodeSet &nodeSet) : Query(graph, nodeSet) {}
 

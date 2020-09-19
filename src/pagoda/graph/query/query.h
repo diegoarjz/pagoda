@@ -34,8 +34,16 @@ namespace pagoda::graph::query
 class Query
 {
 	public:
+	/// Type definition for a container of \c Query
+	using QueryContainer_t = std::vector<std::shared_ptr<Query>>;
 	/// Function type to handle each \c Node that matches a \c Query.
 	using QueryHandle_t = std::function<void(NodePtr)>;
+
+	/**
+	 * Default constructor.
+	 * Should only be used to create sub queries.
+	 */
+	Query();
 
 	/**
 	 * Constructor with a custom \c QueryHandle_t.
@@ -46,15 +54,19 @@ class Query
 	 */
 	Query(Graph& graph, NodeSet& nodeSet);
 
+	virtual ~Query();
+
 	/**
 	 * Checks whether or not the given \c Node \p n passes the condition.
 	 */
 	virtual bool Matches(NodePtr n);
 
+	void SetGraph(Graph* graph);
+
 	const std::string& GetQueryHash() const;
 
 	protected:
-	Graph& m_graph;
+	Graph* m_graph;
 	QueryHandle_t m_queryHandle;
 
 	private:
