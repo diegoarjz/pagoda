@@ -46,6 +46,9 @@ class Query
 	 */
 	Query(Graph& graph, NodeSet& nodeSet);
 
+	/**
+	 * Checks whether or not the given \c Node \p n passes the condition.
+	 */
 	virtual bool Matches(NodePtr n);
 
 	const std::string& GetQueryHash() const;

@@ -4,6 +4,9 @@
 
 namespace pagoda::graph::query
 {
+/**
+ * Query condition that matches output nodes on a graph.
+ */
 class OutputNode : public Query
 {
 	public:

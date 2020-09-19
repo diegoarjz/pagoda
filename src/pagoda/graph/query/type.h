@@ -5,6 +5,9 @@
 
 namespace pagoda::graph::query
 {
+/**
+ * Query condition that matches nodes of a given C++ type.
+ */
 template<class T>
 class Type : public Query
 {

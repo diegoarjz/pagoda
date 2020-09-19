@@ -117,6 +117,10 @@ set(GEOMETRY_UNIT_TESTS
     "io/node_definition_node.test.cpp"
     "io/node_link_definition.test.cpp"
     "io/node_link_node.test.cpp"
+    "query/query.test.cpp"
+    "query/input_node.test.cpp"
+    "query/output_node.test.cpp"
+    "query/type.test.cpp"
     "traversal/forward.test.cpp"
     "traversal/linear.test.cpp"
 )
