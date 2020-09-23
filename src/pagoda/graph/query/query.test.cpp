@@ -50,3 +50,14 @@ TEST_F(QueryTest, should_match_all_nodes)
 		EXPECT_NE(visited.find(n), visited.end());
 	}
 }
+
+TEST_F(QueryTest, inline_syntax)
+{
+	NodeSet nodes;
+	Query q = all(*m_graph, nodes);
+	m_graph->ExecuteQuery(q);
+	EXPECT_EQ(nodes.size(), m_nodes.size());
+	for (const auto &n : m_nodes) {
+		EXPECT_NE(nodes.find(n), nodes.end());
+	}
+}

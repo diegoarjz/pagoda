@@ -16,4 +16,10 @@ class InputNode : public Query
 
 	bool Matches(NodePtr n) override;
 };
+
+template<class... Args>
+InputNode input_node(Args &&... args)
+{
+	return InputNode(args...);
+}
 }  // namespace pagoda::graph::query

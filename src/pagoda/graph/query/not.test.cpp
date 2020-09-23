@@ -1,4 +1,4 @@
-#include "and.h"
+#include "not.h"
 
 #include "input_node.h"
 #include "type.h"
@@ -16,7 +16,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class AndTest : public ::testing::Test
+class NotTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -25,10 +25,6 @@ class AndTest : public ::testing::Test
 
 		m_graph->CreateNode<ParameterNode>("n1");
 		m_graph->CreateNode<OperationNode>("n2");
-		m_graph->CreateNode<InputInterfaceNode>("n3");
-		m_graph->CreateNode<ParameterNode>("n4");
-		m_graph->CreateEdge("n1", "n2");
-		m_graph->CreateEdge("n2", "n4");
 	}
 
 	void TearDown() {}
@@ -38,18 +34,18 @@ class AndTest : public ::testing::Test
 	NodeSet m_nodes;
 };
 
-TEST_F(AndTest, should_do_an_and_operation)
+TEST_F(NotTest, should_do_an_not_operation)
 {
-	And q{*m_graph, m_nodes, {std::make_shared<Type<ParameterNode>>(), std::make_shared<InputNode>()}};
+	Not q{*m_graph, m_nodes, std::make_shared<Type<ParameterNode>>()};
 	m_graph->ExecuteQuery(q);
 	EXPECT_EQ(m_nodes.size(), 1);
-	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
+	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }
 
-TEST_F(AndTest, inline_syntax)
+TEST_F(NotTest, inline_syntax)
 {
-	And q = type<ParameterNode>(*m_graph, m_nodes) && input_node();
+	Not q = !type<ParameterNode>(*m_graph, m_nodes);
 	m_graph->ExecuteQuery(q);
 	EXPECT_EQ(m_nodes.size(), 1);
-	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
+	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }

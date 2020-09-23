@@ -18,4 +18,10 @@ class Type : public Query
 
 	bool Matches(NodePtr n) override { return std::dynamic_pointer_cast<T>(n) != nullptr; }
 };
+
+template<class T, class... Args>
+Type<T> type(Args &&... args)
+{
+	return Type<T>(args...);
+}
 }  // namespace pagoda::graph::query

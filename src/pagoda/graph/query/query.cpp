@@ -18,6 +18,8 @@ bool Query::Matches(NodePtr n) { return true; }
 void Query::AddNode(NodePtr n) { m_queryHandle(n); }
 
 void Query::SetGraph(Graph* graph) { m_graph = graph; }
+Graph* Query::GetGraph() const { return m_graph; }
+Query::QueryHandle_t& Query::GetQueryHandle() { return m_queryHandle; }
 
 const std::string& Query::GetQueryHash() const
 {

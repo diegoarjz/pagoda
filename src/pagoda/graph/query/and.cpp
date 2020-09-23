@@ -5,6 +5,7 @@
 
 namespace pagoda::graph::query
 {
+And::And(QueryContainer_t &&queries) : m_queries(std::move(queries)) {}
 And::And(Graph &graph, QueryHandle_t queryHandle) : Query(graph, queryHandle) {}
 And::And(Graph &graph, NodeSet &nodeSet) : Query(graph, nodeSet) {}
 And::And(Graph &graph, QueryHandle_t queryHandle, QueryContainer_t &&queries)

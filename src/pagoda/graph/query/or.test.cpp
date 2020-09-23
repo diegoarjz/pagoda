@@ -16,7 +16,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class AndTest : public ::testing::Test
+class OrTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -38,7 +38,7 @@ class AndTest : public ::testing::Test
 	NodeSet m_nodes;
 };
 
-TEST_F(AndTest, should_do_an_and_operation)
+TEST_F(OrTest, should_do_an_or_operation)
 {
 	Or q{*m_graph, m_nodes, {std::make_shared<Type<ParameterNode>>(), std::make_shared<InputNode>()}};
 	m_graph->ExecuteQuery(q);
@@ -48,3 +48,12 @@ TEST_F(AndTest, should_do_an_and_operation)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n4")), m_nodes.end());
 }
 
+TEST_F(OrTest, inline_syntax)
+{
+	Or q = type<ParameterNode>(*m_graph, m_nodes) || input_node();
+	m_graph->ExecuteQuery(q);
+	EXPECT_EQ(m_nodes.size(), 3);
+	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
+	EXPECT_NE(m_nodes.find(m_graph->GetNode("n3")), m_nodes.end());
+	EXPECT_NE(m_nodes.find(m_graph->GetNode("n4")), m_nodes.end());
+}

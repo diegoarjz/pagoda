@@ -2,6 +2,8 @@
 
 #include "query.h"
 
+#include <pagoda/common/debug/assertions.h>
+
 #include <memory>
 #include <vector>
 
@@ -29,5 +31,14 @@ class Or : public Query
 	std::vector<std::shared_ptr<Query>> m_queries;
 };
 
+template<class LHS, class RHS>
+Or operator||(LHS &&lhs, RHS &&rhs)
+{
+	auto lhsGraph = lhs.GetGraph();
+	auto rhsGraph = rhs.GetGraph();
+	DBG_ASSERT(lhsGraph != nullptr || rhsGraph != nullptr);
+	DBG_ASSERT(lhsGraph == rhsGraph || rhsGraph == nullptr || lhsGraph == nullptr);
+	return Or(*lhs.GetGraph(), lhs.GetQueryHandle(), {std::make_shared<LHS>(lhs), std::make_shared<RHS>(rhs)});
+}
 }  // namespace pagoda::graph::query
 

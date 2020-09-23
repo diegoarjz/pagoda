@@ -62,6 +62,8 @@ class Query
 	virtual bool Matches(NodePtr n);
 
 	void SetGraph(Graph* graph);
+	Graph* GetGraph() const;
+	QueryHandle_t& GetQueryHandle();
 
 	const std::string& GetQueryHash() const;
 
@@ -75,4 +77,10 @@ class Query
 	friend class pagoda::graph::Graph;
 	friend class pagoda::graph::NodeSet;
 };
+
+template<class... Args>
+Query all(Args&&... args)
+{
+	return Query(args...);
+}
 }  // namespace pagoda::graph::query
