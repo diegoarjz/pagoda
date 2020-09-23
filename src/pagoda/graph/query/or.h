@@ -32,7 +32,7 @@ class Or : public Query
 };
 
 template<class LHS, class RHS>
-Or operator||(LHS &&lhs, RHS &&rhs)
+Or operator|(LHS &&lhs, RHS &&rhs)
 {
 	auto lhsGraph = lhs.GetGraph();
 	auto rhsGraph = rhs.GetGraph();

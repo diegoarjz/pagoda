@@ -50,7 +50,7 @@ TEST_F(OrTest, should_do_an_or_operation)
 
 TEST_F(OrTest, inline_syntax)
 {
-	Or q = type<ParameterNode>(*m_graph, m_nodes) || input_node();
+	Or q = type<ParameterNode>(*m_graph, m_nodes) | input_node();
 	m_graph->ExecuteQuery(q);
 	EXPECT_EQ(m_nodes.size(), 3);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());

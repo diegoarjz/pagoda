@@ -33,7 +33,7 @@ class And : public Query
 };
 
 template<class LHS, class RHS>
-And operator&&(LHS &&lhs, RHS &&rhs)
+And operator&(LHS &&lhs, RHS &&rhs)
 {
 	auto lhsGraph = lhs.GetGraph();
 	auto rhsGraph = rhs.GetGraph();
