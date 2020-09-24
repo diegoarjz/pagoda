@@ -19,6 +19,13 @@ Not::Not(Graph &graph, NodeSet &nodeSet, std::shared_ptr<Query> &&query)
 
 Not::~Not() {}
 
-bool Not::Matches(NodePtr n) { return !m_query->Matches(n); }
+bool Not::matches(NodePtr n) { return !m_query->Matches(n); }
+
+void Not::AppendToString(std::stringstream &os, uint32_t indent) const
+{
+	os << "Not[";
+	m_query->AppendToString(os, indent);
+	os << "]";
+}
 }  // namespace pagoda::graph::query
 

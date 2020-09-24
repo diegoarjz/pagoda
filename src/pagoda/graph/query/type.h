@@ -16,7 +16,13 @@ class Type : public Query
 	Type(Graph &graph, QueryHandle_t queryHandle) : Query(graph, queryHandle) {}
 	Type(Graph &graph, NodeSet &nodeSet) : Query(graph, nodeSet) {}
 
-	bool Matches(NodePtr n) override { return std::dynamic_pointer_cast<T>(n) != nullptr; }
+	void AppendToString(std::stringstream &os, uint32_t indent) const override
+	{
+		os << std::string(indent, ' ') << "Type<" << T::name << ">";
+	}
+
+	private:
+	bool matches(NodePtr n) override { return std::dynamic_pointer_cast<T>(n) != nullptr; }
 };
 
 template<class T, class... Args>

@@ -14,7 +14,10 @@ class InputNode : public Query
 	InputNode(Graph &graph, QueryHandle_t queryHandle);
 	InputNode(Graph &graph, NodeSet &nodeSet);
 
-	bool Matches(NodePtr n) override;
+	void AppendToString(std::stringstream &os, uint32_t indent = 0) const override;
+
+	private:
+	bool matches(NodePtr n) override;
 };
 
 template<class... Args>

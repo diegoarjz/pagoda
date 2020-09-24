@@ -4,6 +4,7 @@
 
 #include <functional>
 #include <memory>
+#include <sstream>
 
 namespace pagoda::graph
 {
@@ -59,13 +60,16 @@ class Query
 	/**
 	 * Checks whether or not the given \c Node \p n passes the condition.
 	 */
-	virtual bool Matches(NodePtr n);
+	bool Matches(NodePtr n);
 
 	void SetGraph(Graph* graph);
 	Graph* GetGraph() const;
 	QueryHandle_t& GetQueryHandle();
 
-	const std::string& GetQueryHash() const;
+	const std::size_t GetQueryHash() const;
+
+	std::string ToString() const;
+	virtual void AppendToString(std::stringstream& os, uint32_t indent = 0) const;
 
 	protected:
 	Graph* m_graph;
@@ -73,6 +77,8 @@ class Query
 
 	private:
 	void AddNode(NodePtr n);
+
+	virtual bool matches(NodePtr n);
 
 	friend class pagoda::graph::Graph;
 	friend class pagoda::graph::NodeSet;

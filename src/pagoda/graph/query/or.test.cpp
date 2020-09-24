@@ -57,3 +57,13 @@ TEST_F(OrTest, inline_syntax)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n3")), m_nodes.end());
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n4")), m_nodes.end());
 }
+
+TEST_F(OrTest, to_string)
+{
+	Or q = type<ParameterNode>(*m_graph, m_nodes) | input_node();
+	EXPECT_EQ(q.ToString(),
+	          R"(Or[
+ Type<Parameter>
+ InputNode
+])");
+}

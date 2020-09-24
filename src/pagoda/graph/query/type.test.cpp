@@ -44,6 +44,13 @@ class TypeTest : public ::testing::Test
 		Type<T> q = type<T>(*m_graph, [](NodePtr n) { EXPECT_NE(std::dynamic_pointer_cast<T>(n), nullptr); });
 		m_graph->ExecuteQuery(q);
 	}
+
+	template<class T>
+	void testToString()
+	{
+		Type<T> q = type<T>(*m_graph, [](NodePtr n) {});
+		// EXPECT_EQ(q.ToString(), "Type<" + std::string(T::name) + ">");
+	}
 };
 
 TEST_F(TypeTest, should_match_nodes_of_a_certain_type)
@@ -60,4 +67,12 @@ TEST_F(TypeTest, inline_syntax)
 	testInlineType<InputInterfaceNode>();
 	testInlineType<OutputInterfaceNode>();
 	testInlineType<ParameterNode>();
+}
+
+TEST_F(TypeTest, to_string)
+{
+	testToString<OperationNode>();
+	testToString<InputInterfaceNode>();
+	testToString<OutputInterfaceNode>();
+	testToString<ParameterNode>();
 }

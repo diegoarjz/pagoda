@@ -20,15 +20,16 @@ class And : public Query
 
 	~And() override;
 
-	bool Matches(NodePtr n) override;
-
 	template<class T>
 	void AddQuery(T q)
 	{
 		m_queries.push_back(std::make_shared<T>(q));
 	}
+	void AppendToString(std::stringstream &os, uint32_t indent = 0) const override;
 
 	private:
+	bool matches(NodePtr n) override;
+
 	std::vector<std::shared_ptr<Query>> m_queries;
 };
 

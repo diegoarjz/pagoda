@@ -50,3 +50,10 @@ TEST_F(InputNodeTest, inline_syntax)
 	EXPECT_NE(nodes.find(m_graph->GetNode("in1")), nodes.end());
 	EXPECT_NE(nodes.find(m_graph->GetNode("in2")), nodes.end());
 }
+
+TEST_F(InputNodeTest, to_string)
+{
+	NodeSet nodes;
+	InputNode q = input_node(*m_graph, nodes);
+	EXPECT_EQ(q.ToString(), "InputNode");
+}

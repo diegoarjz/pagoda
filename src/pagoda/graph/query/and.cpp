@@ -19,11 +19,21 @@ And::And(Graph &graph, NodeSet &nodeSet, QueryContainer_t &&queries)
 
 And::~And() {}
 
-bool And::Matches(NodePtr n)
+bool And::matches(NodePtr n)
 {
 	return std::all_of(m_queries.begin(), m_queries.end(), [&](std::shared_ptr<Query> q) {
 		q->SetGraph(m_graph);
 		return q->Matches(n);
 	});
+}
+
+void And::AppendToString(std::stringstream &os, uint32_t indent) const
+{
+	os << "And[" << std::endl;
+	for (auto q : m_queries) {
+		q->AppendToString(os, indent + 1);
+		os << std::endl;
+	}
+	os << "]";
 }
 }  // namespace pagoda::graph::query

@@ -61,3 +61,10 @@ TEST_F(QueryTest, inline_syntax)
 		EXPECT_NE(nodes.find(n), nodes.end());
 	}
 }
+
+TEST_F(QueryTest, to_string)
+{
+	NodeSet nodes;
+	Query q = all(*m_graph, nodes);
+	EXPECT_EQ(q.ToString(), "Query");
+}

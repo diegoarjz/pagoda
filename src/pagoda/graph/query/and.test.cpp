@@ -53,3 +53,13 @@ TEST_F(AndTest, inline_syntax)
 	EXPECT_EQ(m_nodes.size(), 1);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
+
+TEST_F(AndTest, to_string)
+{
+	And q = type<ParameterNode>(*m_graph, m_nodes) & input_node();
+	EXPECT_EQ(q.ToString(),
+	          R"(And[
+ Type<Parameter>
+ InputNode
+])");
+}

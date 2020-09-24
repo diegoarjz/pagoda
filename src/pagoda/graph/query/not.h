@@ -13,7 +13,6 @@ class Not : public Query
 {
 	public:
 	Not(std::shared_ptr<Query> &&query);
-	Not(QueryContainer_t &&queries);
 	Not(Graph &graph, QueryHandle_t queryHandle);
 	Not(Graph &graph, NodeSet &nodeSet);
 	Not(Graph &graph, QueryHandle_t queryHandle, std::shared_ptr<Query> &&query);
@@ -21,15 +20,11 @@ class Not : public Query
 
 	~Not() override;
 
-	bool Matches(NodePtr n) override;
-
-	template<class T>
-	void AddQuery(T q)
-	{
-		m_query = std::make_shared<T>(q);
-	}
+	void AppendToString(std::stringstream &os, uint32_t indent = 0) const override;
 
 	private:
+	bool matches(NodePtr n) override;
+
 	std::shared_ptr<Query> m_query;
 };
 

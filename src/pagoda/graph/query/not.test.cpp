@@ -49,3 +49,9 @@ TEST_F(NotTest, inline_syntax)
 	EXPECT_EQ(m_nodes.size(), 1);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }
+
+TEST_F(NotTest, to_string)
+{
+	Not q = ~type<ParameterNode>(*m_graph, m_nodes);
+	EXPECT_EQ(q.ToString(), "Not[Type<Parameter>]");
+}
