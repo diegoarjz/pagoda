@@ -34,7 +34,7 @@ class Not : public Query
 };
 
 template<class Q>
-Not operator!(Q &&q)
+Not operator~(Q &&q)
 {
 	return Not(*q.GetGraph(), q.GetQueryHandle(), std::make_shared<Q>(q));
 }

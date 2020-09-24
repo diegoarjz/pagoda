@@ -44,7 +44,7 @@ TEST_F(NotTest, should_do_an_not_operation)
 
 TEST_F(NotTest, inline_syntax)
 {
-	Not q = !type<ParameterNode>(*m_graph, m_nodes);
+	Not q = ~type<ParameterNode>(*m_graph, m_nodes);
 	m_graph->ExecuteQuery(q);
 	EXPECT_EQ(m_nodes.size(), 1);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
