@@ -1,5 +1,8 @@
 #include "query.h"
 
+#include <pagoda/graph/traversal/linear.h>
+#include <pagoda/graph/traversal/traversal.h>
+
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/node.h>
 
@@ -27,6 +30,21 @@ Graph* Query::GetGraph() const { return m_graph; }
 Query::QueryHandle_t& Query::GetQueryHandle() { return m_queryHandle; }
 
 const std::size_t Query::GetQueryHash() const { return 0; }
+
+std::shared_ptr<traversal::Traversal> Query::GetTraversal()
+{
+	if (m_graph == nullptr) {
+		// Can't create a traversal if the graph is not set
+		return nullptr;
+	}
+	if (m_traversal == nullptr) {
+		// Default to a linear traversal
+		m_traversal = std::make_shared<traversal::Linear>(*m_graph);
+	}
+	return m_traversal;
+}
+
+void Query::SetTraversal(std::shared_ptr<traversal::Traversal> traversal) { m_traversal = traversal; }
 
 std::string Query::ToString() const
 {

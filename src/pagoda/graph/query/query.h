@@ -11,6 +11,11 @@ namespace pagoda::graph
 class Graph;
 class Node;
 using NodePtr = std::shared_ptr<Node>;
+
+namespace traversal
+{
+class Traversal;
+}
 }  // namespace pagoda::graph
 
 namespace pagoda::graph::query
@@ -71,7 +76,12 @@ class Query
 	std::string ToString() const;
 	virtual void AppendToString(std::stringstream& os, uint32_t indent = 0) const;
 
+	std::shared_ptr<traversal::Traversal> GetTraversal();
+	void SetTraversal(std::shared_ptr<traversal::Traversal> traversal);
+
 	protected:
+	std::shared_ptr<traversal::Traversal> m_traversal;
+
 	Graph* m_graph;
 	QueryHandle_t m_queryHandle;
 

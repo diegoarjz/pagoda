@@ -5,6 +5,7 @@
 namespace pagoda::graph::traversal
 {
 Linear::Linear(Graph& graph) : Traversal(graph), m_iterator(GetNodes().begin()) {}
+Linear::~Linear() {}
 
 NodePtr Linear::Get() { return *m_iterator; }
 bool Linear::Advance()

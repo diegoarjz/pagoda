@@ -183,14 +183,16 @@ class Graph::Impl
 	void ExecuteQuery(query::Query &q)
 	{
 		START_PROFILE;
+		DBG_ASSERT(q.GetGraph() != nullptr);
 
-		traversal::Linear t(*m_graph);
-		while (t.HasNext()) {
-			NodePtr n = t.Get();
+		auto t = q.GetTraversal();
+		DBG_ASSERT(t != nullptr);
+		while (t->HasNext()) {
+			NodePtr n = t->Get();
 			if (q.Matches(n)) {
 				q.AddNode(n);
 			}
-			t.Advance();
+			t->Advance();
 		}
 	}
 
