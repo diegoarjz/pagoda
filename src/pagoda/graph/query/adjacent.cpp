@@ -24,8 +24,16 @@ Adjacent::~Adjacent() {}
 
 void Adjacent::AppendToString(std::stringstream &os, uint32_t indent) const
 {
-	os << "Downstream(" << m_direction << ")[";
-	m_query->AppendToString(os, indent);
+	os << std::string(indent, ' ');
+	if (m_direction == 0) {
+		os << "Adjacent(";
+	} else if (m_direction > 0) {
+		os << "Downstream(";
+	} else if (m_direction < 0) {
+		os << "Upstream(";
+	}
+	os << m_direction << ")[";
+	m_query->AppendToString(os, 0);
 	os << "]";
 }
 

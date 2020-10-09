@@ -35,6 +35,8 @@ set(GRAPH_SRCS
     "query/input_node.h"
     "query/output_node.cpp"
     "query/output_node.h"
+    "query/rule.cpp"
+    "query/rule.h"
     "query/type.h"
     "traversal/traversal.cpp"
     "traversal/traversal.h"
@@ -133,6 +135,7 @@ set(GEOMETRY_UNIT_TESTS
     "query/output_node.test.cpp"
     "query/query.test.cpp"
     "query/type.test.cpp"
+    "query/rule.test.cpp"
     "traversal/forward.test.cpp"
     "traversal/linear.test.cpp"
 )

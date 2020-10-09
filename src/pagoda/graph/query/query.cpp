@@ -6,6 +6,7 @@
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/node.h>
 
+#include <iostream>
 #include <sstream>
 
 namespace pagoda::graph::query
@@ -19,7 +20,14 @@ Query::Query(Graph& graph, NodeSet& nodeSet)
 
 Query::~Query() {}
 
-bool Query::Matches(NodePtr n) { return matches(n); }
+bool Query::Matches(NodePtr n)
+{
+	bool matched = matches(n);
+	if (matched && m_outputNode != nullptr) {
+		*m_outputNode = n;
+	}
+	return matched;
+}
 
 bool Query::matches(NodePtr n) { return true; }
 
@@ -28,6 +36,7 @@ void Query::AddNode(NodePtr n) { m_queryHandle(n); }
 void Query::SetGraph(Graph* graph) { m_graph = graph; }
 Graph* Query::GetGraph() const { return m_graph; }
 Query::QueryHandle_t& Query::GetQueryHandle() { return m_queryHandle; }
+void Query::SetQueryHandle(QueryHandle_t q) { m_queryHandle = q; }
 
 const std::size_t Query::GetQueryHash() const { return 0; }
 
