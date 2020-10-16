@@ -14,14 +14,14 @@ jobs:
                     os: ubuntu-latest,
                     cc: "gcc",
                     cxx: "g++",
-                    set_path: "set PATH=$PATH:/home/runner/.local/bin"
+                    set_path: "export PATH=$PATH:/home/runner/.local/bin"
                   }
                 - {
                     name: "Ubuntu Latest clang",
                     os: ubuntu-latest,
                     cc: "clang",
                     cxx: "clang++",
-                    set_path: "set PATH=$PATH:/home/runner/.local/bin"
+                    set_path: "export PATH=$PATH:/home/runner/.local/bin"
                   }
                 - {
                     name: "macOs Latest clang",
