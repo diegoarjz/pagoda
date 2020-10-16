@@ -54,10 +54,10 @@ jobs:
                   set CXX=${{ matrix.config.cxx }}
                   git submodule update --init --recursive
                   cd ${{ github.workspace }}/build
-                  BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. \
-                                                                   -DCMAKE_BUILD_TYPE=Release \
-                                                                   -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} \
-                                                                   -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
+                  cmake .. \
+                     -DCMAKE_BUILD_TYPE=Release \
+                     -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} \
+                     -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
                   cmake --build . -j4
 
             - name: Run tests
