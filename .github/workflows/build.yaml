@@ -14,24 +14,28 @@ jobs:
                     os: ubuntu-latest,
                     cc: "gcc",
                     cxx: "g++",
+                    conan: "/home/runner/.local/bin"
                   }
                 - {
                     name: "Ubuntu Latest clang",
                     os: ubuntu-latest,
                     cc: "clang",
                     cxx: "clang++",
+                    conan: "/home/runner/.local/bin"
                   }
                 - {
                     name: "macOs Latest clang",
                     os: macos-latest,
                     cc: "clang",
                     cxx: "clang++",
+                    conan: ""
                   }
                 - {
                     name: "Windows Latest",
                     os: windows-latest,
                     cc: "cl",
-                    cxx: "cl"
+                    cxx: "cl",
+                    conan: ""
                   }
         steps:
             - name: Check out repository
@@ -40,14 +44,15 @@ jobs:
               run: |
                   pip3 install wheel setuptools
                   pip3 install conan
+                  set PATH=$PATH:${{ matrix.config.conan }}
+                  echo $PATH
                   conan --version
                   conan install -if ${{ github.workspace }}/build . --build=missing
             - name: Configure and Build
               run: |
                   set CC=${{ matrix.config.cc }}
-                  set CXX={{ matrix.config.cxx }}
+                  set CXX=${{ matrix.config.cxx }}
                   git submodule update --init --recursive
-                  mkdir -p ${{ github.workspace }}/build
                   cd ${{ github.workspace }}/build
                   BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. \
                                                                    -DCMAKE_BUILD_TYPE=Release \
