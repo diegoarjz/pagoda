@@ -27,6 +27,12 @@ jobs:
                     cc: "clang",
                     cxx: "clang++",
                   }
+                - {
+                    name: "Windows Latest",
+                    os: windows-latest,
+                    cc: "cl",
+                    cxx: "cl"
+                  }
         steps:
             - name: Check out repository
               uses: actions/checkout@v2
@@ -34,8 +40,6 @@ jobs:
               run: |
                   pip3 install wheel setuptools
                   pip3 install conan
-                  export PATH=$PATH:/home/runner/.local/bin
-                  echo $PATH
                   conan --version
                   conan install -if ${{ github.workspace }}/build . --build=missing
             - name: Configure and Build
