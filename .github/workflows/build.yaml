@@ -14,28 +14,28 @@ jobs:
                     os: ubuntu-latest,
                     cc: "gcc",
                     cxx: "g++",
-                    conan: "/home/runner/.local/bin"
+                    set_path: "set PATH=$PATH:/home/runner/.local/bin"
                   }
                 - {
                     name: "Ubuntu Latest clang",
                     os: ubuntu-latest,
                     cc: "clang",
                     cxx: "clang++",
-                    conan: "/home/runner/.local/bin"
+                    set_path: "set PATH=$PATH:/home/runner/.local/bin"
                   }
                 - {
                     name: "macOs Latest clang",
                     os: macos-latest,
                     cc: "clang",
                     cxx: "clang++",
-                    conan: ""
+                    set_path: ""
                   }
                 - {
                     name: "Windows Latest",
                     os: windows-latest,
                     cc: "cl",
                     cxx: "cl",
-                    conan: ""
+                    set_path: ""
                   }
         steps:
             - name: Check out repository
@@ -44,7 +44,7 @@ jobs:
               run: |
                   pip3 install wheel setuptools
                   pip3 install conan
-                  set PATH=$PATH:${{ matrix.config.conan }}
+                  ${{ matrix.config.set_path }}
                   echo $PATH
                   conan --version
                   conan install -if ${{ github.workspace }}/build . --build=missing
