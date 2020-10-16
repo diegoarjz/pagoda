@@ -123,7 +123,7 @@ TEST(IndexedContainerTest, when_iterating_should_iterate_indices_in_order)
 	c.Create(3);
 
 	auto i = 0u;
-	for (const auto &el : c) {
+	for (const auto el : c) {
 		EXPECT_EQ(el.m_index, i);
 		EXPECT_EQ(el.m_value.m_value, i + 1);
 		++i;
@@ -175,7 +175,7 @@ TEST(IndexedContainerTest, when_changing_values_through_an_iterator_should_chang
 	c.Create(1);
 	c.Create(2);
 
-	for (const auto &el : c) {
+	for (const auto el : c) {
 		el.m_value = 0;
 	}
 
@@ -193,7 +193,7 @@ TEST(AssociativeIndexedContainersTest, when_iterating_should_visit_all_values)
 		c.Create(v);
 	}
 
-	for (auto &v : c) {
+	for (auto v : c) {
 		ASSERT_NE(std::find(values.begin(), values.end(), v.second), std::end(values));
 		values.remove(v.second);
 	}

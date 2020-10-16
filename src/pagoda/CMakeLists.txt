@@ -55,7 +55,7 @@ target_compile_definitions(
 target_link_libraries(
     libpagoda
     PUBLIC
-        ${PNG_LIBRARY}
+      ${CONAN_LIBS}
 )
 
 set_target_properties(libpagoda PROPERTIES PREFIX "")

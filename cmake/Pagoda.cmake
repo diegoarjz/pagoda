@@ -126,7 +126,9 @@ function (add_unit_test unit_test_src)
             Boost::system
             Boost::filesystem
             gmock
+            gmock_main
             gtest
+            gtest_main
             pthread
     )
 

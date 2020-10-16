@@ -31,37 +31,8 @@ jobs:
             - name: Check out repository
               uses: actions/checkout@v2
             - name: Download and Install Dependencies
-              shell: cmake -P {0}
               run: |
-                  set(third_party_libs "$ENV{GITHUB_WORKSPACE}/third_party/")
-                  set(boost_version "1.72.0")
-                  string(REPLACE "." "_" boost_file "boost_${boost_version}")
-                  set(boost_dir ${boost_file})
-                  set(boost_file "${boost_file}.tar.gz")
-                  set(boost_url "https://dl.bintray.com/boostorg/release/${boost_version}/source/${boost_file}")
-                  set(boost_libraries "chrono,system,program_options,filesystem")
-                  set(boost_prefix "${third_party_libs}/boost")
-
-                  message(STATUS "Workspace: $ENV{GITHUB_WORKSPACE}")
-                  message(STATUS "Third Party Libs: ${third_party_libs}")
-                  message(STATUS "Boost Version ${boost_version}")
-
-                  # Download and install Boost
-                  file(DOWNLOAD "${boost_url}" "./${boost_file}")
-                  execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar xvfz "${boost_file}"
-                                  OUTPUT_QUIET)
-                  execute_process(COMMAND ./bootstrap.sh
-                                          --prefix=${boost_prefix}
-                                          --with-libraries=${boost_libraries}
-                                  WORKING_DIRECTORY "${boost_dir}"
-                                  OUTPUT_QUIET)
-                  execute_process(COMMAND ./b2
-                                  WORKING_DIRECTORY "${boost_dir}"
-                                  OUTPUT_QUIET)
-                  execute_process(COMMAND ./b2 install
-                                  WORKING_DIRECTORY "${boost_dir}")
-
+                  conan install -bf ${{ github.workspace }}/build .
             - name: Configure and Build
               run: |
                   set CC=${{ matrix.config.cc }}

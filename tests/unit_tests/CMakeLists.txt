@@ -88,7 +88,9 @@ target_link_libraries(
         Boost::system
         Boost::filesystem
         gmock
+        gmock_main
         gtest
+        gtest_main
         pthread
 )
 

@@ -25,8 +25,6 @@ elseif(${UNIX})
   endif()
 endif()
 
-message(STATUS ">> ${PROJECT_SOURCE_DIR}/${BGFX_ROOT}")
-
 execute_process(
   COMMAND make -j4 ${BGFX_MAKE_TARGET}
   WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/${BGFX_ROOT}"
