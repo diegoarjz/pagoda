@@ -48,6 +48,17 @@ class convert_to_native_visitor : public ValueVisitor<typename std::remove_refer
 	}
 };
 
+template<>
+class convert_to_native_visitor<std::string> : public ValueVisitor<std::string>
+{
+	public:
+	template<typename V>
+	std::string operator()(V& value)
+	{
+		return value.ToString();
+	}
+};
+
 /**
  * Returns the value of type T stored in the \c DynamicValueBase \p v.
  * If the cast is impossible, \c UnableToCastToNative is thrown.
