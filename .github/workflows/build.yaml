@@ -47,7 +47,7 @@ jobs:
                   ${{ matrix.config.set_path }}
                   echo $PATH
                   conan --version
-                  conan install -if ${{ github.workspace }}/build . --build=missing -s compiler=gcc -s compiler.version=8.1 -s compiler.libcxx=libstdc++
+                  conan install -if ${{ github.workspace }}/build . --build=missing
             - name: Configure and Build
               run: |
                   set CC=${{ matrix.config.cc }}
