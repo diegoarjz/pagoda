@@ -47,7 +47,7 @@ jobs:
                   ${{ matrix.config.set_path }}
                   echo $PATH
                   conan --version
-                  conan install -if ${{ github.workspace }}/build . --build=missing -s compiler=clang
+                  conan install -if ${{ github.workspace }}/build . --build=missing -s compiler=clang -s compiler.version=12
             - name: Configure and Build
               run: |
                   set CC=${{ matrix.config.cc }}
