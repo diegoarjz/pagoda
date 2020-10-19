@@ -12,29 +12,21 @@ jobs:
                 - {
                     name: "Ubuntu Latest GCC",
                     os: ubuntu-latest,
-                    cc: "gcc",
-                    cxx: "g++",
                     set_path: "export PATH=$PATH:/home/runner/.local/bin"
                   }
                 - {
                     name: "Ubuntu Latest clang",
                     os: ubuntu-latest,
-                    cc: "clang",
-                    cxx: "clang++",
                     set_path: "export PATH=$PATH:/home/runner/.local/bin"
                   }
                 - {
                     name: "macOs Latest clang",
                     os: macos-latest,
-                    cc: "clang",
-                    cxx: "clang++",
                     set_path: ""
                   }
                 - {
                     name: "Windows Latest",
                     os: windows-latest,
-                    cc: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\Llvm\\bin\\clang-cl.exe",
-                    cxx: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\Llvm\\bin\\clang-cl.exe",
                     set_path: ""
                   }
         steps:
@@ -50,12 +42,11 @@ jobs:
                   conan install -if ${{ github.workspace }}/build . --build=missing
             - name: Configure and Build
               run: |
-                  set CC="${{ matrix.config.cc }}"
-                  set CXX="${{ matrix.config.cxx }}"
                   git submodule update --init --recursive
                   cd ${{ github.workspace }}/build
-                  cmake .. -DCMAKE_BUILD_TYPE=Release -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
-                  cmake --build . -j4
+                  conan build ..
+                  #cmake .. -DCMAKE_BUILD_TYPE=Release -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
+                  #cmake --build . -j4
 
             - name: Run tests
               run: |

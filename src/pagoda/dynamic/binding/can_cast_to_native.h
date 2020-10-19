@@ -12,7 +12,7 @@ class can_cast_to_native
 	using yes = char;
 	struct no
 	{
-		char x[2];
+		float x[2];
 	};
 
 	template<typename C>
