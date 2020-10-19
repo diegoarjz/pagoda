@@ -50,8 +50,8 @@ jobs:
                   conan install -if ${{ github.workspace }}/build . --build=missing
             - name: Configure and Build
               run: |
-                  set CC=${{ matrix.config.cc }}
-                  set CXX=${{ matrix.config.cxx }}
+                  set CC="${{ matrix.config.cc }}"
+                  set CXX="${{ matrix.config.cxx }}"
                   git submodule update --init --recursive
                   cd ${{ github.workspace }}/build
                   cmake .. -DCMAKE_BUILD_TYPE=Release -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
