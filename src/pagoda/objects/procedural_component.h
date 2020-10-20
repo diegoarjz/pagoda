@@ -2,6 +2,7 @@
 #define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_COMPONENT_H_
 
 #include <memory>
+#include <string>
 
 namespace pagoda::objects
 {
