@@ -10,10 +10,7 @@ template<typename T, typename V>
 class can_cast_to_native
 {
 	using yes = char;
-	struct no
-	{
-		float x[2];
-	};
+	using no = float;
 
 	template<typename C>
 	static yes test(decltype(&C::operator V));

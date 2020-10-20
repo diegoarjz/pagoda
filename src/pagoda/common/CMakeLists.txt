@@ -46,6 +46,8 @@ target_compile_options(
 
 target_compile_definitions(
     common
+    PUBLIC
+      ${PAGODA_COMPILER_ID}
     PRIVATE
         -DPAGODA_VERSION=\"${PAGODA_VERSION}\"
         -DPAGODA_BUILD_NUMBER=\"${PAGODA_BUILD_NUMBER}\"
