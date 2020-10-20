@@ -113,6 +113,8 @@ function (add_unit_test unit_test_src)
 
     target_compile_definitions(
         ${test_name}
+        PUBLIC
+          ${PAGODA_COMPILER_ID}
         PRIVATE
             $<$<CONFIG:DEBUG>:DEBUG>
     )
@@ -134,15 +136,14 @@ function (add_unit_test unit_test_src)
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 
-set(PAGODA_PLATFORM_DEFINITIONS "")
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   # using Clang
-  set(PAGODA_PLATFORM_DEFINITIONS "-DPAGODA_COMPILER_CLANG")
+  set(PAGODA_COMPILER_ID "-DPAGODA_COMPILER_CLANG")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   # using GCC
-  set(PAGODA_PLATFORM_DEFINITIONS "-DPAGODA_COMPILER_GCC")
+  set(PAGODA_COMPILER_ID "-DPAGODA_COMPILER_GCC")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   # using Visual Studio C++
-  set(PAGODA_PLATFORM_DEFINITIONS "-DPAGODA_COMPILER_MSVC")
+  set(PAGODA_COMPILER_ID "-DPAGODA_COMPILER_MSVC")
 endif()
-message(STATUS ">>>> ${PAGODA_PLATFORM_DEFINITIONS}")
+message(STATUS ">>>> ${PAGODA_COMPILER_ID}")

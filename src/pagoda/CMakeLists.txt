@@ -48,6 +48,8 @@ target_compile_options(
 
 target_compile_definitions(
     libpagoda
+    PUBLIC
+      ${PAGODA_COMPILER_ID}
     PRIVATE
         $<$<CONFIG:DEBUG>:DEBUG>
 )

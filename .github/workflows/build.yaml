@@ -42,6 +42,7 @@ jobs:
                   conan install -if ${{ github.workspace }}/build . --build=missing
             - name: Configure and Build
               run: |
+                  ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
                   cd ${{ github.workspace }}/build
                   conan build ..

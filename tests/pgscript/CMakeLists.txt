@@ -32,6 +32,8 @@ target_include_directories(
 
 target_compile_definitions(
     pgscript_tests
+    PUBLIC
+      ${PAGODA_COMPILER_ID}
     PRIVATE
         -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
