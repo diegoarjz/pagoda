@@ -146,4 +146,3 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   # using Visual Studio C++
   set(PAGODA_COMPILER_ID "-DPAGODA_COMPILER_MSVC")
 endif()
-message(STATUS ">>>> ${PAGODA_COMPILER_ID}")

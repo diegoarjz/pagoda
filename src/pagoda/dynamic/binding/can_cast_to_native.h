@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 namespace pagoda::dynamic
 {
 /**
@@ -12,19 +14,21 @@ class can_cast_to_native
 	using yes = char;
 	struct no
 	{
-		float x[2];
+		char x[2];
 	};
 
 	template<typename C>
-	static yes test(decltype(&C::operator V));
+	static yes& test(decltype(&C::operator V));
 
 	template<typename C>
-	static no test(...);
+	static no& test(...);
 
 	public:
 	enum
 	{
-		value = sizeof(test<T>(0)) == sizeof(yes)
+		// value = sizeof(test<T>(0)) == sizeof(yes)
+		// value = std::is_same<decltype(test<T>(0)), yes>::value
+		value = sizeof(decltype(test<T>(0))) == sizeof(yes)
 	};
 };
 }  // namespace pagoda::dynamic

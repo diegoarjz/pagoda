@@ -13,21 +13,29 @@ jobs:
                     name: "Ubuntu Latest GCC",
                     os: ubuntu-latest,
                     set_path: "export PATH=$PATH:/home/runner/.local/bin"
+                    cc: "gcc",
+                    cxx: "g++"
                   }
                 - {
                     name: "Ubuntu Latest clang",
                     os: ubuntu-latest,
                     set_path: "export PATH=$PATH:/home/runner/.local/bin"
+                    cc: "clang",
+                    cxx: "clang++"
                   }
                 - {
                     name: "macOs Latest clang",
                     os: macos-latest,
                     set_path: ""
+                    cc: "clang",
+                    cxx: "clang++"
                   }
                 - {
                     name: "Windows Latest",
                     os: windows-latest,
                     set_path: ""
+                    cc: "clang",
+                    cxx: "clang++"
                   }
         steps:
             - name: Check out repository
@@ -42,13 +50,12 @@ jobs:
                   conan install -if ${{ github.workspace }}/build . --build=missing
             - name: Configure and Build
               run: |
+                  set CC=${{ matrix.config.cc }}
+                  set CXX={{ matrix.config.cxx }}
                   ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
                   cd ${{ github.workspace }}/build
                   conan build ..
-                  #cmake .. -DCMAKE_BUILD_TYPE=Release -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
-                  #cmake --build . -j4
-
             - name: Run tests
               run: |
                   cd build
@@ -109,7 +116,6 @@ jobs:
 
     publish:
         if: contains(github.ref, 'tags/v')
-        name: ${{ matrix.config.name }}
         runs-on: ${{ matrix.config.os }}
         needs: release
         strategy:
