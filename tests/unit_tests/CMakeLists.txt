@@ -96,6 +96,6 @@ target_link_libraries(
         pthread
 )
 
-file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")
 
 add_test(NAME unit_tests COMMAND unit_tests)

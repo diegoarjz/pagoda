@@ -50,6 +50,6 @@ target_link_libraries(
         pthread
 )
 
-file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")
 
 add_test(NAME pgscript_tests COMMAND pgscript_tests)

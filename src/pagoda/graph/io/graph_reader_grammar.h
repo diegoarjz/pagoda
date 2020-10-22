@@ -1,8 +1,6 @@
 #ifndef PAGODA_PROCEDURAL_GRAPH_GRAPH_FORMAT_GRAMMAR_H_
 #define PAGODA_PROCEDURAL_GRAPH_GRAPH_FORMAT_GRAMMAR_H_
 
-#define BOOST_RESULT_OF_USE_DECLTYPE_WITH_TR1_FALLBACK
-
 #include "graph_definition_node.h"
 #include "graph_reader_grammar_helper.h"
 
