@@ -1,5 +1,7 @@
 #pragma once
 
+#define BOOST_RESULT_OF_USE_DECLTYPE_WITH_TR1_FALLBACK
+
 #include "../ir/ast.h"
 #include "../ir/class_declaration.h"
 #include "grammar_helpers.h"
