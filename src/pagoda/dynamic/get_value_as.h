@@ -36,13 +36,15 @@ class convert_to_native_visitor : public ValueVisitor<typename std::remove_refer
 	}
 
 	template<typename V>
-	typename std::enable_if<can_cast_to_native<V, T>::value, T>::type operator()(V& value)
+	// typename std::enable_if<can_cast_to_native<V, T>::value, T>::type operator()(V& value)
+	typename std::enable_if<is_safely_castable<V, T>::value, T>::type operator()(V& value)
 	{
 		return static_cast<T>(value);
 	}
 
 	template<typename V>
-	typename std::enable_if<!can_cast_to_native<V, T>::value, T>::type operator()(V& value)
+	// typename std::enable_if<!can_cast_to_native<V, T>::value, T>::type operator()(V& value)
+	typename std::enable_if<!is_safely_castable<V, T>::value, T>::type operator()(V& value)
 	{
 		throw UnableToCastToNative<V, T>();
 	}
