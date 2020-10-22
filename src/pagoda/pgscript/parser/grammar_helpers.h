@@ -8,7 +8,7 @@
 #include "../ir/set_expression.h"
 
 #include <string>
-#include <vecto>
+#include <vector>
 
 namespace pagoda
 {
