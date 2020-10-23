@@ -4,14 +4,15 @@ class Pagoda(ConanFile):
     name = "pagoda"
     version = "0.1"
     description = "Graph-Based Procedural Modelling Framework"
-    settings = "os", "compiler", "arch"
+    settings = "os", "compiler", "arch", "build_type"
+    default_settings = (
+        "build_type=Release"
+    )
     options = {
         "shared" : [True, False],
-        "build_type": ["Release", "Debug"]
     }
     default_options = (
-        "shared=False",
-        "build_type=Release"
+        "shared=False"
     )
     generators = "cmake"
 
@@ -30,6 +31,6 @@ class Pagoda(ConanFile):
 
 
     def build(self):
-        cmake = CMake(self, build_type=self.options.build_type)
+        cmake = CMake(self, build_type=self.settings.build_type)
         cmake.configure()
         cmake.build()

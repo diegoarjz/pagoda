@@ -38,10 +38,10 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_create_a_valid_geometry)
 	faceBuilder.AddIndex(p5);
 	faceBuilder.CloseFace();
 
-	EXPECT_EQ(m_geometry->GetFaceCount(), 1);
-	EXPECT_EQ(m_geometry->GetPointCount(), 5);
-	EXPECT_EQ(m_geometry->GetSplitPointCount(), 5);
-	EXPECT_EQ(m_geometry->GetEdgeCount(), 5);
+	EXPECT_EQ(m_geometry->GetFaceCount(), 1u);
+	EXPECT_EQ(m_geometry->GetPointCount(), 5u);
+	EXPECT_EQ(m_geometry->GetSplitPointCount(), 5u);
+	EXPECT_EQ(m_geometry->GetEdgeCount(), 5u);
 	EXPECT_TRUE(m_geometry->IsValid());
 
 	typename SplitPointTopology::SplitPointHandle currentSplitPoint = GeometryType::s_invalidIndex;
