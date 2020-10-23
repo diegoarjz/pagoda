@@ -14,8 +14,8 @@ jobs:
                     os: ubuntu-latest,
                     set_path: "export PATH=$PATH:/home/runner/.local/bin",
                     conan_profile: './tools/profiles/ubuntu_gcc_Release_gh.txt',
-                    cc: "gcc",
-                    cxx: "g++"
+                    cc: "gcc-9",
+                    cxx: "g++-9"
                   }
                 - {
                     name: "Ubuntu Latest clang",
