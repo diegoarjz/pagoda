@@ -13,6 +13,7 @@ jobs:
                     name: "Ubuntu Latest GCC",
                     os: ubuntu-latest,
                     set_path: "export PATH=$PATH:/home/runner/.local/bin",
+                    conan_profile: '${{ github.workspace }}/tools/profiles/ubuntu_gcc_Release_gh.txt',
                     cc: "gcc",
                     cxx: "g++"
                   }
@@ -20,6 +21,7 @@ jobs:
                     name: "Ubuntu Latest clang",
                     os: ubuntu-latest,
                     set_path: "export PATH=$PATH:/home/runner/.local/bin",
+                    conan_profile: '${{ github.workspace }}/tools/profiles/ubuntu_clang_Release_gh.txt',
                     cc: "clang",
                     cxx: "clang++"
                   }
@@ -27,6 +29,7 @@ jobs:
                     name: "macOs Latest clang",
                     os: macos-latest,
                     set_path: "",
+                    conan_profile: '${{ github.workspace }}/tools/profiles/macos_clang_Release_gh.txt',
                     cc: "clang",
                     cxx: "clang++"
                   }
@@ -34,6 +37,7 @@ jobs:
                     name: "Windows Latest",
                     os: windows-latest,
                     set_path: "",
+                    conan_profile: '${{ github.workspace }}/tools/profiles/win_msvc_Release_gh.txt',
                     cc: "clang",
                     cxx: "clang++"
                   }
@@ -45,19 +49,18 @@ jobs:
                   pip3 install wheel setuptools
                   pip3 install conan
                   set CC=${{ matrix.config.cc }}
-                  set CXX={{ matrix.config.cxx }}
+                  set CXX=${{ matrix.config.cxx }}
                   ${{ matrix.config.set_path }}
-                  echo $PATH
                   conan --version
-                  conan install -if ${{ github.workspace }}/build . --build=missing
+                  conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
             - name: Configure and Build
               run: |
                   set CC=${{ matrix.config.cc }}
-                  set CXX={{ matrix.config.cxx }}
+                  set CXX=${{ matrix.config.cxx }}
                   ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
                   cd ${{ github.workspace }}/build
-                  conan build ..
+                  conan build ${{ github.workspace }}
             - name: Run tests
               run: |
                   cd build
