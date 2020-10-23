@@ -13,7 +13,7 @@ jobs:
                     name: "Ubuntu Latest GCC",
                     os: ubuntu-latest,
                     set_path: "export PATH=$PATH:/home/runner/.local/bin",
-                    conan_profile: '${{ github.workspace }}/tools/profiles/ubuntu_gcc_Release_gh.txt',
+                    conan_profile: './tools/profiles/ubuntu_gcc_Release_gh.txt',
                     cc: "gcc",
                     cxx: "g++"
                   }
@@ -21,7 +21,7 @@ jobs:
                     name: "Ubuntu Latest clang",
                     os: ubuntu-latest,
                     set_path: "export PATH=$PATH:/home/runner/.local/bin",
-                    conan_profile: '${{ github.workspace }}/tools/profiles/ubuntu_clang_Release_gh.txt',
+                    conan_profile: './tools/profiles/ubuntu_clang_Release_gh.txt',
                     cc: "clang",
                     cxx: "clang++"
                   }
@@ -29,7 +29,7 @@ jobs:
                     name: "macOs Latest clang",
                     os: macos-latest,
                     set_path: "",
-                    conan_profile: '${{ github.workspace }}/tools/profiles/macos_clang_Release_gh.txt',
+                    conan_profile: './tools/profiles/macos_clang_Release_gh.txt',
                     cc: "clang",
                     cxx: "clang++"
                   }
@@ -37,7 +37,7 @@ jobs:
                     name: "Windows Latest",
                     os: windows-latest,
                     set_path: "",
-                    conan_profile: '${{ github.workspace }}/tools/profiles/win_msvc_Release_gh.txt',
+                    conan_profile: './tools/profiles/win_msvc_Release_gh.txt',
                     cc: "clang",
                     cxx: "clang++"
                   }
