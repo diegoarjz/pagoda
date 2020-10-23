@@ -50,6 +50,9 @@ jobs:
                   pip3 install conan
                   set CC=${{ matrix.config.cc }}
                   set CXX=${{ matrix.config.cxx }}
+
+                  ${CXX} --version
+
                   ${{ matrix.config.set_path }}
                   conan --version
                   conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
