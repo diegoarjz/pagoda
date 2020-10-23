@@ -44,6 +44,8 @@ jobs:
               run: |
                   pip3 install wheel setuptools
                   pip3 install conan
+                  set CC=${{ matrix.config.cc }}
+                  set CXX={{ matrix.config.cxx }}
                   ${{ matrix.config.set_path }}
                   echo $PATH
                   conan --version
