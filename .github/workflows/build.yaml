@@ -48,8 +48,8 @@ jobs:
               run: |
                   pip3 install wheel setuptools
                   pip3 install conan
-                  set CC=${{ matrix.config.cc }}
-                  set CXX=${{ matrix.config.cxx }}
+                  export CC=${{ matrix.config.cc }}
+                  export CXX=${{ matrix.config.cxx }}
 
                   ${CXX} --version
 
@@ -58,8 +58,8 @@ jobs:
                   conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
             - name: Configure and Build
               run: |
-                  set CC=${{ matrix.config.cc }}
-                  set CXX=${{ matrix.config.cxx }}
+                  export CC=${{ matrix.config.cc }}
+                  export CXX=${{ matrix.config.cxx }}
                   ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
                   cd ${{ github.workspace }}/build
