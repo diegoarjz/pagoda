@@ -84,8 +84,8 @@ TEST_F(GeometryBuilderTest, when_creating_a_face_should_be_able_to_reuse_points)
 	faceBuilder2.CloseFace();
 
 	EXPECT_EQ(m_geometry->GetFaceCount(), 2u);
-	EXPECT_EQ(m_geometry->GetPointCount(), 6);
-	EXPECT_EQ(m_geometry->GetSplitPointCount(), 8);
-	EXPECT_EQ(m_geometry->GetEdgeCount(), 8);
+	EXPECT_EQ(m_geometry->GetPointCount(), 6u);
+	EXPECT_EQ(m_geometry->GetSplitPointCount(), 8u);
+	EXPECT_EQ(m_geometry->GetEdgeCount(), 8u);
 	EXPECT_TRUE(m_geometry->IsValid());
 }
