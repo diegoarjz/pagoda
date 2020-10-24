@@ -45,21 +45,20 @@ jobs:
             - name: Check out repository
               uses: actions/checkout@v2
             - name: Download and Install Dependencies
+              env:
+                CC: ${{ matrix.config.cc }}
+                CXX: ${{ matrix.config.cxx }}
               run: |
                   pip3 install wheel setuptools
                   pip3 install conan
-                  export CC=${{ matrix.config.cc }}
-                  export CXX=${{ matrix.config.cxx }}
-
-                  ${CXX} --version
-
                   ${{ matrix.config.set_path }}
                   conan --version
                   conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
             - name: Configure and Build
+              env:
+                CC: ${{ matrix.config.cc }}
+                CXX: ${{ matrix.config.cxx }}
               run: |
-                  export CC=${{ matrix.config.cc }}
-                  export CXX=${{ matrix.config.cxx }}
                   ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
                   cd ${{ github.workspace }}/build
