@@ -44,16 +44,12 @@ jobs:
         steps:
             - name: Check out repository
               uses: actions/checkout@v2
+
             - name: Download and Install Dependencies
-              env:
-                CC: ${{ matrix.config.cc }}
-                CXX: ${{ matrix.config.cxx }}
               run: |
                   pip3 install wheel setuptools
                   pip3 install conan
-                  ${{ matrix.config.set_path }}
-                  conan --version
-                  conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
+
             - name: Configure and Build
               env:
                 CC: ${{ matrix.config.cc }}
@@ -61,18 +57,22 @@ jobs:
               run: |
                   ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
+                  conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
                   cd ${{ github.workspace }}/build
                   conan build ${{ github.workspace }}
+
             - name: Run tests
               run: |
                   cd build
                   cmake --build . --target test
+
             - name: Pack Regression Test Results
               if: always()
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
                                           -E tar cJfv "${{ matrix.config.name }}-regression_results.tar.xz" "build/regression_results")
+
             - name: Upload Regression Test Results
               if: always()
               uses: actions/upload-artifact@v1
@@ -84,11 +84,13 @@ jobs:
               run: |
                   mkdir -p ${{ github.workspace }}/install_dir
                   cmake --install ${{ github.workspace }}/build --prefix ${{ github.workspace }}/install_dir
+
             - name: Pack
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
                                           -E tar cJfv "${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/install_dir")
+
             - name: Upload
               uses: actions/upload-artifact@v1
               with:
