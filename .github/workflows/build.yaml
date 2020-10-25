@@ -59,6 +59,7 @@ jobs:
                   git submodule update --init --recursive
                   conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
                   cd ${{ github.workspace }}/build
+                  ls
                   conan build ${{ github.workspace }}
 
             - name: Run tests
