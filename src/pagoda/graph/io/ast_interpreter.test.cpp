@@ -38,7 +38,7 @@ TEST_F(AstInterpreterTest, when_visiting_a_named_argument_node_should_create_a_p
 {
 	NamedArgument n("arg", NamedArgument::ArgumentType::String, "val");
 	m_interpreter->Visit(&n);
-	ASSERT_EQ(m_interpreter->GetCurrentNamedArguments().size(), 1);
+	ASSERT_EQ(m_interpreter->GetCurrentNamedArguments().size(), 1u);
 	auto iter = m_interpreter->GetCurrentNamedArguments().begin();
 	EXPECT_EQ(iter->first, "arg");
 }
