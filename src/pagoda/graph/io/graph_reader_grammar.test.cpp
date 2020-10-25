@@ -277,8 +277,8 @@ TEST_F(GraphReaderGrammarTest, test_node_definition_construction)
 	ASSERT_NE(out, nullptr);
 	EXPECT_EQ(out->GetNodeName(), "n");
 	EXPECT_EQ(out->GetNodeType(), "Operation");
-	EXPECT_EQ(out->GetConstructionArguments().size(), 2);
-	EXPECT_EQ(out->GetExecutionArguments().size(), 1);
+	EXPECT_EQ(out->GetConstructionArguments().size(), 2u);
+	EXPECT_EQ(out->GetExecutionArguments().size(), 1u);
 }
 
 TEST_F(GraphReaderGrammarTest, test_simplified_operation_node_definition)
