@@ -79,7 +79,7 @@ TYPED_TEST(RangeTest, test_range_iteration)
 	for (auto v : range) {
 		EXPECT_EQ(v, i++);
 	}
-	EXPECT_EQ(i, 10);
+	EXPECT_EQ(i, 10u);
 }
 
 TYPED_TEST(RangeTest, test_range_iteration_reference)
@@ -90,7 +90,7 @@ TYPED_TEST(RangeTest, test_range_iteration_reference)
 	for (auto &v : range) {
 		EXPECT_EQ(v, i++);
 	}
-	EXPECT_EQ(i, 10);
+	EXPECT_EQ(i, 10u);
 }
 
 TYPED_TEST(RangeTest, test_range_iteration_const_reference)
@@ -101,7 +101,7 @@ TYPED_TEST(RangeTest, test_range_iteration_const_reference)
 	for (const auto &v : range) {
 		EXPECT_EQ(v, i++);
 	}
-	EXPECT_EQ(i, 10);
+	EXPECT_EQ(i, 10u);
 }
 
 TYPED_TEST(RangeTest, test_negative)
