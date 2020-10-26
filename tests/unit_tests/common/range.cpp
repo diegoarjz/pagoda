@@ -112,7 +112,7 @@ TYPED_TEST(RangeTest, test_negative)
 	for (auto v : range) {
 		EXPECT_EQ(v, i++);
 	}
-	EXPECT_EQ(i, 0);
+	EXPECT_EQ(i, 0u);
 }
 
 TYPED_TEST(RangeTest, test_negative_increments)
