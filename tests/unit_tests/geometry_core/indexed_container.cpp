@@ -47,7 +47,7 @@ TEST(IndexedContainerTest, when_creating_and_getting_should_return_the_index_and
 	EXPECT_EQ(e1.m_value.m_value, 1u);
 
 	auto e2 = c.CreateAndGet(2);
-	EXPECT_EQ(e2.m_index, 1);
+	EXPECT_EQ(e2.m_index, 1u);
 	EXPECT_EQ(e2.m_value.m_value, 2u);
 }
 
@@ -112,7 +112,7 @@ TEST(IndexedContainerTest, when_getting_the_count_of_elements_should_not_take_in
 	c.Create(3);
 	c.Delete(0);
 
-	EXPECT_EQ(c.Count(), 2);
+	EXPECT_EQ(c.Count(), 2u);
 }
 
 TEST(IndexedContainerTest, when_iterating_should_iterate_indices_in_order)
