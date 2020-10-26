@@ -198,5 +198,5 @@ TEST(AssociativeIndexedContainersTest, when_iterating_should_visit_all_values)
 		values.remove(v.second);
 	}
 
-	ASSERT_EQ(values.size(), 0);
+	ASSERT_EQ(values.size(), 0u);
 }

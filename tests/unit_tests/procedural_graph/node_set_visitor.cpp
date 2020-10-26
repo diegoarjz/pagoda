@@ -37,6 +37,6 @@ TEST_F(NodeTypeFilterTest, when_visiting_a_node_set_should_call_visitor_methods_
 
 	node_type_filter<InputInterfaceNode>(m_nodeSet, nodes);
 
-	EXPECT_EQ(nodes.size(), 1);
+	EXPECT_EQ(nodes.size(), 1u);
 	EXPECT_EQ(*nodes.begin(), m_inputInterfaceNode);
 }

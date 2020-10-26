@@ -18,7 +18,7 @@ TEST_F(ExpressionTest, when_creating_an_expression_should_be_able_to_resolve_var
 {
 	auto expression = Expression::CreateExpression("a + b;");
 	auto variables = expression->GetVariables();
-	ASSERT_EQ(variables.size(), 2);
+	ASSERT_EQ(variables.size(), 2u);
 	for (auto v : std::vector<std::string>{"a", "b"}) {
 		ASSERT_NE(std::find(std::begin(variables), std::end(variables), v), std::end(variables));
 	}
@@ -67,7 +67,7 @@ TEST_F(ExpressionTest, when_setting_an_expression_as_avariable_should_add_to_its
 	auto expression = Expression::CreateExpression("a * b;");
 	auto expression2 = Expression::CreateExpression("\"123\" + \"abc\";");
 	expression->SetVariableValue("b", expression2);
-	ASSERT_EQ(expression2->GetDependentExpressions().size(), 1);
+	ASSERT_EQ(expression2->GetDependentExpressions().size(), 1u);
 	ASSERT_EQ(expression2->GetDependentExpressions().front().lock(), expression);
 }
 

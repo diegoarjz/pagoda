@@ -236,7 +236,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_points_should_go_thr
 		EXPECT_TRUE(std::find(seenPoints.begin(), seenPoints.end(), *iter) == seenPoints.end());
 		seenPoints.push_back((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenPoints.size(), 3);
+	EXPECT_EQ(seenPoints.size(), 3u);
 	for (auto i = 0u; i < 3; ++i) {
 		EXPECT_EQ(seenPoints[i], i);
 	}
@@ -252,7 +252,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_split_points_should_
 		EXPECT_TRUE(std::find(seenSplitPoints.begin(), seenSplitPoints.end(), *iter) == seenSplitPoints.end());
 		seenSplitPoints.push_back((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenSplitPoints.size(), 3);
+	EXPECT_EQ(seenSplitPoints.size(), 3u);
 	for (auto i = 0u; i < 3; ++i) {
 		EXPECT_EQ(seenSplitPoints[i], i);
 	}
@@ -268,7 +268,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_edges_should_go_thro
 		EXPECT_TRUE(seenEdges.find((*iter).GetIndex()) == seenEdges.end());
 		seenEdges.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenEdges.size(), 3);
+	EXPECT_EQ(seenEdges.size(), 3u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_faces_should_go_through_all)
@@ -282,7 +282,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_faces_should_go_thro
 		EXPECT_TRUE(seenFaces.find((*iter).GetIndex()) == seenFaces.end());
 		seenFaces.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenFaces.size(), 2);
+	EXPECT_EQ(seenFaces.size(), 2u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_edges_should_go_through_all)
@@ -296,7 +296,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_edges_should_g
 		EXPECT_TRUE(seenEdges.find((*iter).GetIndex()) == seenEdges.end());
 		seenEdges.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenEdges.size(), 2);
+	EXPECT_EQ(seenEdges.size(), 2u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_split_points_should_go_through_all)
@@ -310,7 +310,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_split_points_s
 		EXPECT_TRUE(seenSplitPoints.find((*iter).GetIndex()) == seenSplitPoints.end());
 		seenSplitPoints.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenSplitPoints.size(), 2);
+	EXPECT_EQ(seenSplitPoints.size(), 2u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_faces_should_go_through_all)
@@ -324,7 +324,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_faces_should_g
 		EXPECT_TRUE(seenFaces.find((*iter).GetIndex()) == seenFaces.end());
 		seenFaces.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenFaces.size(), 2);
+	EXPECT_EQ(seenFaces.size(), 2u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_edges_should_go_through_all)
@@ -337,7 +337,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_edges_should_
 		seenEdges.insert((*iter).GetIndex());
 		++iter;
 	}
-	EXPECT_EQ(seenEdges.size(), 3);
+	EXPECT_EQ(seenEdges.size(), 3u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_split_points_should_go_through_all)
@@ -350,7 +350,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_split_points_
 		seenSplitPoints.insert((*iter).GetIndex());
 		++iter;
 	}
-	EXPECT_EQ(seenSplitPoints.size(), 3);
+	EXPECT_EQ(seenSplitPoints.size(), 3u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_points_should_go_through_all)
@@ -363,7 +363,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_points_should
 		seenPoints.insert((*iter).GetIndex());
 		++iter;
 	}
-	EXPECT_EQ(seenPoints.size(), 3);
+	EXPECT_EQ(seenPoints.size(), 3u);
 }
 
 class SplitPointTopologySplitEdgeTest : public PagodaTestFixture<::testing::Test>
