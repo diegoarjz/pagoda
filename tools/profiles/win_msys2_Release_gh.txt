@@ -11,5 +11,5 @@ compiler=gcc
 compiler.version=7
 compiler.libcxx=libstdc++11
 compiler.threads=posix
-compiler.exception=dwarf2
+compiler.exception=seh
 build_type=Release
