@@ -1,7 +1,3 @@
-[build_requires]
-mingw_installer/1.0@conan/stable
-msys2/20190524
-
 [settings]
 os_build=Windows
 os=Windows

@@ -50,7 +50,8 @@ jobs:
                   pip3 install wheel setuptools
                   pip3 install conan
 
-            - name: Configure and Build
+            - name: Configure and Build (macOs & Ubuntu)
+              if: contains(${{ matrix.config.os }}, 'macOs') || contains(${{ matrix.config.os }}, 'Ubuntu')
               env:
                 CC: ${{ matrix.config.cc }}
                 CXX: ${{ matrix.config.cxx }}
@@ -59,7 +60,16 @@ jobs:
                   git submodule update --init --recursive
                   conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
                   cd ${{ github.workspace }}/build
-                  ls
+                  conan build ${{ github.workspace }}
+
+            - name: Configure and Build (Windows)
+              if: contains(${{ matrix.config.os }}, 'Windows')
+              shell: msys2 {0}
+              run:
+                  ${{ matrix.config.set_path }}
+                  git submodule update --init --recursive
+                  conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
+                  cd ${{ github.workspace }}/build
                   conan build ${{ github.workspace }}
 
             - name: Run tests

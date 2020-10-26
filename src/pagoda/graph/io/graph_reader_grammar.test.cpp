@@ -318,7 +318,7 @@ TEST_F(GraphReaderGrammarTest, test_node_links_construction)
 	qi::phrase_parse(begin, end, m_grammar.node_links, qi::space, out);
 
 	ASSERT_NE(out, nullptr);
-	ASSERT_EQ(out->GetLinkedNodes().size(), 3);
+	ASSERT_EQ(out->GetLinkedNodes().size(), 3u);
 
 	std::string expectedNodeNames[] = {"n1", "n2", "n3"};
 	uint32_t i = 0;
