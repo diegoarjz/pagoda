@@ -35,9 +35,9 @@ class GraphSimpleOperationsTest : public ::testing::Test
 
 TEST_F(GraphSimpleOperationsTest, when_creating_nodes_their_id_should_be_incremental)
 {
-	EXPECT_EQ(input_interface_node->GetId(), 0);
-	EXPECT_EQ(output_interface_node->GetId(), 1);
-	EXPECT_EQ(operation_node->GetId(), 2);
+	EXPECT_EQ(input_interface_node->GetId(), 0u);
+	EXPECT_EQ(output_interface_node->GetId(), 1u);
+	EXPECT_EQ(operation_node->GetId(), 2u);
 }
 
 TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_it_from_the_graph)
