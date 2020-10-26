@@ -20,5 +20,6 @@ jobs:
         run: |
           git submodule update --init --recursive
           conan install -if ${{ github.workspace }}/build -pr ./tools/profiles/win_msys2_Release_gh.txt ${{ github.workspace }} --build=missing
+          pwd
           cd ${{ github.workspace }}/build
           conan build ${{ github.workspace }}

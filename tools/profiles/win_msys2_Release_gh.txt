@@ -11,4 +11,5 @@ compiler=gcc
 compiler.version=4.9
 compiler.libcxx=libstdc++11
 compiler.threads=posix
+compiler.exception=seh
 build_type=Release
