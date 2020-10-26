@@ -26,47 +26,47 @@ const Value Value::s_invalidValue(std::numeric_limits<std::size_t>::max());
 TEST(IndexedContainerTest, when_creating_values_should_return_incremental_indices)
 {
 	IndexedContainer<std::size_t, Value> c;
-	EXPECT_EQ(c.Create(1), 0);
-	EXPECT_EQ(c.Create(1), 1);
+	EXPECT_EQ(c.Create(1), 0u);
+	EXPECT_EQ(c.Create(1), 1u);
 }
 
 TEST(IndexedContainerTest, when_creating_values_should_store_the_values)
 {
 	IndexedContainer<std::size_t, Value> c;
-	c.Create(1);
-	c.Create(2);
-	EXPECT_EQ(c.Get(0).m_value, 1);
-	EXPECT_EQ(c.Get(1).m_value, 2);
+	c.Create(1u);
+	c.Create(2u);
+	EXPECT_EQ(c.Get(0).m_value, 1u);
+	EXPECT_EQ(c.Get(1).m_value, 2u);
 }
 
 TEST(IndexedContainerTest, when_creating_and_getting_should_return_the_index_and_value)
 {
 	IndexedContainer<std::size_t, Value> c;
-	auto e1 = c.CreateAndGet(1);
-	EXPECT_EQ(e1.m_index, 0);
-	EXPECT_EQ(e1.m_value.m_value, 1);
+	auto e1 = c.CreateAndGet(1u);
+	EXPECT_EQ(e1.m_index, 0u);
+	EXPECT_EQ(e1.m_value.m_value, 1u);
 
 	auto e2 = c.CreateAndGet(2);
 	EXPECT_EQ(e2.m_index, 1);
-	EXPECT_EQ(e2.m_value.m_value, 2);
+	EXPECT_EQ(e2.m_value.m_value, 2u);
 }
 
 TEST(IndexedContainerTest, when_checking_if_has_index_should_check_for_existence)
 {
 	IndexedContainer<std::size_t, Value> c;
-	c.Create(1);
-	c.Create(2);
+	c.Create(1u);
+	c.Create(2u);
 
-	EXPECT_TRUE(c.HasIndex(0));
-	EXPECT_TRUE(c.HasIndex(1));
-	EXPECT_FALSE(c.HasIndex(2));
+	EXPECT_TRUE(c.HasIndex(0u));
+	EXPECT_TRUE(c.HasIndex(1u));
+	EXPECT_FALSE(c.HasIndex(2u));
 }
 
 TEST(IndexedContainerTest, when_accessing_a_deleted_index_should_throw)
 {
 	IndexedContainer<std::size_t, Value> c;
-	c.Create(1);
-	c.Delete(0);
+	c.Create(1u);
+	c.Delete(0u);
 	try {
 		c.Get(0);
 	} catch (IndexedDeletedException<std::size_t> &e) {
@@ -78,19 +78,19 @@ TEST(IndexedContainerTest, when_accessing_a_deleted_index_should_throw)
 TEST(IndexedContainerTest, when_checking_if_has_index_of_a_deleted_index_should_return_false)
 {
 	IndexedContainer<std::size_t, Value> c;
-	c.Create(1);
-	c.Create(2);
-	c.Delete(0);
-	EXPECT_FALSE(c.HasIndex(0));
-	EXPECT_TRUE(c.HasIndex(1));
+	c.Create(1u);
+	c.Create(2u);
+	c.Delete(0u);
+	EXPECT_FALSE(c.HasIndex(0u));
+	EXPECT_TRUE(c.HasIndex(1u));
 }
 
 TEST(IndexedContainerTest, when_getting_or_creating_should_create_if_doesnt_exist)
 {
 	IndexedContainer<std::size_t, Value> c;
-	c.Create(1);
+	c.Create(1u);
 	auto value = c.GetOrCreate(2, 123);
-	EXPECT_EQ(value.m_value, 123);
+	EXPECT_EQ(value.m_value, 123u);
 }
 
 TEST(IndexedContainerTest, when_creating_a_new_element_after_getting_or_creating_should_use_the_next_available_index)
@@ -100,8 +100,8 @@ TEST(IndexedContainerTest, when_creating_a_new_element_after_getting_or_creating
 	c.GetOrCreate(2, 123);
 	auto index = c.Create(321);
 	auto value = c.Get(index);
-	EXPECT_EQ(index, 1);
-	EXPECT_EQ(value, 321);
+	EXPECT_EQ(index, 1u);
+	EXPECT_EQ(value, 321u);
 }
 
 TEST(IndexedContainerTest, when_getting_the_count_of_elements_should_not_take_into_account_the_deleted_indices)
@@ -166,7 +166,7 @@ TEST(IndexedContainerTest, when_getting_an_element_should_be_able_to_change_the_
 	auto index = c.Create(1);
 	auto &value = c.Get(index);
 	value.m_value = 123;
-	EXPECT_EQ(c.Get(0).m_value, 123);
+	EXPECT_EQ(c.Get(0).m_value, 123u);
 }
 
 TEST(IndexedContainerTest, when_changing_values_through_an_iterator_should_change_the_stored_value)
@@ -179,8 +179,8 @@ TEST(IndexedContainerTest, when_changing_values_through_an_iterator_should_chang
 		el.m_value = 0;
 	}
 
-	EXPECT_EQ(c.Get(0).m_value, 0);
-	EXPECT_EQ(c.Get(1).m_value, 0);
+	EXPECT_EQ(c.Get(0).m_value, 0u);
+	EXPECT_EQ(c.Get(1).m_value, 0u);
 }
 
 TEST(AssociativeIndexedContainersTest, when_iterating_should_visit_all_values)
