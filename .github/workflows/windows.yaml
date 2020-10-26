@@ -7,18 +7,18 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: msys2/setup-msys2@v2
-        with:
-          update: true
-          install: base-devel git gcc cmake make
+
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Try MSYS2
-        shell: msys2 {0}
+
+      - name: Download and Install Dependencies
         run: |
-          echo "PATH: ${PATH}"
-          which gcc
-          which g++
-          which cmake
-          which make
-          which conan
+          pip3 install wheel setuptools
+          pip3 install conan
+
+      - name: Configure and Build
+        run: |
+          git submodule update --init --recursive
+          conan install -if ${{ github.workspace }}/build -pr ./tools/profiles/win_msys2_Release_gh.txt ${{ github.workspace }} --build=missing
+          cd ${{ github.workspace }}/build
+          conan build ${{ github.workspace }}
