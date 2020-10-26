@@ -6,15 +6,15 @@ jobs:
     name: "Build on Windows"
     runs: windows-latest
 
-  steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
-    - name: Try MSYS2
-      shell: msys2 {0}
-      run: |
-        echo "PATH: ${PATH}"
-        which gcc
-        which g++
-        which cmake
-        which make
-        which conan
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Try MSYS2
+        shell: msys2 {0}
+        run: |
+          echo "PATH: ${PATH}"
+          which gcc
+          which g++
+          which cmake
+          which make
+          which conan
