@@ -4,6 +4,8 @@
 #include "../ir/class_declaration.h"
 #include "grammar_helpers.h"
 
+#define BOOST_SPIRIT_USE_PHOENIX_V3
+
 #include <boost/phoenix/object/construct.hpp>
 #include <boost/phoenix/phoenix.hpp>
 #include <boost/spirit/include/qi.hpp>

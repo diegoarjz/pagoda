@@ -4,6 +4,7 @@
 #include "graph_definition_node.h"
 #include "graph_reader_grammar_helper.h"
 
+#define BOOST_SPIRIT_USE_PHOENIX_V3
 #include <boost/phoenix/phoenix.hpp>
 #include <boost/spirit/include/qi.hpp>
 
