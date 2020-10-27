@@ -51,7 +51,7 @@ TEST_F(ExecutionQueueTest, when_iterating_the_nodes_should_visit_them_by_depth)
 
 	ExecutionQueue q(*m_graph);
 
-	ASSERT_EQ(q.GetNodeCount(), 5);
+	ASSERT_EQ(q.GetNodeCount(), 5u);
 	EXPECT_EQ(q.GetNextNode()->GetName(), "a");
 	EXPECT_EQ(q.GetNextNode()->GetName(), "e");
 	EXPECT_EQ(q.GetNextNode()->GetName(), "b");
@@ -78,7 +78,7 @@ TEST_F(ExecutionQueueTest, when_iterating_the_nodes_should_only_visit_them_once)
 	ExecutionQueue q(*m_graph);
 
 	std::unordered_set<NodePtr> visitedNodes;
-	ASSERT_EQ(q.GetNodeCount(), 5);
+	ASSERT_EQ(q.GetNodeCount(), 5u);
 
 	NodePtr n = q.GetNextNode();
 
