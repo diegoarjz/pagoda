@@ -17,7 +17,7 @@ class Pagoda(ConanFile):
     generators = "cmake"
 
     requires = [
-        ("boost/1.72.0"),
+        ("boost/1.73.0"),
         ("gtest/1.10.0"),
         ("libpng/1.6.37"),
         ("nlohmann_json/3.9.1")

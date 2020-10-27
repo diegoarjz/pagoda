@@ -21,9 +21,8 @@ jobs:
           set PATH="C:/Users/runneradmin/.conan/data/mingw_installer/1.0/conan/stable/package/4145762eb81b9dc84cc7dedbcee89e92fc147dbc/bin/;%PATH%"
 
           echo "------------------------------------------"
-          cd
           dir
-          echo %PATH%
+          set %PATH%
           echo "------------------------------------------"
 
           git submodule update --init --recursive
