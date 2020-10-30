@@ -31,6 +31,6 @@ jobs:
           echo "------------------------------------------"
 
           git submodule update --init --recursive
-          conan install -if ${{ github.workspace }}/build ${{ github.workspace }} -pr ./tools/profiles/win_clang_Release_gh.txt --build=missing
-          cd ${{ github.workspace }}/build
-          conan build ${{ github.workspace }}
+          conan install -if build . -pr ./tools/profiles/win_clang_Release_gh.txt --build=missing
+          cd build
+          conan build ..
