@@ -20,16 +20,13 @@ jobs:
       - name: Configure and Build
         shell: cmd
         env:
-          CC: C:\msys64\mingw64\bin\clang-cl.exe
-          CXX: C:\msys64\mingw64\bin\clang-cl.exe
-          CFLAGS: -m64 -fmsc-version=1910
-          CXXFLAGS: -m64 -fmsc-version=1910
+          CC: C:\msys64\mingw64\bin\gcc.exe
+          CXX: C:\msys64\mingw64\bin\gcc++.exe
         run: |
           echo "------------------------------------------"
-          dir
           dir C:\msys64\mingw64\bin
           $env:path -split ";"
-          C:\msys64\mingw64\bin\clang-cl.exe --version
+          C:\msys64\mingw64\bin\gcc.exe --version
           echo "------------------------------------------"
 
           git submodule update --init --recursive
