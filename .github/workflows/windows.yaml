@@ -19,8 +19,8 @@ jobs:
 
       - name: Configure and Build
         env:
-          CC: "clang"
-          CXX: "clang++"
+          CC: "C:\msys64\mingw64\bin\clang.exe"
+          CXX: "C:\msys64\mingw64\bin\clang++.exe"
         run: |
           echo "------------------------------------------"
           dir
