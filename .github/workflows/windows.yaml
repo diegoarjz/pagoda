@@ -18,14 +18,14 @@ jobs:
           echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
 
       - name: Configure and Build
-        shell: cmd
+        shell: bash
         env:
           CC: C:\msys64\mingw64\bin\gcc.exe
           CXX: C:\msys64\mingw64\bin\g++.exe
         run: |
           echo "------------------------------------------"
           dir C:\msys64\mingw64\bin
-          $env:path -split ";"
+          echo %PATH%
           C:\msys64\mingw64\bin\gcc.exe --version
           echo "------------------------------------------"
 
