@@ -26,8 +26,8 @@ jobs:
           dir
           dir C:\msys64\mingw64\bin
           $env:path -split ";"
-          clang --version
-          clang++ --version
+          C:\msys64\mingw64\bin\clang.exe --version
+          C:\msys64\mingw64\bin\clang++.exe --version
           echo "------------------------------------------"
 
           git submodule update --init --recursive
