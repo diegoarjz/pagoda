@@ -15,17 +15,15 @@ jobs:
         run: |
           pip3 install wheel setuptools
           pip3 install conan
+          echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
 
       - name: Configure and Build
         env:
           CC: "clang"
           CXX: "clang++"
         run: |
-          set PATH="C:\msys64\mingw64\bin;%PATH%"
-
           echo "------------------------------------------"
           dir
-          set %PATH%
           echo %PATH%
           echo "------------------------------------------"
 
