@@ -38,8 +38,8 @@ jobs:
                     os: windows-latest,
                     set_path: "",
                     conan_profile: './tools/profiles/win_msvc_Release_gh.txt',
-                    cc: "",
-                    cxx: ""
+                    cc: "gcc",
+                    cxx: "g++"
                   }
         steps:
             - name: Check out repository

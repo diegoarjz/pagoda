@@ -17,8 +17,11 @@ jobs:
           pip3 install conan
 
       - name: Configure and Build
+        env:
+          CC: "clang"
+          CXX: "clang++"
         run: |
-          set PATH="C:/Users/runneradmin/.conan/data/mingw_installer/1.0/conan/stable/package/4145762eb81b9dc84cc7dedbcee89e92fc147dbc/bin/;%PATH%"
+          echo "::add-path::C:\msys64\mingw64\bin"
 
           echo "------------------------------------------"
           dir
@@ -26,6 +29,6 @@ jobs:
           echo "------------------------------------------"
 
           git submodule update --init --recursive
-          conan install -if ${{ github.workspace }}/build -pr ./tools/profiles/win_msys2_Release_gh.txt ${{ github.workspace }} --build=missing
+          conan install -if ${{ github.workspace }}/build ${{ github.workspace }} --build=missing
           cd ${{ github.workspace }}/build
           conan build ${{ github.workspace }}
