@@ -18,6 +18,7 @@ jobs:
           echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
 
       - name: Configure and Build
+        shell: cmd
         env:
           CC: C:\msys64\mingw64\bin\clang.exe
           CXX: C:\msys64\mingw64\bin\clang++.exe
