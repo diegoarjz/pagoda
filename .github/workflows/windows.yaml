@@ -34,3 +34,17 @@ jobs:
           conan install -if build . -pr ./tools/profiles/win_clang_Release_gh.txt --build=missing
           cd build
           conan build ..
+
+      - name: Package
+        if: always()
+        shell: cmake -P {0}
+        run: |
+            execute_process(COMMAND ${CMAKE_COMMAND} -E tar cJfv "results.tar.xz" ".")
+
+      - name: Upload Regression Test Results
+        if: always()
+        uses: actions/upload-artifact@v1
+        with:
+            path: results.tar.xz
+            name: results.tar.xz
+
