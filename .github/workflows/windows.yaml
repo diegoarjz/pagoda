@@ -21,11 +21,12 @@ jobs:
           CC: "clang"
           CXX: "clang++"
         run: |
-          echo "::add-path::C:\msys64\mingw64\bin"
+          set PATH="C:\msys64\mingw64\bin;%PATH%"
 
           echo "------------------------------------------"
           dir
           set %PATH%
+          echo %PATH%
           echo "------------------------------------------"
 
           git submodule update --init --recursive
