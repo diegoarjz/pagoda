@@ -28,10 +28,13 @@ jobs:
           dir /c/msys64/mingw64/bin
           echo %PATH%
           /c/msys64/mingw64/bin/gcc.exe --version
+          pwd
+          ls -R
           echo "------------------------------------------"
 
           git submodule update --init --recursive
           conan install -if build . -pr ./tools/profiles/win_clang_Release_gh.txt --build=missing
+          ls -R
           cd build
           conan build ..
 
