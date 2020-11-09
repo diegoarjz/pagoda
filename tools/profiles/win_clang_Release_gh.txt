@@ -11,5 +11,10 @@
   os_build=Windows
 
 [options]
+
 [build_requires]
+  msys2/20190524
+  mingw_installer/1.0@conan/stable
+
 [env]
+  PATH=[/c/msys64/mingw64/bin/]
