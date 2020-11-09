@@ -31,6 +31,10 @@ class Pagoda(ConanFile):
 
 
     def build(self):
-        cmake = CMake(self, build_type=self.settings.build_type)
-        cmake.configure()
-        cmake.build()
+        if self.settings.os == "Windows":
+            tools.run_in_windows_bash(self, "cmake ..")
+            tools.run_in_windows_bash(self, "cmake --build .")
+        else:
+            cmake = CMake(self, build_type=self.settings.build_type)
+            cmake.configure()
+            cmake.build()
