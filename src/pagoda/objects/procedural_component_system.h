@@ -57,7 +57,7 @@ class ProceduralComponentSystem : public ProceduralComponentSystemBase
 		if (component == std::end(m_components)) {
 			return nullptr;
 		}
-		return component->second;
+		return std::static_pointer_cast<ProceduralComponent>(component->second);
 	}
 
 	void CloneComponent(ProceduralObjectPtr from, ProceduralObjectPtr to) override
