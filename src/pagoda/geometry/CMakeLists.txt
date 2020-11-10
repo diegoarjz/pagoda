@@ -101,6 +101,7 @@ target_link_libraries(
     geometry
     PRIVATE
         common
+        dynamic
 )
 
 #########################################################################
