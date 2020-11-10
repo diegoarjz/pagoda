@@ -1,5 +1,7 @@
 #include "geometry_component.h"
 
+#include "geometry_system.h"
+
 namespace pagoda::geometry
 {
 using namespace geometry::core;

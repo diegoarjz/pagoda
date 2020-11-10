@@ -1,11 +1,11 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_COMPONENT_H_
 #define PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_COMPONENT_H_
 
-#include "geometry_system.h"
-
 #include <pagoda/geometry/core/geometry.h>
 #include <pagoda/geometry/core/geometry_builder.h>
 #include <pagoda/geometry/core/scope.h>
+
+#include <pagoda/objects/procedural_component.h>
 
 namespace pagoda::geometry
 {
