@@ -48,4 +48,5 @@ target_link_libraries(
     pgscript
     PRIVATE
         common
+        dynamic
 )

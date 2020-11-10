@@ -49,6 +49,7 @@ target_link_libraries(
     image
     PRIVATE
         common
+        dynamic
 )
 
 #########################################################################

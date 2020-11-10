@@ -101,6 +101,7 @@ target_link_libraries(
     graph
     PRIVATE
         common
+        dynamic
 )
 
 #########################################################################

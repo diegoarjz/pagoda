@@ -61,6 +61,7 @@ target_link_libraries(
     objects
     PRIVATE
         common
+        dynamic
 )
 
 #########################################################################

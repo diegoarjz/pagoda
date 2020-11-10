@@ -49,6 +49,7 @@ target_link_libraries(
     material
     PRIVATE
         common
+        dynamic
 )
 
 #########################################################################
