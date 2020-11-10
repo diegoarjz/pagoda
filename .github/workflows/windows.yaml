@@ -12,14 +12,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Download and Install Dependencies
-        shell: bash
+        shell: C:\msys64 {}
         run: |
           pip3 install wheel setuptools
           pip3 install conan
           echo "/c/msys64/mingw64/bin" >> $GITHUB_PATH
 
       - name: Configure and Build
-        shell: bash
+        shell: C:\msys64 {}
         env:
           CC: /c/msys64/mingw64/bin/gcc.exe
           CXX: /c/msys64/mingw64/bin/g++.exe
