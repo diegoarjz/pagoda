@@ -106,7 +106,7 @@ function (add_unit_test unit_test_src)
     target_compile_options(
         ${test_name}
         PRIVATE
-            -Wall
+        #-Wall
             $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
             $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
     )

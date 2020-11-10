@@ -21,7 +21,7 @@ target_compile_options(
     regression_tests
     PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
-        -Wall
+        #-Wall
         $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
 )
 

@@ -34,7 +34,7 @@ target_compile_features(
 target_compile_options(
     image
     PRIVATE
-        -Wall
+    #-Wall
         $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
         $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
@@ -82,7 +82,7 @@ foreach(unit_test_src ${IMAGE_UNIT_TESTS})
     target_compile_options(
         ${test_name}
         PRIVATE
-            -Wall
+        #-Wall
             $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
             $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
     )

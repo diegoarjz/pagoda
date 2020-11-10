@@ -39,7 +39,7 @@ target_compile_features(
 target_compile_options(
     common
     PRIVATE
-        -Wall
+    #-Wall
         $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
         $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
 )
