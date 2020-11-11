@@ -47,7 +47,6 @@ target_link_libraries(
         Boost::filesystem
         gmock
         gtest
-        pthread
 )
 
 file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")

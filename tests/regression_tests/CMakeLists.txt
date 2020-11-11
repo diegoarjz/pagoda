@@ -52,7 +52,6 @@ target_link_libraries(
         Boost::filesystem
         gmock
         gtest
-        pthread
 )
 
 add_test(NAME regression_tests COMMAND regression_tests)
