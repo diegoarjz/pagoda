@@ -47,7 +47,7 @@ jobs:
 
             - name: Download and Install Dependencies
               run: |
-                  pip3 install wheel setuptools urllib3 chardet
+                  pip3 install wheel setuptools urllib3==1.26.0 chardet==3.0.4
                   pip3 install conan
 
             - name: Configure and Build
