@@ -64,7 +64,7 @@ jobs:
             - name: Run tests
               run: |
                   cd build
-                  cmake --build . --target test
+                  make test
 
             - name: Pack Regression Test Results
               if: always()
