@@ -7,8 +7,6 @@ set(DYNAMIC_SRCS
     "binding/has_operators.h"
     "binding/make_free_function.h"
     "binding/make_member_function.h"
-    "binding/native_value_name.cpp"
-    "binding/native_value_name.h"
     "binding/return_from_function.h"
     "binding/return_from_member_function.h"
     "binding/type_name.h"
