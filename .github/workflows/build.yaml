@@ -64,6 +64,7 @@ jobs:
             - name: Run tests
               run: |
                   cd build
+                  bin\unit_tests
                   ctest -C "Release"
 
             - name: Pack Regression Test Results
