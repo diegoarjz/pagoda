@@ -130,7 +130,6 @@ function (add_unit_test unit_test_src)
             gmock_main
             gtest
             gtest_main
-            pthread
     )
 
     add_test(NAME ${test_name} COMMAND ${test_name})

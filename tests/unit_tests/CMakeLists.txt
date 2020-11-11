@@ -92,7 +92,6 @@ target_link_libraries(
         gmock_main
         gtest
         gtest_main
-        pthread
 )
 
 file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")
