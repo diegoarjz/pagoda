@@ -144,6 +144,10 @@ jobs:
                     name: "macOs Latest clang",
                     os: ubuntu-latest,
                   }
+                - {
+                    name: "Windows-msvc",
+                    os: windows-latest,
+                  }
 
         steps:
             - name: Download artifact
