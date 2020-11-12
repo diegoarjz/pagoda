@@ -62,7 +62,7 @@ jobs:
                   conan build ${{ github.workspace }}
 
             - name: Run tests
-              if: !contains(${{ matrix.config.os }}, 'Windows')
+              if: ${{ !contains(${{ matrix.config.os }}, 'Windows') }}
               run: |
                   cd build
                   cmake --build . --target test
