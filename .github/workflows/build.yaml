@@ -67,6 +67,11 @@ jobs:
                   cd build
                   cmake --build . --target test
 
+            - name: Create package
+              run: |
+                conan package -bf build -if build -pf package .
+                ls -R package
+
             - name: Pack Build Results
               if: always()
               shell: cmake -P {0}
