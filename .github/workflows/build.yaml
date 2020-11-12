@@ -62,19 +62,19 @@ jobs:
                   conan build ${{ github.workspace }}
 
             - name: Run tests
+              if: contains(${{ matrix.config.os }}, 'Windows') != "true"
               run: |
                   cd build
-                  bin\unit_tests
-                  ctest -C "Release"
+                  cmake --build . --target test
 
-            - name: Pack Regression Test Results
+            - name: Pack Build Results
               if: always()
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
                                           -E tar cJfv "build-results-${{ matrix.config.name }}.tar.xz" "build/")
 
-            - name: Upload Regression Test Results
+            - name: Upload Build Results
               if: always()
               uses: actions/upload-artifact@v1
               with:
