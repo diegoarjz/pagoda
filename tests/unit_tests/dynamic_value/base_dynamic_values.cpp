@@ -113,6 +113,15 @@ TEST(Integer, test_constructions)
 	EXPECT_EQ(123, static_cast<int>(Integer(std::make_shared<FloatValue>(123.123f))));
 }
 
+TEST(Integer, test_can_cast_to_native)
+{
+	bool canConvert = can_cast_to_native<Integer, int>::value;
+	EXPECT_TRUE(canConvert);
+
+	canConvert = can_cast_to_native<Integer, char>::value;
+	EXPECT_FALSE(canConvert);
+}
+
 TEST(Integer, test_arithmetics)
 {
 	Integer a(123);

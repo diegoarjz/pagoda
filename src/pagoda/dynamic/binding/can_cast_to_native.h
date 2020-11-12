@@ -36,9 +36,7 @@ class can_cast_to_native
 	public:
 	enum
 	{
-		// value = sizeof(test<T>(0)) == sizeof(yes)
-		// value = std::is_same<decltype(test<T>(0)), yes>::value
-		value = sizeof(decltype(test<T>(0))) == sizeof(yes)
+		value = is_safely_castable<T, V>::value
 	};
 };
 
