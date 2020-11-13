@@ -106,9 +106,7 @@ jobs:
 
 
     upload_package:
-      #if: {{ github.ref == 'ref/head/development' }}
         runs-on: ${{ matrix.config.os }}
-        needs: build
         name: "Conan package ${{ matrix.config.os }}"
         strategy:
             fail-fast: false
