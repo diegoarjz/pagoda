@@ -107,6 +107,7 @@ jobs:
 
     upload_package:
         runs-on: ${{ matrix.config.os }}
+        needs: build
         name: "Conan package ${{ matrix.config.os }}"
         strategy:
             fail-fast: false
