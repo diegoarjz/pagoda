@@ -105,6 +105,9 @@ jobs:
 
             - name: Conan Package
               #if: {{ github.ref == 'ref/head/development' }}
+              env:
+                CC: ${{ matrix.config.cc }}
+                CXX: ${{ matrix.config.cxx }}
               run: |
                 ${{ matrix.config.set_path }}
                 rm -rf build
