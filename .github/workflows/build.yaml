@@ -47,7 +47,7 @@ jobs:
 
             - name: Download and Install Dependencies
               run: |
-                  pip3 install wheel setuptools urllib3==1.26.0 chardet==3.0.4
+                  pip3 install wheel setuptools
                   pip3 install conan
 
             - name: Configure and Build
@@ -103,39 +103,8 @@ jobs:
                   path: ./${{ matrix.config.name }}.tar.xz
                   name: ${{ matrix.config.name }}.tar.xz
 
-
-
-    upload_package:
-        runs-on: ${{ matrix.config.os }}
-        needs: build
-        name: "Conan package ${{ matrix.config.os }}"
-        strategy:
-            fail-fast: false
-            matrix:
-                config:
-                - {
-                    name: "Ubuntu-gcc",
-                    os: ubuntu-latest,
-                    set_path: "export PATH=$PATH:/home/runner/.local/bin",
-                  }
-                - {
-                    name: "Ubuntu-clang",
-                    os: ubuntu-latest,
-                    set_path: "export PATH=$PATH:/home/runner/.local/bin",
-                  }
-                - {
-                    name: "macOs-clang",
-                    os: macos-latest,
-                    set_path: "",
-                  }
-                - {
-                    name: "Windows-msvc",
-                    os: windows-latest,
-                    set_path: "",
-                  }
-
-        steps:
-            - name: Create and Upload
+            - name: Conan Package
+              #if: {{ github.ref == 'ref/head/development' }}
               run: |
                 ${{ matrix.config.set_path }}
                 rm -rf build

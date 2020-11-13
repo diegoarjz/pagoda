@@ -37,10 +37,9 @@ class Pagoda(ConanFile):
         cmake = CMake(self, build_type=self.settings.build_type)
 
         # CI Definitions
-        if 'GITHUB_ACTION' in os.environ:
-            cmake.definitions['PAGODA_VERSION'] = os.environ['GITHUB_ACTION']
+        cmake.definitions['PAGODA_VERSION'] = self.version
         if 'GITHUB_RUN_NUMBER' in os.environ:
-            cmake.definitions['PAGODA_BUILD_NUMBER'] = os.environ['GITHUB_ACTION']
+            cmake.definitions['PAGODA_BUILD_NUMBER'] = os.environ['GITHUB_RUN_NUMBER']
 
         cmake.configure(defs=cmake.definitions)
         cmake.build()
