@@ -110,7 +110,6 @@ jobs:
                 CXX: ${{ matrix.config.cxx }}
               run: |
                 ${{ matrix.config.set_path }}
-                rm -rf build
                 conan remote add pagoda https://api.bintray.com/conan/diegoarjz/Pagoda
                 conan user -p ${{ secrets.CONAN_API_KEY }} -r pagoda ${{ secrets.CONAN_USER }}
                 conan create . pagoda/development
