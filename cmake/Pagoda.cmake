@@ -79,11 +79,15 @@ if (${PAGODA_GIT_INFO})
     set(PAGODA_INCLUDE_GIT_INFO 1)
 endif()
 
+set(PAGODA_COMPILE_OPTIONS
+    $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall>
+    $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+)
 
 ################################################
 # Helpers
 ################################################
-
 function (add_unit_test unit_test_src)
     get_filename_component(unit_test_base_name ${unit_test_src} NAME)
     string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
@@ -107,13 +111,13 @@ function (add_unit_test unit_test_src)
     target_compile_options(
         ${test_name}
         PRIVATE
-            -Wall
-            $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-            $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+          ${PAGODA_COMPILE_OPTIONS}
     )
 
     target_compile_definitions(
         ${test_name}
+        PUBLIC
+          ${PAGODA_COMPILER_ID}
         PRIVATE
             $<$<CONFIG:DEBUG>:DEBUG>
     )
@@ -126,9 +130,21 @@ function (add_unit_test unit_test_src)
             Boost::system
             Boost::filesystem
             gmock
+            gmock_main
             gtest
-            pthread
+            gtest_main
     )
 
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  # using Clang
+  set(PAGODA_COMPILER_ID "-DPAGODA_COMPILER_CLANG")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  # using GCC
+  set(PAGODA_COMPILER_ID "-DPAGODA_COMPILER_GCC")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  # using Visual Studio C++
+  set(PAGODA_COMPILER_ID "-DPAGODA_COMPILER_MSVC")
+endif()

@@ -20,9 +20,7 @@ target_compile_features(
 target_compile_options(
     regression_tests
     PRIVATE
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
-        -Wall
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+      ${PAGODA_COMPILE_OPTIONS}
 )
 
 target_include_directories(
@@ -37,6 +35,8 @@ target_include_directories(
 
 target_compile_definitions(
     regression_tests
+    PUBLIC
+      ${PAGODA_COMPILER_ID}
     PRIVATE
         -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
@@ -50,7 +50,6 @@ target_link_libraries(
         Boost::filesystem
         gmock
         gtest
-        pthread
 )
 
 add_test(NAME regression_tests COMMAND regression_tests)

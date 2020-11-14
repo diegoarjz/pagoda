@@ -2,6 +2,7 @@
 #include "boost/filesystem/file_status.hpp"
 
 #include <pagoda/geometry/geometry_component.h>
+#include <pagoda/geometry/geometry_system.h>
 #include <pagoda/geometry/io/geometry_exporter.h>
 
 #include <pagoda/objects/procedural_object_system.h>

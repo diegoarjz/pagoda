@@ -38,7 +38,7 @@ TEST_F(AstInterpreterTest, when_visiting_a_named_argument_node_should_create_a_p
 {
 	NamedArgument n("arg", NamedArgument::ArgumentType::String, "val");
 	m_interpreter->Visit(&n);
-	ASSERT_EQ(m_interpreter->GetCurrentNamedArguments().size(), 1);
+	ASSERT_EQ(m_interpreter->GetCurrentNamedArguments().size(), 1u);
 	auto iter = m_interpreter->GetCurrentNamedArguments().begin();
 	EXPECT_EQ(iter->first, "arg");
 }
@@ -63,7 +63,7 @@ TEST_F(AstInterpreterTest, when_visiting_a_node_definition_node_should_create_a_
 	  std::make_shared<NamedArgument>("interface", NamedArgument::ArgumentType::String, "out")};
 	NodeDefinitionNode n("name", "InputInterface", constructionArgs);
 	m_interpreter->Visit(&n);
-	EXPECT_EQ(m_graph->GetNodeCount(), 1);
+	EXPECT_EQ(m_graph->GetNodeCount(), 1u);
 	EXPECT_NE(m_graph->GetNode("name"), nullptr);
 }
 

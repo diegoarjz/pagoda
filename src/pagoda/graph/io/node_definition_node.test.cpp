@@ -46,7 +46,7 @@ TEST_F(NodeDefinitionNodeTest, when_constructing_with_name_node_type_and_constru
 	EXPECT_EQ(n->GetNodeName(), "nodeName");
 	EXPECT_EQ(n->GetNodeType(), "Operation");
 	expectEqualArgs(n->GetConstructionArguments(), constructionArgs);
-	EXPECT_EQ(n->GetExecutionArguments().size(), 0);
+	EXPECT_EQ(n->GetExecutionArguments().size(), 0u);
 }
 
 TEST_F(NodeDefinitionNodeTest,
@@ -56,7 +56,7 @@ TEST_F(NodeDefinitionNodeTest,
 	EXPECT_EQ(n->GetNodeName(), "nodeName");
 	EXPECT_EQ(n->GetNodeType(), "Operation");
 	expectEqualArgs(n->GetConstructionArguments(), constructionArgs);
-	EXPECT_EQ(n->GetExecutionArguments().size(), 0);
+	EXPECT_EQ(n->GetExecutionArguments().size(), 0u);
 }
 
 TEST_F(NodeDefinitionNodeTest, when_constructing_with_range_name_node_type_and_construction_arguments_should_store_them)
@@ -66,7 +66,7 @@ TEST_F(NodeDefinitionNodeTest, when_constructing_with_range_name_node_type_and_c
 	EXPECT_EQ(n->GetNodeName(), "nodeName");
 	EXPECT_EQ(n->GetNodeType(), "Operation");
 	expectEqualArgs(n->GetConstructionArguments(), constructionArgs);
-	EXPECT_EQ(n->GetExecutionArguments().size(), 0);
+	EXPECT_EQ(n->GetExecutionArguments().size(), 0u);
 }
 
 TEST_F(NodeDefinitionNodeTest, when_setting_the_construction_arguments_should_store_them)

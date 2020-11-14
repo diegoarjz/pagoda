@@ -1,6 +1,8 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_SYSTEM_H_
 #define PAGODA_PROCEDURAL_OBJECTS_GEOMETRY_SYSTEM_H_
 
+#include "geometry_component.h"
+
 #include <pagoda/geometry/core/geometry.h>
 #include <pagoda/geometry/core/geometry_builder.h>
 

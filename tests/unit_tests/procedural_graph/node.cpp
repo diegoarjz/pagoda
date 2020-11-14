@@ -27,10 +27,10 @@ class NodeTest : public ::testing::Test
 TEST_F(NodeTest, when_setting_node_id_should_be_able_to_get_node_id)
 {
 	this->node->SetId(123);
-	EXPECT_EQ(this->node->GetId(), 123);
+	EXPECT_EQ(this->node->GetId(), 123u);
 }
 
-TEST_F(NodeTest, when_getting_node_id_after_construction_should_return_0) { EXPECT_EQ(this->node->GetId(), 0); }
+TEST_F(NodeTest, when_getting_node_id_after_construction_should_return_0) { EXPECT_EQ(this->node->GetId(), 0u); }
 
 TEST_F(NodeTest, when_setting_node_name_should_be_able_to_get_node_name)
 {

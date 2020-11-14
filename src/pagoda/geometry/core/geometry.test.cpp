@@ -25,8 +25,8 @@ class GeometryTest : public ::testing::Test
 TEST_F(GeometryTest, when_created_should_be_empty)
 {
 	auto emptyGeometry = std::make_shared<GeometryBase<>>();
-	EXPECT_EQ(emptyGeometry->GetFaceCount(), 0);
-	EXPECT_EQ(emptyGeometry->GetEdgeCount(), 0);
-	EXPECT_EQ(emptyGeometry->GetSplitPointCount(), 0);
-	EXPECT_EQ(emptyGeometry->GetPointCount(), 0);
+	EXPECT_EQ(emptyGeometry->GetFaceCount(), 0u);
+	EXPECT_EQ(emptyGeometry->GetEdgeCount(), 0u);
+	EXPECT_EQ(emptyGeometry->GetSplitPointCount(), 0u);
+	EXPECT_EQ(emptyGeometry->GetPointCount(), 0u);
 }

@@ -41,13 +41,13 @@ target_compile_features(
 target_compile_options(
     libpagoda
     PRIVATE
-        -Wall
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+      ${PAGODA_COMPILE_OPTIONS}
 )
 
 target_compile_definitions(
     libpagoda
+    PUBLIC
+      ${PAGODA_COMPILER_ID}
     PRIVATE
         $<$<CONFIG:DEBUG>:DEBUG>
 )
@@ -55,7 +55,7 @@ target_compile_definitions(
 target_link_libraries(
     libpagoda
     PUBLIC
-        ${PNG_LIBRARY}
+      ${CONAN_LIBS}
 )
 
 set_target_properties(libpagoda PROPERTIES PREFIX "")

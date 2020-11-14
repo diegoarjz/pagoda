@@ -47,7 +47,7 @@ TEST(Profiler, single_call_should_log_one_entry)
 	{
 		Profiler p(name, file, line);
 
-		ASSERT_EQ(manager->GetLogData().size(), 1);
+		ASSERT_EQ(manager->GetLogData().size(), 1u);
 
 		auto entry = *manager->GetLogData().begin();
 		EXPECT_EQ(entry.m_name, name);
@@ -57,7 +57,7 @@ TEST(Profiler, single_call_should_log_one_entry)
 		EXPECT_EQ(entry.m_time, ProfilerManager::TimeCounter(0));
 	}
 
-	EXPECT_EQ(manager->GetLogData().size(), 1);
+	EXPECT_EQ(manager->GetLogData().size(), 1u);
 }
 
 TEST(Profiler, multiple_calls_should_increment_count)
@@ -87,7 +87,7 @@ TEST(Profiler, multiple_calls_should_not_create_new_entries)
 		Profiler p(name, file, line);
 	}
 
-	ASSERT_EQ(manager->GetLogData().size(), 1);
+	ASSERT_EQ(manager->GetLogData().size(), 1u);
 }
 
 TEST(Profiler, recursive_calls_should_increase_count)
@@ -122,5 +122,5 @@ TEST(Profiler, recursive_calls_should_not_create_multiple_entries)
 			Profiler p2(name1, file1, line1);
 		}
 	}
-	ASSERT_EQ(manager->GetLogData().size(), 1);
+	ASSERT_EQ(manager->GetLogData().size(), 1u);
 }

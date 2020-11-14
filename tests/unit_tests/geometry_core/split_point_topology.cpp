@@ -17,19 +17,19 @@ TEST(HandleImplicitCastTest, test_implicit_casts)
 	SplitPointTopology::EdgeHandle e = 3;
 	SplitPointTopology::SplitPointHandle s = 4;
 
-	EXPECT_EQ(p.GetIndex(), 1);
-	EXPECT_EQ(f.GetIndex(), 2);
-	EXPECT_EQ(e.GetIndex(), 3);
-	EXPECT_EQ(s.GetIndex(), 4);
+	EXPECT_EQ(p.GetIndex(), 1u);
+	EXPECT_EQ(f.GetIndex(), 2u);
+	EXPECT_EQ(e.GetIndex(), 3u);
+	EXPECT_EQ(s.GetIndex(), 4u);
 
 	SplitPointTopology::Index_t i = p;
-	EXPECT_EQ(i, 1);
+	EXPECT_EQ(i, 1u);
 	i = f;
-	EXPECT_EQ(i, 2);
+	EXPECT_EQ(i, 2u);
 	i = e;
-	EXPECT_EQ(i, 3);
+	EXPECT_EQ(i, 3u);
 	i = s;
-	EXPECT_EQ(i, 4);
+	EXPECT_EQ(i, 4u);
 }
 
 class SplitPointTopologyCreateFaceTest : public PagodaTestFixture<::testing::Test>
@@ -45,15 +45,15 @@ class SplitPointTopologyCreateFaceTest : public PagodaTestFixture<::testing::Tes
 TEST_F(SplitPointTopologyCreateFaceTest, when_creating_a_face_should_return_a_face_with_three_points)
 {
 	SplitPointTopology::CreateFaceResult result = m_topology.CreateFace();
-	EXPECT_EQ(result.m_face.GetIndex(), 0);
+	EXPECT_EQ(result.m_face.GetIndex(), 0u);
 	auto splitPoint = m_topology.GetSplitPoint(result.m_face);
-	EXPECT_EQ(splitPoint.GetIndex(), 0);
+	EXPECT_EQ(splitPoint.GetIndex(), 0u);
 	splitPoint = m_topology.GetNextSplitPoint(splitPoint);
-	EXPECT_EQ(splitPoint.GetIndex(), 1);
+	EXPECT_EQ(splitPoint.GetIndex(), 1u);
 	splitPoint = m_topology.GetNextSplitPoint(splitPoint);
-	EXPECT_EQ(splitPoint.GetIndex(), 2);
+	EXPECT_EQ(splitPoint.GetIndex(), 2u);
 	splitPoint = m_topology.GetNextSplitPoint(splitPoint);
-	EXPECT_EQ(splitPoint.GetIndex(), 0);
+	EXPECT_EQ(splitPoint.GetIndex(), 0u);
 
 	EXPECT_TRUE(m_topology.IsValid());
 
@@ -100,7 +100,7 @@ TEST_F(SplitPointTopologyCreateFaceTest, when_creating_faces_should_be_able_to_r
 	EXPECT_EQ(m_topology.GetPoint(splitPoint2.GetIndex()), m_topology.GetPoint(splitPoint1.GetIndex()));
 	splitPoint1 = m_topology.GetNextSplitPoint(splitPoint1);
 	splitPoint2 = m_topology.GetNextSplitPoint(splitPoint2);
-	EXPECT_EQ(m_topology.GetPoint(splitPoint2.GetIndex()).GetIndex(), 3);
+	EXPECT_EQ(m_topology.GetPoint(splitPoint2.GetIndex()).GetIndex(), 3u);
 	EXPECT_TRUE(m_topology.IsValid());
 
 	std::stringstream ss;
@@ -236,7 +236,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_points_should_go_thr
 		EXPECT_TRUE(std::find(seenPoints.begin(), seenPoints.end(), *iter) == seenPoints.end());
 		seenPoints.push_back((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenPoints.size(), 3);
+	EXPECT_EQ(seenPoints.size(), 3u);
 	for (auto i = 0u; i < 3; ++i) {
 		EXPECT_EQ(seenPoints[i], i);
 	}
@@ -252,7 +252,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_split_points_should_
 		EXPECT_TRUE(std::find(seenSplitPoints.begin(), seenSplitPoints.end(), *iter) == seenSplitPoints.end());
 		seenSplitPoints.push_back((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenSplitPoints.size(), 3);
+	EXPECT_EQ(seenSplitPoints.size(), 3u);
 	for (auto i = 0u; i < 3; ++i) {
 		EXPECT_EQ(seenSplitPoints[i], i);
 	}
@@ -268,7 +268,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_edges_should_go_thro
 		EXPECT_TRUE(seenEdges.find((*iter).GetIndex()) == seenEdges.end());
 		seenEdges.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenEdges.size(), 3);
+	EXPECT_EQ(seenEdges.size(), 3u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_faces_should_go_through_all)
@@ -282,7 +282,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_faces_should_go_thro
 		EXPECT_TRUE(seenFaces.find((*iter).GetIndex()) == seenFaces.end());
 		seenFaces.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenFaces.size(), 2);
+	EXPECT_EQ(seenFaces.size(), 2u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_edges_should_go_through_all)
@@ -296,7 +296,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_edges_should_g
 		EXPECT_TRUE(seenEdges.find((*iter).GetIndex()) == seenEdges.end());
 		seenEdges.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenEdges.size(), 2);
+	EXPECT_EQ(seenEdges.size(), 2u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_split_points_should_go_through_all)
@@ -310,7 +310,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_split_points_s
 		EXPECT_TRUE(seenSplitPoints.find((*iter).GetIndex()) == seenSplitPoints.end());
 		seenSplitPoints.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenSplitPoints.size(), 2);
+	EXPECT_EQ(seenSplitPoints.size(), 2u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_faces_should_go_through_all)
@@ -324,7 +324,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_point_faces_should_g
 		EXPECT_TRUE(seenFaces.find((*iter).GetIndex()) == seenFaces.end());
 		seenFaces.insert((*iter).GetIndex());
 	}
-	EXPECT_EQ(seenFaces.size(), 2);
+	EXPECT_EQ(seenFaces.size(), 2u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_edges_should_go_through_all)
@@ -337,7 +337,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_edges_should_
 		seenEdges.insert((*iter).GetIndex());
 		++iter;
 	}
-	EXPECT_EQ(seenEdges.size(), 3);
+	EXPECT_EQ(seenEdges.size(), 3u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_split_points_should_go_through_all)
@@ -350,7 +350,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_split_points_
 		seenSplitPoints.insert((*iter).GetIndex());
 		++iter;
 	}
-	EXPECT_EQ(seenSplitPoints.size(), 3);
+	EXPECT_EQ(seenSplitPoints.size(), 3u);
 }
 
 TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_points_should_go_through_all)
@@ -363,7 +363,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_circulating_over_face_points_should
 		seenPoints.insert((*iter).GetIndex());
 		++iter;
 	}
-	EXPECT_EQ(seenPoints.size(), 3);
+	EXPECT_EQ(seenPoints.size(), 3u);
 }
 
 class SplitPointTopologySplitEdgeTest : public PagodaTestFixture<::testing::Test>
@@ -433,10 +433,10 @@ class SplitPointTopologyDeleteTest : public PagodaTestFixture<::testing::Test>
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_face_should_cascade)
 {
 	m_triangle.DeleteFace(m_face.m_face);
-	EXPECT_EQ(m_triangle.GetFaceCount(), 0);
-	EXPECT_EQ(m_triangle.GetPointCount(), 0);
-	EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
-	EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
+	EXPECT_EQ(m_triangle.GetFaceCount(), 0u);
+	EXPECT_EQ(m_triangle.GetPointCount(), 0u);
+	EXPECT_EQ(m_triangle.GetSplitPointCount(), 0u);
+	EXPECT_EQ(m_triangle.GetEdgeCount(), 0u);
 	EXPECT_TRUE(m_triangle.IsValid());
 
 	std::stringstream ss;
@@ -449,10 +449,10 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_face_should_not_affect_adja
 {
 	m_triangle.CreateFace(m_triangle.GetPoint(0), m_triangle.GetPoint(1));
 	m_triangle.DeleteFace(m_face.m_face);
-	EXPECT_EQ(m_triangle.GetFaceCount(), 1);
-	EXPECT_EQ(m_triangle.GetPointCount(), 3);
-	EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
-	EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
+	EXPECT_EQ(m_triangle.GetFaceCount(), 1u);
+	EXPECT_EQ(m_triangle.GetPointCount(), 3u);
+	EXPECT_EQ(m_triangle.GetSplitPointCount(), 3u);
+	EXPECT_EQ(m_triangle.GetEdgeCount(), 3u);
 	EXPECT_TRUE(m_triangle.IsValid());
 
 	std::stringstream ss;
@@ -464,10 +464,10 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_face_should_not_affect_adja
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_cascade)
 {
 	m_triangle.DeletePoint(m_triangle.GetPoint(0));
-	EXPECT_EQ(m_triangle.GetFaceCount(), 0);
-	EXPECT_EQ(m_triangle.GetPointCount(), 0);
-	EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
-	EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
+	EXPECT_EQ(m_triangle.GetFaceCount(), 0u);
+	EXPECT_EQ(m_triangle.GetPointCount(), 0u);
+	EXPECT_EQ(m_triangle.GetSplitPointCount(), 0u);
+	EXPECT_EQ(m_triangle.GetEdgeCount(), 0u);
 	EXPECT_TRUE(m_triangle.IsValid());
 
 	std::stringstream ss;
@@ -480,10 +480,10 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_not_affect_unr
 {
 	m_triangle.CreateFace(m_triangle.GetPoint(0), m_triangle.GetPoint(1));
 	m_triangle.DeletePoint(m_triangle.GetPoint(2));
-	EXPECT_EQ(m_triangle.GetFaceCount(), 1);
-	EXPECT_EQ(m_triangle.GetPointCount(), 3);
-	EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
-	EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
+	EXPECT_EQ(m_triangle.GetFaceCount(), 1u);
+	EXPECT_EQ(m_triangle.GetPointCount(), 3u);
+	EXPECT_EQ(m_triangle.GetSplitPointCount(), 3u);
+	EXPECT_EQ(m_triangle.GetEdgeCount(), 3u);
 	EXPECT_TRUE(m_triangle.IsValid());
 
 	std::stringstream ss;
@@ -495,10 +495,10 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_point_should_not_affect_unr
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_cascade)
 {
 	m_triangle.DeleteSplitPoint(m_triangle.GetSplitPoint(m_face.m_face));
-	EXPECT_EQ(m_triangle.GetFaceCount(), 0);
-	EXPECT_EQ(m_triangle.GetPointCount(), 0);
-	EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
-	EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
+	EXPECT_EQ(m_triangle.GetFaceCount(), 0u);
+	EXPECT_EQ(m_triangle.GetPointCount(), 0u);
+	EXPECT_EQ(m_triangle.GetSplitPointCount(), 0u);
+	EXPECT_EQ(m_triangle.GetEdgeCount(), 0u);
 	EXPECT_TRUE(m_triangle.IsValid());
 
 	std::stringstream ss;
@@ -511,10 +511,10 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_not_affe
 {
 	m_triangle.CreateFace(m_triangle.GetPoint(1), m_triangle.GetPoint(2));
 	m_triangle.DeleteSplitPoint(m_triangle.GetSplitPoint(m_face.m_face));
-	EXPECT_EQ(m_triangle.GetFaceCount(), 1);
-	EXPECT_EQ(m_triangle.GetPointCount(), 3);
-	EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
-	EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
+	EXPECT_EQ(m_triangle.GetFaceCount(), 1u);
+	EXPECT_EQ(m_triangle.GetPointCount(), 3u);
+	EXPECT_EQ(m_triangle.GetSplitPointCount(), 3u);
+	EXPECT_EQ(m_triangle.GetEdgeCount(), 3u);
 	EXPECT_TRUE(m_triangle.IsValid());
 
 	std::stringstream ss;
@@ -526,10 +526,10 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_a_split_point_should_not_affe
 TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_cascade)
 {
 	m_triangle.DeleteEdge(m_triangle.GetEdge(m_face.m_face));
-	EXPECT_EQ(m_triangle.GetFaceCount(), 0);
-	EXPECT_EQ(m_triangle.GetPointCount(), 0);
-	EXPECT_EQ(m_triangle.GetSplitPointCount(), 0);
-	EXPECT_EQ(m_triangle.GetEdgeCount(), 0);
+	EXPECT_EQ(m_triangle.GetFaceCount(), 0u);
+	EXPECT_EQ(m_triangle.GetPointCount(), 0u);
+	EXPECT_EQ(m_triangle.GetSplitPointCount(), 0u);
+	EXPECT_EQ(m_triangle.GetEdgeCount(), 0u);
 	EXPECT_TRUE(m_triangle.IsValid());
 
 	std::stringstream ss;
@@ -542,10 +542,10 @@ TEST_F(SplitPointTopologyDeleteTest, when_deleting_an_edge_should_not_affect_unr
 {
 	m_triangle.CreateFace(m_triangle.GetPoint(1), m_triangle.GetPoint(2));
 	m_triangle.DeleteEdge(m_triangle.GetEdge(m_face.m_face));
-	EXPECT_EQ(m_triangle.GetFaceCount(), 1);
-	EXPECT_EQ(m_triangle.GetPointCount(), 3);
-	EXPECT_EQ(m_triangle.GetSplitPointCount(), 3);
-	EXPECT_EQ(m_triangle.GetEdgeCount(), 3);
+	EXPECT_EQ(m_triangle.GetFaceCount(), 1u);
+	EXPECT_EQ(m_triangle.GetPointCount(), 3u);
+	EXPECT_EQ(m_triangle.GetSplitPointCount(), 3u);
+	EXPECT_EQ(m_triangle.GetEdgeCount(), 3u);
 	EXPECT_TRUE(m_triangle.IsValid());
 
 	std::stringstream ss;
@@ -577,10 +577,10 @@ TEST_F(SplitPointTopologySplitFaceTest, when_splitting_a_face_should_create_two_
 	m_topology.SplitFace(m_face.m_face, e0, e1);
 
 	ASSERT_TRUE(m_topology.IsValid());
-	EXPECT_EQ(m_topology.GetFaceCount(), 2);
-	EXPECT_EQ(m_topology.GetPointCount(), 4);
-	EXPECT_EQ(m_topology.GetSplitPointCount(), 6);
-	EXPECT_EQ(m_topology.GetEdgeCount(), 6);
+	EXPECT_EQ(m_topology.GetFaceCount(), 2u);
+	EXPECT_EQ(m_topology.GetPointCount(), 4u);
+	EXPECT_EQ(m_topology.GetSplitPointCount(), 6u);
+	EXPECT_EQ(m_topology.GetEdgeCount(), 6u);
 
 	std::stringstream ss;
 	m_topology.DumpToStream(ss);

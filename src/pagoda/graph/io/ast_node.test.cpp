@@ -40,30 +40,30 @@ class AstNodeTest : public ::testing::Test
 TEST_F(AstNodeTest, when_using_the_default_constructor_should_set_the_offsets_to_zero)
 {
 	StubAstNode n;
-	EXPECT_EQ(n.GetStartOffset(), 0);
-	EXPECT_EQ(n.GetEndOffset(), 0);
+	EXPECT_EQ(n.GetStartOffset(), 0u);
+	EXPECT_EQ(n.GetEndOffset(), 0u);
 }
 
 TEST_F(AstNodeTest, when_constructing_with_offset_should_set_the_offsets)
 {
 	StubAstNode n(10, 15);
-	EXPECT_EQ(n.GetStartOffset(), 10);
-	EXPECT_EQ(n.GetEndOffset(), 15);
+	EXPECT_EQ(n.GetStartOffset(), 10u);
+	EXPECT_EQ(n.GetEndOffset(), 15u);
 }
 
 TEST_F(AstNodeTest, when_constructing_with_range_should_set_the_offsets)
 {
 	StubAstNode n(std::make_pair(10, 15));
-	EXPECT_EQ(n.GetStartOffset(), 10);
-	EXPECT_EQ(n.GetEndOffset(), 15);
+	EXPECT_EQ(n.GetStartOffset(), 10u);
+	EXPECT_EQ(n.GetEndOffset(), 15u);
 }
 
 TEST_F(AstNodeTest, when_setting_the_range_should_set_the_offsets)
 {
 	StubAstNode n(std::make_pair(15, 10));
 	n.SetNodeRange(std::make_pair(10, 15));
-	EXPECT_EQ(n.GetStartOffset(), 10);
-	EXPECT_EQ(n.GetEndOffset(), 15);
+	EXPECT_EQ(n.GetStartOffset(), 10u);
+	EXPECT_EQ(n.GetEndOffset(), 15u);
 }
 
 TEST_F(AstNodeTest, when_getting_the_range_should_get_a_correct_range)

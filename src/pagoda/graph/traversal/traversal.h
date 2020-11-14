@@ -3,6 +3,7 @@
 #include <pagoda/graph/node_set.h>
 
 #include <functional>
+#include <iterator>
 
 namespace pagoda::graph
 {

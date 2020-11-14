@@ -10,102 +10,110 @@ jobs:
             matrix:
                 config:
                 - {
-                    name: "Ubuntu Latest GCC",
+                    name: "Ubuntu-gcc",
                     os: ubuntu-latest,
-                    cc: "gcc",
-                    cxx: "g++",
+                    set_path: "export PATH=$PATH:/home/runner/.local/bin",
+                    conan_profile: './tools/profiles/ubuntu_gcc_Release_gh.txt',
+                    cc: "gcc-9",
+                    cxx: "g++-9"
                   }
                 - {
-                    name: "Ubuntu Latest clang",
+                    name: "Ubuntu-clang",
                     os: ubuntu-latest,
+                    set_path: "export PATH=$PATH:/home/runner/.local/bin",
+                    conan_profile: './tools/profiles/ubuntu_clang_Release_gh.txt',
                     cc: "clang",
-                    cxx: "clang++",
+                    cxx: "clang++"
                   }
                 - {
-                    name: "macOs Latest clang",
+                    name: "macOs-clang",
                     os: macos-latest,
+                    set_path: "",
+                    conan_profile: './tools/profiles/macos_clang_Release_gh.txt',
                     cc: "clang",
-                    cxx: "clang++",
+                    cxx: "clang++"
+                  }
+                - {
+                    name: "Windows-msvc",
+                    os: windows-latest,
+                    set_path: "",
+                    conan_profile: './tools/profiles/win_msvc_Release_gh.txt',
+                    cc: "gcc",
+                    cxx: "g++"
                   }
         steps:
             - name: Check out repository
               uses: actions/checkout@v2
+
             - name: Download and Install Dependencies
-              shell: cmake -P {0}
               run: |
-                  set(third_party_libs "$ENV{GITHUB_WORKSPACE}/third_party/")
-                  set(boost_version "1.72.0")
-                  string(REPLACE "." "_" boost_file "boost_${boost_version}")
-                  set(boost_dir ${boost_file})
-                  set(boost_file "${boost_file}.tar.gz")
-                  set(boost_url "https://dl.bintray.com/boostorg/release/${boost_version}/source/${boost_file}")
-                  set(boost_libraries "chrono,system,program_options,filesystem")
-                  set(boost_prefix "${third_party_libs}/boost")
-
-                  message(STATUS "Workspace: $ENV{GITHUB_WORKSPACE}")
-                  message(STATUS "Third Party Libs: ${third_party_libs}")
-                  message(STATUS "Boost Version ${boost_version}")
-
-                  # Download and install Boost
-                  file(DOWNLOAD "${boost_url}" "./${boost_file}")
-                  execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar xvfz "${boost_file}"
-                                  OUTPUT_QUIET)
-                  execute_process(COMMAND ./bootstrap.sh
-                                          --prefix=${boost_prefix}
-                                          --with-libraries=${boost_libraries}
-                                  WORKING_DIRECTORY "${boost_dir}"
-                                  OUTPUT_QUIET)
-                  execute_process(COMMAND ./b2
-                                  WORKING_DIRECTORY "${boost_dir}"
-                                  OUTPUT_QUIET)
-                  execute_process(COMMAND ./b2 install
-                                  WORKING_DIRECTORY "${boost_dir}")
+                  pip3 install wheel setuptools
+                  pip3 install conan
 
             - name: Configure and Build
+              env:
+                CC: ${{ matrix.config.cc }}
+                CXX: ${{ matrix.config.cxx }}
               run: |
-                  set CC=${{ matrix.config.cc }}
-                  set CXX={{ matrix.config.cxx }}
+                  ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
-                  mkdir -p ${{ github.workspace }}/build
+                  conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
                   cd ${{ github.workspace }}/build
-                  BOOST_ROOT=${GITHUB_WORKSPACE}/third_party/boost cmake .. \
-                                                                   -DCMAKE_BUILD_TYPE=Release \
-                                                                   -DPAGODA_VERSION=${{ github.repository }}-${{ github.run_number }} \
-                                                                   -DPAGODA_BUILD_NUMBER=${{ github.run_number }}
-                  cmake --build . -j4
+                  conan build ${{ github.workspace }}
 
             - name: Run tests
+              if: ${{ !contains(matrix.config.os, 'Windows') }}
               run: |
                   cd build
                   cmake --build . --target test
-            - name: Pack Regression Test Results
+
+            - name: Create package
+              run: |
+                  ${{ matrix.config.set_path }}
+                  conan package -bf build -if build -pf package .
+
+            - name: Pack Build Results
               if: always()
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar cJfv "${{ matrix.config.name }}-regression_results.tar.xz" "build/regression_results")
-            - name: Upload Regression Test Results
+                                          -E tar cJfv "build-results-${{ matrix.config.name }}.tar.xz" "build/")
+
+            - name: Upload Build Results
               if: always()
               uses: actions/upload-artifact@v1
               with:
-                  path: ./${{ matrix.config.name }}-regression_results.tar.xz
-                  name: ${{ matrix.config.name }}-regression_results.tar.xz
+                  path: ./build-results-${{ matrix.config.name }}.tar.xz
+                  name: build-results-${{ matrix.config.name }}.tar.xz
 
             - name: Install
               run: |
                   mkdir -p ${{ github.workspace }}/install_dir
                   cmake --install ${{ github.workspace }}/build --prefix ${{ github.workspace }}/install_dir
+
             - name: Pack
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
                                           -E tar cJfv "${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/install_dir")
+
             - name: Upload
               uses: actions/upload-artifact@v1
               with:
                   path: ./${{ matrix.config.name }}.tar.xz
                   name: ${{ matrix.config.name }}.tar.xz
+
+            - name: Conan Package
+              if: ${{ github.ref == 'ref/head/development' }}
+              env:
+                CC: ${{ matrix.config.cc }}
+                CXX: ${{ matrix.config.cxx }}
+              run: |
+                ${{ matrix.config.set_path }}
+                conan remote add pagoda https://api.bintray.com/conan/diegoarjz/Pagoda
+                conan user -p ${{ secrets.CONAN_API_KEY }} -r pagoda ${{ secrets.CONAN_USER }}
+                conan create . pagoda/development
+                conan upload pagoda/*@pagoda/development -r pagoda --all --force --retry 3 --retry-wait 60 --confirm
 
     release:
         if: contains(github.ref, 'tags/v')
@@ -135,7 +143,6 @@ jobs:
 
     publish:
         if: contains(github.ref, 'tags/v')
-        name: ${{ matrix.config.name }}
         runs-on: ${{ matrix.config.os }}
         needs: release
         strategy:
@@ -143,16 +150,20 @@ jobs:
             matrix:
                 config:
                 - {
-                    name: "Ubuntu Latest GCC",
+                    name: "Ubuntu-gcc",
                     os: ubuntu-latest,
                   }
                 - {
-                    name: "Ubuntu Latest clang",
+                    name: "Ubuntu-clang",
                     os: ubuntu-latest,
                   }
                 - {
-                    name: "macOs Latest clang",
+                    name: "macOs-clang",
                     os: ubuntu-latest,
+                  }
+                - {
+                    name: "Windows-msvc",
+                    os: windows-latest,
                   }
 
         steps:

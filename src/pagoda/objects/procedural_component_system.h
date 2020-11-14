@@ -5,8 +5,8 @@
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
-#include <memory>
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -43,7 +43,7 @@ class ProceduralComponentSystem : public ProceduralComponentSystemBase
 
 		auto component = std::make_shared<Component_t>();
 		m_components[object] = component;
-		return component;
+		return std::static_pointer_cast<ProceduralComponent>(component);
 	}
 
 	/**
@@ -57,7 +57,7 @@ class ProceduralComponentSystem : public ProceduralComponentSystemBase
 		if (component == std::end(m_components)) {
 			return nullptr;
 		}
-		return component->second;
+		return std::static_pointer_cast<ProceduralComponent>(component->second);
 	}
 
 	void CloneComponent(ProceduralObjectPtr from, ProceduralObjectPtr to) override

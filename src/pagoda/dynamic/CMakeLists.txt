@@ -7,8 +7,6 @@ set(DYNAMIC_SRCS
     "binding/has_operators.h"
     "binding/make_free_function.h"
     "binding/make_member_function.h"
-    "binding/native_value_name.cpp"
-    "binding/native_value_name.h"
     "binding/return_from_function.h"
     "binding/return_from_member_function.h"
     "binding/type_name.h"
@@ -75,9 +73,7 @@ target_compile_features(
 target_compile_options(
     dynamic
     PRIVATE
-        -Wall
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+      ${PAGODA_COMPILE_OPTIONS}
 )
 
 target_compile_definitions(

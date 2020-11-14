@@ -1,6 +1,7 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_HIERARCHICAL_SYSTEM_H_
 #define PAGODA_PROCEDURAL_OBJECTS_HIERARCHICAL_SYSTEM_H_
 
+#include "hierarchical_component.h"
 #include "procedural_component_system.h"
 #include "procedural_object.h"
 #include "procedural_operation.h"

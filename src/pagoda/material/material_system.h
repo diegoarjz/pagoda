@@ -1,6 +1,7 @@
 #pragma once
 
 #include "material.h"
+#include "material_component.h"
 
 #include <pagoda/objects/procedural_component_system.h>
 

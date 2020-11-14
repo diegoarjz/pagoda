@@ -58,7 +58,12 @@ typename Fail::FailBehaviour DefaultHandler(const char *condition, const char *f
 }  // namespace pagoda::common::debug
 
 /// Interrupts the execution and tries to step into debugger
+#ifdef PAGODA_COMPILER_MSVC
+// MSVC doesn't support inline assembly
+#define HALT
+#else
 #define HALT asm("int $3")
+#endif
 
 #ifdef PAGODA_ENABLE_ASSERTIONS
 

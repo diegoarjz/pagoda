@@ -7,6 +7,9 @@
 #include "../ir/parameter.h"
 #include "../ir/set_expression.h"
 
+#include <string>
+#include <vector>
+
 namespace pagoda
 {
 ast::IdentifierPtr make_identifier(const std::vector<char> &identifier, const std::vector<char> &identifier2);
