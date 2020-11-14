@@ -104,7 +104,7 @@ jobs:
                   name: ${{ matrix.config.name }}.tar.xz
 
             - name: Conan Package
-              if: {{ github.ref == 'ref/head/development' }}
+              #if: ${{ github.ref == 'ref/head/development' }}
               env:
                 CC: ${{ matrix.config.cc }}
                 CXX: ${{ matrix.config.cxx }}
