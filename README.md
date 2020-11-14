@@ -36,11 +36,8 @@ commands in the terminal:
 
 ```
 $ git clone https://github.com/diegarjz/pagoda.git pagoda
-$ cd pagoda
-$ mkdir build
-$ cd build
-$ cmake .. -DCMAKE_BUILD_TYPE=Release
-$ make && make test && make install
+$ conan install -if build pagoda
+$ conan build -bf build pagoda
 ```
 
 If all goes well you will have built and installed the pagoda library,

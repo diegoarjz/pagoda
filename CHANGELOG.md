@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Traversal operations for geometry, providing a cleaner interface for
   operating on geometries.
 - GeoJSON Reader.
+- Windows build with MSVC.
+- Conan package.
 
 ### Changed
 
