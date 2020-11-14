@@ -16,7 +16,6 @@ set(test_srcs
     "dynamic_value/operators.cpp"
     "test_utils.cpp"
     "common/profiler.cpp"
-    "common/range.cpp"
     "math_lib/bissectrix.cpp"
     "math_lib/line_3d.cpp"
     "math_lib/line_segment_3d.cpp"
@@ -58,9 +57,7 @@ target_compile_features(
 target_compile_options(
     unit_tests
     PRIVATE
-        -Wall
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+      ${PAGODA_COMPILE_OPTIONS}
 )
 
 target_include_directories(
@@ -76,6 +73,8 @@ target_include_directories(
 
 target_compile_definitions(
     unit_tests
+    PUBLIC
+      ${PAGODA_COMPILER_ID}
     PRIVATE
         -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
@@ -88,10 +87,11 @@ target_link_libraries(
         Boost::system
         Boost::filesystem
         gmock
+        gmock_main
         gtest
-        pthread
+        gtest_main
 )
 
-file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")
 
 add_test(NAME unit_tests COMMAND unit_tests)

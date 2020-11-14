@@ -96,9 +96,7 @@ target_compile_features(
 target_compile_options(
     graph
     PRIVATE
-        -Wall
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+      ${PAGODA_COMPILE_OPTIONS}
 )
 
 target_compile_definitions(
@@ -111,6 +109,7 @@ target_link_libraries(
     graph
     PRIVATE
         common
+        dynamic
 )
 
 #########################################################################

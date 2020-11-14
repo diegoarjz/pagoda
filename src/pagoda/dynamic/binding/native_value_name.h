@@ -8,21 +8,36 @@ namespace pagoda::dynamic
 template<typename C>
 struct native_value_name
 {
-	static const std::string GetName() { return typeid(C).name(); }
+	inline static const std::string GetName() { return typeid(C).name(); }
 };
 
 template<>
-const std::string native_value_name<char>::GetName();
+inline const std::string native_value_name<char>::GetName()
+{
+	return "char";
+}
 
 template<>
-const std::string native_value_name<int>::GetName();
+inline const std::string native_value_name<int>::GetName()
+{
+	return "int";
+}
 
 template<>
-const std::string native_value_name<float>::GetName();
+inline const std::string native_value_name<float>::GetName()
+{
+	return "float";
+}
 
 template<>
-const std::string native_value_name<bool>::GetName();
+inline const std::string native_value_name<bool>::GetName()
+{
+	return "bool";
+}
 
 template<>
-const std::string native_value_name<std::string>::GetName();
+inline const std::string native_value_name<std::string>::GetName()
+{
+	return "std::string";
+}
 }  // namespace pagoda::dynamic

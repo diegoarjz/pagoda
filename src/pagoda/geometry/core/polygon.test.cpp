@@ -14,7 +14,7 @@ using namespace ::testing;
 TEST(PolygonTest, should_be_constructable)
 {
 	Polygon3 p({{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}});
-	EXPECT_EQ(p.GetPointCount(), 4);
+	EXPECT_EQ(p.GetPointCount(), 4u);
 }
 
 TEST(PolygonTest, should_be_able_to_transform_the_points)

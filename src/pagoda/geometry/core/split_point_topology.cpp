@@ -720,19 +720,19 @@ SplitPointTopology::FacePointCirculator SplitPointTopology::FacePointCirculatorB
 bool SplitPointTopology::IsValid()
 {
 	bool isValid = true;
-	for (const auto &p : m_points) {
+	for (const auto p : m_points) {
 		isValid = isValid && ValidatePoint(p.m_index);
 	}
 
-	for (const auto &s : m_splitPoints) {
+	for (const auto s : m_splitPoints) {
 		isValid = isValid && ValidateSplitPoint(s.m_index);
 	}
 
-	for (const auto &e : m_edges) {
+	for (const auto e : m_edges) {
 		isValid = isValid && ValidateEdge(e.m_index);
 	}
 
-	for (const auto &f : m_faces) {
+	for (const auto f : m_faces) {
 		isValid = isValid && ValidateFace(f.m_index);
 	}
 
@@ -907,7 +907,7 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 {
 	outStream << "IsValid: " << (IsValid() ? "true" : "false") << std::endl;
 	outStream << "Points:" << std::endl;
-	for (const auto &p : m_points) {
+	for (const auto p : m_points) {
 		outStream << " " << p.m_index << " Edges: ";
 		for (const auto &e : p.m_value.m_edges) {
 			outStream << e << ", ";
@@ -917,7 +917,7 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 	outStream << std::endl;
 
 	outStream << "SplitPoints:" << std::endl;
-	for (const auto &sp : m_splitPoints) {
+	for (const auto sp : m_splitPoints) {
 		outStream << " " << sp.m_index << ": ";
 		outStream << " P: " << sp.m_value.m_point;
 		outStream << " F: " << sp.m_value.m_face;
@@ -928,7 +928,7 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 	outStream << std::endl;
 
 	outStream << "Edges:" << std::endl;
-	for (const auto &e : m_edges) {
+	for (const auto e : m_edges) {
 		outStream << " " << e.m_index << ": ";
 		outStream << e.m_value.m_source << " -> " << e.m_value.m_destination;
 		outStream << std::endl;
@@ -936,7 +936,7 @@ void SplitPointTopology::DumpToStream(std::ostream &outStream)
 	outStream << std::endl;
 
 	outStream << "Faces:" << std::endl;
-	for (const auto &f : m_faces) {
+	for (const auto f : m_faces) {
 		outStream << " " << f.m_index << ": ";
 		outStream << "  SP: " << f.m_value.m_splitPoint;
 		outStream << std::endl;

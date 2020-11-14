@@ -32,7 +32,7 @@ TEST(GeoJsonReaderTest, should_be_able_to_read_a_single_feature)
 		return true;
 	});
 
-	EXPECT_EQ(feature.m_polygon.GetPointCount(), 4);
+	EXPECT_EQ(feature.m_polygon.GetPointCount(), 4u);
 	EXPECT_EQ(feature.m_polygon, Polygon2({{0, 0}, {1, 0}, {1, 1}, {0, 1}}));
 }
 
@@ -67,7 +67,7 @@ TEST(GeoJsonReaderTest, should_be_able_to_read_a_feature_collection)
 		return true;
 	});
 
-	EXPECT_EQ(features.size(), 2);
+	EXPECT_EQ(features.size(), 2u);
 	EXPECT_EQ(features[0].m_polygon, Polygon2({{0, 0}, {1, 0}, {1, 1}, {0, 1}}));
 	EXPECT_EQ(features[1].m_polygon, Polygon2({{1, 1}, {2, 1}, {2, 2}, {1, 2}}));
 }
@@ -96,7 +96,7 @@ TEST(GeoJsonReaderTest, should_be_able_to_read_properties)
 		return true;
 	});
 
-	EXPECT_EQ(feature.m_properties.size(), 3);
+	EXPECT_EQ(feature.m_properties.size(), 3u);
 	EXPECT_EQ(feature.m_properties["name"]->ToString(), "feature");
 	EXPECT_EQ(feature.m_properties["height"]->ToString(), "123.000000");
 	EXPECT_EQ(feature.m_properties["b"]->ToString(), "true");

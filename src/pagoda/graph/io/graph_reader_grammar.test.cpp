@@ -277,8 +277,8 @@ TEST_F(GraphReaderGrammarTest, test_node_definition_construction)
 	ASSERT_NE(out, nullptr);
 	EXPECT_EQ(out->GetNodeName(), "n");
 	EXPECT_EQ(out->GetNodeType(), "Operation");
-	EXPECT_EQ(out->GetConstructionArguments().size(), 2);
-	EXPECT_EQ(out->GetExecutionArguments().size(), 1);
+	EXPECT_EQ(out->GetConstructionArguments().size(), 2u);
+	EXPECT_EQ(out->GetExecutionArguments().size(), 1u);
 }
 
 TEST_F(GraphReaderGrammarTest, test_simplified_operation_node_definition)
@@ -318,7 +318,7 @@ TEST_F(GraphReaderGrammarTest, test_node_links_construction)
 	qi::phrase_parse(begin, end, m_grammar.node_links, qi::space, out);
 
 	ASSERT_NE(out, nullptr);
-	ASSERT_EQ(out->GetLinkedNodes().size(), 3);
+	ASSERT_EQ(out->GetLinkedNodes().size(), 3u);
 
 	std::string expectedNodeNames[] = {"n1", "n2", "n3"};
 	uint32_t i = 0;

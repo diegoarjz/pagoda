@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 
 #include <memory>
+#include <optional>
 #include <unordered_map>
 
 namespace pagoda::dynamic

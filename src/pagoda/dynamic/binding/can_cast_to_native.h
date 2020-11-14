@@ -1,7 +1,19 @@
 #pragma once
 
+#include <type_traits>
+
 namespace pagoda::dynamic
 {
+template<typename T, typename U, typename = void>
+struct is_safely_castable : std::false_type
+{
+};
+
+template<typename T, typename U>
+struct is_safely_castable<T, U, std::void_t<decltype(static_cast<U>(std::declval<T>()))>> : std::true_type
+{
+};
+
 /**
  * Tests whether the \c DynamicValueBase of type T can be cast to a native value of type V.
  * In other words, checks for the cast operator to V.
@@ -16,15 +28,16 @@ class can_cast_to_native
 	};
 
 	template<typename C>
-	static yes test(decltype(&C::operator V));
+	static yes& test(decltype(&C::operator V));
 
 	template<typename C>
-	static no test(...);
+	static no& test(...);
 
 	public:
 	enum
 	{
-		value = sizeof(test<T>(0)) == sizeof(yes)
+		value = is_safely_castable<T, V>::value
 	};
 };
+
 }  // namespace pagoda::dynamic

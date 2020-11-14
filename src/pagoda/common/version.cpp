@@ -52,6 +52,20 @@ std::string get_build_number() { return PAGODA_BUILD_NUMBER; }
 
 std::string get_build_date() { return PAGODA_BUILD_DATE; }
 
+std::string get_compiler_id()
+{
+#ifdef PAGODA_COMPILER_MSVC
+	return "MSVC";
+#endif
+#ifdef PAGODA_COMPILER_GCC
+	return "GCC";
+#endif
+#ifdef PAGODA_COMPILER_CLANG
+	return "Clang";
+#endif
+	return "";
+}
+
 std::string get_version_information()
 {
 	std::stringstream ss;
@@ -62,6 +76,9 @@ std::string get_version_information()
 	}
 	if (!get_build_date().empty()) {
 		ss << "\n Build Date: " << get_build_date();
+	}
+	if (!get_compiler_id().empty()) {
+		ss << "\n Compiler: " << get_compiler_id();
 	}
 
 	ss << "\n\nConditional features: ";

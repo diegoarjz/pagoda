@@ -35,10 +35,10 @@ TEST_F(CreateRectTest, create_rect)
 	Vec3F expected[] = {{-5, -2.5, 0}, {5, -2.5, 0}, {5, 2.5, 0}, {-5, 2.5, 0}};
 
 	ASSERT_TRUE(out->IsValid());
-	EXPECT_EQ(out->GetFaceCount(), 1);
-	EXPECT_EQ(out->GetPointCount(), 4);
-	EXPECT_EQ(out->GetSplitPointCount(), 4);
-	EXPECT_EQ(out->GetEdgeCount(), 4);
+	EXPECT_EQ(out->GetFaceCount(), 1u);
+	EXPECT_EQ(out->GetPointCount(), 4u);
+	EXPECT_EQ(out->GetSplitPointCount(), 4u);
+	EXPECT_EQ(out->GetEdgeCount(), 4u);
 
 	auto i = 0u;
 	for (auto fIter = out->FacesBegin(); fIter != out->FacesEnd(); ++fIter) {

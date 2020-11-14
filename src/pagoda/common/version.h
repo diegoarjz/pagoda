@@ -21,6 +21,11 @@ std::string get_build_number();
 std::string get_build_date();
 
 /**
+ * Returns the compiler id used to build the project.
+ */
+std::string get_compiler_id();
+
+/**
  * Returns a formatted version information string.
  */
 std::string get_version_information();

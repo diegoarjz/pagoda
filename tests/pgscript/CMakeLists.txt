@@ -15,9 +15,7 @@ target_compile_features(
 target_compile_options(
     pgscript_tests
     PRIVATE
-        -Wall
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+      ${PAGODA_COMPILE_OPTIONS}
 )
 
 target_include_directories(
@@ -32,6 +30,8 @@ target_include_directories(
 
 target_compile_definitions(
     pgscript_tests
+    PUBLIC
+      ${PAGODA_COMPILER_ID}
     PRIVATE
         -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )
@@ -45,9 +45,8 @@ target_link_libraries(
         Boost::filesystem
         gmock
         gtest
-        pthread
 )
 
-file(COPY test_files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")
 
 add_test(NAME pgscript_tests COMMAND pgscript_tests)

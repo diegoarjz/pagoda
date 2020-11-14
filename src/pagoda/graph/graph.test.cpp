@@ -35,16 +35,16 @@ class GraphSimpleOperationsTest : public ::testing::Test
 
 TEST_F(GraphSimpleOperationsTest, when_creating_nodes_their_id_should_be_incremental)
 {
-	EXPECT_EQ(input_interface_node->GetId(), 0);
-	EXPECT_EQ(output_interface_node->GetId(), 1);
-	EXPECT_EQ(operation_node->GetId(), 2);
+	EXPECT_EQ(input_interface_node->GetId(), 0u);
+	EXPECT_EQ(output_interface_node->GetId(), 1u);
+	EXPECT_EQ(operation_node->GetId(), 2u);
 }
 
 TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_it_from_the_graph)
 {
 	this->graph->DestroyNode(this->operation_node->GetName());
 
-	EXPECT_EQ(this->graph->GetNodeCount(), 2);
+	EXPECT_EQ(this->graph->GetNodeCount(), 2u);
 }
 
 TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_all_of_its_links)
@@ -52,8 +52,8 @@ TEST_F(GraphSimpleOperationsTest, when_destroying_a_node_should_remove_all_of_it
 	this->graph->CreateEdge(this->input_interface_node->GetName(), this->operation_node->GetName());
 	this->graph->CreateEdge(this->operation_node->GetName(), this->output_interface_node->GetName());
 	this->graph->DestroyNode(this->operation_node->GetName());
-	EXPECT_EQ(this->graph->GetNodesAdjacentTo(this->input_interface_node->GetName()).size(), 0);
-	EXPECT_EQ(this->graph->GetNodesAdjacentTo(this->output_interface_node->GetName()).size(), 0);
+	EXPECT_EQ(this->graph->GetNodesAdjacentTo(this->input_interface_node->GetName()).size(), 0u);
+	EXPECT_EQ(this->graph->GetNodesAdjacentTo(this->output_interface_node->GetName()).size(), 0u);
 }
 
 TEST_F(GraphSimpleOperationsTest, when_destroying_an_input_node_should_remove_it_from_the_input_nodes)
@@ -109,7 +109,7 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_adjacent_nodes_should_return_a
 
 	auto all_nodes = this->graph->GetNodesAdjacentTo(this->operation_node->GetName());
 
-	ASSERT_EQ(all_nodes.size(), 2);
+	ASSERT_EQ(all_nodes.size(), 2u);
 	ASSERT_NE(std::find(std::begin(all_nodes), std::end(all_nodes), this->input_interface_node), std::end(all_nodes));
 	ASSERT_NE(std::find(std::begin(all_nodes), std::end(all_nodes), this->output_interface_node), std::end(all_nodes));
 }
@@ -121,7 +121,7 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_in_adjacent_nodes_should_retur
 
 	auto in_nodes = this->graph->GetNodeInputNodes(this->operation_node->GetName());
 
-	ASSERT_EQ(in_nodes.size(), 1);
+	ASSERT_EQ(in_nodes.size(), 1u);
 	EXPECT_EQ(*in_nodes.begin(), this->input_interface_node);
 }
 
@@ -132,7 +132,7 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_out_adjacent_nodes_should_retu
 
 	auto out_nodes = this->graph->GetNodeOutputNodes(this->operation_node->GetName());
 
-	ASSERT_EQ(out_nodes.size(), 1);
+	ASSERT_EQ(out_nodes.size(), 1u);
 	EXPECT_EQ(*out_nodes.begin(), this->output_interface_node);
 }
 
@@ -142,7 +142,7 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_nodes_should_remove_links)
 	this->graph->DestroyEdge(this->input_interface_node->GetName(), this->operation_node->GetName());
 	auto all_linked_nodes = this->graph->GetNodesAdjacentTo(this->operation_node->GetName());
 
-	ASSERT_EQ(all_linked_nodes.size(), 0);
+	ASSERT_EQ(all_linked_nodes.size(), 0u);
 }
 
 TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_input_nodes_should_return_all_nodes_that_dont_have_inputs)
@@ -151,9 +151,9 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_input_nodes_should_re
 	query::InputNode q(*graph, input_nodes);
 	this->graph->ExecuteQuery(q);
 
-	ASSERT_EQ(input_nodes.size(), 3);
+	ASSERT_EQ(input_nodes.size(), 3u);
 	for (auto n : input_nodes) {
-		EXPECT_EQ(this->graph->GetNodeInputNodes(n->GetName()).size(), 0);
+		EXPECT_EQ(this->graph->GetNodeInputNodes(n->GetName()).size(), 0u);
 	}
 }
 
@@ -164,7 +164,7 @@ TEST_F(GraphSimpleOperationsTest, when_linking_a_node_to_an_input_node_should_re
 	query::InputNode q(*graph, input_nodes);
 	this->graph->ExecuteQuery(q);
 
-	ASSERT_EQ(input_nodes.size(), 2);
+	ASSERT_EQ(input_nodes.size(), 2u);
 	ASSERT_NE(std::find(input_nodes.begin(), input_nodes.end(), this->input_interface_node), std::end(input_nodes));
 	ASSERT_NE(std::find(input_nodes.begin(), input_nodes.end(), this->output_interface_node), std::end(input_nodes));
 }
@@ -177,7 +177,7 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_a_node_making_it_an_input_node_
 	query::InputNode q(*graph, input_nodes);
 	this->graph->ExecuteQuery(q);
 
-	ASSERT_EQ(input_nodes.size(), 3);
+	ASSERT_EQ(input_nodes.size(), 3u);
 }
 
 TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_output_nodes_should_return_all_nodes_that_dont_have_outputs)
@@ -186,9 +186,9 @@ TEST_F(GraphSimpleOperationsTest, when_retrieving_a_graphs_output_nodes_should_r
 	query::OutputNode q(*graph, output_nodes);
 	this->graph->ExecuteQuery(q);
 
-	ASSERT_EQ(output_nodes.size(), 3);
+	ASSERT_EQ(output_nodes.size(), 3u);
 	for (auto n : output_nodes) {
-		EXPECT_EQ(this->graph->GetNodeInputNodes(n->GetName()).size(), 0);
+		EXPECT_EQ(this->graph->GetNodeInputNodes(n->GetName()).size(), 0u);
 	}
 }
 
@@ -199,7 +199,7 @@ TEST_F(GraphSimpleOperationsTest, when_linking_a_node_to_an_output_node_should_r
 	query::OutputNode q(*graph, output_nodes);
 	this->graph->ExecuteQuery(q);
 
-	ASSERT_EQ(output_nodes.size(), 2);
+	ASSERT_EQ(output_nodes.size(), 2u);
 	ASSERT_NE(std::find(output_nodes.begin(), output_nodes.end(), this->output_interface_node), std::end(output_nodes));
 	ASSERT_NE(std::find(output_nodes.begin(), output_nodes.end(), this->operation_node), std::end(output_nodes));
 }
@@ -212,7 +212,7 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_a_node_making_it_an_output_node
 	query::OutputNode q(*graph, output_nodes);
 	this->graph->ExecuteQuery(q);
 
-	ASSERT_EQ(output_nodes.size(), 3);
+	ASSERT_EQ(output_nodes.size(), 3u);
 }
 
 class GraphNodeCreationByName : public ::testing::Test

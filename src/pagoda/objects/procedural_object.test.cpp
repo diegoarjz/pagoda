@@ -24,12 +24,12 @@ TEST(ProceduralObject, hierarchical_component_set_parent)
 
 	hierarchical_system->SetParent(parent, child);
 	EXPECT_EQ(child->GetParent(), parent);
-	EXPECT_EQ(parent->ChildrenCount(), 1);
+	EXPECT_EQ(parent->ChildrenCount(), 1u);
 	EXPECT_EQ(parent->cbegin()->lock(), child);
 
 	hierarchical_system->SetParent(nullptr, child);
 	EXPECT_EQ(child->GetParent(), nullptr);
-	EXPECT_EQ(parent->ChildrenCount(), 0);
+	EXPECT_EQ(parent->ChildrenCount(), 0u);
 	EXPECT_EQ(parent->cbegin(), parent->cend());
 }
 
@@ -55,7 +55,7 @@ TEST_F(ProceduralObjectSystemTest, create_procedural_object)
 	auto objects = procedural_object_system->GetProceduralObjects();
 
 	ASSERT_NE(procedural_object, nullptr);
-	ASSERT_EQ(objects.size(), 1);
+	ASSERT_EQ(objects.size(), 1u);
 	ASSERT_EQ(*objects.begin(), procedural_object);
 }
 
@@ -64,7 +64,7 @@ TEST_F(ProceduralObjectSystemTest, remove_procedural_object)
 	auto object = procedural_object_system->CreateProceduralObject();
 	procedural_object_system->KillProceduralObject(object);
 
-	ASSERT_EQ(procedural_object_system->GetProceduralObjects().size(), 0);
+	ASSERT_EQ(procedural_object_system->GetProceduralObjects().size(), 0u);
 }
 
 TEST_F(ProceduralObjectSystemTest, remove_null_procedural_object)
@@ -74,7 +74,7 @@ TEST_F(ProceduralObjectSystemTest, remove_null_procedural_object)
 	object = nullptr;
 	procedural_object_system->KillProceduralObject(object);
 
-	ASSERT_EQ(procedural_object_system->GetProceduralObjects().size(), 1);
+	ASSERT_EQ(procedural_object_system->GetProceduralObjects().size(), 1u);
 }
 
 TEST_F(ProceduralObjectSystemTest, remove_non_managed_procedural_object)
@@ -83,5 +83,5 @@ TEST_F(ProceduralObjectSystemTest, remove_non_managed_procedural_object)
 	auto object = std::make_shared<ProceduralObject>();
 	procedural_object_system->KillProceduralObject(object);
 
-	ASSERT_EQ(procedural_object_system->GetProceduralObjects().size(), 1);
+	ASSERT_EQ(procedural_object_system->GetProceduralObjects().size(), 1u);
 }
