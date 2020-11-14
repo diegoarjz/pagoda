@@ -104,7 +104,7 @@ jobs:
                   name: ${{ matrix.config.name }}.tar.xz
 
             - name: Conan Package
-              #if: {{ github.ref == 'ref/head/development' }}
+              if: {{ github.ref == 'ref/head/development' }}
               env:
                 CC: ${{ matrix.config.cc }}
                 CXX: ${{ matrix.config.cxx }}
@@ -113,7 +113,7 @@ jobs:
                 conan remote add pagoda https://api.bintray.com/conan/diegoarjz/Pagoda
                 conan user -p ${{ secrets.CONAN_API_KEY }} -r pagoda ${{ secrets.CONAN_USER }}
                 conan create . pagoda/development
-                conan upload pagoda/0.1@pagoda/development -r pagoda --all
+                conan upload pagoda/*@pagoda/development -r pagoda --all --force --retry 3 --retry-wait 60
 
     release:
         if: contains(github.ref, 'tags/v')
