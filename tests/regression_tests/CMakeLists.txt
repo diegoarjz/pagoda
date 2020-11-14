@@ -20,9 +20,7 @@ target_compile_features(
 target_compile_options(
     regression_tests
     PRIVATE
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
-        #-Wall
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+      ${PAGODA_COMPILE_OPTIONS}
 )
 
 target_include_directories(

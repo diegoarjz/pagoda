@@ -113,7 +113,7 @@ jobs:
                 conan remote add pagoda https://api.bintray.com/conan/diegoarjz/Pagoda
                 conan user -p ${{ secrets.CONAN_API_KEY }} -r pagoda ${{ secrets.CONAN_USER }}
                 conan create . pagoda/development
-                conan upload pagoda/*@pagoda/development -r pagoda --all --force --retry 3 --retry-wait 60
+                conan upload pagoda/*@pagoda/development -r pagoda --all --force --retry 3 --retry-wait 60 --confirm
 
     release:
         if: contains(github.ref, 'tags/v')

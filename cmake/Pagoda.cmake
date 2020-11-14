@@ -79,6 +79,11 @@ if (${PAGODA_GIT_INFO})
     set(PAGODA_INCLUDE_GIT_INFO 1)
 endif()
 
+set(PAGODA_COMPILE_OPTIONS
+    $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall>
+    $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+    $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+)
 
 ################################################
 # Helpers
@@ -106,9 +111,7 @@ function (add_unit_test unit_test_src)
     target_compile_options(
         ${test_name}
         PRIVATE
-        #-Wall
-            $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-            $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+          ${PAGODA_COMPILE_OPTIONS}
     )
 
     target_compile_definitions(
