@@ -64,6 +64,11 @@ class Pagoda
 	 */
 	graph::GraphPtr CreateGraphFromFile(const std::string& filePath);
 
+	/**
+	 * Creates a \c Graph from the contents of \c graphStr.
+	 */
+	graph::GraphPtr CreateGraphFromString(const std::string& graphStr);
+
 	private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;
