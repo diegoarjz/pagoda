@@ -11,6 +11,7 @@ class Forward : public Traversal
 {
 	public:
 	Forward(Graph& graph);
+	~Forward() override;
 
 	NodePtr Get() override;
 	bool Advance() override;

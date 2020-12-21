@@ -6,6 +6,7 @@
 namespace pagoda::graph::traversal
 {
 Traversal::Traversal(Graph& graph) : m_graph(graph) {}
+Traversal::~Traversal() {}
 
 void Traversal::GetInputNodes(const NodePtr& node, std::insert_iterator<NodeSet> inserter)
 {

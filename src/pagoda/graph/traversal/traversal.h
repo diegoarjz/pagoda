@@ -15,6 +15,8 @@ namespace pagoda::graph::traversal
 class Traversal
 {
 	public:
+	virtual ~Traversal();
+
 	virtual NodePtr Get() = 0;
 	virtual bool Advance() = 0;
 	virtual bool HasNext() = 0;

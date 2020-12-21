@@ -41,6 +41,9 @@ class Graph::Impl
 	void DestroyNode(const NodeIdentifier_t &nodeName)
 	{
 		auto node = GetNode(nodeName);
+		DBG_ASSERT_MSG(node != nullptr, "Node doesn't exist in graph");
+		std::size_t nodeCount = m_nodes.size();
+
 		NodeSet nodeInNodes = GetInNodes(nodeName);
 		NodeSet nodeOutNodes = GetOutNodes(nodeName);
 
@@ -53,8 +56,10 @@ class Graph::Impl
 		}
 
 		m_adjacencies.erase(nodeName);
-
 		m_nodes.erase(node);
+		m_nodesByIdentifier.erase(nodeName);
+		DBG_ASSERT(m_nodes.size() == nodeCount - 1);
+		DBG_ASSERT(GetNode(nodeName) == nullptr);
 	}
 
 	NodePtr GetNode(const NodeIdentifier_t &name) const
@@ -183,14 +188,16 @@ class Graph::Impl
 	void ExecuteQuery(query::Query &q)
 	{
 		START_PROFILE;
+		DBG_ASSERT(q.GetGraph() != nullptr);
 
-		traversal::Linear t(*m_graph);
-		while (t.HasNext()) {
-			NodePtr n = t.Get();
+		auto t = q.GetTraversal();
+		DBG_ASSERT(t != nullptr);
+		while (t->HasNext()) {
+			NodePtr n = t->Get();
 			if (q.Matches(n)) {
 				q.AddNode(n);
 			}
-			t.Advance();
+			t->Advance();
 		}
 	}
 

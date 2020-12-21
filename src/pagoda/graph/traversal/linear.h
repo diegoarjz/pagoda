@@ -8,6 +8,7 @@ class Linear : public Traversal
 {
 	public:
 	Linear(Graph& graph);
+	~Linear() override;
 
 	NodePtr Get() override;
 	bool Advance() override;

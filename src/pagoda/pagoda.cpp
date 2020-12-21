@@ -97,6 +97,15 @@ class Pagoda::Impl
 		return graph;
 	}
 
+	GraphPtr CreateGraphFromString(const std::string &graphStr)
+	{
+		Init();
+		LOG_TRACE(Core, "Creating Graph From String");
+		GraphReader reader(GetNodeFactory());
+		GraphPtr graph = reader.Read(graphStr);
+		return graph;
+	}
+
 	void Init()
 	{
 		if (m_initialized) {
@@ -168,5 +177,10 @@ GraphPtr Pagoda::CreateGraph() { return m_implementation->CreateGraph(); }
 GraphPtr Pagoda::CreateGraphFromFile(const std::string &filePath)
 {
 	return m_implementation->CreateGraphFromFile(filePath);
+}
+
+graph::GraphPtr Pagoda::CreateGraphFromString(const std::string &graphStr)
+{
+	return m_implementation->CreateGraphFromString(graphStr);
 }
 }  // namespace pagoda

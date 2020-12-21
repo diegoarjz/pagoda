@@ -13,6 +13,8 @@ Forward::Forward(Graph& graph) : Traversal(graph)
 	graph.ExecuteQuery(q);
 }
 
+Forward::~Forward() {}
+
 NodePtr Forward::Get() { return m_nodesToVisit.front(); }
 
 bool Forward::Advance()

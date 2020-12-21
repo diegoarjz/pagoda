@@ -4,12 +4,20 @@
 
 #include <functional>
 #include <memory>
+#include <sstream>
+#include <unordered_map>
+#include <vector>
 
 namespace pagoda::graph
 {
 class Graph;
 class Node;
 using NodePtr = std::shared_ptr<Node>;
+
+namespace traversal
+{
+class Traversal;
+}
 }  // namespace pagoda::graph
 
 namespace pagoda::graph::query
@@ -34,8 +42,16 @@ namespace pagoda::graph::query
 class Query
 {
 	public:
+	/// Type definition for a container of \c Query
+	using QueryContainer_t = std::vector<std::shared_ptr<Query>>;
 	/// Function type to handle each \c Node that matches a \c Query.
 	using QueryHandle_t = std::function<void(NodePtr)>;
+
+	/**
+	 * Default constructor.
+	 * Should only be used to create sub queries.
+	 */
+	Query();
 
 	/**
 	 * Constructor with a custom \c QueryHandle_t.
@@ -46,18 +62,45 @@ class Query
 	 */
 	Query(Graph& graph, NodeSet& nodeSet);
 
-	virtual bool Matches(NodePtr n);
+	virtual ~Query();
 
-	const std::string& GetQueryHash() const;
+	/**
+	 * Checks whether or not the given \c Node \p n passes the condition.
+	 */
+	bool Matches(NodePtr n);
+
+	void SetGraph(Graph* graph);
+	Graph* GetGraph() const;
+	QueryHandle_t& GetQueryHandle();
+	void SetQueryHandle(QueryHandle_t q);
+	void SetQueryHandle(NodeSet& nodeSet);
+
+	const std::size_t GetQueryHash() const;
+
+	std::string ToString() const;
+	virtual void AppendToString(std::stringstream& os, uint32_t indent = 0) const;
+
+	std::shared_ptr<traversal::Traversal> GetTraversal();
+	void SetTraversal(std::shared_ptr<traversal::Traversal> traversal);
 
 	protected:
-	Graph& m_graph;
+	std::shared_ptr<traversal::Traversal> m_traversal;
+	Graph* m_graph;
 	QueryHandle_t m_queryHandle;
+	QueryContainer_t m_subQueries;
 
 	private:
 	void AddNode(NodePtr n);
 
+	virtual bool matches(NodePtr n);
+
 	friend class pagoda::graph::Graph;
 	friend class pagoda::graph::NodeSet;
 };
+
+template<class... Args>
+Query all(Args&&... args)
+{
+	return Query(args...);
+}
 }  // namespace pagoda::graph::query
