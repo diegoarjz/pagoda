@@ -72,7 +72,7 @@ TEST_F(RuleTest, should_be_able_to_create_matches)
 	MockRule r(*m_graph);
 	r.Match();
 	auto matches = r.GetMatches();
-	ASSERT_EQ(matches.size(), 2);
+	ASSERT_EQ(matches.size(), 2u);
 }
 
 TEST_F(RuleTest, should_be_able_to_apply_the_rule)
@@ -80,7 +80,7 @@ TEST_F(RuleTest, should_be_able_to_apply_the_rule)
 	MockRule r(*m_graph);
 	r.Match();
 	r.Apply();
-	EXPECT_EQ(r.m_applyCount, 2);
+	EXPECT_EQ(r.m_applyCount, 2u);
 }
 
 TEST_F(RuleTest, should_be_able_to_lock_nodes)
@@ -91,5 +91,5 @@ TEST_F(RuleTest, should_be_able_to_lock_nodes)
 	r.Match();
 	r.Apply();
 	auto lockedNodes = r.GetLockedNodes();
-	ASSERT_EQ(lockedNodes.size(), 4);
+	ASSERT_EQ(lockedNodes.size(), 4u);
 }

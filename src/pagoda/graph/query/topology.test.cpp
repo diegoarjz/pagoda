@@ -38,7 +38,7 @@ class QueryTopologyTest : public ::testing::Test
 TEST_F(QueryTopologyTest, stores_the_initial_query)
 {
 	QueryTopology t(&m_query1);
-	EXPECT_EQ(t.GetQueries().size(), 1);
+	EXPECT_EQ(t.GetQueries().size(), 1u);
 	EXPECT_EQ(*(t.GetQueries().begin()), &m_query1);
 }
 
@@ -53,11 +53,11 @@ TEST_F(QueryTopologyTest, can_create_adjacencies)
 	t.GetDownstreamQueriesOf(&m_query1, std::inserter(downStream, downStream.end()));
 	t.GetUpstreamQueriesOf(&m_query2, std::inserter(upstream, upstream.end()));
 
-	ASSERT_EQ(downStream.size(), 1);
-	ASSERT_EQ(upstream.size(), 1);
+	ASSERT_EQ(downStream.size(), 1u);
+	ASSERT_EQ(upstream.size(), 1u);
 	EXPECT_EQ(*(downStream.begin()), &m_query2);
 	EXPECT_EQ(*(upstream.begin()), &m_query1);
-	EXPECT_EQ(t.GetQueries().size(), 2);
+	EXPECT_EQ(t.GetQueries().size(), 2u);
 
 	t.AddUpstreamQuery(&m_query1, &m_query3);
 	downStream.clear();
@@ -66,8 +66,8 @@ TEST_F(QueryTopologyTest, can_create_adjacencies)
 	t.GetDownstreamQueriesOf(&m_query3, std::inserter(downStream, downStream.end()));
 	t.GetUpstreamQueriesOf(&m_query1, std::inserter(upstream, upstream.end()));
 
-	ASSERT_EQ(downStream.size(), 1);
-	ASSERT_EQ(upstream.size(), 1);
+	ASSERT_EQ(downStream.size(), 1u);
+	ASSERT_EQ(upstream.size(), 1u);
 	EXPECT_EQ(*(downStream.begin()), &m_query1);
 	EXPECT_EQ(*(upstream.begin()), &m_query3);
 }
@@ -103,7 +103,7 @@ TEST_F(QueryTopologyMatchTest, should_match_any)
 	std::vector<typename QueryTopology::Match_t> matches;
 	t.Match(m_graph.get(), matches);
 
-	ASSERT_EQ(matches.size(), 4);
+	ASSERT_EQ(matches.size(), 4u);
 	for (auto &m : matches) {
 		EXPECT_NE(m.find(&query), m.end());
 		EXPECT_NE(m[&query], nullptr);
@@ -118,7 +118,7 @@ TEST_F(QueryTopologyMatchTest, should_match_one)
 
 	std::vector<typename QueryTopology::Match_t> matches;
 	t.Match(m_graph.get(), matches);
-	ASSERT_EQ(matches.size(), 1);
+	ASSERT_EQ(matches.size(), 1u);
 	EXPECT_EQ(matches[0][&query], m_graph->GetNode("op"));
 }
 
@@ -132,7 +132,7 @@ TEST_F(QueryTopologyMatchTest, should_match_with_a_single_downstream_query)
 	std::vector<typename QueryTopology::Match_t> matches;
 	t.Match(m_graph.get(), matches);
 
-	ASSERT_EQ(matches.size(), 1);
+	ASSERT_EQ(matches.size(), 1u);
 	EXPECT_EQ(matches[0][&opQuery], m_graph->GetNode("op"));
 	EXPECT_EQ(matches[0][&outQuery], m_graph->GetNode("out"));
 }
@@ -148,7 +148,7 @@ TEST_F(QueryTopologyMatchTest, should_match_with_chained_downstream_queries)
 
 	std::vector<typename QueryTopology::Match_t> matches;
 	t.Match(m_graph.get(), matches);
-	ASSERT_EQ(matches.size(), 1);
+	ASSERT_EQ(matches.size(), 1u);
 	EXPECT_EQ(matches[0][&opQuery], m_graph->GetNode("op"));
 	EXPECT_EQ(matches[0][&outQuery], m_graph->GetNode("out"));
 	EXPECT_EQ(matches[0][&inQuery], m_graph->GetNode("in"));
@@ -167,7 +167,7 @@ TEST_F(QueryTopologyMatchTest, should_match_with_alternatives)
 	std::vector<typename QueryTopology::Match_t> matches;
 	t.Match(m_graph.get(), matches);
 
-	ASSERT_EQ(matches.size(), 2);
+	ASSERT_EQ(matches.size(), 2u);
 	for (auto m : matches) {
 		EXPECT_EQ(m[&opQuery], m_graph->GetNode("op"));
 		EXPECT_TRUE(m[&outQuery] == m_graph->GetNode("out") || m[&outQuery] == m_graph->GetNode("out2"));
@@ -187,7 +187,7 @@ TEST_F(QueryTopologyMatchTest, should_match_with_a_downstream_and_an_upstream_qu
 	std::vector<typename QueryTopology::Match_t> matches;
 	t.Match(m_graph.get(), matches);
 
-	ASSERT_EQ(matches.size(), 1);
+	ASSERT_EQ(matches.size(), 1u);
 	EXPECT_EQ(matches[0][&opQuery], m_graph->GetNode("op"));
 	EXPECT_EQ(matches[0][&outQuery], m_graph->GetNode("out"));
 	EXPECT_EQ(matches[0][&inQuery], m_graph->GetNode("in"));
@@ -210,7 +210,7 @@ TEST_F(QueryTopologyMatchTest, should_match_with_multiple_paths)
 
 	std::vector<typename QueryTopology::Match_t> matches;
 	t.Match(m_graph.get(), matches);
-	ASSERT_EQ(matches.size(), 2);
+	ASSERT_EQ(matches.size(), 2u);
 	for (auto &m : matches) {
 		EXPECT_EQ(m[&opQuery], m_graph->GetNode("op"));
 		EXPECT_EQ(m[&inQuery], m_graph->GetNode("in2"));
