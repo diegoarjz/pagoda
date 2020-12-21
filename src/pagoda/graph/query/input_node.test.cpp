@@ -36,7 +36,7 @@ TEST_F(InputNodeTest, should_only_match_input_nodes)
 	NodeSet nodes;
 	InputNode q(*m_graph, nodes);
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(nodes.size(), 2);
+	EXPECT_EQ(nodes.size(), 2u);
 	EXPECT_NE(nodes.find(m_graph->GetNode("in1")), nodes.end());
 	EXPECT_NE(nodes.find(m_graph->GetNode("in2")), nodes.end());
 }
@@ -46,7 +46,7 @@ TEST_F(InputNodeTest, inline_syntax)
 	NodeSet nodes;
 	InputNode q = input_node(*m_graph, nodes);
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(nodes.size(), 2);
+	EXPECT_EQ(nodes.size(), 2u);
 	EXPECT_NE(nodes.find(m_graph->GetNode("in1")), nodes.end());
 	EXPECT_NE(nodes.find(m_graph->GetNode("in2")), nodes.end());
 }

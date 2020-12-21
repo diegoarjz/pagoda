@@ -44,7 +44,7 @@ TEST_F(AdjacentTest, should_check_downstream_nodes)
 {
 	Adjacent q{*m_graph, m_nodes, std::make_shared<OutputNode>(), 1};
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(m_nodes.size(), 1);
+	EXPECT_EQ(m_nodes.size(), 1u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
 
@@ -52,7 +52,7 @@ TEST_F(AdjacentTest, should_check_upstream_nodes)
 {
 	Adjacent q{*m_graph, m_nodes, std::make_shared<InputNode>(), -1};
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(m_nodes.size(), 1);
+	EXPECT_EQ(m_nodes.size(), 1u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }
 
@@ -62,7 +62,7 @@ TEST_F(AdjacentTest, should_check_adjacent_nodes)
 	Adjacent q{*m_graph, m_nodes, std::make_shared<Type<OutputInterfaceNode>>(), 0};
 	m_graph->ExecuteQuery(q);
 
-	EXPECT_EQ(m_nodes.size(), 1);
+	EXPECT_EQ(m_nodes.size(), 1u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
 

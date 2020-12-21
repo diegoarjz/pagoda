@@ -42,7 +42,7 @@ TEST_F(OrTest, should_do_an_or_operation)
 {
 	Or q{*m_graph, m_nodes, {std::make_shared<Type<ParameterNode>>(), std::make_shared<InputNode>()}};
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(m_nodes.size(), 3);
+	EXPECT_EQ(m_nodes.size(), 3u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n3")), m_nodes.end());
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n4")), m_nodes.end());
@@ -52,7 +52,7 @@ TEST_F(OrTest, inline_syntax)
 {
 	Or q = type<ParameterNode>(*m_graph, m_nodes) | input_node();
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(m_nodes.size(), 3);
+	EXPECT_EQ(m_nodes.size(), 3u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n3")), m_nodes.end());
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n4")), m_nodes.end());

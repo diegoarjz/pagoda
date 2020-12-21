@@ -42,7 +42,7 @@ TEST_F(AndTest, should_do_an_and_operation)
 {
 	And q{*m_graph, m_nodes, {std::make_shared<Type<ParameterNode>>(), std::make_shared<InputNode>()}};
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(m_nodes.size(), 1);
+	EXPECT_EQ(m_nodes.size(), 1u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
 
@@ -50,7 +50,7 @@ TEST_F(AndTest, inline_syntax)
 {
 	And q = type<ParameterNode>(*m_graph, m_nodes) & input_node();
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(m_nodes.size(), 1);
+	EXPECT_EQ(m_nodes.size(), 1u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
 

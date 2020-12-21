@@ -38,7 +38,7 @@ TEST_F(NotTest, should_do_an_not_operation)
 {
 	Not q{*m_graph, m_nodes, std::make_shared<Type<ParameterNode>>()};
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(m_nodes.size(), 1);
+	EXPECT_EQ(m_nodes.size(), 1u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }
 
@@ -46,7 +46,7 @@ TEST_F(NotTest, inline_syntax)
 {
 	Not q = ~type<ParameterNode>(*m_graph, m_nodes);
 	m_graph->ExecuteQuery(q);
-	EXPECT_EQ(m_nodes.size(), 1);
+	EXPECT_EQ(m_nodes.size(), 1u);
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }
 
