@@ -19,9 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - *Forward* traverses the nodes, in breadth first order, starting with the
       input nodes.
 - Query nodes in a graph:
+    - *Adjacent* finds nodes whose upstream and downstream nodes match a given query.
+    - *And* combines several queries with an and logical operation.
     - *InputNode* finds nodes that don't have upstream nodes.
+    - *Not* negates a query.
+    - *Or* combines several queries with an or logical operation.
     - *OutputNode* finds nodes that don't have downstream nodes.
     - *Type* finds nodes based on their c++ type.
+- Query topology specifying how a set of queries are combined to match subgraphs.
+- Graph Grammar system.
 - Traversal operations for geometry, providing a cleaner interface for
   operating on geometries.
 - GeoJSON Reader.
