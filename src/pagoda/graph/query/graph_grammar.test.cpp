@@ -23,28 +23,6 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-struct MatchAll
-{
-	NodePtr node;
-	static uint32_t count;
-
-	template<class T>
-	std::size_t GetLockedNodes(T inserter)
-	{
-		return 0;
-	}
-
-	void SetNode(const std::string& name, NodePtr n)
-	{
-		//
-	}
-
-	void operator()(Graph* g) { count += 1; }
-	Query m_query;
-};
-
-uint32_t MatchAll::count = 0;
-
 class GraphGrammarTest : public ::testing::Test
 {
 	protected:
@@ -89,7 +67,7 @@ TEST_F(GraphGrammarTest, should_apply_rules)
 	auto r = std::make_shared<MockRule>(*m_graph);
 	g.AddRule(r);
 	g.Run();
-	EXPECT_EQ(r->m_count, 2);
+	EXPECT_EQ(r->m_count, 2u);
 }
 
 struct MockDeleteRule : public Rule
