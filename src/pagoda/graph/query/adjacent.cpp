@@ -3,21 +3,25 @@
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/node.h>
 
+#include <iostream>
+
 namespace pagoda::graph::query
 {
-Adjacent::Adjacent(std::shared_ptr<Query> &&query, int32_t direction)
-  : m_query(std::move(query)), m_direction(direction)
+Adjacent::Adjacent(std::shared_ptr<Query> &&query, int32_t direction) : m_direction(direction)
 {
+	m_subQueries.push_back(std::move(query));
 }
 
 Adjacent::Adjacent(Graph &graph, QueryHandle_t queryHandle, std::shared_ptr<Query> &&query, int32_t direction)
-  : Query(graph, queryHandle), m_query(std::move(query)), m_direction(direction)
+  : Query(graph, queryHandle), m_direction(direction)
 {
+	m_subQueries.push_back(std::move(query));
 }
 
 Adjacent::Adjacent(Graph &graph, NodeSet &nodeSet, std::shared_ptr<Query> &&query, int32_t direction)
-  : Query(graph, nodeSet), m_query(std::move(query)), m_direction(direction)
+  : Query(graph, nodeSet), m_direction(direction)
 {
+	m_subQueries.push_back(std::move(query));
 }
 
 Adjacent::~Adjacent() {}
@@ -33,7 +37,7 @@ void Adjacent::AppendToString(std::stringstream &os, uint32_t indent) const
 		os << "Upstream(";
 	}
 	os << m_direction << ")[";
-	m_query->AppendToString(os, 0);
+	m_subQueries[0]->AppendToString(os, 0);
 	os << "]";
 }
 
@@ -63,17 +67,16 @@ void collectInNodes(Graph *graph, NodePtr n, int32_t depth, std::insert_iterator
 
 bool Adjacent::matches(NodePtr n)
 {
-	m_query->SetGraph(m_graph);
+	m_subQueries[0]->SetGraph(m_graph);
 	NodeSet nodes;
 	collectOutNodes(m_graph, n, std::max(0, m_direction - 1), std::inserter(nodes, nodes.end()));
 	collectInNodes(m_graph, n, std::min(0, m_direction + 1), std::inserter(nodes, nodes.end()));
 
 	for (auto adjacent : nodes) {
-		if (m_query->Matches(adjacent)) {
+		if (m_subQueries[0]->Matches(adjacent)) {
 			return true;
 		}
 	}
-
 	return false;
 }
 }  // namespace pagoda::graph::query

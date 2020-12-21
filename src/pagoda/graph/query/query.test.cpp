@@ -1,8 +1,12 @@
 #include "query.h"
 
+#include "adjacent.h"
+#include "type.h"
+
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/node.h>
 #include <pagoda/graph/operation_node.h>
+#include <pagoda/graph/parameter_node.h>
 
 #include <pagoda/pagoda.h>
 
@@ -68,3 +72,4 @@ TEST_F(QueryTest, to_string)
 	Query q = all(*m_graph, nodes);
 	EXPECT_EQ(q.ToString(), "Query");
 }
+

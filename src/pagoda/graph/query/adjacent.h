@@ -4,6 +4,9 @@
 
 namespace pagoda::graph::query
 {
+/**
+ * Queries if adjacent/upstream/downstream nodes verify a given condition.
+ */
 class Adjacent : public Query
 {
 	public:
@@ -18,7 +21,6 @@ class Adjacent : public Query
 	private:
 	bool matches(NodePtr n) override;
 
-	std::shared_ptr<Query> m_query;
 	int32_t m_direction;
 };
 

@@ -1,55 +1,46 @@
 #pragma once
 
-#include "query.h"
+#include "topology.h"
 
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/node.h>
 
+#include <pagoda/common/debug/assertions.h>
+
+#include <iostream>
+#include <map>
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 namespace pagoda::graph::query
 {
 /**
- * The base class for a graph grammar rule.
+ * The base class for a \c GraphGrammar rule.
  */
-class RuleBase
+class Rule
 {
 	public:
-	RuleBase(Graph &graph, Query &query);
-	virtual ~RuleBase();
+	Rule(Graph &graph);
+	virtual ~Rule();
 
+	void Match();
+	void Apply();
+
+	void SetGraph(Graph &graph);
 	const std::unordered_set<NodePtr> &GetLockedNodes() const;
+	const std::vector<std::map<Query *, NodePtr>> &GetMatches() const;
 
 	protected:
+	void LockNode(NodePtr n);
+
+	virtual QueryTopology &GetTopology() = 0;
+	virtual void ApplyMatch(const std::map<Query *, NodePtr> &match) = 0;
+
 	Graph *m_graph;
-	Query *m_query;
 	std::unordered_set<NodePtr> m_lockedNodes;
+	std::vector<std::map<Query *, NodePtr>> m_matches;
 };
 
-/**
- * Concrete class for a graph grammar rule.
- *
- * Executes a \c Query in a \c Graph, deferring full matches of type T to an
- * external function for node/edges replacement.
- */
-template<class T>
-class Rule : public RuleBase
-{
-	public:
-	Rule(Graph &graph, Query &query, T &fullMatch) : RuleBase(graph, query), m_fullMatch(fullMatch) {}
-
-	void Run(std::function<void(T &)> match)
-	{
-		m_query->SetGraph(m_graph);
-		m_query->SetQueryHandle([&](NodePtr n) {
-			m_fullMatch.GetLockedNodes(std::inserter(m_lockedNodes, std::end(m_lockedNodes)));
-			match(m_fullMatch);
-		});
-		m_graph->ExecuteQuery(*m_query);
-	}
-
-	private:
-	T &m_fullMatch;
-};
 }  // namespace pagoda::graph::query

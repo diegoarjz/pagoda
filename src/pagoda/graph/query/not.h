@@ -9,6 +9,9 @@
 
 namespace pagoda::graph::query
 {
+/**
+ * Negates a give \c Query.
+ */
 class Not : public Query
 {
 	public:
@@ -24,8 +27,6 @@ class Not : public Query
 
 	private:
 	bool matches(NodePtr n) override;
-
-	std::shared_ptr<Query> m_query;
 };
 
 template<class Q>

@@ -5,6 +5,8 @@
 #include <functional>
 #include <memory>
 #include <sstream>
+#include <unordered_map>
+#include <vector>
 
 namespace pagoda::graph
 {
@@ -71,6 +73,7 @@ class Query
 	Graph* GetGraph() const;
 	QueryHandle_t& GetQueryHandle();
 	void SetQueryHandle(QueryHandle_t q);
+	void SetQueryHandle(NodeSet& nodeSet);
 
 	const std::size_t GetQueryHash() const;
 
@@ -80,21 +83,16 @@ class Query
 	std::shared_ptr<traversal::Traversal> GetTraversal();
 	void SetTraversal(std::shared_ptr<traversal::Traversal> traversal);
 
-	void SetOutputNode(NodePtr* node) { m_outputNode = node; }
-	NodePtr* GetOutputNode() { return m_outputNode; }
-
 	protected:
 	std::shared_ptr<traversal::Traversal> m_traversal;
-
 	Graph* m_graph;
 	QueryHandle_t m_queryHandle;
+	QueryContainer_t m_subQueries;
 
 	private:
 	void AddNode(NodePtr n);
 
 	virtual bool matches(NodePtr n);
-
-	NodePtr* m_outputNode = nullptr;
 
 	friend class pagoda::graph::Graph;
 	friend class pagoda::graph::NodeSet;
@@ -104,12 +102,5 @@ template<class... Args>
 Query all(Args&&... args)
 {
 	return Query(args...);
-}
-
-template<class Q>
-Q operator>>(Q&& q, NodePtr& n)
-{
-	q.SetOutputNode(&n);
-	return std::move(q);
 }
 }  // namespace pagoda::graph::query
