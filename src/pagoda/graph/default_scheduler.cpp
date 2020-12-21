@@ -5,8 +5,13 @@
 #include "output_interface_node.h"
 #include "parameter_node.h"
 
+#include "query/adjacent.h"
+#include "query/and.h"
+#include "query/graph_grammar.h"
 #include "query/input_node.h"
 #include "query/query.h"
+#include "query/rule.h"
+#include "query/topology.h"
 #include "query/type.h"
 
 #include <pagoda/common/exception/exception.h>
@@ -19,35 +24,50 @@ using namespace pagoda::objects;
 
 namespace pagoda::graph
 {
+using namespace query;
+
 DefaultScheduler::DefaultScheduler(Graph &graph) : m_graph(graph) {}
+
+class OperationLinker : public Rule
+{
+	public:
+	OperationLinker(Graph &graph) : Rule(graph), m_topology(&m_upstreamNode)
+	{
+		m_topology.AddDownstreamQuery(&m_upstreamNode, &m_outputInterface);
+		m_topology.AddDownstreamQuery(&m_outputInterface, &m_inputInterface);
+		m_topology.AddDownstreamQuery(&m_inputInterface, &m_downstreamNode);
+	}
+
+	QueryTopology &GetTopology() override { return m_topology; }
+
+	void ApplyMatch(const std::map<Query *, NodePtr> &match) override
+	{
+		auto downstream = std::dynamic_pointer_cast<OperationNode>(match.at(&m_downstreamNode));
+		auto outInterface = std::dynamic_pointer_cast<OutputInterfaceNode>(match.at(&m_outputInterface));
+		auto inInterface = std::dynamic_pointer_cast<InputInterfaceNode>(match.at(&m_inputInterface));
+		auto upstream = std::dynamic_pointer_cast<OperationNode>(match.at(&m_upstreamNode));
+
+		auto upstreamOp = upstream->GetOperation();
+		auto downstreamOp = downstream->GetOperation();
+
+		downstreamOp->LinkInputInterface(inInterface->GetInterfaceName(), outInterface->GetInterfaceName(), upstreamOp);
+	}
+
+	private:
+	Type<OperationNode> m_upstreamNode;
+	Type<OutputInterfaceNode> m_outputInterface;
+	Type<InputInterfaceNode> m_inputInterface;
+	Type<OperationNode> m_downstreamNode;
+	QueryTopology m_topology;
+};
 
 void DefaultScheduler::Initialize()
 {
-	// Link the operations
-	query::Type<InputInterfaceNode> q(m_graph, [&](NodePtr n) {
-		auto inputInterface = std::dynamic_pointer_cast<InputInterfaceNode>(n);
+	GraphGrammar graphGrammar(m_graph);
 
-		std::vector<std::shared_ptr<OperationNode>> downstreamNodes;
-
-		for (const auto &outNode : m_graph.GetNodeOutputNodes(n->GetName())) {
-			if (auto op = std::dynamic_pointer_cast<OperationNode>(outNode)) {
-				downstreamNodes.push_back(op);
-			}
-		}
-		for (const auto &inNode : m_graph.GetNodeInputNodes(n->GetName())) {
-			if (auto outInterface = std::dynamic_pointer_cast<OutputInterfaceNode>(inNode)) {
-				for (const auto &inOp : m_graph.GetNodeInputNodes(outInterface->GetName())) {
-					if (auto op = std::dynamic_pointer_cast<OperationNode>(inOp)) {
-						for (auto &downStream : downstreamNodes) {
-							downStream->GetOperation()->LinkInputInterface(inputInterface->GetInterfaceName(),
-							                                               outInterface->GetInterfaceName(), op->GetOperation());
-						}
-					}
-				}
-			}
-		}
-	});
-	m_graph.ExecuteQuery(q);
+	auto linkRule = std::make_shared<OperationLinker>(m_graph);
+	graphGrammar.AddRule(linkRule);
+	graphGrammar.Run();
 
 	// Execute all nodes. I.e., set the parameters
 	query::Query nodes(m_graph, [&](NodePtr n) {
