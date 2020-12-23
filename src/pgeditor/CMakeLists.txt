@@ -1,6 +1,8 @@
 add_subdirectory(input)
 add_subdirectory(window)
 
+find_package(glfw3 REQUIRED)
+
 add_library(libpgeditor STATIC
   $<TARGET_OBJECTS:input>
   $<TARGET_OBJECTS:window>

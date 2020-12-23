@@ -9,7 +9,6 @@ class Pagoda(ConanFile):
     license = "MIT"
     author = "Diego Jesus <diego.a.r.jz@gmail.com>"
     url = "https://github.com/diegoarjz/pagoda"
-    description = "<Description of Hello here>"
     topics = ("procedural modelling", "geometry", "content generation")
 
     settings = "os", "compiler", "arch", "build_type"
@@ -17,10 +16,11 @@ class Pagoda(ConanFile):
         "build_type=Release"
     )
     options = {
-        "shared" : [True, False]
+        "shared" : [True, False],
     }
     default_options = (
-        "shared=False"
+        "shared=False",
+        "glew:shared=False"
     )
     generators = "cmake"
     exports_sources = "*"

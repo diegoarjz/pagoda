@@ -23,7 +23,7 @@ add_pagoda_executable("pagoda" "pagoda.cpp" "")
 set(editor_libs
   "libpgeditor"
   "glfw3"
-  "${GLEW_LIBRARIES}"
+  "glew"
   "Corrade::Main"
   "Magnum::GL"
   "Magnum::GLContext"
