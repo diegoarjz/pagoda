@@ -32,8 +32,8 @@ class Pagoda(ConanFile):
         ("nlohmann_json/3.9.1"),
         ("magnum/2020.06@pagoda/stable"),
         ("corrade/2020.06@helmesjo/stable"),
-        ("glew/2.1.0"),
-        ("glfw/3.3.2")
+        ("glew/2.1.0@bincrafters/stable"),
+        ("glfw/3.3.2@bincrafters/stable")
     ]
 
 

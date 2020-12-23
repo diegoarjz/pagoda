@@ -1,6 +1,5 @@
 
 find_package(glew REQUIRED)
-find_package(glfw3 REQUIRED)
 find_package(Magnum REQUIRED GL Shaders)
 find_package(Corrade REQUIRED Main)
 find_package(OpenGL REQUIRED)
