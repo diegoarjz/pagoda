@@ -57,6 +57,8 @@ jobs:
               run: |
                   ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
+                  conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+                  conan remote add helmesjo https://api.bintray.com/conan/helmesjo/public-conan
                   conan remote add pagoda https://api.bintray.com/conan/diegoarjz/Pagoda
                   conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
                   cd ${{ github.workspace }}/build
