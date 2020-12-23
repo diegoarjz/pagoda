@@ -9,7 +9,6 @@ conan_basic_setup()
 
 include("Pagoda")
 include("WGS84toCartesian")
-#include("bgfx")
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS chrono system program_options filesystem)

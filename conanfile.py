@@ -29,7 +29,11 @@ class Pagoda(ConanFile):
         ("boost/1.73.0"),
         ("gtest/1.10.0"),
         ("libpng/1.6.37"),
-        ("nlohmann_json/3.9.1")
+        ("nlohmann_json/3.9.1"),
+        ("magnum/2020.06@pagoda/stable"),
+        ("corrade/2020.06@helmesjo/stable"),
+        ("glew/2.1.0"),
+        ("glfw/3.3.2")
     ]
 
 

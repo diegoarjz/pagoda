@@ -1,51 +1,37 @@
-set(PagodaSources
-    pagoda.cpp
-    )
 
-add_executable(pagoda ${PagodaSources})
+find_package(glew REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(Magnum REQUIRED GL Shaders)
+find_package(Corrade REQUIRED Main)
+find_package(OpenGL REQUIRED)
 
-target_compile_features(
-    pagoda
-    PRIVATE
-        cxx_std_17
+if(CORRADE_TARGET_APPLE)
+  find_package(Magnum REQUIRED CglContext)
+  find_library(COCOA_LIBRARY Cocoa)
+  find_library(IOKIT_LIBRARY IOKit)
+  find_library(CORE_VIDEO_LIBRARY CoreVideo)
+elseif(CORRADE_TARGET_UNIX)
+  find_package(Magnum REQUIRED GlxContext)
+elseif(CORRADE_TARGET_WINDOWS)
+  find_package(Magnum REQUIRED WglContext)
+else()
+  message(FATAL_ERROR "No context handler available on this platform")
+endif()
+
+add_pagoda_executable("pagoda" "pagoda.cpp" "")
+
+set(editor_libs
+  "libpgeditor"
+  "glfw3"
+  "${GLEW_LIBRARIES}"
+  "Corrade::Main"
+  "Magnum::GL"
+  "Magnum::GLContext"
+  "Magnum::Magnum"
+  "Magnum::Shaders"
+  "${OPENGL_gl_LIBRARY}"
+  "${COCOA_LIBRARY}"
+  "${IOKIT_LIBRARY}"
+  "${CORE_VIDEO_LIBRARY}"
 )
-
-target_compile_options(
-    pagoda
-    PRIVATE
-        -Wall
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
-)
-
-target_include_directories(
-    pagoda
-    PUBLIC
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-    PRIVATE
-        ${CMAKE_SOURCE_DIR}/source
-        ${Boost_INCLUDE_DIRS}
-        ${PGSCRIPT_INCLUDE_DIR}
-)
-
-target_compile_definitions(
-    pagoda
-    PRIVATE
-)
-
-target_link_libraries(
-    pagoda
-    PRIVATE
-        libpagoda
-        Boost::chrono
-        Boost::filesystem
-        Boost::system
-        Boost::program_options
-)
-
-include(GNUInstallDirs)
-install(TARGETS pagoda
-    EXPORT pagoda-export
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+add_pagoda_executable("pgeditor" "pgeditor.cpp" "${editor_libs}")
