@@ -102,9 +102,7 @@ function (add_pagoda_executable executable_name sources extra_libs)
   target_compile_options(
       ${executable_name}
       PRIVATE
-          -Wall
-          $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-          $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+        ${PAGODA_COMPILE_OPTIONS}
   )
 
   target_include_directories(
