@@ -12,6 +12,7 @@ set(editor_libs
   "Magnum::GLContext"
   "Magnum::Magnum"
   "Magnum::Shaders"
+  "${GLEW_LIBRARIES}"
   "${OPENGL_gl_LIBRARY}"
   "${COCOA_LIBRARY}"
   "${IOKIT_LIBRARY}"
@@ -23,12 +24,10 @@ if(CORRADE_TARGET_APPLE)
   find_library(COCOA_LIBRARY Cocoa)
   find_library(IOKIT_LIBRARY IOKit)
   find_library(CORE_VIDEO_LIBRARY CoreVideo)
-  list(APPEND editor_libs "glew")
 elseif(CORRADE_TARGET_UNIX)
   find_package(Magnum REQUIRED GlxContext)
 elseif(CORRADE_TARGET_WINDOWS)
   find_package(Magnum REQUIRED WglContext)
-  list(APPEND editor_libs "glew32")
 else()
   message(FATAL_ERROR "No context handler available on this platform")
 endif()
