@@ -39,6 +39,7 @@ target_compile_definitions(
 target_link_libraries(
     libpgeditor
     PRIVATE
+      libpagoda
       glfw3
 )
 
