@@ -49,6 +49,10 @@ jobs:
               run: |
                   pip3 install wheel setuptools
                   pip3 install conan
+            - name: Download and Install Dependencies (Ubuntu)
+              if: ${{ contains(matrix.config.os, 'Ubuntu') }}
+              run: |
+                  sudo apt-get install -y libgl1-mesa-dev
 
             - name: Configure and Build
               env:

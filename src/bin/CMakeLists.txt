@@ -1,8 +1,10 @@
 
+list(APPEND CMAKE_MODULE_PATH "${MagnumIntegrationModules}")
 find_package(glew REQUIRED)
 find_package(Magnum REQUIRED GL Shaders)
 find_package(Corrade REQUIRED Main)
 find_package(OpenGL REQUIRED)
+find_package(MagnumIntegration REQUIRED ImGui)
 
 set(editor_libs
   "libpgeditor"
@@ -12,6 +14,7 @@ set(editor_libs
   "Magnum::GLContext"
   "Magnum::Magnum"
   "Magnum::Shaders"
+  "MagnumIntegration::ImGui"
   "${GLEW_LIBRARIES}"
   "${OPENGL_gl_LIBRARY}"
   "${COCOA_LIBRARY}"

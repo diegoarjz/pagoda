@@ -7,6 +7,8 @@
 #include <pgeditor/input/input_manager.h>
 #include <pgeditor/input/keys.h>
 
+#include <Magnum/ImGuiIntegration/Context.hpp>
+
 using namespace boost;
 
 using namespace pagoda;
