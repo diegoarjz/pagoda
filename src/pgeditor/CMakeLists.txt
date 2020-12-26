@@ -6,6 +6,7 @@ set(glfw3_DIR "${CONAN_LIB_DIRS_GLFW}/cmake/glfw3")
 find_package(glfw3 CONFIG REQUIRED)
 
 add_library(libpgeditor STATIC
+  $<TARGET_OBJECTS:pgeditor_common>
   $<TARGET_OBJECTS:input>
   $<TARGET_OBJECTS:window>
 )

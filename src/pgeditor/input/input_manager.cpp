@@ -12,18 +12,16 @@ namespace pgeditor::input
 {
 class InputManager::Impl
 {
-public:
+	public:
 	using KeyMapContainer_t = std::unordered_map<std::size_t, boost::signals2::signal<void(void)>>;
-	using MouseDragMapContainer_t =
-	    std::unordered_map<std::size_t, boost::signals2::signal<void(const MouseButton &button, int xPos, int yPos,
-	                                                                 int xDelta, int yDelta)>>;
+	using MouseDragMapContainer_t = std::unordered_map<
+	  std::size_t, boost::signals2::signal<void(const MouseButton &button, int xPos, int yPos, int xDelta, int yDelta)>>;
 	~Impl() {}
 
 	void AddKeyMapping(const KeyMapping &mapping)
 	{
 		auto k = makeKey(mapping.m_modifiers, mapping.m_key);
-		switch (mapping.m_action)
-		{
+		switch (mapping.m_action) {
 			case OnPress:
 				m_onPressSignals[k].connect(mapping.m_handler);
 				break;
@@ -47,8 +45,7 @@ public:
 
 	void OnKeyPressed(const Key &k, int scanCode)
 	{
-		switch (k)
-		{
+		switch (k) {
 			case Key::LeftShift:
 			case Key::RightShift:
 				m_modifiers |= (1 << static_cast<uint8_t>(Mods::Shift));
@@ -74,8 +71,7 @@ public:
 
 	void OnKeyReleased(const Key &k, int scanCode)
 	{
-		switch (k)
-		{
+		switch (k) {
 			case Key::LeftShift:
 			case Key::RightShift:
 				m_modifiers &= ~(1 << static_cast<uint8_t>(Mods::Shift));
@@ -114,46 +110,40 @@ public:
 		m_draggedMouseButtons.insert(button);
 	}
 
+	bool Init() { return true; }
 	void Update(double dT)
 	{
 		START_PROFILE;
-		for (const auto &k : m_pressedKeys)
-		{
+		for (const auto &k : m_pressedKeys) {
 			// Fire pressed
 			fireSignal(m_onPressSignals, k);
 		}
-		for (const auto &k : m_releasedKeys)
-		{
+		for (const auto &k : m_releasedKeys) {
 			// Fire released
 			fireSignal(m_onReleaseSignals, k);
 			m_whilePressedKeys.erase(k);
 			m_pressedKeys.erase(k);
 		}
-		for (const auto &k : m_repeatedKeys)
-		{
+		for (const auto &k : m_repeatedKeys) {
 			// Fire repeated
 			fireSignal(m_onRepeatSignals, k);
 		}
-		for (const auto &k : m_whilePressedKeys)
-		{
+		for (const auto &k : m_whilePressedKeys) {
 			// Fire while pressed
 			fireSignal(m_whilePressedSignals, k);
 		}
-		for (const auto &k : m_pressedKeys)
-		{
+		for (const auto &k : m_pressedKeys) {
 			m_whilePressedKeys.insert(k);
 		}
 		m_pressedKeys.clear();
 		m_releasedKeys.clear();
 		m_repeatedKeys.clear();
 
-		if (m_mouseMoved)
-		{
+		if (m_mouseMoved) {
 			m_mouseMovedSignal(m_mouseXPos, m_mouseYPos, m_mouseXDelta, m_mouseYDelta);
 		}
 
-		for (const auto &b : m_draggedMouseButtons)
-		{
+		for (const auto &b : m_draggedMouseButtons) {
 			fireSignal(m_onMouseDragSignals, b, b, m_mouseXPos, m_mouseYPos, m_mouseXDelta, m_mouseYDelta);
 		}
 		m_draggedMouseButtons.clear();
@@ -164,8 +154,9 @@ public:
 		m_mouseYDelta = 0;
 		m_mouseMoved = false;
 	}
+	void Destroy() {}
 
-private:
+	private:
 	template<typename T>
 	std::size_t makeKey(uint8_t mods, T k)
 	{
@@ -177,8 +168,7 @@ private:
 	{
 		auto mapKey = makeKey(m_modifiers, k);
 		auto iter = container.find(mapKey);
-		if (iter != container.end())
-		{
+		if (iter != container.end()) {
 			iter->second(args...);
 		}
 	}
@@ -233,6 +223,8 @@ void InputManager::AddMouseDragHandler(const MouseDragMapping &handler)
 	m_implementation->AddMouseDragHandler(handler);
 }
 
+bool InputManager::Init() { return m_implementation->Init(); }
 void InputManager::Update(double dT) { m_implementation->Update(dT); }
+void InputManager::Destroy() { m_implementation->Destroy(); }
 
 }  // namespace pgeditor::input
