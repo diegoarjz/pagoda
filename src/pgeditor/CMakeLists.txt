@@ -1,6 +1,7 @@
 add_subdirectory(common)
 add_subdirectory(input)
 add_subdirectory(window)
+add_subdirectory(gui)
 
 set(glfw3_DIR "${CONAN_LIB_DIRS_GLFW}/cmake/glfw3")
 find_package(glfw3 CONFIG REQUIRED)
@@ -9,6 +10,7 @@ add_library(libpgeditor STATIC
   $<TARGET_OBJECTS:pgeditor_common>
   $<TARGET_OBJECTS:input>
   $<TARGET_OBJECTS:window>
+  $<TARGET_OBJECTS:gui>
 )
 
 target_include_directories(
