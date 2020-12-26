@@ -1,3 +1,4 @@
+add_subdirectory(common)
 add_subdirectory(input)
 add_subdirectory(window)
 
