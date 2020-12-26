@@ -4,6 +4,8 @@
 
 #include "window_creation_params.h"
 
+#include <Magnum/Platform/GLContext.h>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -14,6 +16,7 @@
 
 using namespace pgeditor::input;
 using namespace boost;
+using namespace Magnum;
 
 namespace pgeditor::window
 {
@@ -34,8 +37,7 @@ struct Window::Impl
 
 	bool GetSize(uint32_t* outWidth, uint32_t* outHeight)
 	{
-		if (!m_window)
-		{
+		if (!m_window) {
 			return false;
 		}
 
@@ -52,8 +54,7 @@ struct Window::Impl
 
 	bool GetFrameBufferSize(uint32_t* outWidth, uint32_t* outHeight)
 	{
-		if (!m_window)
-		{
+		if (!m_window) {
 			return false;
 		}
 
@@ -70,8 +71,7 @@ struct Window::Impl
 
 	void SetTitle(const std::string& title)
 	{
-		if (m_window)
-		{
+		if (m_window) {
 			glfwSetWindowTitle(m_window, title.c_str());
 		}
 	}
@@ -81,20 +81,17 @@ struct Window::Impl
 		auto pixelFormat = params.GetPixelFormat();
 		auto contextVersion = params.GetContextVersion();
 
-		if (m_window)
-		{
+		if (m_window) {
 			LOG_FATAL("Window creation requested but window already created.");
 		}
 
 		glfwSetErrorCallback(errorCallback);
 
-		if (!glfwInit())
-		{
+		if (!glfwInit()) {
 			LOG_FATAL("Failed to initialize GLFW");
 		}
 
-		for (uint32_t i = 0; i < 4; ++i)
-		{
+		for (uint32_t i = 0; i < 4; ++i) {
 			glfwWindowHint(GLFW_RED_BITS + i, pixelFormat[i]);
 		}
 		glfwWindowHint(GLFW_DEPTH_BITS, params.GetDepthBits());
@@ -112,10 +109,10 @@ struct Window::Impl
 
 		m_window = glfwCreateWindow(params.GetWidth(), params.GetHeight(), params.GetTitle().c_str(), NULL, NULL);
 
-		if (!m_window)
-		{
-			LOG_FATAL("Failed to create window");
+		if (!m_window) {
+			LOG_FATAL("Failed to create window.");
 			glfwTerminate();
+			return;
 		}
 
 		glfwSetCursorPosCallback(m_window, cursorPosCallBack);
@@ -128,11 +125,10 @@ struct Window::Impl
 
 		MakeContextCurrent();
 
-		glewExperimental = true;
-		if (glewInit() != GLEW_OK)
-		{
-			LOG_FATAL("Failed to initialize GLEW");
+		if (!m_context.tryCreate()) {
+			LOG_FATAL("Failed to create Magnum context.");
 			glfwTerminate();
+			return;
 		}
 
 		glfwSetWindowPos(m_window, params.GetXPos(), params.GetYPos());
@@ -140,8 +136,7 @@ struct Window::Impl
 
 	void MakeContextCurrent()
 	{
-		if (!m_window)
-		{
+		if (!m_window) {
 			return;
 		}
 		glfwMakeContextCurrent(m_window);
@@ -151,8 +146,7 @@ struct Window::Impl
 
 	void Destroy()
 	{
-		if (m_window)
-		{
+		if (m_window) {
 			glfwDestroyWindow(m_window);
 			m_window = nullptr;
 		}
@@ -161,8 +155,7 @@ struct Window::Impl
 
 	void SwapBuffers()
 	{
-		if (m_window)
-		{
+		if (m_window) {
 			glfwSwapBuffers(m_window);
 		}
 	}
@@ -177,10 +170,8 @@ struct Window::Impl
 		auto yDelta = yPos - m_mouseYPos;
 		m_mouseMoved(xPos, yPos, xDelta, yDelta);
 
-		for (auto i = 0u; i < GLFW_MOUSE_BUTTON_LAST; ++i)
-		{
-			if (glfwGetMouseButton(m_window, i) == GLFW_PRESS)
-			{
+		for (auto i = 0u; i < GLFW_MOUSE_BUTTON_LAST; ++i) {
+			if (glfwGetMouseButton(m_window, i) == GLFW_PRESS) {
 				m_drag(convertMouseFromGLFW(i), xPos, yPos, xDelta, yDelta);
 			}
 		}
@@ -205,10 +196,7 @@ struct Window::Impl
 
 	void RegisterOnWindowResize(const std::function<void(int, int)>& handler) { m_windowResize.connect(handler); }
 
-	void RegisterOnDrag(const std::function<void(MouseButton, int, int, int, int)>& handler)
-	{
-		m_drag.connect(handler);
-	}
+	void RegisterOnDrag(const std::function<void(MouseButton, int, int, int, int)>& handler) { m_drag.connect(handler); }
 	void RegisterOnKeyPressed(const std::function<void(Key, int)>& handler) { m_keyPressed.connect(handler); }
 	void RegisterOnKeyReleased(const std::function<void(Key, int)>& handler) { m_keyReleased.connect(handler); }
 	void RegisterOnKeyRepeat(const std::function<void(Key, int)>& handler) { m_keyRepeat.connect(handler); }
@@ -228,8 +216,10 @@ struct Window::Impl
 
 	static Impl* GetMappedWindow(GLFWwindow* w) { return s_glfwToWindowMap[w]; }
 
-private:
+	private:
 	GLFWwindow* m_window;
+
+	Platform::GLContext m_context{NoCreate};
 
 	int m_mouseXPos;
 	int m_mouseYPos;
@@ -268,8 +258,7 @@ static void cursorPosCallBack(GLFWwindow* window, double xPos, double yPos)
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	switch (action)
-	{
+	switch (action) {
 		case GLFW_PRESS:
 			Window::Impl::GetMappedWindow(window)->KeyPressed(key, scancode, mods);
 			break;
@@ -284,8 +273,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
 static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	switch (action)
-	{
+	switch (action) {
 		case GLFW_PRESS:
 			Window::Impl::GetMappedWindow(window)->MouseButtonPressed(button, mods);
 			break;
