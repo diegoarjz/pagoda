@@ -35,7 +35,8 @@ class Pagoda(ConanFile):
         ("corrade/2020.06@helmesjo/stable"),
         ("glew/2.1.0@bincrafters/stable"),
         ("glfw/3.3.2@bincrafters/stable"),
-        ("opengl/system")
+        ("opengl/system"),
+        ("entt/3.6.0")
     ]
 
 
