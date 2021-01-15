@@ -20,6 +20,7 @@ class Pagoda(ConanFile):
     }
     default_options = (
         "shared=False",
+        "boost:without_fiber=True",
         "glew:shared=False"
     )
     generators = "cmake"
