@@ -6,6 +6,11 @@
 #include <functional>
 #include <memory>
 
+namespace pgeditor::event
+{
+class EventManager;
+}
+
 namespace pgeditor::window
 {
 class WindowCreationParams;
@@ -15,9 +20,11 @@ class WindowCreationParams;
  */
 class Window
 {
-public:
+	public:
 	Window();
 	~Window();
+
+	void SetEventManager(event::EventManager *eventManager);
 
 	void Create(const WindowCreationParams &parameters);
 	bool GetWindowShouldClose() const;
@@ -29,22 +36,12 @@ public:
 
 	double GetEllapsedTime() const;
 
-	void RegisterOnWindowResize(const std::function<void(int, int)> &handler);
-	void RegisterOnKeyPressed(const std::function<void(input::Key, int)> &handler);
-	void RegisterOnKeyReleased(const std::function<void(input::Key, int)> &handler);
-	void RegisterOnKeyRepeat(const std::function<void(input::Key, int)> &handler);
-	void RegisterOnMouseMoved(const std::function<void(int, int, int, int)> &handler);
-	void RegisterOnMouseButtonPressed(const std::function<void(input::MouseButton)> &handler);
-	void RegisterOnMouseButtonReleased(const std::function<void(input::MouseButton)> &handler);
-	void RegisterOnScroll(const std::function<void(double, double)> &handler);
-	void RegisterOnDrag(const std::function<void(input::MouseButton, int, int, int, int)> &handler);
-
 	void EnterCursorRawMode();
 	void ExitCursorRawMode();
 
 	struct Impl;
 
-private:
+	private:
 	std::unique_ptr<Impl> m_implementation;
 };
 

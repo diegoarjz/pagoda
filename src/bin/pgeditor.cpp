@@ -1,6 +1,8 @@
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/instrument/profiler.h>
 
+#include <pgeditor/event/event_manager.h>
+
 #include <pgeditor/window/window.h>
 #include <pgeditor/window/window_creation_params.h>
 
@@ -24,6 +26,8 @@ using namespace pagoda::common::debug;
 using namespace pagoda::common::instrument;
 
 using namespace pgeditor;
+using namespace pgeditor::common;
+using namespace pgeditor::event;
 using namespace pgeditor::input;
 using namespace pgeditor::window;
 using namespace pgeditor::gui;
@@ -33,14 +37,18 @@ int main(int argc, char* argv[])
 	using namespace Magnum;
 
 	WindowCreationParams wcp;
+	EventManager eventManager;
 	InputManager inputManager;
-	GuiManager guiManager;
+	GuiManager guiManager(&eventManager);
 
 	auto w = std::make_shared<Window>();
 	w->Create(wcp);
 
+	eventManager.Init();
 	inputManager.Init();
 	guiManager.Init();
+
+	w->SetEventManager(&eventManager);
 
 	double previousTime = w->GetEllapsedTime();
 	double currentTime;
@@ -52,6 +60,7 @@ int main(int argc, char* argv[])
 		ellapsedTime = currentTime - previousTime;
 		previousTime = currentTime;
 
+		eventManager.Update(ellapsedTime);
 		inputManager.Update(ellapsedTime);
 		guiManager.Update(ellapsedTime);
 
@@ -61,6 +70,7 @@ int main(int argc, char* argv[])
 
 	guiManager.Destroy();
 	inputManager.Destroy();
+	eventManager.Destroy();
 
 	w->Destroy();
 

@@ -2,6 +2,17 @@ set(EDITOR_INPUT_SRCS
     "input_manager.cpp"
     "input_manager.h"
     "mouse.h"
+    "keys.h"
+    "event/mouse_event.cpp"
+    "event/mouse_event.h"
+    "event/mouse_scroll_event.cpp"
+    "event/mouse_scroll_event.h"
+    "event/mouse_move_event.cpp"
+    "event/mouse_move_event.h"
+    "event/character_event.cpp"
+    "event/character_event.h"
+    "event/key_event.cpp"
+    "event/key_event.h"
 )
 
 add_library(input OBJECT ${EDITOR_INPUT_SRCS})
@@ -38,4 +49,11 @@ target_link_libraries(
   input
   PRIVATE
     common
+    "glfw3"
+    "Corrade::Main"
+    "Magnum::GL"
+    "Magnum::GLContext"
+    "Magnum::Magnum"
+    "Magnum::Shaders"
+    "MagnumIntegration::ImGui"
 )

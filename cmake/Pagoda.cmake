@@ -125,6 +125,7 @@ function (add_pagoda_executable executable_name sources extra_libs)
       ${executable_name}
       PRIVATE
           libpagoda
+          libpgeditor
           Boost::chrono
           Boost::filesystem
           Boost::system

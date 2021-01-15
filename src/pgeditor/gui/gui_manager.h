@@ -4,12 +4,17 @@
 
 #include <memory>
 
+namespace pgeditor::event
+{
+class EventManager;
+}
+
 namespace pgeditor::gui
 {
 class GuiManager : public common::Manager
 {
 	public:
-	GuiManager();
+	GuiManager(event::EventManager* eventManager);
 	~GuiManager() override;
 
 	bool Init() override;

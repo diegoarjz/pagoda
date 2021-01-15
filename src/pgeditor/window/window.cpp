@@ -1,8 +1,15 @@
 #include "window.h"
 
-#include <pagoda/common/debug/logger.h>
-
 #include "window_creation_params.h"
+
+#include <pgeditor/event/event_manager.h>
+#include <pgeditor/input/event/character_event.h>
+#include <pgeditor/input/event/key_event.h>
+#include <pgeditor/input/event/mouse_event.h>
+#include <pgeditor/input/event/mouse_move_event.h>
+#include <pgeditor/input/event/mouse_scroll_event.h>
+
+#include <pagoda/common/debug/logger.h>
 
 #include <Magnum/Platform/GLContext.h>
 
@@ -15,6 +22,9 @@
 #include <unordered_map>
 
 using namespace pgeditor::input;
+using namespace pgeditor::input::event;
+using namespace pgeditor::event;
+
 using namespace boost;
 using namespace Magnum;
 
@@ -27,6 +37,7 @@ static void errorCallback(int errorCode, const char* errorDescription);
 static void windowSizeCallback(GLFWwindow* w, int width, int height);
 static void cursorPosCallBack(GLFWwindow* window, double xPos, double yPos);
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+static void characterCallBack(GLFWwindow* window, unsigned int keyPoint);
 static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 
@@ -34,6 +45,8 @@ struct Window::Impl
 {
 	Impl() : m_window(nullptr) {}
 	~Impl() { Destroy(); }
+
+	void SetEventManager(EventManager* eventManager) { m_eventManager = eventManager; }
 
 	bool GetSize(uint32_t* outWidth, uint32_t* outHeight)
 	{
@@ -119,6 +132,7 @@ struct Window::Impl
 		glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
 		glfwSetScrollCallback(m_window, scrollCallback);
 		glfwSetKeyCallback(m_window, keyCallback);
+		glfwSetCharCallback(m_window, characterCallBack);
 		glfwSetWindowSizeCallback(m_window, windowSizeCallback);
 
 		s_glfwToWindowMap[m_window] = this;
@@ -166,50 +180,49 @@ struct Window::Impl
 
 	void CursorPositionChanged(int xPos, int yPos)
 	{
-		auto xDelta = xPos - m_mouseXPos;
-		auto yDelta = yPos - m_mouseYPos;
-		m_mouseMoved(xPos, yPos, xDelta, yDelta);
-
-		for (auto i = 0u; i < GLFW_MOUSE_BUTTON_LAST; ++i) {
-			if (glfwGetMouseButton(m_window, i) == GLFW_PRESS) {
-				m_drag(convertMouseFromGLFW(i), xPos, yPos, xDelta, yDelta);
-			}
-		}
-
 		m_mouseXPos = xPos;
 		m_mouseYPos = yPos;
+
+		m_eventManager->PushEvent<MouseMoveEvent>(Magnum::Math::Vector2<int>{m_mouseXPos, m_mouseYPos});
 	}
 
-	void WindowResize(int width, int height) { m_windowResize(width, height); }
+	void WindowResize(int width, int height) { /*m_windowResize(width, height);*/ }
 
-	void KeyPressed(int key, int scancode, int mods) { m_keyPressed(convertKeyFromGLFW(key), scancode); }
-
-	void KeyReleased(int key, int scancode, int mods) { m_keyReleased(convertKeyFromGLFW(key), scancode); }
-
-	void KeyRepeat(int key, int scancode, int mods) { m_keyRepeat(convertKeyFromGLFW(key), scancode); }
-
-	void MouseButtonPressed(int button, int mods) { m_mouseButtonPressed(convertMouseFromGLFW(button)); }
-
-	void MouseButtonReleased(int button, int mods) { m_mouseButtonReleased(convertMouseFromGLFW(button)); }
-
-	void Scroll(double xOffset, double yOffset) { m_scrolled(xOffset, yOffset); }
-
-	void RegisterOnWindowResize(const std::function<void(int, int)>& handler) { m_windowResize.connect(handler); }
-
-	void RegisterOnDrag(const std::function<void(MouseButton, int, int, int, int)>& handler) { m_drag.connect(handler); }
-	void RegisterOnKeyPressed(const std::function<void(Key, int)>& handler) { m_keyPressed.connect(handler); }
-	void RegisterOnKeyReleased(const std::function<void(Key, int)>& handler) { m_keyReleased.connect(handler); }
-	void RegisterOnKeyRepeat(const std::function<void(Key, int)>& handler) { m_keyRepeat.connect(handler); }
-	void RegisterOnMouseMoved(const std::function<void(int, int, int, int)>& handler) { m_mouseMoved.connect(handler); }
-	void RegisterOnMouseButtonPressed(const std::function<void(MouseButton)>& handler)
+	void KeyPressed(int key, int scancode, int mods)
 	{
-		m_mouseButtonPressed.connect(handler);
+		m_eventManager->PushEvent<KeyEvent>(key, scancode, mods, input::event::KeyEvent::KeyEventType::Pressed);
 	}
-	void RegisterOnMouseButtonReleased(const std::function<void(MouseButton)>& handler)
+
+	void CharacterPressed(unsigned int keyPoint) { m_eventManager->PushEvent<CharacterEvent>(keyPoint); }
+
+	void KeyReleased(int key, int scancode, int mods)
 	{
-		m_mouseButtonReleased.connect(handler);
+		m_eventManager->PushEvent<KeyEvent>(key, scancode, mods, input::event::KeyEvent::KeyEventType::Released);
 	}
-	void RegisterOnScroll(const std::function<void(double, double)>& handler) { m_scrolled.connect(handler); }
+
+	void KeyRepeat(int key, int scancode, int mods)
+	{
+		m_eventManager->PushEvent<KeyEvent>(key, scancode, mods, input::event::KeyEvent::KeyEventType::Repeat);
+	}
+
+	void MouseButtonPressed(int button, int mods)
+	{
+		m_eventManager->PushEvent<MouseEvent>(Magnum::Math::Vector2<int>{m_mouseXPos, m_mouseYPos},
+		                                      static_cast<input::event::MouseEvent::Button>(button), true);
+	}
+
+	void MouseButtonReleased(int button, int mods)
+	{
+		m_eventManager->PushEvent<MouseEvent>(Magnum::Math::Vector2<int>{m_mouseXPos, m_mouseYPos},
+		                                      static_cast<input::event::MouseEvent::Button>(button), false);
+	}
+
+	void Scroll(double xOffset, double yOffset)
+	{
+		m_eventManager->PushEvent<MouseScrollEvent>(
+		  Magnum::Math::Vector2<int>{static_cast<int>(xOffset), static_cast<int>(yOffset)},
+		  Magnum::Math::Vector2<int>{m_mouseXPos, m_mouseYPos});
+	}
 
 	void EnterCursorRawMode() { glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); }
 	void ExitCursorRawMode() { glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); }
@@ -224,17 +237,9 @@ struct Window::Impl
 	int m_mouseXPos;
 	int m_mouseYPos;
 
-	signals2::signal<void(int, int, int, int)> m_mouseMoved;
-	signals2::signal<void(MouseButton)> m_mouseButtonPressed;
-	signals2::signal<void(MouseButton)> m_mouseButtonReleased;
-	signals2::signal<void(double, double)> m_scrolled;
-	signals2::signal<void(Key, int)> m_keyPressed;
-	signals2::signal<void(Key, int)> m_keyReleased;
-	signals2::signal<void(Key, int)> m_keyRepeat;
-	signals2::signal<void(MouseButton, int, int, int, int)> m_drag;
-	signals2::signal<void(int, int)> m_windowResize;
-
 	static std::unordered_map<GLFWwindow*, Impl*> s_glfwToWindowMap;
+
+	EventManager* m_eventManager;
 };  // struct Window::Impl
 
 std::unordered_map<GLFWwindow*, Window::Impl*> Window::Impl::s_glfwToWindowMap;
@@ -271,6 +276,11 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	};
 }
 
+static void characterCallBack(GLFWwindow* window, unsigned int keyPoint)
+{
+	Window::Impl::GetMappedWindow(window)->CharacterPressed(keyPoint);
+}
+
 static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
 	switch (action) {
@@ -301,45 +311,8 @@ void Window::SwapBuffers() { m_implementation->SwapBuffers(); }
 void Window::PollEvents() { m_implementation->PollEvents(); }
 double Window::GetEllapsedTime() const { return m_implementation->GetEllapsedTime(); }
 
-void Window::RegisterOnWindowResize(const std::function<void(int, int)>& handler)
-{
-	m_implementation->RegisterOnWindowResize(handler);
-}
-
-void Window::RegisterOnKeyPressed(const std::function<void(Key, int)>& handler)
-{
-	m_implementation->RegisterOnKeyPressed(handler);
-}
-void Window::RegisterOnKeyReleased(const std::function<void(Key, int)>& handler)
-{
-	m_implementation->RegisterOnKeyReleased(handler);
-}
-void Window::RegisterOnKeyRepeat(const std::function<void(Key, int)>& handler)
-{
-	m_implementation->RegisterOnKeyRepeat(handler);
-}
-void Window::RegisterOnMouseMoved(const std::function<void(int, int, int, int)>& handler)
-{
-	m_implementation->RegisterOnMouseMoved(handler);
-}
-void Window::RegisterOnMouseButtonPressed(const std::function<void(MouseButton)>& handler)
-{
-	m_implementation->RegisterOnMouseButtonPressed(handler);
-}
-void Window::RegisterOnMouseButtonReleased(const std::function<void(MouseButton)>& handler)
-{
-	m_implementation->RegisterOnMouseButtonReleased(handler);
-}
-void Window::RegisterOnScroll(const std::function<void(double, double)>& handler)
-{
-	m_implementation->RegisterOnScroll(handler);
-}
-
-void Window::RegisterOnDrag(const std::function<void(MouseButton, int, int, int, int)>& handler)
-{
-	m_implementation->RegisterOnDrag(handler);
-}
-
 void Window::EnterCursorRawMode() { m_implementation->EnterCursorRawMode(); }
 void Window::ExitCursorRawMode() { m_implementation->ExitCursorRawMode(); }
+void Window::SetEventManager(EventManager* eventManager) { m_implementation->SetEventManager(eventManager); }
+
 }  // namespace pgeditor::window
