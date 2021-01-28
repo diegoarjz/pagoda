@@ -47,7 +47,7 @@ jobs:
 
             - name: Download and Install Dependencies
               run: |
-                  pip3 install wheel setuptools
+                  pip3 install wheel setuptools numpy
                   pip3 install conan
             - name: Download and Install Dependencies (Ubuntu)
               if: ${{ contains(matrix.config.os, 'Ubuntu') }}

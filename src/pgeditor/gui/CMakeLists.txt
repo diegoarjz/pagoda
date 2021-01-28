@@ -1,6 +1,18 @@
 set(GUI_SRCS
   "gui_manager.cpp"
   "gui_manager.h"
+  "tile.cpp"
+  "tile.h"
+  "window.cpp"
+  "window.h"
+  "menu.cpp"
+  "menu.h"
+  "tile_layout.cpp"
+  "tile_layout.h"
+  "horizontal_tile_layout.cpp"
+  "horizontal_tile_layout.h"
+  "vertical_tile_layout.cpp"
+  "vertical_tile_layout.h"
 )
 
 add_library(gui OBJECT ${GUI_SRCS})
@@ -43,3 +55,16 @@ target_link_libraries(
     "Magnum::Shaders"
     "MagnumIntegration::ImGui"
 )
+
+#########################################################################
+# Unit tests
+#########################################################################
+set(GUI_UNIT_TESTS
+  "tile.test.cpp"
+  "horizontal_tile_layout.test.cpp"
+  "vertical_tile_layout.test.cpp"
+)
+
+foreach(unit_test_src ${GUI_UNIT_TESTS})
+    add_unit_test(${unit_test_src})
+endforeach()

@@ -3,6 +3,10 @@ set(WINDOW_SRCS
     "window.h"
     "window_creation_params.cpp"
     "window_creation_params.h"
+    "event/quit_event.cpp"
+    "event/quit_event.h"
+    "event/window_resize_event.cpp"
+    "event/window_resize_event.h"
 )
 
 add_library(window OBJECT ${WINDOW_SRCS})

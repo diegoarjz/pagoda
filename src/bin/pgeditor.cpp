@@ -46,6 +46,7 @@ int main(int argc, char* argv[])
 
 	eventManager.Init();
 	inputManager.Init();
+	guiManager.SetWindowSize(wcp.GetWidth(), wcp.GetHeight());
 	guiManager.Init();
 
 	w->SetEventManager(&eventManager);

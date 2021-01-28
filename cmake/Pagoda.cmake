@@ -140,6 +140,9 @@ function (add_pagoda_executable executable_name sources extra_libs)
   )
 endfunction()
 
+# GTEST Libraries can be suffixed with a 'd'
+set(PAGODA_GTEST_LIBS "${CONAN_LIBS_GTEST}")
+
 # Adds a unit test executable from a single unit test source.
 # The unit test name is based on the source file and assumes that
 # the source file is suffixed by a .test.cpp.
@@ -149,7 +152,7 @@ endfunction()
 function (add_unit_test unit_test_src)
     get_filename_component(unit_test_base_name ${unit_test_src} NAME)
     string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
-    set(unit_test_libs "gmock" "gmock_main" "gtest" "gtest_main")
+    set(unit_test_libs "${PAGODA_GTEST_LIBS}")
     add_pagoda_executable("${test_name}" "${unit_test_src}" "${unit_test_libs}")
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()

@@ -43,8 +43,7 @@ target_link_libraries(
         Boost::chrono
         Boost::system
         Boost::filesystem
-        gmock
-        gtest
+        ${PAGODA_GTEST_LIBS}
 )
 
 file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")

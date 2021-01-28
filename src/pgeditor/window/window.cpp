@@ -1,5 +1,7 @@
 #include "window.h"
 
+#include "event/quit_event.h"
+#include "event/window_resize_event.h"
 #include "window_creation_params.h"
 
 #include <pgeditor/event/event_manager.h>
@@ -46,7 +48,14 @@ struct Window::Impl
 	Impl() : m_window(nullptr) {}
 	~Impl() { Destroy(); }
 
-	void SetEventManager(EventManager* eventManager) { m_eventManager = eventManager; }
+	void SetEventManager(EventManager* eventManager)
+	{
+		m_eventManager = eventManager;
+
+		m_eventManager->Register<event::QuitEvent, &Impl::HandleQuit>(*this);
+	}
+
+	void HandleQuit(const event::QuitEvent&) { glfwSetWindowShouldClose(m_window, GLFW_TRUE); }
 
 	bool GetSize(uint32_t* outWidth, uint32_t* outHeight)
 	{
@@ -186,7 +195,10 @@ struct Window::Impl
 		m_eventManager->PushEvent<MouseMoveEvent>(Magnum::Math::Vector2<int>{m_mouseXPos, m_mouseYPos});
 	}
 
-	void WindowResize(int width, int height) { /*m_windowResize(width, height);*/ }
+	void WindowResize(int width, int height)
+	{
+		m_eventManager->PushEvent<event::WindowResizeEvent>(static_cast<uint32_t>(width), static_cast<uint32_t>(height));
+	}
 
 	void KeyPressed(int key, int scancode, int mods)
 	{

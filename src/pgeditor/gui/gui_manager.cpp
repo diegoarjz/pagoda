@@ -1,5 +1,9 @@
 #include "gui_manager.h"
 
+#include "menu.h"
+#include "tile.h"
+#include "window.h"
+
 #include <pgeditor/event/event_manager.h>
 
 #include <pgeditor/input/event/character_event.h>
@@ -7,6 +11,9 @@
 #include <pgeditor/input/event/mouse_event.h>
 #include <pgeditor/input/event/mouse_move_event.h>
 #include <pgeditor/input/event/mouse_scroll_event.h>
+
+#include <pgeditor/window/event/quit_event.h>
+#include <pgeditor/window/event/window_resize_event.h>
 
 #include <Magnum/GL/Context.h>
 #include <Magnum/GL/DefaultFramebuffer.h>
@@ -19,20 +26,28 @@
 
 using namespace Magnum;
 
+using namespace pagoda::math;
+
 using namespace pgeditor::event;
 using namespace pgeditor::common;
 using namespace pgeditor::input::event;
+using namespace pgeditor::window::event;
 
 namespace pgeditor::gui
 {
 class GuiManager::GuiManagerImpl
 {
 	public:
-	GuiManagerImpl(EventManager* eventManager) : m_eventManager{eventManager} {}
+	GuiManagerImpl(EventManager* eventManager) : m_eventManager{eventManager}, m_width(0), m_height(0) {}
 
 	bool Init()
 	{
-		m_imgui = std::make_unique<ImGuiIntegration::Context>(Vector2i{800, 600});
+		m_rootTile = std::make_shared<Tile>(Vec2U{0u, getMenuHeight()}, Vec2U{m_width, m_height - getMenuHeight()});
+		m_rootTile->Split(Tile::SplitDirection::Horizontal);
+		m_rootTile->GetChildren()[1]->Split(Tile::SplitDirection::Vertical);
+
+		m_imgui =
+		  std::make_unique<ImGuiIntegration::Context>(Vector2i{static_cast<int>(m_width), static_cast<int>(m_height)});
 
 		GL::Renderer::setBlendEquation(GL::Renderer::BlendEquation::Add, GL::Renderer::BlendEquation::Add);
 		GL::Renderer::setBlendFunction(GL::Renderer::BlendFunction::SourceAlpha,
@@ -43,6 +58,9 @@ class GuiManager::GuiManagerImpl
 		m_eventManager->Register<MouseScrollEvent, &GuiManagerImpl::OnMouseScrollEvent>(*this);
 		m_eventManager->Register<CharacterEvent, &GuiManagerImpl::OnCharacterEvent>(*this);
 		m_eventManager->Register<KeyEvent, &GuiManagerImpl::OnKeyEvent>(*this);
+		m_eventManager->Register<WindowResizeEvent, &GuiManagerImpl::OnWindowResize>(*this);
+
+		initMenus();
 		return true;
 	}
 
@@ -51,6 +69,17 @@ class GuiManager::GuiManagerImpl
 	void OnMouseScrollEvent(const MouseScrollEvent& e) { m_mouseScrollEvents.push_back(e); }
 	void OnCharacterEvent(const CharacterEvent& e) { m_characterEvents.push_back(e); }
 	void OnKeyEvent(const KeyEvent& e) { m_keyEvents.push_back(e); }
+	void OnWindowResize(const WindowResizeEvent& e) { SetWindowSize(e.GetWidth(), e.GetHeight()); }
+	void SetWindowSize(uint32_t width, uint32_t height)
+	{
+		m_width = width;
+		m_height = height;
+		if (m_imgui != nullptr) {
+			ImGui::GetIO().DisplaySize.x = width;
+			ImGui::GetIO().DisplaySize.y = height;
+			m_rootTile->SetSize(width, height);
+		}
+	}
 
 	void Update(double dT)
 	{
@@ -61,6 +90,9 @@ class GuiManager::GuiManagerImpl
 
 		processEvents();
 		m_imgui->newFrame();
+
+		renderMainMenu();
+		m_rootTile->Render();
 
 		m_imgui->drawFrame();
 		GL::Renderer::enable(GL::Renderer::Feature::DepthTest);
@@ -185,6 +217,42 @@ class GuiManager::GuiManagerImpl
 		m_keyEvents.clear();
 	}
 
+	void initMenus()
+	{
+		// clang-format off
+    m_mainMenu = std::vector<Menu>{
+      Menu{"File", {
+          {"New"},
+          {"Open"},
+          {"Save"},
+          {"Quit", [this](){ this->m_eventManager->PushEvent<QuitEvent>(); }}
+        }
+      }
+    };
+		// clang-format on
+	}
+
+	void renderMainMenu()
+	{
+		if (ImGui::BeginMainMenuBar()) {
+			for (const auto& menu : m_mainMenu) {
+				if (ImGui::BeginMenu(menu.GetLabel().c_str())) {
+					for (const auto& item : menu.GetMenuItems()) {
+						if (ImGui::MenuItem(item.m_label.c_str())) {
+							if (item.m_action) {
+								item.m_action();
+							}
+						}
+					}
+					ImGui::EndMenu();
+				}
+			}
+			ImGui::EndMainMenuBar();
+		}
+	}
+
+	uint32_t getMenuHeight() const { return 20u; }
+
 	std::unique_ptr<ImGuiIntegration::Context> m_imgui;
 	EventManager* m_eventManager;
 	std::vector<MouseEvent> m_mouseEvents;
@@ -192,6 +260,11 @@ class GuiManager::GuiManagerImpl
 	std::vector<MouseScrollEvent> m_mouseScrollEvents;
 	std::vector<CharacterEvent> m_characterEvents;
 	std::vector<KeyEvent> m_keyEvents;
+
+	uint32_t m_width;
+	uint32_t m_height;
+	std::shared_ptr<Tile> m_rootTile;
+	std::vector<Menu> m_mainMenu;
 };
 
 GuiManager::GuiManager(EventManager* eventManager) : m_implementation{std::make_unique<GuiManagerImpl>(eventManager)} {}
@@ -200,4 +273,6 @@ GuiManager::~GuiManager() {}
 bool GuiManager::Init() { return m_implementation->Init(); }
 void GuiManager::Update(double dT) { m_implementation->Update(dT); }
 void GuiManager::Destroy() { m_implementation->Destroy(); }
+
+void GuiManager::SetWindowSize(uint32_t width, uint32_t height) { m_implementation->SetWindowSize(width, height); }
 }  // namespace pgeditor::gui

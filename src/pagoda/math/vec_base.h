@@ -32,6 +32,14 @@ std::string to_string(const boost::qvm::vec<Rep, Size>& vec)
 }
 
 // Common vector types
+using Vec2U = boost::qvm::vec<uint32_t, 2>;
+using Vec3U = boost::qvm::vec<uint32_t, 3>;
+using Vec4U = boost::qvm::vec<uint32_t, 4>;
+
+using Vec2I = boost::qvm::vec<int32_t, 2>;
+using Vec3I = boost::qvm::vec<int32_t, 3>;
+using Vec4I = boost::qvm::vec<int32_t, 4>;
+
 using Vec2F = boost::qvm::vec<float, 2>;
 using Vec3F = boost::qvm::vec<float, 3>;
 using Vec4F = boost::qvm::vec<float, 4>;
