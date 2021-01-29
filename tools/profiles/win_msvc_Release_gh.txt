@@ -4,7 +4,7 @@
   build_type=Release
   compiler=Visual Studio
   compiler.runtime=MD
-  compiler.version=14.2
+  compiler.version=14
   os=Windows
   os_build=Windows
 
