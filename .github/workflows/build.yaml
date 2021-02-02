@@ -71,7 +71,7 @@ jobs:
             - name: Run tests
               run: |
                   cd build
-                  ctest
+                  ctest -C Release
 
             - name: Create package
               run: |
