@@ -82,59 +82,78 @@ endif()
 set(PAGODA_COMPILE_OPTIONS
     $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall>
     $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
-    $<$<CXX_COMPILER_ID:GNU>:-Wno-gnu-zero-variadic-macro-arguments>
+    $<$<CXX_COMPILER_ID:Clang>:-Wno-gnu-zero-variadic-macro-arguments>
 )
 
 ################################################
 # Helpers
 ################################################
+
+# Adds an executable linked against the pagoda and other libs.
+function (add_pagoda_executable executable_name sources extra_libs)
+  add_executable(${executable_name} ${sources})
+
+  target_compile_features(
+      ${executable_name}
+      PRIVATE
+          cxx_std_17
+  )
+
+  target_compile_options(
+      ${executable_name}
+      PRIVATE
+        ${PAGODA_COMPILE_OPTIONS}
+  )
+
+  target_include_directories(
+      ${executable_name}
+      PUBLIC
+          $<INSTALL_INTERFACE:pagoda>
+          $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+      PRIVATE
+          ${CMAKE_SOURCE_DIR}/source
+          ${Boost_INCLUDE_DIRS}
+          ${PGSCRIPT_INCLUDE_DIR}
+  )
+
+  target_compile_definitions(
+      ${executable_name}
+      PRIVATE
+  )
+
+  target_link_libraries(
+      ${executable_name}
+      PRIVATE
+          libpagoda
+          libpgeditor
+          Boost::chrono
+          Boost::filesystem
+          Boost::system
+          Boost::program_options
+          ${extra_libs}
+  )
+
+  include(GNUInstallDirs)
+  install(TARGETS ${executable_name}
+      EXPORT pagoda-export
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+endfunction()
+
+# GTEST Libraries can be suffixed with a 'd'
+set(PAGODA_GTEST_LIBS "${CONAN_LIBS_GTEST}")
+
+# Adds a unit test executable from a single unit test source.
+# The unit test name is based on the source file and assumes that
+# the source file is suffixed by a .test.cpp.
+# Example: unit.test.cpp -> unit
+#
+# param unit_test_src: the source file.
 function (add_unit_test unit_test_src)
     get_filename_component(unit_test_base_name ${unit_test_src} NAME)
     string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
-
-    add_executable(${test_name} ${unit_test_src})
-
-    target_include_directories(
-        ${test_name}
-        PRIVATE
-            $<INSTALL_INTERFACE:pagoda>
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-            ${Boost_INCLUDE_DIRS}
-    )
-
-    target_compile_features(
-        ${test_name}
-        PRIVATE
-            cxx_std_17
-    )
-
-    target_compile_options(
-        ${test_name}
-        PRIVATE
-          ${PAGODA_COMPILE_OPTIONS}
-    )
-
-    target_compile_definitions(
-        ${test_name}
-        PUBLIC
-          ${PAGODA_COMPILER_ID}
-        PRIVATE
-            $<$<CONFIG:DEBUG>:DEBUG>
-    )
-
-    target_link_libraries(
-        ${test_name}
-        PRIVATE
-            libpagoda
-            Boost::chrono
-            Boost::system
-            Boost::filesystem
-            gmock
-            gmock_main
-            gtest
-            gtest_main
-    )
-
+    set(unit_test_libs "${PAGODA_GTEST_LIBS}")
+    add_pagoda_executable("${test_name}" "${unit_test_src}" "${unit_test_libs}")
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 

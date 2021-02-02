@@ -38,8 +38,8 @@ jobs:
                     os: windows-latest,
                     set_path: "",
                     conan_profile: './tools/profiles/win_msvc_Release_gh.txt',
-                    cc: "gcc",
-                    cxx: "g++"
+                    cc: "",
+                    cxx: ""
                   }
         steps:
             - name: Check out repository
@@ -47,8 +47,12 @@ jobs:
 
             - name: Download and Install Dependencies
               run: |
-                  pip3 install wheel setuptools
+                  pip3 install wheel setuptools numpy
                   pip3 install conan
+            - name: Download and Install Dependencies (Ubuntu)
+              if: ${{ contains(matrix.config.os, 'Ubuntu') }}
+              run: |
+                  sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev
 
             - name: Configure and Build
               env:
@@ -57,6 +61,9 @@ jobs:
               run: |
                   ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
+                  conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+                  conan remote add helmesjo https://api.bintray.com/conan/helmesjo/public-conan
+                  conan remote add pagoda https://api.bintray.com/conan/diegoarjz/Pagoda
                   conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
                   cd ${{ github.workspace }}/build
                   conan build ${{ github.workspace }}
@@ -65,7 +72,7 @@ jobs:
               if: ${{ !contains(matrix.config.os, 'Windows') }}
               run: |
                   cd build
-                  cmake --build . --target test
+                  ctest -C Release
 
             - name: Create package
               run: |

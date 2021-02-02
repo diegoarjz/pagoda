@@ -48,8 +48,7 @@ target_link_libraries(
         Boost::chrono
         Boost::system
         Boost::filesystem
-        gmock
-        gtest
+        ${PAGODA_GTEST_LIBS}
 )
 
 add_test(NAME regression_tests COMMAND regression_tests)
