@@ -71,7 +71,7 @@ jobs:
             - name: Run tests
               run: |
                   cd build
-                  cmake --build . --target test
+                  ctest
 
             - name: Create package
               run: |
