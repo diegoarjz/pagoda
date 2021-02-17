@@ -262,12 +262,15 @@ class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
 
 	std::string ToString() const { return "<Expression>"; }
 
+	const std::string &GetExpressionString() const { return m_expressionString; }
+
 	ast::ProgramPtr m_expression;
 	std::unordered_set<Variable, Variable::Hash> m_variables;
 	std::unordered_map<Variable, DynamicValueBasePtr, Variable::Hash> m_variableValues;
 	std::vector<std::weak_ptr<Expression>> m_dependentExpressions;
 	DynamicValueBasePtr m_lastComputedValue;
 	ExpressionPtr m_expressionInterface;
+	std::string m_expressionString;
 };
 
 std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expressionString)
@@ -278,6 +281,7 @@ std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expr
 	Parser p;
 	expression->m_implementation = std::make_unique<Expression::Impl>(p.Parse(expressionString));
 	expression->m_implementation->m_expressionInterface = expression;
+	expression->m_implementation->m_expressionString = expressionString;
 
 	ExpressionValidator validator;
 	expression->m_implementation->m_expression->AcceptVisitor(&validator);
@@ -318,6 +322,8 @@ const std::vector<std::weak_ptr<Expression>> Expression::GetDependentExpressions
 }
 
 std::string Expression::ToString() const { return m_implementation->ToString(); }
+
+const std::string &Expression::GetExpressionString() const { return m_implementation->GetExpressionString(); }
 
 void Expression::AcceptVisitor(ValueVisitorBase &visitor) { visitor.Visit(*this); }
 

@@ -13,6 +13,8 @@ class Rotate : public objects::ProceduralOperation
 	Rotate(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Rotate();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

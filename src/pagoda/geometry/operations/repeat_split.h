@@ -22,6 +22,8 @@ class RepeatSplit : public objects::ProceduralOperation
 	RepeatSplit(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~RepeatSplit();
 
+	const std::string &GetOperationName() const override;
+
 	void DoWork() override;
 
 	private:

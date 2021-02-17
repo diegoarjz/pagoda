@@ -13,6 +13,8 @@ class Translate : public objects::ProceduralOperation
 	Translate(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Translate();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

@@ -33,6 +33,12 @@ CreateSphereGeometry::CreateSphereGeometry(ProceduralObjectSystemPtr objectSyste
 
 CreateSphereGeometry::~CreateSphereGeometry() {}
 
+const std::string& CreateSphereGeometry::GetOperationName() const
+{
+	static const std::string sName{"CreateSphereGeometry"};
+	return sName;
+}
+
 void CreateSphereGeometry::DoWork()
 {
 	START_PROFILE;

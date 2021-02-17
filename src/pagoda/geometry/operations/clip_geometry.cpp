@@ -34,6 +34,12 @@ ClipGeometry::ClipGeometry(objects::ProceduralObjectSystemPtr objectSystem) : ob
 
 ClipGeometry::~ClipGeometry() {}
 
+const std::string& ClipGeometry::GetOperationName() const
+{
+	static const std::string sName{"ClipGeometry"};
+	return sName;
+}
+
 void ClipGeometry::DoWork()
 {
 	START_PROFILE;

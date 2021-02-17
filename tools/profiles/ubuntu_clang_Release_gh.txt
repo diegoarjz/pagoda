@@ -4,7 +4,7 @@
   build_type=Release
   compiler=clang
   compiler.libcxx=libc++
-  compiler.version=9
+  compiler.version=10
   os=Linux
   os_build=Linux
 

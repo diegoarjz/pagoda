@@ -15,6 +15,8 @@ class FaceOffsetOperation : public objects::ProceduralOperation
 	FaceOffsetOperation(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~FaceOffsetOperation();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

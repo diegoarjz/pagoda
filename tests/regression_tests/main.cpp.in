@@ -7,6 +7,8 @@
 #include <pagoda/graph/default_scheduler.h>
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/io/reader.h>
+#include <pagoda/graph/io/writer.h>
+#include <pagoda/graph/query/query.h>
 #include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object.h>
 
@@ -21,7 +23,7 @@ using namespace pagoda::graph::io;
 
 class RegressionTest
 {
-public:
+	public:
 	static void SetShouldWriteFiles(const bool& write) { s_writeFiles = write; }
 
 	static boost::filesystem::path GetTestFilesDirectory() { return "@CMAKE_CURRENT_SOURCE_DIR@"; }
@@ -32,6 +34,7 @@ public:
 		ReadGraphFromFile(GetInputGraph().string());
 		ExecuteGraph();
 		MatchFiles();
+		TestWriter();
 	}
 
 	boost::filesystem::path GetInputGraph()
@@ -48,8 +51,7 @@ public:
 		auto dir = GetTestFilesDirectory();
 		dir /= "test_files";
 		dir /= m_regressionTestName;
-		if (!boost::filesystem::exists(dir))
-		{
+		if (!boost::filesystem::exists(dir)) {
 			fs::CreateDirectories(dir);
 		}
 		return dir;
@@ -98,22 +100,16 @@ public:
 		auto expectedFiles = GetAllExpectedFiles();
 		auto resultFiles = GetAllResultFiles();
 
-		if (s_writeFiles)
-		{
-			for (const auto& f : expectedFiles)
-			{
+		if (s_writeFiles) {
+			for (const auto& f : expectedFiles) {
 				boost::filesystem::remove(GetExpectedResultFile(f));
 			}
-			for (const auto& f : resultFiles)
-			{
+			for (const auto& f : resultFiles) {
 				boost::filesystem::copy(GetResultFile(f), GetExpectedResultFile(f));
 			}
-		}
-		else
-		{
+		} else {
 			EXPECT_EQ(expectedFiles, resultFiles);
-			for (const auto& f : expectedFiles)
-			{
+			for (const auto& f : expectedFiles) {
 				std::string resultFile = fs::LoadFileToString(GetResultFile(f));
 				std::string expectedFile = fs::LoadFileToString(GetExpectedResultFile(f));
 				EXPECT_EQ(expectedFile, resultFile);
@@ -121,7 +117,53 @@ public:
 		}
 	}
 
-private:
+	void TestWriter()
+	{
+		GraphWriter writer(m_graph);
+		std::stringstream out;
+		writer.Write(out);
+		auto outStr1 = out.str();
+		std::shared_ptr<Graph> graph2 = nullptr;
+		try {
+			graph2 = m_pagoda.CreateGraphFromString(outStr1);
+		} catch (common::exception::Exception& e) {
+			std::cerr << "Failed to read graph" << std::endl;
+			std::cerr << e.What() << std::endl;
+			FAIL();
+		}
+
+		NodeSet nodes;
+		query::Query q{*m_graph, nodes};
+		m_graph->ExecuteQuery(q);
+
+		auto compareNodeSets = [](const NodeSet& ns1, const NodeSet& ns2) {
+			ASSERT_EQ(ns1.size(), ns2.size());
+			for (auto n1 : ns1) {
+				auto found = std::find_if(ns2.begin(), ns2.end(),
+				                          [&n1](const std::shared_ptr<Node>& n) { return n->GetName() == n1->GetName(); });
+				ASSERT_NE(found, ns2.end());
+
+				auto parEnd = n1->GetMembersEnd();
+				for (auto parIter = n1->GetMembersBegin(); parIter != parEnd; ++parIter) {
+					auto par = (*found)->GetMember(parIter->first);
+					ASSERT_NE(par, nullptr);
+					EXPECT_EQ(parIter->second.m_value->ToString(), par->ToString());
+				}
+			}
+		};
+
+		for (auto n : nodes) {
+			auto n2 = graph2->GetNode(n->GetName());
+			ASSERT_NE(n2, nullptr);
+			auto inNodes = m_graph->GetNodeInputNodes(n->GetName());
+			auto inNodes2 = graph2->GetNodeInputNodes(n2->GetName());
+
+			compareNodeSets(m_graph->GetNodeInputNodes(n->GetName()), graph2->GetNodeInputNodes(n2->GetName()));
+			compareNodeSets(m_graph->GetNodeOutputNodes(n->GetName()), graph2->GetNodeOutputNodes(n2->GetName()));
+		}
+	}
+
+	private:
 	std::string m_regressionTestName;
 
 	GraphPtr m_graph;
@@ -160,10 +202,8 @@ REGRESSION_TEST(banner)
 int main(int argc, char* argv[])
 {
 	bool writeFiles = false;
-	for (auto i = 1; i < argc; ++i)
-	{
-		if (std::string(argv[i]) == "--writeFiles")
-		{
+	for (auto i = 1; i < argc; ++i) {
+		if (std::string(argv[i]) == "--writeFiles") {
 			writeFiles = true;
 			break;
 		}

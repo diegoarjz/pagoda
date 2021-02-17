@@ -35,6 +35,12 @@ ExtrudeGeometry::ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem) : Proce
 
 ExtrudeGeometry::~ExtrudeGeometry() {}
 
+const std::string& ExtrudeGeometry::GetOperationName() const
+{
+	static const std::string sName{"ExtrudeGeometry"};
+	return sName;
+}
+
 void ExtrudeGeometry::DoWork()
 {
 	START_PROFILE;

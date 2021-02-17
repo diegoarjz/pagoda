@@ -1,5 +1,4 @@
-#ifndef PAGODA_PROCEDURAL_GRAPH_READER_H_
-#define PAGODA_PROCEDURAL_GRAPH_READER_H_
+#pragma once
 
 #include "parse_result.h"
 
@@ -32,4 +31,3 @@ class GraphReader
 };
 }  // namespace pagoda::graph::io
 
-#endif

@@ -28,6 +28,12 @@ ExtractScope::ExtractScope(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 
 ExtractScope::~ExtractScope() {}
 
+const std::string& ExtractScope::GetOperationName() const
+{
+	static const std::string sName{"ExtractScope"};
+	return sName;
+}
+
 void ExtractScope::DoWork()
 {
 	START_PROFILE;

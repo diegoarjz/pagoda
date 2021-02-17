@@ -66,6 +66,11 @@ class DynamicValueTable
 	iterator begin();
 	iterator end();
 
+	/**
+	 * Returns the number of members in this table.
+	 */
+	std::size_t GetMemberCount() const;
+
 	void DumpSymbols(std::ostream &out) const;
 
 	private:
