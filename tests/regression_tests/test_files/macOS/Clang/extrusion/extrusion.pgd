@@ -1,0 +1,5 @@
+create_rect = CreateRectGeometry { width: 10, height: 10 }
+extrusion = ExtrudeGeometry {extrusion_amount: 10}
+export_geometry = ExportGeometry { path: "regression_results/extrusion/geometry.obj" }
+
+create_rect>out -> in<extrusion>out -> in<export_geometry;

@@ -3,10 +3,12 @@
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/fs/file_util.h>
 #include <pagoda/common/instrument/profiler.h>
+#include <pagoda/common/version.h>
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/graph/default_scheduler.h>
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/io/reader.h>
+#include <pagoda/graph/query/query.h>
 #include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object.h>
 
@@ -21,7 +23,7 @@ using namespace pagoda::graph::io;
 
 class RegressionTest
 {
-public:
+	public:
 	static void SetShouldWriteFiles(const bool& write) { s_writeFiles = write; }
 
 	static boost::filesystem::path GetTestFilesDirectory() { return "@CMAKE_CURRENT_SOURCE_DIR@"; }
@@ -38,6 +40,8 @@ public:
 	{
 		auto pathToGraphFile = GetTestFilesDirectory();
 		pathToGraphFile /= "test_files";
+		pathToGraphFile /= get_os();
+		pathToGraphFile /= get_compiler_id();
 		pathToGraphFile /= m_regressionTestName;
 		pathToGraphFile /= m_regressionTestName + ".pgd";
 		return pathToGraphFile;
@@ -47,9 +51,10 @@ public:
 	{
 		auto dir = GetTestFilesDirectory();
 		dir /= "test_files";
+		dir /= get_os();
+		dir /= get_compiler_id();
 		dir /= m_regressionTestName;
-		if (!boost::filesystem::exists(dir))
-		{
+		if (!boost::filesystem::exists(dir)) {
 			fs::CreateDirectories(dir);
 		}
 		return dir;
@@ -98,22 +103,16 @@ public:
 		auto expectedFiles = GetAllExpectedFiles();
 		auto resultFiles = GetAllResultFiles();
 
-		if (s_writeFiles)
-		{
-			for (const auto& f : expectedFiles)
-			{
+		if (s_writeFiles) {
+			for (const auto& f : expectedFiles) {
 				boost::filesystem::remove(GetExpectedResultFile(f));
 			}
-			for (const auto& f : resultFiles)
-			{
+			for (const auto& f : resultFiles) {
 				boost::filesystem::copy(GetResultFile(f), GetExpectedResultFile(f));
 			}
-		}
-		else
-		{
+		} else {
 			EXPECT_EQ(expectedFiles, resultFiles);
-			for (const auto& f : expectedFiles)
-			{
+			for (const auto& f : expectedFiles) {
 				std::string resultFile = fs::LoadFileToString(GetResultFile(f));
 				std::string expectedFile = fs::LoadFileToString(GetExpectedResultFile(f));
 				EXPECT_EQ(expectedFile, resultFile);
@@ -121,7 +120,7 @@ public:
 		}
 	}
 
-private:
+	private:
 	std::string m_regressionTestName;
 
 	GraphPtr m_graph;
@@ -160,10 +159,8 @@ REGRESSION_TEST(banner)
 int main(int argc, char* argv[])
 {
 	bool writeFiles = false;
-	for (auto i = 1; i < argc; ++i)
-	{
-		if (std::string(argv[i]) == "--writeFiles")
-		{
+	for (auto i = 1; i < argc; ++i) {
+		if (std::string(argv[i]) == "--writeFiles") {
 			writeFiles = true;
 			break;
 		}

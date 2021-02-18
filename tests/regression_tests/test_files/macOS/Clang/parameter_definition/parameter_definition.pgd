@@ -1,0 +1,19 @@
+parameter = Parameter() { amount: 10 }
+
+create_rect = Operation(operation: "CreateRectGeometry") {
+    width: $< amount; >$, height: $< amount / 2; >$
+}
+create_rect_out = OutputInterface(interface: "out")
+
+extrusion_in = InputInterface(interface: "in")
+extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: $< 2 * amount; >$}
+extrusion_out = OutputInterface(interface: "out")
+
+export_geometry_in = InputInterface(interface: "in")
+export_geometry = Operation(operation: "ExportGeometry") {
+    path: "regression_results/parameter_definition/geometry.obj"
+}
+
+parameter -> create_rect;
+parameter -> extrusion;
+create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out -> export_geometry_in -> export_geometry;
