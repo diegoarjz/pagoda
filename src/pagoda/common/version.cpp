@@ -66,6 +66,20 @@ std::string get_compiler_id()
 	return "";
 }
 
+std::string get_os()
+{
+#ifdef PAGODA_OS_MACOS
+	return "macOS";
+#endif
+#ifdef PAGODA_OS_LINUX
+	return "Linux";
+#endif
+#ifdef PAGODA_OS_WINDOWS
+	return "Windows";
+#endif
+	return "";
+}
+
 std::string get_version_information()
 {
 	std::stringstream ss;
@@ -79,6 +93,9 @@ std::string get_version_information()
 	}
 	if (!get_compiler_id().empty()) {
 		ss << "\n Compiler: " << get_compiler_id();
+	}
+	if (!get_os().empty()) {
+		ss << "\n OS: " << get_os();
 	}
 
 	ss << "\n\nConditional features: ";

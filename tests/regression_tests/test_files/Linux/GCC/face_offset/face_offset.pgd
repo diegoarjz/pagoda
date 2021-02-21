@@ -1,0 +1,21 @@
+create_box = Operation(operation: "CreateBoxGeometry") {
+    xSize: 10, ySize: 10, zSize: 5
+}
+create_box_out = OutputInterface(interface: "out")
+
+face_offset_in = InputInterface(interface: "in")
+face_offset = Operation(operation: "FaceOffset") {amount: 1}
+face_offset_inner = OutputInterface(interface: "inner")
+face_offset_outer = OutputInterface(interface: "outer")
+
+export_geometry_in = InputInterface(interface: "in")
+export_geometry = Operation(operation: "ExportGeometry") {
+    path: $< "regression_results/face_offset/geometry-" + op.in.offset_tag + "-" + op.count + ".obj"; >$
+}
+
+create_box -> create_box_out -> face_offset_in -> face_offset;
+face_offset -> face_offset_inner;
+face_offset -> face_offset_outer;
+face_offset_inner -> export_geometry_in;
+face_offset_outer -> export_geometry_in;
+export_geometry_in -> export_geometry;

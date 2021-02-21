@@ -1,0 +1,30 @@
+create_rect_x = Operation(operation: "CreateRectGeometry") {
+    width: 10, height: 10, plane: "x"
+}
+create_rect_x_out = OutputInterface(interface: "out")
+export_rect_x_in = InputInterface(interface: "in")
+export_rect_x = Operation(operation: "ExportGeometry") {
+    path: "regression_results/create_rect/rect_x.obj"
+}
+
+create_rect_y = Operation(operation: "CreateRectGeometry") {
+    width: 10, height: 10, plane: "y"
+}
+create_rect_y_out = OutputInterface(interface: "out")
+export_rect_y_in = InputInterface(interface: "in")
+export_rect_y = Operation(operation: "ExportGeometry") {
+    path: "regression_results/create_rect/rect_y.obj"
+}
+
+create_rect_z = Operation(operation: "CreateRectGeometry") {
+    width: 10, height: 10, plane: "z"
+}
+create_rect_z_out = OutputInterface(interface: "out")
+export_rect_z_in = InputInterface(interface: "in")
+export_rect_z = Operation(operation: "ExportGeometry") {
+    path: "regression_results/create_rect/rect_z.obj"
+}
+
+create_rect_x -> create_rect_x_out -> export_rect_x_in -> export_rect_x;
+create_rect_y -> create_rect_y_out -> export_rect_y_in -> export_rect_y;
+create_rect_z -> create_rect_z_out -> export_rect_z_in -> export_rect_z;

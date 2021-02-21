@@ -26,6 +26,11 @@ std::string get_build_date();
 std::string get_compiler_id();
 
 /**
+ * Returns the OS the project has been built for.
+ */
+std::string get_os();
+
+/**
  * Returns a formatted version information string.
  */
 std::string get_version_information();
