@@ -15,6 +15,8 @@ class ExtrudeGeometry : public objects::ProceduralOperation
 	ExtrudeGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtrudeGeometry();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };  // class ExtrudeGEometry
 

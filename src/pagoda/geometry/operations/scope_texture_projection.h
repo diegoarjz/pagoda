@@ -13,6 +13,8 @@ class ScopeTextureProjection : public objects::ProceduralOperation
 	ScopeTextureProjection(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ScopeTextureProjection();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

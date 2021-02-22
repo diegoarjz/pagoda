@@ -14,6 +14,8 @@ class CreateRectGeometry : public objects::ProceduralOperation
 	CreateRectGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateRectGeometry();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };  // class CreateSquareGeometry
 

@@ -28,6 +28,12 @@ ExtractFaces::ExtractFaces(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 
 ExtractFaces::~ExtractFaces() {}
 
+const std::string& ExtractFaces::GetOperationName() const
+{
+	static const std::string sName{"ExtractFaces"};
+	return sName;
+}
+
 void ExtractFaces::DoWork()
 {
 	START_PROFILE;
@@ -45,7 +51,7 @@ void ExtractFaces::DoWork()
 		explodeToFaces.Execute(inGeometry, explodedFaces);
 
 		auto inScopeZAxis = inGeometryComponent->GetScope().GetZAxis();
-		for (auto &g : explodedFaces) {
+		for (auto& g : explodedFaces) {
 			auto faceNormal = g->GetFaceAttributes(*g->FacesBegin()).m_normal;
 
 			auto outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);

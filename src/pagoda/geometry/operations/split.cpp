@@ -37,6 +37,12 @@ Split::Split(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objec
 
 Split::~Split() {}
 
+const std::string &Split::GetOperationName() const
+{
+	static const std::string sName{"Split"};
+	return sName;
+}
+
 std::vector<Plane<float>> createPlanes(const Scope &scope, const std::vector<float> &sizes, const std::string &axis)
 {
 	CRITICAL_ASSERT_MSG(axis == "x" || axis == "y" || axis == "z", "Axis must be one of x, y, or z");

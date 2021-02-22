@@ -13,6 +13,8 @@ class CreateSphereGeometry : public objects::ProceduralOperation
 	CreateSphereGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateSphereGeometry();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

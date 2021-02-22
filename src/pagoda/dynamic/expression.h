@@ -70,6 +70,11 @@ class Expression : public DynamicValueBase
 
 	std::string ToString() const override;
 
+	/**
+	 * Gets the original expression string.
+	 */
+	const std::string& GetExpressionString() const;
+
 	void AcceptVisitor(ValueVisitorBase& visitor) override;
 
 	DynamicValueBasePtr Evaluate();

@@ -23,7 +23,7 @@ using namespace geometry::core;
 using namespace geometry::io;
 using namespace dynamic;
 
-const char *ExportGeometry::name = "ExportGeometry";
+const char* ExportGeometry::name = "ExportGeometry";
 const std::string ExportGeometry::inputGeometry("in");
 
 ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem)
@@ -35,6 +35,12 @@ ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem)
 }
 
 ExportGeometry::~ExportGeometry() {}
+
+const std::string& ExportGeometry::GetOperationName() const
+{
+	static const std::string sName{"ExportGeometry"};
+	return sName;
+}
 
 void ExportGeometry::DoWork()
 {

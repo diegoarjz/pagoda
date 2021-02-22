@@ -45,6 +45,12 @@ ScopeTextureProjection::ScopeTextureProjection(objects::ProceduralObjectSystemPt
 
 ScopeTextureProjection::~ScopeTextureProjection() {}
 
+const std::string& ScopeTextureProjection::GetOperationName() const
+{
+	static const std::string sName{"ScopeTextureProjection"};
+	return sName;
+}
+
 void ScopeTextureProjection::DoWork()
 {
 	START_PROFILE;
@@ -71,7 +77,7 @@ void ScopeTextureProjection::DoWork()
 		UpdateValue("offset_v");
 		UpdateValue("clamp");
 
-		auto &scope = outGeometryComponent->GetScope();
+		auto& scope = outGeometryComponent->GetScope();
 		auto scopeSize = scope.GetSize();
 		qvm::vec<float, 3> scopePos = scope.GetPosition();
 		qvm::vec<float, 3> uAxis;

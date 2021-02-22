@@ -13,6 +13,8 @@ class ReadGeoJson : public objects::ProceduralOperation
 	ReadGeoJson(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ReadGeoJson();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

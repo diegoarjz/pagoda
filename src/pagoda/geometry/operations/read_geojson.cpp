@@ -39,6 +39,12 @@ ReadGeoJson::ReadGeoJson(objects::ProceduralObjectSystemPtr objectSystem) : Proc
 
 ReadGeoJson::~ReadGeoJson() {}
 
+const std::string &ReadGeoJson::GetOperationName() const
+{
+	static const std::string sName{"ReadGeoJson"};
+	return sName;
+}
+
 void ReadGeoJson::DoWork()
 {
 	START_PROFILE;

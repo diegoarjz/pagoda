@@ -37,6 +37,12 @@ Scale::Scale(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objec
 }
 Scale::~Scale() {}
 
+const std::string& Scale::GetOperationName() const
+{
+	static const std::string sName{"Scale"};
+	return sName;
+}
+
 void Scale::DoWork()
 {
 	START_PROFILE;

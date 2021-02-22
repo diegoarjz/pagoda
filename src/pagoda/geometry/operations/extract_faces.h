@@ -13,6 +13,8 @@ class ExtractFaces : public objects::ProceduralOperation
 	ExtractFaces(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractFaces();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };  // class ExtractFaces
 }  // namespace pagoda::geometry::operations

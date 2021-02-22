@@ -17,6 +17,13 @@ class MockOperation : public ProceduralOperation
 
 		RegisterValues({{"abc", std::make_shared<dynamic::FloatValue>(0.0f)}});
 	}
+	~MockOperation() override {}
+
+	const std::string& GetOperationName() const override
+	{
+		static const std::string sName{"MockOperation"};
+		return sName;
+	}
 
 	protected:
 	void DoWork() override

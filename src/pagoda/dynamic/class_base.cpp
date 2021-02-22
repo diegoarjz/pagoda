@@ -22,5 +22,6 @@ DynamicValueBasePtr ClassBase::GetMember(const std::string &name) { return m_mem
 
 DynamicValueTable::iterator ClassBase::GetMembersBegin() { return m_memberTable->begin(); }
 DynamicValueTable::iterator ClassBase::GetMembersEnd() { return m_memberTable->end(); }
+std::size_t ClassBase::GetMemberCount() const { return m_memberTable->GetMemberCount(); }
 std::shared_ptr<DynamicValueTable> ClassBase::GetInstanceValueTable() { return m_memberTable; }
 }  // namespace pagoda::dynamic

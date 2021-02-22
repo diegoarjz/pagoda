@@ -33,6 +33,8 @@ using iterator = std::unordered_map<std::string, DynamicValueBasePtr>::iterator;
 typename DynamicValueTable::iterator DynamicValueTable::begin() { return std::begin(m_values); }
 typename DynamicValueTable::iterator DynamicValueTable::end() { return std::end(m_values); }
 
+std::size_t DynamicValueTable::GetMemberCount() const { return m_values.size(); }
+
 void DynamicValueTable::DumpSymbols(std::ostream &out) const
 {
 	out << "Symbols for " << m_tableName << ":" << std::endl;

@@ -16,6 +16,9 @@ class ClipGeometry : public objects::ProceduralOperation
 	ClipGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ClipGeometry();
 
+	const std::string& GetOperationName() const override;
+
+	protected:
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

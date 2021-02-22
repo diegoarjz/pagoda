@@ -35,6 +35,12 @@ SetShader::SetShader(objects::ProceduralObjectSystemPtr objectSystem) : Procedur
 
 SetShader::~SetShader() {}
 
+const std::string& SetShader::GetOperationName() const
+{
+	static const std::string sName{"SetShader"};
+	return sName;
+}
+
 void SetShader::DoWork()
 {
 	START_PROFILE;

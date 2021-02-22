@@ -14,6 +14,8 @@ class SetMaterialAttribute : public objects::ProceduralOperation
 	SetMaterialAttribute(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~SetMaterialAttribute();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::material::operations

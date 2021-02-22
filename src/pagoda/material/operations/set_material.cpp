@@ -39,6 +39,12 @@ SetMaterial::SetMaterial(objects::ProceduralObjectSystemPtr objectSystem) : Proc
 
 SetMaterial::~SetMaterial() {}
 
+const std::string& SetMaterial::GetOperationName() const
+{
+	static const std::string sName{"SetMaterial"};
+	return sName;
+}
+
 void SetMaterial::DoWork()
 {
 	START_PROFILE;
