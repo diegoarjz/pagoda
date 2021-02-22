@@ -2,6 +2,7 @@
 #define PAGODA_TEST_TEST_UTILS_H_
 
 #include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/version.h>
 
 #include <gtest/gtest.h>
 
@@ -56,6 +57,8 @@ class PagodaTestFixture : public PagodaTestFixtureBase, public F
 	boost::filesystem::path GetCurrentTestFileInputDirectory()
 	{
 		boost::filesystem::path directory = GetTestFilesDir();
+		directory /= pagoda::common::get_os();
+		directory /= pagoda::common::get_compiler_id();
 		directory /= ::testing::UnitTest::GetInstance()->current_test_info()->test_suite_name();
 		directory /= ::testing::UnitTest::GetInstance()->current_test_info()->name();
 		directory /= "input";
@@ -65,6 +68,8 @@ class PagodaTestFixture : public PagodaTestFixtureBase, public F
 	boost::filesystem::path GetCurrentTestFileResultsDirectory()
 	{
 		boost::filesystem::path directory = GetTestFilesDir();
+		directory /= pagoda::common::get_os();
+		directory /= pagoda::common::get_compiler_id();
 		directory /= ::testing::UnitTest::GetInstance()->current_test_info()->test_suite_name();
 		directory /= ::testing::UnitTest::GetInstance()->current_test_info()->name();
 		directory /= "results";

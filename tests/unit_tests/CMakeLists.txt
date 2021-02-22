@@ -74,7 +74,7 @@ target_include_directories(
 target_compile_definitions(
     unit_tests
     PUBLIC
-      ${PAGODA_COMPILER_ID}
+      ${PAGODA_PLATFORM_DEFINITIONS}
     PRIVATE
         -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
 )

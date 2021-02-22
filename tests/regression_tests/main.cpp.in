@@ -3,6 +3,7 @@
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/fs/file_util.h>
 #include <pagoda/common/instrument/profiler.h>
+#include <pagoda/common/version.h>
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/graph/default_scheduler.h>
 #include <pagoda/graph/graph.h>
@@ -41,6 +42,8 @@ class RegressionTest
 	{
 		auto pathToGraphFile = GetTestFilesDirectory();
 		pathToGraphFile /= "test_files";
+		pathToGraphFile /= get_os();
+		pathToGraphFile /= get_compiler_id();
 		pathToGraphFile /= m_regressionTestName;
 		pathToGraphFile /= m_regressionTestName + ".pgd";
 		return pathToGraphFile;
@@ -50,6 +53,8 @@ class RegressionTest
 	{
 		auto dir = GetTestFilesDirectory();
 		dir /= "test_files";
+		dir /= get_os();
+		dir /= get_compiler_id();
 		dir /= m_regressionTestName;
 		if (!boost::filesystem::exists(dir)) {
 			fs::CreateDirectories(dir);

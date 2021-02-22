@@ -69,7 +69,6 @@ jobs:
                   conan build ${{ github.workspace }}
 
             - name: Run tests
-              if: ${{ !contains(matrix.config.os, 'Windows') }}
               run: |
                   cd build
                   ctest -C Release
@@ -84,7 +83,7 @@ jobs:
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar cJfv "build-results-${{ matrix.config.name }}.tar.xz" "build/")
+                                          -E tar cJfv "build-results-${{ matrix.config.name }}.tar.xz" "./")
 
             - name: Upload Build Results
               if: always()

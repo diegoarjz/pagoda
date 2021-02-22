@@ -1,0 +1,21 @@
+create_rect = Operation(operation: "CreateRectGeometry") {
+    width: 10, height: 10
+}
+create_rect_out = OutputInterface(interface: "out")
+create_rect -> create_rect_out;
+
+project_in = InputInterface(interface: "in")
+project = Operation(operation: "ScopeTextureProjection") {
+    axis: "z"
+}
+project_out = OutputInterface(interface: "out")
+project_in -> project -> project_out;
+
+export_rect_in = InputInterface(interface: "in")
+export_rect = Operation(operation: "ExportGeometry") {
+    path: "regression_results/scope_texture_projection/geometry.obj"
+}
+export_rect_in -> export_rect;
+
+create_rect_out -> project_in;
+project_out -> export_rect_in;

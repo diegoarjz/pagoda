@@ -1,0 +1,88 @@
+create_box = Operation(operation: "CreateBoxGeometry") {
+    xSize: 10, ySize: 10, zSize: 5
+}
+create_box_out = OutputInterface(interface: "out")
+create_box -> create_box_out;
+
+extract_faces_in = InputInterface(interface: "in")
+extract_faces = Operation(operation: "ExtractFaces") {}
+extract_faces_out = OutputInterface(interface: "out")
+extract_faces_in -> extract_faces -> extract_faces_out;
+
+router_in = InputInterface(interface: "in")
+router = Operation(operation: "Router") {
+    export_up_in: "up",
+    export_down_in: "down",
+    export_left_in: "left",
+    export_right_in: "right",
+    export_front_in: "front",
+    export_back_in: "back"
+}
+router_up = OutputInterface(interface: "export_up_in")
+router_down = OutputInterface(interface: "export_down_in")
+router_left = OutputInterface(interface: "export_left_in")
+router_right = OutputInterface(interface: "export_right_in")
+router_front = OutputInterface(interface: "export_front_in")
+router_back = OutputInterface(interface: "export_back_in")
+router_none = OutputInterface(interface: "none")
+router_in -> router;
+router -> router_up;
+router -> router_down;
+router -> router_left;
+router -> router_right;
+router -> router_front;
+router -> router_back;
+router -> router_none;
+
+export_up_in = InputInterface(interface: "in")
+export_up = Operation(operation: "ExportGeometry") {
+    path: $< "regression_results/router/up" + op.count + ".obj"; >$
+}
+export_up_in -> export_up;
+
+export_down_in = InputInterface(interface: "in")
+export_down = Operation(operation: "ExportGeometry") {
+    path: $< "regression_results/router/down" + op.count + ".obj"; >$
+}
+export_down_in -> export_down;
+
+export_left_in = InputInterface(interface: "in")
+export_left = Operation(operation: "ExportGeometry") {
+    path: $< "regression_results/router/left" + op.count + ".obj"; >$
+}
+export_left_in -> export_left;
+
+export_right_in = InputInterface(interface: "in")
+export_right = Operation(operation: "ExportGeometry") {
+    path: $< "regression_results/router/right" + op.count + ".obj"; >$
+}
+export_right_in -> export_right;
+
+export_front_in = InputInterface(interface: "in")
+export_front = Operation(operation: "ExportGeometry") {
+    path: $< "regression_results/router/front" + op.count + ".obj"; >$
+}
+export_front_in -> export_front;
+
+export_back_in = InputInterface(interface: "in")
+export_back = Operation(operation: "ExportGeometry") {
+    path: $< "regression_results/router/back" + op.count + ".obj"; >$
+}
+export_back_in -> export_back;
+
+export_none_in = InputInterface(interface: "in")
+export_none = Operation(operation: "ExportGeometry") {
+    path: $< "regression_results/router/none" + op.count + ".obj"; >$
+}
+export_none_in -> export_none;
+
+create_box_out -> extract_faces_in;
+extract_faces_out -> router_in;
+router_up -> export_up_in;
+router_down -> export_down_in;
+router_left -> export_left_in;
+router_right -> export_right_in;
+router_front -> export_front_in;
+router_back -> export_back_in;
+router_none -> export_none_in;
+
