@@ -21,6 +21,8 @@ set(GRAPH_SRCS
     "io/parse_result.h"
     "io/reader.cpp"
     "io/reader.h"
+    "io/writer.cpp"
+    "io/writer.h"
     "query/adjacent.cpp"
     "query/adjacent.h"
     "query/and.cpp"
@@ -80,40 +82,10 @@ set(GRAPH_SRCS
     "unsupported_node_link.h"
 )
 
-add_library(graph OBJECT ${GRAPH_SRCS})
-
-target_include_directories(
-    graph
-    PRIVATE
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        ${Boost_INCLUDE_DIRS}
-        ${PGSCRIPT_INCLUDE_DIR}
-)
-
-target_compile_features(
-    graph
-    PRIVATE
-        cxx_std_17
-)
-
-target_compile_options(
-    graph
-    PRIVATE
-      ${PAGODA_COMPILE_OPTIONS}
-)
-
-target_compile_definitions(
-    graph
-    PRIVATE
-        $<$<CONFIG:DEBUG>:DEBUG>
-)
-
-target_link_libraries(
-    graph
-    PRIVATE
-        common
-        dynamic
+add_pagoda_module(
+  NAME          graph
+  SOURCES       ${GRAPH_SRCS}
+  DEPENDENCIES  common dynamic
 )
 
 #########################################################################
@@ -130,6 +102,7 @@ set(GEOMETRY_UNIT_TESTS
     "io/node_definition_node.test.cpp"
     "io/node_link_definition.test.cpp"
     "io/node_link_node.test.cpp"
+    "io/writer.test.cpp"
     "query/adjacent.test.cpp"
     "query/and.test.cpp"
     "query/or.test.cpp"

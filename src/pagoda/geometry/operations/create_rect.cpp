@@ -36,6 +36,12 @@ CreateRectGeometry::CreateRectGeometry(ProceduralObjectSystemPtr objectSystem) :
 
 CreateRectGeometry::~CreateRectGeometry() {}
 
+const std::string& CreateRectGeometry::GetOperationName() const
+{
+	static const std::string sName{"CreateRectGeometry"};
+	return sName;
+}
+
 void CreateRectGeometry::DoWork()
 {
 	START_PROFILE;

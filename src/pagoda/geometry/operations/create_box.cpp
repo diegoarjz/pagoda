@@ -33,6 +33,12 @@ CreateBoxGeometry::CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem) : P
 
 CreateBoxGeometry::~CreateBoxGeometry() {}
 
+const std::string& CreateBoxGeometry::GetOperationName() const
+{
+	static const std::string sName{"CreateBoxGeometry"};
+	return sName;
+}
+
 void CreateBoxGeometry::DoWork()
 {
 	START_PROFILE;

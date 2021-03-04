@@ -38,6 +38,12 @@ RepeatSplit::RepeatSplit(ProceduralObjectSystemPtr objectSystem) : ProceduralOpe
 
 RepeatSplit::~RepeatSplit() {}
 
+const std::string& RepeatSplit::GetOperationName() const
+{
+	static const std::string sName{"RepeatSplit"};
+	return sName;
+}
+
 void RepeatSplit::DoWork()
 {
 	START_PROFILE;

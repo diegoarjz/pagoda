@@ -10,6 +10,8 @@ class Router : public ProceduralOperation
 	Router(ProceduralObjectSystemPtr objectSystem);
 	virtual ~Router();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::objects::operations

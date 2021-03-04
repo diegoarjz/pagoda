@@ -37,6 +37,12 @@ FaceOffsetOperation::FaceOffsetOperation(ProceduralObjectSystemPtr objectSystem)
 
 FaceOffsetOperation::~FaceOffsetOperation() {}
 
+const std::string& FaceOffsetOperation::GetOperationName() const
+{
+	static const std::string sName{"FaceOffset"};
+	return sName;
+}
+
 void FaceOffsetOperation::DoWork()
 {
 	START_PROFILE;

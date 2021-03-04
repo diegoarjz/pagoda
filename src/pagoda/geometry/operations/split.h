@@ -12,6 +12,8 @@ class Split : public objects::ProceduralOperation
 	Split(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Split();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

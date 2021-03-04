@@ -37,6 +37,12 @@ Translate::Translate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperati
 }
 Translate::~Translate() {}
 
+const std::string& Translate::GetOperationName() const
+{
+	static const std::string sName{"Translate"};
+	return sName;
+}
+
 void Translate::DoWork()
 {
 	START_PROFILE;

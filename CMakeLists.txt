@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.11.0 FATAL_ERROR)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-conan_basic_setup()
+conan_basic_setup(KEEP_RPATHS)
 
 include("Pagoda")
 include("WGS84toCartesian")
@@ -14,6 +14,7 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS chrono system program_options filesystem)
 find_package(gtest)
 find_package(PNG REQUIRED)
+find_package(ZLIB REQUIRED)
 
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

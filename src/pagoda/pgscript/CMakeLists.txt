@@ -18,33 +18,8 @@ set(PGSCRIPT_SOURCES
     "value/script_callable_body.cpp"
 )
 
-add_library(pgscript OBJECT
-    ${PGSCRIPT_SOURCES}
-)
-
-target_include_directories(
-    pgscript
-    PRIVATE
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        ${Boost_INCLUDE_DIRS}
-)
-
-target_compile_features(
-    pgscript
-    PRIVATE
-        cxx_std_17
-)
-
-target_compile_options(
-    pgscript
-    PRIVATE
-      ${PAGODA_COMPILE_OPTIONS}
-)
-
-target_link_libraries(
-    pgscript
-    PRIVATE
-        common
-        dynamic
+add_pagoda_module(
+  NAME        pgscript
+  SOURCES     ${PGSCRIPT_SOURCES}
+  DEPENDENCIES  common dynamic
 )

@@ -19,6 +19,12 @@ Router::Router(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(obj
 
 Router::~Router() {}
 
+const std::string& Router::GetOperationName() const
+{
+	static const std::string sName{"Router"};
+	return sName;
+}
+
 void Router::DoWork()
 {
 	START_PROFILE;
@@ -27,7 +33,7 @@ void Router::DoWork()
 
 	while (HasInput("in")) {
 		auto object = GetInputProceduralObject("in");
-		for (const auto &p : *m_memberTable) {
+		for (const auto& p : *m_memberTable) {
 			if (p.second.m_value->GetTypeInfo() == dynamic::String::s_typeInfo) {
 				std::string predicateName = p.second.m_value->ToString();
 				auto predicate = predicateRegistry->Get(predicateName);

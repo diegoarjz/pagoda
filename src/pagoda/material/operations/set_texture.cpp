@@ -32,6 +32,12 @@ SetTexture::SetTexture(objects::ProceduralObjectSystemPtr objectSystem) : Proced
 
 SetTexture::~SetTexture() {}
 
+const std::string& SetTexture::GetOperationName() const
+{
+	static const std::string sName{"SetTexture"};
+	return sName;
+}
+
 void SetTexture::DoWork()
 {
 	START_PROFILE;

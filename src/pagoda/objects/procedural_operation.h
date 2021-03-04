@@ -57,6 +57,11 @@ class ProceduralOperation : public dynamic::BuiltinClass
 
 	std::string ToString() const override;
 
+	/**
+	 * Returns the name of this operation.
+	 */
+	virtual const std::string& GetOperationName() const = 0;
+
 	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
 
 	using InterfaceHandler_t = void(ProceduralOperation*, const std::string&, ProceduralObjectPtr);

@@ -54,37 +54,8 @@ set(DYNAMIC_SRCS
     "vector3.h"
 )
 
-add_library(dynamic OBJECT ${DYNAMIC_SRCS})
-
-target_include_directories(
-    dynamic
-    PRIVATE
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        ${Boost_INCLUDE_DIRS}
+add_pagoda_module(
+  NAME          dynamic
+  SOURCES       ${DYNAMIC_SRCS}
+  DEPENDENCIES  common
 )
-
-target_compile_features(
-    dynamic
-    PRIVATE
-        cxx_std_17
-)
-
-target_compile_options(
-    dynamic
-    PRIVATE
-      ${PAGODA_COMPILE_OPTIONS}
-)
-
-target_compile_definitions(
-    dynamic
-    PRIVATE
-        $<$<CONFIG:DEBUG>:DEBUG>
-)
-
-target_link_libraries(
-    dynamic
-    PRIVATE
-        common
-)
-

@@ -15,6 +15,8 @@ class ExtractScope : public objects::ProceduralOperation
 	ExtractScope(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractScope();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

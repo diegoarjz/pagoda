@@ -14,6 +14,8 @@ class ExportGeometry : public objects::ProceduralOperation
 	ExportGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	~ExportGeometry();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 
 	private:

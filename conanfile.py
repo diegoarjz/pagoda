@@ -31,12 +31,7 @@ class Pagoda(ConanFile):
         ("gtest/1.10.0"),
         ("libpng/1.6.37"),
         ("nlohmann_json/3.9.1"),
-        ("magnum/2020.06@pagoda/stable"),
-        ("magnum-integration/2020.06@pagoda/stable"),
-        ("corrade/2020.06@helmesjo/stable"),
-        ("glew/2.1.0@bincrafters/stable"),
-        ("glfw/3.3.2@bincrafters/stable"),
-        ("opengl/system"),
+        ("qt/6.0.1@bincrafters/stable"),
         ("entt/3.6.0")
     ]
 
@@ -49,13 +44,12 @@ class Pagoda(ConanFile):
         if 'GITHUB_RUN_NUMBER' in os.environ:
             cmake.definitions['PAGODA_BUILD_NUMBER'] = os.environ['GITHUB_RUN_NUMBER']
 
-        magnum_integration_modules = os.path.join(self.deps_cpp_info["magnum-integration"].rootpath , "source_subfolder", "modules")
-        cmake.definitions["MagnumIntegrationModules"] = magnum_integration_modules
-        imgui_dir = os.path.join(self.deps_cpp_info["magnum-integration"].rootpath, "imgui_subfolder")
-        cmake.definitions["IMGUI_DIR"] = imgui_dir
-
         cmake.configure(defs=cmake.definitions)
         cmake.build()
+
+
+    def imports(self):
+        self.copy("*.dylib", src="", dst="bin", root_package="qt", keep_path=False)
 
 
     def package(self):

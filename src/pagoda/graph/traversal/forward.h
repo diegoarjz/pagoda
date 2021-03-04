@@ -7,6 +7,9 @@
 
 namespace pagoda::graph::traversal
 {
+/**
+ * Allows traversing the graph breadth first.
+ */
 class Forward : public Traversal
 {
 	public:
@@ -18,6 +21,6 @@ class Forward : public Traversal
 	bool HasNext() override;
 
 	private:
-	std::queue<NodePtr> m_nodesToVisit;
+	std::queue<NodePtr> m_nodesToVisit;  ///< The queue of next nodes to visit.
 };
 }  // namespace pagoda::graph::traversal

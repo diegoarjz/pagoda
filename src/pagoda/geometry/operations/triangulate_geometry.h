@@ -16,6 +16,8 @@ class TriangulateGeometry : public objects::ProceduralOperation
 	TriangulateGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~TriangulateGeometry();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

@@ -37,6 +37,12 @@ SetMaterialAttribute::SetMaterialAttribute(objects::ProceduralObjectSystemPtr ob
 
 SetMaterialAttribute::~SetMaterialAttribute() {}
 
+const std::string& SetMaterialAttribute::GetOperationName() const
+{
+	static const std::string sName{"SetMaterialAttribute"};
+	return sName;
+}
+
 struct evaluator : public ValueVisitor<DynamicValueBasePtr>
 {
 	DynamicValueBasePtr operator()(ExpressionPtr& e) { return e->Evaluate(); }

@@ -13,6 +13,8 @@ class Scale : public objects::ProceduralOperation
 	Scale(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Scale();
 
+	const std::string& GetOperationName() const override;
+
 	void DoWork() override;
 };
 }  // namespace pagoda::geometry::operations

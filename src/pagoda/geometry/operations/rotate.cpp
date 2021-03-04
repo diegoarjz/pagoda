@@ -41,6 +41,12 @@ Rotate::Rotate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(obj
 
 Rotate::~Rotate() {}
 
+const std::string& Rotate::GetOperationName() const
+{
+	static const std::string sName{"Rotate"};
+	return sName;
+}
+
 void Rotate::DoWork()
 {
 	START_PROFILE;

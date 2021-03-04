@@ -30,6 +30,12 @@ TriangulateGeometry::TriangulateGeometry(ProceduralObjectSystemPtr objectSystem)
 
 TriangulateGeometry::~TriangulateGeometry() {}
 
+const std::string& TriangulateGeometry::GetOperationName() const
+{
+	static const std::string sName{"TriangulateGeometry"};
+	return sName;
+}
+
 void TriangulateGeometry::DoWork()
 {
 	START_PROFILE;
