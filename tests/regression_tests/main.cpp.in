@@ -141,6 +141,12 @@ class RegressionTest
 		query::Query q{*m_graph, nodes};
 		m_graph->ExecuteQuery(q);
 
+		NodeSet newGraphNodes;
+		query::Query q2{*graph2, newGraphNodes};
+		graph2->ExecuteQuery(q2);
+
+		EXPECT_EQ(nodes.size(), newGraphNodes.size());
+
 		auto compareNodeSets = [](const NodeSet& ns1, const NodeSet& ns2) {
 			ASSERT_EQ(ns1.size(), ns2.size());
 			for (auto n1 : ns1) {
