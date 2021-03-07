@@ -10,6 +10,9 @@ namespace pgeditor::gui
 {
 class GraphEditorWidget;
 
+/**
+ * Pagoda GUI Editor main window.
+ */
 class MainWindow : public QMainWindow
 {
 	public:
@@ -18,6 +21,7 @@ class MainWindow : public QMainWindow
 
 	private slots:
 	void OpenGraph();
+	void SaveGraph();
 
 	private:
 	void InitializeGUI();
