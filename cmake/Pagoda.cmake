@@ -149,7 +149,7 @@ function (add_pagoda_build_unit)
       # Set OS id
       $<$<PLATFORM_ID:Darwin>:PAGODA_OS_MACOS>
       $<$<PLATFORM_ID:Linux>:PAGODA_OS_LINUX>
-      $<$<PLATFORM_ID:Window>:PAGODA_OS_WINDOWS>
+      $<$<PLATFORM_ID:Windows>:PAGODA_OS_WINDOWS>
       ${PARSED_ARGS_COMPILE_DEFINITIONS}
   )
 
