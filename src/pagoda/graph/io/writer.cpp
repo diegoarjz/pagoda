@@ -100,37 +100,42 @@ struct GraphWriter::Impl
 		Forward traversal(*m_graph);
 		std::vector<std::string> links;
 
+		std::unordered_set<NodePtr> visitedNodes;
+
 		while (traversal.HasNext()) {
 			auto node = traversal.Get();
+			if (visitedNodes.find(node) == visitedNodes.end()) {
+				visitedNodes.insert(node);
 
-			out << node->GetName() << " = ";
-			node->AcceptNodeVisitor(&typeVisitor);
+				out << node->GetName() << " = ";
+				node->AcceptNodeVisitor(&typeVisitor);
 
-			auto membersEnd = node->GetMembersEnd();
-			auto memberCount = node->GetMemberCount();
-			std::vector<std::string> parameters;
-			parameters.reserve(memberCount);
+				auto membersEnd = node->GetMembersEnd();
+				auto memberCount = node->GetMemberCount();
+				std::vector<std::string> parameters;
+				parameters.reserve(memberCount);
 
-			for (auto p = node->GetMembersBegin(); p != membersEnd; ++p) {
-				ParameterVisitor parameterVisitor{p->first, parameters};
-				p->second.m_value->AcceptVisitor(parameterVisitor);
-			}
-
-			out << "{\n";
-			if (!parameters.empty()) {
-				for (auto i = 0u; i < parameters.size(); ++i) {
-					out << "  " << parameters[i];
-					if (i + 1 != parameters.size()) {
-						out << ",";
-					}
-					out << "\n";
+				for (auto p = node->GetMembersBegin(); p != membersEnd; ++p) {
+					ParameterVisitor parameterVisitor{p->first, parameters};
+					p->second.m_value->AcceptVisitor(parameterVisitor);
 				}
-			}
-			out << "}\n";
 
-			auto inputNodes = m_graph->GetNodeInputNodes(node->GetName());
-			for (auto& in : inputNodes) {
-				links.push_back(in->GetName() + " -> " + node->GetName() + ";");
+				out << "{\n";
+				if (!parameters.empty()) {
+					for (auto i = 0u; i < parameters.size(); ++i) {
+						out << "  " << parameters[i];
+						if (i + 1 != parameters.size()) {
+							out << ",";
+						}
+						out << "\n";
+					}
+				}
+				out << "}\n";
+
+				auto inputNodes = m_graph->GetNodeInputNodes(node->GetName());
+				for (auto& in : inputNodes) {
+					links.push_back(in->GetName() + " -> " + node->GetName() + ";");
+				}
 			}
 
 			traversal.Advance();
