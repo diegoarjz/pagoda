@@ -18,6 +18,7 @@ class GraphEditorWidget : public QWidget
 	GraphEditorWidget();
 
 	void SetGraph(std::shared_ptr<pagoda::graph::Graph> graph);
+	std::shared_ptr<pagoda::graph::Graph> GetGraph() const;
 
 	private:
 	void InitializeGUI();
@@ -25,5 +26,6 @@ class GraphEditorWidget : public QWidget
 
 	QGraphicsView* m_graphicsView;
 	GraphScene* m_graphScene;
+	std::shared_ptr<pagoda::graph::Graph> m_graph;
 };  // class GraphEditorWidget
 }  // namespace pgeditor::gui

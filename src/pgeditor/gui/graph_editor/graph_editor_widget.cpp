@@ -39,6 +39,8 @@ void GraphEditorWidget::SetGraph(std::shared_ptr<Graph> graph)
 	m_graphScene = new GraphScene();
 	m_graphScene->SetProceduralGraph(graph);
 	m_graphicsView->setScene(m_graphScene);
+	m_graph = graph;
 }
 
+std::shared_ptr<Graph> GraphEditorWidget::GetGraph() const { return m_graph; }
 }  // namespace pgeditor::gui
