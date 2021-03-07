@@ -1,68 +1,36 @@
 set(GUI_SRCS
-  "gui_manager.cpp"
-  "gui_manager.h"
-  "tile.cpp"
-  "tile.h"
-  "window.cpp"
-  "window.h"
-  "menu.cpp"
-  "menu.h"
-  "tile_layout.cpp"
-  "tile_layout.h"
-  "horizontal_tile_layout.cpp"
-  "horizontal_tile_layout.h"
-  "vertical_tile_layout.cpp"
-  "vertical_tile_layout.h"
+  "main_window.cpp"
+  "main_window.h"
+  "graph_editor/graph_editor_widget.cpp"
+  "graph_editor/graph_editor_widget.h"
+  "graph_editor/graph_scene.cpp"
+  "graph_editor/graph_scene.h"
+  "graph_editor/graph_node.cpp"
+  "graph_editor/graph_node.h"
+  "graph_editor/graph_port.cpp"
+  "graph_editor/graph_port.h"
+  "graph_editor/graph_in_port.cpp"
+  "graph_editor/graph_in_port.h"
+  "graph_editor/graph_out_port.cpp"
+  "graph_editor/graph_out_port.h"
+  "graph_editor/graph_port_connection.cpp"
+  "graph_editor/graph_port_connection.h"
+  "graph_editor/graph_connector.cpp"
+  "graph_editor/graph_connector.h"
+  "graph_editor/node_style.h"
 )
 
-add_library(gui OBJECT ${GUI_SRCS})
-
-target_include_directories(
-    gui
-    PRIVATE
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        ${Boost_INCLUDE_DIRS}
+add_pagoda_module(
+  NAME          gui
+  SOURCES       ${GUI_SRCS}
+  DEPENDENCIES  libpagoda common graph
 )
-
-target_compile_features(
-    gui
-    PRIVATE
-        cxx_std_17
-)
-
-target_compile_options(
-    gui
-    PRIVATE
-      ${PAGODA_COMPILE_OPTIONS}
-)
-
-target_compile_definitions(
-    gui
-    PRIVATE
-        $<$<CONFIG:DEBUG>:DEBUG>
-)
-
-target_link_libraries(
-  gui
-  PRIVATE
-    common
-    "glfw3"
-    "Corrade::Main"
-    "Magnum::GL"
-    "Magnum::GLContext"
-    "Magnum::Magnum"
-    "Magnum::Shaders"
-    "MagnumIntegration::ImGui"
-)
+set_target_properties(gui PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 #########################################################################
 # Unit tests
 #########################################################################
 set(GUI_UNIT_TESTS
-  "tile.test.cpp"
-  "horizontal_tile_layout.test.cpp"
-  "vertical_tile_layout.test.cpp"
 )
 
 foreach(unit_test_src ${GUI_UNIT_TESTS})

@@ -1,0 +1,55 @@
+#include "graph_port_connection.h"
+
+#include <QPainter>
+
+#include <QtDebug>
+
+#include "node_style.h"
+
+namespace pgeditor::gui
+{
+GraphPortConnection::~GraphPortConnection() {}
+
+GraphPortConnection::GraphPortConnection(QGraphicsWidget *parent) : QGraphicsWidget(parent)
+{
+	setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
+}
+
+void GraphPortConnection::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	using namespace node_style::port_connection;
+
+	QRectF bounds = boundingRect();
+
+	painter->setRenderHint(QPainter::Antialiasing);
+	painter->setPen(QPen(border_color, border_width));
+
+	QPainterPath path;
+	path.addEllipse(bounds);
+
+	painter->fillPath(path, QBrush(fill_color));
+	painter->drawPath(path);
+}
+
+QRectF GraphPortConnection::boundingRect() const
+{
+	using namespace node_style::port_connection;
+	return QRectF(0, 0, port_size, port_size);
+}
+
+QPainterPath GraphPortConnection::shape() const
+{
+	QPainterPath path;
+	path.addEllipse(boundingRect());
+	return path;
+}
+
+QVariant GraphPortConnection::itemChange(QGraphicsWidget::GraphicsItemChange change, const QVariant &value)
+{
+	if (change == QGraphicsWidget::ItemScenePositionHasChanged) {
+		emit PositionChanged(this, mapToScene(pos()));
+	}
+
+	return QGraphicsWidget::itemChange(change, value);
+}
+}  // namespace pgeditor::gui

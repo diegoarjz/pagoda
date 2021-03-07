@@ -26,40 +26,10 @@ set(OBJECTS_SRCS
     "unknown_operation.h"
 )
 
-add_library(objects OBJECT ${OBJECTS_SRCS})
-
-target_include_directories(
-    objects
-    PRIVATE
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        ${Boost_INCLUDE_DIRS}
-        ${PGSCRIPT_INCLUDE_DIR}
-)
-
-target_compile_features(
-    objects
-    PRIVATE
-        cxx_std_17
-)
-
-target_compile_options(
-    objects
-    PRIVATE
-      ${PAGODA_COMPILE_OPTIONS}
-)
-
-target_compile_definitions(
-    objects
-    PRIVATE
-        $<$<CONFIG:DEBUG>:DEBUG>
-)
-
-target_link_libraries(
-    objects
-    PRIVATE
-        common
-        dynamic
+add_pagoda_module(
+  NAME          objects
+  SOURCES       ${OBJECTS_SRCS}
+  DEPENDENCIES  common dynamic
 )
 
 #########################################################################

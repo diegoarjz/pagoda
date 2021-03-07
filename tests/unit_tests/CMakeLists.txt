@@ -44,49 +44,10 @@ set(test_srcs
     "pgscript/grammar.cpp"
     )
 
-add_executable(unit_tests ${test_srcs})
-
-target_compile_features(
-    unit_tests
-    PRIVATE
-        cxx_std_17
-        cxx_constexpr
-        cxx_relaxed_constexpr
-)
-
-target_compile_options(
-    unit_tests
-    PRIVATE
-      ${PAGODA_COMPILE_OPTIONS}
-)
-
-target_include_directories(
-    unit_tests
-    PUBLIC
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-    PRIVATE
-        ${CMAKE_SOURCE_DIR}/source
-        ${Boost_INCLUDE_DIRS}
-        ${PGSCRIPT_INCLUDE_DIR}
-)
-
-target_compile_definitions(
-    unit_tests
-    PUBLIC
-      ${PAGODA_PLATFORM_DEFINITIONS}
-    PRIVATE
-        -DASSERTS_ENABLED=${Pagoda_ENABLE_ASSERTIONS}
-)
-
-target_link_libraries(
-    unit_tests
-    PRIVATE
-        libpagoda
-        Boost::chrono
-        Boost::system
-        Boost::filesystem
-        ${PAGODA_GTEST_LIBS}
+add_pagoda_executable(
+  NAME          unit_tests
+  SOURCES       ${test_srcs}
+  DEPENDENCIES  ${PAGODA_GTEST_LIBS}
 )
 
 file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")

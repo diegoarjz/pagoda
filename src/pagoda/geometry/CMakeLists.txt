@@ -67,39 +67,10 @@ set(GEOMETRY_SRCS
     "scope_axis_direction_predicate.h"
 )
 
-add_library(geometry OBJECT ${GEOMETRY_SRCS})
-
-target_include_directories(
-    geometry
-    PRIVATE
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        ${Boost_INCLUDE_DIRS}
-)
-
-target_compile_features(
-    geometry
-    PRIVATE
-        cxx_std_17
-)
-
-target_compile_options(
-    geometry
-    PRIVATE
-      ${PAGODA_COMPILE_OPTIONS}
-)
-
-target_compile_definitions(
-    geometry
-    PRIVATE
-        $<$<CONFIG:DEBUG>:DEBUG>
-)
-
-target_link_libraries(
-    geometry
-    PRIVATE
-        common
-        dynamic
+add_pagoda_module(
+  NAME          geometry
+  SOURCES       ${GEOMETRY_SRCS}
+  DEPENDENCIES  common dynamic
 )
 
 #########################################################################

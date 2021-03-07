@@ -15,39 +15,10 @@ set(MATERIAL_SRCS
     "operations/set_material_attribute.h"
 )
 
-add_library(material OBJECT ${MATERIAL_SRCS})
-
-target_include_directories(
-    material
-    PRIVATE
-        $<INSTALL_INTERFACE:pagoda>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-        ${Boost_INCLUDE_DIRS}
-)
-
-target_compile_features(
-    material
-    PRIVATE
-        cxx_std_17
-)
-
-target_compile_options(
-    material
-    PRIVATE
-      ${PAGODA_COMPILE_OPTIONS}
-)
-
-target_compile_definitions(
-    material
-    PRIVATE
-        $<$<CONFIG:DEBUG>:DEBUG>
-)
-
-target_link_libraries(
-    material
-    PRIVATE
-        common
-        dynamic
+add_pagoda_module(
+  NAME          material
+  SOURCES       ${MATERIAL_SRCS}
+  DEPENDENCIES  common dynamic
 )
 
 #########################################################################
