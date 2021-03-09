@@ -20,6 +20,8 @@ class GraphScene : public QGraphicsScene
 
 	void SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph);
 
+	void LayoutGraph();
+
 	private:
 	std::shared_ptr<pagoda::graph::Graph> m_graph;
 	std::unordered_map<pagoda::graph::Node *, GraphNode *> m_operationNodes;

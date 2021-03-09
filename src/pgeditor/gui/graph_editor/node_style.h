@@ -54,6 +54,12 @@ namespace pgeditor::gui
       const uint32_t line_width = 2;
       const uint32_t control_point_distance = 50;
     }
+
+    namespace autolayout
+    {
+      const uint32_t horizontal_spacing = 50;
+      const uint32_t vertical_spacing = 100;
+    }
   }  // namespace node_style
 // clang-format on
 }  // namespace pgeditor::gui

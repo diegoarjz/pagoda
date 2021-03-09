@@ -172,4 +172,9 @@ GraphOutPort *GraphNode::GetOutPort(NodePtr node) const
 	}
 	return iter->second;
 }
+
+QVariant GraphNode::itemChange(QGraphicsWidget::GraphicsItemChange change, const QVariant &value)
+{
+	return QGraphicsWidget::itemChange(change, value);
+}
 }  // namespace pgeditor::gui

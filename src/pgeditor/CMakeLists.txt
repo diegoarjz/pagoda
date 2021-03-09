@@ -4,6 +4,7 @@ find_package(Qt6 COMPONENTS Widgets Core REQUIRED)
 
 set(PGEDITOR_SOURCES
   "gui/graph_editor/graph_port_connection.h"
+  "gui/graph_editor/graph_node.h"
   $<TARGET_OBJECTS:gui>
 )
 

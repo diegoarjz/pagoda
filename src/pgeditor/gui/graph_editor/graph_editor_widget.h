@@ -24,6 +24,6 @@ class GraphEditorWidget : public QWidget
 	QWidget* createGraphArea();
 
 	QGraphicsView* m_graphicsView;
-	GraphScene* m_graphScene;
+	GraphScene* m_graphScene{nullptr};
 };  // class GraphEditorWidget
 }  // namespace pgeditor::gui
