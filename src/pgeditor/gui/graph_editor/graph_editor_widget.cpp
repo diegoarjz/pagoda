@@ -4,10 +4,10 @@
 #include "graph_scene.h"
 
 #include <QGraphicsView>
-#include <QHBoxLayout>
 #include <QLabel>
 #include <QScrollArea>
 #include <QSplitter>
+#include <QToolBar>
 #include <QVBoxLayout>
 #include <QVariant>
 #include <QWidget>
@@ -22,8 +22,16 @@ void GraphEditorWidget::InitializeGUI()
 {
 	QVBoxLayout *layout = new QVBoxLayout;
 	setLayout(layout);
+
+	auto toolbar = new QToolBar;
+	toolbar->addAction(tr("Layout"), [this]() {
+		if (m_graphScene != nullptr) {
+			m_graphScene->LayoutGraph();
+		}
+	});
+
+	layout->QLayout::addWidget(toolbar);
 	layout->addWidget(createGraphArea());
-	setLayout(layout);
 }
 
 QWidget *GraphEditorWidget::createGraphArea()
@@ -34,7 +42,6 @@ QWidget *GraphEditorWidget::createGraphArea()
 }
 
 void GraphEditorWidget::SetGraph(std::shared_ptr<Graph> graph)
-
 {
 	m_graphScene = new GraphScene();
 	m_graphScene->SetProceduralGraph(graph);

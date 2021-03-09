@@ -25,7 +25,7 @@ class GraphEditorWidget : public QWidget
 	QWidget* createGraphArea();
 
 	QGraphicsView* m_graphicsView;
-	GraphScene* m_graphScene;
+	GraphScene* m_graphScene{nullptr};
 	std::shared_ptr<pagoda::graph::Graph> m_graph;
 };  // class GraphEditorWidget
 }  // namespace pgeditor::gui

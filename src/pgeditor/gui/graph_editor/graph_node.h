@@ -26,6 +26,7 @@ class GraphOutPort;
 
 class GraphNode : public QGraphicsWidget
 {
+	Q_OBJECT
 	public:
 	GraphNode(pagoda::graph::NodePtr node, pagoda::graph::GraphPtr graph);
 
@@ -35,6 +36,9 @@ class GraphNode : public QGraphicsWidget
 
 	GraphInPort *GetInPort(pagoda::graph::NodePtr node) const;
 	GraphOutPort *GetOutPort(pagoda::graph::NodePtr node) const;
+
+	protected:
+	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 	private:
 	void InitializeGUI();
