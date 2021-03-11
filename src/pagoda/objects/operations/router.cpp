@@ -15,7 +15,10 @@
 
 namespace pagoda::objects::operations
 {
-Router::Router(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem) {}
+Router::Router(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+{
+	CreateInputInterface("in");
+}
 
 Router::~Router() {}
 

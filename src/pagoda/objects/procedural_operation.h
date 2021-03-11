@@ -69,6 +69,15 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	void OnProgress(const std::function<void(const std::size_t&, const std::size_t)>& handler);
 	void OnNeedsUpdate(const std::function<void(ProceduralOperation*)>& handler);
 
+	/**
+	 * Iterates over each input interface, passing its name to \p f.
+	 */
+	void ForEachInputInterface(const std::function<void(const std::string&)>& f);
+	/**
+	 * Iterates over each output interface, passing its name to \p f.
+	 */
+	void ForEachOutputInterface(const std::function<void(const std::string&)>& f);
+
 	protected:
 	/**
 	 * Performs the operation work.

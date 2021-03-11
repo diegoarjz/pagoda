@@ -4,6 +4,7 @@
 #include "graph_in_port.h"
 #include "graph_node.h"
 #include "graph_out_port.h"
+#include "new_node_popup.h"
 #include "node_style.h"
 
 #include <pagoda/graph/query/topology.h>
@@ -19,9 +20,13 @@
 #include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/dynamic/value_not_found.h>
 
-#include <iostream>
+#include <pagoda/pagoda.h>
+
+#include <QCursor>
+
 #include <unordered_map>
 
+using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 using namespace pagoda::graph::traversal;
@@ -30,7 +35,7 @@ using namespace pagoda::dynamic;
 
 namespace pgeditor::gui
 {
-GraphScene::GraphScene() {}
+GraphScene::GraphScene(Pagoda* pagoda) : m_pagoda{pagoda} {}
 
 void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 {
@@ -91,6 +96,38 @@ void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 	}
 }
 
+GraphNode* GraphScene::createOperation(const QString& opName)
+{
+	auto operation = m_pagoda->GetOperationFactory()->Create(opName.toStdString());
+	if (operation == nullptr) {
+		// TODO: throw error
+	}
+
+	auto nodeName = m_graph->CreateNode<OperationNode>(opName.toStdString());
+	auto node = m_graph->GetNode(nodeName);
+	std::dynamic_pointer_cast<OperationNode>(node)->SetOperation(operation);
+
+	operation->ForEachInputInterface([this, &nodeName](const std::string& i) {
+		auto inName = m_graph->CreateNode<InputInterfaceNode>(nodeName + "_" + i);
+		auto inNode = std::dynamic_pointer_cast<InputInterfaceNode>(m_graph->GetNode(inName));
+		inNode->SetInterfaceName(i);
+		m_graph->CreateEdge(inName, nodeName);
+	});
+
+	operation->ForEachOutputInterface([this, &nodeName](const std::string& i) {
+		auto outName = m_graph->CreateNode<OutputInterfaceNode>(nodeName + "_" + i);
+		auto outNode = std::dynamic_pointer_cast<OutputInterfaceNode>(m_graph->GetNode(outName));
+		outNode->SetInterfaceName(i);
+		m_graph->CreateEdge(nodeName, outName);
+	});
+
+	GraphNode* guiNode = new GraphNode(node, m_graph);
+	this->addItem(guiNode);
+	m_operationNodes[node.get()] = guiNode;
+
+	return guiNode;
+}
+
 void GraphScene::LayoutGraph()
 {
 	if (m_graph == nullptr) {
@@ -124,6 +161,24 @@ void GraphScene::LayoutGraph()
 		guiNode->setPos(
 		  {static_cast<qreal>(depth * horizontal_spacing), static_cast<qreal>(verticalPosition[depth] * vertical_spacing)});
 		verticalPosition[depth]++;
+	}
+}
+
+void GraphScene::keyPressEvent(QKeyEvent* keyEvent)
+{
+	if (keyEvent->key() == Qt::Key_Tab) {
+		auto nodePopup = new NewNodePopup(m_pagoda->GetOperationFactory());
+		auto mousePosition = QCursor::pos();
+		nodePopup->move(mousePosition.x(), mousePosition.y());
+
+		connect(nodePopup, &NewNodePopup::OperationSelected, [this /*, &mousePosition*/](const QString& op) {
+			auto node = createOperation(op);
+			if (node != nullptr) {
+				node->setPos(0, 0);
+			}
+		});
+
+		nodePopup->show();
 	}
 }
 }  // namespace pgeditor::gui

@@ -1,8 +1,10 @@
 #include <pagoda/objects/procedural_operation.h>
-#include <memory>
 #include "pagoda/dynamic/float_value.h"
 
 #include <gtest/gtest.h>
+
+#include <memory>
+#include <unordered_set>
 
 using namespace pagoda;
 using namespace pagoda::objects;
@@ -13,7 +15,9 @@ class MockOperation : public ProceduralOperation
 	MockOperation() : ProceduralOperation(nullptr)
 	{
 		CreateInputInterface("in");
+		CreateInputInterface("in2");
 		CreateOutputInterface("out");
+		CreateOutputInterface("out2");
 
 		RegisterValues({{"abc", std::make_shared<dynamic::FloatValue>(0.0f)}});
 	}
@@ -53,4 +57,22 @@ TEST_F(ProceduralOperationTest, can_register_parameters)
 {
 	auto op = std::make_shared<MockOperation>();
 	EXPECT_NE(op->GetMember("abc"), nullptr);
+}
+
+TEST_F(ProceduralOperationTest, can_iterate_over_interfaces)
+{
+	std::unordered_set<std::string> in;
+	std::unordered_set<std::string> out;
+
+	auto op = std::make_shared<MockOperation>();
+	op->ForEachInputInterface([&in](const std::string& i) { in.insert(i); });
+	op->ForEachOutputInterface([&out](const std::string& i) { out.insert(i); });
+
+	EXPECT_EQ(in.size(), 2u);
+	EXPECT_EQ(out.size(), 2u);
+
+	EXPECT_NE(in.find("in"), in.end());
+	EXPECT_NE(in.find("in2"), in.end());
+	EXPECT_NE(out.find("out"), out.end());
+	EXPECT_NE(out.find("out2"), out.end());
 }
