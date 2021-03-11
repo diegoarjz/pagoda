@@ -26,14 +26,15 @@ class Pagoda(ConanFile):
     generators = "cmake"
     exports_sources = "*"
 
-    requires = [
-        ("boost/1.73.0"),
-        ("gtest/1.10.0"),
-        ("libpng/1.6.37"),
-        ("nlohmann_json/3.9.1"),
-        ("qt/6.0.1@bincrafters/stable"),
-        ("entt/3.6.0")
-    ]
+
+    def requirements(self):
+        self.requires("boost/1.73.0")
+        self.requires("gtest/1.10.0")
+        self.requires("libpng/1.6.37")
+        self.requires("nlohmann_json/3.9.1")
+        self.requires("openssl/1.1.1j", override=True)
+        self.requires("qt/6.0.1@bincrafters/stable")
+        self.requires("entt/3.6.0")
 
 
     def build(self):

@@ -37,6 +37,13 @@ class GraphNode : public QGraphicsWidget
 	GraphInPort *GetInPort(pagoda::graph::NodePtr node) const;
 	GraphOutPort *GetOutPort(pagoda::graph::NodePtr node) const;
 
+	/**
+	 * Sets the node position.
+	 * Updates the \c GraphNode GUI position and the \c Node's position
+	 * parameters.
+	 */
+	void SetPosition(int32_t x, int32_t y);
+
 	protected:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
