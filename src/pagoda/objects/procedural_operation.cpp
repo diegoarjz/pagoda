@@ -86,7 +86,12 @@ std::shared_ptr<ProceduralObject> ProceduralOperation::GetInputProceduralObject(
 {
 	START_PROFILE;
 
-	auto object = m_inputInterfaces[interfaceName].GetFront();
+	auto iter = m_inputInterfaces.find(interfaceName);
+	if (iter == m_inputInterfaces.end()) {
+		return nullptr;
+	}
+
+	auto object = iter->second.GetFront();
 	RegisterOrSetMember(interfaceName, object);
 
 	--m_pendingObjects;
@@ -192,6 +197,20 @@ void ProceduralOperation::OnProgress(const std::function<void(const std::size_t&
 void ProceduralOperation::OnNeedsUpdate(const std::function<void(ProceduralOperation*)>& handler)
 {
 	m_needUpdateHandlers.connect(handler);
+}
+
+void ProceduralOperation::ForEachInputInterface(const std::function<void(const std::string&)>& f)
+{
+	for (const auto& i : m_inputInterfaces) {
+		f(i.first);
+	}
+}
+
+void ProceduralOperation::ForEachOutputInterface(const std::function<void(const std::string&)>& f)
+{
+	for (const auto& i : m_outputInterfaces) {
+		f(i.first);
+	}
 }
 
 }  // namespace pagoda::objects

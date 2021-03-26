@@ -18,6 +18,8 @@ set(GUI_SRCS
   "graph_editor/graph_connector.cpp"
   "graph_editor/graph_connector.h"
   "graph_editor/node_style.h"
+  "graph_editor/new_node_popup.cpp"
+  "graph_editor/new_node_popup.h"
 )
 
 add_pagoda_module(

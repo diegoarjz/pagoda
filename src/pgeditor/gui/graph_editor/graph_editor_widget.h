@@ -3,10 +3,15 @@
 #include <QGraphicsView>
 #include <QWidget>
 
-namespace pagoda::graph
+namespace pagoda
+{
+class Pagoda;
+
+namespace graph
 {
 class Graph;
 }
+}  // namespace pagoda
 
 namespace pgeditor::gui
 {
@@ -15,7 +20,7 @@ class GraphScene;
 class GraphEditorWidget : public QWidget
 {
 	public:
-	GraphEditorWidget();
+	GraphEditorWidget(pagoda::Pagoda* pagoda);
 
 	void SetGraph(std::shared_ptr<pagoda::graph::Graph> graph);
 	std::shared_ptr<pagoda::graph::Graph> GetGraph() const;
@@ -27,5 +32,6 @@ class GraphEditorWidget : public QWidget
 	QGraphicsView* m_graphicsView;
 	GraphScene* m_graphScene{nullptr};
 	std::shared_ptr<pagoda::graph::Graph> m_graph;
+	pagoda::Pagoda* m_pagoda;
 };  // class GraphEditorWidget
 }  // namespace pgeditor::gui

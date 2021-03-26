@@ -22,6 +22,8 @@ MainWindow::MainWindow()
 
 	InitializeGUI();
 	InitializeMenus();
+
+	m_graphEditor->SetGraph(m_pagoda.CreateGraph());
 }
 
 MainWindow::~MainWindow() {}
@@ -29,7 +31,7 @@ MainWindow::~MainWindow() {}
 void MainWindow::InitializeGUI()
 {
 	QWidget *sceneViewer = new QWidget();
-	m_graphEditor = new GraphEditorWidget();
+	m_graphEditor = new GraphEditorWidget(&m_pagoda);
 	QWidget *inspector = new QWidget();
 
 	this->setCentralWidget(sceneViewer);
