@@ -12,6 +12,8 @@
 #include <pagoda/graph/operation_node.h>
 #include <pagoda/graph/output_interface_node.h>
 
+#include <pagoda/dynamic/integer_value.h>
+
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
 #include <QStyleOptionGraphicsItem>
@@ -19,6 +21,7 @@
 
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
+using namespace pagoda::dynamic;
 
 namespace pgeditor::gui
 {
@@ -173,8 +176,21 @@ GraphOutPort *GraphNode::GetOutPort(NodePtr node) const
 	return iter->second;
 }
 
+void GraphNode::SetPosition(int32_t x, int32_t y)
+{
+	m_node->RegisterOrSetMember("posX", std::make_shared<Integer>(x));
+	m_node->RegisterOrSetMember("posY", std::make_shared<Integer>(y));
+	setPos(x, y);
+}
+
 QVariant GraphNode::itemChange(QGraphicsWidget::GraphicsItemChange change, const QVariant &value)
 {
+	if (change == QGraphicsWidget::GraphicsItemChange::ItemPositionChange) {
+		auto position = pos();
+		m_node->RegisterOrSetMember("posX", std::make_shared<Integer>(static_cast<int>(position.x())));
+		m_node->RegisterOrSetMember("posY", std::make_shared<Integer>(static_cast<int>(position.y())));
+	}
 	return QGraphicsWidget::itemChange(change, value);
 }
 }  // namespace pgeditor::gui
+using namespace pagoda::dynamic;

@@ -51,7 +51,7 @@ void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 			auto posY = n->GetMember("posY");
 
 			if (posX != nullptr && posY != nullptr) {
-				node->setPos({static_cast<qreal>(get_value_as<int>(*posX)), static_cast<qreal>(get_value_as<int>(*posY))});
+				node->SetPosition(get_value_as<int>(*posX), get_value_as<int>(*posY));
 			} else {
 				needsLayout = true;
 			}
@@ -121,8 +121,7 @@ void GraphScene::LayoutGraph()
 		auto node = n.first;
 		auto guiNode = n.second;
 		auto depth = nodeDepths[node];
-		guiNode->setPos(
-		  {static_cast<qreal>(depth * horizontal_spacing), static_cast<qreal>(verticalPosition[depth] * vertical_spacing)});
+		guiNode->SetPosition(depth * horizontal_spacing, verticalPosition[depth] * vertical_spacing);
 		verticalPosition[depth]++;
 	}
 }
