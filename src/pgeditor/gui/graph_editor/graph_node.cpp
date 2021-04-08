@@ -14,10 +14,15 @@
 
 #include <pagoda/dynamic/integer_value.h>
 
+#include <pagoda/common/debug/assertions.h>
+#include <pagoda/common/debug/logger.h>
+
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
 #include <QStyleOptionGraphicsItem>
 #include <QVariant>
+
+#include <iostream>
 
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
@@ -57,6 +62,7 @@ void GraphNode::InitializeGUI()
 	for (auto n : inputInterfaces) {
 		auto interface = std::dynamic_pointer_cast<InputInterfaceNode>(n);
 		auto proxy = new GraphInPort(interface, this);
+		connect(proxy, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
 		m_inInterfaces.emplace(n, proxy);
 	}
 
@@ -66,7 +72,7 @@ void GraphNode::InitializeGUI()
 	for (auto n : outputInterfaces) {
 		auto interface = std::dynamic_pointer_cast<OutputInterfaceNode>(n);
 		auto proxy = new GraphOutPort(interface, this);
-
+		connect(proxy, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
 		m_outInterfaces.emplace(n, proxy);
 	}
 
@@ -174,6 +180,26 @@ GraphOutPort *GraphNode::GetOutPort(NodePtr node) const
 		return nullptr;
 	}
 	return iter->second;
+}
+
+void GraphNode::ForEachPort(std::function<void(GraphPort *)> f)
+{
+	for (auto &p : m_inInterfaces) {
+		f(p.second);
+	}
+
+	for (auto &p : m_outInterfaces) {
+		f(p.second);
+	}
+}
+
+void GraphNode::ConnectInterfaces(GraphPort *from, GraphPort *to)
+{
+	DBG_ASSERT(std::dynamic_pointer_cast<InputInterfaceNode>(from->GetNode()) != nullptr &&
+	           std::dynamic_pointer_cast<OutputInterfaceNode>(to->GetNode()) != nullptr);
+	m_graph->CreateEdge(from->GetNode()->GetName(), to->GetNode()->GetName());
+	std::cout << "Connecting interfaces" << std::endl;
+	emit NewConnection(from, to);
 }
 
 void GraphNode::SetPosition(int32_t x, int32_t y)

@@ -8,9 +8,17 @@ class GraphPortConnection : public QGraphicsWidget
 {
 	Q_OBJECT
 	public:
+	enum class NodeSide
+	{
+		Left,
+		Right
+	};
+
+	GraphPortConnection(QGraphicsWidget *parent, NodeSide side);
 	~GraphPortConnection() override;
 
-	GraphPortConnection(QGraphicsWidget *parent);
+	NodeSide GetNodeSide() const;
+
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
@@ -20,6 +28,9 @@ class GraphPortConnection : public QGraphicsWidget
 
 	protected:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+
+	private:
+	NodeSide m_nodeSide;
 };
 
 }  // namespace pgeditor::gui

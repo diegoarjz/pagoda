@@ -4,6 +4,8 @@
 #include "graph_in_port.h"
 #include "graph_node.h"
 #include "graph_out_port.h"
+#include "graph_port_connection.h"
+#include "new_connection_edge.h"
 #include "new_node_popup.h"
 #include "node_style.h"
 
@@ -23,6 +25,7 @@
 #include <pagoda/pagoda.h>
 
 #include <QCursor>
+#include <QGraphicsSceneDragDropEvent>
 
 #include <unordered_map>
 
@@ -63,6 +66,11 @@ void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 		} catch (ValueNotFoundException& e) {
 			needsLayout = true;
 		}
+
+		node->ForEachPort([this](GraphPort* port) {
+			connect(port, &GraphPort::StartConnectionDrag, this, &GraphScene::StartConnectionDrag);
+		});
+		connect(node, &GraphNode::NewConnection, this, &GraphScene::ConnectedNodes);
 	}
 
 	auto upstreamNodeQuery = type<OperationNode>();
@@ -89,11 +97,21 @@ void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 
 		GraphConnector* connector = new GraphConnector(outPort->GetPortConnection(), inPort->GetPortConnection());
 		this->addItem(connector);
+		connector->PortConnectionChanged(nullptr, {});
 	}
 
 	if (needsLayout) {
 		LayoutGraph();
 	}
+}
+
+void GraphScene::StartConnectionDrag(GraphPort* port, NewConnectionEdge* newEdge) { m_newEdge = newEdge; }
+
+void GraphScene::ConnectedNodes(GraphPort* from, GraphPort* to)
+{
+	GraphConnector* connector = new GraphConnector(from->GetPortConnection(), to->GetPortConnection());
+	this->addItem(connector);
+	connector->PortConnectionChanged(nullptr, {});
 }
 
 GraphNode* GraphScene::createOperation(const QString& opName)
@@ -122,9 +140,13 @@ GraphNode* GraphScene::createOperation(const QString& opName)
 	});
 
 	GraphNode* guiNode = new GraphNode(node, m_graph);
-	this->addItem(guiNode);
 	m_operationNodes[node.get()] = guiNode;
+	guiNode->ForEachPort([this](GraphPort* port) {
+		connect(port, &GraphPort::StartConnectionDrag, this, &GraphScene::StartConnectionDrag);
+	});
+	connect(guiNode, &GraphNode::NewConnection, this, &GraphScene::ConnectedNodes);
 
+	this->addItem(guiNode);
 	return guiNode;
 }
 
@@ -180,4 +202,13 @@ void GraphScene::keyPressEvent(QKeyEvent* keyEvent)
 		nodePopup->show();
 	}
 }
+
+void GraphScene::dragMoveEvent(QGraphicsSceneDragDropEvent* e)
+{
+	if (m_newEdge != nullptr) {
+		m_newEdge->CursorPositionChanged(e->scenePos());
+	}
+	QGraphicsScene::dragMoveEvent(e);
+}
+
 }  // namespace pgeditor::gui

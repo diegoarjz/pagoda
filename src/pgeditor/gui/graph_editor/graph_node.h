@@ -21,6 +21,7 @@ using NodePtr = std::shared_ptr<Node>;
 
 namespace pgeditor::gui
 {
+class GraphPort;
 class GraphInPort;
 class GraphOutPort;
 
@@ -37,6 +38,8 @@ class GraphNode : public QGraphicsWidget
 	GraphInPort *GetInPort(pagoda::graph::NodePtr node) const;
 	GraphOutPort *GetOutPort(pagoda::graph::NodePtr node) const;
 
+	void ForEachPort(std::function<void(GraphPort *)> f);
+
 	/**
 	 * Sets the node position.
 	 * Updates the \c GraphNode GUI position and the \c Node's position
@@ -44,11 +47,25 @@ class GraphNode : public QGraphicsWidget
 	 */
 	void SetPosition(int32_t x, int32_t y);
 
+	signals:
+
+	/**
+	 * This node has been connected to another node.
+	 */
+	void NewConnection(GraphPort *from, GraphPort *to);
+
 	protected:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 	private:
 	void InitializeGUI();
+
+	/**
+	 * Connects the two ports.
+	 *
+	 * Emits NewConnection signal.
+	 */
+	void ConnectInterfaces(GraphPort *from, GraphPort *to);
 
 	pagoda::graph::NodePtr m_node;
 	pagoda::graph::GraphPtr m_graph;

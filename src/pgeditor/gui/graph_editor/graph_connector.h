@@ -1,19 +1,15 @@
 #pragma once
 
-#include <QGraphicsWidget>
+#include "edge.h"
 
 namespace pgeditor::gui
 {
 class GraphPortConnection;
 
-class GraphConnector : public QGraphicsWidget
+class GraphConnector : public Edge
 {
 	public:
 	GraphConnector(GraphPortConnection *out, GraphPortConnection *in);
-
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
 
 	public slots:
 	void PortConnectionChanged(GraphPortConnection *connection, const QPointF &newPos);
