@@ -18,7 +18,7 @@ GraphOutPort::GraphOutPort(pagoda::graph::NodePtr node, QGraphicsWidget *parent)
 {
 	using namespace node_style::port;
 
-	m_connection = new GraphPortConnection(this);
+	m_connection = new GraphPortConnection(this, GraphPortConnection::NodeSide::Right);
 	QFont labelFont(name_font_family, name_font_size);
 
 	auto outputInterface = std::dynamic_pointer_cast<OutputInterfaceNode>(node);

@@ -1,6 +1,10 @@
 set(GUI_SRCS
   "main_window.cpp"
   "main_window.h"
+  "graph_editor/edge.cpp"
+  "graph_editor/edge.h"
+  "graph_editor/new_connection_edge.cpp"
+  "graph_editor/new_connection_edge.h"
   "graph_editor/graph_editor_widget.cpp"
   "graph_editor/graph_editor_widget.h"
   "graph_editor/graph_scene.cpp"

@@ -6,6 +6,7 @@ set(PGEDITOR_SOURCES
   "gui/graph_editor/graph_port_connection.h"
   "gui/graph_editor/graph_node.h"
   "gui/graph_editor/new_node_popup.h"
+  "gui/graph_editor/graph_port.h"
   $<TARGET_OBJECTS:gui>
 )
 

@@ -1,19 +1,21 @@
 #include "graph_port_connection.h"
 
-#include <QPainter>
-
-#include <QtDebug>
-
 #include "node_style.h"
+
+#include <QPainter>
+#include <QtDebug>
 
 namespace pgeditor::gui
 {
 GraphPortConnection::~GraphPortConnection() {}
 
-GraphPortConnection::GraphPortConnection(QGraphicsWidget *parent) : QGraphicsWidget(parent)
+GraphPortConnection::GraphPortConnection(QGraphicsWidget *parent, NodeSide side)
+  : QGraphicsWidget(parent), m_nodeSide{side}
 {
 	setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
 }
+
+GraphPortConnection::NodeSide GraphPortConnection::GetNodeSide() const { return m_nodeSide; }
 
 void GraphPortConnection::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
