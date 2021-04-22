@@ -38,6 +38,8 @@ GraphNode::GraphNode(NodePtr node, GraphPtr graph) : m_node{node}, m_graph{graph
 	InitializeGUI();
 }
 
+GraphNode::~GraphNode() {}
+
 void GraphNode::InitializeGUI()
 {
 	using namespace node_style::header;
@@ -61,7 +63,7 @@ void GraphNode::InitializeGUI()
 
 	for (auto n : inputInterfaces) {
 		auto interface = std::dynamic_pointer_cast<InputInterfaceNode>(n);
-		auto proxy = new GraphInPort(interface, this);
+		auto proxy = new GraphInPort(this, interface, this);
 		connect(proxy, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
 		m_inInterfaces.emplace(n, proxy);
 	}
@@ -71,7 +73,7 @@ void GraphNode::InitializeGUI()
 	m_outNodes.ExecuteQuery(outputFilter);
 	for (auto n : outputInterfaces) {
 		auto interface = std::dynamic_pointer_cast<OutputInterfaceNode>(n);
-		auto proxy = new GraphOutPort(interface, this);
+		auto proxy = new GraphOutPort(this, interface, this);
 		connect(proxy, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
 		m_outInterfaces.emplace(n, proxy);
 	}
@@ -163,6 +165,8 @@ QRectF GraphNode::boundingRect() const
 
 	return QRectF(0, 0, width, height);
 }
+
+pagoda::graph::NodePtr GraphNode::GetNode() const { return m_node; }
 
 GraphInPort *GraphNode::GetInPort(NodePtr node) const
 {

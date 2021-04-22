@@ -12,6 +12,7 @@ using NodePtr = std::shared_ptr<Node>;
 
 namespace pgeditor::gui
 {
+class GraphNode;
 class GraphPortConnection;
 class NewConnectionEdge;
 
@@ -20,7 +21,7 @@ class GraphPort : public QGraphicsWidget
 	Q_OBJECT
 
 	public:
-	GraphPort(pagoda::graph::NodePtr node, QGraphicsWidget *parent);
+	GraphPort(GraphNode *node, QGraphicsWidget *parent);
 	~GraphPort() override {}
 
 	pagoda::graph::NodePtr GetNode() const;
@@ -42,7 +43,7 @@ class GraphPort : public QGraphicsWidget
 	void dragMoveEvent(QGraphicsSceneDragDropEvent *e) override;
 	void dropEvent(QGraphicsSceneDragDropEvent *e) override;
 
-	pagoda::graph::NodePtr m_node;
+	GraphNode *m_node;
 	GraphPortConnection *m_connection;
 };
 

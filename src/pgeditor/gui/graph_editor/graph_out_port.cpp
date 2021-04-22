@@ -1,5 +1,6 @@
 #include "graph_out_port.h"
 
+#include "graph_node.h"
 #include "graph_port_connection.h"
 
 #include <pagoda/graph/node.h>
@@ -14,17 +15,17 @@ using namespace pagoda::graph;
 
 namespace pgeditor::gui
 {
-GraphOutPort::GraphOutPort(pagoda::graph::NodePtr node, QGraphicsWidget *parent) : GraphPort(node, parent)
+GraphOutPort::GraphOutPort(GraphNode *node, const pagoda::graph::OutputInterfaceNodePtr &interface,
+                           QGraphicsWidget *parent)
+  : GraphPort(node, parent), m_interface{interface}
 {
 	using namespace node_style::port;
 
-	m_connection = new GraphPortConnection(this, GraphPortConnection::NodeSide::Right);
+	m_connection = new GraphPortConnection(this, node, GraphPortConnection::NodeSide::Right);
 	QFont labelFont(name_font_family, name_font_size);
 
-	auto outputInterface = std::dynamic_pointer_cast<OutputInterfaceNode>(node);
-
 	m_label = new QGraphicsProxyWidget(this);
-	QLabel *label = new QLabel(outputInterface->GetInterfaceName().c_str());
+	QLabel *label = new QLabel(m_interface->GetInterfaceName().c_str());
 	label->setFont(labelFont);
 	label->setStyleSheet(label_stylesheet);
 	m_label->setWidget(label);

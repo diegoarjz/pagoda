@@ -95,9 +95,7 @@ void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 		auto outPort = upstreamNode->GetOutPort(outInterfaceNode);
 		auto inPort = downStreamNode->GetInPort(inInterfaceNode);
 
-		GraphConnector* connector = new GraphConnector(outPort->GetPortConnection(), inPort->GetPortConnection());
-		this->addItem(connector);
-		connector->PortConnectionChanged(nullptr, {});
+		ConnectedNodes(outPort, inPort);
 	}
 
 	if (needsLayout) {
@@ -112,6 +110,8 @@ void GraphScene::ConnectedNodes(GraphPort* from, GraphPort* to)
 	GraphConnector* connector = new GraphConnector(from->GetPortConnection(), to->GetPortConnection());
 	this->addItem(connector);
 	connector->PortConnectionChanged(nullptr, {});
+	m_connectorsByNode[from->GetPortConnection()->GetNode()].insert(connector);
+	m_connectorsByNode[to->GetPortConnection()->GetNode()].insert(connector);
 }
 
 GraphNode* GraphScene::createOperation(const QString& opName)
@@ -148,6 +148,33 @@ GraphNode* GraphScene::createOperation(const QString& opName)
 
 	this->addItem(guiNode);
 	return guiNode;
+}
+
+void GraphScene::deleteOperationNode(GraphNode* operationNode)
+{
+	auto n = operationNode->GetNode();
+	auto inNodes = m_graph->GetNodeInputNodes(n->GetName());
+	auto outNodes = m_graph->GetNodeOutputNodes(n->GetName());
+
+	for (auto i : inNodes) {
+		m_graph->DestroyNode(i->GetName());
+	}
+	for (auto o : outNodes) {
+		m_graph->DestroyNode(o->GetName());
+	}
+	m_graph->DestroyNode(n->GetName());
+	m_operationNodes.erase(n.get());
+	removeItem(operationNode);
+
+	for (const auto& connection : m_connectorsByNode[operationNode]) {
+		removeItem(connection);
+		auto otherNode = connection->GetDownstreamNode() == operationNode ? connection->GetUpstreamNode()
+		                                                                  : connection->GetDownstreamNode();
+		m_connectorsByNode[otherNode].erase(connection);
+		delete connection;
+	}
+	m_connectorsByNode.erase(operationNode);
+	delete operationNode;
 }
 
 void GraphScene::LayoutGraph()
@@ -187,20 +214,37 @@ void GraphScene::LayoutGraph()
 
 void GraphScene::keyPressEvent(QKeyEvent* keyEvent)
 {
-	if (keyEvent->key() == Qt::Key_Tab) {
-		auto nodePopup = new NewNodePopup(m_pagoda->GetOperationFactory());
-		auto mousePosition = QCursor::pos();
-		nodePopup->move(mousePosition.x(), mousePosition.y());
+	switch (keyEvent->key()) {
+		case Qt::Key_Tab: {
+			// Show new node pop up
+			auto nodePopup = new NewNodePopup(m_pagoda->GetOperationFactory());
+			auto mousePosition = QCursor::pos();
+			nodePopup->move(mousePosition.x(), mousePosition.y());
 
-		connect(nodePopup, &NewNodePopup::OperationSelected, [this /*, &mousePosition*/](const QString& op) {
-			auto node = createOperation(op);
-			if (node != nullptr) {
-				node->setPos(0, 0);
+			connect(nodePopup, &NewNodePopup::OperationSelected, [this /*, &mousePosition*/](const QString& op) {
+				auto node = createOperation(op);
+				if (node != nullptr) {
+					node->setPos(0, 0);
+				}
+			});
+
+			nodePopup->show();
+			break;
+		}
+		case Qt::Key_Backspace: {
+			// Delete a node
+			std::vector<GraphNode*> toDelete;
+			for (auto n : m_operationNodes) {
+				if (n.second->isSelected()) {
+					toDelete.push_back(n.second);
+				}
 			}
-		});
-
-		nodePopup->show();
-	}
+			for (auto n : toDelete) {
+				deleteOperationNode(n);
+			}
+			break;
+		}
+	};
 }
 
 void GraphScene::dragMoveEvent(QGraphicsSceneDragDropEvent* e)

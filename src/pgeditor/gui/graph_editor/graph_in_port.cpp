@@ -5,6 +5,7 @@
 
 #include <QLabel>
 
+#include "graph_node.h"
 #include "graph_port_connection.h"
 #include "node_style.h"
 
@@ -12,17 +13,17 @@ using namespace pagoda::graph;
 
 namespace pgeditor::gui
 {
-GraphInPort::GraphInPort(pagoda::graph::NodePtr node, QGraphicsWidget *parent) : GraphPort(node, parent)
+GraphInPort::GraphInPort(GraphNode *node, const pagoda::graph::InputInterfaceNodePtr &interface,
+                         QGraphicsWidget *parent)
+  : GraphPort(node, parent), m_interface{interface}
 {
 	using namespace node_style::port;
 
-	m_connection = new GraphPortConnection(this, GraphPortConnection::NodeSide::Left);
+	m_connection = new GraphPortConnection(this, node, GraphPortConnection::NodeSide::Left);
 	QFont labelFont(name_font_family, name_font_size);
 
-	auto inputInterface = std::dynamic_pointer_cast<InputInterfaceNode>(node);
-
 	m_label = new QGraphicsProxyWidget(this);
-	QLabel *label = new QLabel(inputInterface->GetInterfaceName().c_str());
+	QLabel *label = new QLabel(m_interface->GetInterfaceName().c_str());
 	label->setStyleSheet(label_stylesheet);
 	label->setFont(labelFont);
 	m_label->setWidget(label);

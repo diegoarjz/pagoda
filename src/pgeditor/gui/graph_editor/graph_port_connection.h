@@ -4,6 +4,8 @@
 
 namespace pgeditor::gui
 {
+class GraphNode;
+
 class GraphPortConnection : public QGraphicsWidget
 {
 	Q_OBJECT
@@ -14,9 +16,10 @@ class GraphPortConnection : public QGraphicsWidget
 		Right
 	};
 
-	GraphPortConnection(QGraphicsWidget *parent, NodeSide side);
+	GraphPortConnection(QGraphicsItem *parent, GraphNode *node, NodeSide side);
 	~GraphPortConnection() override;
 
+	GraphNode *GetNode() const;
 	NodeSide GetNodeSide() const;
 
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
@@ -30,6 +33,7 @@ class GraphPortConnection : public QGraphicsWidget
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 	private:
+	GraphNode *m_node;
 	NodeSide m_nodeSide;
 };
 
