@@ -5,11 +5,15 @@
 namespace pgeditor::gui
 {
 class GraphPortConnection;
+class GraphNode;
 
 class GraphConnector : public Edge
 {
 	public:
 	GraphConnector(GraphPortConnection *out, GraphPortConnection *in);
+
+	GraphNode *GetUpstreamNode() const;
+	GraphNode *GetDownstreamNode() const;
 
 	public slots:
 	void PortConnectionChanged(GraphPortConnection *connection, const QPointF &newPos);

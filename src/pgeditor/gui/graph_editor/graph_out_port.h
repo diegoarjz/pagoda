@@ -6,21 +6,24 @@
 
 namespace pagoda::graph
 {
-class Node;
-using NodePtr = std::shared_ptr<Node>;
+class OutputInterfaceNode;
+using OutputInterfaceNodePtr = std::shared_ptr<OutputInterfaceNode>;
 }  // namespace pagoda::graph
 
 namespace pgeditor::gui
 {
+class GraphNode;
+
 class GraphOutPort : public GraphPort
 {
 	public:
-	GraphOutPort(pagoda::graph::NodePtr node, QGraphicsWidget *parent);
+	GraphOutPort(GraphNode *node, const pagoda::graph::OutputInterfaceNodePtr &interface, QGraphicsWidget *parent);
 	virtual ~GraphOutPort() {}
 
 	QRectF boundingRect() const override;
 
 	private:
 	QGraphicsProxyWidget *m_label;
+	pagoda::graph::OutputInterfaceNodePtr m_interface;
 };
 }  // namespace pgeditor::gui

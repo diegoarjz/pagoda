@@ -15,6 +15,10 @@ GraphConnector::GraphConnector(GraphPortConnection *out, GraphPortConnection *in
 	connect(m_in, &GraphPortConnection::PositionChanged, this, &GraphConnector::PortConnectionChanged);
 }
 
+GraphNode *GraphConnector::GetUpstreamNode() const { return m_out->GetNode(); }
+
+GraphNode *GraphConnector::GetDownstreamNode() const { return m_in->GetNode(); }
+
 void GraphConnector::PortConnectionChanged(GraphPortConnection *connection, const QPointF &newPos)
 {
 	m_start = mapRectFromScene(m_out->mapRectToScene(m_out->boundingRect())).center();

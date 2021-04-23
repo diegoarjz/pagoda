@@ -9,12 +9,13 @@ namespace pgeditor::gui
 {
 GraphPortConnection::~GraphPortConnection() {}
 
-GraphPortConnection::GraphPortConnection(QGraphicsWidget *parent, NodeSide side)
-  : QGraphicsWidget(parent), m_nodeSide{side}
+GraphPortConnection::GraphPortConnection(QGraphicsItem *parent, GraphNode *node, NodeSide side)
+  : QGraphicsWidget(parent), m_node{node}, m_nodeSide{side}
 {
 	setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
 }
 
+GraphNode *GraphPortConnection::GetNode() const { return m_node; }
 GraphPortConnection::NodeSide GraphPortConnection::GetNodeSide() const { return m_nodeSide; }
 
 void GraphPortConnection::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

@@ -1,5 +1,6 @@
 #include "graph_port.h"
 
+#include "graph_node.h"
 #include "new_connection_edge.h"
 
 #include <pagoda/graph/input_interface_node.h>
@@ -47,14 +48,14 @@ struct GraphPortMimeData : public QMimeData
 	std::unique_ptr<NewConnectionEdge> m_edge;
 };
 
-GraphPort::GraphPort(pagoda::graph::NodePtr node, QGraphicsWidget *parent) : QGraphicsWidget(parent), m_node(node)
+GraphPort::GraphPort(GraphNode *node, QGraphicsWidget *parent) : QGraphicsWidget(parent), m_node(node)
 {
 	setAcceptDrops(true);
 }
 
 GraphPortConnection *GraphPort::GetPortConnection() const { return m_connection; }
 
-pagoda::graph::NodePtr GraphPort::GetNode() const { return m_node; }
+pagoda::graph::NodePtr GraphPort::GetNode() const { return m_node->GetNode(); }
 
 void GraphPort::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {

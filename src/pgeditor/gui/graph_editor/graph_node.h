@@ -28,13 +28,19 @@ class GraphOutPort;
 class GraphNode : public QGraphicsWidget
 {
 	Q_OBJECT
+
 	public:
 	GraphNode(pagoda::graph::NodePtr node, pagoda::graph::GraphPtr graph);
+	~GraphNode() override;
 
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
+	/**
+	 * Returns the pagoda node.
+	 */
+	pagoda::graph::NodePtr GetNode() const;
 	GraphInPort *GetInPort(pagoda::graph::NodePtr node) const;
 	GraphOutPort *GetOutPort(pagoda::graph::NodePtr node) const;
 

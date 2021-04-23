@@ -3,6 +3,7 @@
 #include <QGraphicsScene>
 
 #include <unordered_map>
+#include <unordered_set>
 
 namespace pagoda
 {
@@ -20,6 +21,7 @@ namespace pgeditor::gui
 class NewConnectionEdge;
 class GraphNode;
 class GraphPort;
+class GraphConnector;
 
 class GraphScene : public QGraphicsScene
 {
@@ -35,7 +37,15 @@ class GraphScene : public QGraphicsScene
 	void dragMoveEvent(QGraphicsSceneDragDropEvent *e) override;
 
 	private:
+	/**
+	 * Creates an operation node with the given op name.
+	 */
 	GraphNode *createOperation(const QString &opName);
+
+	/**
+	 * Deletes the given graph operation node
+	 */
+	void deleteOperationNode(GraphNode *operationNode);
 
 	/**
 	 * Starts a graph edge anchored to port.
@@ -51,6 +61,7 @@ class GraphScene : public QGraphicsScene
 
 	std::shared_ptr<pagoda::graph::Graph> m_graph;
 	std::unordered_map<pagoda::graph::Node *, GraphNode *> m_operationNodes;
+	std::unordered_map<GraphNode *, std::unordered_set<GraphConnector *>> m_connectorsByNode;
 	pagoda::Pagoda *m_pagoda;
 };  // class GraphScene
 }  // namespace pgeditor::gui
