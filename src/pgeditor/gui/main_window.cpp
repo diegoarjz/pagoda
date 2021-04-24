@@ -2,6 +2,8 @@
 
 #include "graph/graph_editor_widget.h"
 
+#include <pgeditor/renderer/rendering_system.h>
+
 #include <pagoda/graph/io/reader.h>
 #include <pagoda/graph/io/writer.h>
 
@@ -19,6 +21,9 @@ namespace pgeditor::gui
 MainWindow::MainWindow()
 {
 	using namespace pagoda::graph::io;
+
+	// Register the rendering system with pagoda
+	renderer::RenderingSystem::Registration(&m_pagoda);
 
 	InitializeGUI();
 	InitializeMenus();

@@ -1,3 +1,4 @@
+add_subdirectory(renderer)
 add_subdirectory(gui)
 
 find_package(Qt6 COMPONENTS Widgets Core REQUIRED)
@@ -7,6 +8,7 @@ set(PGEDITOR_SOURCES
   "gui/graph/graph_node.h"
   "gui/graph/new_node_popup.h"
   "gui/graph/graph_port.h"
+  $<TARGET_OBJECTS:renderer>
   $<TARGET_OBJECTS:gui>
 )
 
