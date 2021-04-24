@@ -10,7 +10,7 @@ class OutputInterfaceNode;
 using OutputInterfaceNodePtr = std::shared_ptr<OutputInterfaceNode>;
 }  // namespace pagoda::graph
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 class GraphNode;
 
@@ -26,4 +26,4 @@ class GraphOutPort : public GraphPort
 	QGraphicsProxyWidget *m_label;
 	pagoda::graph::OutputInterfaceNodePtr m_interface;
 };
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

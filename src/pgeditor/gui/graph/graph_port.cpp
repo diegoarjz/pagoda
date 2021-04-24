@@ -15,7 +15,7 @@
 
 using namespace pagoda::graph;
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 struct GraphPortMimeData : public QMimeData
 {
@@ -102,4 +102,4 @@ void GraphPort::dropEvent(QGraphicsSceneDragDropEvent *e)
 		emit NewNodeConnection(from, to);
 	}
 }
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

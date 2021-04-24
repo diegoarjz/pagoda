@@ -6,7 +6,7 @@
 
 #include <QPainter>
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 GraphConnector::GraphConnector(GraphPortConnection *out, GraphPortConnection *in)
   : Edge(in->boundingRect().center(), out->boundingRect().center()), m_out(out), m_in(in)
@@ -26,4 +26,4 @@ void GraphConnector::PortConnectionChanged(GraphPortConnection *connection, cons
 	this->prepareGeometryChange();
 	this->update(boundingRect());
 }
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

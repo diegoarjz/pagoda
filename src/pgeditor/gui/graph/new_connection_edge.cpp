@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 NewConnectionEdge::NewConnectionEdge(GraphPortConnection* port)
   : Edge{port->boundingRect().center(), port->boundingRect().center()}, m_port{port}
@@ -28,4 +28,4 @@ void NewConnectionEdge::CursorPositionChanged(const QPointF& pos)
 	this->prepareGeometryChange();
 	this->update(boundingRect());
 }
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

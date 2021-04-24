@@ -2,7 +2,7 @@
 
 #include <QGraphicsWidget>
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 class GraphNode;
 
@@ -37,4 +37,4 @@ class GraphPortConnection : public QGraphicsWidget
 	NodeSide m_nodeSide;
 };
 
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

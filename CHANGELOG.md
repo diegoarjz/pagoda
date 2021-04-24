@@ -33,6 +33,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GeoJSON Reader.
 - Windows build with MSVC.
 - Conan package.
+- GUI graph editor:
+  - Load and Save functionality.
+  - Node positioning by dragging the node.
+  - Initial implementation of automatic graph layout.
+  - Node creation from operation name by pressing Tab key.
+  - Node deletion by selecting a node and pressing Backspace.
+  - Connection between nodes by dragging from a node port to another.
 
 ### Changed
 

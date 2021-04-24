@@ -2,7 +2,7 @@
 
 #include <QGraphicsWidget>
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 /**
  * Class used to represent a graph edge.
@@ -21,4 +21,4 @@ class Edge : public QGraphicsWidget
 	QPointF m_start;  ///< Position of the left endpoint
 	QPointF m_end;    ///< Position of the right endpoint
 };
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

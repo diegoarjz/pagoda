@@ -10,7 +10,7 @@ class InputInterfaceNode;
 using InputInterfaceNodePtr = std::shared_ptr<InputInterfaceNode>;
 }  // namespace pagoda::graph
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 class GraphNode;
 
@@ -27,4 +27,4 @@ class GraphInPort : public GraphPort
 	pagoda::graph::InputInterfaceNodePtr m_interface;
 };
 
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

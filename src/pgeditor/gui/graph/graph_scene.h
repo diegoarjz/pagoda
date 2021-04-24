@@ -16,7 +16,7 @@ class Node;
 }  // namespace graph
 }  // namespace pagoda
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 class NewConnectionEdge;
 class GraphNode;
@@ -64,4 +64,4 @@ class GraphScene : public QGraphicsScene
 	std::unordered_map<GraphNode *, std::unordered_set<GraphConnector *>> m_connectorsByNode;
 	pagoda::Pagoda *m_pagoda;
 };  // class GraphScene
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

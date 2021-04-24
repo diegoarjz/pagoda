@@ -4,7 +4,7 @@
 
 #include <QPainter>
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 Edge::Edge(const QPointF &start, const QPointF &end) : m_start{start}, m_end{end} {}
 
@@ -43,4 +43,4 @@ QPainterPath Edge::shape() const
 
 	return path;
 }
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

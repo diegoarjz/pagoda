@@ -2,7 +2,7 @@
 
 #include "edge.h"
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 class GraphPortConnection;
 
@@ -23,4 +23,4 @@ class NewConnectionEdge : public Edge
 	private:
 	GraphPortConnection* m_port;
 };
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

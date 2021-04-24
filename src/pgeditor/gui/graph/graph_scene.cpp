@@ -36,7 +36,7 @@ using namespace pagoda::graph::traversal;
 
 using namespace pagoda::dynamic;
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 GraphScene::GraphScene(Pagoda* pagoda) : m_pagoda{pagoda} {}
 
@@ -255,4 +255,4 @@ void GraphScene::dragMoveEvent(QGraphicsSceneDragDropEvent* e)
 	QGraphicsScene::dragMoveEvent(e);
 }
 
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

@@ -19,7 +19,7 @@ class Node;
 using NodePtr = std::shared_ptr<Node>;
 }  // namespace pagoda::graph
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 class GraphPort;
 class GraphInPort;
@@ -84,4 +84,4 @@ class GraphNode : public QGraphicsWidget
 
 	QGraphicsProxyWidget *m_headerLabel;
 };  // class GraphNode
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

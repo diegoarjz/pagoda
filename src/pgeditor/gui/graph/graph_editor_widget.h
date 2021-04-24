@@ -13,7 +13,7 @@ class Graph;
 }
 }  // namespace pagoda
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 class GraphScene;
 
@@ -34,4 +34,4 @@ class GraphEditorWidget : public QWidget
 	std::shared_ptr<pagoda::graph::Graph> m_graph;
 	pagoda::Pagoda* m_pagoda;
 };  // class GraphEditorWidget
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

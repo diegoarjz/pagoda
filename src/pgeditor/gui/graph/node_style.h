@@ -2,7 +2,7 @@
 
 #include <QColor>
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 // clang-format off
   namespace node_style
@@ -62,4 +62,4 @@ namespace pgeditor::gui
     }
   }  // namespace node_style
 // clang-format on
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

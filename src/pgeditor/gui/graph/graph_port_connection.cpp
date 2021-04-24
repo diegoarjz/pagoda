@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QtDebug>
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 GraphPortConnection::~GraphPortConnection() {}
 
@@ -55,4 +55,4 @@ QVariant GraphPortConnection::itemChange(QGraphicsWidget::GraphicsItemChange cha
 
 	return QGraphicsWidget::itemChange(change, value);
 }
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

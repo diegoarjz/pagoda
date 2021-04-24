@@ -14,7 +14,7 @@ class OperationFactory;
 using OperationFactoryPtr = std::shared_ptr<OperationFactory>;
 }  // namespace pagoda::objects
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 class NewNodePopup : public QWidget
 {
@@ -42,4 +42,4 @@ class NewNodePopup : public QWidget
 	QLineEdit* m_searchField;
 	QListWidget* m_operationList;
 };
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

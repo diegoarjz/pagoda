@@ -8,7 +8,10 @@
 
 namespace pgeditor::gui
 {
+namespace graph
+{
 class GraphEditorWidget;
+}
 
 /**
  * Pagoda GUI Editor main window.
@@ -28,7 +31,7 @@ class MainWindow : public QMainWindow
 	void InitializeMenus();
 
 	pagoda::Pagoda m_pagoda;
-	GraphEditorWidget *m_graphEditor;
+	graph::GraphEditorWidget *m_graphEditor;
 
 };  // class MainWindow
 }  // namespace pgeditor::gui

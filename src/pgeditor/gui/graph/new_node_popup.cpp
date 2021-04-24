@@ -10,7 +10,7 @@
 
 using namespace pagoda::objects;
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 NewNodePopup::NewNodePopup(OperationFactoryPtr operationFactory) : QWidget(), m_operationFactory{operationFactory}
 {
@@ -103,4 +103,4 @@ void NewNodePopup::selectDown()
 	m_operationList->setCurrentRow(++selected);
 }
 
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

@@ -14,7 +14,7 @@
 
 using namespace pagoda::graph;
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 GraphEditorWidget::GraphEditorWidget(pagoda::Pagoda *pagoda) : QWidget(), m_pagoda{pagoda} { InitializeGUI(); }
 
@@ -55,4 +55,4 @@ void GraphEditorWidget::SetGraph(std::shared_ptr<Graph> graph)
 }
 
 std::shared_ptr<Graph> GraphEditorWidget::GetGraph() const { return m_graph; }
-}  // namespace pgeditor::gui
+}  // namespace pgeditor::gui::graph

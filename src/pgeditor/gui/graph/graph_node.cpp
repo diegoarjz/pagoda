@@ -28,7 +28,7 @@ using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 using namespace pagoda::dynamic;
 
-namespace pgeditor::gui
+namespace pgeditor::gui::graph
 {
 GraphNode::GraphNode(NodePtr node, GraphPtr graph) : m_node{node}, m_graph{graph}
 {
@@ -222,5 +222,4 @@ QVariant GraphNode::itemChange(QGraphicsWidget::GraphicsItemChange change, const
 	}
 	return QGraphicsWidget::itemChange(change, value);
 }
-}  // namespace pgeditor::gui
-using namespace pagoda::dynamic;
+}  // namespace pgeditor::gui::graph

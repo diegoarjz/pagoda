@@ -1,6 +1,6 @@
 #include "main_window.h"
 
-#include "graph_editor/graph_editor_widget.h"
+#include "graph/graph_editor_widget.h"
 
 #include <pagoda/graph/io/reader.h>
 #include <pagoda/graph/io/writer.h>
@@ -31,7 +31,7 @@ MainWindow::~MainWindow() {}
 void MainWindow::InitializeGUI()
 {
 	QWidget *sceneViewer = new QWidget();
-	m_graphEditor = new GraphEditorWidget(&m_pagoda);
+	m_graphEditor = new graph::GraphEditorWidget(&m_pagoda);
 	QWidget *inspector = new QWidget();
 
 	this->setCentralWidget(sceneViewer);
