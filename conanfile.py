@@ -32,9 +32,10 @@ class Pagoda(ConanFile):
         self.requires("gtest/1.10.0")
         self.requires("libpng/1.6.37")
         self.requires("nlohmann_json/3.9.1")
-        self.requires("openssl/1.1.1j", override=True)
+        self.requires("openssl/1.1.1k", override=True)
         self.requires("qt/6.0.1@bincrafters/stable")
         self.requires("entt/3.6.0")
+        self.requires("glew/2.1.0@bincrafters/stable")
 
 
     def build(self):
