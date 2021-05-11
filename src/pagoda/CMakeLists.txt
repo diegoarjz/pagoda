@@ -3,6 +3,7 @@ add_subdirectory(geometry)
 add_subdirectory(image)
 add_subdirectory(material)
 add_subdirectory(math)
+add_subdirectory(scene)
 add_subdirectory(objects)
 add_subdirectory(graph)
 add_subdirectory(dynamic)
@@ -15,7 +16,8 @@ set(PAGODA_SOURCES
   $<TARGET_OBJECTS:geometry>
   $<TARGET_OBJECTS:image>
   $<TARGET_OBJECTS:material>
-  $<TARGET_OBJECTS:math>
+  #$<TARGET_OBJECTS:math>
+  $<TARGET_OBJECTS:scene>
   $<TARGET_OBJECTS:graph>
   $<TARGET_OBJECTS:objects>
   $<TARGET_OBJECTS:pgscript>
@@ -27,7 +29,7 @@ set(PAGODA_DEPENDENCIES
     Boost::filesystem
     Boost::system
     Boost::program_options
-    bz2
+    BZip2::BZip2
     PNG::PNG
     ZLIB::ZLIB
 )

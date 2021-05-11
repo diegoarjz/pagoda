@@ -4,17 +4,19 @@ project("Pagoda" LANGUAGES CXX VERSION 0.1.0)
 cmake_minimum_required(VERSION 3.11.0 FATAL_ERROR)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-conan_basic_setup(KEEP_RPATHS)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR}")
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR}")
 
 include("Pagoda")
 include("WGS84toCartesian")
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost COMPONENTS chrono system program_options filesystem)
-find_package(gtest)
+find_package(GTest)
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(BZip2 REQUIRED)
+find_package(GLEW REQUIRED)
 
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

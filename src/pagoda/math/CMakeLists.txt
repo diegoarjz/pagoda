@@ -14,7 +14,7 @@ set(MATH_SRCS
     "vec_base.h"
 )
 
-add_pagoda_module(
+add_pagoda_header_only(
   NAME          math
   SOURCES       ${MATH_SRCS}
   DEPENDENCIES  common

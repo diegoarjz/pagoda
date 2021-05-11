@@ -40,6 +40,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Node creation from operation name by pressing Tab key.
   - Node deletion by selecting a node and pressing Backspace.
   - Connection between nodes by dragging from a node port to another.
+- GUI scene viewer:
+  - OpenGL scene viewer with basic mouse navigation.
+  - Rendering system, rendering components and a render operation to display
+    procedural objects.
 
 ### Changed
 
