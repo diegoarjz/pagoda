@@ -3,6 +3,8 @@
 
 #include "graph_scene.h"
 
+#include <pagoda/graph/graph.h>
+
 #include <QGraphicsView>
 #include <QLabel>
 #include <QScrollArea>
@@ -31,6 +33,11 @@ void GraphEditorWidget::InitializeGUI()
 	toolbar->addAction(tr("Layout"), [this]() {
 		if (m_graphScene != nullptr) {
 			m_graphScene->LayoutGraph();
+		}
+	});
+	toolbar->addAction(tr("Generate"), [this]() {
+		if (m_graph != nullptr) {
+			m_graph->Execute();
 		}
 	});
 

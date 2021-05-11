@@ -79,7 +79,6 @@ class ProceduralComponentSystem : public ProceduralComponentSystemBase
 	protected:
 	virtual void DoClone(std::shared_ptr<Component_t> from, std::shared_ptr<Component_t> to) = 0;
 
-	private:
 	/// Stores the \c ProceduralComponent for each \c ProceduralObject.
 	std::unordered_map<ProceduralObjectPtr, std::shared_ptr<Component_t>> m_components;
 };  // class ProceduralComponentSystem

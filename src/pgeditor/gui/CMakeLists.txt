@@ -24,12 +24,14 @@ set(GUI_SRCS
   "graph/node_style.h"
   "graph/new_node_popup.cpp"
   "graph/new_node_popup.h"
+  "viewer/viewer.cpp"
+  "viewer/viewer.h"
 )
 
 add_pagoda_module(
   NAME          gui
   SOURCES       ${GUI_SRCS}
-  DEPENDENCIES  libpagoda common graph
+  DEPENDENCIES  libpagoda common graph renderer
 )
 set_target_properties(gui PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

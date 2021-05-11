@@ -124,10 +124,6 @@ class ProceduralOperation : public dynamic::BuiltinClass
 
 	struct Interface
 	{
-		std::list<ProceduralObjectPtr> m_objects;
-		boost::signals2::signal<InterfaceHandler_t> m_signal;
-		std::list<std::shared_ptr<ProceduralOperation>> m_operations;
-
 		void Add(ProceduralObjectPtr o) { m_objects.push_back(o); }
 		ProceduralObjectPtr GetFront()
 		{
@@ -139,6 +135,11 @@ class ProceduralOperation : public dynamic::BuiltinClass
 			return object;
 		}
 		bool HasObjects() const { return !m_objects.empty(); }
+		void Clear() { m_objects.clear(); }
+
+		std::list<ProceduralObjectPtr> m_objects;
+		boost::signals2::signal<InterfaceHandler_t> m_signal;
+		std::list<std::shared_ptr<ProceduralOperation>> m_operations;
 	};
 
 	using InterfaceContainer_t = std::unordered_map<std::string, Interface>;

@@ -12,6 +12,10 @@ namespace graph
 {
 class GraphEditorWidget;
 }
+namespace viewer
+{
+class Viewer;
+}
 
 /**
  * Pagoda GUI Editor main window.
@@ -27,11 +31,13 @@ class MainWindow : public QMainWindow
 	void SaveGraph();
 
 	private:
+	void InitializeGL();
 	void InitializeGUI();
 	void InitializeMenus();
 
 	pagoda::Pagoda m_pagoda;
-	graph::GraphEditorWidget *m_graphEditor;
+	graph::GraphEditorWidget* m_graphEditor;
+	viewer::Viewer* m_openGLWidget;
 
 };  // class MainWindow
 }  // namespace pgeditor::gui
