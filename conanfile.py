@@ -20,10 +20,10 @@ class Pagoda(ConanFile):
     }
     default_options = (
         "shared=False",
-        "boost:without_fiber=True",
+        "qt:shared=True",
         "glew:shared=False"
     )
-    generators = "cmake"
+    generators = "cmake_find_package"
     exports_sources = "*"
 
 
@@ -33,9 +33,9 @@ class Pagoda(ConanFile):
         self.requires("libpng/1.6.37")
         self.requires("nlohmann_json/3.9.1")
         self.requires("openssl/1.1.1k", override=True)
-        self.requires("qt/6.0.1@bincrafters/stable")
+        self.requires("qt/6.1.1")
         self.requires("entt/3.6.0")
-        self.requires("glew/2.1.0@bincrafters/stable")
+        self.requires("glew/2.1.0")
 
 
     def build(self):
@@ -45,6 +45,11 @@ class Pagoda(ConanFile):
         cmake.definitions['PAGODA_VERSION'] = self.version
         if 'GITHUB_RUN_NUMBER' in os.environ:
             cmake.definitions['PAGODA_BUILD_NUMBER'] = os.environ['GITHUB_RUN_NUMBER']
+
+        if self.settings.build_type == 'Release':
+            cmake.definitions['CMAKE_BUILD_TYPE'] = 'Release'
+        elif self.settings.build_type == 'Debug':
+            cmake.definitions['CMAKE_BUILD_TYPE'] = 'Debug'
 
         cmake.configure(defs=cmake.definitions)
         cmake.build()

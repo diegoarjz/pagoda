@@ -13,10 +13,19 @@ set(IMAGE_SRCS
     "image.h"
 )
 
+find_package(PNG REQUIRED)
+
 add_pagoda_module(
   NAME                image
   SOURCES             ${IMAGE_SRCS}
-  DEPENDENCIES        common dynamic
+  DEPENDENCIES        common dynamic PNG ZLIB
+)
+
+target_include_directories(
+  image
+  PRIVATE
+    ${PNG_INCLUDE_DIR}
+    ${ZLIB_INCLUDE_DIR}
 )
 
 #########################################################################

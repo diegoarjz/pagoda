@@ -67,10 +67,18 @@ set(GEOMETRY_SRCS
     "scope_axis_direction_predicate.h"
 )
 
+find_package(nlohmann_json REQUIRED)
+
 add_pagoda_module(
   NAME          geometry
   SOURCES       ${GEOMETRY_SRCS}
-  DEPENDENCIES  common dynamic
+  DEPENDENCIES  common dynamic nlohmann_json
+)
+
+target_include_directories(
+  geometry
+  PRIVATE
+    ${nlohmann_json_INCLUDE_DIR}
 )
 
 #########################################################################

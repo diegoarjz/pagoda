@@ -2,6 +2,7 @@
 
 #include "graph/graph_editor_widget.h"
 
+#include <pgeditor/gui/viewer/viewer.h>
 #include <pgeditor/renderer/rendering_system.h>
 
 #include <pagoda/graph/io/reader.h>
@@ -13,8 +14,11 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QSplitter>
+#include <QSurfaceFormat>
 
 #include <sstream>
+
+using namespace pgeditor::gui::viewer;
 
 namespace pgeditor::gui
 {
@@ -25,6 +29,7 @@ MainWindow::MainWindow()
 	// Register the rendering system with pagoda
 	renderer::RenderingSystem::Registration(&m_pagoda);
 
+	InitializeGL();
 	InitializeGUI();
 	InitializeMenus();
 
@@ -33,26 +38,49 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow() {}
 
+void MainWindow::InitializeGL()
+{
+	QSurfaceFormat format;
+	format.setMajorVersion(4);
+
+#if !defined(Q_OS_MAC)
+	format.setMinorVersion(1);
+#else
+	format.setMinorVersion(2);
+#endif
+	format.setDepthBufferSize(24);
+	format.setSamples(4);
+	format.setProfile(QSurfaceFormat::CoreProfile);
+
+	QSurfaceFormat::setDefaultFormat(format);
+}
+
 void MainWindow::InitializeGUI()
 {
-	QWidget *sceneViewer = new QWidget();
 	m_graphEditor = new graph::GraphEditorWidget(&m_pagoda);
-	QWidget *inspector = new QWidget();
-
-	this->setCentralWidget(sceneViewer);
+	// QWidget *inspector = new QWidget();
 
 	QDockWidget *graphEditorWidget = new QDockWidget(QString("Graph Editor"), this);
-	this->addDockWidget(Qt::BottomDockWidgetArea, graphEditorWidget);
+	addDockWidget(Qt::BottomDockWidgetArea, graphEditorWidget);
 	graphEditorWidget->setFeatures(graphEditorWidget->features() & ~QDockWidget::DockWidgetClosable &
 	                               ~QDockWidget::DockWidgetFloatable);
 	graphEditorWidget->setWidget(m_graphEditor);
 	graphEditorWidget->show();
+	graphEditorWidget->setTitleBarWidget(new QWidget(graphEditorWidget));
 
+	/*
 	QDockWidget *inspectorWidget = new QDockWidget(QString("Inspector"), this);
 	inspectorWidget->setFeatures(inspectorWidget->features() & ~QDockWidget::DockWidgetClosable &
 	                             ~QDockWidget::DockWidgetFloatable);
 	inspectorWidget->setWidget(inspector);
-	this->addDockWidget(Qt::RightDockWidgetArea, inspectorWidget);
+	addDockWidget(Qt::RightDockWidgetArea, inspectorWidget);
+	*/
+
+	m_openGLWidget = new Viewer(this);
+	m_openGLWidget->setFormat(QSurfaceFormat::defaultFormat());
+	m_openGLWidget->SetRenderingSystem(
+	  m_pagoda.GetProceduralObjectSystem()->GetComponentSystem<renderer::RenderingSystem>());
+	setCentralWidget(m_openGLWidget);
 }
 
 void MainWindow::InitializeMenus()

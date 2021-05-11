@@ -60,6 +60,7 @@ else()
     option(PAGODA_GIT_INFO "Include git information in the version information" ON)
 endif()
 
+message(STATUS "Build Type:         ${CMAKE_BUILD_TYPE}")
 message(STATUS "Version:            ${PAGODA_VERSION}")
 message(STATUS "Build number:       ${PAGODA_BUILD_NUMBER}")
 message(STATUS "Build date:         ${PAGODA_BUILD_DATE}")
@@ -181,6 +182,42 @@ function (add_pagoda_module)
   add_pagoda_build_unit(TYPE OBJECT ${ARGN})
 endfunction()
 
+function (add_pagoda_header_only)
+  set(multiValue SOURCES DEPENDENCIES COMPILE_DEFINITIONS)
+  set(singleValue NAME TYPE)
+  include(CMakeParseArguments)
+  cmake_parse_arguments(
+      PARSED_ARGS       # prefix of output variables
+      ""                # list of names of the boolean arguments (only defined ones will be true)
+      "${singleValue}"  # list of names of mono-valued arguments
+      "${multiValue}"   # list of names of multi-valued arguments (output variables are lists)
+      ${ARGN}           # arguments of the function to parse, here we take the all original ones
+  )
+  # note: remaining unparsed arguments can be found in variable PARSED_ARGS_UNPARSED_ARGUMENTS
+  if(NOT PARSED_ARGS_NAME)
+    message(FATAL_ERROR "You must provide a name")
+  endif(NOT PARSED_ARGS_NAME)
+
+  add_library(${PARSED_ARGS_NAME} INTERFACE ${PARSED_ARGS_SOURCES})
+
+  target_compile_features(
+    ${PARSED_ARGS_NAME}
+    INTERFACE
+      cxx_std_17
+  )
+
+  target_compile_options(
+    ${PARSED_ARGS_NAME}
+    INTERFACE
+      # We don't treat warnings as errors on windows because Boost.Spirit
+      # produces a lot of warnings on windows.
+      $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall>
+      $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+      $<$<CXX_COMPILER_ID:Clang>:-Wno-gnu-zero-variadic-macro-arguments>
+  )
+
+endfunction()
+
 # Adds an executable linked against the pagoda and other libs.
 # Example Usage
 #   add_pagoda_executable(
@@ -256,7 +293,7 @@ endfunction()
 
 # TODO: once all tests use the add_unit_test function we can remove
 # PAGODA_GTEST_LIBS
-set(PAGODA_GTEST_LIBS "${CONAN_LIBS_GTEST}")
+set(PAGODA_GTEST_LIBS GTest::gtest GTest::gtest_main)
 # Adds a unit test executable from a single unit test source.
 # The unit test name is based on the source file and assumes that
 # the source file is suffixed by a .test.cpp.
@@ -266,12 +303,19 @@ set(PAGODA_GTEST_LIBS "${CONAN_LIBS_GTEST}")
 function (add_unit_test unit_test_src)
   get_filename_component(unit_test_base_name ${unit_test_src} NAME)
   string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
-  set(unit_test_libs "${CONAN_LIBS_GTEST}")
+  set(unit_test_libs GTest::gtest GTest::gtest_main)
 
   add_pagoda_executable(
     NAME      ${test_name}
     SOURCES   ${unit_test_src}
     DEPENDENCIES ${unit_test_libs}
+  )
+
+  # TODO: The GeoJSON reader is leaking nlohmann_json headers
+  target_include_directories(
+    ${test_name}
+    PRIVATE
+      ${nlohmann_json_INCLUDE_DIR}
   )
 
   add_test(NAME ${test_name} COMMAND ${test_name})

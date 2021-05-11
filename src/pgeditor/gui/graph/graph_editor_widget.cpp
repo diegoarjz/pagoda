@@ -3,6 +3,8 @@
 
 #include "graph_scene.h"
 
+#include <pagoda/graph/graph.h>
+
 #include <QGraphicsView>
 #include <QLabel>
 #include <QScrollArea>
@@ -22,15 +24,20 @@ void GraphEditorWidget::InitializeGUI()
 {
 	QVBoxLayout *layout = new QVBoxLayout;
 	layout->setContentsMargins(0, 0, 0, 0);
-	layout->QLayout::setSpacing(0);
+	layout->setSpacing(0);
 
 	setLayout(layout);
 
 	auto toolbar = new QToolBar;
-	toolbar->setContentsMargins(-1, -1, -1, 0);
+	toolbar->setContentsMargins(-1, -1, -1, -1);
 	toolbar->addAction(tr("Layout"), [this]() {
 		if (m_graphScene != nullptr) {
 			m_graphScene->LayoutGraph();
+		}
+	});
+	toolbar->addAction(tr("Generate"), [this]() {
+		if (m_graph != nullptr) {
+			m_graph->Execute();
 		}
 	});
 
@@ -41,7 +48,9 @@ void GraphEditorWidget::InitializeGUI()
 QWidget *GraphEditorWidget::createGraphArea()
 {
 	m_graphicsView = new QGraphicsView();
-	m_graphicsView->setContentsMargins(-1, -1, -1, 0);
+	m_graphicsView->setContentsMargins(-1, -1, -1, -1);
+	m_graphicsView->setFrameShape(QFrame::NoFrame);
+	m_graphicsView->setLineWidth(0);
 
 	return m_graphicsView;
 }

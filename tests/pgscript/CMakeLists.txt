@@ -8,5 +8,9 @@ add_pagoda_executable(
   DEPENDENCIES  ${PAGODA_GTEST_LIBS}
 )
 
-file(COPY test_files DESTINATION "${CMAKE_BINARY_DIR}/bin")
+if (WIN32)
+  file(COPY test_files DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}")
+else()
+  file(COPY test_files DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+endif()
 add_test(NAME pgscript_tests COMMAND pgscript_tests)
