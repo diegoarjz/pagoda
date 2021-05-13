@@ -16,19 +16,37 @@ using namespace pagoda::common::instrument;
 
 using namespace pgeditor::gui;
 
+static const char* sStyleSheet = R"(
+  QMainWindow {
+    background-color: #282828;
+    color: #ebdbb2;
+  }
+
+  QMainWindow::separator {
+    background: black;
+    width: 2px;
+    height: 2px;
+}
+
+  QWidget {
+    background-color: #282828;
+    color: #ebdbb2;
+  }
+
+  QToolBar {
+    background: #282828;
+    border: none;
+  }
+)";
+
 int main(int argc, char* argv[])
 {
 	QApplication app(argc, argv);
 
+	app.setStyleSheet(QString{sStyleSheet});
+
 	MainWindow mainWindow;
 	mainWindow.showMaximized();
-	/*
-	QFile styleSheetFile(":/styles/style_sheet.qss");
-	styleSheetFile.open(QFile::ReadOnly);
-	QString styleSheet = QLatin1String(styleSheetFile.readAll());
-
-	mainWindow.setStyleSheet(styleSheet);
-	*/
 
 	return app.exec();
 }

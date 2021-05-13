@@ -1,5 +1,4 @@
 find_package(Qt6 COMPONENTS Widgets Core OpenGL OpenGLWidgets REQUIRED)
-find_package(glew REQUIRED)
 
 add_subdirectory(renderer)
 add_subdirectory(gui)

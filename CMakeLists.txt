@@ -15,6 +15,7 @@ find_package(Boost COMPONENTS chrono system program_options filesystem)
 find_package(gtest)
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(glew REQUIRED)
 
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

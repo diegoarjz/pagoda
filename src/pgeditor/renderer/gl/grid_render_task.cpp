@@ -112,13 +112,15 @@ vec4 grid(vec3 fragPos3D, float scale) {
     float line = min(grid.x, grid.y);
     float minimumz = min(derivative.y, 1);
     float minimumx = min(derivative.x, 1);
-    vec4 color = vec4(0.2, 0.2, 0.2, 1.0 - min(line, 1.0));
+    vec4 color = vec4(0.92, 0.86, 0.7, 1.0 - min(line, 1.0));
     // z axis
-    if(fragPos3D.x > -0.1 * minimumx && fragPos3D.x < 0.1 * minimumx)
-        color.z = 1.0;
+    if(fragPos3D.x > -0.1 * minimumx && fragPos3D.x < 0.1 * minimumx) {
+      color = vec4(0.27, 0.52, 0.53, 1.0);
+    }
     // x axis
-    if(fragPos3D.z > -0.1 * minimumz && fragPos3D.z < 0.1 * minimumz)
-        color.x = 1.0;
+    if(fragPos3D.z > -0.1 * minimumz && fragPos3D.z < 0.1 * minimumz) {
+      color = vec4(0.8, 0.14, 0.11, 1.0);
+    }
     return color;
 }
 

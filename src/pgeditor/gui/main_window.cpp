@@ -66,6 +66,7 @@ void MainWindow::InitializeGUI()
 	                               ~QDockWidget::DockWidgetFloatable);
 	graphEditorWidget->setWidget(m_graphEditor);
 	graphEditorWidget->show();
+	graphEditorWidget->setTitleBarWidget(new QWidget(graphEditorWidget));
 
 	/*
 	QDockWidget *inspectorWidget = new QDockWidget(QString("Inspector"), this);
