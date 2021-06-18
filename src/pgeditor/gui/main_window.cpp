@@ -95,18 +95,11 @@ void MainWindow::InitializeMenus()
 	connect(saveGraphAction, &QAction::triggered, this, &MainWindow::SaveGraph);
 }
 
-// Slots
-void MainWindow::OpenGraph()
+void MainWindow::LoadGraphFile(const std::string &filePath)
 {
 	using namespace pagoda::graph::io;
 
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Graph"), "", tr("Graph Files (*.pgd);;All Files (*)"));
-
-	if (fileName.isEmpty()) {
-		return;
-	}
-
-	QFile file(fileName);
+	QFile file(filePath.c_str());
 	if (!file.open(QIODevice::ReadOnly)) {
 		QMessageBox::information(this, tr("Unable to open file."), file.errorString());
 		return;
@@ -121,6 +114,19 @@ void MainWindow::OpenGraph()
 	}
 
 	m_graphEditor->SetGraph(graph);
+}
+
+// Slots
+void MainWindow::OpenGraph()
+{
+	using namespace pagoda::graph::io;
+
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Graph"), "", tr("Graph Files (*.pgd);;All Files (*)"));
+
+	if (fileName.isEmpty()) {
+		return;
+	}
+	LoadGraphFile(fileName.toStdString());
 }
 
 void MainWindow::SaveGraph()
