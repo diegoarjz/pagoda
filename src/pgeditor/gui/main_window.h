@@ -26,6 +26,11 @@ class MainWindow : public QMainWindow
 	MainWindow();
 	~MainWindow() override;
 
+	/**
+	 * Loads the graph file specified in \p file.
+	 */
+	void LoadGraphFile(const std::string& filePath);
+
 	private slots:
 	void OpenGraph();
 	void SaveGraph();
