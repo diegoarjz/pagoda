@@ -8,6 +8,7 @@
 #include "new_connection_edge.h"
 #include "new_node_popup.h"
 #include "node_style.h"
+#include "operation_node.h"
 
 #include <pagoda/graph/query/topology.h>
 #include <pagoda/graph/query/type.h>
@@ -45,12 +46,13 @@ void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 	m_graph = graph;
 
 	NodeSet operationNodes;
-	auto opNodesQuery = type<OperationNode>(*m_graph, operationNodes);
+	auto opNodesQuery = type<pagoda::graph::OperationNode>(*m_graph, operationNodes);
 	m_graph->ExecuteQuery(opNodesQuery);
 
 	bool needsLayout = false;
 	for (const auto& n : operationNodes) {
-		GraphNode* node = new GraphNode(n, m_graph);
+		OperationNode* node = new OperationNode(m_graph, n);
+		node->InitializeGUI();
 		this->addItem(node);
 		m_operationNodes[n.get()] = node;
 
@@ -73,8 +75,8 @@ void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 		connect(node, &GraphNode::NewConnection, this, &GraphScene::ConnectedNodes);
 	}
 
-	auto upstreamNodeQuery = type<OperationNode>();
-	auto downStreamNodeQuery = type<OperationNode>();
+	auto upstreamNodeQuery = type<pagoda::graph::OperationNode>();
+	auto downStreamNodeQuery = type<pagoda::graph::OperationNode>();
 	auto outInterfaceQuery = type<OutputInterfaceNode>();
 	auto inInterfaceQuery = type<InputInterfaceNode>();
 
@@ -92,8 +94,8 @@ void GraphScene::SetProceduralGraph(std::shared_ptr<pagoda::graph::Graph> graph)
 		auto inInterfaceNode = m[&inInterfaceQuery];
 		auto outInterfaceNode = m[&outInterfaceQuery];
 
-		auto outPort = upstreamNode->GetOutPort(outInterfaceNode);
-		auto inPort = downStreamNode->GetInPort(inInterfaceNode);
+		auto outPort = dynamic_cast<OperationNode*>(upstreamNode)->GetOutPortForNode(outInterfaceNode);
+		auto inPort = dynamic_cast<OperationNode*>(downStreamNode)->GetInPortForNode(inInterfaceNode);
 
 		ConnectedNodes(outPort, inPort);
 	}
@@ -121,9 +123,9 @@ GraphNode* GraphScene::createOperation(const QString& opName)
 		// TODO: throw error
 	}
 
-	auto nodeName = m_graph->CreateNode<OperationNode>(opName.toStdString());
+	auto nodeName = m_graph->CreateNode<pagoda::graph::OperationNode>(opName.toStdString());
 	auto node = m_graph->GetNode(nodeName);
-	std::dynamic_pointer_cast<OperationNode>(node)->SetOperation(operation);
+	std::dynamic_pointer_cast<pagoda::graph::OperationNode>(node)->SetOperation(operation);
 
 	operation->ForEachInputInterface([this, &nodeName](const std::string& i) {
 		auto inName = m_graph->CreateNode<InputInterfaceNode>(nodeName + "_" + i);
@@ -139,7 +141,8 @@ GraphNode* GraphScene::createOperation(const QString& opName)
 		m_graph->CreateEdge(nodeName, outName);
 	});
 
-	GraphNode* guiNode = new GraphNode(node, m_graph);
+	OperationNode* guiNode = new OperationNode(m_graph, node);
+	guiNode->InitializeGUI();
 	m_operationNodes[node.get()] = guiNode;
 	guiNode->ForEachPort([this](GraphPort* port) {
 		connect(port, &GraphPort::StartConnectionDrag, this, &GraphScene::StartConnectionDrag);

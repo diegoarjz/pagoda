@@ -11,6 +11,8 @@ set(GUI_SRCS
   "graph/graph_scene.h"
   "graph/graph_node.cpp"
   "graph/graph_node.h"
+  "graph/operation_node.cpp"
+  "graph/operation_node.h"
   "graph/graph_port.cpp"
   "graph/graph_port.h"
   "graph/graph_in_port.cpp"

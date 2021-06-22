@@ -30,19 +30,19 @@ class GraphNode : public QGraphicsWidget
 	Q_OBJECT
 
 	public:
-	GraphNode(pagoda::graph::NodePtr node, pagoda::graph::GraphPtr graph);
+	GraphNode(pagoda::graph::GraphPtr graph, pagoda::graph::NodePtr node);
 	~GraphNode() override;
+
+	void InitializeGUI();
 
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
 	/**
-	 * Returns the pagoda node.
+	 * Returns the \c Node.
 	 */
 	pagoda::graph::NodePtr GetNode() const;
-	GraphInPort *GetInPort(pagoda::graph::NodePtr node) const;
-	GraphOutPort *GetOutPort(pagoda::graph::NodePtr node) const;
 
 	void ForEachPort(std::function<void(GraphPort *)> f);
 
@@ -52,6 +52,13 @@ class GraphNode : public QGraphicsWidget
 	 * parameters.
 	 */
 	void SetPosition(int32_t x, int32_t y);
+
+	/**
+	 * Connects the two ports.
+	 *
+	 * Emits NewConnection signal.
+	 */
+	void ConnectInterfaces(GraphPort *from, GraphPort *to);
 
 	signals:
 
@@ -63,25 +70,17 @@ class GraphNode : public QGraphicsWidget
 	protected:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
-	private:
-	void InitializeGUI();
-
-	/**
-	 * Connects the two ports.
-	 *
-	 * Emits NewConnection signal.
-	 */
-	void ConnectInterfaces(GraphPort *from, GraphPort *to);
+	virtual void CreateBody() = 0;
+	void AddPort(GraphInPort *port);
+	void AddPort(GraphOutPort *port);
 
 	pagoda::graph::NodePtr m_node;
 	pagoda::graph::GraphPtr m_graph;
 
-	pagoda::graph::NodeSet m_inNodes;
-	pagoda::graph::NodeSet m_outNodes;
-
-	std::unordered_map<pagoda::graph::NodePtr, GraphInPort *> m_inInterfaces;
-	std::unordered_map<pagoda::graph::NodePtr, GraphOutPort *> m_outInterfaces;
-
 	QGraphicsProxyWidget *m_headerLabel;
+
+	std::vector<GraphInPort *> m_inPorts;
+	std::vector<GraphOutPort *> m_outPorts;
+	bool m_guiInitialized{false};
 };  // class GraphNode
 }  // namespace pgeditor::gui::graph

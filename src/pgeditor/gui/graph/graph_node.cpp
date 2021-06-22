@@ -4,18 +4,13 @@
 #include "graph_out_port.h"
 #include "node_style.h"
 
-#include <pagoda/graph/query/type.h>
-
-#include <pagoda/graph/graph.h>
-#include <pagoda/graph/input_interface_node.h>
-#include <pagoda/graph/node.h>
-#include <pagoda/graph/operation_node.h>
-#include <pagoda/graph/output_interface_node.h>
-
-#include <pagoda/dynamic/integer_value.h>
-
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
+
+#include <pagoda/graph/graph.h>
+#include <pagoda/graph/node.h>
+
+#include <pagoda/dynamic/integer_value.h>
 
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
@@ -30,70 +25,32 @@ using namespace pagoda::dynamic;
 
 namespace pgeditor::gui::graph
 {
-GraphNode::GraphNode(NodePtr node, GraphPtr graph) : m_node{node}, m_graph{graph}
+GraphNode::GraphNode(GraphPtr graph, NodePtr node) : m_node{node}, m_graph{graph}
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
-
-	InitializeGUI();
 }
 
 GraphNode::~GraphNode() {}
 
 void GraphNode::InitializeGUI()
 {
+	if (m_guiInitialized) {
+		return;
+	}
+	m_guiInitialized = true;
 	using namespace node_style::header;
 	using namespace node_style::node;
-
-	m_headerLabel = new QGraphicsProxyWidget(this);
 
 	QFont labelFont(name_font_family, name_font_size);
 	QLabel *label = new QLabel(m_node->GetName().c_str());
 	label->setFont(labelFont);
 	label->setStyleSheet(label_stylesheet);
+	m_headerLabel = new QGraphicsProxyWidget(this);
 	m_headerLabel->setWidget(label);
 	m_headerLabel->setPos(QPointF(0, 0));
 
-	m_inNodes = m_graph->GetNodeInputNodes(m_node->GetName());
-	m_outNodes = m_graph->GetNodeOutputNodes(m_node->GetName());
-
-	NodeSet inputInterfaces;
-	auto inputFilter = pagoda::graph::query::type<InputInterfaceNode>(*m_graph, inputInterfaces);
-	m_inNodes.ExecuteQuery(inputFilter);
-
-	for (auto n : inputInterfaces) {
-		auto interface = std::dynamic_pointer_cast<InputInterfaceNode>(n);
-		auto proxy = new GraphInPort(this, interface, this);
-		connect(proxy, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
-		m_inInterfaces.emplace(n, proxy);
-	}
-
-	NodeSet outputInterfaces;
-	auto outputFilter = pagoda::graph::query::type<OutputInterfaceNode>(*m_graph, outputInterfaces);
-	m_outNodes.ExecuteQuery(outputFilter);
-	for (auto n : outputInterfaces) {
-		auto interface = std::dynamic_pointer_cast<OutputInterfaceNode>(n);
-		auto proxy = new GraphOutPort(this, interface, this);
-		connect(proxy, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
-		m_outInterfaces.emplace(n, proxy);
-	}
-
-	QRectF bounds = boundingRect();
-	auto horizontalCenter = bounds.width() * 0.5;
-	QRectF headerBounds = m_headerLabel->boundingRect();
-	m_headerLabel->setPos(QPointF(horizontalCenter - headerBounds.width() * 0.5, 0));
-
-	auto startYPos = headerBounds.bottom() + ports_top_margin;
-	for (auto inPort : m_inInterfaces) {
-		inPort.second->setPos(ports_side_margin, startYPos);
-		startYPos += inPort.second->boundingRect().height() + port_vertical_spacing;
-	}
-
-	startYPos = headerBounds.bottom() + ports_top_margin;
-	for (auto outPort : m_outInterfaces) {
-		outPort.second->setPos(bounds.width() - outPort.second->boundingRect().width() - ports_side_margin, startYPos);
-		startYPos += outPort.second->boundingRect().height() + port_vertical_spacing;
-	}
+	CreateBody();
 }
 
 void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -102,28 +59,29 @@ void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 	QRectF bounds = boundingRect();
 
+	QRectF headerBounds = m_headerLabel->boundingRect();
+	headerBounds.setWidth(bounds.width());
+	headerBounds.setHeight(headerBounds.height() + 2);
+	bounds.setTop(bounds.top() + headerBounds.height());
+
 	painter->setRenderHint(QPainter::Antialiasing);
 	painter->setPen(QPen(border_color, border_width));
 
-	QPainterPath path;
-	path.addRoundedRect(bounds, round_size, round_size);
-
-	QLinearGradient gradient(0, 0, 0, bounds.height());
 	if (option->state & QStyle::State_Selected) {
-		gradient.setColorAt(0, selected_fill_gradient_start);
-		gradient.setColorAt(1, selected_fill_gradient_end);
+		painter->fillRect(bounds, selected_fill_gradient_start);
 	} else {
-		gradient.setColorAt(0, fill_gradient_start);
-		gradient.setColorAt(1, fill_gradient_end);
+		painter->fillRect(bounds, fill_gradient_start);
 	}
+	painter->drawRect(bounds);
 
-	painter->fillPath(path, gradient);
-	painter->drawPath(path);
+	painter->fillRect(headerBounds, QColor(1, 1, 1, 1));
+	painter->drawRect(headerBounds);
 }
 
 QPainterPath GraphNode::shape() const
 {
 	using namespace node_style::node;
+
 	QRectF bounds = boundingRect();
 	QPainterPath path;
 	path.addRoundedRect(bounds, round_size, round_size);
@@ -141,8 +99,8 @@ QRectF GraphNode::boundingRect() const
 
 	uint32_t maxInPortsWidth = 0;
 	uint32_t inPortsHeight = 0;
-	for (auto inPort : m_inInterfaces) {
-		auto bounds = inPort.second->boundingRect();
+	for (auto inPort : m_inPorts) {
+		auto bounds = inPort->boundingRect();
 		if (bounds.width() > maxInPortsWidth) {
 			maxInPortsWidth = bounds.width();
 		}
@@ -151,8 +109,8 @@ QRectF GraphNode::boundingRect() const
 
 	uint32_t maxOutPortsWidth = 0;
 	uint32_t outPortsHeight = 0;
-	for (auto outPort : m_outInterfaces) {
-		auto bounds = outPort.second->boundingRect();
+	for (auto outPort : m_outPorts) {
+		auto bounds = outPort->boundingRect();
 		if (bounds.width() > maxOutPortsWidth) {
 			maxOutPortsWidth = bounds.width();
 		}
@@ -168,32 +126,14 @@ QRectF GraphNode::boundingRect() const
 
 pagoda::graph::NodePtr GraphNode::GetNode() const { return m_node; }
 
-GraphInPort *GraphNode::GetInPort(NodePtr node) const
-{
-	auto iter = m_inInterfaces.find(node);
-	if (iter == m_inInterfaces.end()) {
-		return nullptr;
-	}
-	return iter->second;
-}
-
-GraphOutPort *GraphNode::GetOutPort(NodePtr node) const
-{
-	auto iter = m_outInterfaces.find(node);
-	if (iter == m_outInterfaces.end()) {
-		return nullptr;
-	}
-	return iter->second;
-}
-
 void GraphNode::ForEachPort(std::function<void(GraphPort *)> f)
 {
-	for (auto &p : m_inInterfaces) {
-		f(p.second);
+	for (auto &p : m_inPorts) {
+		f(p);
 	}
 
-	for (auto &p : m_outInterfaces) {
-		f(p.second);
+	for (auto &p : m_outPorts) {
+		f(p);
 	}
 }
 
@@ -202,8 +142,29 @@ void GraphNode::ConnectInterfaces(GraphPort *from, GraphPort *to)
 	DBG_ASSERT(std::dynamic_pointer_cast<InputInterfaceNode>(from->GetNode()) != nullptr &&
 	           std::dynamic_pointer_cast<OutputInterfaceNode>(to->GetNode()) != nullptr);
 	m_graph->CreateEdge(from->GetNode()->GetName(), to->GetNode()->GetName());
-	std::cout << "Connecting interfaces" << std::endl;
 	emit NewConnection(from, to);
+}
+
+void GraphNode::AddPort(GraphInPort *port)
+{
+	using namespace node_style::node;
+
+	port->setPos(ports_side_margin, m_headerLabel->boundingRect().bottom() + ports_top_margin +
+	                                  m_inPorts.size() * (port->boundingRect().height() + port_vertical_spacing));
+	m_inPorts.push_back(port);
+	connect(port, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
+}
+
+void GraphNode::AddPort(GraphOutPort *port)
+{
+	using namespace node_style::node;
+
+	port->setPos(boundingRect().width() - port->boundingRect().width() - ports_side_margin,
+	             m_headerLabel->boundingRect().bottom() + ports_top_margin +
+	               m_inPorts.size() * (port->boundingRect().height() + port_vertical_spacing));
+
+	m_outPorts.push_back(port);
+	connect(port, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
 }
 
 void GraphNode::SetPosition(int32_t x, int32_t y)
