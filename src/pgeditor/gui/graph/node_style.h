@@ -44,7 +44,7 @@ namespace pgeditor::gui::graph
     {
       const QColor border_color = QColor(0, 0, 0);
       const uint32_t border_width = 2;
-      const QColor fill_color = QColor(235,219,178);
+      const QColor fill_color = QColor();
       const uint32_t port_size = 10;
     }
 
