@@ -7,6 +7,7 @@ add_subdirectory(gui)
 set(PGEDITOR_SOURCES
   "gui/graph/graph_port_connection.h"
   "gui/graph/graph_node.h"
+  "gui/graph/operation_node.h"
   "gui/graph/new_node_popup.h"
   "gui/graph/graph_port.h"
   $<TARGET_OBJECTS:renderer>
