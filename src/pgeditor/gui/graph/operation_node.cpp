@@ -49,32 +49,6 @@ void OperationNode::CreateBody()
 		AddPort(proxy);
 		m_outInterfaces.emplace(n, proxy);
 	}
-
-	// QRectF bounds = boundingRect();
-	// auto horizontalCenter = bounds.width() * 0.5;
-	// QRectF headerBounds = m_headerLabel->boundingRect();
-	// m_headerLabel->setPos(QPointF(horizontalCenter - headerBounds.width() * 0.5, 0));
-
-	/*
-	auto startYPos = 0;  // headerBounds.bottom() + ports_top_margin;
-	for (auto inPort : m_inInterfaces) {
-	  inPort.second->setPos(ports_side_margin, startYPos);
-	  startYPos += inPort.second->boundingRect().height() + port_vertical_spacing;
-	}
-
-	// auto parametersYPos = startYPos;
-	startYPos = 0;  // headerBounds.bottom() + ports_top_margin;
-	for (auto outPort : m_outInterfaces) {
-	  outPort.second->setPos(bounds.width() - outPort.second->boundingRect().width() - ports_side_margin, startYPos);
-	  startYPos += outPort.second->boundingRect().height() + port_vertical_spacing;
-	}
-
-	parametersYPos = std::max(parametersYPos, startYPos);
-	auto membersEnd = m_node->GetMembersEnd();
-	for (auto p = m_node->GetMembersBegin(); p != membersEnd; ++p) {
-	  std::cout << "Parameter: " << p->first << std::endl;
-	}
-	*/
 }
 
 GraphInPort* OperationNode::GetInPortForNode(NodePtr node) const

@@ -147,12 +147,22 @@ void GraphNode::ConnectInterfaces(GraphPort *from, GraphPort *to)
 
 void GraphNode::AddPort(GraphInPort *port)
 {
+	using namespace node_style::node;
+
+	port->setPos(ports_side_margin, m_headerLabel->boundingRect().bottom() + ports_top_margin +
+	                                  m_inPorts.size() * (port->boundingRect().height() + port_vertical_spacing));
 	m_inPorts.push_back(port);
 	connect(port, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
 }
 
 void GraphNode::AddPort(GraphOutPort *port)
 {
+	using namespace node_style::node;
+
+	port->setPos(boundingRect().width() - port->boundingRect().width() - ports_side_margin,
+	             m_headerLabel->boundingRect().bottom() + ports_top_margin +
+	               m_inPorts.size() * (port->boundingRect().height() + port_vertical_spacing));
+
 	m_outPorts.push_back(port);
 	connect(port, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
 }
