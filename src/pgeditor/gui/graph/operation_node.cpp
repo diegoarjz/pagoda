@@ -3,6 +3,7 @@
 #include "graph_in_port.h"
 #include "graph_out_port.h"
 #include "node_style.h"
+#include "parameter_port.h"
 
 #include <pagoda/graph/query/type.h>
 
@@ -12,6 +13,10 @@
 #include <pagoda/graph/operation_node.h>
 #include <pagoda/graph/output_interface_node.h>
 
+#include <pagoda/dynamic/dynamic_value_base.h>
+#include <pagoda/dynamic/type_info.h>
+
+using namespace pagoda::dynamic;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
@@ -49,6 +54,12 @@ void OperationNode::CreateBody()
 		AddPort(proxy);
 		m_outInterfaces.emplace(n, proxy);
 	}
+
+	auto params = [this](const std::string& name, const DynamicValueBasePtr& value) {
+		auto proxy = new ParameterPort(this, name, this);
+		AddPort(proxy);
+	};
+	std::dynamic_pointer_cast<pagoda::graph::OperationNode>(m_node)->ForEachOperationParameter(params);
 }
 
 GraphInPort* OperationNode::GetInPortForNode(NodePtr node) const

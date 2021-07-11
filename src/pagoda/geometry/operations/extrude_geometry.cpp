@@ -1,5 +1,7 @@
 #include "extrude_geometry.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/algorithms/extrusion.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -29,11 +31,14 @@ ExtrudeGeometry::ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem) : Proce
 
 	CreateInputInterface(input_geometry);
 	CreateOutputInterface(output_geometry);
-
-	RegisterValues({{"extrusion_amount", std::make_shared<FloatValue>(0.0f)}});
 }
 
 ExtrudeGeometry::~ExtrudeGeometry() {}
+
+void ExtrudeGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("extrusion_amount", cb->FloatArgument("extrusion_amount", "Amount", 1.0f));
+}
 
 const std::string& ExtrudeGeometry::GetOperationName() const
 {

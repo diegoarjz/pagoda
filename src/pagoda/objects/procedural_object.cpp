@@ -1,6 +1,7 @@
 #include "procedural_object.h"
 
 #include <pagoda/dynamic/type_info.h>
+#include <pagoda/dynamic/value_visitor.h>
 
 using namespace pagoda::dynamic;
 
@@ -14,5 +15,5 @@ ProceduralObject::~ProceduralObject() {}
 
 std::string ProceduralObject::ToString() const { return "<ProceduralObject>"; }
 
-void ProceduralObject::AcceptVisitor(ValueVisitorBase& visitor) { throw common::exception::Exception("Unimplemented"); }
+void ProceduralObject::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
 }  // namespace pagoda::objects

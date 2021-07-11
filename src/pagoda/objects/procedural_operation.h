@@ -1,5 +1,4 @@
-#ifndef PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
-#define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OPERATION_H_
+#pragma once
 
 #include "procedural_component.h"
 
@@ -13,12 +12,23 @@
 #include <list>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
-namespace pagoda::dynamic
+namespace pagoda
+{
+namespace graph
+{
+class ExecutionArgumentCallback;
+}
+
+namespace dynamic
 {
 class TypeInfo;
 using TypeInfoPtr = std::shared_ptr<TypeInfo>;
-}  // namespace pagoda::dynamic
+class DynamicValueBase;
+using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
+}  // namespace dynamic
+}  // namespace pagoda
 
 namespace pagoda::objects
 {
@@ -78,16 +88,19 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	 */
 	void ForEachOutputInterface(const std::function<void(const std::string&)>& f);
 
+	/**
+	 * Iterates over each operation parameter.
+	 */
+	void ForEachParameter(const std::function<void(const std::string&, const dynamic::DynamicValueBasePtr& type)>& f);
+
+	virtual void SetParameters(graph::ExecutionArgumentCallback* cb) = 0;
+
 	protected:
 	/**
 	 * Performs the operation work.
 	 */
 	virtual void DoWork() = 0;
 
-	/**
-	 * Registers the \c DynamicValueBase objects that will be used during the execution.
-	 */
-	void RegisterValues(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr>& values);
 	/**
 	 * Updates the value of the \c DynamicValueBase with the \p valueName if it is an expression.
 	 */
@@ -114,11 +127,11 @@ class ProceduralOperation : public dynamic::BuiltinClass
 
 	private:
 	/**
-	 * Pushes the given \p procedural_object to the input interface with the given \p interface.
+	 * Pushes the given \p procedural_object to the input interface with the name given in \p interface.
 	 */
 	bool PushProceduralObject(const std::string& interface, ProceduralObjectPtr procedural_object);
 	/**
-	 * Pops a \c ProceduralObject from the output interface with the given \p interface
+	 * Pops a \c ProceduralObject from the output interface with the name given in \p interface.
 	 */
 	ProceduralObjectPtr PopProceduralObject(const std::string& interface);
 
@@ -154,6 +167,7 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	std::size_t m_pendingObjects;
 	std::size_t m_processedObjects;
 
+	std::vector<std::string> m_parameterNames;
+
 };  // class ProceduralOperation
 }  // namespace pagoda::objects
-#endif

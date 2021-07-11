@@ -16,6 +16,8 @@ class TriangulateGeometry : public objects::ProceduralOperation
 	TriangulateGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~TriangulateGeometry();
 
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+
 	const std::string& GetOperationName() const override;
 
 	void DoWork() override;

@@ -20,13 +20,6 @@ void Node::SetId(uint32_t nodeId) { m_nodeId = nodeId; }
 void Node::SetName(const std::string &name) { m_nodeName = name; }
 const std::string &Node::GetName() const { return m_nodeName; }
 
-void Node::SetExecutionArguments(const std::unordered_map<std::string, DynamicValueBasePtr> &arguments)
-{
-	for (const auto &arg : arguments) {
-		RegisterMember(arg.first, arg.second);
-	}
-}
-
 std::string Node::ToString() const { return "<Node>"; }
 
 void Node::AcceptVisitor(ValueVisitorBase &visitor) { throw common::exception::Exception("Unimplemented"); }

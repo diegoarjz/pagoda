@@ -23,6 +23,8 @@ set(GUI_SRCS
   "graph/graph_port_connection.h"
   "graph/graph_connector.cpp"
   "graph/graph_connector.h"
+  "graph/parameter_port.cpp"
+  "graph/parameter_port.h"
   "graph/node_style.h"
   "graph/new_node_popup.cpp"
   "graph/new_node_popup.h"

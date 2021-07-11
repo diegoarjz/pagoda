@@ -1,5 +1,7 @@
 #include "create_box.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/algorithms/create_box.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -24,14 +26,18 @@ const char* CreateBoxGeometry::name = "CreateBoxGeometry";
 CreateBoxGeometry::CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-	RegisterValues({{"xSize", std::make_shared<FloatValue>(0.0f)},
-	                {"ySize", std::make_shared<FloatValue>(0.0f)},
-	                {"zSize", std::make_shared<FloatValue>(0.0f)}});
 
 	CreateOutputInterface(outputGeometry);
 }
 
 CreateBoxGeometry::~CreateBoxGeometry() {}
+
+void CreateBoxGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("xSize", cb->FloatArgument("xSize", "X", 1.0f));
+	RegisterMember("ySize", cb->FloatArgument("ySize", "Y", 1.0f));
+	RegisterMember("zSize", cb->FloatArgument("zSize", "Z", 1.0f));
+}
 
 const std::string& CreateBoxGeometry::GetOperationName() const
 {

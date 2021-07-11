@@ -13,6 +13,8 @@ class Rotate : public objects::ProceduralOperation
 	Rotate(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Rotate();
 
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+
 	const std::string& GetOperationName() const override;
 
 	void DoWork() override;

@@ -29,11 +29,11 @@ SetShader::SetShader(objects::ProceduralObjectSystemPtr objectSystem) : Procedur
 {
 	CreateInputInterface(inputObject);
 	CreateOutputInterface(outputObject);
-
-	RegisterValues({{"type", std::make_shared<String>()}, {"path", std::make_shared<String>()}});
 }
 
 SetShader::~SetShader() {}
+
+void SetShader::SetParameters(graph::ExecutionArgumentCallback* cb) {}
 
 const std::string& SetShader::GetOperationName() const
 {

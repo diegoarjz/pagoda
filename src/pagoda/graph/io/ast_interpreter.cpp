@@ -8,11 +8,16 @@
 
 #include <pagoda/common/exception/exception.h>
 
+#include <pagoda/dynamic/binding/cast_to.h>
 #include <pagoda/dynamic/expression.h>
 #include <pagoda/dynamic/float_value.h>
+#include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/dynamic/integer_value.h>
 #include <pagoda/dynamic/string_value.h>
 
+#include <pagoda/graph/construction_argument_callback.h>
+#include <pagoda/graph/construction_argument_not_found.h>
+#include <pagoda/graph/execution_argument_callback.h>
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/input_interface_node.h>
 #include <pagoda/graph/node.h>
@@ -58,6 +63,87 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 	m_currentNamedParameters[namedArgument->GetName()] = param;
 }
 
+struct ConstructionArgumentSetter : public ConstructionArgumentCallback
+{
+	ConstructionArgumentSetter(std::string &nodeName, std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+	  : m_nodeName{nodeName}, m_args{args}
+	{
+	}
+
+	void StringArgument(const char *const name, std::string &arg, const char *const label)
+	{
+		std::string n{name};
+		if (m_args.find(n) == m_args.end()) {
+			throw ConstructionArgumentNotFound(m_nodeName, name);
+		}
+
+		arg = dynamic::get_value_as<std::string>(*m_args[n]);
+	}
+
+	std::string &m_nodeName;
+	std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &m_args;
+};
+
+class ExecutionArgumentSetter : public ExecutionArgumentCallback
+{
+	public:
+	ExecutionArgumentSetter(std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args) : m_args{args} {}
+
+	DynamicValueBasePtr StringArgument(const char *const name, const char *const label,
+	                                   const std::string &defaultValue = "")
+	{
+		if (auto value = GetArgument(name)) {
+			return value;
+		}
+		return std::make_shared<String>(defaultValue);
+	}
+
+	DynamicValueBasePtr FloatArgument(const char *const name, const char *const label, float defaultValue = 0.0f)
+	{
+		if (auto value = GetArgument(name)) {
+			return value;
+		}
+		return std::make_shared<FloatValue>(defaultValue);
+	}
+
+	DynamicValueBasePtr IntegerArgument(const char *const name, const char *const label, int defaultValue = 0)
+	{
+		if (auto value = GetArgument(name)) {
+			return value;
+		}
+		return std::make_shared<Integer>(defaultValue);
+	}
+
+	DynamicValueBasePtr BooleanArgument(const char *const name, const char *const label, bool defaultValue = false)
+	{
+		if (auto value = GetArgument(name)) {
+			return value;
+		}
+		return std::make_shared<Boolean>(defaultValue);
+	}
+
+	DynamicValueBasePtr PlaneArgument(const char *const name, const char *const label,
+	                                  math::Plane<float> defaultValue = math::Plane<float>{})
+	{
+		if (auto value = GetArgument(name)) {
+			return value;
+		}
+		return std::make_shared<DynamicPlane>(defaultValue);
+	}
+
+	private:
+	dynamic::DynamicValueBasePtr GetArgument(const char *const name)
+	{
+		if (m_args.find(name) == m_args.end()) {
+			return nullptr;
+		}
+		auto v = m_args[name];
+		return m_args[name];
+	}
+
+	std::unordered_map<std::string, DynamicValueBasePtr> &m_args;
+};
+
 void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 {
 	m_currentNamedParameters.clear();
@@ -66,14 +152,17 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	}
 
 	auto nodeName = nodeDefinition->GetNodeName();
+
+	ConstructionArgumentSetter setter(nodeName, m_currentNamedParameters);
 	nodeName = m_graph->CreateNode(nodeDefinition->GetNodeType(), nodeName);
-	m_graph->SetNodeConstructionParameters(nodeName, m_currentNamedParameters);
+	m_graph->SetNodeConstructionParameters(nodeName, &setter);
 
 	m_currentNamedParameters.clear();
 	for (const auto &namedArgument : nodeDefinition->GetExecutionArguments()) {
 		namedArgument->AcceptVisitor(this);
 	}
-	m_graph->SetNodeExecutionParameters(nodeName, m_currentNamedParameters);
+	ExecutionArgumentSetter executionSetter{m_currentNamedParameters};
+	m_graph->SetNodeExecutionParameters(nodeName, &executionSetter);
 }
 
 void AstInterpreter::Visit(NodeLinkNode *nodeLink)

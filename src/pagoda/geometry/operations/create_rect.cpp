@@ -1,5 +1,7 @@
 #include "create_rect.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/algorithms/create_rect.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -27,14 +29,17 @@ CreateRectGeometry::CreateRectGeometry(ProceduralObjectSystemPtr objectSystem) :
 {
 	START_PROFILE;
 
-	RegisterValues({{"width", std::make_shared<FloatValue>(0.0f)},
-	                {"height", std::make_shared<FloatValue>(0.0f)},
-	                {"plane", std::make_shared<String>("z")}});
-
 	CreateOutputInterface(output_geometry);
 }
 
 CreateRectGeometry::~CreateRectGeometry() {}
+
+void CreateRectGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("width", cb->FloatArgument("width", "Width", 1.0f));
+	RegisterMember("height", cb->FloatArgument("height", "Height", 1.0f));
+	RegisterMember("plane", cb->StringArgument("plane", "Plane", "z"));
+}
 
 const std::string& CreateRectGeometry::GetOperationName() const
 {

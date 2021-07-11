@@ -135,6 +135,10 @@ class RegressionTest
 			std::cerr << "Failed to read graph" << std::endl;
 			std::cerr << e.What() << std::endl;
 			FAIL();
+		} catch (std::runtime_error& e) {
+			std::cerr << "Runtime error" << std::endl;
+			std::cerr << e.what() << std::endl;
+			FAIL();
 		}
 
 		NodeSet nodes;
