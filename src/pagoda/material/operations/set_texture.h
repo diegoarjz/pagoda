@@ -14,6 +14,8 @@ class SetTexture : public objects::ProceduralOperation
 	SetTexture(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~SetTexture();
 
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+
 	const std::string& GetOperationName() const override;
 
 	void DoWork() override;

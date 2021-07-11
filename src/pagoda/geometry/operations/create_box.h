@@ -14,6 +14,8 @@ class CreateBoxGeometry : public objects::ProceduralOperation
 	CreateBoxGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateBoxGeometry();
 
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+
 	const std::string& GetOperationName() const override;
 
 	void DoWork() override;

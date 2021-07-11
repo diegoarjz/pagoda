@@ -1,8 +1,12 @@
 #pragma once
-#ifndef PAGODA_PROCEDURAL_GRAPH_PARAMETER_NODE_H_
-#define PAGODA_PROCEDURAL_GRAPH_PARAMETER_NODE_H_
 
 #include "node.h"
+
+namespace pagoda::dynamic
+{
+class DynamicValueBase;
+using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
+}  // namespace pagoda::dynamic
 
 namespace pagoda::graph
 {
@@ -19,12 +23,14 @@ class ParameterNode : public Node
 	ParameterNode();
 	virtual ~ParameterNode();
 
-	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &) override;
-	void AcceptNodeVisitor(NodeVisitor *visitor) override;
+	void SetConstructionArguments(ConstructionArgumentCallback *cb) override;
+	void SetExecutionArguments(ExecutionArgumentCallback *cb) override;
+	void ForEachConstructionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) override;
+	void ForEachExecutionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) override;
 
 	void Execute(const NodeSet &inNodes, const NodeSet &outNodes) override;
+
+	const char *const GetNodeType() override;
 };
 
 }  // namespace pagoda::graph
-
-#endif

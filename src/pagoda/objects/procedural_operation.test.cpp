@@ -18,10 +18,13 @@ class MockOperation : public ProceduralOperation
 		CreateInputInterface("in2");
 		CreateOutputInterface("out");
 		CreateOutputInterface("out2");
-
-		RegisterValues({{"abc", std::make_shared<dynamic::FloatValue>(0.0f)}});
 	}
 	~MockOperation() override {}
+
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override
+	{
+		RegisterMember("abc", std::make_shared<dynamic::FloatValue>(0.0f));
+	}
 
 	const std::string& GetOperationName() const override
 	{
@@ -51,12 +54,6 @@ TEST_F(ProceduralOperationTest, can_check_existence_of_interface)
 	EXPECT_TRUE(op->HasOutputInterface("out"));
 	EXPECT_FALSE(op->HasInputInterface("_in"));
 	EXPECT_FALSE(op->HasOutputInterface("_out"));
-}
-
-TEST_F(ProceduralOperationTest, can_register_parameters)
-{
-	auto op = std::make_shared<MockOperation>();
-	EXPECT_NE(op->GetMember("abc"), nullptr);
 }
 
 TEST_F(ProceduralOperationTest, can_iterate_over_interfaces)

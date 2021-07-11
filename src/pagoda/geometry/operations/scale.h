@@ -13,6 +13,7 @@ class Scale : public objects::ProceduralOperation
 	Scale(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Scale();
 
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
 	const std::string& GetOperationName() const override;
 
 	void DoWork() override;

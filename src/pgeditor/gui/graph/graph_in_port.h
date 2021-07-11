@@ -18,7 +18,7 @@ class GraphInPort : public GraphPort
 {
 	public:
 	GraphInPort(GraphNode *node, const pagoda::graph::InputInterfaceNodePtr &interface, QGraphicsWidget *parent);
-	virtual ~GraphInPort() {}
+	~GraphInPort() override {}
 
 	QRectF boundingRect() const override;
 

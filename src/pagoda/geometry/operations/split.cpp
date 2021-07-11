@@ -1,5 +1,7 @@
 #include "split.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
@@ -24,18 +26,19 @@ const std::string Split::s_inputGeometry("in");
 Split::Split(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
 {
 	CreateInputInterface(s_inputGeometry);
-
-	std::unordered_map<std::string, DynamicValueBasePtr> values = {{"axis", std::make_shared<String>("x")},
-	                                                               {"split_count", std::make_shared<Integer>(0)}};
-
-	for (uint32_t i = 1u; i <= 32; ++i) {
-		values.emplace("split_" + std::to_string(i), std::make_shared<Integer>(0));
-	}
-
-	RegisterValues(values);
 }
 
 Split::~Split() {}
+
+void Split::SetParameters(graph::ExecutionArgumentCallback *cb)
+{
+	RegisterMember("axis", cb->StringArgument("axis", "Axis", "x"));
+	RegisterMember("split_count", cb->IntegerArgument("split_count", "Split Count", 0));
+	for (uint32_t i = 1u; i <= 32; ++i) {
+		auto name = "split_" + std::to_string(i);
+		RegisterMember(name, cb->FloatArgument(name.c_str(), ("Split " + std::to_string(i)).c_str(), 0));
+	}
+}
 
 const std::string &Split::GetOperationName() const
 {

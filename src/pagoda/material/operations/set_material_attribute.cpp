@@ -1,5 +1,7 @@
 #include "set_material_attribute.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/common/exception/exception.h>
 
 #include <pagoda/material/material_component.h>
@@ -31,11 +33,14 @@ SetMaterialAttribute::SetMaterialAttribute(objects::ProceduralObjectSystemPtr ob
 {
 	CreateInputInterface(inputObject);
 	CreateOutputInterface(outputObject);
-
-	RegisterValues({{"name", std::make_shared<String>()}, {"value", Expression::CreateExpression("null;")}});
 }
 
 SetMaterialAttribute::~SetMaterialAttribute() {}
+
+void SetMaterialAttribute::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	// RegisterMember("name", cb->
+}
 
 const std::string& SetMaterialAttribute::GetOperationName() const
 {

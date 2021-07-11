@@ -1,11 +1,11 @@
 #include "output_interface_node.h"
 
+#include "construction_argument_callback.h"
 #include "construction_argument_not_found.h"
 #include "graph.h"
 #include "input_interface_node.h"
 #include "node.h"
 #include "node_set_visitor.h"
-#include "node_visitor.h"
 #include "operation_node.h"
 #include "unsupported_node_link.h"
 
@@ -22,28 +22,37 @@ const char* OutputInterfaceNode::name = "OutputInterface";
 OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName("", 0) {}
 OutputInterfaceNode::~OutputInterfaceNode() {}
 
-void OutputInterfaceNode::SetConstructionArguments(
-  const std::unordered_map<std::string, DynamicValueBasePtr>& constructionArgs)
+void OutputInterfaceNode::SetConstructionArguments(ConstructionArgumentCallback* cb)
 {
-	auto interfaceNameIter = constructionArgs.find("interface");
-	if (interfaceNameIter == std::end(constructionArgs)) {
-		throw ConstructionArgumentNotFound(GetName(), GetId(), "interface");
-	}
-
-	auto interfaceName = get_value_as<std::string>(*interfaceNameIter->second);
+	std::string interfaceName;
+	cb->StringArgument("interface", interfaceName, "Output Interface");
 	SetInterfaceName(interfaceName);
 }
 
+void OutputInterfaceNode::SetExecutionArguments(ExecutionArgumentCallback* cb) {}
+
 void OutputInterfaceNode::SetInterfaceName(const std::string& name) { m_interfaceName = name; }
 const std::string& OutputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
-
-void OutputInterfaceNode::AcceptNodeVisitor(NodeVisitor* visitor)
-{
-	visitor->Visit(std::dynamic_pointer_cast<OutputInterfaceNode>(shared_from_this()));
-}
 
 void OutputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object) { m_proceduralObjects.push_back(object); }
 
 void OutputInterfaceNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes) { START_PROFILE; }
 
+const char* const OutputInterfaceNode::GetNodeType()
+{
+	static const char* const sNodeType = "OutputInterface";
+	return sNodeType;
+}
+
+void OutputInterfaceNode::ForEachConstructionArgument(
+  std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
+{
+	f("interface", std::make_shared<dynamic::String>(m_interfaceName));
+}
+
+void OutputInterfaceNode::ForEachExecutionArgument(
+  std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
+{
+	//
+}
 }  // namespace pagoda::graph

@@ -13,6 +13,8 @@ class ScopeTextureProjection : public objects::ProceduralOperation
 	ScopeTextureProjection(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ScopeTextureProjection();
 
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+
 	const std::string& GetOperationName() const override;
 
 	void DoWork() override;

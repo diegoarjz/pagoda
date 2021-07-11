@@ -1,6 +1,4 @@
 #pragma once
-#ifndef PAGODA_PROCEDURAL_GRAPH_INPUT_INTERFACE_NODE_H_
-#define PAGODA_PROCEDURAL_GRAPH_INPUT_INTERFACE_NODE_H_
 
 #include "node.h"
 
@@ -22,22 +20,26 @@ class InputInterfaceNode : public Node
 	static const char* name;
 
 	InputInterfaceNode();
-	~InputInterfaceNode();
+	~InputInterfaceNode() override;
 
-	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr>&) override;
+	void SetConstructionArguments(ConstructionArgumentCallback* cb) override;
+	void SetExecutionArguments(ExecutionArgumentCallback* cb) override;
 
 	void Execute(const NodeSet& inNodes, const NodeSet& outNodes) override;
 	void SetInterfaceName(const std::string& interfaceName);
 	const std::string& GetInterfaceName() const;
 	void AddProceduralObject(pagoda::objects::ProceduralObjectPtr object);
-	void AcceptNodeVisitor(NodeVisitor* visitor) override;
+
+	void ForEachConstructionArgument(std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f) override;
+
+	void ForEachExecutionArgument(std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f) override;
 
 	const std::list<pagoda::objects::ProceduralObjectPtr>& GetProceduralObjects() const { return m_proceduralObjects; }
+
+	const char* const GetNodeType() override;
 
 	private:
 	std::string m_interfaceName;
 	std::list<pagoda::objects::ProceduralObjectPtr> m_proceduralObjects;
 };  // class OperationExecution
 }  // namespace pagoda::graph
-
-#endif

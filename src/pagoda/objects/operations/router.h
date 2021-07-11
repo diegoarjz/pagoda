@@ -10,6 +10,8 @@ class Router : public ProceduralOperation
 	Router(ProceduralObjectSystemPtr objectSystem);
 	virtual ~Router();
 
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+
 	const std::string& GetOperationName() const override;
 
 	void DoWork() override;

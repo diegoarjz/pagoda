@@ -1,6 +1,8 @@
 #include "export_geometry.h"
 #include "boost/filesystem/file_status.hpp"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/geometry/io/geometry_exporter.h>
@@ -30,11 +32,15 @@ ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem)
   : ProceduralOperation(objectSystem), m_objectCount(0)
 {
 	CreateInputInterface(inputGeometry);
-
-	RegisterValues({{"path", std::make_shared<String>("geometry.obj")}, {"count", std::make_shared<Integer>(0)}});
 }
 
 ExportGeometry::~ExportGeometry() {}
+
+void ExportGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("path", cb->StringArgument("path", "File"));
+	RegisterMember("count", std::make_shared<Integer>(0));
+}
 
 const std::string& ExportGeometry::GetOperationName() const
 {

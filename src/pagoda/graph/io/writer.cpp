@@ -6,9 +6,9 @@
 
 #include <pagoda/graph/input_interface_node.h>
 #include <pagoda/graph/node.h>
-#include <pagoda/graph/node_visitor.h>
 #include <pagoda/graph/operation_node.h>
 #include <pagoda/graph/output_interface_node.h>
+#include <pagoda/graph/parameter_input_node.h>
 #include <pagoda/graph/parameter_node.h>
 #include <pagoda/graph/traversal/forward.h>
 
@@ -23,26 +23,6 @@ using namespace pagoda::dynamic;
 
 namespace pagoda::graph::io
 {
-namespace
-{
-class NodeTypeVisitor : public pagoda::graph::NodeVisitor
-{
-	public:
-	NodeTypeVisitor(std::ostream& outStream) : m_outStream{outStream} {}
-	void Visit(std::shared_ptr<OperationNode> n) override { m_outStream << n->GetOperation()->GetOperationName(); }
-	void Visit(std::shared_ptr<InputInterfaceNode> n) override
-	{
-		m_outStream << "InputInterface(interface: \"" << n->GetInterfaceName() << "\")";
-	}
-	void Visit(std::shared_ptr<OutputInterfaceNode> n) override
-	{
-		m_outStream << "OutputInterface(interface: \"" << n->GetInterfaceName() << "\")";
-	}
-	void Visit(std::shared_ptr<ParameterNode> n) override { m_outStream << "Parameter()"; }
-	std::ostream& m_outStream;
-};
-}  // namespace
-
 class ParameterVisitor : public ValueVisitorBase
 {
 	public:
@@ -77,6 +57,7 @@ class ParameterVisitor : public ValueVisitorBase
 	void Visit(DynamicInstance& v) override {}
 	void Visit(Expression& v) override { write("$< " + v.GetExpressionString() + ">$"); }
 	void Visit(objects::ProceduralOperation& v) override {}
+	void Visit(objects::ProceduralObject& v) override {}
 
 	private:
 	void write(const std::string& val) { m_parameters.push_back(m_parameterName + " : " + val); }
@@ -96,7 +77,6 @@ struct GraphWriter::Impl
 
 		auto graphDef = std::make_shared<GraphDefinitionNode>();
 
-		NodeTypeVisitor typeVisitor{out};
 		Forward traversal(*m_graph);
 		std::vector<std::string> links;
 
@@ -108,17 +88,25 @@ struct GraphWriter::Impl
 				visitedNodes.insert(node);
 
 				out << node->GetName() << " = ";
-				node->AcceptNodeVisitor(&typeVisitor);
-
-				auto membersEnd = node->GetMembersEnd();
-				auto memberCount = node->GetMemberCount();
-				std::vector<std::string> parameters;
-				parameters.reserve(memberCount);
-
-				for (auto p = node->GetMembersBegin(); p != membersEnd; ++p) {
-					ParameterVisitor parameterVisitor{p->first, parameters};
-					p->second.m_value->AcceptVisitor(parameterVisitor);
+				out << node->GetNodeType() << "(";
+				std::vector<std::string> constructionArgs;
+				node->ForEachConstructionArgument([&constructionArgs](const std::string& name, dynamic::DynamicValueBasePtr v) {
+					constructionArgs.emplace_back(name + ": \"" + v->ToString() + "\"");
+				});
+				for (auto i = 0u; i < constructionArgs.size(); ++i) {
+					out << constructionArgs[i];
+					if (i + 1 != constructionArgs.size()) {
+						out << ",";
+					}
 				}
+				out << ")";
+
+				std::vector<std::string> parameters;
+
+				node->ForEachExecutionArgument([&parameters](const std::string& name, dynamic::DynamicValueBasePtr v) {
+					ParameterVisitor parameterVisitor{name, parameters};
+					v->AcceptVisitor(parameterVisitor);
+				});
 
 				out << "{\n";
 				if (!parameters.empty()) {

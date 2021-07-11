@@ -28,6 +28,8 @@ ExtractScope::ExtractScope(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 
 ExtractScope::~ExtractScope() {}
 
+void ExtractScope::SetParameters(graph::ExecutionArgumentCallback* cb) {}
+
 const std::string& ExtractScope::GetOperationName() const
 {
 	static const std::string sName{"ExtractScope"};

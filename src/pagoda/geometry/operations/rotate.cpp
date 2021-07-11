@@ -1,5 +1,7 @@
 #include "rotate.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
@@ -31,15 +33,18 @@ Rotate::Rotate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(obj
 {
 	CreateInputInterface(s_inputGeometry);
 	CreateOutputInterface(s_outputGeometry);
-
-	RegisterValues({{"x", std::make_shared<FloatValue>(0.0f)},
-	                {"y", std::make_shared<FloatValue>(0.0f)},
-	                {"z", std::make_shared<FloatValue>(0.0f)},
-	                {"rotation_order", std::make_shared<String>("xyz")},
-	                {"world", std::make_shared<Boolean>(false)}});
 }
 
 Rotate::~Rotate() {}
+
+void Rotate::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
+	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));
+	RegisterMember("z", cb->FloatArgument("z", "Z", 0.0f));
+	RegisterMember("rotation_order", cb->StringArgument("rotation_order", "Rotation Order", "xyz"));
+	RegisterMember("world", cb->BooleanArgument("world", "World", false));
+}
 
 const std::string& Rotate::GetOperationName() const
 {

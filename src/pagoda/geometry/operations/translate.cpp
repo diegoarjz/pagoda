@@ -1,5 +1,7 @@
 #include "translate.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
@@ -29,13 +31,16 @@ Translate::Translate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperati
 {
 	CreateInputInterface(s_inputGeometry);
 	CreateOutputInterface(s_outputGeometry);
-
-	RegisterValues({{"x", std::make_shared<FloatValue>(0.0f)},
-	                {"y", std::make_shared<FloatValue>(0.0f)},
-	                {"z", std::make_shared<FloatValue>(0.0f)},
-	                {"world", std::make_shared<Boolean>(false)}});
 }
 Translate::~Translate() {}
+
+void Translate::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
+	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));
+	RegisterMember("z", cb->FloatArgument("z", "Z", 0.0f));
+	RegisterMember("world", cb->BooleanArgument("world", "World", false));
+}
 
 const std::string& Translate::GetOperationName() const
 {

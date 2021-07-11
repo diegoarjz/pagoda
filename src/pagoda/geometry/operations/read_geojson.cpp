@@ -1,13 +1,16 @@
 #include "read_geojson.h"
-#include "pagoda/dynamic/float_value.h"
+
+#include <pagoda/graph/execution_argument_callback.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/geometry/io/geojson_reader.h>
-#include <iterator>
 
 #include <pagoda/common/fs/file_util.h>
+
 #include <pagoda/dynamic/get_value_as.h>
+#include "pagoda/dynamic/float_value.h"
+
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -15,6 +18,7 @@
 #include <pagoda/math/vec_base.h>
 #include <boost/qvm/map_vec_mat.hpp>
 
+#include <iterator>
 #include <memory>
 
 namespace pagoda::geometry::operations
@@ -32,12 +36,16 @@ ReadGeoJson::ReadGeoJson(objects::ProceduralObjectSystemPtr objectSystem) : Proc
 {
 	START_PROFILE;
 	CreateOutputInterface(outputGeometry);
-	RegisterValues({{"file", std::make_shared<dynamic::String>("")},
-	                {"ref_latitude", std::make_shared<dynamic::FloatValue>(0)},
-	                {"ref_longitude", std::make_shared<dynamic::FloatValue>(0)}});
 }
 
 ReadGeoJson::~ReadGeoJson() {}
+
+void ReadGeoJson::SetParameters(graph::ExecutionArgumentCallback *cb)
+{
+	RegisterMember("file", cb->StringArgument("file", "File"));
+	RegisterMember("ref_latitude", cb->FloatArgument("ref_latitude", "Reference Latitude", 0.0f));
+	RegisterMember("ref_longitude", cb->FloatArgument("ref_longitude", "Reference Longitude", 0.0f));
+}
 
 const std::string &ReadGeoJson::GetOperationName() const
 {

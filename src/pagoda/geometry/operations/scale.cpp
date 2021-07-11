@@ -1,5 +1,7 @@
 #include "scale.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
@@ -29,13 +31,16 @@ Scale::Scale(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objec
 {
 	CreateInputInterface(s_inputGeometry);
 	CreateOutputInterface(s_outputGeometry);
-
-	RegisterValues({{"x", std::make_shared<FloatValue>(0.0f)},
-	                {"y", std::make_shared<FloatValue>(0.0f)},
-	                {"z", std::make_shared<FloatValue>(0.0f)},
-	                {"pivotal_point", std::make_shared<String>("scope_center")}});
 }
 Scale::~Scale() {}
+
+void Scale::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
+	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));
+	RegisterMember("z", cb->FloatArgument("z", "Z", 0.0f));
+	RegisterMember("pivotal_point", cb->StringArgument("pivotal_point", "Pivotal Point", "scope_center"));
+}
 
 const std::string& Scale::GetOperationName() const
 {
