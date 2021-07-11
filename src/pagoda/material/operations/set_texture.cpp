@@ -26,11 +26,11 @@ SetTexture::SetTexture(objects::ProceduralObjectSystemPtr objectSystem) : Proced
 {
 	CreateInputInterface(inputObject);
 	CreateOutputInterface(outputObject);
-
-	RegisterValues({{"slot", std::make_shared<Integer>()}, {"path", std::make_shared<String>()}});
 }
 
 SetTexture::~SetTexture() {}
+
+void SetTexture::SetParameters(graph::ExecutionArgumentCallback* cb) {}
 
 const std::string& SetTexture::GetOperationName() const
 {

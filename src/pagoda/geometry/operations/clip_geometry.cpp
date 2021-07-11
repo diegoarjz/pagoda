@@ -1,5 +1,7 @@
 #include "clip_geometry.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/objects/procedural_object_system.h>
@@ -28,11 +30,14 @@ ClipGeometry::ClipGeometry(objects::ProceduralObjectSystemPtr objectSystem) : ob
 	CreateInputInterface(inputGeometry);
 	CreateOutputInterface(frontGeometry);
 	CreateOutputInterface(backGeometry);
-
-	RegisterValues({{"plane", std::make_shared<DynamicPlane>()}});
 }
 
 ClipGeometry::~ClipGeometry() {}
+
+void ClipGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("plane", cb->PlaneArgument("plane", "Clip Plane"));
+}
 
 const std::string& ClipGeometry::GetOperationName() const
 {

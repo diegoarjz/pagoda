@@ -22,12 +22,19 @@ class OperationNode : public Node
 	OperationNode(pagoda::objects::OperationFactoryPtr operationFactory);
 	~OperationNode();
 
-	void SetConstructionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &) override;
+	void SetConstructionArguments(ConstructionArgumentCallback *cb) override;
+	void SetExecutionArguments(ExecutionArgumentCallback *cb) override;
 
 	void Execute(const NodeSet &inNodes, const NodeSet &outNodes) override;
 	void SetOperation(pagoda::objects::ProceduralOperationPtr operation);
 	pagoda::objects::ProceduralOperationPtr GetOperation() const { return m_operation; }
-	void AcceptNodeVisitor(NodeVisitor *visitor) override;
+	void ForEachConstructionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) override;
+	void ForEachExecutionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) override;
+
+	void ForEachOperationParameter(
+	  const std::function<void(const std::string &, const dynamic::DynamicValueBasePtr &)> &f) const;
+
+	const char *const GetNodeType() override;
 
 	private:
 	pagoda::objects::ProceduralOperationPtr m_operation;

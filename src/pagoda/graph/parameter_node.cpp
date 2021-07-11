@@ -4,8 +4,6 @@
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/instrument/profiler.h>
 
-#include "node_visitor.h"
-
 using namespace pagoda::dynamic;
 
 namespace pagoda::graph
@@ -16,15 +14,8 @@ ParameterNode::ParameterNode() {}
 
 ParameterNode::~ParameterNode() {}
 
-void ParameterNode::SetConstructionArguments(
-  const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
-{
-}
-
-void ParameterNode::AcceptNodeVisitor(NodeVisitor *visitor)
-{
-	visitor->Visit(std::dynamic_pointer_cast<ParameterNode>(shared_from_this()));
-}
+void ParameterNode::SetConstructionArguments(ConstructionArgumentCallback *cb) {}
+void ParameterNode::SetExecutionArguments(ExecutionArgumentCallback *cb) {}
 
 void ParameterNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
@@ -36,5 +27,21 @@ void ParameterNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 			outNode->RegisterOrSetMember(parIter->first, parIter->second.m_value);
 		}
 	}
+}
+
+const char *const ParameterNode::GetNodeType()
+{
+	static const char *const sNodeType = "Parameter";
+	return sNodeType;
+}
+
+void ParameterNode::ForEachConstructionArgument(
+  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
+{
+}
+
+void ParameterNode::ForEachExecutionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
+{
+	//
 }
 }  // namespace pagoda::graph

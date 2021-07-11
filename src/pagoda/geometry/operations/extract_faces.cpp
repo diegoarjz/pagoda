@@ -28,6 +28,8 @@ ExtractFaces::ExtractFaces(ProceduralObjectSystemPtr objectSystem) : ProceduralO
 
 ExtractFaces::~ExtractFaces() {}
 
+void ExtractFaces::SetParameters(graph::ExecutionArgumentCallback* cb) {}
+
 const std::string& ExtractFaces::GetOperationName() const
 {
 	static const std::string sName{"ExtractFaces"};

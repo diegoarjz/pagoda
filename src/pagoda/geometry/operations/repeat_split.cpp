@@ -1,5 +1,7 @@
 #include "repeat_split.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
@@ -30,13 +32,16 @@ RepeatSplit::RepeatSplit(ProceduralObjectSystemPtr objectSystem) : ProceduralOpe
 
 	CreateInputInterface(inputGeometry);
 	CreateOutputInterface(outputGeometry);
-
-	RegisterValues({{"size", std::make_shared<FloatValue>(0.0f)},
-	                {"axis", std::make_shared<String>("x")},
-	                {"adjust", std::make_shared<Boolean>(false)}});
 }
 
 RepeatSplit::~RepeatSplit() {}
+
+void RepeatSplit::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("size", cb->FloatArgument("size", "Size", 1.0f));
+	RegisterMember("axis", cb->StringArgument("axis", "Axis", "x"));
+	RegisterMember("adjust", cb->BooleanArgument("adjust", "Adjust", false));
+}
 
 const std::string& RepeatSplit::GetOperationName() const
 {

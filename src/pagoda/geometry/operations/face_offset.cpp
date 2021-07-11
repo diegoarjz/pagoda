@@ -1,5 +1,7 @@
 #include "face_offset.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
@@ -31,11 +33,14 @@ FaceOffsetOperation::FaceOffsetOperation(ProceduralObjectSystemPtr objectSystem)
 	CreateInputInterface(inputGeometry);
 	CreateOutputInterface(outputInnerGeometry);
 	CreateOutputInterface(outputOuterGeometry);
-
-	RegisterValues({{"amount", std::make_shared<FloatValue>(0.0f)}});
 }
 
 FaceOffsetOperation::~FaceOffsetOperation() {}
+
+void FaceOffsetOperation::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("amount", cb->FloatArgument("amount", "Amount", 0.0f));
+}
 
 const std::string& FaceOffsetOperation::GetOperationName() const
 {

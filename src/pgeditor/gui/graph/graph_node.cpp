@@ -3,6 +3,7 @@
 #include "graph_in_port.h"
 #include "graph_out_port.h"
 #include "node_style.h"
+#include "parameter_port.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
@@ -117,6 +118,14 @@ QRectF GraphNode::boundingRect() const
 		outPortsHeight += bounds.height() + port_vertical_spacing;
 	}
 
+	for (auto paramPort : m_parameterPorts) {
+		auto bounds = paramPort->boundingRect();
+		if (bounds.width() > maxOutPortsWidth) {
+			maxInPortsWidth = bounds.width();
+		}
+		inPortsHeight += bounds.height() + port_vertical_spacing;
+	}
+
 	height += std::max(inPortsHeight, outPortsHeight) + ports_top_margin + ports_bottom_margin;
 	width = std::max(static_cast<uint32_t>(m_headerLabel->boundingRect().width()), maxInPortsWidth + maxOutPortsWidth) +
 	        2 * ports_side_margin + port_horizontal_spacing;
@@ -165,6 +174,16 @@ void GraphNode::AddPort(GraphOutPort *port)
 
 	m_outPorts.push_back(port);
 	connect(port, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
+}
+
+void GraphNode::AddPort(ParameterPort *port)
+{
+	using namespace node_style::node;
+	port->setPos(ports_side_margin, m_headerLabel->boundingRect().bottom() + ports_top_margin +
+	                                  (m_parameterPorts.size() + m_inPorts.size()) *
+	                                    (port->boundingRect().height() + port_vertical_spacing));
+	m_parameterPorts.push_back(port);
+	// connect(port, &GraphPort::NewNodeConnection, this, &GraphNode::ConnectInterfaces);
 }
 
 void GraphNode::SetPosition(int32_t x, int32_t y)

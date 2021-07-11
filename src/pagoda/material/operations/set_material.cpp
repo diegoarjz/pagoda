@@ -1,5 +1,7 @@
 #include "set_material.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/material/material_component.h>
 #include <pagoda/material/material_system.h>
 
@@ -27,17 +29,17 @@ SetMaterial::SetMaterial(objects::ProceduralObjectSystemPtr objectSystem) : Proc
 {
 	CreateInputInterface(inputObject);
 	CreateOutputInterface(outputObject);
-
-	std::unordered_map<std::string, DynamicValueBasePtr> values;
-
-	for (uint32_t i = 0u; i < 8; ++i) {
-		values.emplace("texture_" + std::to_string(i), std::make_shared<String>());
-	}
-
-	RegisterValues(values);
 }
 
 SetMaterial::~SetMaterial() {}
+
+void SetMaterial::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	for (uint32_t i = 0u; i < 8; ++i) {
+		auto texture = "texture_" + std::to_string(i);
+		RegisterMember(texture, cb->StringArgument(texture.c_str(), ("Texture " + std::to_string(i)).c_str(), ""));
+	}
+}
 
 const std::string& SetMaterial::GetOperationName() const
 {

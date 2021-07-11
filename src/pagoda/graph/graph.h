@@ -25,6 +25,9 @@ using NodePtr = std::shared_ptr<Node>;
 class NodeFactory;
 using NodeFactoryPtr = std::shared_ptr<NodeFactory>;
 
+class ConstructionArgumentCallback;
+class ExecutionArgumentCallback;
+
 namespace query
 {
 class Query;
@@ -196,11 +199,9 @@ class Graph
 	 */
 	void ExecuteQuery(query::Query &q);
 
-	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
-	                                   const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args);
+	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName, ConstructionArgumentCallback *cb);
 
-	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-	                                const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args);
+	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName, ExecutionArgumentCallback *cb);
 
 	private:
 	class Impl;

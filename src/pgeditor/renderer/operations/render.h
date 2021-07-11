@@ -13,6 +13,8 @@ class Render : public pagoda::objects::ProceduralOperation
 	Render(pagoda::objects::ProceduralObjectSystemPtr objectSystem);
 	~Render() override;
 
+	void SetParameters(pagoda::graph::ExecutionArgumentCallback* cb) override;
+
 	const std::string& GetOperationName() const override;
 
 	void DoWork() override;

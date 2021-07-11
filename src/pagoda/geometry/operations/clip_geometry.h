@@ -16,6 +16,8 @@ class ClipGeometry : public objects::ProceduralOperation
 	ClipGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ClipGeometry();
 
+	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+
 	const std::string& GetOperationName() const override;
 
 	protected:

@@ -10,6 +10,7 @@
 #include <pagoda/graph/io/reader.h>
 #include <pagoda/graph/operation_node.h>
 #include <pagoda/graph/output_interface_node.h>
+#include <pagoda/graph/parameter_input_node.h>
 #include <pagoda/graph/parameter_node.h>
 
 #include <pagoda/geometry/operations/clip_geometry.h>
@@ -132,6 +133,7 @@ class Pagoda::Impl
 			m_nodeFactory->Register("OutputInterface", []() { return std::make_shared<OutputInterfaceNode>(); });
 			m_nodeFactory->Register("Parameter", []() { return std::make_shared<ParameterNode>(); });
 			m_nodeFactory->Register("Operation", [this]() { return std::make_shared<OperationNode>(m_operationFactory); });
+			m_nodeFactory->Register("ParameterInputNode", []() { return std::make_shared<ParameterInputNode>(); });
 		}
 
 		// Register Predicates

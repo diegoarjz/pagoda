@@ -22,6 +22,8 @@ Router::Router(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(obj
 
 Router::~Router() {}
 
+void Router::SetParameters(graph::ExecutionArgumentCallback* cb) {}
+
 const std::string& Router::GetOperationName() const
 {
 	static const std::string sName{"Router"};

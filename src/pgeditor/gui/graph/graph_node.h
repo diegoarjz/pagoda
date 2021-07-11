@@ -24,6 +24,7 @@ namespace pgeditor::gui::graph
 class GraphPort;
 class GraphInPort;
 class GraphOutPort;
+class ParameterPort;
 
 class GraphNode : public QGraphicsWidget
 {
@@ -73,6 +74,7 @@ class GraphNode : public QGraphicsWidget
 	virtual void CreateBody() = 0;
 	void AddPort(GraphInPort *port);
 	void AddPort(GraphOutPort *port);
+	void AddPort(ParameterPort *port);
 
 	pagoda::graph::NodePtr m_node;
 	pagoda::graph::GraphPtr m_graph;
@@ -81,6 +83,7 @@ class GraphNode : public QGraphicsWidget
 
 	std::vector<GraphInPort *> m_inPorts;
 	std::vector<GraphOutPort *> m_outPorts;
+	std::vector<ParameterPort *> m_parameterPorts;
 	bool m_guiInitialized{false};
 };  // class GraphNode
 }  // namespace pgeditor::gui::graph

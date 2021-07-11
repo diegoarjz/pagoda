@@ -14,9 +14,9 @@
 #include <pagoda/graph/io/parse_result.h>
 #include <pagoda/graph/io/reader.h>
 #include <pagoda/graph/node_set_visitor.h>
-#include <pagoda/graph/node_visitor.h>
 #include <pagoda/graph/operation_node.h>
 #include <pagoda/graph/output_interface_node.h>
+#include <pagoda/graph/parameter_input_node.h>
 #include <pagoda/graph/parameter_node.h>
 #include <pagoda/graph/query/query.h>
 
@@ -42,7 +42,6 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm);
 std::shared_ptr<Graph> ReadGraphFromFile(Pagoda& pagoda, const std::string& file_path);
 void SetParameter(const NodeSet& nodes, const std::string& param);
 void WriteDotFile(std::shared_ptr<Graph> graph, const std::string& file_path);
-void ListGraph(std::shared_ptr<Graph> graph);
 void ExecuteGraph(std::shared_ptr<Graph> graph);
 void PrintProfile();
 
@@ -89,10 +88,6 @@ int main(int argc, char* argv[])
 				}
 			}
 
-			if (vm.count("list")) {
-				ListGraph(graph);
-			}
-
 			if (dot_file.size() > 0) {
 				WriteDotFile(graph, dot_file);
 			}
@@ -117,41 +112,6 @@ void ExecuteGraph(std::shared_ptr<Graph> graph) { graph->Execute(); }
 std::shared_ptr<Graph> ReadGraphFromFile(Pagoda& pagoda, const std::string& file_path)
 {
 	return pagoda.CreateGraphFromFile(file_path);
-}
-
-struct PrintVisitor : NodeVisitor
-{
-	void Visit(std::shared_ptr<OperationNode> n) override { print(n, "OperationNode"); }
-	void Visit(std::shared_ptr<InputInterfaceNode> n) override { print(n, "InputInterfaceNode"); }
-	void Visit(std::shared_ptr<OutputInterfaceNode> n) override { print(n, "OutputInterfaceNode"); }
-	void Visit(std::shared_ptr<ParameterNode> n) override { print(n, "ParameterNode"); }
-
-	void print(std::shared_ptr<Node> n, const std::string& nodeType)
-	{
-		std::cout << "  - name: " << n->GetName() << std::endl;
-		std::cout << "    id: " << n->GetId() << std::endl;
-		std::cout << "    type: " << nodeType << std::endl;
-		auto parametersEnd = n->GetMembersEnd();
-		std::cout << "    parameters:" << std::endl;
-		for (auto iter = n->GetMembersBegin(); iter != parametersEnd; ++iter) {
-			std::cout << "    - name: " << iter->first << std::endl;
-			std::cout << "      type: " << iter->second.m_value->GetTypeInfo()->GetTypeName() << std::endl;
-			std::cout << "      value: " << iter->second.m_value->ToString() << std::endl;
-		}
-	}
-};
-
-void ListGraph(std::shared_ptr<Graph> graph)
-{
-	ExecutionQueue q(*graph);
-	auto n = q.GetNextNode();
-	std::cout << "nodes:" << std::endl;
-
-	PrintVisitor v;
-	do {
-		n->AcceptNodeVisitor(&v);
-		n = q.GetNextNode();
-	} while (n != nullptr);
 }
 
 struct ParamSetter : ValueVisitorBase
@@ -182,6 +142,10 @@ struct ParamSetter : ValueVisitorBase
 	void Visit(ProceduralOperation& v) override
 	{
 		throw pagoda::common::exception::Exception("Cannot set a ProceduralOperation.");
+	}
+	void Visit(ProceduralObject&) override
+	{
+		throw pagoda::common::exception::Exception("Cannot set a ProceduralObject.");
 	}
 
 	std::string m_value;
@@ -246,7 +210,6 @@ bool ParseCommandLine(int argc, char* argv[], po::variables_map* out_vm)
             ("file", po::value<std::string>(), "Input Graph specification file.")
             ("dot", po::value<std::string>(), "Outputs the graph in dot format to the specified file.")
             ("execute", "Executes the graph")
-            ("list", "Lists all nodes and parameters in a graph")
             ("param", po::value<std::vector<std::string>>(), "Override a parameter in a node.\nFormat: '<node name>.<param name>=<value>'")
             ("show-profile", "Prints profiling information");
 		// clang-format on

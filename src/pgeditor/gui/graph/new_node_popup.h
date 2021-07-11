@@ -6,6 +6,7 @@
 #include <QWidget>
 
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace pagoda::objects
@@ -16,6 +17,8 @@ using OperationFactoryPtr = std::shared_ptr<OperationFactory>;
 
 namespace pgeditor::gui::graph
 {
+class GraphNode;
+
 class NewNodePopup : public QWidget
 {
 	Q_OBJECT
@@ -25,6 +28,7 @@ class NewNodePopup : public QWidget
 
 	signals:
 	void OperationSelected(const QString& operationName);
+	void NodeCreated(GraphNode* n);
 
 	private:
 	bool eventFilter(QObject* watched, QEvent* event) override;
@@ -38,6 +42,7 @@ class NewNodePopup : public QWidget
 
 	pagoda::objects::OperationFactoryPtr m_operationFactory;
 	QStringList m_availableOperations;
+	std::unordered_map<QString, std::function<GraphNode*(void)>> m_factoryFunctions;
 
 	QLineEdit* m_searchField;
 	QListWidget* m_operationList;

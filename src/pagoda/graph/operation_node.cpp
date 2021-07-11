@@ -1,11 +1,11 @@
 #include "operation_node.h"
 
+#include "construction_argument_callback.h"
 #include "construction_argument_not_found.h"
 #include "graph.h"
 #include "input_interface_node.h"
 #include "node.h"
 #include "node_set_visitor.h"
-#include "node_visitor.h"
 #include "output_interface_node.h"
 #include "unsupported_node_link.h"
 
@@ -25,21 +25,18 @@ const char *OperationNode::name = "Operation";
 OperationNode::OperationNode(OperationFactoryPtr operationFactory) : m_operationFactory(operationFactory) {}
 OperationNode::~OperationNode() {}
 
-void OperationNode::SetConstructionArguments(
-  const std::unordered_map<std::string, DynamicValueBasePtr> &constructionArgs)
+void OperationNode::SetConstructionArguments(ConstructionArgumentCallback *cb)
 {
-	auto operationIter = constructionArgs.find("operation");
-	if (operationIter == std::end(constructionArgs)) {
-		throw ConstructionArgumentNotFound(GetName(), GetId(), "operation");
-	}
-
-	auto operation = m_operationFactory->Create(get_value_as<std::string>(*operationIter->second));
+	std::string operationName;
+	cb->StringArgument("operation", operationName, "Operation");
+	auto operation = m_operationFactory->Create(operationName);
 	if (operation == nullptr) {
-		throw UnknownOperation(get_value_as<std::string>(*operationIter->second));
+		throw UnknownOperation(operationName);
 	}
-
 	SetOperation(operation);
 }
+
+void OperationNode::SetExecutionArguments(ExecutionArgumentCallback *cb) { m_operation->SetParameters(cb); }
 
 void OperationNode::SetOperation(ProceduralOperationPtr operation)
 {
@@ -47,9 +44,10 @@ void OperationNode::SetOperation(ProceduralOperationPtr operation)
 	RegisterOrSetMember("op", m_operation);
 }
 
-void OperationNode::AcceptNodeVisitor(NodeVisitor *visitor)
+void OperationNode::ForEachOperationParameter(
+  const std::function<void(const std::string &, const dynamic::DynamicValueBasePtr &)> &f) const
 {
-	visitor->Visit(std::dynamic_pointer_cast<OperationNode>(shared_from_this()));
+	m_operation->ForEachParameter(f);
 }
 
 void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
@@ -61,4 +59,22 @@ void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 	}
 }
 
+const char *const OperationNode::GetNodeType()
+{
+	static const char *const sNodeType = "Operation";
+	return sNodeType;
+}
+
+void OperationNode::ForEachConstructionArgument(
+  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
+{
+	f("operation", std::make_shared<dynamic::String>(m_operation->GetOperationName()));
+}
+
+void OperationNode::ForEachExecutionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
+{
+	for (auto p = m_operation->GetMembersBegin(); p != m_operation->GetMembersEnd(); ++p) {
+		f(p->first, p->second.m_value);
+	}
+}
 }  // namespace pagoda::graph

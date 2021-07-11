@@ -1,5 +1,7 @@
 #include "scope_texture_projection.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/core/planar_texture_projection.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -30,20 +32,19 @@ ScopeTextureProjection::ScopeTextureProjection(objects::ProceduralObjectSystemPt
 {
 	CreateInputInterface(s_inputGeometry);
 	CreateOutputInterface(s_outputGeometry);
-
-	// clang-format off
-    RegisterValues({
-        {"axis", std::make_shared<String>("z")},
-        {"scale_u", std::make_shared<FloatValue>(1.0f)},
-        {"scale_v", std::make_shared<FloatValue>(1.0f)},
-        {"offset_u", std::make_shared<FloatValue>(0.0f)},
-        {"offset_v", std::make_shared<FloatValue>(0.0f)},
-        {"clamp", std::make_shared<Boolean>(false)}
-    });
-	// clang-format on
 }
 
 ScopeTextureProjection::~ScopeTextureProjection() {}
+
+void ScopeTextureProjection::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("axis", cb->StringArgument("axis", "Axis", "z"));
+	RegisterMember("scale_u", cb->FloatArgument("scale_u", "Scale U", 1.0f));
+	RegisterMember("scale_v", cb->FloatArgument("scale_v", "Scale V", 1.0f));
+	RegisterMember("offset_u", cb->FloatArgument("offset_u", "Offset U", 0.0f));
+	RegisterMember("offset_v", cb->FloatArgument("offset_v", "Offset V", 0.0f));
+	RegisterMember("clamp", cb->BooleanArgument("clamp", "Clamp", false));
+}
 
 const std::string& ScopeTextureProjection::GetOperationName() const
 {

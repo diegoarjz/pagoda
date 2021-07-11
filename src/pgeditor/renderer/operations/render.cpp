@@ -64,6 +64,8 @@ Render::Render(pagoda::objects::ProceduralObjectSystemPtr objectSystem)
 
 Render::~Render() {}
 
+void Render::SetParameters(pagoda::graph::ExecutionArgumentCallback* cb) {}
+
 const std::string& Render::GetOperationName() const
 {
 	static const std::string kName{"Render"};

@@ -1,5 +1,7 @@
 #include "new_node_popup.h"
 
+#include <pagoda/common/debug/assertions.h>
+
 #include <pagoda/objects/operation_factory.h>
 
 #include <QEvent>
@@ -17,9 +19,12 @@ NewNodePopup::NewNodePopup(OperationFactoryPtr operationFactory) : QWidget(), m_
 	setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 
 	auto operations = m_operationFactory->RegisteredTypes();
-
 	for (const auto& o : operations) {
 		m_availableOperations.push_back(QString(o.c_str()));
+		m_factoryFunctions.emplace(QString(o.c_str()), [this, &o]() {
+			auto operation = m_operationFactory->Create(o);
+			return nullptr;
+		});
 	}
 
 	InitializeGUI();
@@ -64,6 +69,7 @@ bool NewNodePopup::eventFilter(QObject* watched, QEvent* event)
 				return true;
 			case Qt::Key_Return:
 				setSelectedItem();
+				close();
 				return true;
 			case Qt::Key_Up:
 				selectUp();
@@ -89,7 +95,14 @@ void NewNodePopup::updateOperationList()
 	}
 }
 
-void NewNodePopup::setSelectedItem() { emit OperationSelected(m_operationList->currentItem()->text()); }
+void NewNodePopup::setSelectedItem()
+{
+	emit OperationSelected(m_operationList->currentItem()->text());
+
+	auto name = m_operationList->currentItem()->text();
+	DBG_ASSERT(m_factoryFunctions.find(name) != m_factoryFunctions.end());
+	emit NodeCreated(m_factoryFunctions[name]());
+}
 
 void NewNodePopup::selectUp()
 {

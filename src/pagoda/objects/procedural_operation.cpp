@@ -147,13 +147,6 @@ std::string ProceduralOperation::ToString() const { return "<ProceduralOperation
 
 void ProceduralOperation::AcceptVisitor(ValueVisitorBase& visitor) { visitor.Visit(*this); }
 
-void ProceduralOperation::RegisterValues(const std::unordered_map<std::string, DynamicValueBasePtr>& values)
-{
-	for (const auto& v : values) {
-		RegisterMember(v.first, v.second);
-	}
-}
-
 void ProceduralOperation::UpdateValue(const std::string& valueName)
 {
 	auto expression = std::dynamic_pointer_cast<Expression>(GetValue(valueName));
@@ -210,6 +203,14 @@ void ProceduralOperation::ForEachOutputInterface(const std::function<void(const 
 {
 	for (const auto& i : m_outputInterfaces) {
 		f(i.first);
+	}
+}
+
+void ProceduralOperation::ForEachParameter(
+  const std::function<void(const std::string&, const dynamic::DynamicValueBasePtr& type)>& f)
+{
+	for (const auto& pn : m_parameterNames) {
+		f(pn, GetMember(pn));
 	}
 }
 

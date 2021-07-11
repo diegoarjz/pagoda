@@ -1,5 +1,7 @@
 #include "create_sphere.h"
 
+#include <pagoda/graph/execution_argument_callback.h>
+
 #include <pagoda/geometry/algorithms/create_sphere.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -24,14 +26,17 @@ CreateSphereGeometry::CreateSphereGeometry(ProceduralObjectSystemPtr objectSyste
 {
 	START_PROFILE;
 
-	RegisterValues({{"radius", std::make_shared<FloatValue>(1.0f)},
-	                {"slices", std::make_shared<Integer>(10)},
-	                {"stacks", std::make_shared<Integer>(10)}});
-
 	CreateOutputInterface(outputGeometry);
 }
 
 CreateSphereGeometry::~CreateSphereGeometry() {}
+
+void CreateSphereGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+	RegisterMember("radius", cb->FloatArgument("radius", "Radius", 1.0f));
+	RegisterMember("slices", cb->IntegerArgument("slices", "Slices", 10));
+	RegisterMember("stacks", cb->IntegerArgument("stacks", "Stacks", 10));
+}
 
 const std::string& CreateSphereGeometry::GetOperationName() const
 {

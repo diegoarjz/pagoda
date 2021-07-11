@@ -44,11 +44,12 @@ TEST_F(GraphWriterTest, test_empty_graph) { EXPECT_EQ(getAsString(), ""); }
 TEST_F(GraphWriterTest, test_single_operation)
 {
 	m_graph->CreateNode<OperationNode>("op");
-	auto opNode = std::dynamic_pointer_cast<OperationNode>(m_graph->GetNode("op"));
-	opNode->SetOperation(m_pagoda.GetOperationFactory()->Create("CreateRectGeometry"));
-	opNode->SetExecutionArguments({{"parameter", std::make_shared<FloatValue>(123.0f)}});
+	NodePtr opNode = std::dynamic_pointer_cast<OperationNode>(m_graph->GetNode("op"));
+	std::dynamic_pointer_cast<OperationNode>(opNode)->SetOperation(
+	  m_pagoda.GetOperationFactory()->Create("CreateRectGeometry"));
+	opNode->RegisterMember("parameter", std::make_shared<FloatValue>(123.0f));
 
-	EXPECT_EQ(getAsString(), R"(op = CreateRectGeometry{
+	EXPECT_EQ(getAsString(), R"(op = Operation(operation: "CreateRectGeometry"){
   parameter : 123.000000
 }
 )");
@@ -68,7 +69,7 @@ TEST_F(GraphWriterTest, test_links)
 
 	EXPECT_EQ(getAsString(), R"(in = InputInterface(interface: "in"){
 }
-op = CreateRectGeometry{
+op = Operation(operation: "CreateRectGeometry"){
 }
 out = OutputInterface(interface: "out"){
 }

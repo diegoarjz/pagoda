@@ -9,6 +9,6 @@ namespace pagoda::graph
 class ConstructionArgumentNotFound : public common::exception::Exception
 {
 	public:
-	ConstructionArgumentNotFound(const std::string nodeName, const uint32_t nodeId, const std::string &argName);
+	ConstructionArgumentNotFound(const std::string nodeName, const std::string &argName);
 };
 }  // namespace pagoda::graph

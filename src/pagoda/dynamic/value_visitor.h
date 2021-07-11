@@ -15,6 +15,7 @@
 #include "vector3.h"
 
 #include <pagoda/common/exception/exception.h>
+#include <pagoda/objects/procedural_object.h>
 #include <pagoda/objects/procedural_operation.h>
 
 #include <stdexcept>
@@ -44,6 +45,7 @@ class ValueVisitorBase
 	virtual void Visit(DynamicInstance&) = 0;
 	virtual void Visit(Expression&) = 0;
 	virtual void Visit(objects::ProceduralOperation&) = 0;
+	virtual void Visit(objects::ProceduralObject&) = 0;
 };
 
 template<typename R, class V>
@@ -65,6 +67,7 @@ class value_visitor : public ValueVisitorBase
 	void Visit(DynamicInstance& i) override { m_returnValue = m_visitor(i); }
 	void Visit(Expression& e) override { m_returnValue = m_visitor(e); }
 	void Visit(objects::ProceduralOperation& p) override { m_returnValue = m_visitor(p); }
+	void Visit(objects::ProceduralObject& p) override { m_returnValue = m_visitor(p); }
 
 	R get_return_value() { return m_returnValue; }
 
@@ -91,6 +94,7 @@ class value_visitor<void, V> : public ValueVisitorBase
 	void Visit(DynamicInstance& i) override { m_visitor(i); }
 	void Visit(Expression& e) override { m_visitor(e); }
 	void Visit(objects::ProceduralOperation& p) override { m_visitor(p); }
+	void Visit(objects::ProceduralObject& p) override { m_visitor(p); }
 
 	void get_return_value() {}
 

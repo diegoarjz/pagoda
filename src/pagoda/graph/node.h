@@ -1,5 +1,4 @@
-#ifndef PAGODA_PROCEDURAL_GRAPH_NODE_H_
-#define PAGODA_PROCEDURAL_GRAPH_NODE_H_
+#pragma once
 
 #include "node_set.h"
 
@@ -15,7 +14,8 @@ namespace pagoda::graph
 class Node;
 using NodePtr = std::shared_ptr<Node>;
 
-class NodeVisitor;
+class ConstructionArgumentCallback;
+class ExecutionArgumentCallback;
 
 /**
  * Represents a \c Node in a \c Graph.
@@ -35,15 +35,25 @@ class Node : public dynamic::BuiltinClass
 	Node &operator=(const Node &n) = delete;
 
 	/**
-	 * Sets the construction arguments from \p arguments.
+	 * Sets the construction arguments from \p cb.
 	 */
-	virtual void SetConstructionArguments(
-	  const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &arguments) = 0;
+	virtual void SetConstructionArguments(ConstructionArgumentCallback *cb) = 0;
+
+	/**
+	 * Iterates over each of the construction arguments.
+	 */
+	virtual void ForEachConstructionArgument(
+	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) = 0;
 
 	/**
 	 * Sets the execution arguments from \p arguments.
 	 */
-	void SetExecutionArguments(const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &arguments);
+	virtual void SetExecutionArguments(ExecutionArgumentCallback *cb) = 0;
+
+	/**
+	 * Iterates oves each of the execution arguments.
+	 */
+	virtual void ForEachExecutionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) = 0;
 
 	/**
 	 * Gets the id from this \c Node.
@@ -64,11 +74,6 @@ class Node : public dynamic::BuiltinClass
 	const std::string &GetName() const;
 
 	/**
-	 * Accepts a \c NodeVisitor.
-	 */
-	virtual void AcceptNodeVisitor(NodeVisitor *visitor) = 0;
-
-	/**
 	 * Executes some operation in the procedural graph.
 	 *
 	 * Subclasses should override this method to implement some execution logic.
@@ -79,6 +84,8 @@ class Node : public dynamic::BuiltinClass
 	virtual void Execute(const NodeSet &inNodes, const NodeSet &outNodes) = 0;
 
 	std::string ToString() const override;
+
+	virtual const char *const GetNodeType() = 0;
 
 	void AcceptVisitor(dynamic::ValueVisitorBase &visitor) override;
 
@@ -106,4 +113,3 @@ struct NodeWeakPtrEqual
 
 }  // namespace pagoda::graph
 
-#endif

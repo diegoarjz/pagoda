@@ -165,24 +165,22 @@ class Graph::Impl
 		return name;
 	}
 
-	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
-	                                   const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName, ConstructionArgumentCallback *cb)
 	{
 		auto node = GetNode(nodeName);
 		if (node == nullptr) {
 			return;
 		}
-		node->SetConstructionArguments(args);
+		node->SetConstructionArguments(cb);
 	}
 
-	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-	                                const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName, ExecutionArgumentCallback *cb)
 	{
 		auto node = GetNode(nodeName);
 		if (node == nullptr) {
 			return;
 		}
-		node->SetExecutionArguments(args);
+		node->SetExecutionArguments(cb);
 	}
 
 	void ExecuteQuery(query::Query &q)
@@ -303,16 +301,14 @@ Graph::SchedulerFactoryFunction_t Graph::s_schedulerFactoryFunction = [](Graph &
 
 void Graph::ExecuteQuery(query::Query &q) { m_implementation->ExecuteQuery(q); }
 
-void Graph::SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
-                                          const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+void Graph::SetNodeConstructionParameters(const NodeIdentifier_t &nodeName, ConstructionArgumentCallback *cb)
 {
-	m_implementation->SetNodeConstructionParameters(nodeName, args);
+	m_implementation->SetNodeConstructionParameters(nodeName, cb);
 }
 
-void Graph::SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-                                       const std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+void Graph::SetNodeExecutionParameters(const NodeIdentifier_t &nodeName, ExecutionArgumentCallback *cb)
 {
-	m_implementation->SetNodeExecutionParameters(nodeName, args);
+	m_implementation->SetNodeExecutionParameters(nodeName, cb);
 }
 
 NodeSet &Graph::getNodes() { return m_implementation->getNodes(); }
