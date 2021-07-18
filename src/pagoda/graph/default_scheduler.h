@@ -26,7 +26,7 @@ class DefaultScheduler : public IScheduler
 
 	private:
 	Graph &m_graph;
-	std::queue<objects::ProceduralOperation *> m_operationQueue;
+	std::queue<NodePtr> m_nodeQueue;
 };  // class Scheduler
 }  // namespace pagoda::graph
 #endif

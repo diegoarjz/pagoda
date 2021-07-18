@@ -127,6 +127,9 @@ GraphNode* GraphScene::createOperation(const QString& opName)
 	auto node = m_graph->GetNode(nodeName);
 	std::dynamic_pointer_cast<pagoda::graph::OperationNode>(node)->SetOperation(operation);
 
+  assert(false); // Need to reimplement the stuff below
+
+  /*
 	operation->ForEachInputInterface([this, &nodeName](const std::string& i) {
 		auto inName = m_graph->CreateNode<InputInterfaceNode>(nodeName + "_" + i);
 		auto inNode = std::dynamic_pointer_cast<InputInterfaceNode>(m_graph->GetNode(inName));
@@ -140,6 +143,7 @@ GraphNode* GraphScene::createOperation(const QString& opName)
 		outNode->SetInterfaceName(i);
 		m_graph->CreateEdge(nodeName, outName);
 	});
+  */
 
 	OperationNode* guiNode = new OperationNode(m_graph, node);
 	guiNode->InitializeGUI();

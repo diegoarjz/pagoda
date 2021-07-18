@@ -18,24 +18,49 @@ namespace pagoda::graph
 {
 const char* InputInterfaceNode::name = "InputInterface";
 
-InputInterfaceNode::InputInterfaceNode() : m_interfaceName("", 0) {}
-InputInterfaceNode::~InputInterfaceNode() {}
+InputInterfaceNode::InputInterfaceNode() : m_interfaceName("", 0)
+{
+}
+InputInterfaceNode::~InputInterfaceNode()
+{
+}
 
-void InputInterfaceNode::SetConstructionArguments(ConstructionArgumentCallback* cb)
+void InputInterfaceNode::SetConstructionArguments(
+  ConstructionArgumentCallback* cb)
 {
 	std::string interfaceName;
 	cb->StringArgument("interface", interfaceName, "Interface Name");
 	SetInterfaceName(interfaceName);
 }
 
-void InputInterfaceNode::SetExecutionArguments(ExecutionArgumentCallback* cb) {}
+void InputInterfaceNode::SetExecutionArguments(
+  objects::NewParameterCallback* cb)
+{
+}
 
-void InputInterfaceNode::SetInterfaceName(const std::string& interfaceName) { m_interfaceName = interfaceName; }
-const std::string& InputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
+void InputInterfaceNode::SetInterfaceName(const std::string& interfaceName)
+{
+	m_interfaceName = interfaceName;
+}
+const std::string& InputInterfaceNode::GetInterfaceName() const
+{
+	return m_interfaceName;
+}
 
-void InputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object) { m_proceduralObjects.push_back(object); }
+void InputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object)
+{
+	m_proceduralObjects.push_back(object);
+}
 
-void InputInterfaceNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes) { START_PROFILE; }
+void InputInterfaceNode::Execute(const NodeSet& inNodes,
+                                 const NodeSet& outNodes)
+{
+	START_PROFILE;
+	LOG_TRACE(ProceduralGraph,
+	          "Executing InputInterfaceNode for interface " << m_interfaceName);
+	LOG_TRACE(ProceduralGraph,
+	          "  with " << m_proceduralObjects.size() << " objects.");
+}
 
 const char* const InputInterfaceNode::GetNodeType()
 {
@@ -52,6 +77,5 @@ void InputInterfaceNode::ForEachConstructionArgument(
 void InputInterfaceNode::ForEachExecutionArgument(
   std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
 {
-	//
 }
 }  // namespace pagoda::graph

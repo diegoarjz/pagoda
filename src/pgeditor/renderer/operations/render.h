@@ -13,10 +13,14 @@ class Render : public pagoda::objects::ProceduralOperation
 	Render(pagoda::objects::ProceduralObjectSystemPtr objectSystem);
 	~Render() override;
 
-	void SetParameters(pagoda::graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(pagoda::objects::ParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
+	void Interfaces(pagoda::objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
+
+	private:
+	pagoda::objects::InterfacePtr m_input;
 };
 }  // namespace pgeditor::renderer::operations

@@ -1,6 +1,6 @@
 #include "set_material_attribute.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/common/exception/exception.h>
 
@@ -28,16 +28,17 @@ using namespace common::exception;
 const std::string SetMaterialAttribute::inputObject("in");
 const std::string SetMaterialAttribute::outputObject("out");
 
-SetMaterialAttribute::SetMaterialAttribute(objects::ProceduralObjectSystemPtr objectSystem)
+SetMaterialAttribute::SetMaterialAttribute(
+  objects::ProceduralObjectSystemPtr objectSystem)
   : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface(inputObject);
-	CreateOutputInterface(outputObject);
 }
 
-SetMaterialAttribute::~SetMaterialAttribute() {}
+SetMaterialAttribute::~SetMaterialAttribute()
+{
+}
 
-void SetMaterialAttribute::SetParameters(graph::ExecutionArgumentCallback* cb)
+void SetMaterialAttribute::SetParameters(objects::ParameterCallback* cb)
 {
 	// RegisterMember("name", cb->
 }
@@ -48,36 +49,48 @@ const std::string& SetMaterialAttribute::GetOperationName() const
 	return sName;
 }
 
+void SetMaterialAttribute::Interfaces(InterfaceCallback* cb)
+{
+}
+
 struct evaluator : public ValueVisitor<DynamicValueBasePtr>
 {
-	DynamicValueBasePtr operator()(ExpressionPtr& e) { return e->Evaluate(); }
+	DynamicValueBasePtr operator()(ExpressionPtr& e)
+	{
+		return e->Evaluate();
+	}
 };
 
 void SetMaterialAttribute::DoWork()
 {
 	START_PROFILE;
 
-	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
+	auto materialSystem =
+	  m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
+	/*
 	while (HasInput(inputObject)) {
-		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
-		std::shared_ptr<MaterialComponent> materialComponent = materialSystem->GetComponentAs<MaterialComponent>(outObject);
-		if (materialComponent == nullptr) {
-			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
-		}
+	  ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
+	  ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+	  std::shared_ptr<MaterialComponent> materialComponent =
+	    materialSystem->GetComponentAs<MaterialComponent>(outObject);
+	  if (materialComponent == nullptr) {
+	    materialComponent =
+	      materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+	  }
 
-		UpdateValue("name");
-		UpdateValue("value");
+	  UpdateValue("name");
+	  UpdateValue("value");
 
-		DynamicValueBasePtr v = GetValue("value");
-		ExpressionPtr e = std::dynamic_pointer_cast<Expression>(v);
-		if (e != nullptr) {
-			v = e->Evaluate();
-		}
+	  DynamicValueBasePtr v = GetValue("value");
+	  ExpressionPtr e = std::dynamic_pointer_cast<Expression>(v);
+	  if (e != nullptr) {
+	    v = e->Evaluate();
+	  }
 
-		std::string name = get_value_as<std::string>(*GetValue("name"));
-		materialComponent->GetMaterial().SetAttribute(name, v);
+	  std::string name = get_value_as<std::string>(*GetValue("name"));
+	  materialComponent->GetMaterial().SetAttribute(name, v);
 	}
+	*/
 }
 }  // namespace pagoda::material::operations

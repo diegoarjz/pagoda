@@ -25,15 +25,18 @@ using namespace common::exception;
 const std::string SetShader::inputObject("in");
 const std::string SetShader::outputObject("out");
 
-SetShader::SetShader(objects::ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+SetShader::SetShader(objects::ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface(inputObject);
-	CreateOutputInterface(outputObject);
 }
 
-SetShader::~SetShader() {}
+SetShader::~SetShader()
+{
+}
 
-void SetShader::SetParameters(graph::ExecutionArgumentCallback* cb) {}
+void SetShader::SetParameters(objects::ParameterCallback* cb)
+{
+}
 
 const std::string& SetShader::GetOperationName() const
 {
@@ -41,38 +44,48 @@ const std::string& SetShader::GetOperationName() const
 	return sName;
 }
 
+void SetShader::Interfaces(InterfaceCallback* cb)
+{
+}
+
 void SetShader::DoWork()
 {
 	START_PROFILE;
 
-	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
+	auto materialSystem =
+	  m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
+	/*
 	while (HasInput(inputObject)) {
-		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
-		std::shared_ptr<MaterialComponent> materialComponent = materialSystem->GetComponentAs<MaterialComponent>(outObject);
-		if (materialComponent == nullptr) {
-			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
-		}
+	  ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
+	  ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+	  std::shared_ptr<MaterialComponent> materialComponent =
+	    materialSystem->GetComponentAs<MaterialComponent>(outObject);
+	  if (materialComponent == nullptr) {
+	    materialComponent =
+	      materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+	  }
 
-		UpdateValue("type");
-		UpdateValue("path");
+	  UpdateValue("type");
+	  UpdateValue("path");
 
-		std::string type = get_value_as<std::string>(*GetValue("type"));
-		Material::ShaderType shaderType = Material::ShaderType::Vertex;
-		if (type == "vertex") {
-			shaderType = Material::ShaderType::Vertex;
-		} else if (type == "tesselation") {
-			shaderType = Material::ShaderType::Tesselation;
-		} else if (type == "geometry") {
-			shaderType = Material::ShaderType::Geometry;
-		} else if (type == "fragment") {
-			shaderType = Material::ShaderType::Fragment;
-		} else {
-			throw Exception("Unknown shader type '" + type + "'.");
-		}
+	  std::string type = get_value_as<std::string>(*GetValue("type"));
+	  Material::ShaderType shaderType = Material::ShaderType::Vertex;
+	  if (type == "vertex") {
+	    shaderType = Material::ShaderType::Vertex;
+	  } else if (type == "tesselation") {
+	    shaderType = Material::ShaderType::Tesselation;
+	  } else if (type == "geometry") {
+	    shaderType = Material::ShaderType::Geometry;
+	  } else if (type == "fragment") {
+	    shaderType = Material::ShaderType::Fragment;
+	  } else {
+	    throw Exception("Unknown shader type '" + type + "'.");
+	  }
 
-		materialComponent->GetMaterial().SetShaderSource(shaderType, get_value_as<std::string>(*GetValue("path")));
+	  materialComponent->GetMaterial().SetShaderSource(
+	    shaderType, get_value_as<std::string>(*GetValue("path")));
 	}
+	*/
 }
 }  // namespace pagoda::material::operations

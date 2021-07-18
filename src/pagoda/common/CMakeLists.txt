@@ -44,3 +44,15 @@ add_pagoda_module(
   COMPILE_DEFINITIONS "${COMMON_COMPILE_DEFINITIONS}"
 )
 
+
+#########################################################################
+# Unit tests
+#########################################################################
+
+set(COMMON_UNIT_TESTS
+    "utils.test.cpp"
+)
+
+foreach(unit_test_src ${COMMON_UNIT_TESTS})
+    add_unit_test(${unit_test_src})
+endforeach()
