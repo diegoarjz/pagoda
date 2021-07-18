@@ -25,12 +25,16 @@ class RepeatSplit : public objects::ProceduralOperation
 	void SetParameters(graph::ExecutionArgumentCallback *cb) override;
 
 	const std::string &GetOperationName() const override;
+	void Interfaces(objects::InterfaceCallback *cb) override;
 
 	void DoWork() override;
 
 	private:
 	std::vector<math::Plane<float>> CreatePlanes(const core::Scope &scope, const float &size, const std::string &axis,
 	                                             bool adjust);
+
+  objects::InterfacePtr m_input;
+  objects::InterfacePtr m_output;
 };
 }  // namespace pagoda::geometry::operations
 

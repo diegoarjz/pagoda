@@ -5,6 +5,8 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/dynamic/boolean_value.h>
@@ -50,6 +52,12 @@ const std::string& Rotate::GetOperationName() const
 {
 	static const std::string sName{"Rotate"};
 	return sName;
+}
+
+void Rotate::Interfaces(InterfaceCallback* cb)
+{
+	cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_output, s_outputGeometry, "Out", Interface::Arity::Many);
 }
 
 void Rotate::DoWork()

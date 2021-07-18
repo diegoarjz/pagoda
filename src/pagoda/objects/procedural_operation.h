@@ -1,18 +1,20 @@
 #pragma once
 
+#include "interface.h"
+#include "interface_callback.h"
 #include "procedural_component.h"
 
 #include <pagoda/common/factory.h>
 #include <pagoda/dynamic/builtin_class.h>
-#include <cstddef>
-#include <memory>
-
 #include <boost/signals2.hpp>
 
 #include <list>
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <cstddef>
+#include <memory>
+
 
 namespace pagoda
 {
@@ -36,6 +38,7 @@ class ProceduralObject;
 using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
 class ProceduralObjectSystem;
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
+class InterfaceCallback;
 
 /**
  * @brief Base class for a procedural operation.
@@ -59,9 +62,6 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	 */
 	void Execute();
 
-	bool HasInputInterface(const std::string& name) const;
-	bool HasOutputInterface(const std::string& name) const;
-
 	void LinkInputInterface(const std::string& inputInterface, const std::string& outputInterface,
 	                        const std::shared_ptr<ProceduralOperation>& op);
 
@@ -74,10 +74,11 @@ class ProceduralOperation : public dynamic::BuiltinClass
 
 	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
 
-	using InterfaceHandler_t = void(ProceduralOperation*, const std::string&, ProceduralObjectPtr);
-	void OnOutputObjectCreated(const std::string& interface, const std::function<InterfaceHandler_t>& handler);
-	void OnProgress(const std::function<void(const std::size_t&, const std::size_t)>& handler);
-	void OnNeedsUpdate(const std::function<void(ProceduralOperation*)>& handler);
+	////////////////////////////////////////////////////////////
+	/// \name Interfaces
+	////////////////////////////////////////////////////////////
+
+	virtual void Interfaces(InterfaceCallback* cb) = 0;
 
 	/**
 	 * Iterates over each input interface, passing its name to \p f.
@@ -87,6 +88,14 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	 * Iterates over each output interface, passing its name to \p f.
 	 */
 	void ForEachOutputInterface(const std::function<void(const std::string&)>& f);
+
+	bool HasInputInterface(const std::string& name) const;
+	bool HasOutputInterface(const std::string& name) const;
+
+	using InterfaceHandler_t = void(ProceduralOperation*, const std::string&, ProceduralObjectPtr);
+	void OnOutputObjectCreated(const std::string& interface, const std::function<InterfaceHandler_t>& handler);
+	void OnProgress(const std::function<void(const std::size_t&, const std::size_t)>& handler);
+	void OnNeedsUpdate(const std::function<void(ProceduralOperation*)>& handler);
 
 	/**
 	 * Iterates over each operation parameter.
@@ -112,6 +121,7 @@ class ProceduralOperation : public dynamic::BuiltinClass
 
 	void CreateInputInterface(const std::string& interfaceName);
 	void CreateOutputInterface(const std::string& interfaceName);
+
 	std::shared_ptr<ProceduralObject> GetInputProceduralObject(const std::string& interfaceName);
 	bool HasInput(const std::string& interfaceName) const;
 	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(const std::string& interfaceName);
@@ -135,7 +145,7 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	 */
 	ProceduralObjectPtr PopProceduralObject(const std::string& interface);
 
-	struct Interface
+	struct OldInterface
 	{
 		void Add(ProceduralObjectPtr o) { m_objects.push_back(o); }
 		ProceduralObjectPtr GetFront()
@@ -155,7 +165,7 @@ class ProceduralOperation : public dynamic::BuiltinClass
 		std::list<std::shared_ptr<ProceduralOperation>> m_operations;
 	};
 
-	using InterfaceContainer_t = std::unordered_map<std::string, Interface>;
+	using InterfaceContainer_t = std::unordered_map<std::string, OldInterface>;
 
 	boost::signals2::signal<void(const std::size_t&, const std::size_t)> m_progressHandlers;
 	boost::signals2::signal<void(ProceduralOperation*)> m_needUpdateHandlers;

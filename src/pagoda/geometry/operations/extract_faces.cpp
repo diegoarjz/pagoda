@@ -7,6 +7,8 @@
 #include <pagoda/common/instrument/profiler.h>
 
 #include <pagoda/objects/procedural_object_system.h>
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 
 namespace pagoda::geometry::operations
 {
@@ -34,6 +36,12 @@ const std::string& ExtractFaces::GetOperationName() const
 {
 	static const std::string sName{"ExtractFaces"};
 	return sName;
+}
+
+void ExtractFaces::Interfaces(InterfaceCallback* cb)
+{
+  cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_output, s_outputGeometry, "Out", Interface::Arity::Many);
 }
 
 void ExtractFaces::DoWork()

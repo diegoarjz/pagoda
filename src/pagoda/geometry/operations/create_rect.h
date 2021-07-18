@@ -1,7 +1,11 @@
-#ifndef PAGODA_PROCEDURAL_OBJECTS_CREATE_RECT
-#define PAGODA_PROCEDURAL_OBJECTS_CREATE_RECT
+#pragma once
 
 #include <pagoda/objects/procedural_operation.h>
+
+namespace pagoda::objects
+{
+using InterfacePtr = std::shared_ptr<class Interface>;
+}
 
 namespace pagoda::geometry::operations
 {
@@ -18,9 +22,13 @@ class CreateRectGeometry : public objects::ProceduralOperation
 
 	const std::string& GetOperationName() const override;
 
+	void Interfaces(objects::InterfaceCallback* cb) override;
+
 	void DoWork() override;
+
+	private:
+	objects::InterfacePtr m_out;
 };  // class CreateSquareGeometry
 
 }  // namespace pagoda::geometry::operations
 
-#endif

@@ -5,6 +5,8 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -46,6 +48,13 @@ const std::string& FaceOffsetOperation::GetOperationName() const
 {
 	static const std::string sName{"FaceOffset"};
 	return sName;
+}
+
+void FaceOffsetOperation::Interfaces(InterfaceCallback* cb)
+{
+  cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_inner, outputInnerGeometry, "Inner", Interface::Arity::Many);
+  cb->OutputInterface(m_outer, outputOuterGeometry, "Outer", Interface::Arity::Many);
 }
 
 void FaceOffsetOperation::DoWork()

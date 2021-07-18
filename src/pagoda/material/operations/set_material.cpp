@@ -47,6 +47,10 @@ const std::string& SetMaterial::GetOperationName() const
 	return sName;
 }
 
+void SetMaterial::Interfaces(InterfaceCallback* cb)
+{
+}
+
 void SetMaterial::DoWork()
 {
 	START_PROFILE;

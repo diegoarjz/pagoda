@@ -38,6 +38,10 @@ const std::string& SetTexture::GetOperationName() const
 	return sName;
 }
 
+void SetTexture::Interfaces(InterfaceCallback* cb)
+{
+}
+
 void SetTexture::DoWork()
 {
 	START_PROFILE;

@@ -3,6 +3,8 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -34,6 +36,12 @@ const std::string& ExtractScope::GetOperationName() const
 {
 	static const std::string sName{"ExtractScope"};
 	return sName;
+}
+
+void ExtractScope::Interfaces(InterfaceCallback* cb)
+{
+	cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::Many);
 }
 
 void ExtractScope::DoWork()

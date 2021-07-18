@@ -41,6 +41,10 @@ const std::string& SetShader::GetOperationName() const
 	return sName;
 }
 
+void SetShader::Interfaces(InterfaceCallback* cb)
+{
+}
+
 void SetShader::DoWork()
 {
 	START_PROFILE;

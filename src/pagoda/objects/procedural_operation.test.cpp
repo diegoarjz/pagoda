@@ -32,6 +32,11 @@ class MockOperation : public ProceduralOperation
 		return sName;
 	}
 
+  void Interfaces(InterfaceCallback *cb) override
+  {
+    //
+  }
+
 	protected:
 	void DoWork() override
 	{

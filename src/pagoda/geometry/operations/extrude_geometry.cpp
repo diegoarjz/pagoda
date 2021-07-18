@@ -6,6 +6,8 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -44,6 +46,12 @@ const std::string& ExtrudeGeometry::GetOperationName() const
 {
 	static const std::string sName{"ExtrudeGeometry"};
 	return sName;
+}
+
+void ExtrudeGeometry::Interfaces(InterfaceCallback* cb)
+{
+	cb->InputInterface(m_in, input_geometry, "In", Interface::Arity::Many);
+	cb->OutputInterface(m_out, output_geometry, "Out", Interface::Arity::Many);
 }
 
 void ExtrudeGeometry::DoWork()

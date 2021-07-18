@@ -5,6 +5,8 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/dynamic/boolean_value.h>
@@ -34,7 +36,7 @@ void Split::SetParameters(graph::ExecutionArgumentCallback *cb)
 {
 	RegisterMember("axis", cb->StringArgument("axis", "Axis", "x"));
 	RegisterMember("split_count", cb->IntegerArgument("split_count", "Split Count", 0));
-	for (uint32_t i = 1u; i <= 32; ++i) {
+	for (uint32_t i = 1u; i <= 8; ++i) {
 		auto name = "split_" + std::to_string(i);
 		RegisterMember(name, cb->FloatArgument(name.c_str(), ("Split " + std::to_string(i)).c_str(), 0));
 	}
@@ -44,6 +46,15 @@ const std::string &Split::GetOperationName() const
 {
 	static const std::string sName{"Split"};
 	return sName;
+}
+
+void Split::Interfaces(InterfaceCallback* cb)
+{
+	cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
+	for (uint32_t i = 1u; i <= 8; ++i) {
+		auto name = "split_" + std::to_string(i);
+    cb->OutputInterface(m_outputs[i], "split_" + std::to_string(i), "Split " + std::to_string(i), Interface::Arity::Many);
+  }
 }
 
 std::vector<Plane<float>> createPlanes(const Scope &scope, const std::vector<float> &sizes, const std::string &axis)

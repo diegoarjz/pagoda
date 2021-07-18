@@ -71,6 +71,10 @@ const std::string& Render::GetOperationName() const
 	static const std::string kName{"Render"};
 	return kName;
 }
+void Render::Interfaces(pagoda::objects::InterfaceCallback* cb)
+{
+  cb->InputInterface(m_input, input, "In", Interface::Arity::Many);
+}
 
 void Render::DoWork()
 {

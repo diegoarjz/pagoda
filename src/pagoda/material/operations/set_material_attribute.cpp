@@ -48,6 +48,10 @@ const std::string& SetMaterialAttribute::GetOperationName() const
 	return sName;
 }
 
+void SetMaterialAttribute::Interfaces(InterfaceCallback* cb)
+{
+}
+
 struct evaluator : public ValueVisitor<DynamicValueBasePtr>
 {
 	DynamicValueBasePtr operator()(ExpressionPtr& e) { return e->Evaluate(); }

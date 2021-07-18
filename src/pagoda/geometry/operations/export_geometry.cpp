@@ -7,6 +7,8 @@
 #include <pagoda/geometry/geometry_system.h>
 #include <pagoda/geometry/io/geometry_exporter.h>
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/common/fs/file_util.h>
@@ -46,6 +48,11 @@ const std::string& ExportGeometry::GetOperationName() const
 {
 	static const std::string sName{"ExportGeometry"};
 	return sName;
+}
+
+void ExportGeometry::Interfaces(InterfaceCallback* cb)
+{
+  cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
 }
 
 void ExportGeometry::DoWork()

@@ -16,7 +16,12 @@ class Translate : public objects::ProceduralOperation
 	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
+	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
+
+  private:
+  objects::InterfacePtr m_input;
+  objects::InterfacePtr m_output;
 };
 }  // namespace pagoda::geometry::operations

@@ -7,6 +7,9 @@
 #include <pagoda/geometry/geometry_system.h>
 
 #include <pagoda/dynamic/get_value_as.h>
+
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -43,6 +46,11 @@ const std::string& CreateBoxGeometry::GetOperationName() const
 {
 	static const std::string sName{"CreateBoxGeometry"};
 	return sName;
+}
+
+void CreateBoxGeometry::Interfaces(InterfaceCallback* cb)
+{
+  cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::One);
 }
 
 void CreateBoxGeometry::DoWork()

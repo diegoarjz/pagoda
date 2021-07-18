@@ -5,6 +5,8 @@ set(OBJECTS_SRCS
     "hierarchical_component.h"
     "hierarchical_system.cpp"
     "hierarchical_system.h"
+    "interface.cpp"
+    "interface.h"
     "operation_factory.cpp"
     "operation_factory.h"
     "procedural_component.cpp"
@@ -39,6 +41,7 @@ add_pagoda_module(
 set(GEOMETRY_UNIT_TESTS
     "procedural_object.test.cpp"
     "procedural_operation.test.cpp"
+    "interface.test.cpp"
 )
 
 foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})

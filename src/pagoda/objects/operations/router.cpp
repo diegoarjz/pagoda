@@ -1,5 +1,7 @@
 #include "router.h"
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_object_predicate.h>
 #include <pagoda/objects/procedural_object_predicate_registry.h>
 #include <pagoda/objects/procedural_object_system.h>
@@ -28,6 +30,11 @@ const std::string& Router::GetOperationName() const
 {
 	static const std::string sName{"Router"};
 	return sName;
+}
+
+void Router::Interfaces(InterfaceCallback* cb)
+{
+  //
 }
 
 void Router::DoWork()

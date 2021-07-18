@@ -2,6 +2,7 @@
 
 #include "hierarchical_component.h"
 #include "hierarchical_system.h"
+#include "interface_callback.h"
 #include "procedural_object.h"
 #include "procedural_object_system.h"
 
@@ -70,16 +71,12 @@ ProceduralObjectPtr ProceduralOperation::PopProceduralObject(const std::string& 
 
 void ProceduralOperation::CreateInputInterface(const std::string& interfaceName)
 {
-	START_PROFILE;
-
-	m_inputInterfaces.emplace(std::make_pair(interfaceName, Interface{}));
+	m_inputInterfaces.emplace(std::make_pair(interfaceName, OldInterface{}));
 }
 
 void ProceduralOperation::CreateOutputInterface(const std::string& interfaceName)
 {
-	START_PROFILE;
-
-	m_outputInterfaces.emplace(std::make_pair(interfaceName, Interface{}));
+	m_outputInterfaces.emplace(std::make_pair(interfaceName, OldInterface{}));
 }
 
 std::shared_ptr<ProceduralObject> ProceduralOperation::GetInputProceduralObject(const std::string& interfaceName)

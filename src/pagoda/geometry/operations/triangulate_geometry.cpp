@@ -3,6 +3,8 @@
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -36,6 +38,12 @@ const std::string& TriangulateGeometry::GetOperationName() const
 {
 	static const std::string sName{"TriangulateGeometry"};
 	return sName;
+}
+
+void TriangulateGeometry::Interfaces(InterfaceCallback* cb)
+{
+	cb->InputInterface(m_input, sInputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_output, sOutputGeometry, "Out", Interface::Arity::Many);
 }
 
 void TriangulateGeometry::DoWork()

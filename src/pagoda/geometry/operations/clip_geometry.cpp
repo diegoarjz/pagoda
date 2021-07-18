@@ -4,6 +4,9 @@
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
+
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_object_system.h>
 
 #include <pagoda/dynamic/float_value.h>
@@ -43,6 +46,13 @@ const std::string& ClipGeometry::GetOperationName() const
 {
 	static const std::string sName{"ClipGeometry"};
 	return sName;
+}
+
+void ClipGeometry::Interfaces(InterfaceCallback* cb)
+{
+  cb->InputInterface(m_inputGeometry, inputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_frontGeometry, frontGeometry, "Front", Interface::Arity::Many);
+  cb->OutputInterface(m_backGeometry, backGeometry, "Back", Interface::Arity::Many);
 }
 
 void ClipGeometry::DoWork()
