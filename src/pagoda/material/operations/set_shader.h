@@ -14,9 +14,10 @@ class SetShader : public objects::ProceduralOperation
 	SetShader(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~SetShader();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
+	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
 };

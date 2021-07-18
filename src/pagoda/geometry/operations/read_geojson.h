@@ -13,10 +13,21 @@ class ReadGeoJson : public objects::ProceduralOperation
 	ReadGeoJson(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ReadGeoJson();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
+	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
+
+	private:
+	objects::InterfacePtr m_output;
+
+	std::string m_file;
+	float m_refLatitude;
+	float m_refLongitude;
 };
 }  // namespace pagoda::geometry::operations

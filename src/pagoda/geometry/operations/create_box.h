@@ -14,11 +14,22 @@ class CreateBoxGeometry : public objects::ProceduralOperation
 	CreateBoxGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateBoxGeometry();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
+	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
+
+	private:
+	objects::InterfacePtr m_output;
+
+	float m_width;
+	float m_height;
+	float m_depth;
 };
 }  // namespace pagoda::geometry::operations
 #endif

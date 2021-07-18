@@ -14,16 +14,17 @@ std::unique_ptr<Logger> Logger::sError = nullptr;
 std::unique_ptr<Logger> Logger::sFatal = nullptr;
 std::list<typename Logger::LogFile> Logger::sLogFiles;
 
-const bool Logger::trace_enabled[static_cast<uint32_t>(Logger::TraceLogs::Max)] = {
-  false,  // Core,
-  false,  // Common,
-  false,  // MathLib,
-  false,  // GeometryCore,
-  false,  // GeometryOperations,
-  false,  // Parameter,
-  false,  // ProceduralGraph,
-  false,  // ProceduralGraphReader,
-  false,  // ProceduralObjects,
+const bool
+  Logger::trace_enabled[static_cast<uint32_t>(Logger::TraceLogs::Max)] = {
+    false,  // Core,
+    false,  // Common,
+    false,  // MathLib,
+    false,  // GeometryCore,
+    false,  // GeometryOperations,
+    false,  // Parameter,
+    false,   // ProceduralGraph,
+    false,  // ProceduralGraphReader,
+    false,   // ProceduralObjects,
 };
 
 Logger *Logger::trace()
@@ -74,7 +75,8 @@ Logger *Logger::fatal()
 	return sFatal.get();
 }
 
-Logger::Logger(const std::string &out_file) : m_enabled(true), m_console(ConsoleOutput::None)
+Logger::Logger(const std::string &out_file)
+  : m_enabled(true), m_console(ConsoleOutput::None)
 {
 	m_file = RequestFile(out_file);
 
@@ -83,7 +85,10 @@ Logger::Logger(const std::string &out_file) : m_enabled(true), m_console(Console
 	}
 }
 
-Logger::Logger(const ConsoleOutput &console_output) : m_file(), m_enabled(true), m_console(console_output) {}
+Logger::Logger(const ConsoleOutput &console_output)
+  : m_file(), m_enabled(true), m_console(console_output)
+{
+}
 
 Logger::Logger(const std::string &out_file, const ConsoleOutput &console_output)
   : m_file(), m_enabled(true), m_console(console_output)
@@ -190,6 +195,9 @@ void Logger::Shutdown()
 	sFatal = nullptr;
 }
 
-bool Logger::IsTraceEnabled(const TraceLogs &trace) { return trace_enabled[static_cast<uint32_t>(trace)]; }
+bool Logger::IsTraceEnabled(const TraceLogs &trace)
+{
+	return trace_enabled[static_cast<uint32_t>(trace)];
+}
 
 }  // namespace pagoda::common::debug

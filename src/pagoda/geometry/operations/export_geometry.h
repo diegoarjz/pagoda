@@ -14,14 +14,21 @@ class ExportGeometry : public objects::ProceduralOperation
 	ExportGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	~ExportGeometry();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
+	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
 
 	private:
-	uint32_t m_objectCount;
+	objects::InterfacePtr m_input;
+
+	int32_t m_objectCount;
+	std::string m_path;
 };
 }  // namespace pagoda::geometry::operations
 

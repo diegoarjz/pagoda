@@ -1,11 +1,13 @@
 #include "extrude_geometry.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/algorithms/extrusion.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
@@ -25,19 +27,19 @@ const char* ExtrudeGeometry::name = "ExtrudeGeometry";
 const std::string ExtrudeGeometry::input_geometry("in");
 const std::string ExtrudeGeometry::output_geometry("out");
 
-ExtrudeGeometry::ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+ExtrudeGeometry::ExtrudeGeometry(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-
-	CreateInputInterface(input_geometry);
-	CreateOutputInterface(output_geometry);
 }
 
-ExtrudeGeometry::~ExtrudeGeometry() {}
-
-void ExtrudeGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+ExtrudeGeometry::~ExtrudeGeometry()
 {
-	RegisterMember("extrusion_amount", cb->FloatArgument("extrusion_amount", "Amount", 1.0f));
+}
+
+void ExtrudeGeometry::Parameters(objects::NewParameterCallback* cb)
+{
+	cb->FloatParameter(&m_amount, "amount", "Amount", 1.0f);
 }
 
 const std::string& ExtrudeGeometry::GetOperationName() const
@@ -46,32 +48,36 @@ const std::string& ExtrudeGeometry::GetOperationName() const
 	return sName;
 }
 
+void ExtrudeGeometry::Interfaces(InterfaceCallback* cb)
+{
+	cb->InputInterface(m_in, input_geometry, "In", Interface::Arity::Many);
+	cb->OutputInterface(m_out, output_geometry, "Out", Interface::Arity::Many);
+}
+
 void ExtrudeGeometry::DoWork()
 {
 	START_PROFILE;
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(input_geometry)) {
-		ProceduralObjectPtr in_object = GetInputProceduralObject(input_geometry);
-		UpdateValue("extrusion_amount");
+	ProceduralObjectPtr in_object = m_in->GetNext();
 
-		float extrusion_amount = get_value_as<float>(*GetValue("extrusion_amount"));
-		Extrusion<Geometry> extrude(extrusion_amount);
+	Extrusion<Geometry> extrude(m_amount);
 
-		// Geometry
-		ProceduralObjectPtr out_object = CreateOutputProceduralObject(in_object, output_geometry);
-		std::shared_ptr<GeometryComponent> geometry_component =
-		  geometrySystem->CreateComponentAs<GeometryComponent>(out_object);
-		std::shared_ptr<GeometryComponent> in_geometry_component =
-		  geometrySystem->GetComponentAs<GeometryComponent>(in_object);
-		GeometryPtr in_geometry = in_geometry_component->GetGeometry();
+	// Geometry
+	ProceduralObjectPtr out_object = CreateOutputProceduralObject(in_object);
+	std::shared_ptr<GeometryComponent> geometry_component =
+	  geometrySystem->CreateComponentAs<GeometryComponent>(out_object);
+	std::shared_ptr<GeometryComponent> in_geometry_component =
+	  geometrySystem->GetComponentAs<GeometryComponent>(in_object);
+	GeometryPtr in_geometry = in_geometry_component->GetGeometry();
+	m_out->SetNext(out_object);
 
-		auto out_geometry = std::make_shared<Geometry>();
-		extrude.Execute(in_geometry, out_geometry);
+	auto out_geometry = std::make_shared<Geometry>();
+	extrude.Execute(in_geometry, out_geometry);
 
-		geometry_component->SetGeometry(out_geometry);
-		geometry_component->SetScope(
-		  Scope::FromGeometryAndConstrainedRotation(out_geometry, in_geometry_component->GetScope().GetRotation()));
-	}
+	geometry_component->SetGeometry(out_geometry);
+	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
+	  out_geometry, in_geometry_component->GetScope().GetRotation()));
 }
 }  // namespace pagoda::geometry::operations

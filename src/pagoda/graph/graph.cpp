@@ -26,7 +26,8 @@ namespace pagoda::graph
 class Graph::Impl
 {
 	private:
-	using NodeWeakPtrSet = std::unordered_set<NodeWeakPtr, NodeWeakPtrHasher, NodeWeakPtrEqual>;
+	using NodeWeakPtrSet =
+	  std::unordered_set<NodeWeakPtr, NodeWeakPtrHasher, NodeWeakPtrEqual>;
 
 	struct Adjacency
 	{
@@ -36,7 +37,10 @@ class Graph::Impl
 	using AdjacencyContainer = std::unordered_map<NodeIdentifier_t, Adjacency>;
 
 	public:
-	Impl(NodeFactoryPtr nodeFactory, Graph *graph) : m_nextNodeId(0), m_graph(graph), m_nodeFactory(nodeFactory) {}
+	Impl(NodeFactoryPtr nodeFactory, Graph *graph)
+	  : m_nextNodeId(0), m_graph(graph), m_nodeFactory(nodeFactory)
+	{
+	}
 
 	void DestroyNode(const NodeIdentifier_t &nodeName)
 	{
@@ -71,7 +75,8 @@ class Graph::Impl
 		return iter->second.lock();
 	}
 
-	Graph::EdgeCreated CreateEdge(const NodeIdentifier_t &source_node, const NodeIdentifier_t &target_node)
+	Graph::EdgeCreated CreateEdge(const NodeIdentifier_t &source_node,
+	                              const NodeIdentifier_t &target_node)
 	{
 		auto &source_node_out = OutNodes(source_node);
 		auto &target_node_in = InNodes(target_node);
@@ -86,7 +91,8 @@ class Graph::Impl
 		return EdgeCreated::Created;
 	}
 
-	Graph::EdgeDestroyed DestroyEdge(const NodeIdentifier_t &source_node, const NodeIdentifier_t &target_node)
+	Graph::EdgeDestroyed DestroyEdge(const NodeIdentifier_t &source_node,
+	                                 const NodeIdentifier_t &target_node)
 	{
 		auto &source_node_out = OutNodes(source_node);
 		auto &target_node_in = InNodes(target_node);
@@ -94,12 +100,18 @@ class Graph::Impl
 		size_t out_links_removed = source_node_out.erase(GetNode(target_node));
 		size_t in_links_removed = target_node_in.erase(GetNode(source_node));
 
-		DBG_ASSERT_MSG(out_links_removed == in_links_removed, "Mismatch between number of removed in links and out links");
+		DBG_ASSERT_MSG(out_links_removed == in_links_removed,
+		               "Mismatch between number of removed in links and out links");
 
-		return out_links_removed > 0 && in_links_removed > 0 ? EdgeDestroyed::Destroyed : EdgeDestroyed::EdgeDoesntExist;
+		return out_links_removed > 0 && in_links_removed > 0
+		         ? EdgeDestroyed::Destroyed
+		         : EdgeDestroyed::EdgeDoesntExist;
 	}
 
-	std::size_t GetNodeCount() const { return m_nodes.size(); }
+	std::size_t GetNodeCount() const
+	{
+		return m_nodes.size();
+	}
 
 	NodeSet GetNodesAdjacentTo(const NodeIdentifier_t &nodeName)
 	{
@@ -123,7 +135,10 @@ class Graph::Impl
 		return nodes;
 	}
 
-	void SetScheduler(std::unique_ptr<IScheduler> scheduler) { m_scheduler = std::move(scheduler); }
+	void SetScheduler(std::unique_ptr<IScheduler> scheduler)
+	{
+		m_scheduler = std::move(scheduler);
+	}
 
 	void Execute()
 	{
@@ -137,9 +152,13 @@ class Graph::Impl
 		scheduler->Finalize();
 	}
 
-	NodeIdentifier_t CreateNode(const std::string &nodeType) { return CreateNode(nodeType, nodeType); }
+	NodeIdentifier_t CreateNode(const std::string &nodeType)
+	{
+		return CreateNode(nodeType, nodeType);
+	}
 
-	NodeIdentifier_t CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName)
+	NodeIdentifier_t CreateNode(const std::string &nodeType,
+	                            const NodeIdentifier_t &nodeName)
 	{
 		auto node = m_nodeFactory->Create(nodeType);
 		if (node == nullptr) {
@@ -150,7 +169,8 @@ class Graph::Impl
 		if (m_nodesByIdentifier.find(name) != m_nodesByIdentifier.end()) {
 			std::size_t counter = 1;
 			std::string availableName = name + std::to_string(counter);
-			while (m_nodesByIdentifier.find(availableName) != m_nodesByIdentifier.end()) {
+			while (m_nodesByIdentifier.find(availableName) !=
+			       m_nodesByIdentifier.end()) {
 				availableName = name + std::to_string(++counter);
 			}
 			name = availableName;
@@ -165,7 +185,8 @@ class Graph::Impl
 		return name;
 	}
 
-	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName, ConstructionArgumentCallback *cb)
+	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
+	                                   ConstructionArgumentCallback *cb)
 	{
 		auto node = GetNode(nodeName);
 		if (node == nullptr) {
@@ -174,7 +195,8 @@ class Graph::Impl
 		node->SetConstructionArguments(cb);
 	}
 
-	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName, ExecutionArgumentCallback *cb)
+	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
+	                                objects::NewParameterCallback *cb)
 	{
 		auto node = GetNode(nodeName);
 		if (node == nullptr) {
@@ -199,7 +221,10 @@ class Graph::Impl
 		}
 	}
 
-	NodeSet &getNodes() { return m_nodes; }
+	NodeSet &getNodes()
+	{
+		return m_nodes;
+	}
 
 	private:
 	IScheduler *GetScheduler()
@@ -212,7 +237,8 @@ class Graph::Impl
 
 	void CollectNodes(const NodeWeakPtrSet &node_set, NodeSet &outSet)
 	{
-		std::transform(node_set.begin(), node_set.end(), std::inserter(outSet, outSet.end()),
+		std::transform(node_set.begin(), node_set.end(),
+		               std::inserter(outSet, outSet.end()),
 		               [](NodeWeakPtr n) { return n.lock(); });
 	}
 
@@ -220,7 +246,8 @@ class Graph::Impl
 	{
 		auto adjacenies = m_adjacencies.find(node);
 		if (adjacenies == m_adjacencies.end()) {
-			throw common::exception::Exception("Node '" + node + "' not found in graph");
+			throw common::exception::Exception("Node '" + node +
+			                                   "' not found in graph");
 		}
 
 		return adjacenies->second.m_inLinks;
@@ -230,7 +257,8 @@ class Graph::Impl
 	{
 		auto adjacenies = m_adjacencies.find(node);
 		if (adjacenies == m_adjacencies.end()) {
-			throw common::exception::Exception("Node '" + node + "' not found in graph");
+			throw common::exception::Exception("Node '" + node +
+			                                   "' not found in graph");
 		}
 
 		return adjacenies->second.m_outLinks;
@@ -245,31 +273,56 @@ class Graph::Impl
 	NodeFactoryPtr m_nodeFactory;
 };
 
-Graph::Graph(NodeFactoryPtr nodeFactory) : m_implementation(std::make_unique<Graph::Impl>(nodeFactory, this)) {}
+Graph::Graph(NodeFactoryPtr nodeFactory)
+  : m_implementation(std::make_unique<Graph::Impl>(nodeFactory, this))
+{
+}
 
-Graph::~Graph() {}
+Graph::~Graph()
+{
+}
 
-void Graph::DestroyNode(const NodeIdentifier_t &node) { m_implementation->DestroyNode(node); }
+void Graph::DestroyNode(const NodeIdentifier_t &node)
+{
+	m_implementation->DestroyNode(node);
+}
 
-NodePtr Graph::GetNode(const NodeIdentifier_t &name) const { return m_implementation->GetNode(name); }
+NodePtr Graph::GetNode(const NodeIdentifier_t &name) const
+{
+	return m_implementation->GetNode(name);
+}
 
-Graph::EdgeCreated Graph::CreateEdge(const NodeIdentifier_t &source_node, const NodeIdentifier_t &target_node)
+Graph::EdgeCreated Graph::CreateEdge(const NodeIdentifier_t &source_node,
+                                     const NodeIdentifier_t &target_node)
 {
 	return m_implementation->CreateEdge(source_node, target_node);
 }
 
-Graph::EdgeDestroyed Graph::DestroyEdge(const NodeIdentifier_t &source_node, const NodeIdentifier_t &target_node)
+Graph::EdgeDestroyed Graph::DestroyEdge(const NodeIdentifier_t &source_node,
+                                        const NodeIdentifier_t &target_node)
 {
 	return m_implementation->DestroyEdge(source_node, target_node);
 }
 
-std::size_t Graph::GetNodeCount() const { return m_implementation->GetNodeCount(); }
+std::size_t Graph::GetNodeCount() const
+{
+	return m_implementation->GetNodeCount();
+}
 
-NodeSet Graph::GetNodesAdjacentTo(const NodeIdentifier_t &node) { return m_implementation->GetNodesAdjacentTo(node); }
+NodeSet Graph::GetNodesAdjacentTo(const NodeIdentifier_t &node)
+{
+	return m_implementation->GetNodesAdjacentTo(node);
+}
 
-NodeSet Graph::GetNodeInputNodes(const NodeIdentifier_t &node) { return m_implementation->GetInNodes(node); }
+NodeSet Graph::GetNodeInputNodes(const NodeIdentifier_t &node)
+{
+	return m_implementation->GetInNodes(node);
+}
 
-NodeSet Graph::GetNodeOutputNodes(const NodeIdentifier_t &node) { return m_implementation->GetOutNodes(node); }
+NodeSet Graph::GetNodeOutputNodes(const NodeIdentifier_t &node)
+{
+	return m_implementation->GetOutNodes(node);
+}
 
 void Graph::SetScheduler(std::unique_ptr<IScheduler> scheduler)
 {
@@ -281,35 +334,50 @@ Graph::NodeIdentifier_t Graph::CreateNode(const std::string &nodeType)
 	return m_implementation->CreateNode(nodeType);
 }
 
-Graph::NodeIdentifier_t Graph::CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName)
+Graph::NodeIdentifier_t Graph::CreateNode(const std::string &nodeType,
+                                          const NodeIdentifier_t &nodeName)
 {
 	return m_implementation->CreateNode(nodeType, nodeName);
 }
 
-void Graph::Execute() { m_implementation->Execute(); }
+void Graph::Execute()
+{
+	m_implementation->Execute();
+}
 
-void Graph::SetSchedulerFactory(const SchedulerFactoryFunction_t &factoryFunction)
+void Graph::SetSchedulerFactory(
+  const SchedulerFactoryFunction_t &factoryFunction)
 {
 	s_schedulerFactoryFunction = factoryFunction;
 }
 
-Graph::SchedulerFactoryFunction_t Graph::GetSchedulerFactory() { return s_schedulerFactoryFunction; }
+Graph::SchedulerFactoryFunction_t Graph::GetSchedulerFactory()
+{
+	return s_schedulerFactoryFunction;
+}
 
-Graph::SchedulerFactoryFunction_t Graph::s_schedulerFactoryFunction = [](Graph &graph) {
-	return std::make_unique<DefaultScheduler>(graph);
-};
+Graph::SchedulerFactoryFunction_t Graph::s_schedulerFactoryFunction =
+  [](Graph &graph) { return std::make_unique<DefaultScheduler>(graph); };
 
-void Graph::ExecuteQuery(query::Query &q) { m_implementation->ExecuteQuery(q); }
+void Graph::ExecuteQuery(query::Query &q)
+{
+	m_implementation->ExecuteQuery(q);
+}
 
-void Graph::SetNodeConstructionParameters(const NodeIdentifier_t &nodeName, ConstructionArgumentCallback *cb)
+void Graph::SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
+                                          ConstructionArgumentCallback *cb)
 {
 	m_implementation->SetNodeConstructionParameters(nodeName, cb);
 }
 
-void Graph::SetNodeExecutionParameters(const NodeIdentifier_t &nodeName, ExecutionArgumentCallback *cb)
+void Graph::SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
+                                       objects::NewParameterCallback *cb)
 {
 	m_implementation->SetNodeExecutionParameters(nodeName, cb);
 }
 
-NodeSet &Graph::getNodes() { return m_implementation->getNodes(); }
+NodeSet &Graph::getNodes()
+{
+	return m_implementation->getNodes();
+}
 }  // namespace pagoda::graph

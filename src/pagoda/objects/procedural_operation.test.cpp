@@ -1,5 +1,6 @@
-#include <pagoda/objects/procedural_operation.h>
 #include "pagoda/dynamic/float_value.h"
+#include "pagoda/objects/interface_callback.h"
+#include "pagoda/objects/procedural_operation.h"
 
 #include <gtest/gtest.h>
 
@@ -14,14 +15,12 @@ class MockOperation : public ProceduralOperation
 	public:
 	MockOperation() : ProceduralOperation(nullptr)
 	{
-		CreateInputInterface("in");
-		CreateInputInterface("in2");
-		CreateOutputInterface("out");
-		CreateOutputInterface("out2");
 	}
-	~MockOperation() override {}
+	~MockOperation() override
+	{
+	}
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override
+	void SetParameters(objects::ParameterCallback* cb) override
 	{
 		RegisterMember("abc", std::make_shared<dynamic::FloatValue>(0.0f));
 	}
@@ -32,44 +31,44 @@ class MockOperation : public ProceduralOperation
 		return sName;
 	}
 
+	void Interfaces(InterfaceCallback* cb) override
+	{
+		cb->InputInterface(m_in, "in", "In", Interface::Arity::Many);
+		cb->InputInterface(m_in2, "in2", "In2", Interface::Arity::Many);
+		cb->OutputInterface(m_out, "out", "Out", Interface::Arity::Many);
+		cb->OutputInterface(m_out2, "out2", "Out2", Interface::Arity::Many);
+	}
+
+	bool m_called{false};
+
 	protected:
 	void DoWork() override
 	{
-		//
+		m_called = true;
 	}
+
+	objects::InterfacePtr m_in;
+	objects::InterfacePtr m_in2;
+	objects::InterfacePtr m_out;
+	objects::InterfacePtr m_out2;
 };
 
 class ProceduralOperationTest : public ::testing::Test
 {
 	protected:
-	void SetUp() {}
+	void SetUp()
+	{
+	}
 
-	void TearDown() {}
+	void TearDown()
+	{
+	}
 };
 
-TEST_F(ProceduralOperationTest, can_check_existence_of_interface)
+TEST_F(ProceduralOperationTest, calling_execute_should_call_do_work)
 {
-	auto op = std::make_shared<MockOperation>();
-	EXPECT_TRUE(op->HasInputInterface("in"));
-	EXPECT_TRUE(op->HasOutputInterface("out"));
-	EXPECT_FALSE(op->HasInputInterface("_in"));
-	EXPECT_FALSE(op->HasOutputInterface("_out"));
+	MockOperation op;
+	op.Execute();
+	EXPECT_TRUE(op.m_called);
 }
 
-TEST_F(ProceduralOperationTest, can_iterate_over_interfaces)
-{
-	std::unordered_set<std::string> in;
-	std::unordered_set<std::string> out;
-
-	auto op = std::make_shared<MockOperation>();
-	op->ForEachInputInterface([&in](const std::string& i) { in.insert(i); });
-	op->ForEachOutputInterface([&out](const std::string& i) { out.insert(i); });
-
-	EXPECT_EQ(in.size(), 2u);
-	EXPECT_EQ(out.size(), 2u);
-
-	EXPECT_NE(in.find("in"), in.end());
-	EXPECT_NE(in.find("in2"), in.end());
-	EXPECT_NE(out.find("out"), out.end());
-	EXPECT_NE(out.find("out2"), out.end());
-}

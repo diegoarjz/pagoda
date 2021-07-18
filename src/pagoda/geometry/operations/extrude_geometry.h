@@ -1,7 +1,11 @@
-#ifndef PAGODA_PROCEDURAL_OBJECTS_EXTRUDE_GEOMETRY
-#define PAGODA_PROCEDURAL_OBJECTS_EXTRUDE_GEOMETRY
+#pragma once
 
 #include <pagoda/objects/procedural_operation.h>
+
+namespace pagoda::objects
+{
+using InterfacePtr = std::shared_ptr<class Interface>;
+}
 
 namespace pagoda::geometry::operations
 {
@@ -15,13 +19,23 @@ class ExtrudeGeometry : public objects::ProceduralOperation
 	ExtrudeGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtrudeGeometry();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
 
+	void Interfaces(objects::InterfaceCallback* cb) override;
+
 	void DoWork() override;
+
+	private:
+	objects::InterfacePtr m_in;
+	objects::InterfacePtr m_out;
+
+	float m_amount;
 };  // class ExtrudeGEometry
 
 }  // namespace pagoda::geometry::operations
 
-#endif

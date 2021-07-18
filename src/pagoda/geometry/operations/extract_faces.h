@@ -13,10 +13,17 @@ class ExtractFaces : public objects::ProceduralOperation
 	ExtractFaces(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractFaces();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
 
 	const std::string& GetOperationName() const override;
+	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
+
+	private:
+	objects::InterfacePtr m_input;
+	objects::InterfacePtr m_output;
 };  // class ExtractFaces
 }  // namespace pagoda::geometry::operations

@@ -17,11 +17,13 @@
 
 #include <pagoda/graph/construction_argument_callback.h>
 #include <pagoda/graph/construction_argument_not_found.h>
-#include <pagoda/graph/execution_argument_callback.h>
 #include <pagoda/graph/graph.h>
 #include <pagoda/graph/input_interface_node.h>
 #include <pagoda/graph/node.h>
 #include <pagoda/graph/output_interface_node.h>
+
+#include <pagoda/objects/parameter_callback.h>
+#include <pagoda/objects/parameter_creator.h>
 
 #include <memory>
 
@@ -29,8 +31,12 @@ using namespace pagoda::dynamic;
 
 namespace pagoda::graph::io
 {
-AstInterpreter::AstInterpreter(GraphPtr graph) : m_graph(graph) {}
-AstInterpreter::~AstInterpreter() {}
+AstInterpreter::AstInterpreter(GraphPtr graph) : m_graph(graph)
+{
+}
+AstInterpreter::~AstInterpreter()
+{
+}
 
 void AstInterpreter::Visit(GraphDefinitionNode *graphDefinition)
 {
@@ -48,11 +54,13 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 			break;
 		}
 		case NamedArgument::ArgumentType::Float: {
-			param = std::make_shared<FloatValue>(static_cast<float>(std::atof(namedArgument->GetArgumentValue().c_str())));
+			param = std::make_shared<FloatValue>(static_cast<float>(
+			  std::atof(namedArgument->GetArgumentValue().c_str())));
 			break;
 		}
 		case NamedArgument::ArgumentType::Integer: {
-			param = std::make_shared<Integer>(static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str())));
+			param = std::make_shared<Integer>(
+			  static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str())));
 			break;
 		}
 		case NamedArgument::ArgumentType::Expression: {
@@ -65,12 +73,15 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 
 struct ConstructionArgumentSetter : public ConstructionArgumentCallback
 {
-	ConstructionArgumentSetter(std::string &nodeName, std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
+	ConstructionArgumentSetter(
+	  std::string &nodeName,
+	  std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
 	  : m_nodeName{nodeName}, m_args{args}
 	{
 	}
 
-	void StringArgument(const char *const name, std::string &arg, const char *const label)
+	void StringArgument(const char *const name, std::string &arg,
+	                    const char *const label)
 	{
 		std::string n{name};
 		if (m_args.find(n) == m_args.end()) {
@@ -82,66 +93,6 @@ struct ConstructionArgumentSetter : public ConstructionArgumentCallback
 
 	std::string &m_nodeName;
 	std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &m_args;
-};
-
-class ExecutionArgumentSetter : public ExecutionArgumentCallback
-{
-	public:
-	ExecutionArgumentSetter(std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args) : m_args{args} {}
-
-	DynamicValueBasePtr StringArgument(const char *const name, const char *const label,
-	                                   const std::string &defaultValue = "")
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<String>(defaultValue);
-	}
-
-	DynamicValueBasePtr FloatArgument(const char *const name, const char *const label, float defaultValue = 0.0f)
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<FloatValue>(defaultValue);
-	}
-
-	DynamicValueBasePtr IntegerArgument(const char *const name, const char *const label, int defaultValue = 0)
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<Integer>(defaultValue);
-	}
-
-	DynamicValueBasePtr BooleanArgument(const char *const name, const char *const label, bool defaultValue = false)
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<Boolean>(defaultValue);
-	}
-
-	DynamicValueBasePtr PlaneArgument(const char *const name, const char *const label,
-	                                  math::Plane<float> defaultValue = math::Plane<float>{})
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<DynamicPlane>(defaultValue);
-	}
-
-	private:
-	dynamic::DynamicValueBasePtr GetArgument(const char *const name)
-	{
-		if (m_args.find(name) == m_args.end()) {
-			return nullptr;
-		}
-		auto v = m_args[name];
-		return m_args[name];
-	}
-
-	std::unordered_map<std::string, DynamicValueBasePtr> &m_args;
 };
 
 void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
@@ -161,7 +112,17 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	for (const auto &namedArgument : nodeDefinition->GetExecutionArguments()) {
 		namedArgument->AcceptVisitor(this);
 	}
-	ExecutionArgumentSetter executionSetter{m_currentNamedParameters};
+
+	objects::ParameterCreator executionSetter{
+	  [this](std::shared_ptr<objects::ParameterBase> p) {
+		  auto iter = m_currentNamedParameters.find(p->GetName());
+		  if (iter != m_currentNamedParameters.end()) {
+			  p->FromDynamicValue(iter->second);
+		  }
+
+		  return true;
+	  }};
+
 	m_graph->SetNodeExecutionParameters(nodeName, &executionSetter);
 }
 
@@ -175,7 +136,8 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 		(*prevNodeDefinition)->AcceptVisitor(this);
 		(*currentNodeDefinition)->AcceptVisitor(this);
 
-		m_graph->CreateEdge((*prevNodeDefinition)->GetOutNode(), (*currentNodeDefinition)->GetInNode());
+		m_graph->CreateEdge((*prevNodeDefinition)->GetOutNode(),
+		                    (*currentNodeDefinition)->GetInNode());
 
 		++prevNodeDefinition;
 		++currentNodeDefinition;
@@ -192,7 +154,8 @@ void AstInterpreter::Visit(NodeLinkDefinition *nodeLinkDefinition)
 		auto inputInterfaceName = nodeLinkDefinition->GetInNode();
 		if (m_graph->GetNode(inputInterfaceName) == nullptr) {
 			m_graph->CreateNode<InputInterfaceNode>(inputInterfaceName);
-			auto inInterfaceNode = std::dynamic_pointer_cast<InputInterfaceNode>(m_graph->GetNode(inputInterfaceName));
+			auto inInterfaceNode = std::dynamic_pointer_cast<InputInterfaceNode>(
+			  m_graph->GetNode(inputInterfaceName));
 			inInterfaceNode->SetInterfaceName(inInterface);
 		}
 		m_graph->CreateEdge(inputInterfaceName, node);
@@ -201,14 +164,16 @@ void AstInterpreter::Visit(NodeLinkDefinition *nodeLinkDefinition)
 		auto outputInterfaceName = nodeLinkDefinition->GetOutNode();
 		if (m_graph->GetNode(outputInterfaceName) == nullptr) {
 			m_graph->CreateNode<OutputInterfaceNode>(outputInterfaceName);
-			auto outInterfaceNode = std::dynamic_pointer_cast<OutputInterfaceNode>(m_graph->GetNode(outputInterfaceName));
+			auto outInterfaceNode = std::dynamic_pointer_cast<OutputInterfaceNode>(
+			  m_graph->GetNode(outputInterfaceName));
 			outInterfaceNode->SetInterfaceName(outInterface);
 		}
 		m_graph->CreateEdge(node, outputInterfaceName);
 	}
 }
 
-const std::unordered_map<std::string, DynamicValueBasePtr> &AstInterpreter::GetCurrentNamedArguments() const
+const std::unordered_map<std::string, DynamicValueBasePtr>
+  &AstInterpreter::GetCurrentNamedArguments() const
 {
 	return m_currentNamedParameters;
 }

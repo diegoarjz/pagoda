@@ -2,6 +2,11 @@
 
 #include <pagoda/objects/procedural_operation.h>
 
+namespace pagoda::objects
+{
+class InterfaceCallback;
+}
+
 namespace pagoda::objects::operations
 {
 class Router : public ProceduralOperation
@@ -10,9 +15,10 @@ class Router : public ProceduralOperation
 	Router(ProceduralObjectSystemPtr objectSystem);
 	virtual ~Router();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
+	void Interfaces(InterfaceCallback* cb) override;
 
 	void DoWork() override;
 };
