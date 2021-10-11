@@ -31,20 +31,22 @@ using namespace dynamic;
 const std::string Rotate::s_inputGeometry("in");
 const std::string Rotate::s_outputGeometry("out");
 
-Rotate::Rotate(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+Rotate::Rotate(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface(s_inputGeometry);
-	CreateOutputInterface(s_outputGeometry);
 }
 
-Rotate::~Rotate() {}
+Rotate::~Rotate()
+{
+}
 
 void Rotate::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
 	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
 	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));
 	RegisterMember("z", cb->FloatArgument("z", "Z", 0.0f));
-	RegisterMember("rotation_order", cb->StringArgument("rotation_order", "Rotation Order", "xyz"));
+	RegisterMember("rotation_order",
+	               cb->StringArgument("rotation_order", "Rotation Order", "xyz"));
 	RegisterMember("world", cb->BooleanArgument("world", "World", false));
 }
 
@@ -57,81 +59,89 @@ const std::string& Rotate::GetOperationName() const
 void Rotate::Interfaces(InterfaceCallback* cb)
 {
 	cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
-  cb->OutputInterface(m_output, s_outputGeometry, "Out", Interface::Arity::Many);
+	cb->OutputInterface(m_output, s_outputGeometry, "Out",
+	                    Interface::Arity::Many);
 }
 
 void Rotate::DoWork()
 {
 	START_PROFILE;
 
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(s_inputGeometry)) {
-		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);
+	ProceduralObjectPtr inObject = m_input->GetNext();
+	ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+	m_output->SetNext(outObject);
 
-		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
-		auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-		auto outGeometry = std::make_shared<Geometry>();
-		outGeometryComponent->SetGeometry(outGeometry);
+	auto inGeometryComponent =
+	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+	GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
+	auto outGeometryComponent =
+	  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+	auto outGeometry = std::make_shared<Geometry>();
+	outGeometryComponent->SetGeometry(outGeometry);
 
-		auto inScope = inGeometryComponent->GetScope();
-		UpdateValue("x");
-		UpdateValue("y");
-		UpdateValue("z");
-		UpdateValue("rotation_order");
-		UpdateValue("world");
+	auto inScope = inGeometryComponent->GetScope();
+	UpdateValue("x");
+	UpdateValue("y");
+	UpdateValue("z");
+	UpdateValue("rotation_order");
+	UpdateValue("world");
 
-		auto x = Degrees<float>(get_value_as<float>(*GetValue("x")));
-		auto y = Degrees<float>(get_value_as<float>(*GetValue("y")));
-		auto z = Degrees<float>(get_value_as<float>(*GetValue("z")));
-		auto rotationOrder = get_value_as<std::string>(*GetValue("rotation_order"));
-		auto world = get_value_as<std::string>(*GetValue("world")) == "true";
+	auto x = Degrees<float>(get_value_as<float>(*GetValue("x")));
+	auto y = Degrees<float>(get_value_as<float>(*GetValue("y")));
+	auto z = Degrees<float>(get_value_as<float>(*GetValue("z")));
+	auto rotationOrder = get_value_as<std::string>(*GetValue("rotation_order"));
+	auto world = get_value_as<std::string>(*GetValue("world")) == "true";
 
-		Mat4x4F matrix(boost::qvm::diag_mat(Vec4F{1.0f, 1.0f, 1.0f, 1.0f}));
-		if (world) {
-			auto rot = inScope.GetRotation();
-			boost::qvm::col<0>(matrix) = XYZ0(boost::qvm::col<0>(rot));
-			boost::qvm::col<1>(matrix) = XYZ0(boost::qvm::col<1>(rot));
-			boost::qvm::col<2>(matrix) = XYZ0(boost::qvm::col<2>(rot));
-			boost::qvm::col<3>(matrix) = Vec4F{0, 0, 0, 1};
-		}
-
-		for (std::size_t i = rotationOrder.size(); i > 0; --i) {
-			char order = rotationOrder[i - 1];
-			switch (order) {
-				case 'x':
-					matrix = matrix * boost::qvm::rotx_mat<4>(static_cast<float>(Radians(x)));
-					break;
-				case 'y':
-					matrix = matrix * boost::qvm::roty_mat<4>(static_cast<float>(Radians(y)));
-					break;
-				case 'z':
-					matrix = matrix * boost::qvm::rotz_mat<4>(static_cast<float>(Radians(z)));
-					break;
-				default:
-					throw common::exception::Exception("Invalid rotation order " + std::string(1, order));
-			}
-		}
-
-		if (world) {
-			auto rot = inScope.GetInverseRotation();
-			Mat4x4F invRot;
-			boost::qvm::col<0>(invRot) = XYZ0(boost::qvm::col<0>(rot));
-			boost::qvm::col<1>(invRot) = XYZ0(boost::qvm::col<1>(rot));
-			boost::qvm::col<2>(invRot) = XYZ0(boost::qvm::col<2>(rot));
-			boost::qvm::col<3>(invRot) = Vec4F{0, 0, 0, 1};
-			matrix = matrix * invRot;
-		}
-
-		MatrixTransform<Geometry> transform(matrix);
-		transform.Execute(inGeometry, outGeometry);
-		Mat3x3F rot;
-		boost::qvm::col<0>(rot) = XYZ(boost::qvm::col<0>(matrix));
-		boost::qvm::col<1>(rot) = XYZ(boost::qvm::col<1>(matrix));
-		boost::qvm::col<2>(rot) = XYZ(boost::qvm::col<2>(matrix));
-		outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(outGeometry, rot * inScope.GetRotation()));
+	Mat4x4F matrix(boost::qvm::diag_mat(Vec4F{1.0f, 1.0f, 1.0f, 1.0f}));
+	if (world) {
+		auto rot = inScope.GetRotation();
+		boost::qvm::col<0>(matrix) = XYZ0(boost::qvm::col<0>(rot));
+		boost::qvm::col<1>(matrix) = XYZ0(boost::qvm::col<1>(rot));
+		boost::qvm::col<2>(matrix) = XYZ0(boost::qvm::col<2>(rot));
+		boost::qvm::col<3>(matrix) = Vec4F{0, 0, 0, 1};
 	}
+
+	for (std::size_t i = rotationOrder.size(); i > 0; --i) {
+		char order = rotationOrder[i - 1];
+		switch (order) {
+			case 'x':
+				matrix =
+				  matrix * boost::qvm::rotx_mat<4>(static_cast<float>(Radians(x)));
+				break;
+			case 'y':
+				matrix =
+				  matrix * boost::qvm::roty_mat<4>(static_cast<float>(Radians(y)));
+				break;
+			case 'z':
+				matrix =
+				  matrix * boost::qvm::rotz_mat<4>(static_cast<float>(Radians(z)));
+				break;
+			default:
+				throw common::exception::Exception("Invalid rotation order " +
+				                                   std::string(1, order));
+		}
+	}
+
+	if (world) {
+		auto rot = inScope.GetInverseRotation();
+		Mat4x4F invRot;
+		boost::qvm::col<0>(invRot) = XYZ0(boost::qvm::col<0>(rot));
+		boost::qvm::col<1>(invRot) = XYZ0(boost::qvm::col<1>(rot));
+		boost::qvm::col<2>(invRot) = XYZ0(boost::qvm::col<2>(rot));
+		boost::qvm::col<3>(invRot) = Vec4F{0, 0, 0, 1};
+		matrix = matrix * invRot;
+	}
+
+	MatrixTransform<Geometry> transform(matrix);
+	transform.Execute(inGeometry, outGeometry);
+	Mat3x3F rot;
+	boost::qvm::col<0>(rot) = XYZ(boost::qvm::col<0>(matrix));
+	boost::qvm::col<1>(rot) = XYZ(boost::qvm::col<1>(matrix));
+	boost::qvm::col<2>(rot) = XYZ(boost::qvm::col<2>(matrix));
+	outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
+	  outGeometry, rot * inScope.GetRotation()));
 }  // namespace pagoda
 }  // namespace pagoda::geometry::operations

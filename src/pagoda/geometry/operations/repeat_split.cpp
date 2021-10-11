@@ -28,15 +28,15 @@ const std::string RepeatSplit::inputGeometry("in");
 const std::string RepeatSplit::outputGeometry("out");
 const char* RepeatSplit::name = "RepeatSplit";
 
-RepeatSplit::RepeatSplit(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+RepeatSplit::RepeatSplit(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-
-	CreateInputInterface(inputGeometry);
-	CreateOutputInterface(outputGeometry);
 }
 
-RepeatSplit::~RepeatSplit() {}
+RepeatSplit::~RepeatSplit()
+{
+}
 
 void RepeatSplit::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
@@ -54,54 +54,63 @@ const std::string& RepeatSplit::GetOperationName() const
 void RepeatSplit::Interfaces(InterfaceCallback* cb)
 {
 	cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
-  cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::Many);
+	cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::All);
 }
 
 void RepeatSplit::DoWork()
 {
 	START_PROFILE;
 
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(inputGeometry)) {
-		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
+	ProceduralObjectPtr inObject = m_input->GetNext();
 
-		UpdateValue("size");
-		UpdateValue("axis");
-		UpdateValue("adjust");
+	UpdateValue("size");
+	UpdateValue("axis");
+	UpdateValue("adjust");
 
-		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
-		auto inScope = inGeometryComponent->GetScope();
+	auto inGeometryComponent =
+	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+	GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
+	auto inScope = inGeometryComponent->GetScope();
 
-		auto size = get_value_as<float>(*GetValue("size"));
-		auto axis = get_value_as<std::string>(*GetValue("axis"));
-		auto adjust = get_value_as<std::string>(*GetValue("adjust"));
-		PlaneSplits<Geometry> planeSplit(CreatePlanes(inScope, size, axis, adjust == "true"));
+	auto size = get_value_as<float>(*GetValue("size"));
+	auto axis = get_value_as<std::string>(*GetValue("axis"));
+	auto adjust = get_value_as<std::string>(*GetValue("adjust"));
+	PlaneSplits<Geometry> planeSplit(
+	  CreatePlanes(inScope, size, axis, adjust == "true"));
 
-		std::vector<GeometryPtr> splitGeometries;
+	std::vector<GeometryPtr> splitGeometries;
 
-		planeSplit.Execute(inGeometry, splitGeometries);
+	planeSplit.Execute(inGeometry, splitGeometries);
 
-		int32_t createdObjectCount = 1;
-		for (auto& g : splitGeometries) {
-			auto outProceduralObject = CreateOutputProceduralObject(inObject, outputGeometry);
-			outProceduralObject->RegisterOrSetMember("index", std::make_shared<Integer>(createdObjectCount++));
-			auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outProceduralObject);
+	int32_t createdObjectCount = 1;
+	for (auto& g : splitGeometries) {
+		auto outProceduralObject = CreateOutputProceduralObject(inObject);
+		outProceduralObject->RegisterOrSetMember(
+		  "index", std::make_shared<Integer>(createdObjectCount++));
+		auto outGeometryComponent =
+		  geometrySystem->CreateComponentAs<GeometryComponent>(outProceduralObject);
+		m_output->Add(outProceduralObject);
 
-			outGeometryComponent->SetGeometry(g);
-			outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(g, inScope.GetRotation()));
-		}
+		outGeometryComponent->SetGeometry(g);
+		outGeometryComponent->SetScope(
+		  Scope::FromGeometryAndConstrainedRotation(g, inScope.GetRotation()));
 	}
 }
 
-std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const float& size, const std::string& axis,
+std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope,
+                                                    const float& size,
+                                                    const std::string& axis,
                                                     bool adjust)
 {
-	CRITICAL_ASSERT_MSG(axis == "x" || axis == "y" || axis == "z", "Axis must be one of x, y, or z");
+	CRITICAL_ASSERT_MSG(axis == "x" || axis == "y" || axis == "z",
+	                    "Axis must be one of x, y, or z");
 
 	LOG_TRACE(ProceduralObjects, "Creating repeat split planes.");
-	LOG_TRACE(ProceduralObjects, " size: " << size << " , axis: " << axis << ", adjust: " << adjust);
+	LOG_TRACE(ProceduralObjects,
+	          " size: " << size << " , axis: " << axis << ", adjust: " << adjust);
 
 	auto scopeAxis = scope.GetAxis(axis);
 	Plane<float> scopePlane;
@@ -129,7 +138,8 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope, const fl
 	auto currentPoint = scopePlane.GetPoint() + translationVector;
 
 	LOG_TRACE(ProceduralObjects,
-	          " scopeAxis: " << scopeAxis << ", planeDistance: " << planeDistance << ", numPlanes: " << numPlanes);
+	          " scopeAxis: " << scopeAxis << ", planeDistance: " << planeDistance
+	                         << ", numPlanes: " << numPlanes);
 	for (uint32_t i = 0; i < numPlanes; ++i) {
 		auto plane = Plane<float>::FromPointAndNormal(currentPoint, scopeAxis);
 		LOG_TRACE(ProceduralObjects, " Split Plane: " << plane);

@@ -25,14 +25,16 @@ using namespace dynamic;
 const std::string CreateSphereGeometry::outputGeometry("out");
 const char* CreateSphereGeometry::name = "CreateSphereGeometry";
 
-CreateSphereGeometry::CreateSphereGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+CreateSphereGeometry::CreateSphereGeometry(
+  ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-
-	CreateOutputInterface(outputGeometry);
 }
 
-CreateSphereGeometry::~CreateSphereGeometry() {}
+CreateSphereGeometry::~CreateSphereGeometry()
+{
+}
 
 void CreateSphereGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
@@ -49,7 +51,7 @@ const std::string& CreateSphereGeometry::GetOperationName() const
 
 void CreateSphereGeometry::Interfaces(InterfaceCallback* cb)
 {
-  cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::One);
+	cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::One);
 }
 
 void CreateSphereGeometry::DoWork()
@@ -60,17 +62,21 @@ void CreateSphereGeometry::DoWork()
 	int slices = get_value_as<int>(*GetValue("slices"));
 	int stacks = get_value_as<int>(*GetValue("stacks"));
 
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	CreateSphere<Geometry> createSphere(radius, slices, stacks);
 	auto geometry = std::make_shared<Geometry>();
 	createSphere.Execute(geometry);
 
-	ProceduralObjectPtr object = CreateOutputProceduralObject(outputGeometry);
-	std::shared_ptr<GeometryComponent> geometry_component = geometrySystem->CreateComponentAs<GeometryComponent>(object);
+	ProceduralObjectPtr object = CreateOutputProceduralObject();
+	std::shared_ptr<GeometryComponent> geometry_component =
+	  geometrySystem->CreateComponentAs<GeometryComponent>(object);
+	m_output->Set(object);
 
 	geometry_component->SetGeometry(geometry);
 	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
-	  geometry, math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
+	  geometry,
+	  math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
 }
 }  // namespace pagoda::geometry::operations

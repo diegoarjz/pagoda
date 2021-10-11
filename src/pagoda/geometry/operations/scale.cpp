@@ -29,19 +29,22 @@ using namespace dynamic;
 const std::string Scale::s_inputGeometry("in");
 const std::string Scale::s_outputGeometry("out");
 
-Scale::Scale(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+Scale::Scale(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface(s_inputGeometry);
-	CreateOutputInterface(s_outputGeometry);
 }
-Scale::~Scale() {}
+Scale::~Scale()
+{
+}
 
 void Scale::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
 	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
 	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));
 	RegisterMember("z", cb->FloatArgument("z", "Z", 0.0f));
-	RegisterMember("pivotal_point", cb->StringArgument("pivotal_point", "Pivotal Point", "scope_center"));
+	RegisterMember(
+	  "pivotal_point",
+	  cb->StringArgument("pivotal_point", "Pivotal Point", "scope_center"));
 }
 
 const std::string& Scale::GetOperationName() const
@@ -53,56 +56,62 @@ const std::string& Scale::GetOperationName() const
 void Scale::Interfaces(InterfaceCallback* cb)
 {
 	cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
-  cb->OutputInterface(m_output, s_outputGeometry, "Out", Interface::Arity::Many);
+	cb->OutputInterface(m_output, s_outputGeometry, "Out",
+	                    Interface::Arity::Many);
 }
 
 void Scale::DoWork()
 {
 	START_PROFILE;
 
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(s_inputGeometry)) {
-		ProceduralObjectPtr inObject = GetInputProceduralObject(s_inputGeometry);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, s_outputGeometry);
+	ProceduralObjectPtr inObject = m_input->GetNext();
+	ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+	m_output->SetNext(outObject);
 
-		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
-		auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-		auto outGeometry = std::make_shared<Geometry>();
-		outGeometryComponent->SetGeometry(outGeometry);
+	auto inGeometryComponent =
+	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+	GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
+	auto outGeometryComponent =
+	  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+	auto outGeometry = std::make_shared<Geometry>();
+	outGeometryComponent->SetGeometry(outGeometry);
 
-		auto inScope = inGeometryComponent->GetScope();
-		UpdateValue("x");
-		UpdateValue("y");
-		UpdateValue("z");
-		UpdateValue("pivotal_point");
+	auto inScope = inGeometryComponent->GetScope();
+	UpdateValue("x");
+	UpdateValue("y");
+	UpdateValue("z");
+	UpdateValue("pivotal_point");
 
-		auto x = get_value_as<float>(*GetValue("x"));
-		auto y = get_value_as<float>(*GetValue("y"));
-		auto z = get_value_as<float>(*GetValue("z"));
-		auto pivotalPointName = get_value_as<std::string>(*GetValue("pivotal_point"));
+	auto x = get_value_as<float>(*GetValue("x"));
+	auto y = get_value_as<float>(*GetValue("y"));
+	auto z = get_value_as<float>(*GetValue("z"));
+	auto pivotalPointName = get_value_as<std::string>(*GetValue("pivotal_point"));
 
-		Mat4x4F matrix;
-		if (pivotalPointName == "scope_center") {
-			Vec3F pivotalPoint = inScope.GetCenterPointInWorld();
-			Mat4x4F translation = boost::qvm::translation_mat(XYZ(pivotalPoint));
-			Mat4x4F scale = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
-			Mat4x4F invTranslation = boost::qvm::translation_mat(XYZ(-pivotalPoint));
-			matrix = translation * scale * invTranslation;
-		} else if (pivotalPointName == "scope_origin") {
-			Vec3F pivotalPoint = inScope.GetWorldPoint(Scope::BoxPoints::LowerBottomLeft);
-			matrix = boost::qvm::translation_mat(pivotalPoint) * boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z})) *
-			         boost::qvm::translation_mat(-pivotalPoint);
-		} else if (pivotalPointName == "world_origin") {
-			matrix = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
-		}
-
-		MatrixTransform<Geometry> transform(matrix);
-
-		transform.Execute(inGeometry, outGeometry);
-
-		outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(outGeometry, inScope.GetRotation()));
+	Mat4x4F matrix;
+	if (pivotalPointName == "scope_center") {
+		Vec3F pivotalPoint = inScope.GetCenterPointInWorld();
+		Mat4x4F translation = boost::qvm::translation_mat(XYZ(pivotalPoint));
+		Mat4x4F scale = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
+		Mat4x4F invTranslation = boost::qvm::translation_mat(XYZ(-pivotalPoint));
+		matrix = translation * scale * invTranslation;
+	} else if (pivotalPointName == "scope_origin") {
+		Vec3F pivotalPoint =
+		  inScope.GetWorldPoint(Scope::BoxPoints::LowerBottomLeft);
+		matrix = boost::qvm::translation_mat(pivotalPoint) *
+		         boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z})) *
+		         boost::qvm::translation_mat(-pivotalPoint);
+	} else if (pivotalPointName == "world_origin") {
+		matrix = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
 	}
+
+	MatrixTransform<Geometry> transform(matrix);
+
+	transform.Execute(inGeometry, outGeometry);
+
+	outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
+	  outGeometry, inScope.GetRotation()));
 }
 }  // namespace pagoda::geometry::operations

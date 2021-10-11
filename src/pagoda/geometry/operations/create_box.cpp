@@ -26,14 +26,15 @@ using namespace dynamic;
 const std::string CreateBoxGeometry::outputGeometry("out");
 const char* CreateBoxGeometry::name = "CreateBoxGeometry";
 
-CreateBoxGeometry::CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+CreateBoxGeometry::CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-
-	CreateOutputInterface(outputGeometry);
 }
 
-CreateBoxGeometry::~CreateBoxGeometry() {}
+CreateBoxGeometry::~CreateBoxGeometry()
+{
+}
 
 void CreateBoxGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
@@ -50,7 +51,7 @@ const std::string& CreateBoxGeometry::GetOperationName() const
 
 void CreateBoxGeometry::Interfaces(InterfaceCallback* cb)
 {
-  cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::One);
+	cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::One);
 }
 
 void CreateBoxGeometry::DoWork()
@@ -61,17 +62,20 @@ void CreateBoxGeometry::DoWork()
 	float ySize = get_value_as<float>(*GetValue("ySize"));
 	float zSize = get_value_as<float>(*GetValue("zSize"));
 
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	CreateBox<Geometry> createBox(xSize, ySize, zSize);
 	auto geometry = std::make_shared<Geometry>();
 	createBox.Execute(geometry);
 
-	ProceduralObjectPtr object = CreateOutputProceduralObject(outputGeometry);
-	std::shared_ptr<GeometryComponent> geometry_component = geometrySystem->CreateComponentAs<GeometryComponent>(object);
+	ProceduralObjectPtr object = CreateOutputProceduralObject();
+	std::shared_ptr<GeometryComponent> geometry_component =
+	  geometrySystem->CreateComponentAs<GeometryComponent>(object);
+	m_output->Set(object);
 
 	geometry_component->SetGeometry(geometry);
-	geometry_component->SetScope(
-	  Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
+	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
+	  geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
 }
 }  // namespace pagoda::geometry::operations

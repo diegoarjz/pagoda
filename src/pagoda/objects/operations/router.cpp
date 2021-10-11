@@ -17,14 +17,19 @@
 
 namespace pagoda::objects::operations
 {
-Router::Router(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+Router::Router(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface("in");
+	//CreateInputInterface("in");
 }
 
-Router::~Router() {}
+Router::~Router()
+{
+}
 
-void Router::SetParameters(graph::ExecutionArgumentCallback* cb) {}
+void Router::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+}
 
 const std::string& Router::GetOperationName() const
 {
@@ -34,13 +39,14 @@ const std::string& Router::GetOperationName() const
 
 void Router::Interfaces(InterfaceCallback* cb)
 {
-  //
+	//
 }
 
 void Router::DoWork()
 {
 	START_PROFILE;
 
+  /*
 	auto predicateRegistry = m_proceduralObjectSystem->GetPredicateRegistry();
 
 	while (HasInput("in")) {
@@ -51,15 +57,17 @@ void Router::DoWork()
 				auto predicate = predicateRegistry->Get(predicateName);
 
 				if (predicate == nullptr) {
-					LOG_ERROR("Predicate with name " << p.second.m_value->ToString() << " not found");
+					LOG_ERROR("Predicate with name " << p.second.m_value->ToString()
+					                                 << " not found");
 					return;
 				}
 
 				if ((*predicate)(object)) {
-					CreateOutputProceduralObject(object, p.first);
+					CreateOutputProceduralObject(object);
 				}
 			}
 		}
 	}
+  */
 }
 }  // namespace pagoda::objects::operations

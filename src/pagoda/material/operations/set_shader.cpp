@@ -25,15 +25,18 @@ using namespace common::exception;
 const std::string SetShader::inputObject("in");
 const std::string SetShader::outputObject("out");
 
-SetShader::SetShader(objects::ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+SetShader::SetShader(objects::ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface(inputObject);
-	CreateOutputInterface(outputObject);
 }
 
-SetShader::~SetShader() {}
+SetShader::~SetShader()
+{
+}
 
-void SetShader::SetParameters(graph::ExecutionArgumentCallback* cb) {}
+void SetShader::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+}
 
 const std::string& SetShader::GetOperationName() const
 {
@@ -49,14 +52,18 @@ void SetShader::DoWork()
 {
 	START_PROFILE;
 
-	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
+	auto materialSystem =
+	  m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
+  /*
 	while (HasInput(inputObject)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
-		std::shared_ptr<MaterialComponent> materialComponent = materialSystem->GetComponentAs<MaterialComponent>(outObject);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+		std::shared_ptr<MaterialComponent> materialComponent =
+		  materialSystem->GetComponentAs<MaterialComponent>(outObject);
 		if (materialComponent == nullptr) {
-			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+			materialComponent =
+			  materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 		}
 
 		UpdateValue("type");
@@ -76,7 +83,9 @@ void SetShader::DoWork()
 			throw Exception("Unknown shader type '" + type + "'.");
 		}
 
-		materialComponent->GetMaterial().SetShaderSource(shaderType, get_value_as<std::string>(*GetValue("path")));
+		materialComponent->GetMaterial().SetShaderSource(
+		  shaderType, get_value_as<std::string>(*GetValue("path")));
 	}
+  */
 }
 }  // namespace pagoda::material::operations

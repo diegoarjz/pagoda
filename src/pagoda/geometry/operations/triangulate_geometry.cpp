@@ -22,17 +22,19 @@ const std::string TriangulateGeometry::sInputGeometry("in");
 const std::string TriangulateGeometry::sOutputGeometry("out");
 const char* TriangulateGeometry::name = "TriangulateGeometry";
 
-TriangulateGeometry::TriangulateGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+TriangulateGeometry::TriangulateGeometry(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-
-	CreateInputInterface(sInputGeometry);
-	CreateOutputInterface(sOutputGeometry);
 }
 
-TriangulateGeometry::~TriangulateGeometry() {}
+TriangulateGeometry::~TriangulateGeometry()
+{
+}
 
-void TriangulateGeometry::SetParameters(graph::ExecutionArgumentCallback* cb) {}
+void TriangulateGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+}
 
 const std::string& TriangulateGeometry::GetOperationName() const
 {
@@ -43,33 +45,33 @@ const std::string& TriangulateGeometry::GetOperationName() const
 void TriangulateGeometry::Interfaces(InterfaceCallback* cb)
 {
 	cb->InputInterface(m_input, sInputGeometry, "In", Interface::Arity::Many);
-  cb->OutputInterface(m_output, sOutputGeometry, "Out", Interface::Arity::Many);
+	cb->OutputInterface(m_output, sOutputGeometry, "Out", Interface::Arity::Many);
 }
 
 void TriangulateGeometry::DoWork()
 {
 	START_PROFILE;
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	EarClipping<Geometry> earClipping;
 
-	while (HasInput(sInputGeometry)) {
-		// Geometry
-		ProceduralObjectPtr inObject = GetInputProceduralObject(sInputGeometry);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, sOutputGeometry);
+	// Geometry
+	ProceduralObjectPtr inObject = m_input->GetNext();
+	ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+	m_output->SetNext(outObject);
 
-		std::shared_ptr<GeometryComponent> inGeometryComponent =
-		  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		std::shared_ptr<GeometryComponent> outGeometryComponent =
-		  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+	std::shared_ptr<GeometryComponent> inGeometryComponent =
+	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+	std::shared_ptr<GeometryComponent> outGeometryComponent =
+	  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 
-		GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
-		auto outGeometry = std::make_shared<Geometry>();
+	GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
+	auto outGeometry = std::make_shared<Geometry>();
 
-		earClipping.Execute(inGeometry, outGeometry);
-		outGeometryComponent->SetGeometry(outGeometry);
-		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
-	}
+	earClipping.Execute(inGeometry, outGeometry);
+	outGeometryComponent->SetGeometry(outGeometry);
+	outGeometryComponent->SetScope(inGeometryComponent->GetScope());
 }
 
 }  // namespace pagoda::geometry::operations

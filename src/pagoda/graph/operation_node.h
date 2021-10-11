@@ -27,12 +27,20 @@ class OperationNode : public Node
 
 	void Execute(const NodeSet &inNodes, const NodeSet &outNodes) override;
 	void SetOperation(pagoda::objects::ProceduralOperationPtr operation);
-	pagoda::objects::ProceduralOperationPtr GetOperation() const { return m_operation; }
-	void ForEachConstructionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) override;
-	void ForEachExecutionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) override;
+	pagoda::objects::ProceduralOperationPtr GetOperation() const
+	{
+		return m_operation;
+	}
+	void ForEachConstructionArgument(
+	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
+	  override;
+	void ForEachExecutionArgument(
+	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
+	  override;
 
 	void ForEachOperationParameter(
-	  const std::function<void(const std::string &, const dynamic::DynamicValueBasePtr &)> &f) const;
+	  const std::function<void(const std::string &,
+	                           const dynamic::DynamicValueBasePtr &)> &f) const;
 
 	const char *const GetNodeType() override;
 

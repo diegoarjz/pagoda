@@ -42,6 +42,8 @@ class OutputInterfaceNode : public Node
 	std::string m_interfaceName;
 	std::list<pagoda::objects::ProceduralObjectPtr> m_proceduralObjects;
 };  // class OutputInterfaceNode
+
+using OutputInterfaceNodePtr = std::shared_ptr<OutputInterfaceNode>;
 }  // namespace pagoda::graph
 
 #endif

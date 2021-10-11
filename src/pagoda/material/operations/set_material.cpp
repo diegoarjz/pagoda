@@ -25,19 +25,22 @@ using namespace objects;
 const std::string SetMaterial::inputObject("in");
 const std::string SetMaterial::outputObject("out");
 
-SetMaterial::SetMaterial(objects::ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+SetMaterial::SetMaterial(objects::ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface(inputObject);
-	CreateOutputInterface(outputObject);
 }
 
-SetMaterial::~SetMaterial() {}
+SetMaterial::~SetMaterial()
+{
+}
 
 void SetMaterial::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
 	for (uint32_t i = 0u; i < 8; ++i) {
 		auto texture = "texture_" + std::to_string(i);
-		RegisterMember(texture, cb->StringArgument(texture.c_str(), ("Texture " + std::to_string(i)).c_str(), ""));
+		RegisterMember(texture, cb->StringArgument(
+		                          texture.c_str(),
+		                          ("Texture " + std::to_string(i)).c_str(), ""));
 	}
 }
 
@@ -55,12 +58,15 @@ void SetMaterial::DoWork()
 {
 	START_PROFILE;
 
-	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto materialSystem =
+	  m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
+  /*
 	while (HasInput(inputObject)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
 
 		for (uint32_t i = 0u; i < 8; ++i) {
 			std::string texture = "texture_" + std::to_string(i);
@@ -69,17 +75,21 @@ void SetMaterial::DoWork()
 			  materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 			auto value = GetValue(texture);
 			if (value != nullptr) {
-				materialComponent->GetMaterial().SetTexture(i, get_value_as<std::string>(*value));
+				materialComponent->GetMaterial().SetTexture(
+				  i, get_value_as<std::string>(*value));
 			}
 		}
 
 		// geometry
-		auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		auto outGeometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+		auto inGeometryComponent =
+		  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+		auto outGeometryComponent =
+		  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
 		auto geom = std::make_shared<core::Geometry>();
 		*geom = *inGeometryComponent->GetGeometry();
 		outGeometryComponent->SetGeometry(geom);
 		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
 	}
+  */
 }
 }  // namespace pagoda::material::operations

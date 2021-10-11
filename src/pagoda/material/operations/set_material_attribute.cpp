@@ -28,14 +28,15 @@ using namespace common::exception;
 const std::string SetMaterialAttribute::inputObject("in");
 const std::string SetMaterialAttribute::outputObject("out");
 
-SetMaterialAttribute::SetMaterialAttribute(objects::ProceduralObjectSystemPtr objectSystem)
+SetMaterialAttribute::SetMaterialAttribute(
+  objects::ProceduralObjectSystemPtr objectSystem)
   : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface(inputObject);
-	CreateOutputInterface(outputObject);
 }
 
-SetMaterialAttribute::~SetMaterialAttribute() {}
+SetMaterialAttribute::~SetMaterialAttribute()
+{
+}
 
 void SetMaterialAttribute::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
@@ -54,21 +55,28 @@ void SetMaterialAttribute::Interfaces(InterfaceCallback* cb)
 
 struct evaluator : public ValueVisitor<DynamicValueBasePtr>
 {
-	DynamicValueBasePtr operator()(ExpressionPtr& e) { return e->Evaluate(); }
+	DynamicValueBasePtr operator()(ExpressionPtr& e)
+	{
+		return e->Evaluate();
+	}
 };
 
 void SetMaterialAttribute::DoWork()
 {
 	START_PROFILE;
 
-	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
+	auto materialSystem =
+	  m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
+  /*
 	while (HasInput(inputObject)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
-		std::shared_ptr<MaterialComponent> materialComponent = materialSystem->GetComponentAs<MaterialComponent>(outObject);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+		std::shared_ptr<MaterialComponent> materialComponent =
+		  materialSystem->GetComponentAs<MaterialComponent>(outObject);
 		if (materialComponent == nullptr) {
-			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+			materialComponent =
+			  materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 		}
 
 		UpdateValue("name");
@@ -83,5 +91,6 @@ void SetMaterialAttribute::DoWork()
 		std::string name = get_value_as<std::string>(*GetValue("name"));
 		materialComponent->GetMaterial().SetAttribute(name, v);
 	}
+  */
 }
 }  // namespace pagoda::material::operations

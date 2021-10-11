@@ -19,24 +19,56 @@ namespace pagoda::graph
 {
 const char* OutputInterfaceNode::name = "OutputInterface";
 
-OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName("", 0) {}
-OutputInterfaceNode::~OutputInterfaceNode() {}
+OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName("", 0)
+{
+}
+OutputInterfaceNode::~OutputInterfaceNode()
+{
+}
 
-void OutputInterfaceNode::SetConstructionArguments(ConstructionArgumentCallback* cb)
+void OutputInterfaceNode::SetConstructionArguments(
+  ConstructionArgumentCallback* cb)
 {
 	std::string interfaceName;
 	cb->StringArgument("interface", interfaceName, "Output Interface");
 	SetInterfaceName(interfaceName);
 }
 
-void OutputInterfaceNode::SetExecutionArguments(ExecutionArgumentCallback* cb) {}
+void OutputInterfaceNode::SetExecutionArguments(ExecutionArgumentCallback* cb)
+{
+}
 
-void OutputInterfaceNode::SetInterfaceName(const std::string& name) { m_interfaceName = name; }
-const std::string& OutputInterfaceNode::GetInterfaceName() const { return m_interfaceName; }
+void OutputInterfaceNode::SetInterfaceName(const std::string& name)
+{
+	m_interfaceName = name;
+}
+const std::string& OutputInterfaceNode::GetInterfaceName() const
+{
+	return m_interfaceName;
+}
 
-void OutputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object) { m_proceduralObjects.push_back(object); }
+void OutputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object)
+{
+	m_proceduralObjects.push_back(object);
+}
 
-void OutputInterfaceNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes) { START_PROFILE; }
+void OutputInterfaceNode::Execute(const NodeSet& inNodes,
+                                  const NodeSet& outNodes)
+{
+	START_PROFILE;
+	LOG_TRACE(ProceduralGraph,
+	          "Executing OutputInterfaceNode for interface " << m_interfaceName);
+	LOG_TRACE(ProceduralGraph,
+	          "  with " << m_proceduralObjects.size() << " objects.");
+
+	for (auto& o : outNodes) {
+		if (auto n = std::dynamic_pointer_cast<InputInterfaceNode>(o)) {
+			for (auto& object : m_proceduralObjects) {
+				n->AddProceduralObject(object);
+			}
+		}
+	}
+}
 
 const char* const OutputInterfaceNode::GetNodeType()
 {

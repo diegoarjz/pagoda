@@ -22,15 +22,18 @@ using namespace objects;
 const std::string SetTexture::inputObject("in");
 const std::string SetTexture::outputObject("out");
 
-SetTexture::SetTexture(objects::ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+SetTexture::SetTexture(objects::ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
-	CreateInputInterface(inputObject);
-	CreateOutputInterface(outputObject);
 }
 
-SetTexture::~SetTexture() {}
+SetTexture::~SetTexture()
+{
+}
 
-void SetTexture::SetParameters(graph::ExecutionArgumentCallback* cb) {}
+void SetTexture::SetParameters(graph::ExecutionArgumentCallback* cb)
+{
+}
 
 const std::string& SetTexture::GetOperationName() const
 {
@@ -46,21 +49,27 @@ void SetTexture::DoWork()
 {
 	START_PROFILE;
 
-	auto materialSystem = m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
+	auto materialSystem =
+	  m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
+  /*
 	while (HasInput(inputObject)) {
 		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject, outputObject);
-		std::shared_ptr<MaterialComponent> materialComponent = materialSystem->GetComponentAs<MaterialComponent>(outObject);
+		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+		std::shared_ptr<MaterialComponent> materialComponent =
+		  materialSystem->GetComponentAs<MaterialComponent>(outObject);
 		if (materialComponent == nullptr) {
-			materialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+			materialComponent =
+			  materialSystem->CreateComponentAs<MaterialComponent>(outObject);
 		}
 
 		UpdateValue("slot");
 		UpdateValue("path");
 
-		materialComponent->GetMaterial().SetTexture(get_value_as<int>(*GetValue("slot")),
-		                                            get_value_as<std::string>(*GetValue("path")));
+		materialComponent->GetMaterial().SetTexture(
+		  get_value_as<int>(*GetValue("slot")),
+		  get_value_as<std::string>(*GetValue("path")));
 	}
+  */
 }
 }  // namespace pagoda::material::operations

@@ -14,10 +14,6 @@ class MockOperation : public ProceduralOperation
 	public:
 	MockOperation() : ProceduralOperation(nullptr)
 	{
-		CreateInputInterface("in");
-		CreateInputInterface("in2");
-		CreateOutputInterface("out");
-		CreateOutputInterface("out2");
 	}
 	~MockOperation() override {}
 
@@ -34,7 +30,10 @@ class MockOperation : public ProceduralOperation
 
   void Interfaces(InterfaceCallback *cb) override
   {
-    //
+    cb->InputInterface(m_in, "in", "In", Interface::Arity::Many);
+    cb->InputInterface(m_in2, "in2", "In2", Interface::Arity::Many);
+    cb->OutputInterface(m_out, "out", "Out", Interface::Arity::Many);
+    cb->OutputInterface(m_out2, "out2", "Out2", Interface::Arity::Many);
   }
 
 	protected:
@@ -42,6 +41,11 @@ class MockOperation : public ProceduralOperation
 	{
 		//
 	}
+
+  objects::InterfacePtr m_in;
+  objects::InterfacePtr m_in2;
+  objects::InterfacePtr m_out;
+  objects::InterfacePtr m_out2;
 };
 
 class ProceduralOperationTest : public ::testing::Test
@@ -52,15 +56,7 @@ class ProceduralOperationTest : public ::testing::Test
 	void TearDown() {}
 };
 
-TEST_F(ProceduralOperationTest, can_check_existence_of_interface)
-{
-	auto op = std::make_shared<MockOperation>();
-	EXPECT_TRUE(op->HasInputInterface("in"));
-	EXPECT_TRUE(op->HasOutputInterface("out"));
-	EXPECT_FALSE(op->HasInputInterface("_in"));
-	EXPECT_FALSE(op->HasOutputInterface("_out"));
-}
-
+/*
 TEST_F(ProceduralOperationTest, can_iterate_over_interfaces)
 {
 	std::unordered_set<std::string> in;
@@ -78,3 +74,4 @@ TEST_F(ProceduralOperationTest, can_iterate_over_interfaces)
 	EXPECT_NE(out.find("out"), out.end());
 	EXPECT_NE(out.find("out2"), out.end());
 }
+*/

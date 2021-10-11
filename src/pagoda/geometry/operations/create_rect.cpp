@@ -27,14 +27,15 @@ using namespace dynamic;
 const std::string CreateRectGeometry::output_geometry("out");
 const char* CreateRectGeometry::name = "CreateRectGeometry";
 
-CreateRectGeometry::CreateRectGeometry(ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+CreateRectGeometry::CreateRectGeometry(ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-
-	CreateOutputInterface(output_geometry);
 }
 
-CreateRectGeometry::~CreateRectGeometry() {}
+CreateRectGeometry::~CreateRectGeometry()
+{
+}
 
 void CreateRectGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
@@ -51,7 +52,7 @@ const std::string& CreateRectGeometry::GetOperationName() const
 
 void CreateRectGeometry::Interfaces(InterfaceCallback* cb)
 {
-	cb->OutputInterface(m_out, output_geometry, "Out", Interface::Arity::All);
+	cb->OutputInterface(m_out, output_geometry, "Out", Interface::Arity::One);
 }
 
 void CreateRectGeometry::DoWork()
@@ -79,20 +80,26 @@ void CreateRectGeometry::DoWork()
 			break;
 		default:
 			throw common::exception::Exception(
-			  "The 'plane' parameter in create rect must be one of 'x', 'y', or 'z'. It was '" + planeName + "'");
+			  "The 'plane' parameter in create rect must be one of 'x', 'y', or 'z'. "
+			  "It was '" +
+			  planeName + "'");
 	}
 
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	CreateRect<Geometry> create_rect(width, height, rectXAxis, rectYAxis);
 	auto geometry = std::make_shared<Geometry>();
 	create_rect.Execute(geometry);
 
-	ProceduralObjectPtr object = CreateOutputProceduralObject(output_geometry);
-	std::shared_ptr<GeometryComponent> geometry_component = geometrySystem->CreateComponentAs<GeometryComponent>(object);
+	ProceduralObjectPtr object = CreateOutputProceduralObject();
+	std::shared_ptr<GeometryComponent> geometry_component =
+	  geometrySystem->CreateComponentAs<GeometryComponent>(object);
+	m_out->Set(object);
 
 	geometry_component->SetGeometry(geometry);
 	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
-	  geometry, math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
+	  geometry,
+	  math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
 }
 }  // namespace pagoda::geometry::operations

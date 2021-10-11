@@ -42,4 +42,6 @@ class InputInterfaceNode : public Node
 	std::string m_interfaceName;
 	std::list<pagoda::objects::ProceduralObjectPtr> m_proceduralObjects;
 };  // class OperationExecution
+
+using InputInterfaceNodePtr = std::shared_ptr<InputInterfaceNode>;
 }  // namespace pagoda::graph

@@ -34,19 +34,24 @@ using namespace math;
 
 const std::string ReadGeoJson::outputGeometry = "out";
 
-ReadGeoJson::ReadGeoJson(objects::ProceduralObjectSystemPtr objectSystem) : ProceduralOperation(objectSystem)
+ReadGeoJson::ReadGeoJson(objects::ProceduralObjectSystemPtr objectSystem)
+  : ProceduralOperation(objectSystem)
 {
 	START_PROFILE;
-	CreateOutputInterface(outputGeometry);
 }
 
-ReadGeoJson::~ReadGeoJson() {}
+ReadGeoJson::~ReadGeoJson()
+{
+}
 
 void ReadGeoJson::SetParameters(graph::ExecutionArgumentCallback *cb)
 {
 	RegisterMember("file", cb->StringArgument("file", "File"));
-	RegisterMember("ref_latitude", cb->FloatArgument("ref_latitude", "Reference Latitude", 0.0f));
-	RegisterMember("ref_longitude", cb->FloatArgument("ref_longitude", "Reference Longitude", 0.0f));
+	RegisterMember("ref_latitude",
+	               cb->FloatArgument("ref_latitude", "Reference Latitude", 0.0f));
+	RegisterMember(
+	  "ref_longitude",
+	  cb->FloatArgument("ref_longitude", "Reference Longitude", 0.0f));
 }
 
 const std::string &ReadGeoJson::GetOperationName() const
@@ -55,7 +60,7 @@ const std::string &ReadGeoJson::GetOperationName() const
 	return sName;
 }
 
-void ReadGeoJson::Interfaces(InterfaceCallback* cb)
+void ReadGeoJson::Interfaces(InterfaceCallback *cb)
 {
 	cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::Many);
 }
@@ -67,10 +72,12 @@ void ReadGeoJson::DoWork()
 	std::string file = get_value_as<std::string>(*GetValue("file"));
 	std::string json = LoadFileToString(file);
 
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 	GeoJsonReader reader(json);
 	reader.SetReferenceCoordinate(
-	  math::Vec2F{get_value_as<float>(*GetValue("ref_latitude")), get_value_as<float>(*GetValue("ref_longitude"))});
+	  math::Vec2F{get_value_as<float>(*GetValue("ref_latitude")),
+	              get_value_as<float>(*GetValue("ref_longitude"))});
 
 	reader.Read([&](GeoJsonReader::Feature &&f) {
 		if (f.m_polygon.GetPointCount() < 3) {
@@ -78,18 +85,21 @@ void ReadGeoJson::DoWork()
 		}
 		auto geometry = std::make_shared<Geometry>();
 		std::vector<Vec3F> positions;
-		std::transform(f.m_polygon.GetPoints().begin(), f.m_polygon.GetPoints().end(), std::back_inserter(positions),
+		std::transform(f.m_polygon.GetPoints().begin(),
+		               f.m_polygon.GetPoints().end(), std::back_inserter(positions),
 		               [](const Vec2F &p) {
 			               return Vec3F{X(p), Y(p), 0};
 		               });
 		geometry->CreateFaceFromPositions(positions);
 
-		ProceduralObjectPtr object = CreateOutputProceduralObject(outputGeometry);
-		auto geometryComponent = geometrySystem->CreateComponentAs<GeometryComponent>(object);
+		ProceduralObjectPtr object = CreateOutputProceduralObject();
+		auto geometryComponent =
+		  geometrySystem->CreateComponentAs<GeometryComponent>(object);
+		m_output->Add(object);
 
 		geometryComponent->SetGeometry(geometry);
-		geometryComponent->SetScope(
-		  Scope::FromGeometryAndConstrainedRotation(geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
+		geometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
+		  geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
 
 		for (const auto &property : f.m_properties) {
 			object->RegisterMember(property.first, property.second);

@@ -33,10 +33,11 @@ const std::string ExportGeometry::inputGeometry("in");
 ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem)
   : ProceduralOperation(objectSystem), m_objectCount(0)
 {
-	CreateInputInterface(inputGeometry);
 }
 
-ExportGeometry::~ExportGeometry() {}
+ExportGeometry::~ExportGeometry()
+{
+}
 
 void ExportGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
 {
@@ -52,34 +53,35 @@ const std::string& ExportGeometry::GetOperationName() const
 
 void ExportGeometry::Interfaces(InterfaceCallback* cb)
 {
-  cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
+	cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
 }
 
 void ExportGeometry::DoWork()
 {
 	START_PROFILE;
 
-	auto geometrySystem = m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+	auto geometrySystem =
+	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	while (HasInput(inputGeometry)) {
-		set_value_from<int>(*GetValue("count"), m_objectCount);
-		UpdateValue("path");
+	set_value_from<int>(*GetValue("count"), m_objectCount);
+	UpdateValue("path");
 
-		ProceduralObjectPtr inObject = GetInputProceduralObject(inputGeometry);
+	ProceduralObjectPtr inObject = m_input->GetNext();
 
-		auto geometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		auto geometry = geometryComponent->GetGeometry();
-		ObjExporter<Geometry> exporter(geometry);
+	auto geometryComponent =
+	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+	auto geometry = geometryComponent->GetGeometry();
+	ObjExporter<Geometry> exporter(geometry);
 
-		std::string outputPath = get_value_as<std::string>(*GetValue("path"));
-		common::fs::CreateDirectories(boost::filesystem::path(outputPath).parent_path());
+	std::string outputPath = get_value_as<std::string>(*GetValue("path"));
+	common::fs::CreateDirectories(
+	  boost::filesystem::path(outputPath).parent_path());
 
-		std::ofstream out_file(outputPath.c_str());
-		exporter.Export(out_file);
-		out_file.close();
+	std::ofstream out_file(outputPath.c_str());
+	exporter.Export(out_file);
+	out_file.close();
 
-		++m_objectCount;
-	}
+	++m_objectCount;
 }
 
 }  // namespace pagoda::geometry::operations
