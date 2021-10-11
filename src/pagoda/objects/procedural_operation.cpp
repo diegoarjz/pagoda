@@ -23,11 +23,11 @@ const TypeInfoPtr ProceduralOperation::s_typeInfo =
 
 ProceduralOperation::ProceduralOperation(
   ProceduralObjectSystemPtr proceduralObjectSystem)
-  : BuiltinClass(s_typeInfo),
-    m_proceduralObjectSystem(proceduralObjectSystem),
-    m_needsUpdate(false),
-    m_pendingObjects(0),
-    m_processedObjects(0)
+  : BuiltinClass(s_typeInfo), m_proceduralObjectSystem(proceduralObjectSystem)
+{
+}
+
+ProceduralOperation::~ProceduralOperation()
 {
 }
 
@@ -55,11 +55,9 @@ void ProceduralOperation::Execute()
 	}
 
 	DoWork();
-	m_needsUpdate = false;
 }
 
-std::shared_ptr<ProceduralObject>
-ProceduralOperation::CreateOutputProceduralObject()
+ProceduralObjectPtr ProceduralOperation::CreateOutputProceduralObject()
 {
 	START_PROFILE;
 
@@ -73,9 +71,8 @@ ProceduralOperation::CreateOutputProceduralObject()
 	return procedural_object;
 }
 
-std::shared_ptr<ProceduralObject>
-ProceduralOperation::CreateOutputProceduralObject(
-  std::shared_ptr<ProceduralObject>& base)
+ProceduralObjectPtr ProceduralOperation::CreateOutputProceduralObject(
+  ProceduralObjectPtr& base)
 {
 	auto proceduralObject = m_proceduralObjectSystem->CloneProceduralObject(base);
 

@@ -33,10 +33,8 @@ using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
 
 namespace pagoda::objects
 {
-class ProceduralObject;
-using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
-class ProceduralObjectSystem;
-using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;
+using ProceduralObjectPtr = std::shared_ptr<class ProceduralObject>;
+using ProceduralObjectSystemPtr = std::shared_ptr<class ProceduralObjectSystem>;
 class InterfaceCallback;
 
 /**
@@ -44,9 +42,6 @@ class InterfaceCallback;
  *
  * Makes no assumptions about the schedulling system, making it agnostic to the
  * procedural modelling methodology (e.g., graph based or shape grammars)
- *
- * Has input and output \c ProceduralOperationObjectInterface which is used to
- * pass input and output procedural objects.
  */
 class ProceduralOperation : public dynamic::BuiltinClass
 {
@@ -54,41 +49,30 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	static const dynamic::TypeInfoPtr s_typeInfo;
 
 	ProceduralOperation(ProceduralObjectSystemPtr proceduralObjectSystem);
-	virtual ~ProceduralOperation()
-	{
-	}
+	~ProceduralOperation() override;
 
 	/**
 	 * Executes the \c ProceduralOperation.
 	 */
 	void Execute();
 
-	std::string ToString() const override;
-
 	/**
 	 * Returns the name of this operation.
 	 */
 	virtual const std::string& GetOperationName() const = 0;
 
-	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
-
 	////////////////////////////////////////////////////////////
 	/// \name Interfaces
 	////////////////////////////////////////////////////////////
-
+	/**
+	 * When called, subclasses must use \p cb with the correct values to specify
+	 * an Interface.
+	 */
 	virtual void Interfaces(InterfaceCallback* cb) = 0;
 
-	/**
-	 * Iterates over each input interface, passing its name to \p f.
-	 */
-	void ForEachInputInterface(const std::function<void(const std::string&)>& f);
-	/**
-	 * Iterates over each output interface, passing its name to \p f.
-	 */
-	void ForEachOutputInterface(const std::function<void(const std::string&)>& f);
-
-	bool HasInputInterface(const std::string& name) const;
-	bool HasOutputInterface(const std::string& name) const;
+	////////////////////////////////////////////////////////////
+	/// \name Parameters
+	////////////////////////////////////////////////////////////
 
 	/**
 	 * Iterates over each operation parameter.
@@ -98,6 +82,12 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	                           const dynamic::DynamicValueBasePtr& type)>& f);
 
 	virtual void SetParameters(graph::ExecutionArgumentCallback* cb) = 0;
+
+	////////////////////////////////////////////////////////////
+	/// \name BuiltinClass overrides
+	////////////////////////////////////////////////////////////
+	std::string ToString() const override;
+	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
 
 	protected:
 	/**
@@ -115,27 +105,21 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	 */
 	dynamic::DynamicValueBasePtr GetValue(const std::string& valueName);
 
-
-	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject();
+	/**
+	 * Creates an empty ProceduralObject.
+	 */
+	ProceduralObjectPtr CreateOutputProceduralObject();
 
 	/**
 	 * Creates a \c ProceduralObject in the output interface named \p
 	 * interfaceName, copying all components present in \p base.
 	 */
-	std::shared_ptr<ProceduralObject> CreateOutputProceduralObject(
-	  std::shared_ptr<ProceduralObject>& base);
+	ProceduralObjectPtr CreateOutputProceduralObject(ProceduralObjectPtr& base);
 
+	/// Our ProceduralObjectSystem
 	ProceduralObjectSystemPtr m_proceduralObjectSystem;
 
 	private:
-	boost::signals2::signal<void(const std::size_t&, const std::size_t)>
-	  m_progressHandlers;
-	boost::signals2::signal<void(ProceduralOperation*)> m_needUpdateHandlers;
-	bool m_needsUpdate;
-
-	std::size_t m_pendingObjects;
-	std::size_t m_processedObjects;
-
 	std::vector<std::string> m_parameterNames;
 
 };  // class ProceduralOperation
