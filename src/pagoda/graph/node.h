@@ -9,19 +9,23 @@
 #include <memory>
 #include <set>
 
+namespace pagoda::objects
+{
+class ParameterCallback;
+}
+
 namespace pagoda::graph
 {
 class Node;
 using NodePtr = std::shared_ptr<Node>;
 
 class ConstructionArgumentCallback;
-class ExecutionArgumentCallback;
 
 /**
  * Represents a \c Node in a \c Graph.
  *
- * Each subclass of \c Node is responsible for implementing an execution logic by
- * overriding the Node::Execute() method.
+ * Each subclass of \c Node is responsible for implementing an execution logic
+ * by overriding the Node::Execute() method.
  */
 class Node : public dynamic::BuiltinClass
 {
@@ -43,17 +47,20 @@ class Node : public dynamic::BuiltinClass
 	 * Iterates over each of the construction arguments.
 	 */
 	virtual void ForEachConstructionArgument(
-	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) = 0;
+	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)>
+	    f) = 0;
 
 	/**
 	 * Sets the execution arguments from \p arguments.
 	 */
-	virtual void SetExecutionArguments(ExecutionArgumentCallback *cb) = 0;
+	virtual void SetExecutionArguments(objects::ParameterCallback *cb) = 0;
 
 	/**
 	 * Iterates oves each of the execution arguments.
 	 */
-	virtual void ForEachExecutionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f) = 0;
+	virtual void ForEachExecutionArgument(
+	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)>
+	    f) = 0;
 
 	/**
 	 * Gets the id from this \c Node.
@@ -108,7 +115,10 @@ struct NodeWeakPtrHasher
 
 struct NodeWeakPtrEqual
 {
-	bool operator()(const NodeWeakPtr &lhs, const NodeWeakPtr &rhs) const { return lhs.lock() == rhs.lock(); }
+	bool operator()(const NodeWeakPtr &lhs, const NodeWeakPtr &rhs) const
+	{
+		return lhs.lock() == rhs.lock();
+	}
 };
 
 }  // namespace pagoda::graph

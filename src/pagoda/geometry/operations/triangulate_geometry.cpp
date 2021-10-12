@@ -32,7 +32,7 @@ TriangulateGeometry::~TriangulateGeometry()
 {
 }
 
-void TriangulateGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+void TriangulateGeometry::SetParameters(objects::ParameterCallback* cb)
 {
 }
 

@@ -9,6 +9,7 @@ set(OBJECTS_SRCS
     "interface.h"
     "operation_factory.cpp"
     "operation_factory.h"
+    "parameter_callback.h"
     "procedural_component.cpp"
     "procedural_component.h"
     "procedural_component_system.h"

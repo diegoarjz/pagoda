@@ -31,7 +31,7 @@ SetTexture::~SetTexture()
 {
 }
 
-void SetTexture::SetParameters(graph::ExecutionArgumentCallback* cb)
+void SetTexture::SetParameters(objects::ParameterCallback* cb)
 {
 }
 
@@ -52,24 +52,24 @@ void SetTexture::DoWork()
 	auto materialSystem =
 	  m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
-  /*
+	/*
 	while (HasInput(inputObject)) {
-		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-		std::shared_ptr<MaterialComponent> materialComponent =
-		  materialSystem->GetComponentAs<MaterialComponent>(outObject);
-		if (materialComponent == nullptr) {
-			materialComponent =
-			  materialSystem->CreateComponentAs<MaterialComponent>(outObject);
-		}
+	  ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
+	  ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+	  std::shared_ptr<MaterialComponent> materialComponent =
+	    materialSystem->GetComponentAs<MaterialComponent>(outObject);
+	  if (materialComponent == nullptr) {
+	    materialComponent =
+	      materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+	  }
 
-		UpdateValue("slot");
-		UpdateValue("path");
+	  UpdateValue("slot");
+	  UpdateValue("path");
 
-		materialComponent->GetMaterial().SetTexture(
-		  get_value_as<int>(*GetValue("slot")),
-		  get_value_as<std::string>(*GetValue("path")));
+	  materialComponent->GetMaterial().SetTexture(
+	    get_value_as<int>(*GetValue("slot")),
+	    get_value_as<std::string>(*GetValue("path")));
 	}
-  */
+	*/
 }
 }  // namespace pagoda::material::operations

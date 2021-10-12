@@ -1,6 +1,6 @@
 #include "read_geojson.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -44,7 +44,7 @@ ReadGeoJson::~ReadGeoJson()
 {
 }
 
-void ReadGeoJson::SetParameters(graph::ExecutionArgumentCallback *cb)
+void ReadGeoJson::SetParameters(objects::ParameterCallback *cb)
 {
 	RegisterMember("file", cb->StringArgument("file", "File"));
 	RegisterMember("ref_latitude",

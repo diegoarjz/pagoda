@@ -1,6 +1,6 @@
 #include "scope_texture_projection.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/core/planar_texture_projection.h>
 #include <pagoda/geometry/geometry_component.h>
@@ -39,7 +39,7 @@ ScopeTextureProjection::~ScopeTextureProjection()
 {
 }
 
-void ScopeTextureProjection::SetParameters(graph::ExecutionArgumentCallback* cb)
+void ScopeTextureProjection::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("axis", cb->StringArgument("axis", "Axis", "z"));
 	RegisterMember("scale_u", cb->FloatArgument("scale_u", "Scale U", 1.0f));

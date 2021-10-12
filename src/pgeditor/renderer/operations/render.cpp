@@ -67,7 +67,7 @@ Render::~Render()
 {
 }
 
-void Render::SetParameters(pagoda::graph::ExecutionArgumentCallback* cb)
+void Render::SetParameters(pagoda::objects::ParameterCallback* cb)
 {
 }
 

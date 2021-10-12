@@ -4,7 +4,7 @@
 
 namespace pagoda::objects
 {
-  class InterfaceCallback;
+class InterfaceCallback;
 }
 
 namespace pagoda::objects::operations
@@ -15,10 +15,10 @@ class Router : public ProceduralOperation
 	Router(ProceduralObjectSystemPtr objectSystem);
 	virtual ~Router();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
-  void Interfaces(InterfaceCallback* cb) override;
+	void Interfaces(InterfaceCallback* cb) override;
 
 	void DoWork() override;
 };

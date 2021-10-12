@@ -16,7 +16,7 @@ class ClipGeometry : public objects::ProceduralOperation
 	ClipGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ClipGeometry();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;
@@ -24,10 +24,10 @@ class ClipGeometry : public objects::ProceduralOperation
 	protected:
 	void DoWork() override;
 
-  private:
-  objects::InterfacePtr m_inputGeometry;
-  objects::InterfacePtr m_frontGeometry;
-  objects::InterfacePtr m_backGeometry;
+	private:
+	objects::InterfacePtr m_inputGeometry;
+	objects::InterfacePtr m_frontGeometry;
+	objects::InterfacePtr m_backGeometry;
 };
 }  // namespace pagoda::geometry::operations
 

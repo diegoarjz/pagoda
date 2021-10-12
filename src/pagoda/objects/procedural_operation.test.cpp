@@ -20,7 +20,7 @@ class MockOperation : public ProceduralOperation
 	{
 	}
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override
+	void SetParameters(objects::ParameterCallback* cb) override
 	{
 		RegisterMember("abc", std::make_shared<dynamic::FloatValue>(0.0f));
 	}

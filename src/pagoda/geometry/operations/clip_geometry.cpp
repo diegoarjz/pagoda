@@ -1,6 +1,6 @@
 #include "clip_geometry.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -36,7 +36,7 @@ ClipGeometry::~ClipGeometry()
 {
 }
 
-void ClipGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+void ClipGeometry::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("plane", cb->PlaneArgument("plane", "Clip Plane"));
 }

@@ -1,6 +1,6 @@
 #include "create_rect.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/algorithms/create_rect.h>
 #include <pagoda/geometry/geometry_component.h>
@@ -37,7 +37,7 @@ CreateRectGeometry::~CreateRectGeometry()
 {
 }
 
-void CreateRectGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+void CreateRectGeometry::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("width", cb->FloatArgument("width", "Width", 1.0f));
 	RegisterMember("height", cb->FloatArgument("height", "Height", 1.0f));

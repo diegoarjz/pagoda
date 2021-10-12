@@ -30,7 +30,7 @@ ExtractFaces::~ExtractFaces()
 {
 }
 
-void ExtractFaces::SetParameters(graph::ExecutionArgumentCallback* cb)
+void ExtractFaces::SetParameters(objects::ParameterCallback* cb)
 {
 }
 

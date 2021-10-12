@@ -45,7 +45,7 @@ void OperationNode::SetConstructionArguments(ConstructionArgumentCallback *cb)
 	SetOperation(operation);
 }
 
-void OperationNode::SetExecutionArguments(ExecutionArgumentCallback *cb)
+void OperationNode::SetExecutionArguments(objects::ParameterCallback *cb)
 {
 	m_operation->SetParameters(cb);
 }

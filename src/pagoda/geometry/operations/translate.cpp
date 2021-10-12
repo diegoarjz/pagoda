@@ -1,6 +1,6 @@
 #include "translate.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -37,7 +37,7 @@ Translate::~Translate()
 {
 }
 
-void Translate::SetParameters(graph::ExecutionArgumentCallback* cb)
+void Translate::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
 	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));

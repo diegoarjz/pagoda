@@ -14,15 +14,15 @@ class Split : public objects::ProceduralOperation
 	Split(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Split();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
 
-  private:
-  objects::InterfacePtr m_input;
-  std::array<objects::InterfacePtr, 8> m_outputs;
+	private:
+	objects::InterfacePtr m_input;
+	std::array<objects::InterfacePtr, 8> m_outputs;
 };
 }  // namespace pagoda::geometry::operations

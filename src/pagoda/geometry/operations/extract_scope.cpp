@@ -30,7 +30,7 @@ ExtractScope::~ExtractScope()
 {
 }
 
-void ExtractScope::SetParameters(graph::ExecutionArgumentCallback* cb)
+void ExtractScope::SetParameters(objects::ParameterCallback* cb)
 {
 }
 

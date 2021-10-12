@@ -13,14 +13,14 @@ class CreateSphereGeometry : public objects::ProceduralOperation
 	CreateSphereGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateSphereGeometry();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
 
-  private:
-  objects::InterfacePtr m_output;
+	private:
+	objects::InterfacePtr m_output;
 };
 }  // namespace pagoda::geometry::operations

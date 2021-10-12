@@ -17,6 +17,11 @@ class DynamicValueBase;
 using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
 }  // namespace pagoda::dynamic
 
+namespace pagoda::objects
+{
+class ParameterCallback;
+}
+
 namespace pagoda::graph
 {
 class Node;
@@ -26,7 +31,6 @@ class NodeFactory;
 using NodeFactoryPtr = std::shared_ptr<NodeFactory>;
 
 class ConstructionArgumentCallback;
-class ExecutionArgumentCallback;
 
 namespace query
 {
@@ -51,9 +55,11 @@ class Query;
 class Graph
 {
 	public:
-	using SchedulerFactoryFunction_t = std::function<std::unique_ptr<IScheduler>(Graph &)>;
+	using SchedulerFactoryFunction_t =
+	  std::function<std::unique_ptr<IScheduler>(Graph &)>;
 
-	static void SetSchedulerFactory(const SchedulerFactoryFunction_t &factoryFunction);
+	static void SetSchedulerFactory(
+	  const SchedulerFactoryFunction_t &factoryFunction);
 
 	static SchedulerFactoryFunction_t GetSchedulerFactory();
 
@@ -118,7 +124,8 @@ class Graph
 	/**
 	 * Creates and adds a \c Node with the given \c nodeType and \c nodeName.
 	 */
-	NodeIdentifier_t CreateNode(const std::string &nodeType, const NodeIdentifier_t &nodeName);
+	NodeIdentifier_t CreateNode(const std::string &nodeType,
+	                            const NodeIdentifier_t &nodeName);
 
 	/**
 	 * Destroys a \c Node object from this \c Graph.
@@ -147,16 +154,19 @@ class Graph
 	 * @param [in] targetNode The target \c Node.
 	 * @return Returns true if linking both nodes was successful, false otherwise.
 	 */
-	EdgeCreated CreateEdge(const NodeIdentifier_t &sourceNode, const NodeIdentifier_t &targetNode);
+	EdgeCreated CreateEdge(const NodeIdentifier_t &sourceNode,
+	                       const NodeIdentifier_t &targetNode);
 
 	/**
 	 * Destroys an edge between two \c Node objects in this \c Graph.
 	 *
 	 * @param [in] sourceNode The source \c Node.
 	 * @param [in] targetNode The target \c Node.
-	 * @return Returns true if unlinking the nodes was successful, false otherwise.
+	 * @return Returns true if unlinking the nodes was successful, false
+	 * otherwise.
 	 */
-	EdgeDestroyed DestroyEdge(const NodeIdentifier_t &sourceNode, const NodeIdentifier_t &targetNode);
+	EdgeDestroyed DestroyEdge(const NodeIdentifier_t &sourceNode,
+	                          const NodeIdentifier_t &targetNode);
 
 	/**
 	 * Returns the number of \c Node in this \c Graph.
@@ -199,9 +209,11 @@ class Graph
 	 */
 	void ExecuteQuery(query::Query &q);
 
-	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName, ConstructionArgumentCallback *cb);
+	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
+	                                   ConstructionArgumentCallback *cb);
 
-	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName, ExecutionArgumentCallback *cb);
+	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
+	                                objects::ParameterCallback *cb);
 
 	private:
 	class Impl;

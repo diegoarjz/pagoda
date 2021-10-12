@@ -17,11 +17,6 @@
 
 namespace pagoda
 {
-namespace graph
-{
-class ExecutionArgumentCallback;
-}
-
 namespace dynamic
 {
 class TypeInfo;
@@ -36,6 +31,7 @@ namespace pagoda::objects
 using ProceduralObjectPtr = std::shared_ptr<class ProceduralObject>;
 using ProceduralObjectSystemPtr = std::shared_ptr<class ProceduralObjectSystem>;
 class InterfaceCallback;
+class ParameterCallback;
 
 /**
  * @brief Base class for a procedural operation.
@@ -81,7 +77,7 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	  const std::function<void(const std::string&,
 	                           const dynamic::DynamicValueBasePtr& type)>& f);
 
-	virtual void SetParameters(graph::ExecutionArgumentCallback* cb) = 0;
+	virtual void SetParameters(objects::ParameterCallback* cb) = 0;
 
 	////////////////////////////////////////////////////////////
 	/// \name BuiltinClass overrides

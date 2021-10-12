@@ -10,19 +10,29 @@ namespace pagoda::graph
 {
 const char *ParameterNode::name = "Parameter";
 
-ParameterNode::ParameterNode() {}
+ParameterNode::ParameterNode()
+{
+}
 
-ParameterNode::~ParameterNode() {}
+ParameterNode::~ParameterNode()
+{
+}
 
-void ParameterNode::SetConstructionArguments(ConstructionArgumentCallback *cb) {}
-void ParameterNode::SetExecutionArguments(ExecutionArgumentCallback *cb) {}
+void ParameterNode::SetConstructionArguments(ConstructionArgumentCallback *cb)
+{
+}
+void ParameterNode::SetExecutionArguments(objects::ParameterCallback *cb)
+{
+}
 
 void ParameterNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	START_PROFILE;
-	LOG_TRACE(ProceduralGraph, "Executing ParameterNode " << GetName() << "(" << GetId() << ")");
+	LOG_TRACE(ProceduralGraph,
+	          "Executing ParameterNode " << GetName() << "(" << GetId() << ")");
 
-	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd(); ++parIter) {
+	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd();
+	     ++parIter) {
 		for (const auto &outNode : outNodes) {
 			outNode->RegisterOrSetMember(parIter->first, parIter->second.m_value);
 		}
@@ -40,7 +50,8 @@ void ParameterNode::ForEachConstructionArgument(
 {
 }
 
-void ParameterNode::ForEachExecutionArgument(std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
+void ParameterNode::ForEachExecutionArgument(
+  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
 {
 	//
 }

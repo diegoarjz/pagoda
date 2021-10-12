@@ -1,7 +1,7 @@
 #include "export_geometry.h"
 #include "boost/filesystem/file_status.hpp"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -39,7 +39,7 @@ ExportGeometry::~ExportGeometry()
 {
 }
 
-void ExportGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+void ExportGeometry::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("path", cb->StringArgument("path", "File"));
 	RegisterMember("count", std::make_shared<Integer>(0));

@@ -1,6 +1,6 @@
 #include "repeat_split.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -38,7 +38,7 @@ RepeatSplit::~RepeatSplit()
 {
 }
 
-void RepeatSplit::SetParameters(graph::ExecutionArgumentCallback* cb)
+void RepeatSplit::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("size", cb->FloatArgument("size", "Size", 1.0f));
 	RegisterMember("axis", cb->StringArgument("axis", "Axis", "x"));

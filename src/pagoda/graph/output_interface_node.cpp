@@ -34,7 +34,7 @@ void OutputInterfaceNode::SetConstructionArguments(
 	SetInterfaceName(interfaceName);
 }
 
-void OutputInterfaceNode::SetExecutionArguments(ExecutionArgumentCallback* cb)
+void OutputInterfaceNode::SetExecutionArguments(objects::ParameterCallback* cb)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "split.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -34,7 +34,7 @@ Split::~Split()
 {
 }
 
-void Split::SetParameters(graph::ExecutionArgumentCallback *cb)
+void Split::SetParameters(objects::ParameterCallback *cb)
 {
 	RegisterMember("axis", cb->StringArgument("axis", "Axis", "x"));
 	RegisterMember("split_count",
@@ -121,7 +121,7 @@ void Split::DoWork()
 	std::vector<std::string> outInterfaces;
 	for (auto i = 1; i <= splitCount; ++i) {
 		std::string outInterface("split_" + std::to_string(i));
-		//CreateOutputInterface(outInterface);
+		// CreateOutputInterface(outInterface);
 		outInterfaces.push_back(outInterface);
 	}
 

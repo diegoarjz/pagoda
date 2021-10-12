@@ -1,6 +1,6 @@
 #include "create_box.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/algorithms/create_box.h>
 #include <pagoda/geometry/geometry_component.h>
@@ -36,7 +36,7 @@ CreateBoxGeometry::~CreateBoxGeometry()
 {
 }
 
-void CreateBoxGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+void CreateBoxGeometry::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("xSize", cb->FloatArgument("xSize", "X", 1.0f));
 	RegisterMember("ySize", cb->FloatArgument("ySize", "Y", 1.0f));

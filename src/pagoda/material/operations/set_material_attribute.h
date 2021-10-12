@@ -14,10 +14,10 @@ class SetMaterialAttribute : public objects::ProceduralOperation
 	SetMaterialAttribute(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~SetMaterialAttribute();
 
-	void SetParameters(graph::ExecutionArgumentCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
-  void Interfaces(objects::InterfaceCallback* cb) override;
+	void Interfaces(objects::InterfaceCallback* cb) override;
 
 	void DoWork() override;
 };

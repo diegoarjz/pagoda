@@ -10,16 +10,24 @@
 
 namespace pagoda::graph
 {
-ParameterInputNode::ParameterInputNode() {}
-ParameterInputNode::~ParameterInputNode() {}
+ParameterInputNode::ParameterInputNode()
+{
+}
+ParameterInputNode::~ParameterInputNode()
+{
+}
 
-void ParameterInputNode::SetConstructionArguments(ConstructionArgumentCallback* cb)
+void ParameterInputNode::SetConstructionArguments(
+  ConstructionArgumentCallback* cb)
 {
 	cb->StringArgument("name", m_parameterName, "Parameter Name");
 }
-void ParameterInputNode::SetExecutionArguments(ExecutionArgumentCallback* cb) {}
+void ParameterInputNode::SetExecutionArguments(objects::ParameterCallback* cb)
+{
+}
 
-void ParameterInputNode::Execute(const NodeSet& inNodes, const NodeSet& outNodes)
+void ParameterInputNode::Execute(const NodeSet& inNodes,
+                                 const NodeSet& outNodes)
 {
 	std::cout << "Executing ParameterInputNode" << std::endl;
 	//
@@ -37,7 +45,10 @@ void ParameterInputNode::ForEachExecutionArgument(
 	//
 }
 
-const std::string& ParameterInputNode::GetParameterName() const { return m_parameterName; }
+const std::string& ParameterInputNode::GetParameterName() const
+{
+	return m_parameterName;
+}
 
 const char* const ParameterInputNode::GetNodeType()
 {

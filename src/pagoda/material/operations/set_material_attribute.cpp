@@ -1,6 +1,6 @@
 #include "set_material_attribute.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/common/exception/exception.h>
 
@@ -38,7 +38,7 @@ SetMaterialAttribute::~SetMaterialAttribute()
 {
 }
 
-void SetMaterialAttribute::SetParameters(graph::ExecutionArgumentCallback* cb)
+void SetMaterialAttribute::SetParameters(objects::ParameterCallback* cb)
 {
 	// RegisterMember("name", cb->
 }
@@ -68,29 +68,29 @@ void SetMaterialAttribute::DoWork()
 	auto materialSystem =
 	  m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
 
-  /*
+	/*
 	while (HasInput(inputObject)) {
-		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-		std::shared_ptr<MaterialComponent> materialComponent =
-		  materialSystem->GetComponentAs<MaterialComponent>(outObject);
-		if (materialComponent == nullptr) {
-			materialComponent =
-			  materialSystem->CreateComponentAs<MaterialComponent>(outObject);
-		}
+	  ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
+	  ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+	  std::shared_ptr<MaterialComponent> materialComponent =
+	    materialSystem->GetComponentAs<MaterialComponent>(outObject);
+	  if (materialComponent == nullptr) {
+	    materialComponent =
+	      materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+	  }
 
-		UpdateValue("name");
-		UpdateValue("value");
+	  UpdateValue("name");
+	  UpdateValue("value");
 
-		DynamicValueBasePtr v = GetValue("value");
-		ExpressionPtr e = std::dynamic_pointer_cast<Expression>(v);
-		if (e != nullptr) {
-			v = e->Evaluate();
-		}
+	  DynamicValueBasePtr v = GetValue("value");
+	  ExpressionPtr e = std::dynamic_pointer_cast<Expression>(v);
+	  if (e != nullptr) {
+	    v = e->Evaluate();
+	  }
 
-		std::string name = get_value_as<std::string>(*GetValue("name"));
-		materialComponent->GetMaterial().SetAttribute(name, v);
+	  std::string name = get_value_as<std::string>(*GetValue("name"));
+	  materialComponent->GetMaterial().SetAttribute(name, v);
 	}
-  */
+	*/
 }
 }  // namespace pagoda::material::operations

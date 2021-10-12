@@ -1,6 +1,6 @@
 #include "extrude_geometry.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/algorithms/extrusion.h>
 #include <pagoda/geometry/geometry_component.h>
@@ -37,7 +37,7 @@ ExtrudeGeometry::~ExtrudeGeometry()
 {
 }
 
-void ExtrudeGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+void ExtrudeGeometry::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("extrusion_amount",
 	               cb->FloatArgument("extrusion_amount", "Amount", 1.0f));

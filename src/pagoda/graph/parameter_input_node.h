@@ -11,11 +11,15 @@ class ParameterInputNode : public Node
 	~ParameterInputNode() override;
 
 	void SetConstructionArguments(ConstructionArgumentCallback* cb) override;
-	void SetExecutionArguments(ExecutionArgumentCallback* cb) override;
+	void SetExecutionArguments(objects::ParameterCallback* cb) override;
 
 	void Execute(const NodeSet& inNodes, const NodeSet& outNodes) override;
-	void ForEachConstructionArgument(std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f) override;
-	void ForEachExecutionArgument(std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f) override;
+	void ForEachConstructionArgument(
+	  std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
+	  override;
+	void ForEachExecutionArgument(
+	  std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
+	  override;
 
 	const std::string& GetParameterName() const;
 

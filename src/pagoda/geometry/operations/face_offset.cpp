@@ -1,6 +1,6 @@
 #include "face_offset.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
@@ -38,7 +38,7 @@ FaceOffsetOperation::~FaceOffsetOperation()
 {
 }
 
-void FaceOffsetOperation::SetParameters(graph::ExecutionArgumentCallback* cb)
+void FaceOffsetOperation::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("amount", cb->FloatArgument("amount", "Amount", 0.0f));
 }

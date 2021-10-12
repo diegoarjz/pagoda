@@ -1,6 +1,6 @@
 #include "create_sphere.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/geometry/algorithms/create_sphere.h>
 #include <pagoda/geometry/geometry_component.h>
@@ -36,7 +36,7 @@ CreateSphereGeometry::~CreateSphereGeometry()
 {
 }
 
-void CreateSphereGeometry::SetParameters(graph::ExecutionArgumentCallback* cb)
+void CreateSphereGeometry::SetParameters(objects::ParameterCallback* cb)
 {
 	RegisterMember("radius", cb->FloatArgument("radius", "Radius", 1.0f));
 	RegisterMember("slices", cb->IntegerArgument("slices", "Slices", 10));

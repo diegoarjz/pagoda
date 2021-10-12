@@ -25,16 +25,24 @@ class OutputInterfaceNode : public Node
 	~OutputInterfaceNode();
 
 	void SetConstructionArguments(ConstructionArgumentCallback* cb) override;
-	void SetExecutionArguments(ExecutionArgumentCallback* cb) override;
+	void SetExecutionArguments(objects::ParameterCallback* cb) override;
 
 	void Execute(const NodeSet& inNodes, const NodeSet& outNodes) override;
 
 	void SetInterfaceName(const std::string& name);
 	const std::string& GetInterfaceName() const;
-	const std::list<pagoda::objects::ProceduralObjectPtr>& GetProceduralObjects() const { return m_proceduralObjects; }
+	const std::list<pagoda::objects::ProceduralObjectPtr>& GetProceduralObjects()
+	  const
+	{
+		return m_proceduralObjects;
+	}
 	void AddProceduralObject(pagoda::objects::ProceduralObjectPtr object);
-	void ForEachConstructionArgument(std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f) override;
-	void ForEachExecutionArgument(std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f) override;
+	void ForEachConstructionArgument(
+	  std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
+	  override;
+	void ForEachExecutionArgument(
+	  std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
+	  override;
 
 	const char* const GetNodeType() override;
 

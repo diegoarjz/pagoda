@@ -1,6 +1,6 @@
 #include "set_material.h"
 
-#include <pagoda/graph/execution_argument_callback.h>
+#include <pagoda/objects/parameter_callback.h>
 
 #include <pagoda/material/material_component.h>
 #include <pagoda/material/material_system.h>
@@ -34,7 +34,7 @@ SetMaterial::~SetMaterial()
 {
 }
 
-void SetMaterial::SetParameters(graph::ExecutionArgumentCallback* cb)
+void SetMaterial::SetParameters(objects::ParameterCallback* cb)
 {
 	for (uint32_t i = 0u; i < 8; ++i) {
 		auto texture = "texture_" + std::to_string(i);
@@ -63,33 +63,33 @@ void SetMaterial::DoWork()
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-  /*
+	/*
 	while (HasInput(inputObject)) {
-		ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+	  ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
+	  ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
 
-		for (uint32_t i = 0u; i < 8; ++i) {
-			std::string texture = "texture_" + std::to_string(i);
-			UpdateValue(texture);
-			std::shared_ptr<MaterialComponent> materialComponent =
-			  materialSystem->CreateComponentAs<MaterialComponent>(outObject);
-			auto value = GetValue(texture);
-			if (value != nullptr) {
-				materialComponent->GetMaterial().SetTexture(
-				  i, get_value_as<std::string>(*value));
-			}
-		}
+	  for (uint32_t i = 0u; i < 8; ++i) {
+	    std::string texture = "texture_" + std::to_string(i);
+	    UpdateValue(texture);
+	    std::shared_ptr<MaterialComponent> materialComponent =
+	      materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+	    auto value = GetValue(texture);
+	    if (value != nullptr) {
+	      materialComponent->GetMaterial().SetTexture(
+	        i, get_value_as<std::string>(*value));
+	    }
+	  }
 
-		// geometry
-		auto inGeometryComponent =
-		  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-		auto outGeometryComponent =
-		  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-		auto geom = std::make_shared<core::Geometry>();
-		*geom = *inGeometryComponent->GetGeometry();
-		outGeometryComponent->SetGeometry(geom);
-		outGeometryComponent->SetScope(inGeometryComponent->GetScope());
+	  // geometry
+	  auto inGeometryComponent =
+	    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+	  auto outGeometryComponent =
+	    geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+	  auto geom = std::make_shared<core::Geometry>();
+	  *geom = *inGeometryComponent->GetGeometry();
+	  outGeometryComponent->SetGeometry(geom);
+	  outGeometryComponent->SetScope(inGeometryComponent->GetScope());
 	}
-  */
+	*/
 }
 }  // namespace pagoda::material::operations
