@@ -13,7 +13,10 @@ class Scale : public objects::ProceduralOperation
 	Scale(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Scale();
 
-	void SetParameters(objects::ParameterCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;
 
@@ -22,5 +25,10 @@ class Scale : public objects::ProceduralOperation
 	private:
 	objects::InterfacePtr m_input;
 	objects::InterfacePtr m_output;
+
+	float m_scaleX;
+	float m_scaleY;
+	float m_scaleZ;
+	std::string m_scaleCenter;
 };
 }  // namespace pagoda::geometry::operations

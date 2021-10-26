@@ -21,7 +21,7 @@ ParameterNode::~ParameterNode()
 void ParameterNode::SetConstructionArguments(ConstructionArgumentCallback *cb)
 {
 }
-void ParameterNode::SetExecutionArguments(objects::ParameterCallback *cb)
+void ParameterNode::SetExecutionArguments(objects::NewParameterCallback *cb)
 {
 }
 

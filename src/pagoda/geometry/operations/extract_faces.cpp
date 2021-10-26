@@ -30,10 +30,6 @@ ExtractFaces::~ExtractFaces()
 {
 }
 
-void ExtractFaces::SetParameters(objects::ParameterCallback* cb)
-{
-}
-
 const std::string& ExtractFaces::GetOperationName() const
 {
 	static const std::string sName{"ExtractFaces"};

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <pagoda/math/plane.h>
+#include "parameter.h"
 
 #include <memory>
 #include <string>
@@ -39,6 +39,30 @@ class ParameterCallback
 
 	virtual dynamic::DynamicValueBasePtr PlaneArgument(
 	  const char* const name, const char* const label,
+	  math::Plane<float> defaultValue = math::Plane<float>{}) = 0;
+};
+
+class NewParameterCallback
+{
+	public:
+	virtual StringParameterPtr StringParameter(
+	  std::string* v, const std::string& name, const std::string& label,
+	  const std::string& defaultValue = "") = 0;
+
+	virtual FloatParameterPtr FloatParameter(float* v, const std::string& name,
+	                                         const std::string& label,
+	                                         float defaultValue = 0.0f) = 0;
+
+	virtual IntParameterPtr IntegerParameter(int* v, const std::string& name,
+	                                         const std::string& label,
+	                                         int defaultValue = 0) = 0;
+
+	virtual BooleanParameterPtr BooleanParameter(bool* v, const std::string& name,
+	                                             const std::string& label,
+	                                             bool defaultValue = false) = 0;
+
+	virtual PlaneParameterPtr PlaneParameter(
+	  math::Plane<float>* v, const std::string& name, const std::string& label,
 	  math::Plane<float> defaultValue = math::Plane<float>{}) = 0;
 };
 }  // namespace pagoda::objects

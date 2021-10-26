@@ -38,9 +38,9 @@ FaceOffsetOperation::~FaceOffsetOperation()
 {
 }
 
-void FaceOffsetOperation::SetParameters(objects::ParameterCallback* cb)
+void FaceOffsetOperation::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("amount", cb->FloatArgument("amount", "Amount", 0.0f));
+	cb->FloatParameter(&m_amount, "amount", "Amount", 0.0f);
 }
 
 const std::string& FaceOffsetOperation::GetOperationName() const
@@ -65,10 +65,8 @@ void FaceOffsetOperation::DoWork()
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	ProceduralObjectPtr inObject = m_input->GetNext();
-	UpdateValue("amount");
 
-	float amount = get_value_as<float>(*GetValue("amount"));
-	FaceOffset<Geometry> offset(amount);
+	FaceOffset<Geometry> offset(m_amount);
 
 	std::vector<GeometryPtr> innerGeometries;
 	std::vector<GeometryPtr> outerGeometries;

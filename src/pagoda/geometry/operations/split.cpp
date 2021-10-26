@@ -34,16 +34,15 @@ Split::~Split()
 {
 }
 
-void Split::SetParameters(objects::ParameterCallback *cb)
+void Split::Parameters(objects::NewParameterCallback *cb)
 {
-	RegisterMember("axis", cb->StringArgument("axis", "Axis", "x"));
-	RegisterMember("split_count",
-	               cb->IntegerArgument("split_count", "Split Count", 0));
+	cb->StringParameter(&m_axis, "axis", "Axis", "x");
+	cb->IntegerParameter(&m_splitCount, "split_count", "Split Count", 0);
 	for (uint32_t i = 1u; i <= 8; ++i) {
 		auto name = "split_" + std::to_string(i);
-		RegisterMember(
-		  name, cb->FloatArgument(name.c_str(),
-		                          ("Split " + std::to_string(i)).c_str(), 0));
+
+		cb->FloatParameter(&m_splitSizes[i], name.c_str(),
+		                   ("Split " + std::to_string(i)).c_str(), 0);
 	}
 }
 
@@ -115,16 +114,6 @@ void Split::DoWork()
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	auto axis = get_value_as<std::string>(*GetValue("axis"));
-	auto splitCount = get_value_as<int>(*GetValue("split_count"));
-
-	std::vector<std::string> outInterfaces;
-	for (auto i = 1; i <= splitCount; ++i) {
-		std::string outInterface("split_" + std::to_string(i));
-		// CreateOutputInterface(outInterface);
-		outInterfaces.push_back(outInterface);
-	}
-
 	ProceduralObjectPtr inObject = m_input->GetNext();
 	auto inGeometryComponent =
 	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -132,19 +121,19 @@ void Split::DoWork()
 	auto inScope = inGeometryComponent->GetScope();
 
 	std::vector<float> sizes;
-	sizes.reserve(splitCount);
-	for (auto i = 1; i <= splitCount; ++i) {
+	sizes.reserve(m_splitCount);
+	for (auto i = 1; i <= m_splitCount; ++i) {
 		std::string splitSizeName = "split_" + std::to_string(i);
 		UpdateValue(splitSizeName);
 		sizes.push_back(get_value_as<float>(*GetValue(splitSizeName)));
 	}
 
-	PlaneSplits<Geometry> planeSplit(createPlanes(inScope, sizes, axis));
+	PlaneSplits<Geometry> planeSplit(createPlanes(inScope, sizes, m_axis));
 	std::vector<GeometryPtr> splitGeometries;
 	planeSplit.Execute(inGeometry, splitGeometries);
 
 	for (auto i = 0u;
-	     i < static_cast<uint32_t>(splitCount) && i < splitGeometries.size();
+	     i < static_cast<uint32_t>(m_splitCount) && i < splitGeometries.size();
 	     ++i) {
 		auto outProceduralObject = CreateOutputProceduralObject(inObject);
 		m_outputs[i]->SetNext(outProceduralObject);

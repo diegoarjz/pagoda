@@ -25,7 +25,7 @@ class OutputInterfaceNode : public Node
 	~OutputInterfaceNode();
 
 	void SetConstructionArguments(ConstructionArgumentCallback* cb) override;
-	void SetExecutionArguments(objects::ParameterCallback* cb) override;
+	void SetExecutionArguments(objects::NewParameterCallback* cb) override;
 
 	void Execute(const NodeSet& inNodes, const NodeSet& outNodes) override;
 

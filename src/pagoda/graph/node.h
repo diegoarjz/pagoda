@@ -11,7 +11,7 @@
 
 namespace pagoda::objects
 {
-class ParameterCallback;
+class NewParameterCallback;
 }
 
 namespace pagoda::graph
@@ -53,7 +53,7 @@ class Node : public dynamic::BuiltinClass
 	/**
 	 * Sets the execution arguments from \p arguments.
 	 */
-	virtual void SetExecutionArguments(objects::ParameterCallback *cb) = 0;
+	virtual void SetExecutionArguments(objects::NewParameterCallback *cb) = 0;
 
 	/**
 	 * Iterates oves each of the execution arguments.

@@ -37,14 +37,13 @@ Scale::~Scale()
 {
 }
 
-void Scale::SetParameters(objects::ParameterCallback* cb)
+void Scale::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
-	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));
-	RegisterMember("z", cb->FloatArgument("z", "Z", 0.0f));
-	RegisterMember(
-	  "pivotal_point",
-	  cb->StringArgument("pivotal_point", "Pivotal Point", "scope_center"));
+	cb->FloatParameter(&m_scaleX, "x", "X", 1.0f);
+	cb->FloatParameter(&m_scaleY, "y", "Y", 1.0f);
+	cb->FloatParameter(&m_scaleZ, "z", "Z", 1.0f);
+	cb->StringParameter(&m_scaleCenter, "scale_center", "Scale Center",
+	                    "scope_center");
 }
 
 const std::string& Scale::GetOperationName() const
@@ -80,31 +79,23 @@ void Scale::DoWork()
 	outGeometryComponent->SetGeometry(outGeometry);
 
 	auto inScope = inGeometryComponent->GetScope();
-	UpdateValue("x");
-	UpdateValue("y");
-	UpdateValue("z");
-	UpdateValue("pivotal_point");
-
-	auto x = get_value_as<float>(*GetValue("x"));
-	auto y = get_value_as<float>(*GetValue("y"));
-	auto z = get_value_as<float>(*GetValue("z"));
-	auto pivotalPointName = get_value_as<std::string>(*GetValue("pivotal_point"));
 
 	Mat4x4F matrix;
-	if (pivotalPointName == "scope_center") {
+	if (m_scaleCenter == "scope_center") {
 		Vec3F pivotalPoint = inScope.GetCenterPointInWorld();
 		Mat4x4F translation = boost::qvm::translation_mat(XYZ(pivotalPoint));
-		Mat4x4F scale = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
+		Mat4x4F scale =
+		  boost::qvm::diag_mat(XYZ1(Vec3F{m_scaleX, m_scaleY, m_scaleZ}));
 		Mat4x4F invTranslation = boost::qvm::translation_mat(XYZ(-pivotalPoint));
 		matrix = translation * scale * invTranslation;
-	} else if (pivotalPointName == "scope_origin") {
+	} else if (m_scaleCenter == "scope_origin") {
 		Vec3F pivotalPoint =
 		  inScope.GetWorldPoint(Scope::BoxPoints::LowerBottomLeft);
 		matrix = boost::qvm::translation_mat(pivotalPoint) *
-		         boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z})) *
+		         boost::qvm::diag_mat(XYZ1(Vec3F{m_scaleX, m_scaleY, m_scaleZ})) *
 		         boost::qvm::translation_mat(-pivotalPoint);
-	} else if (pivotalPointName == "world_origin") {
-		matrix = boost::qvm::diag_mat(XYZ1(Vec3F{x, y, z}));
+	} else if (m_scaleCenter == "world_origin") {
+		matrix = boost::qvm::diag_mat(XYZ1(Vec3F{m_scaleX, m_scaleY, m_scaleZ}));
 	}
 
 	MatrixTransform<Geometry> transform(matrix);

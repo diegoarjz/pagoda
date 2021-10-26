@@ -16,7 +16,9 @@ class TriangulateGeometry : public objects::ProceduralOperation
 	TriangulateGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~TriangulateGeometry();
 
-	void SetParameters(objects::ParameterCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
 
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;

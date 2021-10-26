@@ -40,14 +40,14 @@ Rotate::~Rotate()
 {
 }
 
-void Rotate::SetParameters(objects::ParameterCallback* cb)
+void Rotate::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
-	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));
-	RegisterMember("z", cb->FloatArgument("z", "Z", 0.0f));
-	RegisterMember("rotation_order",
-	               cb->StringArgument("rotation_order", "Rotation Order", "xyz"));
-	RegisterMember("world", cb->BooleanArgument("world", "World", false));
+	cb->FloatParameter(&m_rotX, "x", "X", 0.0f);
+	cb->FloatParameter(&m_rotY, "y", "Y", 0.0f);
+	cb->FloatParameter(&m_rotZ, "z", "Z", 0.0f);
+	cb->StringParameter(&m_rotationOrder, "rotation_order", "Rotation Order",
+	                    "xyz");
+	cb->BooleanParameter(&m_world, "world", "World", false);
 }
 
 const std::string& Rotate::GetOperationName() const
@@ -83,20 +83,9 @@ void Rotate::DoWork()
 	outGeometryComponent->SetGeometry(outGeometry);
 
 	auto inScope = inGeometryComponent->GetScope();
-	UpdateValue("x");
-	UpdateValue("y");
-	UpdateValue("z");
-	UpdateValue("rotation_order");
-	UpdateValue("world");
-
-	auto x = Degrees<float>(get_value_as<float>(*GetValue("x")));
-	auto y = Degrees<float>(get_value_as<float>(*GetValue("y")));
-	auto z = Degrees<float>(get_value_as<float>(*GetValue("z")));
-	auto rotationOrder = get_value_as<std::string>(*GetValue("rotation_order"));
-	auto world = get_value_as<std::string>(*GetValue("world")) == "true";
 
 	Mat4x4F matrix(boost::qvm::diag_mat(Vec4F{1.0f, 1.0f, 1.0f, 1.0f}));
-	if (world) {
+	if (m_world) {
 		auto rot = inScope.GetRotation();
 		boost::qvm::col<0>(matrix) = XYZ0(boost::qvm::col<0>(rot));
 		boost::qvm::col<1>(matrix) = XYZ0(boost::qvm::col<1>(rot));
@@ -104,20 +93,20 @@ void Rotate::DoWork()
 		boost::qvm::col<3>(matrix) = Vec4F{0, 0, 0, 1};
 	}
 
-	for (std::size_t i = rotationOrder.size(); i > 0; --i) {
-		char order = rotationOrder[i - 1];
+	for (std::size_t i = m_rotationOrder.size(); i > 0; --i) {
+		char order = m_rotationOrder[i - 1];
 		switch (order) {
 			case 'x':
 				matrix =
-				  matrix * boost::qvm::rotx_mat<4>(static_cast<float>(Radians(x)));
+				  matrix * boost::qvm::rotx_mat<4>(static_cast<float>(Radians(m_rotX)));
 				break;
 			case 'y':
 				matrix =
-				  matrix * boost::qvm::roty_mat<4>(static_cast<float>(Radians(y)));
+				  matrix * boost::qvm::roty_mat<4>(static_cast<float>(Radians(m_rotY)));
 				break;
 			case 'z':
 				matrix =
-				  matrix * boost::qvm::rotz_mat<4>(static_cast<float>(Radians(z)));
+				  matrix * boost::qvm::rotz_mat<4>(static_cast<float>(Radians(m_rotZ)));
 				break;
 			default:
 				throw common::exception::Exception("Invalid rotation order " +
@@ -125,7 +114,7 @@ void Rotate::DoWork()
 		}
 	}
 
-	if (world) {
+	if (m_world) {
 		auto rot = inScope.GetInverseRotation();
 		Mat4x4F invRot;
 		boost::qvm::col<0>(invRot) = XYZ0(boost::qvm::col<0>(rot));

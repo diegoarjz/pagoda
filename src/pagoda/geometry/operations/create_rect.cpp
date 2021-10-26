@@ -37,11 +37,12 @@ CreateRectGeometry::~CreateRectGeometry()
 {
 }
 
-void CreateRectGeometry::SetParameters(objects::ParameterCallback* cb)
+void CreateRectGeometry::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("width", cb->FloatArgument("width", "Width", 1.0f));
-	RegisterMember("height", cb->FloatArgument("height", "Height", 1.0f));
-	RegisterMember("plane", cb->StringArgument("plane", "Plane", "z"));
+	std::cout << "Setting parameters" << std::endl;
+	cb->FloatParameter(&m_width, "width", "Width", 1.0f);
+	cb->FloatParameter(&m_height, "height", "Height", 1.0f);
+	cb->StringParameter(&m_plane, "plane", "Plane", "z");
 }
 
 const std::string& CreateRectGeometry::GetOperationName() const
@@ -59,13 +60,12 @@ void CreateRectGeometry::DoWork()
 {
 	START_PROFILE;
 
-	float width = get_value_as<float>(*GetValue("width"));
-	float height = get_value_as<float>(*GetValue("height"));
-	std::string planeName = get_value_as<std::string>(*GetValue("plane"));
+	std::cout << "Creating rect " << m_width << " " << m_height << " " << m_plane
+	          << std::endl;
+
 	math::Vec3F rectXAxis;
 	math::Vec3F rectYAxis;
-
-	switch (planeName[0]) {
+	switch (m_plane[0]) {
 		case 'x':
 			rectXAxis = math::Vec3F{0, 1, 0};
 			rectYAxis = math::Vec3F{0, 0, 1};
@@ -82,13 +82,13 @@ void CreateRectGeometry::DoWork()
 			throw common::exception::Exception(
 			  "The 'plane' parameter in create rect must be one of 'x', 'y', or 'z'. "
 			  "It was '" +
-			  planeName + "'");
+			  m_plane + "'");
 	}
 
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	CreateRect<Geometry> create_rect(width, height, rectXAxis, rectYAxis);
+	CreateRect<Geometry> create_rect(m_width, m_height, rectXAxis, rectYAxis);
 	auto geometry = std::make_shared<Geometry>();
 	create_rect.Execute(geometry);
 

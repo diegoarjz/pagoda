@@ -13,7 +13,10 @@ class Rotate : public objects::ProceduralOperation
 	Rotate(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Rotate();
 
-	void SetParameters(objects::ParameterCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;
@@ -23,5 +26,11 @@ class Rotate : public objects::ProceduralOperation
 	private:
 	objects::InterfacePtr m_input;
 	objects::InterfacePtr m_output;
+
+	float m_rotX;
+	float m_rotY;
+	float m_rotZ;
+	std::string m_rotationOrder;
+	bool m_world;
 };
 }  // namespace pagoda::geometry::operations

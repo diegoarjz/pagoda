@@ -37,10 +37,9 @@ ExtrudeGeometry::~ExtrudeGeometry()
 {
 }
 
-void ExtrudeGeometry::SetParameters(objects::ParameterCallback* cb)
+void ExtrudeGeometry::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("extrusion_amount",
-	               cb->FloatArgument("extrusion_amount", "Amount", 1.0f));
+	cb->FloatParameter(&m_amount, "amount", "Amount", 1.0f);
 }
 
 const std::string& ExtrudeGeometry::GetOperationName() const
@@ -62,10 +61,8 @@ void ExtrudeGeometry::DoWork()
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	ProceduralObjectPtr in_object = m_in->GetNext();
-	UpdateValue("extrusion_amount");
 
-	float extrusion_amount = get_value_as<float>(*GetValue("extrusion_amount"));
-	Extrusion<Geometry> extrude(extrusion_amount);
+	Extrusion<Geometry> extrude(m_amount);
 
 	// Geometry
 	ProceduralObjectPtr out_object = CreateOutputProceduralObject(in_object);

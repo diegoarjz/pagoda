@@ -32,10 +32,6 @@ TriangulateGeometry::~TriangulateGeometry()
 {
 }
 
-void TriangulateGeometry::SetParameters(objects::ParameterCallback* cb)
-{
-}
-
 const std::string& TriangulateGeometry::GetOperationName() const
 {
 	static const std::string sName{"TriangulateGeometry"};

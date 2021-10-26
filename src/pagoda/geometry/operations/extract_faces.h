@@ -13,7 +13,9 @@ class ExtractFaces : public objects::ProceduralOperation
 	ExtractFaces(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractFaces();
 
-	void SetParameters(objects::ParameterCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
 
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;

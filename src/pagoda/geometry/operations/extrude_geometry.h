@@ -19,7 +19,10 @@ class ExtrudeGeometry : public objects::ProceduralOperation
 	ExtrudeGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtrudeGeometry();
 
-	void SetParameters(objects::ParameterCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
 
@@ -30,6 +33,8 @@ class ExtrudeGeometry : public objects::ProceduralOperation
 	private:
 	objects::InterfacePtr m_in;
 	objects::InterfacePtr m_out;
+
+	float m_amount;
 };  // class ExtrudeGEometry
 
 }  // namespace pagoda::geometry::operations

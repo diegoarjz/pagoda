@@ -39,14 +39,14 @@ ScopeTextureProjection::~ScopeTextureProjection()
 {
 }
 
-void ScopeTextureProjection::SetParameters(objects::ParameterCallback* cb)
+void ScopeTextureProjection::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("axis", cb->StringArgument("axis", "Axis", "z"));
-	RegisterMember("scale_u", cb->FloatArgument("scale_u", "Scale U", 1.0f));
-	RegisterMember("scale_v", cb->FloatArgument("scale_v", "Scale V", 1.0f));
-	RegisterMember("offset_u", cb->FloatArgument("offset_u", "Offset U", 0.0f));
-	RegisterMember("offset_v", cb->FloatArgument("offset_v", "Offset V", 0.0f));
-	RegisterMember("clamp", cb->BooleanArgument("clamp", "Clamp", false));
+	cb->StringParameter(&m_axis, "axis", "Axis", "z");
+	cb->FloatParameter(&m_scale.a[0], "scale_u", "Scale U", 1.0f);
+	cb->FloatParameter(&m_scale.a[1], "scale_v", "Scale V", 1.0f);
+	cb->FloatParameter(&m_offset.a[0], "offset_u", "Offset U", 0.0f);
+	cb->FloatParameter(&m_offset.a[1], "offset_v", "Offset V", 0.0f);
+	cb->BooleanParameter(&m_clamp, "clamp", "Clamp", false);
 }
 
 const std::string& ScopeTextureProjection::GetOperationName() const
@@ -84,44 +84,33 @@ void ScopeTextureProjection::DoWork()
 	outGeometryComponent->SetGeometry(outGeometry);
 	outGeometryComponent->SetScope(inGeometryComponent->GetScope());
 
-	UpdateValue("axis");
-	UpdateValue("scale_u");
-	UpdateValue("scale_v");
-	UpdateValue("offset_u");
-	UpdateValue("offset_v");
-	UpdateValue("clamp");
-
 	auto& scope = outGeometryComponent->GetScope();
 	auto scopeSize = scope.GetSize();
 	qvm::vec<float, 3> scopePos = scope.GetPosition();
 	qvm::vec<float, 3> uAxis;
 	qvm::vec<float, 3> vAxis;
-	float uScale = get_value_as<float>(*GetValue("scale_u"));
-	float vScale = get_value_as<float>(*GetValue("scale_v"));
 
-	std::string axis = get_value_as<std::string>(*GetValue("axis"));
-	if (axis == "x") {
+	if (m_axis == "x") {
 		uAxis = scope.GetAxis('y');
 		vAxis = scope.GetAxis('z');
-		uScale *= Y(scopeSize);
-		vScale *= Z(scopeSize);
-	} else if (axis == "y") {
+		m_scale.a[0] *= Y(scopeSize);
+		m_scale.a[1] *= Z(scopeSize);
+	} else if (m_axis == "y") {
 		uAxis = scope.GetAxis('x');
 		vAxis = scope.GetAxis('z');
-		uScale *= X(scopeSize);
-		vScale *= Z(scopeSize);
-	} else if (axis == "z") {
+		m_scale.a[0] *= X(scopeSize);
+		m_scale.a[1] *= Z(scopeSize);
+	} else if (m_axis == "z") {
 		uAxis = scope.GetAxis('x');
 		vAxis = scope.GetAxis('y');
-		uScale *= X(scopeSize);
-		vScale *= Y(scopeSize);
+		m_scale.a[0] *= X(scopeSize);
+		m_scale.a[1] *= Y(scopeSize);
 	}
 
 	PlanarTextureProjection ptp(scopePos, uAxis, vAxis);
-	ptp.SetScale(uScale, vScale);
-	ptp.SetOffset(get_value_as<float>(*GetValue("offset_u")),
-	              get_value_as<float>(*GetValue("offset_v")));
-	ptp.SetClamp(get_value_as<bool>(*GetValue("clamp")));
+	ptp.SetScale(m_scale.a[0], m_scale.a[1]);
+	ptp.SetOffset(m_offset.a[0], m_offset.a[1]);
+	ptp.SetClamp(m_clamp);
 
 	for (auto i = outGeometry->PointsBegin(); i != outGeometry->PointsEnd();
 	     ++i) {

@@ -196,7 +196,7 @@ class Graph::Impl
 	}
 
 	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-	                                objects::ParameterCallback *cb)
+	                                objects::NewParameterCallback *cb)
 	{
 		auto node = GetNode(nodeName);
 		if (node == nullptr) {
@@ -371,7 +371,7 @@ void Graph::SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
 }
 
 void Graph::SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-                                       objects::ParameterCallback *cb)
+                                       objects::NewParameterCallback *cb)
 {
 	m_implementation->SetNodeExecutionParameters(nodeName, cb);
 }

@@ -36,9 +36,9 @@ ClipGeometry::~ClipGeometry()
 {
 }
 
-void ClipGeometry::SetParameters(objects::ParameterCallback* cb)
+void ClipGeometry::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("plane", cb->PlaneArgument("plane", "Clip Plane"));
+	cb->PlaneParameter(&m_plane, "plane", "Clip Plane");
 }
 
 const std::string& ClipGeometry::GetOperationName() const
@@ -65,9 +65,8 @@ void ClipGeometry::DoWork()
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
 	ProceduralObjectPtr inObject = m_inputGeometry->GetNext();
-	UpdateValue("plane");
 
-	Clip<Geometry> clip(get_value_as<Plane<float>>(*GetValue("plane")));
+	Clip<Geometry> clip(m_plane);
 
 	// Geometry
 	auto inGeometryComponent =

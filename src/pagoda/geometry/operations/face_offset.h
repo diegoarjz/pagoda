@@ -15,7 +15,10 @@ class FaceOffsetOperation : public objects::ProceduralOperation
 	FaceOffsetOperation(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~FaceOffsetOperation();
 
-	void SetParameters(objects::ParameterCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;
@@ -26,5 +29,7 @@ class FaceOffsetOperation : public objects::ProceduralOperation
 	objects::InterfacePtr m_input;
 	objects::InterfacePtr m_inner;
 	objects::InterfacePtr m_outer;
+
+	float m_amount;
 };
 }  // namespace pagoda::geometry::operations

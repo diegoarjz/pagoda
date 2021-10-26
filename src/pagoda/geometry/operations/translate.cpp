@@ -37,12 +37,12 @@ Translate::~Translate()
 {
 }
 
-void Translate::SetParameters(objects::ParameterCallback* cb)
+void Translate::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("x", cb->FloatArgument("x", "X", 0.0f));
-	RegisterMember("y", cb->FloatArgument("y", "Y", 0.0f));
-	RegisterMember("z", cb->FloatArgument("z", "Z", 0.0f));
-	RegisterMember("world", cb->BooleanArgument("world", "World", false));
+	cb->FloatParameter(&m_translate.a[0], "x", "X", 0.0f);
+	cb->FloatParameter(&m_translate.a[1], "y", "Y", 0.0f);
+	cb->FloatParameter(&m_translate.a[2], "z", "Z", 0.0f);
+	cb->BooleanParameter(&m_world, "world", "World", false);
 }
 
 const std::string& Translate::GetOperationName() const
@@ -78,22 +78,12 @@ void Translate::DoWork()
 	outGeometryComponent->SetGeometry(outGeometry);
 
 	auto inScope = inGeometryComponent->GetScope();
-	UpdateValue("x");
-	UpdateValue("y");
-	UpdateValue("z");
-	UpdateValue("world");
 
-	auto x = get_value_as<float>(*GetValue("x"));
-	auto y = get_value_as<float>(*GetValue("y"));
-	auto z = get_value_as<float>(*GetValue("z"));
-	auto inWorldCoordinates =
-	  get_value_as<std::string>(*GetValue("world")) == "true";
 	Mat4x4F matrix;
-	if (inWorldCoordinates) {
-		matrix = boost::qvm::translation_mat(Vec3F{x, y, z});
+	if (m_world) {
+		matrix = boost::qvm::translation_mat(m_translate);
 	} else {
-		matrix =
-		  boost::qvm::translation_mat(inScope.GetLocalVector(Vec3F{x, y, z}));
+		matrix = boost::qvm::translation_mat(inScope.GetLocalVector(m_translate));
 	}
 	MatrixTransform<Geometry> transform(matrix);
 

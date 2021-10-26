@@ -21,7 +21,9 @@
 #include <pagoda/graph/input_interface_node.h>
 #include <pagoda/graph/node.h>
 #include <pagoda/graph/output_interface_node.h>
+
 #include <pagoda/objects/parameter_callback.h>
+#include <pagoda/objects/parameter_creator.h>
 
 #include <memory>
 
@@ -93,78 +95,6 @@ struct ConstructionArgumentSetter : public ConstructionArgumentCallback
 	std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &m_args;
 };
 
-class ExecutionArgumentSetter : public objects::ParameterCallback
-{
-	public:
-	ExecutionArgumentSetter(
-	  std::unordered_map<std::string, dynamic::DynamicValueBasePtr> &args)
-	  : m_args{args}
-	{
-	}
-
-	DynamicValueBasePtr StringArgument(const char *const name,
-	                                   const char *const label,
-	                                   const std::string &defaultValue = "")
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<String>(defaultValue);
-	}
-
-	DynamicValueBasePtr FloatArgument(const char *const name,
-	                                  const char *const label,
-	                                  float defaultValue = 0.0f)
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<FloatValue>(defaultValue);
-	}
-
-	DynamicValueBasePtr IntegerArgument(const char *const name,
-	                                    const char *const label,
-	                                    int defaultValue = 0)
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<Integer>(defaultValue);
-	}
-
-	DynamicValueBasePtr BooleanArgument(const char *const name,
-	                                    const char *const label,
-	                                    bool defaultValue = false)
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<Boolean>(defaultValue);
-	}
-
-	DynamicValueBasePtr PlaneArgument(
-	  const char *const name, const char *const label,
-	  math::Plane<float> defaultValue = math::Plane<float>{})
-	{
-		if (auto value = GetArgument(name)) {
-			return value;
-		}
-		return std::make_shared<DynamicPlane>(defaultValue);
-	}
-
-	private:
-	dynamic::DynamicValueBasePtr GetArgument(const char *const name)
-	{
-		if (m_args.find(name) == m_args.end()) {
-			return nullptr;
-		}
-		auto v = m_args[name];
-		return m_args[name];
-	}
-
-	std::unordered_map<std::string, DynamicValueBasePtr> &m_args;
-};
-
 void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 {
 	m_currentNamedParameters.clear();
@@ -182,7 +112,17 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 	for (const auto &namedArgument : nodeDefinition->GetExecutionArguments()) {
 		namedArgument->AcceptVisitor(this);
 	}
-	ExecutionArgumentSetter executionSetter{m_currentNamedParameters};
+
+	objects::ParameterCreator executionSetter{
+	  [this](std::shared_ptr<objects::ParameterBase> p) {
+		  auto iter = m_currentNamedParameters.find(p->GetName());
+		  if (iter != m_currentNamedParameters.end()) {
+			  p->FromDynamicValue(iter->second);
+		  }
+
+		  return true;
+	  }};
+
 	m_graph->SetNodeExecutionParameters(nodeName, &executionSetter);
 }
 

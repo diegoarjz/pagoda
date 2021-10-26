@@ -45,9 +45,9 @@ void OperationNode::SetConstructionArguments(ConstructionArgumentCallback *cb)
 	SetOperation(operation);
 }
 
-void OperationNode::SetExecutionArguments(objects::ParameterCallback *cb)
+void OperationNode::SetExecutionArguments(objects::NewParameterCallback *cb)
 {
-	m_operation->SetParameters(cb);
+	m_operation->Parameters(cb);
 }
 
 class InterfaceCreator : public InterfaceCallback

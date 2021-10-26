@@ -22,7 +22,8 @@ void ParameterInputNode::SetConstructionArguments(
 {
 	cb->StringArgument("name", m_parameterName, "Parameter Name");
 }
-void ParameterInputNode::SetExecutionArguments(objects::ParameterCallback* cb)
+void ParameterInputNode::SetExecutionArguments(
+  objects::NewParameterCallback* cb)
 {
 }
 

@@ -36,11 +36,11 @@ CreateBoxGeometry::~CreateBoxGeometry()
 {
 }
 
-void CreateBoxGeometry::SetParameters(objects::ParameterCallback* cb)
+void CreateBoxGeometry::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("xSize", cb->FloatArgument("xSize", "X", 1.0f));
-	RegisterMember("ySize", cb->FloatArgument("ySize", "Y", 1.0f));
-	RegisterMember("zSize", cb->FloatArgument("zSize", "Z", 1.0f));
+	cb->FloatParameter(&m_width, "width", "Width", 1.0f);
+	cb->FloatParameter(&m_height, "height", "Height", 1.0f);
+	cb->FloatParameter(&m_depth, "depth", "Depth", 1.0f);
 }
 
 const std::string& CreateBoxGeometry::GetOperationName() const
@@ -58,14 +58,10 @@ void CreateBoxGeometry::DoWork()
 {
 	START_PROFILE;
 
-	float xSize = get_value_as<float>(*GetValue("xSize"));
-	float ySize = get_value_as<float>(*GetValue("ySize"));
-	float zSize = get_value_as<float>(*GetValue("zSize"));
-
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	CreateBox<Geometry> createBox(xSize, ySize, zSize);
+	CreateBox<Geometry> createBox(m_width, m_height, m_depth);
 	auto geometry = std::make_shared<Geometry>();
 	createBox.Execute(geometry);
 

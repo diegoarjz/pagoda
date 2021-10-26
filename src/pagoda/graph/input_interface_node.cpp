@@ -33,7 +33,8 @@ void InputInterfaceNode::SetConstructionArguments(
 	SetInterfaceName(interfaceName);
 }
 
-void InputInterfaceNode::SetExecutionArguments(objects::ParameterCallback* cb)
+void InputInterfaceNode::SetExecutionArguments(
+  objects::NewParameterCallback* cb)
 {
 }
 

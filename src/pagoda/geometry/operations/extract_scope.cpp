@@ -30,10 +30,6 @@ ExtractScope::~ExtractScope()
 {
 }
 
-void ExtractScope::SetParameters(objects::ParameterCallback* cb)
-{
-}
-
 const std::string& ExtractScope::GetOperationName() const
 {
 	static const std::string sName{"ExtractScope"};

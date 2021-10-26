@@ -23,7 +23,7 @@ class OperationNode : public Node
 	~OperationNode();
 
 	void SetConstructionArguments(ConstructionArgumentCallback *cb) override;
-	void SetExecutionArguments(objects::ParameterCallback *cb) override;
+	void SetExecutionArguments(objects::NewParameterCallback *cb) override;
 
 	void Execute(const NodeSet &inNodes, const NodeSet &outNodes) override;
 	void SetOperation(pagoda::objects::ProceduralOperationPtr operation);

@@ -19,7 +19,7 @@ using DynamicValueBasePtr = std::shared_ptr<DynamicValueBase>;
 
 namespace pagoda::objects
 {
-class ParameterCallback;
+class NewParameterCallback;
 }
 
 namespace pagoda::graph
@@ -213,7 +213,7 @@ class Graph
 	                                   ConstructionArgumentCallback *cb);
 
 	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-	                                objects::ParameterCallback *cb);
+	                                objects::NewParameterCallback *cb);
 
 	private:
 	class Impl;

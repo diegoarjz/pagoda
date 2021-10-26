@@ -39,10 +39,12 @@ ExportGeometry::~ExportGeometry()
 {
 }
 
-void ExportGeometry::SetParameters(objects::ParameterCallback* cb)
+void ExportGeometry::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("path", cb->StringArgument("path", "File"));
-	RegisterMember("count", std::make_shared<Integer>(0));
+	if (auto par = cb->IntegerParameter(&m_objectCount, "count", "Count", 0)) {
+		par->SetFlag(ParameterBase::Flag::NoWrite, true);
+	}
+	cb->StringParameter(&m_path, "path", "Path", "");
 }
 
 const std::string& ExportGeometry::GetOperationName() const
@@ -63,9 +65,6 @@ void ExportGeometry::DoWork()
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	set_value_from<int>(*GetValue("count"), m_objectCount);
-	UpdateValue("path");
-
 	ProceduralObjectPtr inObject = m_input->GetNext();
 
 	auto geometryComponent =
@@ -73,11 +72,9 @@ void ExportGeometry::DoWork()
 	auto geometry = geometryComponent->GetGeometry();
 	ObjExporter<Geometry> exporter(geometry);
 
-	std::string outputPath = get_value_as<std::string>(*GetValue("path"));
-	common::fs::CreateDirectories(
-	  boost::filesystem::path(outputPath).parent_path());
+	common::fs::CreateDirectories(boost::filesystem::path(m_path).parent_path());
 
-	std::ofstream out_file(outputPath.c_str());
+	std::ofstream out_file(m_path.c_str());
 	exporter.Export(out_file);
 	out_file.close();
 

@@ -22,7 +22,10 @@ class RepeatSplit : public objects::ProceduralOperation
 	RepeatSplit(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~RepeatSplit();
 
-	void SetParameters(objects::ParameterCallback *cb) override;
+	void SetParameters(objects::ParameterCallback *cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback *cb) override;
 
 	const std::string &GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback *cb) override;
@@ -37,6 +40,10 @@ class RepeatSplit : public objects::ProceduralOperation
 
 	objects::InterfacePtr m_input;
 	objects::InterfacePtr m_output;
+
+	float m_size;
+	std::string m_axis;
+	bool m_adjust;
 };
 }  // namespace pagoda::geometry::operations
 

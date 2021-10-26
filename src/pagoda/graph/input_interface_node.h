@@ -23,7 +23,7 @@ class InputInterfaceNode : public Node
 	~InputInterfaceNode() override;
 
 	void SetConstructionArguments(ConstructionArgumentCallback* cb) override;
-	void SetExecutionArguments(objects::ParameterCallback* cb) override;
+	void SetExecutionArguments(objects::NewParameterCallback* cb) override;
 
 	void Execute(const NodeSet& inNodes, const NodeSet& outNodes) override;
 	void SetInterfaceName(const std::string& interfaceName);

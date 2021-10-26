@@ -18,7 +18,10 @@ class CreateRectGeometry : public objects::ProceduralOperation
 	CreateRectGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateRectGeometry();
 
-	void SetParameters(objects::ParameterCallback* cb) override;
+	void SetParameters(objects::ParameterCallback* cb) override
+	{
+	}
+	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
 
@@ -28,6 +31,10 @@ class CreateRectGeometry : public objects::ProceduralOperation
 
 	private:
 	objects::InterfacePtr m_out;
+
+	float m_width;
+	float m_height;
+	std::string m_plane;
 };  // class CreateSquareGeometry
 
 }  // namespace pagoda::geometry::operations

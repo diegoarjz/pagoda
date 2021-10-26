@@ -38,11 +38,11 @@ RepeatSplit::~RepeatSplit()
 {
 }
 
-void RepeatSplit::SetParameters(objects::ParameterCallback* cb)
+void RepeatSplit::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("size", cb->FloatArgument("size", "Size", 1.0f));
-	RegisterMember("axis", cb->StringArgument("axis", "Axis", "x"));
-	RegisterMember("adjust", cb->BooleanArgument("adjust", "Adjust", false));
+	cb->FloatParameter(&m_size, "size", "Size", 1.0f);
+	cb->StringParameter(&m_axis, "axis", "Axis", "x");
+	cb->BooleanParameter(&m_adjust, "adjust", "Adjust", false);
 }
 
 const std::string& RepeatSplit::GetOperationName() const

@@ -36,11 +36,11 @@ CreateSphereGeometry::~CreateSphereGeometry()
 {
 }
 
-void CreateSphereGeometry::SetParameters(objects::ParameterCallback* cb)
+void CreateSphereGeometry::Parameters(objects::NewParameterCallback* cb)
 {
-	RegisterMember("radius", cb->FloatArgument("radius", "Radius", 1.0f));
-	RegisterMember("slices", cb->IntegerArgument("slices", "Slices", 10));
-	RegisterMember("stacks", cb->IntegerArgument("stacks", "Stacks", 10));
+	cb->FloatParameter(&m_radius, "radius", "Radius", 1.0f);
+	cb->IntegerParameter(&m_slices, "slices", "Slices", 10);
+	cb->IntegerParameter(&m_stacks, "stacks", "Stacks", 10);
 }
 
 const std::string& CreateSphereGeometry::GetOperationName() const

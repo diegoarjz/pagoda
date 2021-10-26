@@ -9,7 +9,11 @@ set(OBJECTS_SRCS
     "interface.h"
     "operation_factory.cpp"
     "operation_factory.h"
+    "parameter.cpp"
+    "parameter.h"
     "parameter_callback.h"
+    "parameter_creator.cpp"
+    "parameter_creator.h"
     "procedural_component.cpp"
     "procedural_component.h"
     "procedural_component_system.h"
@@ -43,6 +47,8 @@ set(GEOMETRY_UNIT_TESTS
     "procedural_object.test.cpp"
     "procedural_operation.test.cpp"
     "interface.test.cpp"
+    "parameter.test.cpp"
+    "parameter_creator.test.cpp"
 )
 
 foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})

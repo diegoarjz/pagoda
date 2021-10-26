@@ -44,14 +44,13 @@ ReadGeoJson::~ReadGeoJson()
 {
 }
 
-void ReadGeoJson::SetParameters(objects::ParameterCallback *cb)
+void ReadGeoJson::Parameters(objects::NewParameterCallback *cb)
 {
-	RegisterMember("file", cb->StringArgument("file", "File"));
-	RegisterMember("ref_latitude",
-	               cb->FloatArgument("ref_latitude", "Reference Latitude", 0.0f));
-	RegisterMember(
-	  "ref_longitude",
-	  cb->FloatArgument("ref_longitude", "Reference Longitude", 0.0f));
+	cb->StringParameter(&m_file, "file", "File", "");
+	cb->FloatParameter(&m_refLatitude, "ref_latitude", "Reference Latitude",
+	                   0.0f);
+	cb->FloatParameter(&m_refLongitude, "ref_longitude", "Reference Longitude",
+	                   0.0f);
 }
 
 const std::string &ReadGeoJson::GetOperationName() const
@@ -69,15 +68,12 @@ void ReadGeoJson::DoWork()
 {
 	START_PROFILE;
 
-	std::string file = get_value_as<std::string>(*GetValue("file"));
-	std::string json = LoadFileToString(file);
+	std::string json = LoadFileToString(m_file);
 
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 	GeoJsonReader reader(json);
-	reader.SetReferenceCoordinate(
-	  math::Vec2F{get_value_as<float>(*GetValue("ref_latitude")),
-	              get_value_as<float>(*GetValue("ref_longitude"))});
+	reader.SetReferenceCoordinate(math::Vec2F{m_refLatitude, m_refLongitude});
 
 	reader.Read([&](GeoJsonReader::Feature &&f) {
 		if (f.m_polygon.GetPointCount() < 3) {
