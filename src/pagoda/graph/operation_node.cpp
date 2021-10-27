@@ -10,11 +10,14 @@
 #include "unsupported_node_link.h"
 
 #include <pagoda/common/utils.h>
+
 #include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/dynamic/value_not_found.h>
+
 #include <pagoda/objects/interface.h>
 #include <pagoda/objects/interface_callback.h>
 #include <pagoda/objects/operation_factory.h>
+#include <pagoda/objects/parameter_creator.h>
 #include <pagoda/objects/procedural_operation.h>
 #include <pagoda/objects/unknown_operation.h>
 
@@ -72,8 +75,12 @@ class InterfaceCreator : public InterfaceCallback
 void OperationNode::SetOperation(ProceduralOperationPtr operation)
 {
 	m_operation = operation;
-	InterfaceCreator creator;
-	m_operation->Interfaces(&creator);
+	InterfaceCreator interfaceCreator;
+	m_operation->Interfaces(&interfaceCreator);
+	ParameterCreator paramCreator([this](ParameterBasePtr p) {
+		return m_parameters.insert({p->GetName(), p}).second;
+	});
+	m_operation->Parameters(&paramCreator);
 	RegisterOrSetMember("op", m_operation);
 }
 
@@ -165,6 +172,13 @@ void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	LOG_TRACE(ProceduralGraph,
 	          "Executing OperationNode " << GetName() << "(" << GetId() << ")");
+
+	// Compute all parameters that have an expression
+	for (auto &p : m_parameters) {
+		if (p.second->HasExpression()) {
+			p.second->EvaluateExpression();
+		}
+	}
 
 	std::vector<InterfacePtr> inputs;
 	std::vector<InterfacePtr> outputs;

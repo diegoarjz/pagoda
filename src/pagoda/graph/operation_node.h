@@ -1,15 +1,11 @@
 #pragma once
-#ifndef PAGODA_PROCEDURAL_GRAPH_OPERATION_NODE_H_
-#define PAGODA_PROCEDURAL_GRAPH_OPERATION_NODE_H_
 
 #include "node.h"
 
 namespace pagoda::objects
 {
-class ProceduralOperation;
-using ProceduralOperationPtr = std::shared_ptr<ProceduralOperation>;
-class OperationFactory;
-using OperationFactoryPtr = std::shared_ptr<OperationFactory>;
+using ProceduralOperationPtr = std::shared_ptr<class ProceduralOperation>;
+using OperationFactoryPtr = std::shared_ptr<class OperationFactory>;
 }  // namespace pagoda::objects
 
 namespace pagoda::graph
@@ -50,4 +46,3 @@ class OperationNode : public Node
 };  // class OperationNode
 }  // namespace pagoda::graph
 
-#endif
