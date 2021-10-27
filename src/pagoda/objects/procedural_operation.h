@@ -33,6 +33,7 @@ using ProceduralObjectSystemPtr = std::shared_ptr<class ProceduralObjectSystem>;
 class InterfaceCallback;
 class ParameterCallback;
 class NewParameterCallback;
+class ParameterBase;
 
 /**
  * @brief Base class for a procedural operation.
@@ -81,6 +82,10 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	virtual void SetParameters(objects::ParameterCallback* cb) = 0;
 
 	virtual void Parameters(objects::NewParameterCallback* cb)
+	{
+	}
+
+	virtual void ParameterChanged(std::shared_ptr<ParameterBase> par)
 	{
 	}
 

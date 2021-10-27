@@ -113,17 +113,15 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 		namedArgument->AcceptVisitor(this);
 	}
 
-	objects::ParameterCreator executionSetter{
-	  [this](std::shared_ptr<objects::ParameterBase> p) {
-		  auto iter = m_currentNamedParameters.find(p->GetName());
-		  if (iter != m_currentNamedParameters.end()) {
-			  p->FromDynamicValue(iter->second);
-		  }
-
-		  return true;
-	  }};
-
-	m_graph->SetNodeExecutionParameters(nodeName, &executionSetter);
+	auto node = m_graph->GetNode(nodeName);
+	for (const auto &p : m_currentNamedParameters) {
+		if (auto par = node->GetParameter(p.first)) {
+			par->FromDynamicValue(p.second);
+		} else {
+			LOG_WARNING("Parameter " << p.first << " doesn't exist in node "
+			                         << nodeName);
+		}
+	}
 }
 
 void AstInterpreter::Visit(NodeLinkNode *nodeLink)
