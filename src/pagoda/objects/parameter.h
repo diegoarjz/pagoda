@@ -22,7 +22,7 @@ namespace pagoda::objects
  * Parameters hold a pointer to a value that is stored elsewhere, usually in a
  * ProceduralOperation.
  */
-class ParameterBase
+class ParameterBase : public std::enable_shared_from_this<ParameterBase>
 {
 	public:
 	enum class Flag
@@ -82,11 +82,31 @@ class ParameterBase
 	void EvaluateExpression();
 
 	////////////////////////////////////////
+	/// \name Callbacks
+	////////////////////////////////////////
+
+	/// Used in ParameterBase::OnChanged
+	using OnChangedCallback = std::function<void(std::shared_ptr<ParameterBase>)>;
+
+	/**
+	 * Add a OnChangedCallback to the list of callbacks that will be called
+	 * whenever a Parameter changes its value.
+	 */
+	void OnChanged(OnChangedCallback cb);
+
+	////////////////////////////////////////
 	/// \name Conversion and Serialization
 	////////////////////////////////////////
 
+	/**
+	 * Sets the Parameter value from a DynamicValueBase.
+	 */
 	virtual void FromDynamicValue(
 	  const dynamic::DynamicValueBasePtr& dynamicValue) = 0;
+
+	/**
+	 * Returns the DynamicValueBase equivalent of this Parameter.
+	 */
 	virtual dynamic::DynamicValueBasePtr ToDynamicValue() = 0;
 
 	protected:
@@ -94,10 +114,14 @@ class ParameterBase
 	ParameterBase(const std::string& name, const std::string& label);
 	virtual ~ParameterBase();
 
+	void changed();
+
 	private:
 	std::string m_name;
 	std::string m_label;
 	std::bitset<static_cast<size_t>(Flag::FlagCount)> m_flags;
+
+	std::vector<OnChangedCallback> m_onChangedCallbacks;
 
 	struct Expression;
 	std::unique_ptr<Expression> m_expression;
@@ -151,7 +175,10 @@ class Parameter : public ParameterBase
 	 */
 	void SetValue(const VALUE& v)
 	{
-		*m_valuePtr = v;
+		if (*m_valuePtr != v) {
+			*m_valuePtr = v;
+			changed();
+		}
 	}
 
 	/**
@@ -159,7 +186,10 @@ class Parameter : public ParameterBase
 	 */
 	void SetValue(VALUE&& v)
 	{
-		*m_valuePtr = std::move(v);
+		if (*m_valuePtr != v) {
+			*m_valuePtr = std::move(v);
+			changed();
+		}
 	}
 
 	////////////////////////////////////////
@@ -169,7 +199,8 @@ class Parameter : public ParameterBase
 	void FromDynamicValue(
 	  const dynamic::DynamicValueBasePtr& dynamicValue) override
 	{
-		*m_valuePtr = dynamic::get_value_as<VALUE>(*dynamicValue);
+		VALUE v = dynamic::get_value_as<VALUE>(*dynamicValue);
+		SetValue(v);
 	}
 
 	dynamic::DynamicValueBasePtr ToDynamicValue() override

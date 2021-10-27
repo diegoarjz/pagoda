@@ -95,6 +95,21 @@ void ParameterBase::EvaluateExpression()
 }
 
 ////////////////////////////////////////
+/// \name Callbacks
+////////////////////////////////////////
+void ParameterBase::OnChanged(ParameterBase::OnChangedCallback cb)
+{
+	m_onChangedCallbacks.push_back(cb);
+}
+
+void ParameterBase::changed()
+{
+	for (const auto& cb : m_onChangedCallbacks) {
+		cb(shared_from_this());
+	}
+}
+
+////////////////////////////////////////
 /// \name Conversion and Serialization
 ////////////////////////////////////////
 
