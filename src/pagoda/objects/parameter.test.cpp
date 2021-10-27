@@ -104,9 +104,9 @@ TYPED_TEST_SUITE_P(ParameterTest);
 TYPED_TEST_P(ParameterTest, test_constructors)
 {
 	TypeParam v = defaultValues<TypeParam>::value1;
-	Parameter<TypeParam> par(&v, "par");
-	EXPECT_EQ(par.GetName(), "par");
-	EXPECT_EQ(par.GetLabel(), "par");
+	auto par = std::make_shared<Parameter<TypeParam>>(&v, "par");
+	EXPECT_EQ(par->GetName(), "par");
+	EXPECT_EQ(par->GetLabel(), "par");
 
 	Parameter<TypeParam> par2(&v, "par2", "label");
 	EXPECT_EQ(par2.GetName(), "par2");
@@ -116,8 +116,8 @@ TYPED_TEST_P(ParameterTest, test_constructors)
 TYPED_TEST_P(ParameterTest, test_getters)
 {
 	TypeParam v = defaultValues<TypeParam>::value1;
-	Parameter<TypeParam> par(&v, "par");
-	EXPECT_EQ(par.GetValue(), defaultValues<TypeParam>::value1);
+	auto par = std::make_shared<Parameter<TypeParam>>(&v, "par");
+	EXPECT_EQ(par->GetValue(), defaultValues<TypeParam>::value1);
 
 	const Parameter<TypeParam> par2(&v, "par");
 	EXPECT_EQ(par2.GetValue(), defaultValues<TypeParam>::value1);
@@ -126,58 +126,76 @@ TYPED_TEST_P(ParameterTest, test_getters)
 TYPED_TEST_P(ParameterTest, test_setters)
 {
 	TypeParam v = defaultValues<TypeParam>::value1;
-	Parameter<TypeParam> par(&v, "par");
-	par.SetValue(defaultValues<TypeParam>::value2);
-	EXPECT_EQ(v, defaultValues<TypeParam>::value2);
+	auto par = std::make_shared<Parameter<TypeParam>>(&v, "par");
 
-	par.SetValue(std::move(defaultValues<TypeParam>::value1));
+	bool called{false};
+	par->OnChanged(
+	  [&called](std::shared_ptr<ParameterBase> p) { called = true; });
+
+	par->SetValue(defaultValues<TypeParam>::value2);
+	EXPECT_EQ(v, defaultValues<TypeParam>::value2);
+	EXPECT_TRUE(called);
+
+	called = false;
+	par->SetValue(std::move(defaultValues<TypeParam>::value1));
 	EXPECT_EQ(v, defaultValues<TypeParam>::value1);
+	EXPECT_TRUE(called);
 }
 
 TYPED_TEST_P(ParameterTest, test_flags)
 {
 	TypeParam v = defaultValues<TypeParam>::value1;
-	Parameter<TypeParam> par(&v, "par");
+	auto par = std::make_shared<Parameter<TypeParam>>(&v, "par");
 
 	for (std::size_t f = 0;
 	     f < static_cast<std::size_t>(ParameterBase::Flag::FlagCount); ++f) {
 		auto flag = static_cast<ParameterBase::Flag>(f);
 
-		EXPECT_FALSE(par.HasFlag(flag));
-		par.SetFlag(flag, true);
-		EXPECT_TRUE(par.HasFlag(flag));
-		par.SetFlag(flag, false);
-		EXPECT_FALSE(par.HasFlag(flag));
+		EXPECT_FALSE(par->HasFlag(flag));
+		par->SetFlag(flag, true);
+		EXPECT_TRUE(par->HasFlag(flag));
+		par->SetFlag(flag, false);
+		EXPECT_FALSE(par->HasFlag(flag));
 	}
 }
 
 TYPED_TEST_P(ParameterTest, test_conversion_from_dynamic_value)
 {
 	TypeParam v = defaultValues<TypeParam>::value2;
-	Parameter<TypeParam> par(&v, "par");
-	par.FromDynamicValue(defaultValues<TypeParam>::getDynamicValue());
+	auto par = std::make_shared<Parameter<TypeParam>>(&v, "par");
+	bool called{false};
+	par->OnChanged(
+	  [&called](std::shared_ptr<ParameterBase> p) { called = true; });
+
+	par->FromDynamicValue(defaultValues<TypeParam>::getDynamicValue());
 	EXPECT_EQ(v, defaultValues<TypeParam>::value1);
+	EXPECT_TRUE(called);
 }
 
 TYPED_TEST_P(ParameterTest, test_conversion_to_dynamic_value)
 {
 	TypeParam v = defaultValues<TypeParam>::value1;
-	Parameter<TypeParam> par(&v, "par");
-	par.SetValue(defaultValues<TypeParam>::value2);
-	auto dynamicValue = par.ToDynamicValue();
+	auto par = std::make_shared<Parameter<TypeParam>>(&v, "par");
+	par->SetValue(defaultValues<TypeParam>::value2);
+	auto dynamicValue = par->ToDynamicValue();
 	ASSERT_NE(dynamicValue, nullptr);
 }
 
 TYPED_TEST_P(ParameterTest, test_parameters_with_expressions)
 {
 	TypeParam v = defaultValues<TypeParam>::value2;
-	Parameter<TypeParam> par(&v, "par");
-	par.SetExpression(defaultValues<TypeParam>::expression1);
-	ASSERT_TRUE(par.HasExpression());
-	EXPECT_EQ(par.GetExpression(), defaultValues<TypeParam>::expression1);
+	auto par = std::make_shared<Parameter<TypeParam>>(&v, "par");
+	bool called{false};
+	par->OnChanged(
+	  [&called](std::shared_ptr<ParameterBase> p) { called = true; });
 
-	par.EvaluateExpression();
+	par->SetExpression(defaultValues<TypeParam>::expression1);
+	ASSERT_TRUE(par->HasExpression());
+	EXPECT_EQ(par->GetExpression(), defaultValues<TypeParam>::expression1);
+
+	par->EvaluateExpression();
 	EXPECT_EQ(v, defaultValues<TypeParam>::value1);
+	EXPECT_TRUE(called);
 }
 
 // clang-format off
