@@ -28,6 +28,7 @@ struct defaultValues
 	static const T value1;
 	static const T value2;
 	static dynamic::DynamicValueBasePtr getDynamicValue();
+	static const std::string expression1;
 };
 
 template<>
@@ -39,6 +40,8 @@ DynamicValueBasePtr defaultValues<std::string>::getDynamicValue()
 {
 	return std::make_shared<String>(value1);
 }
+template<>
+const std::string defaultValues<std::string>::expression1{"\"a string\";"};
 
 template<>
 const float defaultValues<float>::value1{123.456f};
@@ -49,6 +52,8 @@ DynamicValueBasePtr defaultValues<float>::getDynamicValue()
 {
 	return std::make_shared<FloatValue>(value1);
 }
+template<>
+const std::string defaultValues<float>::expression1{"123.456;"};
 
 template<>
 const int defaultValues<int>::value1{123};
@@ -59,6 +64,8 @@ DynamicValueBasePtr defaultValues<int>::getDynamicValue()
 {
 	return std::make_shared<Integer>(value1);
 }
+template<>
+const std::string defaultValues<int>::expression1{"123;"};
 
 template<>
 const bool defaultValues<bool>::value1{false};
@@ -69,10 +76,16 @@ DynamicValueBasePtr defaultValues<bool>::getDynamicValue()
 {
 	return std::make_shared<Boolean>(value1);
 }
+template<>
+const std::string defaultValues<bool>::expression1{"false;"};
 
 template<>
 const math::Plane<float> defaultValues<math::Plane<float>>::value1{
-  {1.0f, 2.0f, 3.0f}, 4.0f};
+  math::Plane<float>::FromPointAndNormal(math::Vec3F{1, 2, 3}, math::Vec3F{
+                                                                 1,
+                                                                 0,
+                                                                 0,
+                                                               })};
 template<>
 const math::Plane<float> defaultValues<math::Plane<float>>::value2{
   {2.0f, 3.0f, 4.0f}, 5.0f};
@@ -81,6 +94,9 @@ DynamicValueBasePtr defaultValues<math::Plane<float>>::getDynamicValue()
 {
 	return std::make_shared<DynamicPlane>(value1);
 }
+template<>
+const std::string defaultValues<math::Plane<float>>::expression1{
+  "Plane(Vector3(1,2,3), Vector3(1,0,0));"};
 }  // namespace
 
 TYPED_TEST_SUITE_P(ParameterTest);
@@ -152,6 +168,18 @@ TYPED_TEST_P(ParameterTest, test_conversion_to_dynamic_value)
 	ASSERT_NE(dynamicValue, nullptr);
 }
 
+TYPED_TEST_P(ParameterTest, test_parameters_with_expressions)
+{
+	TypeParam v = defaultValues<TypeParam>::value2;
+	Parameter<TypeParam> par(&v, "par");
+	par.SetExpression(defaultValues<TypeParam>::expression1);
+	ASSERT_TRUE(par.HasExpression());
+	EXPECT_EQ(par.GetExpression(), defaultValues<TypeParam>::expression1);
+
+	par.EvaluateExpression();
+	EXPECT_EQ(v, defaultValues<TypeParam>::value1);
+}
+
 // clang-format off
 REGISTER_TYPED_TEST_SUITE_P(ParameterTest,
                             test_constructors,
@@ -159,7 +187,8 @@ REGISTER_TYPED_TEST_SUITE_P(ParameterTest,
                             test_setters,
                             test_flags,
                             test_conversion_from_dynamic_value,
-                            test_conversion_to_dynamic_value);
+                            test_conversion_to_dynamic_value,
+                            test_parameters_with_expressions);
 
 using MyTypes = ::testing::Types<std::string,
                                  float,

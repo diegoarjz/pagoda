@@ -43,7 +43,6 @@ class ParameterBase
 	 * Returns the Parameter's Label.
 	 */
 	const std::string& GetLabel() const;
-
 	////////////////////////////////////////
 	/// \name Parameter Flags
 	////////////////////////////////////////
@@ -57,6 +56,30 @@ class ParameterBase
 	 * Sets the \p flag to \p val.
 	 */
 	void SetFlag(Flag flag, bool val);
+
+	////////////////////////////////////////
+	/// \name Expressions
+	////////////////////////////////////////
+
+	/**
+	 * Returns whether or not this parameter has an Expression.
+	 */
+	bool HasExpression() const;
+
+	/**
+	 * Sets the parameter to use the expression in \p e.
+	 */
+	void SetExpression(const std::string& e);
+
+	/**
+	 * Returns a string containing the expression.
+	 */
+	const std::string& GetExpression() const;
+
+	/**
+	 * Evaluates the expression and sets the value.
+	 */
+	void EvaluateExpression();
 
 	////////////////////////////////////////
 	/// \name Conversion and Serialization
@@ -75,6 +98,9 @@ class ParameterBase
 	std::string m_name;
 	std::string m_label;
 	std::bitset<static_cast<size_t>(Flag::FlagCount)> m_flags;
+
+	struct Expression;
+	std::unique_ptr<Expression> m_expression;
 };
 
 template<typename VALUE>
