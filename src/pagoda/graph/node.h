@@ -12,7 +12,8 @@
 namespace pagoda::objects
 {
 class NewParameterCallback;
-}
+using ParameterBasePtr = std::shared_ptr<class ParameterBase>;
+}  // namespace pagoda::objects
 
 namespace pagoda::graph
 {
@@ -95,6 +96,11 @@ class Node : public dynamic::BuiltinClass
 	virtual const char *const GetNodeType() = 0;
 
 	void AcceptVisitor(dynamic::ValueVisitorBase &visitor) override;
+
+	objects::ParameterBasePtr GetParameter(const std::string &name) const;
+
+	protected:
+	std::unordered_map<std::string, objects::ParameterBasePtr> m_parameters;
 
 	private:
 	std::string m_nodeName;
