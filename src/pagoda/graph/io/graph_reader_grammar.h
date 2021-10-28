@@ -14,10 +14,12 @@ namespace pagoda::graph::io
 {
 template<class Iterator>
 struct GraphReaderGrammar
-  : boost::spirit::qi::grammar<Iterator, GraphDefinitionNodePtr(), boost::spirit::qi::space_type>
+  : boost::spirit::qi::grammar<Iterator, GraphDefinitionNodePtr(),
+                               boost::spirit::qi::space_type>
 {
 	template<typename... Args>
-	using Rule_t = boost::spirit::qi::rule<Args..., boost::spirit::qi::space_type>;
+	using Rule_t =
+	  boost::spirit::qi::rule<Args..., boost::spirit::qi::space_type>;
 
 	GraphReaderGrammar() : GraphReaderGrammar::base_type(graph_definition)
 	{
@@ -31,12 +33,15 @@ struct GraphReaderGrammar
 		 * literal -> quoted_string | float
 		 * expression -> "$<" expression_body ">$"
 		 * expression_body -> .* \ ">$"
+		 * compound_arg -> "[" compound_arg_body "]"
+		 * compound_arg_body -> .* \ "]"
 		 * construction_args -> (named_simple_arg ("," named_simple_arg)*)?
 		 * named_simple_arg -> identifier ":" literal
 		 * execution_args -> (named_expression_arg ("," named_expression_arg)*)?
 		 * named_expression_arg -> identifier ":" ( expression | literal )
 		 * link_definition -> (identifier:)?identifier(:identifier)?
-		 * node_links -> link_definition "->" link_definition ("->" link_definition)*
+		 * node_links -> link_definition "->" link_definition ("->"
+		 * link_definition)*
 		 */
 
 		using namespace boost::spirit;
@@ -66,6 +71,16 @@ struct GraphReaderGrammar
 		 */
 		expression_body = lexeme[*(char_ - ">$")];
 
+    /*
+     * compound_arg -> "[" compound_arg_body "]"
+     */
+    compound_arg = "[" >> compound_arg_body >> "]";
+
+    /*
+     * compound_arg_body -> .* \ "]"
+     */
+    compound_arg_body = lexeme[*(char_ - "]")];
+
 		/*
 		 * named_simple_arg -> identifier ":" literal
 		 */
@@ -79,9 +94,10 @@ struct GraphReaderGrammar
 		construction_args = -(named_simple_arg % ',');
 
 		/*
-		 * named_expression_arg -> identifier ":" ( expression | literal )
+		 * named_expression_arg -> identifier ":" ( expression | compound_arg | literal )
 		 */
-		named_expression_arg = named_simple_arg [_val = boost::spirit::_1 ]|
+		named_expression_arg = named_simple_arg [_val = boost::spirit::_1 ] |
+                               (identifier >> ':' >> compound_arg) [_val = bind(CreateCompoundNamedArgument, boost::spirit::_1, boost::spirit::_2)] |
                                (identifier >> ':' >> expression) [_val = bind(CreateExpressionNamedArgument, boost::spirit::_1, boost::spirit::_2)];
 
 		/*
@@ -140,6 +156,8 @@ struct GraphReaderGrammar
 	Rule_t<Iterator, boost::variant<std::string, float>()> literal;
 	Rule_t<Iterator, std::string()> expression;
 	Rule_t<Iterator, std::string()> expression_body;
+	Rule_t<Iterator, std::string()> compound_arg;
+	Rule_t<Iterator, std::string()> compound_arg_body;
 	Rule_t<Iterator, NamedArgumentPtr()> named_simple_arg;
 	Rule_t<Iterator, std::vector<NamedArgumentPtr>()> construction_args;
 	Rule_t<Iterator, NamedArgumentPtr()> named_expression_arg;

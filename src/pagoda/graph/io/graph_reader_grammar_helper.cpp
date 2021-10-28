@@ -15,66 +15,106 @@ namespace grammar_helpers
 {
 NamedArgumentPtr CreateStringNamedArgument(std::string &name, std::string &str)
 {
-	return std::make_shared<NamedArgument>(name, NamedArgument::ArgumentType::String, str);
+	return std::make_shared<NamedArgument>(
+	  name, NamedArgument::ArgumentType::String, str);
 }
 
 NamedArgumentPtr CreateFloatNamedArgument(std::string &name, float &f)
 {
-	return std::make_shared<NamedArgument>(name, NamedArgument::ArgumentType::Float, std::to_string(f));
+	return std::make_shared<NamedArgument>(
+	  name, NamedArgument::ArgumentType::Float, std::to_string(f));
 }
 
 NamedArgumentPtr CreateIntegerNamedArgument(std::string &name, int &f)
 {
-	return std::make_shared<NamedArgument>(name, NamedArgument::ArgumentType::Integer, std::to_string(f));
+	return std::make_shared<NamedArgument>(
+	  name, NamedArgument::ArgumentType::Integer, std::to_string(f));
 }
 
-NamedArgumentPtr CreateExpressionNamedArgument(std::string &name, std::string &expression)
+NamedArgumentPtr CreateExpressionNamedArgument(std::string &name,
+                                               std::string &expression)
 {
-	return std::make_shared<NamedArgument>(name, NamedArgument::ArgumentType::Expression, expression);
+	return std::make_shared<NamedArgument>(
+	  name, NamedArgument::ArgumentType::Expression, expression);
 }
 
-NodeDefinitionNodePtr CreateNodeDefinition(std::string &name, std::string &type,
-                                           std::vector<NamedArgumentPtr> &constructionArgs)
+NamedArgumentPtr CreateCompoundNamedArgument(std::string &name,
+                                             std::string &value)
+{
+	return std::make_shared<NamedArgument>(
+	  name, NamedArgument::ArgumentType::Compound, value);
+}
+
+NodeDefinitionNodePtr CreateNodeDefinition(
+  std::string &name, std::string &type,
+  std::vector<NamedArgumentPtr> &constructionArgs)
 {
 	return std::make_shared<NodeDefinitionNode>(name, type, constructionArgs);
 }
 
-NodeDefinitionNodePtr CreateOperationDefinition(std::string &name, std::string &operation,
-                                                std::vector<NamedArgumentPtr> &executionArgs)
+NodeDefinitionNodePtr CreateOperationDefinition(
+  std::string &name, std::string &operation,
+  std::vector<NamedArgumentPtr> &executionArgs)
 {
 	NodeDefinitionNode::ConstructionArgumentContainer_t construction = {
-	  std::make_shared<NamedArgument>("operation", NamedArgument::ArgumentType::String, operation)};
-	auto node = std::make_shared<NodeDefinitionNode>(name, "Operation", construction);
+	  std::make_shared<NamedArgument>(
+	    "operation", NamedArgument::ArgumentType::String, operation)};
+	auto node =
+	  std::make_shared<NodeDefinitionNode>(name, "Operation", construction);
 	node->SetExecutionArguments(executionArgs);
 	return node;
 }
 
-NodeDefinitionNodePtr SetExecutionArguments(NodeDefinitionNodePtr nodeDefinition,
-                                            std::vector<NamedArgumentPtr> &executionArgs)
+NodeDefinitionNodePtr SetExecutionArguments(
+  NodeDefinitionNodePtr nodeDefinition,
+  std::vector<NamedArgumentPtr> &executionArgs)
 {
 	nodeDefinition->SetExecutionArguments(executionArgs);
 	return nodeDefinition;
 }
 
-NodeLinkDefinitionPtr CreateLinkDefinition() { return std::make_shared<NodeLinkDefinition>(); }
-void SetInputInterface(NodeLinkDefinitionPtr n, const std::string &name) { n->SetInputInterface(name); }
-void SetNodeName(NodeLinkDefinitionPtr n, const std::string &name) { n->SetNodeName(name); }
-void SetOutputInterface(NodeLinkDefinitionPtr n, const std::string &name) { n->SetOutputInterface(name); }
+NodeLinkDefinitionPtr CreateLinkDefinition()
+{
+	return std::make_shared<NodeLinkDefinition>();
+}
+void SetInputInterface(NodeLinkDefinitionPtr n, const std::string &name)
+{
+	n->SetInputInterface(name);
+}
+void SetNodeName(NodeLinkDefinitionPtr n, const std::string &name)
+{
+	n->SetNodeName(name);
+}
+void SetOutputInterface(NodeLinkDefinitionPtr n, const std::string &name)
+{
+	n->SetOutputInterface(name);
+}
 
-NodeLinkNodePtr CreateNodeLink() { return std::make_shared<NodeLinkNode>(); }
+NodeLinkNodePtr CreateNodeLink()
+{
+	return std::make_shared<NodeLinkNode>();
+}
 
-void AddLinkedNode(NodeLinkNodePtr linkedNodes, NodeLinkDefinitionPtr &linkDefinition)
+void AddLinkedNode(NodeLinkNodePtr linkedNodes,
+                   NodeLinkDefinitionPtr &linkDefinition)
 {
 	linkedNodes->AddLinkedNode(linkDefinition);
 }
 
-GraphDefinitionNodePtr CreateGraphDefinition() { return std::make_shared<GraphDefinitionNode>(); }
+GraphDefinitionNodePtr CreateGraphDefinition()
+{
+	return std::make_shared<GraphDefinitionNode>();
+}
 
-void AddNodeDefinition(GraphDefinitionNodePtr graph, NodeDefinitionNodePtr statement)
+void AddNodeDefinition(GraphDefinitionNodePtr graph,
+                       NodeDefinitionNodePtr statement)
 {
 	graph->AddGraphStatementNode(statement);
 }
 
-void AddNodeLinks(GraphDefinitionNodePtr graph, NodeLinkNodePtr statement) { graph->AddGraphStatementNode(statement); }
+void AddNodeLinks(GraphDefinitionNodePtr graph, NodeLinkNodePtr statement)
+{
+	graph->AddGraphStatementNode(statement);
+}
 }  // namespace grammar_helpers
 }  // namespace pagoda::graph::io
