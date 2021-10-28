@@ -7,6 +7,7 @@
 #include "node_link_node.h"
 
 #include <pagoda/common/exception/exception.h>
+#include <pagoda/common/exception/unimplemented.h>
 
 #include <pagoda/dynamic/binding/cast_to.h>
 #include <pagoda/dynamic/expression.h>
@@ -47,28 +48,51 @@ void AstInterpreter::Visit(GraphDefinitionNode *graphDefinition)
 
 void AstInterpreter::Visit(NamedArgument *namedArgument)
 {
-	DynamicValueBasePtr param;
-	switch (namedArgument->GetArgumentType()) {
-		case NamedArgument::ArgumentType::String: {
-			param = std::make_shared<String>(namedArgument->GetArgumentValue());
-			break;
+	if (m_doingParameters) {
+		std::cout << "Doing parameters" << std::endl;
+		std::cout << "  " << namedArgument->GetName() << " "
+		          << namedArgument->GetArgumentValue() << std::endl;
+		auto par = m_currentNode->GetParameter(namedArgument->GetName());
+		if (par == nullptr) {
+			LOG_WARNING("Parameter " << namedArgument->GetName()
+			                         << " doesn't exist in node "
+			                         << m_currentNode->GetName());
+			return;
 		}
-		case NamedArgument::ArgumentType::Float: {
-			param = std::make_shared<FloatValue>(static_cast<float>(
-			  std::atof(namedArgument->GetArgumentValue().c_str())));
-			break;
+		if (namedArgument->GetArgumentType() ==
+		    NamedArgument::ArgumentType::Expression) {
+			std::cout << "  it's an expression" << std::endl;
+			par->SetExpression(namedArgument->GetArgumentValue());
+		} else {
+			par->FromString(namedArgument->GetArgumentValue());
 		}
-		case NamedArgument::ArgumentType::Integer: {
-			param = std::make_shared<Integer>(
-			  static_cast<int>(std::atoi(namedArgument->GetArgumentValue().c_str())));
-			break;
+	} else {
+		DynamicValueBasePtr param;
+		switch (namedArgument->GetArgumentType()) {
+			case NamedArgument::ArgumentType::String: {
+				param = std::make_shared<String>(namedArgument->GetArgumentValue());
+				break;
+			}
+			case NamedArgument::ArgumentType::Float: {
+				param = std::make_shared<FloatValue>(static_cast<float>(
+				  std::atof(namedArgument->GetArgumentValue().c_str())));
+				break;
+			}
+			case NamedArgument::ArgumentType::Integer: {
+				param = std::make_shared<Integer>(static_cast<int>(
+				  std::atoi(namedArgument->GetArgumentValue().c_str())));
+				break;
+			}
+			case NamedArgument::ArgumentType::Expression: {
+				param = Expression::CreateExpression(namedArgument->GetArgumentValue());
+				break;
+			}
+			case NamedArgument::ArgumentType::Compound:
+				UNIMPLEMENTED;
+				break;
 		}
-		case NamedArgument::ArgumentType::Expression: {
-			param = Expression::CreateExpression(namedArgument->GetArgumentValue());
-			break;
-		}
+		m_currentNamedParameters[namedArgument->GetName()] = param;
 	}
-	m_currentNamedParameters[namedArgument->GetName()] = param;
 }
 
 struct ConstructionArgumentSetter : public ConstructionArgumentCallback
@@ -97,6 +121,7 @@ struct ConstructionArgumentSetter : public ConstructionArgumentCallback
 
 void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 {
+	m_doingParameters = false;
 	m_currentNamedParameters.clear();
 	for (const auto &namedArgument : nodeDefinition->GetConstructionArguments()) {
 		namedArgument->AcceptVisitor(this);
@@ -106,16 +131,17 @@ void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 
 	ConstructionArgumentSetter setter(nodeName, m_currentNamedParameters);
 	nodeName = m_graph->CreateNode(nodeDefinition->GetNodeType(), nodeName);
+	m_currentNode = m_graph->GetNode(nodeName);
 	m_graph->SetNodeConstructionParameters(nodeName, &setter);
 
 	m_currentNamedParameters.clear();
+	m_doingParameters = true;
 	for (const auto &namedArgument : nodeDefinition->GetExecutionArguments()) {
 		namedArgument->AcceptVisitor(this);
 	}
 
-	auto node = m_graph->GetNode(nodeName);
 	for (const auto &p : m_currentNamedParameters) {
-		if (auto par = node->GetParameter(p.first)) {
+		if (auto par = m_currentNode->GetParameter(p.first)) {
 			par->FromDynamicValue(p.second);
 		} else {
 			LOG_WARNING("Parameter " << p.first << " doesn't exist in node "
