@@ -5,11 +5,13 @@
 
 namespace pagoda::objects
 {
+/*
 struct ParameterBase::Expression
 {
-	std::string m_expression;
-	ast::ProgramPtr m_compiledExpression;
+  std::string m_expression;
+  ast::ProgramPtr m_compiledExpression;
 };
+*/
 
 ParameterBase::ParameterBase(const std::string& name)
   : m_name{name}, m_label{name}
@@ -57,10 +59,7 @@ bool ParameterBase::HasExpression() const
 
 void ParameterBase::SetExpression(const std::string& e)
 {
-	if (m_expression == nullptr) {
-		m_expression = std::make_unique<Expression>();
-	}
-	m_expression->m_expression = e;
+	m_expression = dynamic::Expression::CreateExpression(e);
 }
 
 const std::string& ParameterBase::GetExpression() const
@@ -69,7 +68,7 @@ const std::string& ParameterBase::GetExpression() const
 	if (m_expression == nullptr) {
 		return sEmptyExpression;
 	}
-	return m_expression->m_expression;
+	return m_expression->GetExpressionString();
 }
 
 void ParameterBase::EvaluateExpression()
@@ -78,18 +77,7 @@ void ParameterBase::EvaluateExpression()
 		return;
 	}
 
-	if (m_expression->m_compiledExpression == nullptr) {
-		m_expression->m_compiledExpression =
-		  Parser().Parse(m_expression->m_expression);
-	}
-
-	if (m_expression->m_compiledExpression == nullptr) {
-		return;
-	}
-
-	Interpreter interpreter;
-	interpreter.Interpret(m_expression->m_compiledExpression);
-	if (auto value = interpreter.GetLastEvaluatedExpression()) {
+	if (auto value = m_expression->Evaluate()) {
 		FromDynamicValue(value);
 	}
 }

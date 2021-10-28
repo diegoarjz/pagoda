@@ -3,6 +3,7 @@
 #include "pagoda/dynamic/boolean_value.h"
 #include "pagoda/dynamic/dynamic_plane.h"
 #include "pagoda/dynamic/dynamic_value_base.h"
+#include "pagoda/dynamic/expression.h"
 #include "pagoda/dynamic/float_value.h"
 #include "pagoda/dynamic/get_value_as.h"
 #include "pagoda/dynamic/integer_value.h"
@@ -123,8 +124,7 @@ class ParameterBase : public std::enable_shared_from_this<ParameterBase>
 
 	std::vector<OnChangedCallback> m_onChangedCallbacks;
 
-	struct Expression;
-	std::unique_ptr<Expression> m_expression;
+	std::shared_ptr<dynamic::Expression> m_expression;
 };
 
 template<typename VALUE>
