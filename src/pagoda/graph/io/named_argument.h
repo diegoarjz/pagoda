@@ -8,7 +8,8 @@
 namespace pagoda::graph::io
 {
 /**
- * Represents a named argument (both construction and execution arguments) in the graph format.
+ * Represents a named argument (both construction and execution arguments) in
+ * the graph format.
  */
 class NamedArgument : public AstNode
 {
@@ -22,25 +23,29 @@ class NamedArgument : public AstNode
 		String,
 		Float,
 		Integer,
+		Compound,
 		Expression
 	};
 
 	/**
 	 * Constructs a \c NamedArgument with the \p name, \p type and \p value.
 	 */
-	NamedArgument(const std::string &name, const ArgumentType type, const std::string &value);
+	NamedArgument(const std::string &name, const ArgumentType type,
+	              const std::string &value);
 	/**
-	 * Constructs a \c NamedArgument with the \p name, \p type and \p value passing the \p startOffset and \p endOffset
-	 * to the respective constructor of \c AstNode.
+	 * Constructs a \c NamedArgument with the \p name, \p type and \p value
+	 * passing the \p startOffset and \p endOffset to the respective constructor
+	 * of \c AstNode.
 	 */
-	NamedArgument(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset, const std::string &name,
+	NamedArgument(const AstNode::Offset_t &startOffset,
+	              const AstNode::Offset_t &endOffset, const std::string &name,
 	              const ArgumentType type, const std::string &value);
 	/**
-	 * Constructs a \c NamedArgument with the \p name, \p type and \p value passing the \p range to the respective
-	 * constructor of \c AstNode.
+	 * Constructs a \c NamedArgument with the \p name, \p type and \p value
+	 * passing the \p range to the respective constructor of \c AstNode.
 	 */
-	NamedArgument(const AstNode::NodeRange_t &range, const std::string &name, const ArgumentType type,
-	              const std::string &value);
+	NamedArgument(const AstNode::NodeRange_t &range, const std::string &name,
+	              const ArgumentType type, const std::string &value);
 
 	virtual ~NamedArgument();
 
@@ -91,7 +96,8 @@ class NamedArgument : public AstNode
 	private:
 	std::string m_name;           ///< The name for this \c NamedArgument
 	ArgumentType m_argumentType;  ///< The type of the \c NamedArgument
-	std::string m_argumentValue;  ///< The string representation of the value of the \c NamedArgument
+	std::string m_argumentValue;  ///< The string representation of the value of
+	                              ///< the \c NamedArgument
 };
 }  // namespace pagoda::graph::io
 

@@ -110,6 +110,9 @@ class ParameterBase : public std::enable_shared_from_this<ParameterBase>
 	 */
 	virtual dynamic::DynamicValueBasePtr ToDynamicValue() = 0;
 
+	virtual void FromString(const std::string& value) = 0;
+	virtual std::string ToString() const = 0;
+
 	protected:
 	ParameterBase(const std::string& name);
 	ParameterBase(const std::string& name, const std::string& label);
@@ -207,6 +210,9 @@ class Parameter : public ParameterBase
 	{
 		return nullptr;
 	}
+
+	void FromString(const std::string& value) override;
+	std::string ToString() const override;
 
 	private:
 	VALUE* m_valuePtr;  ///< The pointer to the value.
