@@ -26,21 +26,38 @@ namespace pagoda::graph::io
 class ParameterVisitor : public ValueVisitorBase
 {
 	public:
-	ParameterVisitor(const std::string& name, std::vector<std::string>& parameters)
+	ParameterVisitor(const std::string& name,
+	                 std::vector<std::string>& parameters)
 	  : m_parameterName{name}, m_parameters{parameters}
 	{
 	}
 
-	void Visit(Boolean& v) override {}
-	void Visit(FloatValue& v) override { write(v.ToString()); }
-	void Visit(Integer& v) override { write(v.ToString()); }
-	void Visit(String& v) override { write("\"" + v.ToString() + "\""); }
-	void Visit(NullObject& v) override {}
-	void Visit(TypeInfo& v) override {}
+	void Visit(Boolean& v) override
+	{
+	}
+	void Visit(FloatValue& v) override
+	{
+		write(v.ToString());
+	}
+	void Visit(Integer& v) override
+	{
+		write(v.ToString());
+	}
+	void Visit(String& v) override
+	{
+		write("\"" + v.ToString() + "\"");
+	}
+	void Visit(NullObject& v) override
+	{
+	}
+	void Visit(TypeInfo& v) override
+	{
+	}
 	void Visit(Vector3& v) override
 	{
 		std::stringstream ss;
-		ss << "$< Vector3(" << v.GetX() << ", " << v.GetY() << ", " << v.GetZ() << "); $>";
+		ss << "$< Vector3(" << v.GetX() << ", " << v.GetY() << ", " << v.GetZ()
+		   << "); $>";
 		write(ss.str());
 	}
 	void Visit(DynamicPlane& v) override
@@ -48,19 +65,36 @@ class ParameterVisitor : public ValueVisitorBase
 		std::stringstream ss;
 		auto p = v.GetPoint();
 		auto n = v.GetNormal();
-		ss << "$< Plane(Vector3(" << p->GetX() << ", " << p->GetY() << ", " << p->GetZ() << "), Vector3(" << n->GetX()
-		   << ", " << n->GetY() << ", " << n->GetZ() << ")); >$";
+		ss << "$< Plane(Vector3(" << p->GetX() << ", " << p->GetY() << ", "
+		   << p->GetZ() << "), Vector3(" << n->GetX() << ", " << n->GetY() << ", "
+		   << n->GetZ() << ")); >$";
 		write(ss.str());
 	}
-	void Visit(Function& v) override {}
-	void Visit(DynamicClass& v) override {}
-	void Visit(DynamicInstance& v) override {}
-	void Visit(Expression& v) override { write("$< " + v.GetExpressionString() + ">$"); }
-	void Visit(objects::ProceduralOperation& v) override {}
-	void Visit(objects::ProceduralObject& v) override {}
+	void Visit(Function& v) override
+	{
+	}
+	void Visit(DynamicClass& v) override
+	{
+	}
+	void Visit(DynamicInstance& v) override
+	{
+	}
+	void Visit(Expression& v) override
+	{
+		write("$< " + v.GetExpressionString() + ">$");
+	}
+	void Visit(objects::ProceduralOperation& v) override
+	{
+	}
+	void Visit(objects::ProceduralObject& v) override
+	{
+	}
 
 	private:
-	void write(const std::string& val) { m_parameters.push_back(m_parameterName + " : " + val); }
+	void write(const std::string& val)
+	{
+		m_parameters.push_back(m_parameterName + " : " + val);
+	}
 
 	const std::string& m_parameterName;
 	std::vector<std::string>& m_parameters;
@@ -68,7 +102,9 @@ class ParameterVisitor : public ValueVisitorBase
 
 struct GraphWriter::Impl
 {
-	Impl(GraphPtr graph) : m_graph{graph} {}
+	Impl(GraphPtr graph) : m_graph{graph}
+	{
+	}
 
 	void Write(std::ostream& out)
 	{
@@ -90,9 +126,12 @@ struct GraphWriter::Impl
 				out << node->GetName() << " = ";
 				out << node->GetNodeType() << "(";
 				std::vector<std::string> constructionArgs;
-				node->ForEachConstructionArgument([&constructionArgs](const std::string& name, dynamic::DynamicValueBasePtr v) {
-					constructionArgs.emplace_back(name + ": \"" + v->ToString() + "\"");
+				/*
+				node->ForEachConstructionArgument([&constructionArgs](const std::string&
+				name, dynamic::DynamicValueBasePtr v) {
+				  constructionArgs.emplace_back(name + ": \"" + v->ToString() + "\"");
 				});
+				*/
 				for (auto i = 0u; i < constructionArgs.size(); ++i) {
 					out << constructionArgs[i];
 					if (i + 1 != constructionArgs.size()) {
@@ -103,10 +142,12 @@ struct GraphWriter::Impl
 
 				std::vector<std::string> parameters;
 
-				node->ForEachExecutionArgument([&parameters](const std::string& name, dynamic::DynamicValueBasePtr v) {
-					ParameterVisitor parameterVisitor{name, parameters};
-					v->AcceptVisitor(parameterVisitor);
+				/*
+				node->ForEachExecutionArgument([&parameters](const std::string& name,
+				dynamic::DynamicValueBasePtr v) { ParameterVisitor
+				parameterVisitor{name, parameters}; v->AcceptVisitor(parameterVisitor);
 				});
+				*/
 
 				out << "{\n";
 				if (!parameters.empty()) {
@@ -137,8 +178,16 @@ struct GraphWriter::Impl
 	GraphPtr m_graph;
 };
 
-GraphWriter::GraphWriter(GraphPtr graph) : m_implementation{std::make_unique<GraphWriter::Impl>(graph)} {}
-GraphWriter::~GraphWriter() {}
+GraphWriter::GraphWriter(GraphPtr graph)
+  : m_implementation{std::make_unique<GraphWriter::Impl>(graph)}
+{
+}
+GraphWriter::~GraphWriter()
+{
+}
 
-void GraphWriter::Write(std::ostream& outStream) { m_implementation->Write(outStream); }
+void GraphWriter::Write(std::ostream& outStream)
+{
+	m_implementation->Write(outStream);
+}
 }  // namespace pagoda::graph::io

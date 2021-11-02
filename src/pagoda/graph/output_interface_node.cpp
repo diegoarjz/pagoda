@@ -1,7 +1,5 @@
 #include "output_interface_node.h"
 
-#include "construction_argument_callback.h"
-#include "construction_argument_not_found.h"
 #include "graph.h"
 #include "input_interface_node.h"
 #include "node.h"
@@ -23,19 +21,6 @@ OutputInterfaceNode::OutputInterfaceNode() : m_interfaceName("", 0)
 {
 }
 OutputInterfaceNode::~OutputInterfaceNode()
-{
-}
-
-void OutputInterfaceNode::SetConstructionArguments(
-  ConstructionArgumentCallback* cb)
-{
-	std::string interfaceName;
-	cb->StringArgument("interface", interfaceName, "Output Interface");
-	SetInterfaceName(interfaceName);
-}
-
-void OutputInterfaceNode::SetExecutionArguments(
-  objects::NewParameterCallback* cb)
 {
 }
 
@@ -75,17 +60,5 @@ const char* const OutputInterfaceNode::GetNodeType()
 {
 	static const char* const sNodeType = "OutputInterface";
 	return sNodeType;
-}
-
-void OutputInterfaceNode::ForEachConstructionArgument(
-  std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
-{
-	f("interface", std::make_shared<dynamic::String>(m_interfaceName));
-}
-
-void OutputInterfaceNode::ForEachExecutionArgument(
-  std::function<void(const std::string&, dynamic::DynamicValueBasePtr)> f)
-{
-	//
 }
 }  // namespace pagoda::graph

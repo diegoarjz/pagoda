@@ -20,8 +20,6 @@ namespace pagoda::graph
 class Node;
 using NodePtr = std::shared_ptr<Node>;
 
-class ConstructionArgumentCallback;
-
 /**
  * Represents a \c Node in a \c Graph.
  *
@@ -38,30 +36,6 @@ class Node : public dynamic::BuiltinClass
 
 	Node(const Node &n) = delete;
 	Node &operator=(const Node &n) = delete;
-
-	/**
-	 * Sets the construction arguments from \p cb.
-	 */
-	virtual void SetConstructionArguments(ConstructionArgumentCallback *cb) = 0;
-
-	/**
-	 * Iterates over each of the construction arguments.
-	 */
-	virtual void ForEachConstructionArgument(
-	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)>
-	    f) = 0;
-
-	/**
-	 * Sets the execution arguments from \p arguments.
-	 */
-	virtual void SetExecutionArguments(objects::NewParameterCallback *cb) = 0;
-
-	/**
-	 * Iterates oves each of the execution arguments.
-	 */
-	virtual void ForEachExecutionArgument(
-	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)>
-	    f) = 0;
 
 	/**
 	 * Gets the id from this \c Node.

@@ -30,7 +30,7 @@ NamedArgumentPtr CreateCompoundNamedArgument(std::string &name,
 
 NodeDefinitionNodePtr CreateNodeDefinition(
   std::string &name, std::string &type,
-  std::vector<NamedArgumentPtr> &constructionArgs);
+  std::vector<NamedArgumentPtr> &executionArgs);
 
 NodeDefinitionNodePtr CreateOperationDefinition(
   std::string &name, std::string &operation,

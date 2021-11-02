@@ -174,15 +174,14 @@ void Parameter<math::Plane<float>>::FromString(const std::string& value)
 
 	bool r = boost::spirit::qi::phrase_parse(
 	  first, last,
-	  "[" >> float_[ref(normal.a[0]) = _1] >> "," >>
-	    float_[ref(normal.a[1]) = _1] >> "," >> float_[ref(normal.a[2]) = _1] >>
-	    "]" >> "," >> float_[ref(dist) = _1],
+	  float_[ref(normal.a[0]) = _1] >> "," >> float_[ref(normal.a[1]) = _1] >>
+	    "," >> float_[ref(normal.a[2]) = _1] >> "," >> float_[ref(dist) = _1],
 	  space);
 
 	if (r && first == last) {
 		SetValue(math::Plane<float>{normal, dist});
 	} else {
-		LOG_ERROR("Invalid string value " << value << " for a Plane parameter");
+		LOG_ERROR("Invalid string value '" << value << "' for a Plane parameter");
 	}
 }
 
@@ -216,8 +215,7 @@ std::string Parameter<math::Plane<float>>::ToString() const
 	auto normal = m_valuePtr->GetNormal();
 	auto dist = m_valuePtr->GetDistanceToOrigin();
 	std::stringstream ss;
-	ss << "[" << X(normal) << ", " << Y(normal) << ", " << Z(normal) << "], "
-	   << dist;
+	ss << X(normal) << ", " << Y(normal) << ", " << Z(normal) << dist;
 	return ss.str();
 }
 }  // namespace pagoda::objects

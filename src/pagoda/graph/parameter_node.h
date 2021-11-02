@@ -23,15 +23,6 @@ class ParameterNode : public Node
 	ParameterNode();
 	virtual ~ParameterNode();
 
-	void SetConstructionArguments(ConstructionArgumentCallback *cb) override;
-	void SetExecutionArguments(objects::NewParameterCallback *cb) override;
-	void ForEachConstructionArgument(
-	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
-	  override;
-	void ForEachExecutionArgument(
-	  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
-	  override;
-
 	void Execute(const NodeSet &inNodes, const NodeSet &outNodes) override;
 
 	const char *const GetNodeType() override;

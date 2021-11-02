@@ -185,26 +185,6 @@ class Graph::Impl
 		return name;
 	}
 
-	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
-	                                   ConstructionArgumentCallback *cb)
-	{
-		auto node = GetNode(nodeName);
-		if (node == nullptr) {
-			return;
-		}
-		node->SetConstructionArguments(cb);
-	}
-
-	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-	                                objects::NewParameterCallback *cb)
-	{
-		auto node = GetNode(nodeName);
-		if (node == nullptr) {
-			return;
-		}
-		node->SetExecutionArguments(cb);
-	}
-
 	void ExecuteQuery(query::Query &q)
 	{
 		START_PROFILE;
@@ -362,18 +342,6 @@ Graph::SchedulerFactoryFunction_t Graph::s_schedulerFactoryFunction =
 void Graph::ExecuteQuery(query::Query &q)
 {
 	m_implementation->ExecuteQuery(q);
-}
-
-void Graph::SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
-                                          ConstructionArgumentCallback *cb)
-{
-	m_implementation->SetNodeConstructionParameters(nodeName, cb);
-}
-
-void Graph::SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-                                       objects::NewParameterCallback *cb)
-{
-	m_implementation->SetNodeExecutionParameters(nodeName, cb);
 }
 
 NodeSet &Graph::getNodes()

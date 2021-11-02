@@ -16,15 +16,20 @@ using namespace pagoda::graph::io;
 class GraphReaderGrammarTest : public ::testing::Test
 {
 	protected:
-	void SetUp() {}
-	void TearDown() {}
+	void SetUp()
+	{
+	}
+	void TearDown()
+	{
+	}
 
 	GraphReaderGrammar<std::string::const_iterator> m_grammar;
 };
 
 TEST_F(GraphReaderGrammarTest, test_literal_floats)
 {
-	std::pair<std::string, float> literals[] = {{"123.0", 123.0}, {"0.0", 0.0}, {"-123.0", -123.0}};
+	std::pair<std::string, float> literals[] = {
+	  {"123.0", 123.0}, {"0.0", 0.0}, {"-123.0", -123.0}};
 
 	for (auto p : literals) {
 		std::string in = std::get<0>(p);
@@ -101,7 +106,8 @@ TEST_F(GraphReaderGrammarTest, test_identifier_fail)
 
 TEST_F(GraphReaderGrammarTest, test_expression)
 {
-	std::pair<std::string, std::string> expressions[] = {{"$<a;>$", "a;"}, {"$<1+2;>$", "1+2;"}};
+	std::pair<std::string, std::string> expressions[] = {{"$<a;>$", "a;"},
+	                                                     {"$<1+2;>$", "1+2;"}};
 
 	for (auto e : expressions) {
 		std::string out;
@@ -123,56 +129,11 @@ TEST_F(GraphReaderGrammarTest, test_named_simple_arg)
 		NamedArgumentPtr out;
 		std::string::const_iterator begin = std::begin(a);
 		std::string::const_iterator end = std::end(a);
-		bool r = qi::phrase_parse(begin, end, m_grammar.named_simple_arg, qi::space, out);
+		bool r =
+		  qi::phrase_parse(begin, end, m_grammar.named_simple_arg, qi::space, out);
 
 		EXPECT_TRUE(r) << "Should have matched " << a;
 		EXPECT_EQ(begin, end);
-	}
-}
-
-TEST_F(GraphReaderGrammarTest, test_named_simple_arg_construction_string)
-{
-	NamedArgumentPtr out;
-	std::string a = "a : \"abc\"";
-	std::string::const_iterator begin = std::begin(a);
-	std::string::const_iterator end = std::end(a);
-	qi::phrase_parse(begin, end, m_grammar.named_simple_arg, qi::space, out);
-
-	ASSERT_NE(out, nullptr);
-	EXPECT_EQ(out->GetName(), "a");
-	EXPECT_EQ(out->GetArgumentType(), NamedArgument::ArgumentType::String);
-	EXPECT_EQ(out->GetArgumentValue(), "abc");
-}
-
-TEST_F(GraphReaderGrammarTest, test_named_simple_arg_construction_float)
-{
-	NamedArgumentPtr out;
-	std::string a = "a : 123";
-	std::string::const_iterator begin = std::begin(a);
-	std::string::const_iterator end = std::end(a);
-	qi::phrase_parse(begin, end, m_grammar.named_simple_arg, qi::space, out);
-
-	ASSERT_NE(out, nullptr);
-	EXPECT_EQ(out->GetName(), "a");
-	EXPECT_EQ(out->GetArgumentType(), NamedArgument::ArgumentType::Float);
-	EXPECT_EQ(std::atof(out->GetArgumentValue().c_str()), 123.0f);
-}
-
-TEST_F(GraphReaderGrammarTest, test_construction_args)
-{
-	std::string args[] = {"", "a : \"abc\", b:123.0", "b:123.0"};
-	std::size_t expectedSizes[] = {0, 2, 1};
-
-	for (auto i = 0u; i < 3; ++i) {
-		auto a = args[i];
-		std::vector<NamedArgumentPtr> out;
-		std::string::const_iterator begin = std::begin(a);
-		std::string::const_iterator end = std::end(a);
-		bool r = qi::phrase_parse(begin, end, m_grammar.construction_args, qi::space, out);
-
-		EXPECT_TRUE(r) << "Should have matched " << a;
-		EXPECT_EQ(begin, end);
-		EXPECT_EQ(out.size(), expectedSizes[i]);
 	}
 }
 
@@ -184,53 +145,12 @@ TEST_F(GraphReaderGrammarTest, test_named_expression_arg)
 		NamedArgumentPtr out;
 		std::string::const_iterator begin = std::begin(a);
 		std::string::const_iterator end = std::end(a);
-		bool r = qi::phrase_parse(begin, end, m_grammar.named_expression_arg, qi::space, out);
+		bool r = qi::phrase_parse(begin, end, m_grammar.named_expression_arg,
+		                          qi::space, out);
 
 		EXPECT_TRUE(r) << "Should have matched " << a;
 		EXPECT_EQ(begin, end);
 	}
-}
-
-TEST_F(GraphReaderGrammarTest, test_named_expression_arg_construction_string)
-{
-	NamedArgumentPtr out;
-	std::string a = "a : \"abc\"";
-	std::string::const_iterator begin = std::begin(a);
-	std::string::const_iterator end = std::end(a);
-	qi::phrase_parse(begin, end, m_grammar.named_expression_arg, qi::space, out);
-
-	ASSERT_NE(out, nullptr);
-	EXPECT_EQ(out->GetName(), "a");
-	EXPECT_EQ(out->GetArgumentType(), NamedArgument::ArgumentType::String);
-	EXPECT_EQ(out->GetArgumentValue(), "abc");
-}
-
-TEST_F(GraphReaderGrammarTest, test_named_expression_arg_construction_float)
-{
-	NamedArgumentPtr out;
-	std::string a = "a : 123";
-	std::string::const_iterator begin = std::begin(a);
-	std::string::const_iterator end = std::end(a);
-	qi::phrase_parse(begin, end, m_grammar.named_expression_arg, qi::space, out);
-
-	ASSERT_NE(out, nullptr);
-	EXPECT_EQ(out->GetName(), "a");
-	EXPECT_EQ(out->GetArgumentType(), NamedArgument::ArgumentType::Float);
-	EXPECT_EQ(std::atof(out->GetArgumentValue().c_str()), 123.0f);
-}
-
-TEST_F(GraphReaderGrammarTest, test_named_expression_arg_construction_expression)
-{
-	NamedArgumentPtr out;
-	std::string a = "a : $<1+1>$";
-	std::string::const_iterator begin = std::begin(a);
-	std::string::const_iterator end = std::end(a);
-	qi::phrase_parse(begin, end, m_grammar.named_expression_arg, qi::space, out);
-
-	ASSERT_NE(out, nullptr);
-	EXPECT_EQ(out->GetName(), "a");
-	EXPECT_EQ(out->GetArgumentType(), NamedArgument::ArgumentType::Expression);
-	EXPECT_EQ(out->GetArgumentValue(), "1+1");
 }
 
 TEST_F(GraphReaderGrammarTest, test_execution_args)
@@ -243,7 +163,8 @@ TEST_F(GraphReaderGrammarTest, test_execution_args)
 		std::vector<NamedArgumentPtr> out;
 		std::string::const_iterator begin = std::begin(a);
 		std::string::const_iterator end = std::end(a);
-		bool r = qi::phrase_parse(begin, end, m_grammar.execution_args, qi::space, out);
+		bool r =
+		  qi::phrase_parse(begin, end, m_grammar.execution_args, qi::space, out);
 
 		EXPECT_TRUE(r) << "Should have matched " << a;
 		EXPECT_EQ(begin, end);
@@ -253,13 +174,15 @@ TEST_F(GraphReaderGrammarTest, test_execution_args)
 
 TEST_F(GraphReaderGrammarTest, test_node_definition)
 {
-	std::string def[] = {"n = Operation(a:1,b:2)", "n = Operation(a:1){}", "n = Operation(a:1){a:$<1+1;>$}"};
+	std::string def[] = {"n = Operation(a:1,b:2)", "n = Operation(a:1){}",
+	                     "n = Operation(a:1){a:$<1+1;>$}"};
 
 	for (auto a : def) {
 		NodeDefinitionNodePtr out;
 		std::string::const_iterator begin = std::begin(a);
 		std::string::const_iterator end = std::end(a);
-		bool r = qi::phrase_parse(begin, end, m_grammar.node_definition, qi::space, out);
+		bool r =
+		  qi::phrase_parse(begin, end, m_grammar.node_definition, qi::space, out);
 
 		EXPECT_TRUE(r);
 		EXPECT_EQ(begin, end) << "Should have matched " << a;
@@ -277,7 +200,6 @@ TEST_F(GraphReaderGrammarTest, test_node_definition_construction)
 	ASSERT_NE(out, nullptr);
 	EXPECT_EQ(out->GetNodeName(), "n");
 	EXPECT_EQ(out->GetNodeType(), "Operation");
-	EXPECT_EQ(out->GetConstructionArguments().size(), 2u);
 	EXPECT_EQ(out->GetExecutionArguments().size(), 1u);
 }
 
@@ -288,7 +210,8 @@ TEST_F(GraphReaderGrammarTest, test_simplified_operation_node_definition)
 	NodeDefinitionNodePtr out;
 	std::string::const_iterator begin = std::begin(def);
 	std::string::const_iterator end = std::end(def);
-	bool r = qi::phrase_parse(begin, end, m_grammar.operation_definition, qi::space, out);
+	bool r = qi::phrase_parse(begin, end, m_grammar.operation_definition,
+	                          qi::space, out);
 
 	EXPECT_TRUE(r);
 	EXPECT_EQ(begin, end) << "Should have matched " << def;

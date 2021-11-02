@@ -32,16 +32,9 @@ class AstInterpreter : public AstNodeVisitor
 	void Visit(NodeLinkNode *nodeLink) override;
 	void Visit(NodeLinkDefinition *nodeLinkDefinition) override;
 
-	const std::unordered_map<std::string, dynamic::DynamicValueBasePtr>
-	  &GetCurrentNamedArguments() const;
-
 	private:
 	GraphPtr m_graph;
 	NodePtr m_currentNode;
-	bool m_doingParameters{false};
-
-	std::unordered_map<std::string, dynamic::DynamicValueBasePtr>
-	  m_currentNamedParameters;
 };
 }  // namespace pagoda::graph::io
 #endif

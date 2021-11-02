@@ -103,7 +103,7 @@ template<>
 const std::string defaultValues<math::Plane<float>>::expression1{
   "Plane(Vector3(1,2,3), Vector3(1,0,0));"};
 template<>
-const std::string defaultValues<math::Plane<float>>::strValue{"[1, 0, 0], 1"};
+const std::string defaultValues<math::Plane<float>>::strValue{"1, 0, 0, 1"};
 }  // namespace
 
 TYPED_TEST_SUITE_P(ParameterTest);

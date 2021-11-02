@@ -1,7 +1,5 @@
 #include "operation_node.h"
 
-#include "construction_argument_callback.h"
-#include "construction_argument_not_found.h"
 #include "graph.h"
 #include "input_interface_node.h"
 #include "node.h"
@@ -31,26 +29,20 @@ const char *OperationNode::name = "Operation";
 OperationNode::OperationNode(OperationFactoryPtr operationFactory)
   : m_operationFactory(operationFactory)
 {
+	auto operationParameter =
+	  std::make_shared<StringParameter>(&m_operationName, "operation");
+	operationParameter->OnChanged([this](ParameterBasePtr p) {
+		const auto operation = m_operationFactory->Create(m_operationName);
+		if (operation == nullptr) {
+			throw UnknownOperation(m_operationName);
+		}
+		SetOperation(operation);
+	});
+	m_parameters["operation"] = operationParameter;
 }
 
 OperationNode::~OperationNode()
 {
-}
-
-void OperationNode::SetConstructionArguments(ConstructionArgumentCallback *cb)
-{
-	std::string operationName;
-	cb->StringArgument("operation", operationName, "Operation");
-	auto operation = m_operationFactory->Create(operationName);
-	if (operation == nullptr) {
-		throw UnknownOperation(operationName);
-	}
-	SetOperation(operation);
-}
-
-void OperationNode::SetExecutionArguments(objects::NewParameterCallback *cb)
-{
-	m_operation->Parameters(cb);
 }
 
 class InterfaceCreator : public InterfaceCallback
@@ -271,19 +263,4 @@ const char *const OperationNode::GetNodeType()
 	return sNodeType;
 }
 
-void OperationNode::ForEachConstructionArgument(
-  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
-{
-	f("operation",
-	  std::make_shared<dynamic::String>(m_operation->GetOperationName()));
-}
-
-void OperationNode::ForEachExecutionArgument(
-  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
-{
-	for (auto p = m_operation->GetMembersBegin();
-	     p != m_operation->GetMembersEnd(); ++p) {
-		f(p->first, p->second.m_value);
-	}
-}
 }  // namespace pagoda::graph
