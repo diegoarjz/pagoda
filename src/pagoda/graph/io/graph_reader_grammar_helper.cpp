@@ -7,6 +7,7 @@
 #include "node_link_definition.h"
 #include "node_link_node.h"
 
+#include <iostream>
 #include <memory>
 
 namespace pagoda::graph::io
@@ -16,7 +17,7 @@ namespace grammar_helpers
 NamedArgumentPtr CreateStringNamedArgument(std::string &name, std::string &str)
 {
 	return std::make_shared<NamedArgument>(
-	  name, NamedArgument::ArgumentType::String, str);
+	  name, NamedArgument::ArgumentType::String, "\"" + str + "\"");
 }
 
 NamedArgumentPtr CreateFloatNamedArgument(std::string &name, float &f)
@@ -29,6 +30,12 @@ NamedArgumentPtr CreateIntegerNamedArgument(std::string &name, int &f)
 {
 	return std::make_shared<NamedArgument>(
 	  name, NamedArgument::ArgumentType::Integer, std::to_string(f));
+}
+
+NamedArgumentPtr CreateBoolNamedArgument(std::string &name, bool &f)
+{
+	return std::make_shared<NamedArgument>(
+	  name, NamedArgument::ArgumentType::Boolean, f ? "true" : "false");
 }
 
 NamedArgumentPtr CreateExpressionNamedArgument(std::string &name,
@@ -47,21 +54,23 @@ NamedArgumentPtr CreateCompoundNamedArgument(std::string &name,
 
 NodeDefinitionNodePtr CreateNodeDefinition(
   std::string &name, std::string &type,
-  std::vector<NamedArgumentPtr> &constructionArgs)
+  std::vector<NamedArgumentPtr> &executionArgs)
 {
-	return std::make_shared<NodeDefinitionNode>(name, type, constructionArgs);
+	return std::make_shared<NodeDefinitionNode>(name, type, executionArgs);
 }
 
 NodeDefinitionNodePtr CreateOperationDefinition(
   std::string &name, std::string &operation,
   std::vector<NamedArgumentPtr> &executionArgs)
 {
-	NodeDefinitionNode::ConstructionArgumentContainer_t construction = {
-	  std::make_shared<NamedArgument>(
-	    "operation", NamedArgument::ArgumentType::String, operation)};
+	// We need to add the operation parameter first so the operation is created
+	// before the rest of the arguments.
+	executionArgs.insert(executionArgs.begin(),
+	                     std::make_shared<NamedArgument>(
+	                       "operation", NamedArgument::ArgumentType::String,
+	                       "\"" + operation + "\""));
 	auto node =
-	  std::make_shared<NodeDefinitionNode>(name, "Operation", construction);
-	node->SetExecutionArguments(executionArgs);
+	  std::make_shared<NodeDefinitionNode>(name, "Operation", executionArgs);
 	return node;
 }
 

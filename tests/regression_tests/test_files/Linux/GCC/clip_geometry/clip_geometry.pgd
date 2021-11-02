@@ -1,44 +1,33 @@
-create_rect = Operation(operation: "CreateRectGeometry") {
-    width: 10, height: 10
+create_rect = CreateRectGeometry {
+    width: 10,
+    height: 10
 }
-create_rect_out = OutputInterface(interface: "out")
 
-extrusion_in = InputInterface(interface: "in")
-extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: 10}
-extrusion_out = OutputInterface(interface: "out")
+extrusion = ExtrudeGeometry {
+    amount: 10
+}
 
-clip_geometry_in = InputInterface(interface: "in")
-clip_geometry = Operation(operation: "ClipGeometry") {
+clip_geometry = ClipGeometry {
     plane: $< Plane(Vector3(0, 0, 4), Vector3(1, 2, 3)); >$
 }
-front_geometry = OutputInterface(interface: "front")
-back_geometry = OutputInterface(interface: "back")
 
-export_front_geometry_in = InputInterface(interface: "in")
-export_front_geometry = Operation(operation: "ExportGeometry") {
+export_front_geometry = ExportGeometry {
     path: "regression_results/clip_geometry/front.obj"
 }
 
-export_back_geometry_in = InputInterface(interface: "in")
-export_back_geometry = Operation(operation: "ExportGeometry") {
+export_back_geometry = ExportGeometry {
     path: "regression_results/clip_geometry/back.obj"
 }
 
-create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out -> clip_geometry_in -> clip_geometry;
-clip_geometry -> front_geometry;
-clip_geometry -> back_geometry;
+extract_scope = ExtractScope {}
 
-front_geometry -> export_front_geometry_in -> export_front_geometry;
-back_geometry -> export_back_geometry_in -> export_back_geometry;
+export_scope = ExportGeometry {
+    path: $< "regression_results/clip_geometry/scope" + op.count + ".obj"; >$
+}
 
-extract_scope_in = InputInterface(interface: "in")
-extract_scope = Operation(operation: "ExtractScope")
-extract_scope_out = OutputInterface(interface: "out")
-extract_scope_in -> extract_scope -> extract_scope_out;
-
-export_scope_in = InputInterface(interface: "in")
-export_scope = Operation(operation: "ExportGeometry") { path: $< "regression_results/clip_geometry/scope" + op.count + ".obj"; >$ }
-
-front_geometry -> extract_scope_in;
-back_geometry -> extract_scope_in;
-extract_scope_out -> export_scope_in -> export_scope;
+create_rect>out -> in<extrusion>out -> in<clip_geometry;
+clip_geometry>front -> in<export_front_geometry;
+clip_geometry>back -> in<export_back_geometry;
+clip_geometry>front -> in<extract_scope;
+clip_geometry>back -> in<extract_scope;
+extract_scope>out -> in<export_scope;

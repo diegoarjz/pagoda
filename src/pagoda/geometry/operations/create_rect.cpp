@@ -39,7 +39,6 @@ CreateRectGeometry::~CreateRectGeometry()
 
 void CreateRectGeometry::Parameters(objects::NewParameterCallback* cb)
 {
-	std::cout << "Setting parameters" << std::endl;
 	cb->FloatParameter(&m_width, "width", "Width", 1.0f);
 	cb->FloatParameter(&m_height, "height", "Height", 1.0f);
 	cb->StringParameter(&m_plane, "plane", "Plane", "z");

@@ -58,14 +58,10 @@ void CreateSphereGeometry::DoWork()
 {
 	START_PROFILE;
 
-	float radius = get_value_as<float>(*GetValue("radius"));
-	int slices = get_value_as<int>(*GetValue("slices"));
-	int stacks = get_value_as<int>(*GetValue("stacks"));
-
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	CreateSphere<Geometry> createSphere(radius, slices, stacks);
+	CreateSphere<Geometry> createSphere(m_radius, m_slices, m_stacks);
 	auto geometry = std::make_shared<Geometry>();
 	createSphere.Execute(geometry);
 

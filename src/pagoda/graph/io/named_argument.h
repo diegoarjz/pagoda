@@ -23,6 +23,7 @@ class NamedArgument : public AstNode
 		String,
 		Float,
 		Integer,
+		Boolean,
 		Compound,
 		Expression
 	};

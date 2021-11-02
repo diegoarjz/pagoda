@@ -1,15 +1,14 @@
-create_rect = Operation(operation: "CreateRectGeometry") {
-    width: $< 5+5; >$, height: $< 20-3; >$
+create_rect = CreateRectGeometry {
+    width: $< 5+5; >$,
+    height: $< 20-3; >$
 }
 
-create_rect_out = OutputInterface(interface: "out")
-extrusion_in = InputInterface(interface: "in")
-extrusion = Operation(operation: "ExtrudeGeometry") {extrusion_amount: $< 10*1.5; >$}
-extrusion_out = OutputInterface(interface: "out")
+extrusion = ExtrudeGeometry {
+    amount: $< 10*1.5; >$
+}
 
-export_geometry_in = InputInterface(interface: "in")
-export_geometry = Operation(operation: "ExportGeometry") {path: "regression_results/expression/geometry.obj"}
-export_geometry_in -> export_geometry;
+export_geometry = ExportGeometry {
+    path: "regression_results/expression/geometry.obj"
+}
 
-create_rect -> create_rect_out -> extrusion_in -> extrusion -> extrusion_out;
-extrusion_out -> export_geometry_in;
+create_rect>out -> in<extrusion>out -> in<export_geometry;

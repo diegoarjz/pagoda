@@ -209,12 +209,6 @@ class Graph
 	 */
 	void ExecuteQuery(query::Query &q);
 
-	void SetNodeConstructionParameters(const NodeIdentifier_t &nodeName,
-	                                   ConstructionArgumentCallback *cb);
-
-	void SetNodeExecutionParameters(const NodeIdentifier_t &nodeName,
-	                                objects::NewParameterCallback *cb);
-
 	private:
 	class Impl;
 	std::unique_ptr<Impl> m_implementation;

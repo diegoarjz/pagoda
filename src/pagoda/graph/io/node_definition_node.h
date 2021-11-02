@@ -17,8 +17,6 @@ using NamedArgumentPtr = std::shared_ptr<NamedArgument>;
 class NodeDefinitionNode : public GraphStatementNode
 {
 	public:
-	/// Storage type for construction arguments
-	using ConstructionArgumentContainer_t = std::vector<NamedArgumentPtr>;
 	/// Storage type for execution arguments
 	using ExecutionArgumentContainer_t = std::vector<NamedArgumentPtr>;
 
@@ -28,23 +26,29 @@ class NodeDefinitionNode : public GraphStatementNode
 	NodeDefinitionNode();
 
 	/**
-	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args.
+	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p
+	 * args.
 	 */
-	NodeDefinitionNode(const std::string &name, const std::string &nodeType, const ConstructionArgumentContainer_t &args);
+	NodeDefinitionNode(const std::string &name, const std::string &nodeType,
+	                   const ExecutionArgumentContainer_t &args);
 
 	/**
-	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args, passing \p startOffset and \p
-	 * endOffset to the respective \c AstNode constructor.
+	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p
+	 * args, passing \p startOffset and \p endOffset to the respective \c AstNode
+	 * constructor.
 	 */
-	NodeDefinitionNode(const AstNode::Offset_t &startOffset, const AstNode::Offset_t &endOffset, const std::string &name,
-	                   const std::string &nodeType, const ConstructionArgumentContainer_t &args);
+	NodeDefinitionNode(const AstNode::Offset_t &startOffset,
+	                   const AstNode::Offset_t &endOffset,
+	                   const std::string &name, const std::string &nodeType,
+	                   const ExecutionArgumentContainer_t &args);
 
 	/**
-	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p args, passing \p nodeRange to the
-	 * respective \c AstNode constructor.
+	 * Constructs a \c NodeDefinitionNode with the \p name, \p nodeType and \p
+	 * args, passing \p nodeRange to the respective \c AstNode constructor.
 	 */
-	NodeDefinitionNode(const AstNode::NodeRange_t &nodeRange, const std::string &name, const std::string &nodeType,
-	                   const ConstructionArgumentContainer_t &args);
+	NodeDefinitionNode(const AstNode::NodeRange_t &nodeRange,
+	                   const std::string &name, const std::string &nodeType,
+	                   const ExecutionArgumentContainer_t &args);
 
 	virtual ~NodeDefinitionNode();
 
@@ -79,32 +83,6 @@ class NodeDefinitionNode : public GraphStatementNode
 	void SetNodeType(const std::string &type);
 
 	/**
-	 * Returns the construction arguments.
-	 */
-	const ConstructionArgumentContainer_t &GetConstructionArguments() const;
-
-	/**
-	 * Sets the construction arguments.
-	 */
-	void SetConstructionArguments(const ConstructionArgumentContainer_t &args);
-
-	/**
-	 * Adds the \p arg to the construction arguments.
-	 */
-	void AddConstructionArgument(const NamedArgumentPtr &arg);
-
-	/**
-	 * Creates and returns a construction argument with the give arguments.
-	 * \p args should match one of the \c NamedArgument constructors.
-	 */
-	template<typename... Args>
-	NamedArgumentPtr CreateConstructionArgument(Args... args)
-	{
-		m_constructionArguments.emplace_back(std::make_shared<NamedArgument>(args...));
-		return m_constructionArguments.back();
-	}
-
-	/**
 	 * Returns the execution arguments.
 	 */
 	const ExecutionArgumentContainer_t &GetExecutionArguments() const;
@@ -136,10 +114,10 @@ class NodeDefinitionNode : public GraphStatementNode
 	void AcceptVisitor(AstNodeVisitor *visitor) override;
 
 	private:
-	std::string m_nodeName;                                   ///< The graph's \c Node name.
-	std::string m_nodeType;                                   ///< The type of node to create.
-	ConstructionArgumentContainer_t m_constructionArguments;  ///< The construction arguments.
-	ExecutionArgumentContainer_t m_executionArguments;        ///< The execution arguments.
+	std::string m_nodeName;  ///< The graph's \c Node name.
+	std::string m_nodeType;  ///< The type of node to create.
+	ExecutionArgumentContainer_t
+	  m_executionArguments;  ///< The execution arguments.
 };
 
 using NodeDefinitionNodePtr = std::shared_ptr<NodeDefinitionNode>;

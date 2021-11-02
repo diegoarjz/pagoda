@@ -1,10 +1,12 @@
-create_box = Operation(operation: "CreateBoxGeometry") {
-    xSize: 10, ySize: 10, zSize: 5
+create_box = CreateBoxGeometry {
+    width: 10,
+    depth: 10,
+    height: 5
 }
-create_box_out = OutputInterface(interface: "out")
-export_geometry_in = InputInterface(interface: "in")
-export_geometry = Operation(operation: "ExportGeometry") {
+
+export_geometry = ExportGeometry {
     path: "regression_results/create_box/geometry.obj"
 }
 
-create_box -> create_box_out -> export_geometry_in -> export_geometry;
+
+create_box>out -> in<export_geometry;

@@ -61,7 +61,7 @@ void CreateBoxGeometry::DoWork()
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	CreateBox<Geometry> createBox(m_width, m_height, m_depth);
+	CreateBox<Geometry> createBox(m_width, m_depth, m_height);
 	auto geometry = std::make_shared<Geometry>();
 	createBox.Execute(geometry);
 
