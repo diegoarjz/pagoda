@@ -18,13 +18,6 @@ ParameterNode::~ParameterNode()
 {
 }
 
-void ParameterNode::SetConstructionArguments(ConstructionArgumentCallback *cb)
-{
-}
-void ParameterNode::SetExecutionArguments(objects::NewParameterCallback *cb)
-{
-}
-
 void ParameterNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	START_PROFILE;
@@ -45,14 +38,4 @@ const char *const ParameterNode::GetNodeType()
 	return sNodeType;
 }
 
-void ParameterNode::ForEachConstructionArgument(
-  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
-{
-}
-
-void ParameterNode::ForEachExecutionArgument(
-  std::function<void(const std::string &, dynamic::DynamicValueBasePtr)> f)
-{
-	//
-}
 }  // namespace pagoda::graph

@@ -37,13 +37,26 @@ Split::~Split()
 void Split::Parameters(objects::NewParameterCallback *cb)
 {
 	cb->StringParameter(&m_axis, "axis", "Axis", "x");
-	cb->IntegerParameter(&m_splitCount, "split_count", "Split Count", 0);
-	for (uint32_t i = 1u; i <= 8; ++i) {
+	cb->IntegerParameter(&m_splitCount, "split_count", "Split Count", 8);
+	m_splitSizes.resize(m_splitCount);
+	for (uint32_t i = 1u; i <= m_splitCount; ++i) {
 		auto name = "split_" + std::to_string(i);
 
 		cb->FloatParameter(&m_splitSizes[i], name.c_str(),
 		                   ("Split " + std::to_string(i)).c_str(), 0);
 	}
+}
+
+void Split::ParameterChanged(std::shared_ptr<objects::ParameterBase> par)
+{
+	if (par->GetName() == "split_count") {
+		// Notify parameters changed
+		// Notify interfaces changed
+	}
+}
+
+void Split::updateWithSplitCount()
+{
 }
 
 const std::string &Split::GetOperationName() const
@@ -55,11 +68,14 @@ const std::string &Split::GetOperationName() const
 void Split::Interfaces(InterfaceCallback *cb)
 {
 	cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
-	for (uint32_t i = 1u; i <= 8; ++i) {
-		auto name = "split_" + std::to_string(i);
-		cb->OutputInterface(m_outputs[i - 1], "split_" + std::to_string(i),
-		                    "Split " + std::to_string(i), Interface::Arity::Many);
+
+	/*
+	for (uint32_t i = 1u; i <= m_splitCount; ++i) {
+	  auto name = "split_" + std::to_string(i);
+	  cb->OutputInterface(m_outputs[i - 1], "split_" + std::to_string(i),
+	                      "Split " + std::to_string(i), Interface::Arity::Many);
 	}
+	*/
 }
 
 std::vector<Plane<float>> createPlanes(const Scope &scope,

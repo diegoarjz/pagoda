@@ -1,10 +1,11 @@
-create_sphere = Operation(operation: "CreateSphereGeometry") {
-    radius: 2, slices: 20, stacks: 20
+create_sphere = CreateSphereGeometry {
+    radius: 2,
+    slices: 20,
+    stacks: 20
 }
-create_sphere_out = OutputInterface(interface: "out")
-export_sphere_in = InputInterface(interface: "in")
-export_sphere = Operation(operation: "ExportGeometry") {
+
+export_sphere = ExportGeometry {
     path: "regression_results/create_sphere/sphere.obj"
 }
 
-create_sphere -> create_sphere_out -> export_sphere_in -> export_sphere;
+create_sphere>out -> in<export_sphere;

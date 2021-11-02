@@ -21,7 +21,11 @@ namespace pagoda::graph::io
 {
 struct GraphReader::Impl
 {
-	Impl(NodeFactoryPtr nodeFactory) : m_nodeFactory(nodeFactory), m_currentParseResult({ParseResult::Status::Ok, 0}) {}
+	Impl(NodeFactoryPtr nodeFactory)
+	  : m_nodeFactory(nodeFactory),
+	    m_currentParseResult({ParseResult::Status::Ok, 0})
+	{
+	}
 
 	GraphPtr Read(const std::string &str)
 	{
@@ -33,11 +37,14 @@ struct GraphReader::Impl
 		GraphReaderGrammar<std::string::const_iterator> grammar;
 		GraphDefinitionNodePtr graph_def;
 
-		bool result = boost::spirit::qi::phrase_parse(begin, end, grammar, boost::spirit::qi::space, graph_def);
+		bool result = boost::spirit::qi::phrase_parse(
+		  begin, end, grammar, boost::spirit::qi::space, graph_def);
 
 		if (!result || begin != end) {
-			throw common::exception::Exception("Syntax error while reading graph file. Starting in\n " +
-			                                   std::string(begin, end));
+			std::cout << "Syntax error in " << std::string(begin, end) << std::endl;
+			throw common::exception::Exception(
+			  "Syntax error while reading graph file. Starting in\n " +
+			  std::string(begin, end));
 			m_currentParseResult.status = ParseResult::Status::UnknownError;
 			return nullptr;
 		}
@@ -47,7 +54,10 @@ struct GraphReader::Impl
 
 		return graph;
 	}
-	const ParseResult &GetParseResult() const { return m_currentParseResult; }
+	const ParseResult &GetParseResult() const
+	{
+		return m_currentParseResult;
+	}
 
 	private:
 	NodeFactoryPtr m_nodeFactory;
@@ -58,8 +68,16 @@ GraphReader::GraphReader(NodeFactoryPtr nodeFactory)
   : m_implementation(std::make_unique<GraphReader::Impl>(nodeFactory))
 {
 }
-GraphReader::~GraphReader() {}
-GraphPtr GraphReader::Read(const std::string &str) { return m_implementation->Read(str); }
-const ParseResult &GraphReader::GetParseResult() const { return m_implementation->GetParseResult(); }
+GraphReader::~GraphReader()
+{
+}
+GraphPtr GraphReader::Read(const std::string &str)
+{
+	return m_implementation->Read(str);
+}
+const ParseResult &GraphReader::GetParseResult() const
+{
+	return m_implementation->GetParseResult();
+}
 
 }  // namespace pagoda::graph::io
