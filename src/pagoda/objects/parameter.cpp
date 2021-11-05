@@ -132,7 +132,11 @@ dynamic::DynamicValueBasePtr Parameter<math::Plane<float>>::ToDynamicValue()
 template<>
 void Parameter<std::string>::FromString(const std::string& value)
 {
-	SetValue(value);
+	if (value.front() != '\"' || value.back() != '\"') {
+		LOG_ERROR("Invalid value '" << value << "' for a string parameter");
+		return;
+	}
+	SetValue(value.substr(1, value.size() - 2));
 }
 
 template<>
@@ -174,8 +178,9 @@ void Parameter<math::Plane<float>>::FromString(const std::string& value)
 
 	bool r = boost::spirit::qi::phrase_parse(
 	  first, last,
-	  float_[ref(normal.a[0]) = _1] >> "," >> float_[ref(normal.a[1]) = _1] >>
-	    "," >> float_[ref(normal.a[2]) = _1] >> "," >> float_[ref(dist) = _1],
+	  "[" >> float_[ref(normal.a[0]) = _1] >> "," >>
+	    float_[ref(normal.a[1]) = _1] >> "," >> float_[ref(normal.a[2]) = _1] >>
+	    "," >> float_[ref(dist) = _1] >> "]",
 	  space);
 
 	if (r && first == last) {
@@ -188,7 +193,7 @@ void Parameter<math::Plane<float>>::FromString(const std::string& value)
 template<>
 std::string Parameter<std::string>::ToString() const
 {
-	return GetValue();
+	return "\"" + GetValue() + "\"";
 }
 
 template<>
@@ -215,7 +220,8 @@ std::string Parameter<math::Plane<float>>::ToString() const
 	auto normal = m_valuePtr->GetNormal();
 	auto dist = m_valuePtr->GetDistanceToOrigin();
 	std::stringstream ss;
-	ss << X(normal) << ", " << Y(normal) << ", " << Z(normal) << dist;
+	ss << "[" << X(normal) << ", " << Y(normal) << ", " << Z(normal) << dist
+	   << "]";
 	return ss.str();
 }
 }  // namespace pagoda::objects

@@ -44,7 +44,7 @@ DynamicValueBasePtr defaultValues<std::string>::getDynamicValue()
 template<>
 const std::string defaultValues<std::string>::expression1{"\"a string\";"};
 template<>
-const std::string defaultValues<std::string>::strValue{"a string"};
+const std::string defaultValues<std::string>::strValue{"\"a string\""};
 
 template<>
 const float defaultValues<float>::value1{123.456f};
@@ -103,7 +103,7 @@ template<>
 const std::string defaultValues<math::Plane<float>>::expression1{
   "Plane(Vector3(1,2,3), Vector3(1,0,0));"};
 template<>
-const std::string defaultValues<math::Plane<float>>::strValue{"1, 0, 0, 1"};
+const std::string defaultValues<math::Plane<float>>::strValue{"[1, 0, 0, 1]"};
 }  // namespace
 
 TYPED_TEST_SUITE_P(ParameterTest);

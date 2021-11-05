@@ -55,4 +55,12 @@ objects::ParameterBasePtr Node::GetParameter(const std::string &name) const
 	return iter->second;
 }
 
+void Node::ForEachParameter(
+  std::function<void(objects::ParameterBasePtr)> f) const
+{
+	for (const auto &p : m_parameters) {
+		f(p.second);
+	}
+}
+
 }  // namespace pagoda::graph

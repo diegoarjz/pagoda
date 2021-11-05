@@ -172,23 +172,6 @@ TEST_F(GraphReaderGrammarTest, test_execution_args)
 	}
 }
 
-TEST_F(GraphReaderGrammarTest, test_node_definition)
-{
-	std::string def[] = {"n = Operation(a:1,b:2)", "n = Operation(a:1){}",
-	                     "n = Operation(a:1){a:$<1+1;>$}"};
-
-	for (auto a : def) {
-		NodeDefinitionNodePtr out;
-		std::string::const_iterator begin = std::begin(a);
-		std::string::const_iterator end = std::end(a);
-		bool r =
-		  qi::phrase_parse(begin, end, m_grammar.node_definition, qi::space, out);
-
-		EXPECT_TRUE(r);
-		EXPECT_EQ(begin, end) << "Should have matched " << a;
-	}
-}
-
 TEST_F(GraphReaderGrammarTest, test_node_definition_construction)
 {
 	std::string a = "n = Operation(a:1,b:2){c:3}";
@@ -200,7 +183,7 @@ TEST_F(GraphReaderGrammarTest, test_node_definition_construction)
 	ASSERT_NE(out, nullptr);
 	EXPECT_EQ(out->GetNodeName(), "n");
 	EXPECT_EQ(out->GetNodeType(), "Operation");
-	EXPECT_EQ(out->GetExecutionArguments().size(), 1u);
+	EXPECT_EQ(out->GetExecutionArguments().size(), 2u);
 }
 
 TEST_F(GraphReaderGrammarTest, test_simplified_operation_node_definition)

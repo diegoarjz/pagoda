@@ -72,6 +72,7 @@ class Node : public dynamic::BuiltinClass
 	void AcceptVisitor(dynamic::ValueVisitorBase &visitor) override;
 
 	objects::ParameterBasePtr GetParameter(const std::string &name) const;
+	void ForEachParameter(std::function<void(objects::ParameterBasePtr)> f) const;
 
 	protected:
 	std::unordered_map<std::string, objects::ParameterBasePtr> m_parameters;

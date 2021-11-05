@@ -64,7 +64,7 @@ void AstInterpreter::Visit(NamedArgument *namedArgument)
 void AstInterpreter::Visit(NodeDefinitionNode *nodeDefinition)
 {
 	const std::string nodeName = m_graph->CreateNode(
-	  nodeDefinition->GetNodeType(), nodeDefinition->GetNodeType());
+	  nodeDefinition->GetNodeType(), nodeDefinition->GetNodeName());
 	m_currentNode = m_graph->GetNode(nodeName);
 
 	const auto &executionArgs = nodeDefinition->GetExecutionArguments();

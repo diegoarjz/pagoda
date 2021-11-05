@@ -8,6 +8,8 @@
 #include "unsupported_node_link.h"
 
 #include <pagoda/dynamic/get_value_as.h>
+
+#include <pagoda/objects/parameter.h>
 #include <pagoda/objects/procedural_operation.h>
 
 using namespace pagoda::dynamic;
@@ -19,7 +21,10 @@ const char* InputInterfaceNode::name = "InputInterface";
 
 InputInterfaceNode::InputInterfaceNode() : m_interfaceName("", 0)
 {
+	m_parameters["interface"] =
+	  std::make_shared<StringParameter>(&m_interfaceName, "interface");
 }
+
 InputInterfaceNode::~InputInterfaceNode()
 {
 }
