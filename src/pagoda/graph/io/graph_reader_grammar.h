@@ -29,7 +29,7 @@ struct GraphReaderGrammar
 		 *                      ("{" execution_args "}")?
 		 * operation_definition -> identifier = identifier "{" execution_args "}"
 		 * identifier -> ("_" | alpha) (alnum | "_")*
-		 * literal -> quoted_string | float
+		 * literal -> quoted_string | float | boolean
 		 * expression -> "$<" expression_body ">$"
 		 * expression_body -> .* \ ">$"
 		 * compound_arg -> "[" compound_arg_body "]"
@@ -53,10 +53,12 @@ struct GraphReaderGrammar
 		identifier %= (char_('_') | alpha) >> *(alnum | char_('_'));
 		quoted_string %= ('"' > lexeme[*(char_ - char_('"'))] >> '"');
 
+		boolean %= (lexeme["true"])[_val = true] | (lexeme["false"])[_val = false];
+
 		/*
-		 * literal -> quoted_string | float
+		 * literal -> quoted_string | float | boolean
 		 */
-		literal = quoted_string | float_;
+		literal = quoted_string | float_ | bool_;  // boolean;
 
 		/*
 		 * expression -> "$<" expression_body ">$"
@@ -90,7 +92,10 @@ struct GraphReaderGrammar
 		                       boost::spirit::_2)] |
 		  (identifier >> ':' >> int_ >>
 		   !float_)[_val = bind(CreateIntegerNamedArgument, boost::spirit::_1,
-		                        boost::spirit::_2)];
+		                        boost::spirit::_2)] |
+		  (identifier >> ':' >>
+		   bool_)[_val = bind(CreateBoolNamedArgument, boost::spirit::_1,
+		                      boost::spirit::_2)];
 
 		/*
 		 * named_expression_arg -> identifier ":" ( expression | compound_arg |
@@ -156,8 +161,9 @@ struct GraphReaderGrammar
 	}
 
 	Rule_t<Iterator, std::string()> identifier;
+	Rule_t<Iterator, bool()> boolean;
 	Rule_t<Iterator, std::string()> quoted_string;
-	Rule_t<Iterator, boost::variant<std::string, float>()> literal;
+	Rule_t<Iterator, boost::variant<std::string, float, bool>()> literal;
 	Rule_t<Iterator, std::string()> expression;
 	Rule_t<Iterator, std::string()> expression_body;
 	Rule_t<Iterator, std::string()> compound_arg;

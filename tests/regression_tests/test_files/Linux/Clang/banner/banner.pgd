@@ -1,103 +1,66 @@
-facade = Operation(operation: "CreateRectGeometry") {
+facade = CreateRectGeometry {
     width: 30, height: 20
 }
-facade_out = OutputInterface(interface: "out")
-facade -> facade_out;
 
-facade_extrusion_in = InputInterface(interface: "in")
-facade_extrusion = Operation(operation: "ExtrudeGeometry") {
-    extrusion_amount: -5
+facade_extrusion = ExtrudeGeometry {
+    amount: -5
 }
-facade_extrusion_out = OutputInterface(interface: "out")
-facade_extrusion_in -> facade_extrusion -> facade_extrusion_out;
-facade_out -> facade_extrusion_in;
 
-first_floor_in = InputInterface(interface: "in")
-first_floor = Operation(operation: "Split") {
+facade>out -> in<facade_extrusion;
+
+first_floor = Split {
     axis: "y",
     split_count: 3,
     split_1: 3,
     split_2: 15,
     split_3: 2
 }
-first_floor_1 = OutputInterface(interface: "split_1")
-first_floor_2 = OutputInterface(interface: "split_2")
-first_floor_3 = OutputInterface(interface: "split_3")
-first_floor_in -> first_floor;
-first_floor -> first_floor_1;
-first_floor -> first_floor_2;
-first_floor -> first_floor_3;
 
-
-first_floor_split_in = InputInterface(interface: "in", offset:0)
-first_floor_split = Operation(operation: "Split") {
+first_floor_split = Split {
     axis: "x",
     split_count: 3,
     split_1: 13,
     split_2: 4,
     split_3: 13
 }
-first_floor_split_1 = OutputInterface(interface: "split_1")
-first_floor_split_2 = OutputInterface(interface: "split_2")
-first_floor_split_3 = OutputInterface(interface: "split_3")
 
-first_floor_split_in -> first_floor_split;
-first_floor_split -> first_floor_split_1;
-first_floor_split -> first_floor_split_2;
-first_floor_split -> first_floor_split_3;
-
-door_in = InputInterface(interface: "in")
-door = Operation(operation: "ExtrudeGeometry") {
-    extrusion_amount: 0.5
+door = ExtrudeGeometry {
+    amount: 0.5
 }
-door_out = OutputInterface(interface: "out")
-door_in -> door -> door_out;
 
-
-middle_floors_in = InputInterface(interface: "in")
-middle_floors = Operation(operation: "RepeatSplit") {
+middle_floors = RepeatSplit {
     size: 2,
     axis: "y",
-    adjust: "true"
+    adjust: true
 }
-middle_floors_out = OutputInterface(interface: "out")
-middle_floors_in -> middle_floors -> middle_floors_out;
 
-
-middle_floors_tiles_in = InputInterface(interface: "in")
-middle_floors_tiles = Operation(operation: "RepeatSplit") {
+middle_floors_tiles = RepeatSplit {
     size: 2,
     axis: "x",
-    adjust: "true"
+    adjust: true
 }
-middle_floors_tiles_out = OutputInterface(interface: "out")
-middle_floors_tiles_in -> middle_floors_tiles -> middle_floors_tiles_out;
 
-
-top_floor_extrude_in = InputInterface(interface: "in", offset:0)
-top_floor_extrude = Operation(operation: "ExtrudeGeometry") {
-    extrusion_amount: 0.5
+top_floor_extrude = ExtrudeGeometry {
+    amount: 0.5
 }
-top_floor_extrude_out = OutputInterface(interface: "out")
-top_floor_extrude_in -> top_floor_extrude -> top_floor_extrude_out;
 
-export_geometry_in = InputInterface(interface: "in")
-export_geometry = Operation(operation: "ExportGeometry") {
+export_geometry = ExportGeometry {
     path: $< "regression_results/banner/geometry" + op.count + ".obj"; >$
 }
-export_geometry_in -> export_geometry;
 
+facade>out -> in<first_floor;
 
-facade_out -> first_floor_in;
-first_floor_1 -> first_floor_split_in;
-first_floor_2 -> middle_floors_in;
-middle_floors_out -> middle_floors_tiles_in;
-first_floor_3 -> top_floor_extrude_in;
+first_floor>split_1 -> in<first_floor_split;
+first_floor>split_2 -> in<middle_floors;
+first_floor>split_3 -> in<top_floor_extrude;
+first_floor_split>split_1 -> in<export_geometry;
+first_floor_split>split_2 -> in<door;
+first_floor_split>split_3 -> in<export_geometry;
 
-first_floor_split_1 -> export_geometry_in;
-first_floor_split_2 -> door_in;
-door_out -> export_geometry_in;
-first_floor_split_3 -> export_geometry_in;
-middle_floors_tiles_out -> export_geometry_in;
-top_floor_extrude_out -> export_geometry_in;
-facade_extrusion_out -> export_geometry_in;
+door>out -> in<export_geometry;
+
+middle_floors>out -> in<middle_floors_tiles;
+middle_floors_tiles>out -> in<export_geometry;
+
+top_floor_extrude>out -> in<export_geometry;
+facade_extrusion>out -> in<export_geometry;

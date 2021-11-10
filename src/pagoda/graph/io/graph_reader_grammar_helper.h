@@ -23,6 +23,7 @@ namespace grammar_helpers
 NamedArgumentPtr CreateStringNamedArgument(std::string &name, std::string &str);
 NamedArgumentPtr CreateFloatNamedArgument(std::string &name, float &f);
 NamedArgumentPtr CreateIntegerNamedArgument(std::string &name, int &f);
+NamedArgumentPtr CreateBoolNamedArgument(std::string &name, bool &f);
 NamedArgumentPtr CreateExpressionNamedArgument(std::string &name,
                                                std::string &expression);
 NamedArgumentPtr CreateCompoundNamedArgument(std::string &name,

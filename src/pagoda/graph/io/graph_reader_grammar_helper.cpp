@@ -17,7 +17,7 @@ namespace grammar_helpers
 NamedArgumentPtr CreateStringNamedArgument(std::string &name, std::string &str)
 {
 	return std::make_shared<NamedArgument>(
-	  name, NamedArgument::ArgumentType::String, str);
+	  name, NamedArgument::ArgumentType::String, "\"" + str + "\"");
 }
 
 NamedArgumentPtr CreateFloatNamedArgument(std::string &name, float &f)
@@ -30,6 +30,12 @@ NamedArgumentPtr CreateIntegerNamedArgument(std::string &name, int &f)
 {
 	return std::make_shared<NamedArgument>(
 	  name, NamedArgument::ArgumentType::Integer, std::to_string(f));
+}
+
+NamedArgumentPtr CreateBoolNamedArgument(std::string &name, bool &f)
+{
+	return std::make_shared<NamedArgument>(
+	  name, NamedArgument::ArgumentType::Boolean, f ? "true" : "false");
 }
 
 NamedArgumentPtr CreateExpressionNamedArgument(std::string &name,
@@ -59,10 +65,10 @@ NodeDefinitionNodePtr CreateOperationDefinition(
 {
 	// We need to add the operation parameter first so the operation is created
 	// before the rest of the arguments.
-	executionArgs.insert(
-	  executionArgs.begin(),
-	  std::make_shared<NamedArgument>(
-	    "operation", NamedArgument::ArgumentType::String, operation));
+	executionArgs.insert(executionArgs.begin(),
+	                     std::make_shared<NamedArgument>(
+	                       "operation", NamedArgument::ArgumentType::String,
+	                       "\"" + operation + "\""));
 	auto node =
 	  std::make_shared<NodeDefinitionNode>(name, "Operation", executionArgs);
 	return node;

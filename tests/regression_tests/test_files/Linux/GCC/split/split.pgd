@@ -1,32 +1,22 @@
-create_box = Operation(operation: "CreateBoxGeometry") {
-    xSize: 10, ySize: 10, zSize: 5
+create_box = CreateBoxGeometry{
+    width: 10,
+    depth: 10,
+    height: 5
 }
-create_box_out = OutputInterface(interface: "out")
-create_box -> create_box_out;
 
-split_in = InputInterface(interface: "in")
-split = Operation(operation: "Split") {
+split = Split{
     axis: "x",
     split_count: 3,
     split_1: 1,
     split_2: 3,
     split_3: 6
 }
-split_out_1 = OutputInterface(interface: "split_1")
-split_out_2 = OutputInterface(interface: "split_2")
-split_out_3 = OutputInterface(interface: "split_3")
-split_in -> split;
-split -> split_out_1;
-split -> split_out_2;
-split -> split_out_3;
 
-export_geometry_in = InputInterface(interface: "in")
-export_geometry = Operation(operation: "ExportGeometry") {
+export_geometry = ExportGeometry{
     path: $< "regression_results/split/geometry" + op.count + ".obj"; >$
 }
-export_geometry_in -> export_geometry;
 
-create_box_out -> split_in;
-split_out_1 -> export_geometry_in;
-split_out_2 -> export_geometry_in;
-split_out_3 -> export_geometry_in;
+create_box>out -> in<split;
+split>split_1 -> in<export_geometry;
+split>split_2 -> in<export_geometry;
+split>split_3 -> in<export_geometry;

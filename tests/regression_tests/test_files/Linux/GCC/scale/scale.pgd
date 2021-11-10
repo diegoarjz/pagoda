@@ -1,77 +1,71 @@
-create_box = Operation(operation: "CreateBoxGeometry") {
-    xSize: 10, ySize: 10, zSize: 10
+create_box = CreateBoxGeometry {
+    width: 10,
+    depth: 10,
+    height: 10
 }
-create_box_out = OutputInterface(interface: "out")
-create_box -> create_box_out;
 
-translate_scope_origin_in = InputInterface(interface: "in")
-translate_scope_origin = Operation(operation: "Translate") {
-    x: 1, y: 1, z: 1, world: "true"
+translate_scope_origin = Translate {
+    x: 1,
+    y: 1,
+    z: 1,
+    world: true
 }
-translate_scope_origin_out = OutputInterface(interface: "out")
-translate_scope_origin_in -> translate_scope_origin -> translate_scope_origin_out;
 
-translate_scope_center_in = InputInterface(interface: "in")
-translate_scope_center = Operation(operation: "Translate") {
-    x: 1, y: 1, z: 1, world: "true"
+translate_scope_center = Translate {
+    x: 1,
+    y: 1,
+    z: 1,
+    world: true
 }
-translate_scope_center_out = OutputInterface(interface: "out")
-translate_scope_center_in -> translate_scope_center -> translate_scope_center_out;
 
-translate_world_origin_in = InputInterface(interface: "in")
-translate_world_origin = Operation(operation: "Translate") {
-    x: 1, y: 1, z: 1, world: "true"
+translate_world_origin = Translate {
+    x: 1,
+    y: 1,
+    z: 1,
+    world: true
 }
-translate_world_origin_out = OutputInterface(interface: "out")
-translate_world_origin_in -> translate_world_origin -> translate_world_origin_out;
 
-scale_scope_origin_in = InputInterface(interface: "in")
-scale_scope_origin = Operation(operation: "Scale") {
-    x: 0.1, y: 0.1, z: 0.1, pivotal_point: "scope_origin"
+scale_scope_origin = Scale {
+    x: 0.1,
+    y: 0.1,
+    z: 0.1,
+    scale_center: "scope_origin"
 }
-scale_scope_origin_out = OutputInterface(interface: "out")
-scale_scope_origin_in -> scale_scope_origin -> scale_scope_origin_out;
 
-scale_scope_center_in = InputInterface(interface: "in")
-scale_scope_center = Operation(operation: "Scale") {
-    x: 0.1, y: 0.1, z: 0.1, pivotal_point: "scope_center"
+scale_scope_center = Scale {
+    x: 0.1,
+    y: 0.1,
+    z: 0.1,
+    scale_center: "scope_center"
 }
-scale_scope_center_out = OutputInterface(interface: "out")
-scale_scope_center_in -> scale_scope_center -> scale_scope_center_out;
 
-scale_world_origin_in = InputInterface(interface: "in")
-scale_world_origin = Operation(operation: "Scale") {
-    x: 0.1, y: 0.1, z: 0.1, pivotal_point: "world_origin"
+scale_world_origin = Scale {
+    x: 0.1,
+    y: 0.1,
+    z: 0.1,
+    scale_center: "world_origin"
 }
-scale_world_origin_out = OutputInterface(interface: "out")
-scale_world_origin_in -> scale_world_origin -> scale_world_origin_out;
 
-export_scope_origin_in = InputInterface(interface: "in")
-export_scope_origin = Operation(operation: "ExportGeometry") {
+export_scope_origin = ExportGeometry {
     path: "regression_results/scale/geometry_scope_origin.obj"
 }
-export_scope_origin_in -> export_scope_origin;
 
-export_scope_center_in = InputInterface(interface: "in")
-export_scope_center = Operation(operation: "ExportGeometry") {
+export_scope_center = ExportGeometry {
     path: "regression_results/scale/geometry_scope_center.obj"
 }
-export_scope_center_in -> export_scope_center;
 
-export_world_origin_in = InputInterface(interface: "in")
-export_world_origin = Operation(operation: "ExportGeometry") {
+export_world_origin = ExportGeometry {
     path: "regression_results/scale/geometry_world_origin.obj"
 }
-export_world_origin_in -> export_world_origin;
 
-create_box_out -> translate_scope_origin_in;
-translate_scope_origin_out -> scale_scope_origin_in;
-scale_scope_origin_out -> export_scope_origin_in;
+create_box>out ->in<translate_scope_origin;
+translate_scope_origin>out -> in<scale_scope_origin;
+scale_scope_origin>out -> in<export_scope_origin;
 
-create_box_out -> translate_scope_center_in;
-translate_scope_center_out -> scale_scope_center_in;
-scale_scope_center_out -> export_scope_center_in;
+create_box>out -> in<translate_scope_center;
+translate_scope_center>out -> in<scale_scope_center;
+scale_scope_center>out -> in<export_scope_center;
 
-create_box_out -> translate_world_origin_in;
-translate_world_origin_out -> scale_world_origin_in;
-scale_world_origin_out -> export_world_origin_in;
+create_box>out -> in<translate_world_origin;
+translate_world_origin>out -> in<scale_world_origin;
+scale_world_origin>out -> in<export_world_origin;

@@ -66,20 +66,13 @@ void RepeatSplit::DoWork()
 
 	ProceduralObjectPtr inObject = m_input->GetNext();
 
-	UpdateValue("size");
-	UpdateValue("axis");
-	UpdateValue("adjust");
-
 	auto inGeometryComponent =
 	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
 	GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 	auto inScope = inGeometryComponent->GetScope();
 
-	auto size = get_value_as<float>(*GetValue("size"));
-	auto axis = get_value_as<std::string>(*GetValue("axis"));
-	auto adjust = get_value_as<std::string>(*GetValue("adjust"));
 	PlaneSplits<Geometry> planeSplit(
-	  CreatePlanes(inScope, size, axis, adjust == "true"));
+	  CreatePlanes(inScope, m_size, m_axis, m_adjust));
 
 	std::vector<GeometryPtr> splitGeometries;
 
