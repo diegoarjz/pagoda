@@ -67,12 +67,15 @@ class InterfaceCreator : public InterfaceCallback
 void OperationNode::SetOperation(ProceduralOperationPtr operation)
 {
 	m_operation = operation;
-	InterfaceCreator interfaceCreator;
-	m_operation->Interfaces(&interfaceCreator);
 	ParameterCreator paramCreator([this](ParameterBasePtr p) {
 		return m_parameters.insert({p->GetName(), p}).second;
 	});
+
+	InterfaceCreator interfaceCreator;
+	m_operation->Interfaces(&interfaceCreator);
+
 	m_operation->Parameters(&paramCreator);
+
 	RegisterOrSetMember("op", m_operation);
 }
 
