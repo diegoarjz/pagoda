@@ -101,8 +101,8 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope,
 	CRITICAL_ASSERT_MSG(axis == "x" || axis == "y" || axis == "z",
 	                    "Axis must be one of x, y, or z");
 
-	LOG_TRACE(ProceduralObjects, "Creating repeat split planes.");
-	LOG_TRACE(ProceduralObjects,
+	LOG_TRACE(GeometryOperations, "Creating repeat split planes.");
+	LOG_TRACE(GeometryOperations,
 	          " size: " << size << " , axis: " << axis << ", adjust: " << adjust);
 
 	auto scopeAxis = scope.GetAxis(axis);
@@ -130,12 +130,12 @@ std::vector<Plane<float>> RepeatSplit::CreatePlanes(const Scope& scope,
 	scopeAxis = -1 * scopeAxis;
 	auto currentPoint = scopePlane.GetPoint() + translationVector;
 
-	LOG_TRACE(ProceduralObjects,
+	LOG_TRACE(GeometryOperations,
 	          " scopeAxis: " << scopeAxis << ", planeDistance: " << planeDistance
 	                         << ", numPlanes: " << numPlanes);
 	for (uint32_t i = 0; i < numPlanes; ++i) {
 		auto plane = Plane<float>::FromPointAndNormal(currentPoint, scopeAxis);
-		LOG_TRACE(ProceduralObjects, " Split Plane: " << plane);
+		LOG_TRACE(GeometryOperations, " Split Plane: " << plane);
 		planes.push_back(plane);
 		currentPoint = currentPoint + translationVector;
 	}

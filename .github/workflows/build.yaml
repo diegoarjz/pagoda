@@ -35,7 +35,7 @@ jobs:
                   }
                 - {
                     name: "Windows-msvc",
-                    os: windows-latest,
+                    os: windows-2019,
                     set_path: "",
                     conan_profile: './tools/profiles/win_msvc_Release_gh.txt',
                     cc: "",
@@ -58,12 +58,10 @@ jobs:
               env:
                 CC: ${{ matrix.config.cc }}
                 CXX: ${{ matrix.config.cxx }}
+                CONAN_SYSREQUIRES_MODE: "enabled"
               run: |
                   ${{ matrix.config.set_path }}
                   git submodule update --init --recursive
-                  conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-                  conan remote add helmesjo https://api.bintray.com/conan/helmesjo/public-conan
-                  conan remote add pagoda https://api.bintray.com/conan/diegoarjz/Pagoda
                   conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
                   cd ${{ github.workspace }}/build
                   conan build ${{ github.workspace }}

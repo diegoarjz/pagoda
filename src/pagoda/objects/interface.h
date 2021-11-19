@@ -4,6 +4,8 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <functional>
+#include <variant>
 
 namespace pagoda::objects
 {
@@ -134,6 +136,11 @@ class Interface : public std::enable_shared_from_this<Interface>
 	std::size_t GetAll(std::function<void(ProceduralObjectPtr&)> f);
 
 	void Add(ProceduralObjectPtr object);
+
+	/**
+	 * Get the next \c ProceduralObject but doesn't remove it.
+	 */
+	const ProceduralObjectPtr PeekObject() const;
 
 	private:
 	/**

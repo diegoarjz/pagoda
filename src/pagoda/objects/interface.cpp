@@ -31,6 +31,7 @@ Interface::Arity Interface::GetArity() const
 
 const std::string& Interface::GetArityName() const
 {
+  static const std::string sInvalid{"Invalid"};
 	static const std::string sOne{"One"};
 	static const std::string sMany{"Many"};
 	static const std::string sAll{"All"};
@@ -43,6 +44,7 @@ const std::string& Interface::GetArityName() const
 		case Arity::All:
 			return sAll;
 	};
+  return sInvalid;
 }
 
 ////////////////////////////////////////////////////////////
@@ -178,7 +180,9 @@ std::size_t Interface::GetAll(std::function<void(ProceduralObjectPtr&)> f)
 	for (auto& o : m_objects) {
 		f(o);
 	}
-	return m_objects.size();
+	std::size_t size = m_objects.size();
+	m_objects.clear();
+	return size;
 }
 
 void Interface::Add(ProceduralObjectPtr object)
@@ -193,5 +197,13 @@ void Interface::Add(ProceduralObjectPtr object)
 		return;
 	}
 	m_objects.push_back(object);
+}
+
+const ProceduralObjectPtr Interface::PeekObject() const
+{
+	if (m_objects.empty()) {
+		return nullptr;
+	}
+	return m_objects.front();
 }
 }  // namespace pagoda::objects

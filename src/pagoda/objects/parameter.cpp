@@ -69,10 +69,32 @@ const std::string& ParameterBase::GetExpression() const
 	return m_expression->GetExpressionString();
 }
 
-void ParameterBase::EvaluateExpression()
+void ParameterBase::EvaluateExpression(VariableProvider* provider)
 {
 	if (m_expression == nullptr) {
 		return;
+	}
+
+	if (provider != nullptr) {
+		for (const auto& var : m_expression->GetVariables()) {
+			Variable_t outVar;
+			if (provider->GetVariable(var.GetIdentifiers(), outVar)) {
+				dynamic::DynamicValueBasePtr varValue;
+				if (auto par = std::get_if<std::shared_ptr<ParameterBase>>(&outVar)) {
+					if ((*par)->HasExpression()) {
+						varValue = (*par)->m_expression;
+					} else {
+						varValue = (*par)->ToDynamicValue();
+					}
+				} else {
+					auto value = std::get_if<dynamic::DynamicValueBasePtr>(&outVar);
+					DBG_ASSERT_MSG(value != nullptr,
+					               "Could not get value as DynamicValue for variable");
+					varValue = *value;
+				}
+				m_expression->SetVariableValue(var, varValue);
+			}
+		}
 	}
 
 	if (auto value = m_expression->Evaluate()) {

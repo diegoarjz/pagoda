@@ -22,7 +22,7 @@ export_back_geometry = ExportGeometry {
 extract_scope = ExtractScope {}
 
 export_scope = ExportGeometry {
-    path: $< "regression_results/clip_geometry/scope" + op.count + ".obj"; >$
+    path: $< "regression_results/clip_geometry/scope" + count + ".obj"; >$
 }
 
 create_rect>out -> in<extrusion>out -> in<clip_geometry;

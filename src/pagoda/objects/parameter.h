@@ -62,6 +62,16 @@ class ParameterBase : public std::enable_shared_from_this<ParameterBase>
 	/// \name Expressions
 	////////////////////////////////////////
 
+	using Variable_t =
+	  std::variant<dynamic::DynamicValueBasePtr, std::shared_ptr<ParameterBase>>;
+
+	class VariableProvider
+	{
+public:
+		virtual bool GetVariable(const std::list<std::string>& path,
+		                         Variable_t& outVar) = 0;
+	};
+
 	/**
 	 * Returns whether or not this parameter has an Expression.
 	 */
@@ -80,7 +90,7 @@ class ParameterBase : public std::enable_shared_from_this<ParameterBase>
 	/**
 	 * Evaluates the expression and sets the value.
 	 */
-	void EvaluateExpression();
+	void EvaluateExpression(VariableProvider* provider = nullptr);
 
 	////////////////////////////////////////
 	/// \name Callbacks
@@ -206,10 +216,7 @@ class Parameter : public ParameterBase
 		SetValue(v);
 	}
 
-	dynamic::DynamicValueBasePtr ToDynamicValue() override
-	{
-		return nullptr;
-	}
+	dynamic::DynamicValueBasePtr ToDynamicValue() override;
 
 	void FromString(const std::string& value) override;
 	std::string ToString() const override;
@@ -220,17 +227,27 @@ class Parameter : public ParameterBase
 
 using StringParameter = Parameter<std::string>;
 using StringParameterPtr = std::shared_ptr<StringParameter>;
+template<>
+dynamic::DynamicValueBasePtr Parameter<std::string>::ToDynamicValue();
 
 using FloatParameter = Parameter<float>;
 using FloatParameterPtr = std::shared_ptr<FloatParameter>;
+template<>
+dynamic::DynamicValueBasePtr Parameter<float>::ToDynamicValue();
 
 using IntParameter = Parameter<int>;
 using IntParameterPtr = std::shared_ptr<IntParameter>;
+template<>
+dynamic::DynamicValueBasePtr Parameter<int>::ToDynamicValue();
 
 using BooleanParameter = Parameter<bool>;
 using BooleanParameterPtr = std::shared_ptr<BooleanParameter>;
+template<>
+dynamic::DynamicValueBasePtr Parameter<bool>::ToDynamicValue();
 
 using PlaneParameter = Parameter<math::Plane<float>>;
 using PlaneParameterPtr = std::shared_ptr<PlaneParameter>;
+template<>
+dynamic::DynamicValueBasePtr Parameter<math::Plane<float>>::ToDynamicValue();
 
 }  // namespace pagoda::objects

@@ -29,10 +29,10 @@ class Split : public objects::ProceduralOperation
 	void updateWithSplitCount();
 
 	objects::InterfacePtr m_input;
-	std::vector<objects::InterfacePtr> m_outputs;
+	std::array<objects::InterfacePtr, 8> m_outputs;
 
 	std::string m_axis;
 	int m_splitCount;
-	std::vector<float> m_splitSizes;
+	std::array<float, 8> m_splitSizes;
 };
 }  // namespace pagoda::geometry::operations

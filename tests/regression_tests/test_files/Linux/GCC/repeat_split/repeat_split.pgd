@@ -22,9 +22,8 @@ repeat_split_z = RepeatSplit {
     axis: "z"
 }
 
-
 export_geometry = ExportGeometry {
-    path: $< "regression_results/repeat_split/geometry_" + op.count + ".obj"; >$
+    path: $< "regression_results/repeat_split/geometry_" + count + ".obj"; >$
 }
 
 create_box>out -> in<repeat_split_x;

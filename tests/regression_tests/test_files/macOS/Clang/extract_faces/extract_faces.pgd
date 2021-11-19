@@ -7,7 +7,7 @@ create_box = CreateBoxGeometry {
 extract_faces = ExtractFaces {}
 
 export_geometry = ExportGeometry {
-    path: $< "regression_results/extract_faces/geometry" + op.count + ".obj"; >$
+    path: $< "regression_results/extract_faces/geometry" + count + ".obj"; >$
 }
 
 create_box>out -> in<extract_faces>out -> in<export_geometry;
