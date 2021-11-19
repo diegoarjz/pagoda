@@ -137,15 +137,55 @@ void pairInterfaceWithNodes(
 }
 
 void execute(
-  ProceduralOperationPtr operation,
+  OperationNode *node, ProceduralOperationPtr operation,
+  const std::unordered_map<InterfacePtr, InputInterfaceNodePtr> &inputMap,
   const std::unordered_map<InterfacePtr, OutputInterfaceNodePtr> &outputMap)
 {
+	// Compute all parameters that have an expression
+	struct OpVariableProvider : public ParameterBase::VariableProvider
+	{
+public:
+		OpVariableProvider(
+		  OperationNode *n, ProceduralOperation *op,
+		  const std::unordered_map<InterfacePtr, InputInterfaceNodePtr>
+		    &inInterfaces)
+		  : m_node{n}, m_operation{op}, m_inInterfaces{inInterfaces}
+		{
+		}
+
+		bool GetVariable(const std::list<std::string> &path,
+		                 ParameterBase::Variable_t &outVar) override
+		{
+			if (auto par = m_node->GetParameter(path.front())) {
+				outVar = par;
+				return true;
+			}
+			for (const auto &i : m_inInterfaces) {
+				if (i.first->GetName() == path.front()) {
+					outVar = i.first->PeekObject();
+					return true;
+				}
+			}
+			return false;
+		}
+
+		OperationNode *m_node;
+		ProceduralOperation *m_operation;
+		const std::unordered_map<InterfacePtr, InputInterfaceNodePtr>
+		  &m_inInterfaces;
+	} variableProvider{node, operation.get(), inputMap};
+
+	node->ForEachParameter([&variableProvider](ParameterBasePtr p) {
+		if (p->HasExpression()) {
+			p->EvaluateExpression(&variableProvider);
+		}
+	});
 	operation->Execute();
 
 	for (const auto &out : outputMap) {
-		LOG_TRACE(ProceduralGraph, "Copying to " << operation->GetOperationName()
-		                                         << " " << out.first->GetName()
-		                                         << " interface");
+		LOG_TRACE(ProceduralGraph, "Copying to '" << node->GetName() << ">"
+		                                          << out.first->GetName()
+		                                          << "' interface");
 		switch (out.first->GetArity()) {
 			case Interface::Arity::One:
 				out.second->AddProceduralObject(out.first->Get());
@@ -166,14 +206,7 @@ void execute(
 void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 {
 	LOG_TRACE(ProceduralGraph,
-	          "Executing OperationNode " << GetName() << "(" << GetId() << ")");
-
-	// Compute all parameters that have an expression
-	for (auto &p : m_parameters) {
-		if (p.second->HasExpression()) {
-			p.second->EvaluateExpression();
-		}
-	}
+	          "Executing OperationNode '" << GetName() << "'(" << GetId() << ")");
 
 	std::vector<InterfacePtr> inputs;
 	std::vector<InterfacePtr> outputs;
@@ -207,16 +240,18 @@ void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 		auto interfaceNode = inputMap[i];
 		switch (i->GetArity()) {
 			case Interface::Arity::One:
-				LOG_TRACE(ProceduralGraph,
-				          "Interface " << i->GetName() << " has Arity One.");
+				LOG_TRACE(ProceduralGraph, "Interface '" << i->GetName() << "<"
+				                                         << GetName()
+				                                         << "' has Arity One.");
 				// Set the object in interfaces with arity One
 				CRITICAL_ASSERT_MSG(interfaceNode->GetProceduralObjects().size() == 1,
 				                    "Expected interface node to only have one object");
 				i->Set(interfaceNode->GetProceduralObjects().front());
 				break;
 			case Interface::Arity::All:
-				LOG_TRACE(ProceduralGraph,
-				          "Interface " << i->GetName() << " has Arity All.");
+				LOG_TRACE(ProceduralGraph, "Interface '" << i->GetName() << "<"
+				                                         << GetName()
+				                                         << "' has Arity All.");
 				// Set all objects in interfaces with arity All
 				for (auto &o : interfaceNode->GetProceduralObjects()) {
 					i->Add(o);
@@ -224,40 +259,35 @@ void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes)
 				break;
 			case Interface::Arity::Many: {
 				const auto &objects = interfaceNode->GetProceduralObjects();
-				LOG_TRACE(ProceduralGraph,
-				          "Interface " << i->GetName() << " has Arity Many.");
+				LOG_TRACE(ProceduralGraph, "Interface '" << i->GetName() << "<"
+				                                         << GetName()
+				                                         << "' has Arity Many.");
 				LOG_TRACE(ProceduralGraph, "  It has " << objects.size() << " objects");
 				manyArityInterfacesObjects.emplace_back(objects.begin(), objects.end());
 				manyArityInterfaces.push_back(i);
 				break;
 			}
 		};
+		interfaceNode->ClearProceduralObjects();
 	}
 
 	if (manyArityInterfacesObjects.empty()) {
 		// All interfaces are setup so we can execute
-		execute(m_operation, outputMap);
+		execute(this, m_operation, inputMap, outputMap);
 	} else {
 		// Do a CartesianProduct of the procedural objects in the Arity::Many
 		// interfaces and for each result set each object in the respective
 		// interface and execute the operation.
-		common::CartesianProduct(manyArityInterfacesObjects,
-		                         [this, &manyArityInterfaces, &outputMap](
-		                           const std::vector<ProceduralObjectPtr> &obj) {
-			                         for (auto i = 0; i < obj.size(); ++i) {
-				                         manyArityInterfaces[i]->SetNext(obj[i]);
-			                         }
-			                         execute(m_operation, outputMap);
-		                         });
+		common::CartesianProduct(
+		  manyArityInterfacesObjects,
+		  [this, &manyArityInterfaces, &outputMap,
+		   &inputMap](const std::vector<ProceduralObjectPtr> &obj) {
+			  for (std::size_t i = 0; i < obj.size(); ++i) {
+				  manyArityInterfaces[i]->SetNext(obj[i]);
+			  }
+			  execute(this, m_operation, inputMap, outputMap);
+		  });
 	}
-
-	/*
-	// Copy all parameters registered in this node to the operation
-	for (auto parIter = GetMembersBegin(); parIter != GetMembersEnd();
-	     ++parIter) {
-	  m_operation->RegisterOrSetMember(parIter->first, GetMember(parIter->first));
-	}
-	*/
 }
 
 const char *const OperationNode::GetNodeType()

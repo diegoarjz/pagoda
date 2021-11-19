@@ -62,6 +62,16 @@ class ParameterBase : public std::enable_shared_from_this<ParameterBase>
 	/// \name Expressions
 	////////////////////////////////////////
 
+	using Variable_t =
+	  std::variant<dynamic::DynamicValueBasePtr, std::shared_ptr<ParameterBase>>;
+
+	class VariableProvider
+	{
+public:
+		virtual bool GetVariable(const std::list<std::string>& path,
+		                         Variable_t& outVar) = 0;
+	};
+
 	/**
 	 * Returns whether or not this parameter has an Expression.
 	 */
@@ -80,7 +90,7 @@ class ParameterBase : public std::enable_shared_from_this<ParameterBase>
 	/**
 	 * Evaluates the expression and sets the value.
 	 */
-	void EvaluateExpression();
+	void EvaluateExpression(VariableProvider* provider = nullptr);
 
 	////////////////////////////////////////
 	/// \name Callbacks

@@ -59,9 +59,6 @@ void CreateRectGeometry::DoWork()
 {
 	START_PROFILE;
 
-	std::cout << "Creating rect " << m_width << " " << m_height << " " << m_plane
-	          << std::endl;
-
 	math::Vec3F rectXAxis;
 	math::Vec3F rectYAxis;
 	switch (m_plane[0]) {

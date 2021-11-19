@@ -22,9 +22,9 @@ const bool
     false,  // GeometryCore,
     false,  // GeometryOperations,
     false,  // Parameter,
-    false,   // ProceduralGraph,
+    false,  // ProceduralGraph,
     false,  // ProceduralGraphReader,
-    false,   // ProceduralObjects,
+    false,  // ProceduralObjects,
 };
 
 Logger *Logger::trace()

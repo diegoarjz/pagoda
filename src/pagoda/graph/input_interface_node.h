@@ -33,6 +33,8 @@ class InputInterfaceNode : public Node
 		return m_proceduralObjects;
 	}
 
+	void ClearProceduralObjects();
+
 	const char* const GetNodeType() override;
 
 	private:

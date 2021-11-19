@@ -23,43 +23,27 @@
 
 namespace pagoda::dynamic
 {
-const TypeInfoPtr Expression::s_typeInfo = std::make_shared<TypeInfo>("Expression");
-
-class ExpressionInterpreter : public Interpreter
-{
-	public:
-	static ExpressionInterpreter &GetInstance()
-	{
-		static ExpressionInterpreter sInterpreter;
-		return sInterpreter;
-	}
-
-	static std::shared_ptr<DynamicInstance> MakeParameterInstance()
-	{
-		return std::make_shared<DynamicInstance>(m_parameterClass);
-	}
-
-	private:
-	ExpressionInterpreter() : Interpreter()
-	{
-		// TODO: Add built-in functions
-	}
-
-	static const DynamicClassPtr m_parameterClass;
-};
-
-const DynamicClassPtr ExpressionInterpreter::m_parameterClass = std::make_shared<DynamicClass>("PagodaObject");
+const TypeInfoPtr Expression::s_typeInfo =
+  std::make_shared<TypeInfo>("Expression");
 
 class ExpressionValidator : public AstVisitor
 {
 	public:
-	ExpressionValidator() : m_getExpressionCount(0) {}
+	ExpressionValidator() : m_getExpressionCount(0)
+	{
+	}
 
-	void Visit(ast::FloatPtr) override {}
+	void Visit(ast::FloatPtr) override
+	{
+	}
 
-	void Visit(ast::IntegerPtr) override {}
+	void Visit(ast::IntegerPtr) override
+	{
+	}
 
-	void Visit(ast::StringPtr) override {}
+	void Visit(ast::StringPtr) override
+	{
+	}
 
 	void Visit(ast::IdentifierPtr i) override
 	{
@@ -70,9 +54,13 @@ class ExpressionValidator : public AstVisitor
 		}
 	}
 
-	void Visit(ast::BooleanPtr) override {}
+	void Visit(ast::BooleanPtr) override
+	{
+	}
 
-	void Visit(ast::Nullptr) override {}
+	void Visit(ast::Nullptr) override
+	{
+	}
 
 	void Visit(ast::ArithmeticOpPtr a) override
 	{
@@ -80,7 +68,10 @@ class ExpressionValidator : public AstVisitor
 		a->GetRhs()->AcceptVisitor(this);
 	}
 
-	void Visit(ast::UnaryPtr u) override { u->GetRhs()->AcceptVisitor(this); }
+	void Visit(ast::UnaryPtr u) override
+	{
+		u->GetRhs()->AcceptVisitor(this);
+	}
 
 	void Visit(ast::ComparisonOpPtr c) override
 	{
@@ -100,7 +91,10 @@ class ExpressionValidator : public AstVisitor
 		a->GetRhs()->AcceptVisitor(this);
 	}
 
-	void Visit(ast::ExpressionStatementPtr e) override { e->GetExpression()->AcceptVisitor(this); }
+	void Visit(ast::ExpressionStatementPtr e) override
+	{
+		e->GetExpression()->AcceptVisitor(this);
+	}
 
 	void Visit(ast::IfStatementPtr i) override
 	{
@@ -142,11 +136,17 @@ class ExpressionValidator : public AstVisitor
 		}
 	}
 
-	void Visit(ast::FunctionDeclarationPtr f) override {}
+	void Visit(ast::FunctionDeclarationPtr f) override
+	{
+	}
 
-	void Visit(ast::ClassDeclarationPtr) override {}
+	void Visit(ast::ClassDeclarationPtr) override
+	{
+	}
 
-	void Visit(ast::AnonymousMethodPtr) override {}
+	void Visit(ast::AnonymousMethodPtr) override
+	{
+	}
 
 	void Visit(ast::GetExpressionPtr g) override
 	{
@@ -162,7 +162,9 @@ class ExpressionValidator : public AstVisitor
 		s->GetIdentifier()->AcceptVisitor(this);
 	}
 
-	void Visit(ast::ReturnPtr) override {}
+	void Visit(ast::ReturnPtr) override
+	{
+	}
 
 	void Visit(ast::ProgramPtr p) override
 	{
@@ -171,7 +173,9 @@ class ExpressionValidator : public AstVisitor
 		}
 	}
 
-	void Visit(ast::ParameterPtr p) override {}
+	void Visit(ast::ParameterPtr p) override
+	{
+	}
 
 	std::vector<Variable> m_symbols;
 	uint32_t m_getExpressionCount;
@@ -179,9 +183,15 @@ class ExpressionValidator : public AstVisitor
 
 struct dependent_expression_adder : public ValueVisitor<void>
 {
-	dependent_expression_adder(ExpressionPtr expression) : m_expression(expression) {}
+	dependent_expression_adder(ExpressionPtr expression)
+	  : m_expression(expression)
+	{
+	}
 
-	void operator()(Expression &e) { e.AddDependentExpression(m_expression); }
+	void operator()(Expression &e)
+	{
+		e.AddDependentExpression(m_expression);
+	}
 
 	template<typename T>
 	void operator()(const T &)
@@ -194,29 +204,30 @@ struct dependent_expression_adder : public ValueVisitor<void>
 class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
 {
 	public:
-	Impl(ast::ProgramPtr &&program) : m_expression(program) {}
-	~Impl() {}
+	Impl(ast::ProgramPtr &&program) : m_expression(program)
+	{
+	}
+	~Impl()
+	{
+	}
 
 	DynamicValueBasePtr Evaluate()
 	{
 		START_PROFILE;
 
-		if (m_lastComputedValue == nullptr) {
-			auto &interpreter = ExpressionInterpreter::GetInstance();
+		Interpreter interpreter;
 
-			auto variables = std::make_shared<DynamicValueTable>("variables");
-			for (auto &var : m_variableValues) {
-				const std::list<std::string> &variableIdentifiers = var.first.GetIdentifiers();
-				variables->Declare(variableIdentifiers.front(), EvaluateIfExpression(var.second));
-			}
-			interpreter.PushExternalSymbols(variables);
-
-			interpreter.Interpret(m_expression);
-			m_lastComputedValue = interpreter.GetLastEvaluatedExpression();
-
-			// TODO: this would not be needed if ExpressionInterpreter wasn't a singleton
-			interpreter.PopExternalSymbols();
+		auto variables = std::make_shared<DynamicValueTable>("variables");
+		for (auto &var : m_variableValues) {
+			const std::list<std::string> &variableIdentifiers =
+			  var.first.GetIdentifiers();
+			variables->Declare(variableIdentifiers.front(),
+			                   EvaluateIfExpression(var.second));
 		}
+		interpreter.PushExternalSymbols(variables);
+
+		interpreter.Interpret(m_expression);
+		m_lastComputedValue = interpreter.GetLastEvaluatedExpression();
 
 		return m_lastComputedValue;
 	}
@@ -241,14 +252,21 @@ class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
 		SetDirty();
 	}
 
-	void SetVariableValue(const std::string &variableName, DynamicValueBasePtr value)
+	void SetVariableValue(const std::string &variableName,
+	                      DynamicValueBasePtr value)
 	{
 		SetVariableValue(Variable(variableName), value);
 	}
 
-	void AddDependentExpression(ExpressionPtr e) { m_dependentExpressions.push_back(e); }
+	void AddDependentExpression(ExpressionPtr e)
+	{
+		m_dependentExpressions.push_back(e);
+	}
 
-	const std::vector<std::weak_ptr<Expression>> GetDependentExpressions() const { return m_dependentExpressions; }
+	const std::vector<std::weak_ptr<Expression>> GetDependentExpressions() const
+	{
+		return m_dependentExpressions;
+	}
 
 	void SetDirty()
 	{
@@ -258,28 +276,40 @@ class Expression::Impl : public std::enable_shared_from_this<Expression::Impl>
 		}
 	}
 
-	bool IsDirty() const { return m_lastComputedValue == nullptr; }
+	bool IsDirty() const
+	{
+		return m_lastComputedValue == nullptr;
+	}
 
-	std::string ToString() const { return "<Expression>"; }
+	std::string ToString() const
+	{
+		return "<Expression>";
+	}
 
-	const std::string &GetExpressionString() const { return m_expressionString; }
+	const std::string &GetExpressionString() const
+	{
+		return m_expressionString;
+	}
 
 	ast::ProgramPtr m_expression;
 	std::unordered_set<Variable, Variable::Hash> m_variables;
-	std::unordered_map<Variable, DynamicValueBasePtr, Variable::Hash> m_variableValues;
+	std::unordered_map<Variable, DynamicValueBasePtr, Variable::Hash>
+	  m_variableValues;
 	std::vector<std::weak_ptr<Expression>> m_dependentExpressions;
 	DynamicValueBasePtr m_lastComputedValue;
 	ExpressionPtr m_expressionInterface;
 	std::string m_expressionString;
 };
 
-std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expressionString)
+std::shared_ptr<Expression> Expression::CreateExpression(
+  const std::string &expressionString)
 {
 	START_PROFILE;
 
 	auto expression = std::make_shared<Expression>();
 	Parser p;
-	expression->m_implementation = std::make_unique<Expression::Impl>(p.Parse(expressionString));
+	expression->m_implementation =
+	  std::make_unique<Expression::Impl>(p.Parse(expressionString));
 	expression->m_implementation->m_expressionInterface = expression;
 	expression->m_implementation->m_expressionString = expressionString;
 
@@ -293,39 +323,67 @@ std::shared_ptr<Expression> Expression::CreateExpression(const std::string &expr
 	return expression;
 }
 
-Expression::Expression() : DynamicValueBase(s_typeInfo), m_implementation(nullptr) {}
+Expression::Expression()
+  : DynamicValueBase(s_typeInfo), m_implementation(nullptr)
+{
+}
 
-const std::unordered_set<Variable, Variable::Hash> &Expression::GetVariables() const
+const std::unordered_set<Variable, Variable::Hash> &Expression::GetVariables()
+  const
 {
 	return m_implementation->m_variables;
 }
 
-void Expression::SetVariableValue(const Variable &variableName, DynamicValueBasePtr value)
+void Expression::SetVariableValue(const Variable &variableName,
+                                  DynamicValueBasePtr value)
 {
 	m_implementation->SetVariableValue(variableName, value);
 }
 
-void Expression::SetVariableValue(const std::string &variableName, DynamicValueBasePtr value)
+void Expression::SetVariableValue(const std::string &variableName,
+                                  DynamicValueBasePtr value)
 {
 	m_implementation->SetVariableValue(variableName, value);
 }
 
-void Expression::SetDirty() { m_implementation->SetDirty(); }
+void Expression::SetDirty()
+{
+	m_implementation->SetDirty();
+}
 
-bool Expression::IsDirty() const { return m_implementation->IsDirty(); }
+bool Expression::IsDirty() const
+{
+	return m_implementation->IsDirty();
+}
 
-void Expression::AddDependentExpression(ExpressionPtr e) { m_implementation->AddDependentExpression(e); }
+void Expression::AddDependentExpression(ExpressionPtr e)
+{
+	m_implementation->AddDependentExpression(e);
+}
 
-const std::vector<std::weak_ptr<Expression>> Expression::GetDependentExpressions() const
+const std::vector<std::weak_ptr<Expression>>
+Expression::GetDependentExpressions() const
 {
 	return m_implementation->GetDependentExpressions();
 }
 
-std::string Expression::ToString() const { return m_implementation->ToString(); }
+std::string Expression::ToString() const
+{
+	return m_implementation->ToString();
+}
 
-const std::string &Expression::GetExpressionString() const { return m_implementation->GetExpressionString(); }
+const std::string &Expression::GetExpressionString() const
+{
+	return m_implementation->GetExpressionString();
+}
 
-void Expression::AcceptVisitor(ValueVisitorBase &visitor) { visitor.Visit(*this); }
+void Expression::AcceptVisitor(ValueVisitorBase &visitor)
+{
+	visitor.Visit(*this);
+}
 
-DynamicValueBasePtr Expression::Evaluate() { return m_implementation->Evaluate(); }
+DynamicValueBasePtr Expression::Evaluate()
+{
+	return m_implementation->Evaluate();
+}
 }  // namespace pagoda::dynamic

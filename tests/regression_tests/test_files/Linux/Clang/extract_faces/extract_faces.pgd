@@ -1,20 +1,13 @@
-create_box = Operation(operation: "CreateBoxGeometry") {
-    xSize: 10, ySize: 10, zSize: 5
+create_box = CreateBoxGeometry {
+    width: 10,
+    depth: 10,
+    height: 5
 }
-create_box_out = OutputInterface(interface: "out")
-create_box -> create_box_out;
 
-extract_faces_in = InputInterface(interface: "in")
-extract_faces = Operation(operation: "ExtractFaces") {
+extract_faces = ExtractFaces {}
+
+export_geometry = ExportGeometry {
+    path: $< "regression_results/extract_faces/geometry" + count + ".obj"; >$
 }
-extract_faces_out = OutputInterface(interface: "out")
-extract_faces_in -> extract_faces -> extract_faces_out;
 
-export_geometry_in = InputInterface(interface: "in")
-export_geometry = Operation(operation: "ExportGeometry") {
-    path: $< "regression_results/extract_faces/geometry" + op.count + ".obj"; >$
-}
-export_geometry_in -> export_geometry;
-
-create_box_out -> extract_faces_in;
-extract_faces_out -> export_geometry_in;
+create_box>out -> in<extract_faces>out -> in<export_geometry;

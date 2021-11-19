@@ -49,7 +49,7 @@ NamedArgumentPtr CreateCompoundNamedArgument(std::string &name,
                                              std::string &value)
 {
 	return std::make_shared<NamedArgument>(
-	  name, NamedArgument::ArgumentType::Compound, value);
+	  name, NamedArgument::ArgumentType::Compound, "[" + value + "]");
 }
 
 NodeDefinitionNodePtr CreateNodeDefinition(

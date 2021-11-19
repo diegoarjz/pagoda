@@ -59,6 +59,7 @@ void OutputInterfaceNode::Execute(const NodeSet& inNodes,
 			}
 		}
 	}
+	m_proceduralObjects.clear();
 }
 
 const char* const OutputInterfaceNode::GetNodeType()

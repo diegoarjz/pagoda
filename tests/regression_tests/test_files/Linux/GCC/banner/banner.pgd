@@ -45,7 +45,7 @@ top_floor_extrude = ExtrudeGeometry {
 }
 
 export_geometry = ExportGeometry {
-    path: $< "regression_results/banner/geometry" + op.count + ".obj"; >$
+    path: $< "regression_results/banner/geometry" + count + ".obj"; >$
 }
 
 facade>out -> in<first_floor;
