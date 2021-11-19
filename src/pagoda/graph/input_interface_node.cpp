@@ -43,6 +43,11 @@ void InputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object)
 	m_proceduralObjects.push_back(object);
 }
 
+void InputInterfaceNode::ClearProceduralObjects()
+{
+	m_proceduralObjects.clear();
+}
+
 void InputInterfaceNode::Execute(const NodeSet& inNodes,
                                  const NodeSet& outNodes)
 {

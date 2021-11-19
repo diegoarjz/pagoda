@@ -38,8 +38,7 @@ void Split::Parameters(objects::NewParameterCallback *cb)
 {
 	cb->StringParameter(&m_axis, "axis", "Axis", "x");
 	cb->IntegerParameter(&m_splitCount, "split_count", "Split Count", 8);
-	m_splitSizes.resize(m_splitCount);
-	for (uint32_t i = 1u; i <= m_splitCount; ++i) {
+	for (uint32_t i = 1u; i <= 8; ++i) {
 		auto name = "split_" + std::to_string(i);
 
 		cb->FloatParameter(&m_splitSizes[i], name.c_str(),
@@ -69,13 +68,11 @@ void Split::Interfaces(InterfaceCallback *cb)
 {
 	cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
 
-	/*
-	for (uint32_t i = 1u; i <= m_splitCount; ++i) {
+	for (uint32_t i = 1u; i <= 8; ++i) {
 	  auto name = "split_" + std::to_string(i);
 	  cb->OutputInterface(m_outputs[i - 1], "split_" + std::to_string(i),
 	                      "Split " + std::to_string(i), Interface::Arity::Many);
 	}
-	*/
 }
 
 std::vector<Plane<float>> createPlanes(const Scope &scope,
@@ -139,9 +136,7 @@ void Split::DoWork()
 	std::vector<float> sizes;
 	sizes.reserve(m_splitCount);
 	for (auto i = 1; i <= m_splitCount; ++i) {
-		std::string splitSizeName = "split_" + std::to_string(i);
-		UpdateValue(splitSizeName);
-		sizes.push_back(get_value_as<float>(*GetValue(splitSizeName)));
+    sizes.push_back(m_splitSizes[i]);
 	}
 
 	PlaneSplits<Geometry> planeSplit(createPlanes(inScope, sizes, m_axis));

@@ -58,8 +58,8 @@ TEST_F(GraphWriterTest, test_single_operation)
 	  m_pagoda.GetOperationFactory()->Create("CreateRectGeometry"));
 
 	EXPECT_EQ(getAsString(), R"(op = CreateRectGeometry {
-  plane: "z",
   height: 1.000000,
+  plane: "z",
   width: 1.000000
 }
 )");
@@ -91,13 +91,13 @@ TEST_F(GraphWriterTest, test_links)
 	  ->SetInterfaceName("out");
 
 	EXPECT_EQ(getAsString(), R"(op = CreateRectGeometry {
-  plane: "z",
   height: 1.000000,
+  plane: "z",
   width: 1.000000
 }
 op2 = CreateRectGeometry {
-  plane: "z",
   height: 1.000000,
+  plane: "z",
   width: 1.000000
 }
 op>out -> in<op2;

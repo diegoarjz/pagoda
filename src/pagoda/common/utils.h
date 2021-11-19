@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace pagoda::common
 {
@@ -60,7 +61,7 @@ std::size_t CartesianProduct(const std::vector<std::vector<T>>& items, Cb f)
 
 		// Construct the first product vector by extracting the elements of each
 		// CartProd.
-		for (auto i = 0; i < iters.size(); ++i) {
+		for (std::size_t i = 0; i < iters.size(); ++i) {
 			const auto& v = iters[i];
 			p[i] = *v.m_current;
 		}

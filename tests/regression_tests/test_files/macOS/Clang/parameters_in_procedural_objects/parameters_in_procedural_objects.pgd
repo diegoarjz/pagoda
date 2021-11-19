@@ -1,26 +1,22 @@
-create_rect = Operation(operation: "CreateRectGeometry") {
-    width: 50, height: 10
+create_rect = CreateRectGeometry{
+    width: 50,
+    height: 10
 }
-create_rect_out = OutputInterface(interface: "out", offset:0)
-create_rect -> create_rect_out;
 
-repeat_split_in = InputInterface(interface: "in")
-repeat_split = Operation(operation: "RepeatSplit") { size: 5, adjust: "true", axis: "x" }
-repeat_split_out = OutputInterface(interface: "out")
-repeat_split_in -> repeat_split -> repeat_split_out;
-
-extrude_in = InputInterface(interface: "in")
-extrude = Operation(operation: "ExtrudeGeometry") {extrusion_amount: $< op.in.index; >$}
-extrude_out = OutputInterface(interface: "out")
-extrude_in -> extrude -> extrude_out;
-
-export_geometry_in = InputInterface(interface: "in")
-export_geometry = Operation(operation: "ExportGeometry") {
-    path: $< "regression_results/parameters_in_procedural_objects/geometry_" + op.count + ".obj"; >$
+repeat_split = RepeatSplit {
+    size: 5,
+    adjust: true,
+    axis: "x"
 }
-export_geometry_in -> export_geometry;
 
-create_rect_out -> repeat_split_in;
-repeat_split_out -> extrude_in;
-extrude_out -> export_geometry_in;
+extrude = ExtrudeGeometry {
+    amount: $< in.index; >$
+}
 
+export_geometry = ExportGeometry {
+    path: $< "regression_results/parameters_in_procedural_objects/geometry_" + count + ".obj"; >$
+}
+
+create_rect>out -> in<repeat_split;
+repeat_split>out -> in<extrude;
+extrude>out -> in<export_geometry;

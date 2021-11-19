@@ -236,3 +236,95 @@ using MyTypes = ::testing::Types<std::string,
                                  math::Plane<float>>;
 // clang-format on
 INSTANTIATE_TYPED_TEST_SUITE_P(Instantiated, ParameterTest, MyTypes);
+
+TEST(ParameterTestExpression, evaluate_with_dynamic_value_variables)
+{
+	class Provider : public ParameterBase::VariableProvider
+	{
+public:
+		bool GetVariable(const std::list<std::string>& path,
+		                 ParameterBase::Variable_t& v) override
+		{
+			v = std::make_shared<FloatValue>(2.0f);
+			return true;
+		}
+	};
+
+	float a = 0;
+	Provider p;
+	auto par = std::make_shared<FloatParameter>(&a, "par");
+	par->SetExpression("b + 2;");
+	par->EvaluateExpression(&p);
+	EXPECT_EQ(a, 4.0f);
+}
+
+TEST(ParameterTestExpression, evaluate_with_parameter_variables)
+{
+	class Provider : public ParameterBase::VariableProvider
+	{
+public:
+		bool GetVariable(const std::list<std::string>& path,
+		                 ParameterBase::Variable_t& v) override
+		{
+			m_par = std::make_shared<FloatParameter>(&m_value, "b");
+			v = m_par;
+			return true;
+		}
+		float m_value = {123.0f};
+		std::shared_ptr<FloatParameter> m_par;
+	};
+
+	float a = 0;
+	Provider p;
+	auto par = std::make_shared<FloatParameter>(&a, "par");
+	par->SetExpression("b + 2;");
+	par->EvaluateExpression(&p);
+	EXPECT_EQ(a, 125.0f);
+}
+
+TEST(ParameterTestExpression, evaluate_with_expression_variables)
+{
+	class Provider : public ParameterBase::VariableProvider
+	{
+public:
+		bool GetVariable(const std::list<std::string>& path,
+		                 ParameterBase::Variable_t& v) override
+		{
+			m_par = std::make_shared<FloatParameter>(&m_value, "b");
+			m_par->SetExpression("1.0 + 345.0;");
+			v = m_par;
+			return true;
+		}
+		float m_value = {123.0f};
+		std::shared_ptr<FloatParameter> m_par;
+	};
+
+	float a = 0;
+	Provider p;
+	auto par = std::make_shared<FloatParameter>(&a, "par");
+	par->SetExpression("b + 2;");
+	par->EvaluateExpression(&p);
+	EXPECT_EQ(a, 348.0f);
+}
+
+TEST(ParameterTestExpression, evaluate_with_compound_variables)
+{
+	class Provider : public ParameterBase::VariableProvider
+	{
+public:
+		bool GetVariable(const std::list<std::string>& path,
+		                 ParameterBase::Variable_t& v) override
+		{
+			v = std::make_shared<FloatValue>(2.0f);
+			return true;
+		}
+	};
+
+	float a = 0;
+	Provider p;
+	auto par = std::make_shared<FloatParameter>(&a, "op.par");
+	par->SetExpression("b + 2;");
+	par->EvaluateExpression(&p);
+	EXPECT_EQ(a, 4.0f);
+}
+

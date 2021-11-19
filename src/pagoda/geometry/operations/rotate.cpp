@@ -93,20 +93,24 @@ void Rotate::DoWork()
 		boost::qvm::col<3>(matrix) = Vec4F{0, 0, 0, 1};
 	}
 
+	auto x = Degrees<float>(m_rotX);
+	auto y = Degrees<float>(m_rotY);
+	auto z = Degrees<float>(m_rotZ);
+
 	for (std::size_t i = m_rotationOrder.size(); i > 0; --i) {
 		char order = m_rotationOrder[i - 1];
 		switch (order) {
 			case 'x':
 				matrix =
-				  matrix * boost::qvm::rotx_mat<4>(static_cast<float>(Radians(m_rotX)));
+				  matrix * boost::qvm::rotx_mat<4>(static_cast<float>(Radians(x)));
 				break;
 			case 'y':
 				matrix =
-				  matrix * boost::qvm::roty_mat<4>(static_cast<float>(Radians(m_rotY)));
+				  matrix * boost::qvm::roty_mat<4>(static_cast<float>(Radians(y)));
 				break;
 			case 'z':
 				matrix =
-				  matrix * boost::qvm::rotz_mat<4>(static_cast<float>(Radians(m_rotZ)));
+				  matrix * boost::qvm::rotz_mat<4>(static_cast<float>(Radians(z)));
 				break;
 			default:
 				throw common::exception::Exception("Invalid rotation order " +

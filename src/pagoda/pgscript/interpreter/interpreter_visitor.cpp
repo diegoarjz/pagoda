@@ -33,23 +33,44 @@ namespace pagoda
 // clang-format on
 
 interpreter_visitor::interpreter_visitor()
-  : m_globals(std::make_shared<DynamicValueTable>("Global")), m_symbolTable(m_globals)
+  : m_globals(std::make_shared<DynamicValueTable>("Global")),
+    m_symbolTable(m_globals)
 {
 }
 
-interpreter_visitor::~interpreter_visitor() {}
+interpreter_visitor::~interpreter_visitor()
+{
+}
 
-void interpreter_visitor::Visit(ast::FloatPtr n) { PushValue(std::make_shared<FloatValue>(n->GetNumber())); }
+void interpreter_visitor::Visit(ast::FloatPtr n)
+{
+	PushValue(std::make_shared<FloatValue>(n->GetNumber()));
+}
 
-void interpreter_visitor::Visit(ast::IntegerPtr n) { PushValue(std::make_shared<Integer>(n->GetInteger())); }
+void interpreter_visitor::Visit(ast::IntegerPtr n)
+{
+	PushValue(std::make_shared<Integer>(n->GetInteger()));
+}
 
-void interpreter_visitor::Visit(ast::StringPtr s) { PushValue(std::make_shared<String>(s->GetString())); }
+void interpreter_visitor::Visit(ast::StringPtr s)
+{
+	PushValue(std::make_shared<String>(s->GetString()));
+}
 
-void interpreter_visitor::Visit(ast::IdentifierPtr i) { PushValue(GetCurrentSymbolTable()->Get(i->GetIdentifier())); }
+void interpreter_visitor::Visit(ast::IdentifierPtr i)
+{
+	PushValue(GetCurrentSymbolTable()->Get(i->GetIdentifier()));
+}
 
-void interpreter_visitor::Visit(ast::BooleanPtr b) { PushValue(std::make_shared<Boolean>(b->GetBoolean())); }
+void interpreter_visitor::Visit(ast::BooleanPtr b)
+{
+	PushValue(std::make_shared<Boolean>(b->GetBoolean()));
+}
 
-void interpreter_visitor::Visit(ast::Nullptr n) { PushValue(std::make_shared<NullObject>()); }
+void interpreter_visitor::Visit(ast::Nullptr n)
+{
+	PushValue(std::make_shared<NullObject>());
+}
 
 void interpreter_visitor::Visit(ast::ArithmeticOpPtr op)
 {
@@ -220,9 +241,11 @@ void interpreter_visitor::Visit(ast::VarDeclPtr v)
 
 	if (rhs) {
 		rhs->AcceptVisitor(this);
-		GetCurrentSymbolTable()->Declare(v->GetIdentifier()->GetIdentifier(), PopValue());
+		GetCurrentSymbolTable()->Declare(v->GetIdentifier()->GetIdentifier(),
+		                                 PopValue());
 	} else {
-		GetCurrentSymbolTable()->Declare(v->GetIdentifier()->GetIdentifier(), std::make_shared<NullObject>());
+		GetCurrentSymbolTable()->Declare(v->GetIdentifier()->GetIdentifier(),
+		                                 std::make_shared<NullObject>());
 	}
 }
 
@@ -240,10 +263,12 @@ void interpreter_visitor::Visit(ast::StatementBlockPtr b)
 
 void interpreter_visitor::EnterBlock()
 {
-	m_symbolTable = std::make_shared<DynamicValueTable>("Block", GetCurrentSymbolTable());
+	m_symbolTable =
+	  std::make_shared<DynamicValueTable>("Block", GetCurrentSymbolTable());
 }
 
-void interpreter_visitor::ExitBlock(const std::shared_ptr<DynamicValueTable> &previousSymbolTable)
+void interpreter_visitor::ExitBlock(
+  const std::shared_ptr<DynamicValueTable> &previousSymbolTable)
 {
 	m_symbolTable = previousSymbolTable;
 }
@@ -252,13 +277,16 @@ void interpreter_visitor::EnterFunction(const ICallablePtr &callable)
 {
 	auto closure = callable->GetClosure();
 	if (closure) {
-		m_symbolTable = std::make_shared<DynamicValueTable>(callable->GetCallableName(), closure);
+		m_symbolTable =
+		  std::make_shared<DynamicValueTable>(callable->GetCallableName(), closure);
 	} else {
-		m_symbolTable = std::make_shared<DynamicValueTable>(callable->GetCallableName(), m_globals);
+		m_symbolTable = std::make_shared<DynamicValueTable>(
+		  callable->GetCallableName(), m_globals);
 	}
 }
 
-void interpreter_visitor::ExitFunction(const std::shared_ptr<DynamicValueTable> &previousSymbolTable)
+void interpreter_visitor::ExitFunction(
+  const std::shared_ptr<DynamicValueTable> &previousSymbolTable)
 {
 	m_symbolTable = previousSymbolTable;
 }
@@ -290,7 +318,8 @@ void interpreter_visitor::Visit(ast::FunctionDeclarationPtr func)
 	auto identifier = func->GetIdentifier();
 	auto parameters = func->GetParameters();
 	auto body = func->GetFunctionBody();
-	auto callableBody = std::make_shared<ScriptCallableBody>(identifier, body, parameters);
+	auto callableBody =
+	  std::make_shared<ScriptCallableBody>(identifier, body, parameters);
 
 	auto callable = std::make_shared<Function>(callableBody);
 	callable->SetCallableName(identifier->GetIdentifier());
@@ -304,7 +333,10 @@ void interpreter_visitor::Visit(ast::FunctionDeclarationPtr func)
 	GetCurrentSymbolTable()->Declare(identifier->GetIdentifier(), callable);
 }
 
-void interpreter_visitor::Visit(ast::ParameterPtr par) { throw common::exception::Exception("Unimplemented"); }
+void interpreter_visitor::Visit(ast::ParameterPtr par)
+{
+	throw common::exception::Exception("Unimplemented");
+}
 
 void interpreter_visitor::Visit(ast::ReturnPtr r)
 {
@@ -328,7 +360,8 @@ void interpreter_visitor::Visit(ast::ClassDeclarationPtr c)
 		auto identifier = m->GetIdentifier();
 		auto parameters = m->GetParameters();
 		auto body = m->GetFunctionBody();
-		auto callableBody = std::make_shared<ScriptCallableBody>(identifier, body, parameters);
+		auto callableBody =
+		  std::make_shared<ScriptCallableBody>(identifier, body, parameters);
 
 		auto callable = std::make_shared<Function>(callableBody);
 		callable->SetClosure(GetCurrentSymbolTable());
@@ -377,7 +410,11 @@ void interpreter_visitor::Visit(ast::AnonymousMethodPtr a)
 void interpreter_visitor::Visit(ast::GetExpressionPtr e)
 {
 	e->GetLhs()->AcceptVisitor(this);
-	auto lhs = std::dynamic_pointer_cast<ClassBase>(PopValue());
+	const auto v = PopValue();
+	auto lhs = std::dynamic_pointer_cast<ClassBase>(v);
+	DBG_ASSERT_MSG(lhs != nullptr, "Expected a ClassBase but got a '"
+	                                 << v->TypeInfo()->GetTypeName() << "' ("
+	                                 << v->ToString() << ")");
 	auto identifier = e->GetIdentifier()->GetIdentifier();
 
 	auto value = lhs->GetMember(identifier);
@@ -408,7 +445,10 @@ void interpreter_visitor::Visit(ast::ProgramPtr p)
 	}
 }
 
-void interpreter_visitor::PushValue(const DynamicValueBasePtr &v) { m_values.push(v); }
+void interpreter_visitor::PushValue(const DynamicValueBasePtr &v)
+{
+	m_values.push(v);
+}
 
 DynamicValueBasePtr interpreter_visitor::PopValue()
 {

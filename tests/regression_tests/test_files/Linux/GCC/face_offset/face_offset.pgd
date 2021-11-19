@@ -9,7 +9,7 @@ face_offset = FaceOffset {
 }
 
 export_geometry = ExportGeometry{
-    path: $< "regression_results/face_offset/geometry-" + op.in.offset_tag + "-" + op.count + ".obj"; >$
+    path: $< "regression_results/face_offset/geometry-" + in.offset_tag + "-" + count + ".obj"; >$
 }
 
 create_box>out -> in<face_offset;

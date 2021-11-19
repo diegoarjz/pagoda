@@ -73,8 +73,6 @@ set(GRAPH_SRCS
     "output_interface_node.h"
     "parameter_node.cpp"
     "parameter_node.h"
-    "float_parameter_node.cpp"
-    "float_parameter_node.h"
     "parameter_input_node.cpp"
     "parameter_input_node.h"
     "scheduler.h"

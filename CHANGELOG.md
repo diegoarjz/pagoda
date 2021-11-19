@@ -26,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - *Or* combines several queries with an or logical operation.
     - *OutputNode* finds nodes that don't have downstream nodes.
     - *Type* finds nodes based on their c++ type.
+- New API for setting parameters in operations.
+- Parameters callback into external functions on value change.
+- Parameters have expressions.
+- Parameters are stored in nodes.
+- New API for setting interfaces in operations.
 - Query topology specifying how a set of queries are combined to match subgraphs.
 - Graph Grammar system.
 - Traversal operations for geometry, providing a cleaner interface for
@@ -40,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Node creation from operation name by pressing Tab key.
   - Node deletion by selecting a node and pressing Backspace.
   - Connection between nodes by dragging from a node port to another.
+  - Added the `--file` command line option to start pgeditor with a graph.
 - GUI scene viewer:
   - OpenGL scene viewer with basic mouse navigation.
   - Rendering system, rendering components and a render operation to display

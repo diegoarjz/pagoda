@@ -7,6 +7,7 @@
 #include <pagoda/objects/procedural_operation.h>
 
 #include <memory>
+#include <map>
 #include <set>
 
 namespace pagoda::objects
@@ -75,7 +76,7 @@ class Node : public dynamic::BuiltinClass
 	void ForEachParameter(std::function<void(objects::ParameterBasePtr)> f) const;
 
 	protected:
-	std::unordered_map<std::string, objects::ParameterBasePtr> m_parameters;
+	std::map<std::string, objects::ParameterBasePtr> m_parameters;
 
 	private:
 	std::string m_nodeName;

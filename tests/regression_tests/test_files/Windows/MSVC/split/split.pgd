@@ -13,7 +13,7 @@ split = Split{
 }
 
 export_geometry = ExportGeometry{
-    path: $< "regression_results/split/geometry" + op.count + ".obj"; >$
+    path: $< "regression_results/split/geometry" + count + ".obj"; >$
 }
 
 create_box>out -> in<split;
