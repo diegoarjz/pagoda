@@ -1,4 +1,6 @@
 set(RENDERER_SRCS
+  "buffer.cpp"
+  "buffer.h"
   "rendering_system.cpp"
   "rendering_system.h"
   "rendering_component.cpp"
@@ -26,8 +28,10 @@ add_pagoda_module(
 # Unit tests
 #########################################################################
 set(RENDERER_UNIT_TESTS
+  "buffer.test.cpp"
 )
 
 foreach(unit_test_src ${RENDERER_UNIT_TESTS})
     add_unit_test(${unit_test_src})
 endforeach()
+target_link_libraries("buffer_test" PRIVATE libpgeditor)
