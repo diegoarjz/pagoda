@@ -1,6 +1,8 @@
 set(RENDERER_SRCS
   "buffer.cpp"
   "buffer.h"
+  "interleaved_buffer.cpp"
+  "interleaved_buffer.h"
   "rendering_system.cpp"
   "rendering_system.h"
   "rendering_component.cpp"
