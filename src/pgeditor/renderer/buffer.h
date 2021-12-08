@@ -1,30 +1,12 @@
 #pragma once
 
+#include "types.h"
+
 #include <typeinfo>
 #include <vector>
 
 namespace pgeditor::renderer
 {
-enum class Format
-{
-	F32,
-	Invalid
-};
-
-enum class VaryingType
-{
-	Vertex,
-	Invalid
-};
-
-template<class T>
-struct BufferTypeTraits
-{
-	static const Format format;
-	static const std::size_t componentsPerElement;
-	static const std::size_t bytesPerComponent;
-};
-
 /**
  * Holds data of different types.
  */
@@ -44,8 +26,6 @@ class Buffer
 	/// Destroys and frees up the data
 	~Buffer();
 
-	/// Returns the VaryingType for this buffer
-	VaryingType GetVaryingType() const;
 	/// Returns the storage format
 	Format GetFormat() const;
 
@@ -60,7 +40,7 @@ class Buffer
 	std::size_t GetNumElements() const;
 
 	/// Returns a pointer to the data.
-	const void* const GetData() const;
+	const std::byte* const GetData() const;
 
 	/// Checks whether the buffer is holding values of type T
 	template<class T>
@@ -77,7 +57,7 @@ class Buffer
 		if (!IsHolding<T>()) {
 			return nullptr;
 		}
-		return static_cast<T*>(m_data);
+		return reinterpret_cast<T*>(m_data);
 	}
 
 	/// Sets the data to the contents of \p data
@@ -89,7 +69,7 @@ class Buffer
 		const std::size_t newBytesPerComponent = BufferTypeTraits<T>::bytesPerComponent;
 
 		if (m_data != nullptr) {
-			delete[] static_cast<char*>(m_data);
+			delete[] reinterpret_cast<std::byte*>(m_data);
 		}
 
 		const std::size_t newBufferSize = data.size() * newComponentsPerElement * newBytesPerComponent;
@@ -99,7 +79,7 @@ class Buffer
 		m_format = BufferTypeTraits<T>::format;
 		m_numElements = data.size();
 
-		m_data = new char[newBufferSize];
+		m_data = new std::byte[newBufferSize];
 		std::memcpy(m_data, data.data(), m_bufferSize);
 
 		m_typeHash = typeid(T).hash_code();
@@ -124,7 +104,7 @@ class Buffer
 		if (offset > m_bufferSize) {
 			return nullptr;
 		}
-		return &static_cast<T*>(m_data)[i];
+		return &reinterpret_cast<T*>(m_data)[i];
 	}
 
 	/// Returns the contents as a vector of the given type.
@@ -149,7 +129,6 @@ class Buffer
 	Buffer(const Buffer&) = delete;
 	Buffer& operator=(const Buffer&) = delete;
 
-	VaryingType m_varyingType{VaryingType::Invalid};
 	Format m_format{Format::Invalid};
 
 	std::size_t m_componentsPerElement{0};
@@ -157,7 +136,7 @@ class Buffer
 	std::size_t m_bufferSize{0};
 	std::size_t m_numElements{0};
 
-	void* m_data{nullptr};
+	std::byte* m_data{nullptr};
 
 	std::size_t m_typeHash;
 };
