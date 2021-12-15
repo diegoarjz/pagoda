@@ -1,12 +1,24 @@
 set(RENDERER_SRCS
   "buffer.cpp"
   "buffer.h"
+  "collection.cpp"
+  "collection.h"
   "interleaved_buffer.cpp"
   "interleaved_buffer.h"
+  "material_network.cpp"
+  "material_network.h"
+  "material_node.cpp"
+  "material_node.h"
   "rendering_system.cpp"
   "rendering_system.h"
   "rendering_component.cpp"
   "rendering_component.h"
+  "renderable.cpp"
+  "renderable.h"
+  "types.cpp"
+  "types.h"
+  "vertex_attribute.h"
+
   "operations/render.cpp"
   "operations/render.h"
   "gl/mesh.cpp"
@@ -17,6 +29,11 @@ set(RENDERER_SRCS
   "gl/render_pass.h"
   "gl/grid_render_task.cpp"
   "gl/grid_render_task.h"
+
+  "metal/metal_renderer.mm"
+  "metal/metal_renderer.h"
+  "metal/shader_gen.cpp"
+  "metal/shader_gen.h"
 )
 
 add_pagoda_module(
@@ -31,9 +48,11 @@ add_pagoda_module(
 #########################################################################
 set(RENDERER_UNIT_TESTS
   "buffer.test.cpp"
+  "metal/shader_gen.test.cpp"
 )
 
 foreach(unit_test_src ${RENDERER_UNIT_TESTS})
     add_unit_test(${unit_test_src})
 endforeach()
 target_link_libraries("buffer_test" PRIVATE libpgeditor)
+target_link_libraries("shader_gen_test" PRIVATE libpgeditor)

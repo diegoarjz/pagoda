@@ -30,6 +30,8 @@ set(GUI_SRCS
   "graph/new_node_popup.h"
   "viewer/viewer.cpp"
   "viewer/viewer.h"
+  "viewer/metal_viewer.mm"
+  "viewer/metal_viewer.h"
 )
 
 add_pagoda_module(
@@ -37,7 +39,6 @@ add_pagoda_module(
   SOURCES       ${GUI_SRCS}
   DEPENDENCIES  libpagoda common graph renderer Qt6::Widgets Qt6::Core Qt6::OpenGL Qt6::OpenGLWidgets GLEW::GLEW
 )
-set_target_properties(gui PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 #########################################################################
 # Unit tests

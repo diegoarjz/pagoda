@@ -2,6 +2,7 @@
 
 #include "graph/graph_editor_widget.h"
 
+#include <pgeditor/gui/viewer/metal_viewer.h>
 #include <pgeditor/gui/viewer/viewer.h>
 #include <pgeditor/renderer/rendering_system.h>
 
@@ -29,7 +30,7 @@ MainWindow::MainWindow()
 	// Register the rendering system with pagoda
 	renderer::RenderingSystem::Registration(&m_pagoda);
 
-	InitializeGL();
+	// InitializeGL();
 	InitializeGUI();
 	InitializeMenus();
 
@@ -76,11 +77,16 @@ void MainWindow::InitializeGUI()
 	addDockWidget(Qt::RightDockWidgetArea, inspectorWidget);
 	*/
 
+	/*
 	m_openGLWidget = new Viewer(this);
 	m_openGLWidget->setFormat(QSurfaceFormat::defaultFormat());
 	m_openGLWidget->SetRenderingSystem(
 	  m_pagoda.GetProceduralObjectSystem()->GetComponentSystem<renderer::RenderingSystem>());
 	setCentralWidget(m_openGLWidget);
+	*/
+
+	m_metalViewer = new MetalViewer(this);
+	setCentralWidget(m_metalViewer);
 }
 
 void MainWindow::InitializeMenus()

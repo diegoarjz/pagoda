@@ -15,7 +15,8 @@ class GraphEditorWidget;
 namespace viewer
 {
 class Viewer;
-}
+class MetalViewer;
+}  // namespace viewer
 
 /**
  * Pagoda GUI Editor main window.
@@ -42,7 +43,8 @@ class MainWindow : public QMainWindow
 
 	pagoda::Pagoda m_pagoda;
 	graph::GraphEditorWidget* m_graphEditor;
-	viewer::Viewer* m_openGLWidget;
+	// viewer::Viewer* m_openGLWidget;
+	viewer::MetalViewer* m_metalViewer;
 
 };  // class MainWindow
 }  // namespace pgeditor::gui

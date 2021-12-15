@@ -20,5 +20,9 @@ add_pagoda_library(
   DEPENDENCIES  libpagoda GLEW::GLEW Qt6::Widgets Qt6::Core Qt6::OpenGL Qt6::OpenGLWidgets
 )
 
+target_compile_options(libpgeditor PRIVATE "-fobjc-arc")
 set_target_properties(libpgeditor PROPERTIES AUTOMOC TRUE)
 set_target_properties(libpgeditor PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(libpgeditor PROPERTIES LINK_FLAGS "-framework Metal -framework MetalKit")
+
+target_link_libraries(libpgeditor PUBLIC "-framework Metal" "-framework MetalKit")
