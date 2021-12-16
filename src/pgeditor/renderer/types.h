@@ -13,6 +13,9 @@ enum class Format
 enum class Type
 {
 	Int,
+	Int2,
+	UInt,
+	UInt2,
 	Float,
 	Double,
 	Vec2,

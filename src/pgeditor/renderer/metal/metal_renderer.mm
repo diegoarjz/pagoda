@@ -63,9 +63,9 @@ class RenderPipelineStateManager
     positionNode->SetParameter("type", static_cast<int>(Type::Vec4));
 
     auto viewPortUniformNode = network.CreateMaterialNode("uniformView", "viewport");
-    viewPortUniformNode->SetOutput("viewport", {"viewport", Type::Vec2});
+    viewPortUniformNode->SetOutput("viewport", {"viewport", Type::UInt2});
     viewPortUniformNode->SetParameter("uniformName", "viewport");
-    viewPortUniformNode->SetParameter("type", static_cast<int>(Type::Vec2));
+    viewPortUniformNode->SetParameter("type", static_cast<int>(Type::UInt2));
 
     defaultVert->GetInput("position")->m_upstreamNode = "position";
     defaultVert->GetInput("position")->m_upstreamOutput = "position";
