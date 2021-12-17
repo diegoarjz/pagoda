@@ -11,8 +11,8 @@ MaterialNode::MaterialNode(MaterialNode&& node)
 
 MaterialNode::~MaterialNode() {}
 
-void MaterialNode::SetInput(const std::string& name, const Connection& connection) { m_inputs[name] = connection; }
-MaterialNode::Connection* MaterialNode::GetInput(const std::string& name)
+void MaterialNode::SetInput(const std::string& name, const Input& connection) { m_inputs[name] = connection; }
+MaterialNode::Input* MaterialNode::GetInput(const std::string& name)
 {
 	auto iter = m_inputs.find(name);
 	if (iter == m_inputs.end()) {
@@ -20,7 +20,7 @@ MaterialNode::Connection* MaterialNode::GetInput(const std::string& name)
 	}
 	return &iter->second;
 }
-const MaterialNode::Connection* MaterialNode::GetInput(const std::string& name) const
+const MaterialNode::Input* MaterialNode::GetInput(const std::string& name) const
 {
 	auto iter = m_inputs.find(name);
 	if (iter == m_inputs.end()) {
@@ -29,21 +29,21 @@ const MaterialNode::Connection* MaterialNode::GetInput(const std::string& name) 
 	return &iter->second;
 }
 
-void MaterialNode::SetOutput(const std::string& name, const Connection& connection) { m_outputs[name] = connection; }
-MaterialNode::Connection* MaterialNode::GetOutput(const std::string& name)
+void MaterialNode::SetOutput(const std::string& name, const Output& connection) { m_outputs[name] = connection; }
+MaterialNode::Output* MaterialNode::GetOutput(const std::string& name)
 {
 	auto iter = m_outputs.find(name);
 	if (iter == m_outputs.end()) {
-		static const Connection empty{};
+		static const Output empty{};
 		return nullptr;
 	}
 	return &iter->second;
 }
-const MaterialNode::Connection* MaterialNode::GetOutput(const std::string& name) const
+const MaterialNode::Output* MaterialNode::GetOutput(const std::string& name) const
 {
 	auto iter = m_outputs.find(name);
 	if (iter == m_outputs.end()) {
-		static const Connection empty{};
+		static const Output empty{};
 		return nullptr;
 	}
 	return &iter->second;

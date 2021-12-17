@@ -20,11 +20,11 @@ class MaterialNode
 	using Parameter_t = std::variant<int, float, double, pagoda::math::Vec2F, pagoda::math::Vec3F, pagoda::math::Vec4F,
 	                                 pagoda::math::Mat2x2F, pagoda::math::Mat3x3F, pagoda::math::Mat4x4F, std::string>;
 
-	struct Connection
+	struct Input
 	{
-		Connection() = default;
+		Input() = default;
 
-		Connection(const std::string& name, const Type type) : m_name{name}, m_type{type} {}
+		Input(const std::string& name, const Type type) : m_name{name}, m_type{type} {}
 
 		void AppendHash(std::size_t& hash) const
 		{
@@ -41,8 +41,14 @@ class MaterialNode
 		Parameter_t m_defaultValue;
 	};
 
-	using InputContainer_t = std::unordered_map<std::string, Connection>;
-	using OutputContainer_t = std::unordered_map<std::string, Connection>;
+	struct Output
+	{
+    std::string m_name;
+    Type m_type;
+	};
+
+	using InputContainer_t = std::unordered_map<std::string, Input>;
+	using OutputContainer_t = std::unordered_map<std::string, Output>;
 
 	MaterialNode(const std::string& nodeId, const std::string& name);
 	MaterialNode(MaterialNode&& node);
@@ -54,14 +60,14 @@ class MaterialNode
 	const std::string& GetName() const { return m_name; }
 	const std::string& GetId() const { return m_id; }
 
-	void SetInput(const std::string& name, const Connection& connection);
-	Connection* GetInput(const std::string& name);
-	const Connection* GetInput(const std::string& name) const;
+	void SetInput(const std::string& name, const Input& connection);
+	Input* GetInput(const std::string& name);
+	const Input* GetInput(const std::string& name) const;
 	const InputContainer_t& GetInputs() const { return m_inputs; }
 
-	void SetOutput(const std::string& name, const Connection& connection);
-	Connection* GetOutput(const std::string& name);
-	const Connection* GetOutput(const std::string& name) const;
+	void SetOutput(const std::string& name, const Output& connection);
+	Output* GetOutput(const std::string& name);
+	const Output* GetOutput(const std::string& name) const;
 	const OutputContainer_t& GetOutputs() const { return m_outputs; }
 
 	void SetParameter(const std::string& name, const Parameter_t& par);
