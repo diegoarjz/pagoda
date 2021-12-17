@@ -14,35 +14,21 @@ namespace
 {
 const std::string& typeName(Type t)
 {
-	static const std::string& sInt{"int"};
-	static const std::string& sFloat{"float"};
-	static const std::string& sDouble{"double"};
-	static const std::string& sVec2{"float2"};
-	static const std::string& sVec3{"float3"};
-	static const std::string& sVec4{"float4"};
-	static const std::string& sMat2{"float2x2"};
-	static const std::string& sMat3{"float3x3"};
-	static const std::string& sMat4{"float4x4"};
-	switch (t) {
-		case Type::Int:
-			return sInt;
-		case Type::Float:
-			return sFloat;
-		case Type::Double:
-			return sDouble;
-		case Type::Vec2:
-			return sVec2;
-		case Type::Vec3:
-			return sVec3;
-		case Type::Vec4:
-			return sVec4;
-		case Type::Mat2:
-			return sMat2;
-		case Type::Mat3:
-			return sMat3;
-		case Type::Mat4:
-			return sMat4;
-	};
+  static const std::string sTypenames[] = {
+	  "int",
+	  "int2",
+	  "uint",
+	  "uint2",
+	  "float",
+	  "double",
+	  "float2",
+	  "float3",
+	  "float4",
+	  "float2x2",
+	  "float3x3",
+	  "float4x4",
+  };
+  return sTypenames[static_cast<int>(t)];
 }
 
 template<class T>
@@ -76,20 +62,8 @@ void defaultVert(MaterialNetworkVisitor* vis, const std::string& outputName, con
 		}
 	}
 
-	std::string viewportInput = "float2(0,0)";
-	if (auto input = node->GetInput("viewport")) {
-		const auto& upstreamNodeName = input->m_upstreamNode;
-		const auto& upstreamOutput = input->m_upstreamOutput;
-
-		if (auto upstreamNode = genCtx.materialNetwork->GetMaterialNode(upstreamNodeName)) {
-			viewportInput = upstreamNodeName + "(in, uniforms)." + upstreamOutput;
-		}
-	}
-
 	code << "  " << outputName << " out;\n";
-	code << "  float2 pixelSpacePosition = " << positionInput << ".xy;\n";
-	code << "  vector_float2 viewportSize = vector_float2(" << viewportInput << ");\n";
-	code << "  out.position.xy = pixelSpacePosition / (viewportSize / 2.0);\n";
+	code << "  out.position = " << positionInput << ";\n";
 	code << "  return out;\n";
 }
 

@@ -30,29 +30,16 @@ class MetalWindow : public QWindow
   {
     setSurfaceType(QSurface::MetalSurface);
 
-#if 1
     std::vector<Vec4F> translations{
-      {-100, 0, 0, 0},
-      { 100, 0, 0, 0}
+      {-0.1, 0, 0, 0},
+      { 0.1, 0, 0, 0}
     };
 
     static const std::vector<Vec4F> position{
-      {  255, -255, 0, 1},
-      { -255, -255, 0, 1},
-      {    0,  255, 0, 1}
+      {-1, -1, 0, 1},
+      { 1, -1, 0, 1},
+      { 0,  1, 0, 1}
     };
-#else
-    std::vector<Vec4F> translations{
-      {0, 0, 0, 0},
-      {0, 0, 0, 0}
-    };
-
-    static const std::vector<Vec4F> position{
-      {  1, -1, 0, 1},
-      { -1, -1, 0, 1},
-      {  0,  1, 0, 1}
-    };
-#endif
     static const std::vector<Vec4F> colors{
       { 1, 0, 0, 1},
       { 0, 1, 0, 1},
