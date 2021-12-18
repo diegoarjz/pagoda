@@ -52,7 +52,6 @@ class MetalWindow : public QWindow
     // The Vert shader network
     auto defaultVert = network->CreateMaterialNode("defaultVert", "defaultVert");
     defaultVert->SetInput("position", {"position", Type::Vec4});
-    defaultVert->SetInput("viewport", {"viewport", Type::Vec2});
     defaultVert->SetOutput("position", {"position", Type::Vec4});
     network->SetStageTerminalNode(MaterialNetwork::ShaderStage::Vertex, "defaultVert");
 
@@ -62,18 +61,13 @@ class MetalWindow : public QWindow
     positionNode->SetParameter("semantics", static_cast<int>(VertexAttributeSemantics::Position));
     positionNode->SetParameter("type", static_cast<int>(Type::Vec4));
 
-    auto viewPortUniformNode = network->CreateMaterialNode("uniformView", "viewport");
-    viewPortUniformNode->SetOutput("viewport", {"viewport", Type::UInt2});
-    viewPortUniformNode->SetParameter("uniformName", "viewport");
-    viewPortUniformNode->SetParameter("type", static_cast<int>(Type::UInt2));
-
     defaultVert->ConnectInput("position", positionNode, "position");
-    defaultVert->ConnectInput("viewport", viewPortUniformNode, "viewport");
-
 
     // The frag shader network
     auto defaultFrag = network->CreateMaterialNode("defaultFrag", "defaultFrag");
     defaultFrag->SetInput("color", {"color", Type::Vec4});
+    defaultFrag->SetInput("scale", {"color", Type::Vec4});
+    defaultFrag->SetInput("bias", {"color", Type::Vec4});
     defaultFrag->SetOutput("color", {"color", Type::Vec4});
 
     auto colorNode = network->CreateMaterialNode("bufferView", "color");
@@ -82,7 +76,19 @@ class MetalWindow : public QWindow
     colorNode->SetParameter("semantics", static_cast<int>(VertexAttributeSemantics::Color));
     colorNode->SetParameter("type", static_cast<int>(Type::Vec4));
 
+    auto scaleUniformNode = network->CreateMaterialNode("uniformView", "scale");
+    scaleUniformNode->SetOutput("scale", {"scale", Type::Vec4});
+    scaleUniformNode->SetParameter("uniformName", "scale");
+    scaleUniformNode->SetParameter("type", static_cast<int>(Type::Vec4));
+
+    auto biasUniformNode = network->CreateMaterialNode("uniformView", "bias");
+    biasUniformNode->SetOutput("bias", {"bias", Type::Vec4});
+    biasUniformNode->SetParameter("uniformName", "bias");
+    biasUniformNode->SetParameter("type", static_cast<int>(Type::Vec4));
+
     defaultFrag->ConnectInput("color", colorNode, "color");
+    defaultFrag->ConnectInput("scale", scaleUniformNode, "scale");
+    defaultFrag->ConnectInput("bias", biasUniformNode, "bias");
 
     network->SetStageTerminalNode(MaterialNetwork::ShaderStage::Fragment, "defaultFrag");
 

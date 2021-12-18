@@ -17,6 +17,8 @@ set(RENDERER_SRCS
   "renderable.h"
   "types.cpp"
   "types.h"
+  "uniform_buffer.cpp"
+  "uniform_buffer.h"
   "vertex_attribute.h"
 
   "operations/render.cpp"

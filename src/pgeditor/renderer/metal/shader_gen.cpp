@@ -331,8 +331,8 @@ typedef struct
 
 	// Write the Fragment Shader Entry point
 	std::stringstream fragment;
-	fragment << "fragment float4 fragmentShader(Fragment thisFragment [[stage_in]],\n";
-	fragment << "                               constant Uniforms *uniforms) {\n";
+	fragment << "fragment float4 fragmentShader(Fragment thisFragment        [[ stage_in ]],\n";
+	fragment << "                               constant Uniforms *uniforms  [[ buffer(0) ]]) {\n";
 	fragment << "  FragmentIn in;\n";
 	for (const auto& index : fragBufferInputs) {
 		const auto& bufferInput = m_genCtx.bufferInputs[index];
@@ -340,7 +340,7 @@ typedef struct
 	}
 	fragment << "  " << structName(fragTerminalNode->GetName(), false) << " terminal = " << fragTerminalNodeName
 	         << "(in, uniforms);\n";
-	fragment << "  return terminal.color;\n";
+	fragment << "  return terminal.color * uniforms->scale + uniforms->bias;\n";
 	fragment << "}\n";
 
 	std::stringstream source;

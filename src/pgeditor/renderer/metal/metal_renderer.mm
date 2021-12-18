@@ -9,6 +9,7 @@
 #include <pgeditor/renderer/material_node.h>
 #include <pgeditor/renderer/interleaved_buffer.h>
 #include <pgeditor/renderer/vertex_attribute.h>
+#include <pgeditor/renderer/uniform_buffer.h>
 
 #include <pagoda/common/debug/logger.h>
 
@@ -93,8 +94,13 @@ void MetalRenderer::Draw(const Collection& collection)
       id<MTLRenderPipelineState> pipeline = m_impl->m_pipelineManager->GetRenderPipelineState(materialNetwork);
       [renderEncoder setRenderPipelineState: pipeline];
 
+      UniformBuffer uniforms;
+      uniforms.Add(Vec4F{1,0,0,1});
+      uniforms.Add(Vec4F{0,1,0,1});
+
       std::vector<const Buffer*> buffers{
-        &r->GetBuffer("position"), &r->GetBuffer("color")
+        &r->GetBuffer("position"),
+        &r->GetBuffer("color")
       };
       std::vector<VertexAttributeDescription> vertexDescription = {
         {VertexAttributeSemantics::Position, Type::Vec4, 4, sizeof(float)},
@@ -106,12 +112,13 @@ void MetalRenderer::Draw(const Collection& collection)
                              length: buffer.GetSize()
                             atIndex: 0];
 
-      vector_uint2 viewportSize = { (unsigned int)(layer.bounds.size.width),
-                                    (unsigned int)(layer.bounds.size.height) };
-
-      [renderEncoder setVertexBytes: &viewportSize
-                             length: sizeof(viewportSize)
+      [renderEncoder setVertexBytes: uniforms.GetData()
+                             length: uniforms.GetSize()
                             atIndex: 1];
+
+      [renderEncoder setFragmentBytes: uniforms.GetData()
+                               length: uniforms.GetSize()
+                              atIndex: 0];
 
       // Draw the 3 vertices
       [renderEncoder drawPrimitives: MTLPrimitiveTypeTriangle

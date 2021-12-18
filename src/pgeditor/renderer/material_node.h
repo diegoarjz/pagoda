@@ -15,9 +15,6 @@ namespace pgeditor::renderer
 class MaterialNode
 {
 	public:
-	using Parameter_t = std::variant<int, float, double, pagoda::math::Vec2F, pagoda::math::Vec3F, pagoda::math::Vec4F,
-	                                 pagoda::math::Mat2x2F, pagoda::math::Mat3x3F, pagoda::math::Mat4x4F, std::string>;
-
 	struct Input
 	{
 		Input() = default;
@@ -28,7 +25,7 @@ class MaterialNode
 		Type m_type;
 		std::string m_upstreamNode;
 		std::string m_upstreamOutput;
-		Parameter_t m_defaultValue;
+		Value m_defaultValue;
 	};
 
 	struct Output
@@ -78,8 +75,8 @@ class MaterialNode
   ////////////////////////////////////////
   /// \name Parameters
   ////////////////////////////////////////
-	void SetParameter(const std::string& name, const Parameter_t& par);
-	const Parameter_t* GetParameter(const std::string& name) const;
+	void SetParameter(const std::string& name, const Value& par);
+	const Value* GetParameter(const std::string& name) const;
 
   ////////////////////////////////////////
 	/// \name Hash
@@ -91,6 +88,6 @@ class MaterialNode
 	std::string m_id;
 	InputContainer_t m_inputs;
 	OutputContainer_t m_outputs;
-	std::unordered_map<std::string, Parameter_t> m_parameters;
+	std::unordered_map<std::string, Value> m_parameters;
 };
 }  // namespace pgeditor::renderer

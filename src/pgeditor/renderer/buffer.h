@@ -65,8 +65,8 @@ class Buffer
 	template<class T>
 	void SetData(const std::vector<T>& data)
 	{
-		const std::size_t newComponentsPerElement = BufferTypeTraits<T>::componentsPerElement;
-		const std::size_t newBytesPerComponent = BufferTypeTraits<T>::bytesPerComponent;
+		const std::size_t newComponentsPerElement = TypeTraits<T>::componentsPerElement;
+		const std::size_t newBytesPerComponent = TypeTraits<T>::bytesPerComponent;
 
 		if (m_data != nullptr) {
 			delete[] reinterpret_cast<std::byte*>(m_data);
@@ -76,7 +76,7 @@ class Buffer
 		m_componentsPerElement = newComponentsPerElement;
 		m_bytesPerComponent = newBytesPerComponent;
 		m_bufferSize = newBufferSize;
-		m_format = BufferTypeTraits<T>::format;
+		m_format = TypeTraits<T>::format;
 		m_numElements = data.size();
 
 		m_data = new std::byte[newBufferSize];
@@ -97,8 +97,8 @@ class Buffer
 			return nullptr;
 		}
 
-		const std::size_t componentsPerElement = BufferTypeTraits<T>::componentsPerElement;
-		const std::size_t bytesPerComponent = BufferTypeTraits<T>::bytesPerComponent;
+		const std::size_t componentsPerElement = TypeTraits<T>::componentsPerElement;
+		const std::size_t bytesPerComponent = TypeTraits<T>::bytesPerComponent;
 		const std::size_t offset = i * componentsPerElement * bytesPerComponent;
 
 		if (offset > m_bufferSize) {

@@ -54,9 +54,9 @@ bool MaterialNode::ConnectInput(const std::string& inputName, const MaterialNode
   return true;
 }
 
-void MaterialNode::SetParameter(const std::string& name, const Parameter_t& par) { m_parameters[name] = par; }
+void MaterialNode::SetParameter(const std::string& name, const Value& par) { m_parameters[name] = par; }
 
-const MaterialNode::Parameter_t* MaterialNode::GetParameter(const std::string& name) const
+const Value* MaterialNode::GetParameter(const std::string& name) const
 {
 	auto iter = m_parameters.find(name);
 	if (iter == m_parameters.end()) {
