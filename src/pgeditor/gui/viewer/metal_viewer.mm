@@ -8,6 +8,7 @@
 #include <pgeditor/renderer/collection.h>
 #include <pgeditor/renderer/renderable.h>
 #include <pgeditor/renderer/buffer.h>
+#include <pgeditor/renderer/vertex_attribute.h>
 
 #include <QHBoxLayout>
 #include <QWindow>
@@ -46,9 +47,43 @@ class MetalWindow : public QWindow
       { 0, 0, 1, 1},
     };
 
+    // Create a material network
     auto network = std::make_shared<MaterialNetwork>("default");
-    auto node = network->CreateMaterialNode("default", "defaultFrag");
-    node->SetOutput("color", {"color", Type::Vec4});
+    // The Vert shader network
+    auto defaultVert = network->CreateMaterialNode("defaultVert", "defaultVert");
+    defaultVert->SetInput("position", {"position", Type::Vec4});
+    defaultVert->SetInput("viewport", {"viewport", Type::Vec2});
+    defaultVert->SetOutput("position", {"position", Type::Vec4});
+    network->SetStageTerminalNode(MaterialNetwork::ShaderStage::Vertex, "defaultVert");
+
+    auto positionNode = network->CreateMaterialNode("bufferView", "position");
+    positionNode->SetOutput("position", {"position", Type::Vec4});
+    positionNode->SetParameter("bufferName", "position");
+    positionNode->SetParameter("semantics", static_cast<int>(VertexAttributeSemantics::Position));
+    positionNode->SetParameter("type", static_cast<int>(Type::Vec4));
+
+    auto viewPortUniformNode = network->CreateMaterialNode("uniformView", "viewport");
+    viewPortUniformNode->SetOutput("viewport", {"viewport", Type::UInt2});
+    viewPortUniformNode->SetParameter("uniformName", "viewport");
+    viewPortUniformNode->SetParameter("type", static_cast<int>(Type::UInt2));
+
+    defaultVert->ConnectInput("position", positionNode, "position");
+    defaultVert->ConnectInput("viewport", viewPortUniformNode, "viewport");
+
+
+    // The frag shader network
+    auto defaultFrag = network->CreateMaterialNode("defaultFrag", "defaultFrag");
+    defaultFrag->SetInput("color", {"color", Type::Vec4});
+    defaultFrag->SetOutput("color", {"color", Type::Vec4});
+
+    auto colorNode = network->CreateMaterialNode("bufferView", "color");
+    colorNode->SetOutput("color", {"color", Type::Vec4});
+    colorNode->SetParameter("bufferName", "color");
+    colorNode->SetParameter("semantics", static_cast<int>(VertexAttributeSemantics::Color));
+    colorNode->SetParameter("type", static_cast<int>(Type::Vec4));
+
+    defaultFrag->ConnectInput("color", colorNode, "color");
+
     network->SetStageTerminalNode(MaterialNetwork::ShaderStage::Fragment, "defaultFrag");
 
     for (const auto& t : translations) {

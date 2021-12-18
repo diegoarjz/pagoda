@@ -30,8 +30,10 @@ set(RENDERER_SRCS
   "gl/grid_render_task.cpp"
   "gl/grid_render_task.h"
 
-  "metal/metal_renderer.mm"
   "metal/metal_renderer.h"
+  "metal/metal_renderer.mm"
+  "metal/render_pipeline_state_manager.h"
+  "metal/render_pipeline_state_manager.mm"
   "metal/shader_gen.cpp"
   "metal/shader_gen.h"
 )

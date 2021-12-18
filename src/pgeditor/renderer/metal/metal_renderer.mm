@@ -1,6 +1,7 @@
 #include "metal_renderer.h"
 
 #include "render_pipeline_state.h"
+#include "render_pipeline_state_manager.h"
 #include "shader_gen.h"
 
 #include <pgeditor/renderer/renderable.h>
@@ -19,137 +20,11 @@ using namespace pagoda::math;
 
 namespace pgeditor::renderer::metal
 {
-class RenderPipelineStateManager
-{
-	public:
-  RenderPipelineStateManager(id<MTLDevice> device, MTLPixelFormat pixelFormat)
-    : m_device(device)
-    , m_pixelFormat(pixelFormat)
-  {
-  }
-
-	RenderPipelineStatePtr Create(const RenderPipelineStateDescriptor& desc)
-  {
-    auto it = m_pipelines.find(desc.m_materialName);
-    if (it != m_pipelines.end()) {
-      return it->second;
-    }
-    auto r = m_pipelines.emplace(desc.m_materialName, std::make_shared<RenderPipelineSate>());
-    return r.first->second;
-  }
-
-	id<MTLRenderPipelineState> GetMetalPipelineState(const RenderPipelineStatePtr& state)
-  {
-    auto it = m_metalRenderPipelineState.find(state);
-    if (it != m_metalRenderPipelineState.end()) {
-      return it->second;
-    }
-
-    NSError *error = nil;
-    // Create a default library and pipeline state
-
-    MaterialNetwork network("default");
-    // The Vert shader network
-    auto defaultVert = network.CreateMaterialNode("defaultVert", "defaultVert");
-    defaultVert->SetInput("position", {"position", Type::Vec4});
-    defaultVert->SetInput("viewport", {"viewport", Type::Vec2});
-    defaultVert->SetOutput("position", {"position", Type::Vec4});
-    network.SetStageTerminalNode(MaterialNetwork::ShaderStage::Vertex, "defaultVert");
-
-    auto positionNode = network.CreateMaterialNode("bufferView", "position");
-    positionNode->SetOutput("position", {"position", Type::Vec4});
-    positionNode->SetParameter("bufferName", "position");
-    positionNode->SetParameter("semantics", static_cast<int>(VertexAttributeSemantics::Position));
-    positionNode->SetParameter("type", static_cast<int>(Type::Vec4));
-
-    auto viewPortUniformNode = network.CreateMaterialNode("uniformView", "viewport");
-    viewPortUniformNode->SetOutput("viewport", {"viewport", Type::UInt2});
-    viewPortUniformNode->SetParameter("uniformName", "viewport");
-    viewPortUniformNode->SetParameter("type", static_cast<int>(Type::UInt2));
-
-    defaultVert->ConnectInput("position", positionNode, "position");
-    defaultVert->ConnectInput("viewport", viewPortUniformNode, "viewport");
-
-
-    // The frag shader network
-    auto defaultFrag = network.CreateMaterialNode("defaultFrag", "defaultFrag");
-    defaultFrag->SetInput("color", {"color", Type::Vec4});
-    defaultFrag->SetOutput("color", {"color", Type::Vec4});
-
-    auto colorNode = network.CreateMaterialNode("bufferView", "color");
-    colorNode->SetOutput("color", {"color", Type::Vec4});
-    colorNode->SetParameter("bufferName", "color");
-    colorNode->SetParameter("semantics", static_cast<int>(VertexAttributeSemantics::Color));
-    colorNode->SetParameter("type", static_cast<int>(Type::Vec4));
-
-    defaultFrag->ConnectInput("color", colorNode, "color");
-
-    network.SetStageTerminalNode(MaterialNetwork::ShaderStage::Fragment, "defaultFrag");
-    auto defaultShaderSource = ShaderGen{network}.Generate();
-
-    std::cout << "Shader source" << std::endl;
-    std::cout << defaultShaderSource << std::endl;
-
-    NSString *source = [NSString stringWithCString:defaultShaderSource.c_str()
-                                          encoding:[NSString defaultCStringEncoding]];
-    id<MTLLibrary> library = [m_device newLibraryWithSource: source
-                                                    options: nil
-                                                      error: &error];
-
-    if (error != nil) {
-      LOG_FATAL("Failed to compile default pipeline shader");
-      LOG_FATAL([error.description UTF8String]);
-    }
-
-    id<MTLFunction> vertexFunction = [library newFunctionWithName: @"vertexShader"];
-    id<MTLFunction> fragmentFunction = [library newFunctionWithName: @"fragmentShader"];
-    MTLRenderPipelineDescriptor* pipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
-    pipelineDescriptor.label = [NSString stringWithCString:state->GetDebugName().c_str()
-                                                  encoding:[NSString defaultCStringEncoding]];
-    pipelineDescriptor.vertexFunction = vertexFunction;
-    pipelineDescriptor.fragmentFunction = fragmentFunction;
-    pipelineDescriptor.colorAttachments[0].pixelFormat = m_pixelFormat;
-
-    id<MTLRenderPipelineState> pipeline = [m_device newRenderPipelineStateWithDescriptor: pipelineDescriptor
-                                                                                   error: &error];
-
-    if (error != nil) {
-      LOG_FATAL("Failed to create default render pipeline");
-      LOG_FATAL([error.description UTF8String]);
-    }
-
-    auto i = m_metalRenderPipelineState.emplace(state, pipeline);
-    return i.first->second;
-  }
-
-	private:
-	// TODO: this should not be a string
-	std::unordered_map<std::string, RenderPipelineStatePtr> m_pipelines;
-  std::unordered_map<RenderPipelineStatePtr, id<MTLRenderPipelineState>> m_metalRenderPipelineState;
-
-  id<MTLDevice> m_device;
-  MTLPixelFormat m_pixelFormat; // TODO Doesn't belong here
-};
-
 class MetalRenderer::Impl
 {
 	public:
   Impl(void* handle) : m_layer{static_cast<CAMetalLayer*>(handle)}
   {
-  }
-
-  void CreateDefaultPipelineState()
-  {
-    if (m_pipelineManager == nullptr) {
-      m_pipelineManager = std::make_shared<RenderPipelineStateManager>(m_device, m_layer.pixelFormat);
-    }
-
-    RenderPipelineStateDescriptor desc;
-    desc.m_debugName = "Default Pipeline Descriptor";
-    desc.m_materialName = "Default Material";
-
-    auto pipeline = m_pipelineManager->Create(desc);
-    m_defaultPipeline = m_pipelineManager->GetMetalPipelineState(pipeline);
   }
 
   CAMetalLayer* m_layer;
@@ -181,8 +56,7 @@ void MetalRenderer::InitRenderer()
     return;
   }
 
-  m_impl->CreateDefaultPipelineState();
-
+  m_impl->m_pipelineManager = std::make_shared<RenderPipelineStateManager>(m_impl->m_device, m_impl->m_layer.pixelFormat);
   m_impl->m_commandQueue = [m_impl->m_device newCommandQueue];
 }
 
@@ -190,7 +64,6 @@ void MetalRenderer::Draw(const Collection& collection)
 {
   auto commandQueue = m_impl->m_commandQueue;
   auto layer = m_impl->m_layer;
-  auto defaultPipeline = m_impl->m_defaultPipeline;
 
   id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
   commandBuffer.label = @"MyCommand";
@@ -214,9 +87,12 @@ void MetalRenderer::Draw(const Collection& collection)
 
     // Set the viewport
     [renderEncoder setViewport:(MTLViewport){0.0, 0.0, layer.drawableSize.width, layer.drawableSize.height, -1.0, 1.0}];
-    [renderEncoder setRenderPipelineState: defaultPipeline];
 
     for (const auto& r : collection) {
+      auto materialNetwork = r->GetMaterial();
+      id<MTLRenderPipelineState> pipeline = m_impl->m_pipelineManager->GetRenderPipelineState(materialNetwork);
+      [renderEncoder setRenderPipelineState: pipeline];
+
       std::vector<const Buffer*> buffers{
         &r->GetBuffer("position"), &r->GetBuffer("color")
       };
