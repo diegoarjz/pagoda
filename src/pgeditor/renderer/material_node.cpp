@@ -1,5 +1,9 @@
 #include "material_node.h"
 
+#include <boost/functional/hash.hpp>
+
+using namespace pagoda::math;
+
 namespace pgeditor::renderer
 {
 MaterialNode::MaterialNode(const std::string& nodeId, const std::string& name) : m_name{name}, m_id{nodeId} {}
@@ -12,14 +16,6 @@ MaterialNode::MaterialNode(MaterialNode&& node)
 MaterialNode::~MaterialNode() {}
 
 void MaterialNode::SetInput(const std::string& name, const Input& connection) { m_inputs[name] = connection; }
-MaterialNode::Input* MaterialNode::GetInput(const std::string& name)
-{
-	auto iter = m_inputs.find(name);
-	if (iter == m_inputs.end()) {
-		return nullptr;
-	}
-	return &iter->second;
-}
 const MaterialNode::Input* MaterialNode::GetInput(const std::string& name) const
 {
 	auto iter = m_inputs.find(name);
@@ -30,15 +26,6 @@ const MaterialNode::Input* MaterialNode::GetInput(const std::string& name) const
 }
 
 void MaterialNode::SetOutput(const std::string& name, const Output& connection) { m_outputs[name] = connection; }
-MaterialNode::Output* MaterialNode::GetOutput(const std::string& name)
-{
-	auto iter = m_outputs.find(name);
-	if (iter == m_outputs.end()) {
-		static const Output empty{};
-		return nullptr;
-	}
-	return &iter->second;
-}
 const MaterialNode::Output* MaterialNode::GetOutput(const std::string& name) const
 {
 	auto iter = m_outputs.find(name);
@@ -47,6 +34,24 @@ const MaterialNode::Output* MaterialNode::GetOutput(const std::string& name) con
 		return nullptr;
 	}
 	return &iter->second;
+}
+
+bool MaterialNode::ConnectInput(const std::string& inputName, const MaterialNode* node, const std::string& upstreamName)
+{
+  if (node == nullptr) {
+    return false;
+  }
+  auto inIter = m_inputs.find(inputName);
+  auto outIter = node->m_outputs.find(upstreamName);
+  if (inIter == m_inputs.end() || outIter == node->m_outputs.end()) {
+    return false;
+  }
+  if (inIter->second.m_type != outIter->second.m_type) {
+    return false;
+  }
+  inIter->second.m_upstreamNode = node->GetName();
+  inIter->second.m_upstreamOutput = upstreamName;
+  return true;
 }
 
 void MaterialNode::SetParameter(const std::string& name, const Parameter_t& par) { m_parameters[name] = par; }
@@ -60,4 +65,45 @@ const MaterialNode::Parameter_t* MaterialNode::GetParameter(const std::string& n
 	return &iter->second;
 }
 
+void MaterialNode::AppendHash(std::size_t& hash) const
+{
+  struct
+  {
+    void operator()(const int& v) { boost::hash_combine(m_hash, v); }
+    void operator()(const float& v) { boost::hash_combine(m_hash, v); }
+    void operator()(const double& v) { boost::hash_combine(m_hash, v); }
+    void operator()(const Vec2F& v) { boost::hash_combine(m_hash, v.a); }
+    void operator()(const Vec3F& v) { boost::hash_combine(m_hash, v.a); }
+    void operator()(const Vec4F& v) { boost::hash_combine(m_hash, v.a); }
+    void operator()(const Mat2x2F& v) { boost::hash_combine(m_hash, v.a); }
+    void operator()(const Mat3x3F& v) { boost::hash_combine(m_hash, v.a); }
+    void operator()(const Mat4x4F& v) { boost::hash_combine(m_hash, v.a); }
+    void operator()(const std::string& v) { boost::hash_combine(m_hash, v); }
+
+    std::size_t& m_hash;
+  } paramHash{hash};
+
+  boost::hash_combine(hash, m_name);
+  boost::hash_combine(hash, m_id);
+  for (const auto& i : m_inputs) {
+    const auto& input = i.second;
+    boost::hash_combine(hash, input.m_name);
+    boost::hash_combine(hash, input.m_type);
+    boost::hash_combine(hash, input.m_upstreamNode);
+    boost::hash_combine(hash, input.m_upstreamOutput);
+    std::visit(paramHash, input.m_defaultValue);
+  }
+
+  for (const auto& o : m_outputs) {
+    const auto& output = o.second;
+    boost::hash_combine(hash, output.m_name);
+    boost::hash_combine(hash, output.m_type);
+  }
+
+  for (const auto& p : m_parameters) {
+    const auto& parameter = p.second;
+    boost::hash_combine(hash, p.first);
+    std::visit(paramHash, parameter);
+  }
+}
 }  // namespace pgeditor::renderer

@@ -1,9 +1,13 @@
 #include "material_network.h"
 
+#include <boost/functional/hash.hpp>
+
 namespace pgeditor::renderer
 {
 MaterialNetwork::MaterialNetwork(const std::string& materialName) : m_materialName{materialName} {}
 MaterialNetwork::~MaterialNetwork() {}
+
+const std::string& MaterialNetwork::GetName() const { return m_materialName; }
 
 MaterialNode* MaterialNetwork::CreateMaterialNode(const std::string& nodeId, const std::string& name)
 {
@@ -54,6 +58,15 @@ MaterialNode* MaterialNetwork::GetStageTerminalNode(ShaderStage stage)
 			return GetMaterialNode(m_terminalNodes[1]);
 			break;
 	}
+}
+
+void MaterialNetwork::AppendHash(std::size_t& hash) const
+{
+  for (const auto& node : m_nodes) {
+    node.second.AppendHash(hash);
+  }
+  boost::hash_combine(hash, m_terminalNodes[0]);
+  boost::hash_combine(hash, m_terminalNodes[1]);
 }
 
 }  // namespace pgeditor::renderer

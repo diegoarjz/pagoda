@@ -53,7 +53,7 @@ void defaultVert(MaterialNetworkVisitor* vis, const std::string& outputName, con
 	std::stringstream& code = *genCtx.nodeCode;
 
 	std::string positionInput = "float4(0,0,0,1)";
-	if (auto input = node->GetInput("position")) {
+	if (const auto& input = node->GetInput("position")) {
 		const auto& upstreamNodeName = input->m_upstreamNode;
 		const auto& upstreamOutput = input->m_upstreamOutput;
 

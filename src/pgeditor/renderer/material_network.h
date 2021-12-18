@@ -18,15 +18,34 @@ class MaterialNetwork
 		Fragment
 	};
 
+  ////////////////////////////////////////
+  /// \n name Constructors
+  ////////////////////////////////////////
 	MaterialNetwork(const std::string& materialName);
 	~MaterialNetwork();
 
+  ////////////////////////////////////////
+	/// \n name Getters & Setters
+  ////////////////////////////////////////
+  const std::string& GetName() const;
+
+  ////////////////////////////////////////
+  /// \n name Material Nodes
+  ////////////////////////////////////////
 	MaterialNode* CreateMaterialNode(const std::string& nodeId, const std::string& name);
 	const MaterialNode* GetMaterialNode(const std::string& name) const;
 	MaterialNode* GetMaterialNode(const std::string& name);
 
+  ////////////////////////////////////////
+  /// \n name Terminal Nodes
+  ////////////////////////////////////////
 	void SetStageTerminalNode(ShaderStage stage, const std::string& name);
 	MaterialNode* GetStageTerminalNode(ShaderStage stage);
+
+  ////////////////////////////////////////
+	/// \name Hash
+  ////////////////////////////////////////
+  void AppendHash(std::size_t& hash) const;
 
 	private:
 	std::string m_materialName;

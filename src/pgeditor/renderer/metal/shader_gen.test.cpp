@@ -33,10 +33,8 @@ TEST(ShaderGen, test_simple_node)
 	viewPortUniformNode->SetParameter("uniformName", "viewport");
 	viewPortUniformNode->SetParameter("type", static_cast<int>(Type::Vec2));
 
-	defaultVert->GetInput("position")->m_upstreamNode = "position";
-	defaultVert->GetInput("position")->m_upstreamOutput = "position";
-	defaultVert->GetInput("viewport")->m_upstreamNode = "viewport";
-	defaultVert->GetInput("viewport")->m_upstreamOutput = "viewport";
+	defaultVert->ConnectInput("position", positionNode, "positionn");
+	defaultVert->ConnectInput("viewport", viewPortUniformNode, "viewport");
 
 	// The frag shader network
 	auto defaultFrag = network.CreateMaterialNode("defaultFrag", "defaultFrag");
@@ -49,8 +47,7 @@ TEST(ShaderGen, test_simple_node)
 	colorNode->SetParameter("semantics", static_cast<int>(VertexAttributeSemantics::Color));
 	colorNode->SetParameter("type", static_cast<int>(Type::Vec4));
 
-	defaultFrag->GetInput("color")->m_upstreamNode = "color";
-	defaultFrag->GetInput("color")->m_upstreamOutput = "color";
+	defaultFrag->ConnectInput("color", colorNode, "color");
 
 	network.SetStageTerminalNode(MaterialNetwork::ShaderStage::Fragment, "defaultFrag");
 
