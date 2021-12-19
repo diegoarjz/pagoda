@@ -19,19 +19,19 @@ class MaterialNode
 	{
 		Input() = default;
 
-		Input(const std::string& name, const Type type) : m_name{name}, m_type{type} {}
+		Input(const std::string& name, const Type type) : name{name}, type{type} {}
 
-		std::string m_name;
-		Type m_type;
-		std::string m_upstreamNode;
-		std::string m_upstreamOutput;
-		Value m_defaultValue;
+		std::string name;
+		Type type;
+		std::string upstreamNode;
+		std::string upstreamOutput;
+		Value defaultValue;
 	};
 
 	struct Output
 	{
-    std::string m_name;
-    Type m_type;
+    std::string name;
+    Type type;
 	};
 
 	using InputContainer_t = std::unordered_map<std::string, Input>;

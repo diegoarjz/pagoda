@@ -46,11 +46,11 @@ bool MaterialNode::ConnectInput(const std::string& inputName, const MaterialNode
   if (inIter == m_inputs.end() || outIter == node->m_outputs.end()) {
     return false;
   }
-  if (inIter->second.m_type != outIter->second.m_type) {
+  if (inIter->second.type != outIter->second.type) {
     return false;
   }
-  inIter->second.m_upstreamNode = node->GetName();
-  inIter->second.m_upstreamOutput = upstreamName;
+  inIter->second.upstreamNode = node->GetName();
+  inIter->second.upstreamOutput = upstreamName;
   return true;
 }
 
@@ -87,17 +87,17 @@ void MaterialNode::AppendHash(std::size_t& hash) const
   boost::hash_combine(hash, m_id);
   for (const auto& i : m_inputs) {
     const auto& input = i.second;
-    boost::hash_combine(hash, input.m_name);
-    boost::hash_combine(hash, input.m_type);
-    boost::hash_combine(hash, input.m_upstreamNode);
-    boost::hash_combine(hash, input.m_upstreamOutput);
-    std::visit(paramHash, input.m_defaultValue);
+    boost::hash_combine(hash, input.name);
+    boost::hash_combine(hash, input.type);
+    boost::hash_combine(hash, input.upstreamNode);
+    boost::hash_combine(hash, input.upstreamOutput);
+    std::visit(paramHash, input.defaultValue);
   }
 
   for (const auto& o : m_outputs) {
     const auto& output = o.second;
-    boost::hash_combine(hash, output.m_name);
-    boost::hash_combine(hash, output.m_type);
+    boost::hash_combine(hash, output.name);
+    boost::hash_combine(hash, output.type);
   }
 
   for (const auto& p : m_parameters) {

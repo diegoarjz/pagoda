@@ -10,7 +10,8 @@ enum class VertexAttributeSemantics
 	Normal,
 	TexCoord,
 	Color,
-	Custom
+	Custom,
+	Invalid
 };
 
 struct VertexAttributeDescription

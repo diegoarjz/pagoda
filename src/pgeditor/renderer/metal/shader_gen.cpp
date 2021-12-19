@@ -8,11 +8,13 @@
 #include <iostream>
 #include <stack>
 
+using namespace pagoda::math;
+
 namespace pgeditor::renderer::metal
 {
 namespace
 {
-const std::string& typeName(Type t)
+inline const std::string& typeName(Type t)
 {
   static const std::string sTypenames[] = {
 	  "int",
@@ -31,18 +33,98 @@ const std::string& typeName(Type t)
   return sTypenames[static_cast<int>(t)];
 }
 
+inline const std::string& shaderTypeName(MaterialNetwork::ShaderStage stage)
+{
+  static const std::string sNames[] = {"Vertex", "Fragment"};
+  return sNames[static_cast<int>(stage)];
+}
+
+void writeStructMember(std::stringstream& ss, Type type, const std::string& name, VertexAttributeSemantics semantics, bool withAttributes)
+{
+  if (withAttributes && semantics == VertexAttributeSemantics::Position) {
+	  ss << "  " << typeName(type) << " " << name << " [[ position ]];\n";
+  }
+  else {
+	  ss << "  " << typeName(type) << " " << name << ";\n";
+  }
+}
+
 template<class T>
 void writeStruct(std::stringstream& ss, const std::string& name, const T& contents)
 {
 	ss << "struct " << name << " {\n";
 	for (const auto& p : contents) {
 		auto c = p.second;
-		ss << "  " << typeName(c.m_type) << " " << c.m_name << ";\n";
+		writeStructMember(ss, c.type, c.name, VertexAttributeSemantics::Invalid, false);
 	}
 	ss << "};\n";
 }
 
-inline std::string structName(const std::string& baseName, bool in) { return baseName + (in ? "Input" : "Output"); }
+inline std::string structName(const std::string& baseName) { return baseName + "Input"; }
+
+std::string resolveInput(const MaterialNetwork* network, const MaterialNode* node, const std::string& inputName, const std::string& defaultResult)
+{
+  struct
+  {
+    void operator()(const int& v) {
+      result = std::to_string(v);
+    }
+    void operator()(const float& v) {
+      result = std::to_string(v);
+    }
+    void operator()(const double& v) {
+      result = std::to_string(v);
+    }
+    void operator()(const Vec2F& v) {
+      result = "float2(" +
+                std::to_string(X(v)) + ", " +
+                std::to_string(Y(v)) + ")";
+    }
+    void operator()(const Vec3F& v) {
+      result = "float3(" +
+                std::to_string(X(v)) + ", " +
+                std::to_string(Y(v)) + ", " +
+                std::to_string(Z(v)) + ")";
+    }
+    void operator()(const Vec4F& v) {
+      result = "float4(" +
+                std::to_string(X(v)) + ", " +
+                std::to_string(Y(v)) + ", " +
+                std::to_string(Z(v)) + ", " +
+                std::to_string(W(v)) + ")";
+    }
+    void operator()(const Mat2x2F& v) {
+      result = "";
+    }
+    void operator()(const Mat3x3F& v) {
+      result = "";
+    }
+    void operator()(const Mat4x4F& v) {
+      result = "";
+    }
+    void operator()(const std::string& v) {
+      result = "";
+    }
+
+    std::string result;
+  } defaultValueVis;
+
+	std::string output = defaultResult;
+	if (auto input = node->GetInput(inputName)) {
+		const auto& upstreamNodeName = input->upstreamNode;
+		const auto& upstreamOutput = input->upstreamOutput;
+		const auto& defaultValue = input->defaultValue;
+
+		if (auto upstreamNode = network->GetMaterialNode(upstreamNodeName)) {
+			return upstreamNodeName + "(in, uniforms)." + upstreamOutput;
+		}
+		else {
+		  std::visit(defaultValueVis, defaultValue);
+		  return defaultValueVis.result;
+		}
+	}
+	return "";
+}
 
 using NodeVisitorImplementation =
   std::function<void(MaterialNetworkVisitor*, const std::string&, const MaterialNode*, ShaderGenContext&)>;
@@ -51,17 +133,7 @@ void defaultVert(MaterialNetworkVisitor* vis, const std::string& outputName, con
                  ShaderGenContext& genCtx)
 {
 	std::stringstream& code = *genCtx.nodeCode;
-
-	std::string positionInput = "float4(0,0,0,1)";
-	if (const auto& input = node->GetInput("position")) {
-		const auto& upstreamNodeName = input->m_upstreamNode;
-		const auto& upstreamOutput = input->m_upstreamOutput;
-
-		if (auto upstreamNode = genCtx.materialNetwork->GetMaterialNode(upstreamNodeName)) {
-			positionInput = upstreamNodeName + "(in, uniforms)." + upstreamOutput;
-		}
-	}
-
+  std::string positionInput = resolveInput(genCtx.materialNetwork, node, "position", "float4(0,0,0,1)");
 	code << "  " << outputName << " out;\n";
 	code << "  out.position = " << positionInput << ";\n";
 	code << "  return out;\n";
@@ -70,19 +142,11 @@ void defaultVert(MaterialNetworkVisitor* vis, const std::string& outputName, con
 void defaultFrag(MaterialNetworkVisitor* vis, const std::string& outputName, const MaterialNode* node,
                  ShaderGenContext& genCtx)
 {
-	std::string colorInput = "float4(1,0,0,1)";
-	if (auto input = node->GetInput("color")) {
-		const auto& upstreamNodeName = input->m_upstreamNode;
-		const auto& upstreamOutput = input->m_upstreamOutput;
-
-		if (auto upstreamNode = genCtx.materialNetwork->GetMaterialNode(upstreamNodeName)) {
-			colorInput = upstreamNodeName + "(in, uniforms)." + upstreamOutput;
-		}
-	}
-
-	*genCtx.nodeCode << "  " << outputName << " out;\n";
-	*genCtx.nodeCode << "  out.color = " << colorInput << ";\n";
-	*genCtx.nodeCode << "  return out;\n";
+	std::stringstream& code = *genCtx.nodeCode;
+	std::string colorInput = resolveInput(genCtx.materialNetwork, node, "color", "float4(1,0,0,1)");
+	code << "  " << outputName << " out;\n";
+	code << "  out.color = " << colorInput << ";\n";
+	code << "  return out;\n";
 }
 
 void bufferView(MaterialNetworkVisitor* vis, const std::string& outputName, const MaterialNode* node,
@@ -101,11 +165,12 @@ void bufferView(MaterialNetworkVisitor* vis, const std::string& outputName, cons
 	genCtx.bufferInputsPerStage[genCtx.shaderStage].emplace_back(genCtx.bufferInputs.size() - 1);
 
 	auto output = node->GetOutputs().begin();
-	auto structOutName = output->second.m_name;
+	auto structOutName = output->second.name;
 
-	*genCtx.nodeCode << "  " << outputName << " out;\n";
-	*genCtx.nodeCode << "  out." << structOutName << " = in." << *bufferName << ";\n";
-	*genCtx.nodeCode << "  return out;\n";
+	std::stringstream& code = *genCtx.nodeCode;
+	code << "  " << outputName << " out;\n";
+	code << "  out." << structOutName << " = in." << *bufferName << ";\n";
+	code << "  return out;\n";
 }
 
 void uniformView(MaterialNetworkVisitor* vis, const std::string& outputName, const MaterialNode* node,
@@ -123,7 +188,7 @@ void uniformView(MaterialNetworkVisitor* vis, const std::string& outputName, con
 	genCtx.uniformRequestsPerStage[genCtx.shaderStage].emplace_back(genCtx.uniformRequests.size() - 1);
 
 	auto output = node->GetOutputs().begin();
-	auto structOutName = output->second.m_name;
+	auto structOutName = output->second.name;
 
 	*genCtx.nodeCode << "  " << outputName << " out;\n";
 	*genCtx.nodeCode << "  out." << structOutName << " = uniforms->" << *uniformName << ";\n";
@@ -160,34 +225,24 @@ void ShaderGen::Visit(const MaterialNode* node)
 
 	// Visit all upstream nodes
 	for (const auto& in : node->GetInputs()) {
-		if (auto upstreamNode = m_network.GetMaterialNode(in.second.m_upstreamNode)) {
+		if (auto upstreamNode = m_network.GetMaterialNode(in.second.upstreamNode)) {
 			Visit(upstreamNode);
 		}
 	}
 
 	const auto& nodeName = node->GetName();
-	const auto& outputName = structName(nodeName, false);
+	const auto& shaderType = m_genCtx.shaderStage;
+	const auto& outputName = structName(nodeName);
 
 	DBG_ASSERT_MSG(!node->GetOutputs().empty(), "A MaterialNode should always have outputs");
-	if (m_genCtx.shaderStage == MaterialNetwork::ShaderStage::Vertex) {
-		m_shaderCode << "//// Begin Vertex Shader Material Node '" << nodeName << "'\n";
-	} else {
-		m_shaderCode << "//// Begin Fragment Shader Material Node '" << nodeName << "'\n";
-	}
+	m_shaderCode << "//// Begin " << shaderTypeName(shaderType) << " Vertex Shader Material Node '" << nodeName << "'\n";
 	writeStruct(m_shaderCode, outputName, node->GetOutputs());
 
-	if (m_genCtx.shaderStage == MaterialNetwork::ShaderStage::Vertex) {
-		m_shaderCode << outputName << " " << node->GetName() << "(VertexIn in, constant Uniforms* uniforms) {\n";
-	} else {
-		m_shaderCode << outputName << " " << node->GetName() << "(FragmentIn in, constant Uniforms* uniforms) {\n";
-	}
+	m_shaderCode << outputName << " " << node->GetName() << "(" << shaderTypeName(shaderType) << "In in, constant Uniforms* uniforms) {\n";
 	visIter->second(this, outputName, node, m_genCtx);
 	m_shaderCode << "}\n";
-	if (m_genCtx.shaderStage == MaterialNetwork::ShaderStage::Vertex) {
-		m_shaderCode << "//// End Vertex Shader Material Node '" << nodeName << "'\n\n";
-	} else {
-		m_shaderCode << "//// End Fragment Shader Material Node '" << nodeName << "'\n\n";
-	}
+
+	m_shaderCode << "//// End " << shaderTypeName(shaderType) << " Vertex Shader Material Node '" << nodeName << "'\n";
 }
 
 std::string ShaderGen::Generate()
@@ -245,16 +300,11 @@ typedef struct
 	bool emittedPosition = false;
 	for (const auto& index : fragBufferInputs) {
 		const auto& bufferInput = m_genCtx.bufferInputs[index];
-		header << "  " << typeName(bufferInput.type);
-		if (bufferInput.semantics == VertexAttributeSemantics::Position) {
-			header << " " << bufferInput.name << " [[ position ]];\n";
-			emittedPosition = true;
-		} else {
-			header << " " << bufferInput.name << ";\n";
-		}
+		writeStructMember(header, bufferInput.type, bufferInput.name, bufferInput.semantics, true);
+		emittedPosition |= bufferInput.semantics == VertexAttributeSemantics::Position;
 	}
 	if (!emittedPosition) {
-		header << "  " << typeName(positionBuffer->type) << " " << positionBuffer->name << " [[ position ]];\n";
+	  writeStructMember(header, positionBuffer->type, positionBuffer->name, positionBuffer->semantics, true);
 	}
 	header << R"(
 } Fragment;
@@ -267,7 +317,7 @@ typedef struct
 {
 )";
 	for (const auto& uniform : m_genCtx.uniformRequests) {
-		header << "  " << typeName(uniform.type) << " " << uniform.name << ";\n";
+		writeStructMember(header, uniform.type, uniform.name, VertexAttributeSemantics::Invalid, false);
 	}
 	header << "} Uniforms;\n";
 
@@ -279,7 +329,7 @@ typedef struct
 )";
 	for (const auto& index : vertexBufferInputs) {
 		const auto& bufferInput = m_genCtx.bufferInputs[index];
-		header << "  " << typeName(bufferInput.type) << " " << bufferInput.name << ";\n";
+		writeStructMember(header, bufferInput.type, bufferInput.name, bufferInput.semantics, false);
 	}
 	header << "} VertexIn;\n";
 
@@ -291,7 +341,7 @@ typedef struct
 )";
 	for (const auto& index : fragBufferInputs) {
 		const auto& bufferInput = m_genCtx.bufferInputs[index];
-		header << "  " << typeName(bufferInput.type) << " " << bufferInput.name << ";\n";
+		writeStructMember(header, bufferInput.type, bufferInput.name, bufferInput.semantics, false);
 	}
 	header << "} FragmentIn;\n";
 
@@ -307,7 +357,7 @@ typedef struct
 		const auto& bufferInput = m_genCtx.bufferInputs[index];
 		vertex << "  vertexIn." << bufferInput.name << " = thisVertex." << bufferInput.name << ";\n";
 	}
-	vertex << "  " << structName(vertTerminalNode->GetName(), false) << " terminal = " << vertTerminalNodeName
+	vertex << "  " << structName(vertTerminalNode->GetName()) << " terminal = " << vertTerminalNodeName
 	       << "(vertexIn, uniforms);\n";
 	vertex << "  Fragment out;\n";
 	for (const auto& index : fragBufferInputs) {
@@ -338,9 +388,9 @@ typedef struct
 		const auto& bufferInput = m_genCtx.bufferInputs[index];
 		fragment << "  in." << bufferInput.name << " = thisFragment." << bufferInput.name << ";\n";
 	}
-	fragment << "  " << structName(fragTerminalNode->GetName(), false) << " terminal = " << fragTerminalNodeName
+	fragment << "  " << structName(fragTerminalNode->GetName()) << " terminal = " << fragTerminalNodeName
 	         << "(in, uniforms);\n";
-	fragment << "  return terminal.color * uniforms->scale + uniforms->bias;\n";
+	fragment << "  return terminal.color;\n";
 	fragment << "}\n";
 
 	std::stringstream source;
@@ -348,6 +398,10 @@ typedef struct
 	source << m_shaderCode.str() << "\n";
 	source << vertex.str() << "\n";
 	source << fragment.str() << "\n";
+
+	std::cout << "--------------------------------------------------------------------------------" << std::endl;
+	std::cout << source.str() << std::endl;
+	std::cout << "--------------------------------------------------------------------------------" << std::endl;
 
 	return source.str();
 }
