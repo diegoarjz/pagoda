@@ -4,12 +4,12 @@
 #include "render_pipeline_state_manager.h"
 #include "shader_gen.h"
 
-#include <pgeditor/renderer/renderable.h>
+#include <pgeditor/renderer/interleaved_buffer.h>
 #include <pgeditor/renderer/material_network.h>
 #include <pgeditor/renderer/material_node.h>
-#include <pgeditor/renderer/interleaved_buffer.h>
-#include <pgeditor/renderer/vertex_attribute.h>
+#include <pgeditor/renderer/renderable.h>
 #include <pgeditor/renderer/uniform_buffer.h>
+#include <pgeditor/renderer/vertex_attribute.h>
 
 #include <pagoda/common/debug/logger.h>
 
@@ -19,32 +19,25 @@
 
 using namespace pagoda::math;
 
-namespace pgeditor::renderer::metal
-{
-class MetalRenderer::Impl
-{
-	public:
-  Impl(void* handle) : m_layer{static_cast<CAMetalLayer*>(handle)}
-  {
-  }
+namespace pgeditor::renderer::metal {
+class MetalRenderer::Impl {
+public:
+  Impl(void *handle) : m_layer{static_cast<CAMetalLayer *>(handle)} {}
 
-  CAMetalLayer* m_layer;
+  CAMetalLayer *m_layer;
   id<MTLDevice> m_device{nullptr};
-  id<MTLRenderPipelineState> m_defaultPipeline; // TODO: This doesn't belong here
+  id<MTLRenderPipelineState>
+      m_defaultPipeline; // TODO: This doesn't belong here
   id<MTLCommandQueue> m_commandQueue;
   std::shared_ptr<RenderPipelineStateManager> m_pipelineManager;
 };
 
-MetalRenderer::MetalRenderer(void* handle) : m_impl{std::make_unique<Impl>(handle)}
-{
-}
+MetalRenderer::MetalRenderer(void *handle)
+    : m_impl{std::make_unique<Impl>(handle)} {}
 
-MetalRenderer::~MetalRenderer()
-{
-}
+MetalRenderer::~MetalRenderer() {}
 
-void MetalRenderer::InitRenderer()
-{
+void MetalRenderer::InitRenderer() {
   if (m_impl->m_device) {
     LOG_WARNING("Metal device already initialized");
     return;
@@ -57,12 +50,12 @@ void MetalRenderer::InitRenderer()
     return;
   }
 
-  m_impl->m_pipelineManager = std::make_shared<RenderPipelineStateManager>(m_impl->m_device, m_impl->m_layer.pixelFormat);
+  m_impl->m_pipelineManager = std::make_shared<RenderPipelineStateManager>(
+      m_impl->m_device, m_impl->m_layer.pixelFormat);
   m_impl->m_commandQueue = [m_impl->m_device newCommandQueue];
 }
 
-void MetalRenderer::Draw(const Collection& collection)
-{
+void MetalRenderer::Draw(const Collection &collection) {
   auto commandQueue = m_impl->m_commandQueue;
   auto layer = m_impl->m_layer;
 
@@ -76,61 +69,71 @@ void MetalRenderer::Draw(const Collection& collection)
       return;
     }
 
-    MTLRenderPassDescriptor* renderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
+    MTLRenderPassDescriptor *renderPassDescriptor =
+        [MTLRenderPassDescriptor renderPassDescriptor];
     renderPassDescriptor.colorAttachments[0].texture = drawable.texture;
     renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-    renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
+    renderPassDescriptor.colorAttachments[0].clearColor =
+        MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
     renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
 
     // Create a render encoder for the render pass
-    id<MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor: renderPassDescriptor];
+    id<MTLRenderCommandEncoder> renderEncoder =
+        [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
     renderEncoder.label = @"MyRenderEncoder";
 
     // Set the viewport
-    [renderEncoder setViewport:(MTLViewport){0.0, 0.0, layer.drawableSize.width, layer.drawableSize.height, -1.0, 1.0}];
+    [renderEncoder
+        setViewport:(MTLViewport){0.0, 0.0, layer.drawableSize.width,
+                                  layer.drawableSize.height, -1.0, 1.0}];
 
-    for (const auto& r : collection) {
+    for (const auto &r : collection) {
       auto materialNetwork = r->GetMaterial();
-      id<MTLRenderPipelineState> pipeline = m_impl->m_pipelineManager->GetRenderPipelineState(materialNetwork);
-      [renderEncoder setRenderPipelineState: pipeline];
+      auto pipelineState =
+          m_impl->m_pipelineManager->GetRenderPipelineState(materialNetwork);
+      id<MTLRenderPipelineState> pipeline = pipelineState.pipelineState;
+      [renderEncoder setRenderPipelineState:pipeline];
 
+      ////////////////////////////////////////
+      // Prepare the uniform buffer
+      ////////////////////////////////////////
       UniformBuffer uniforms;
-      uniforms.Add(Vec4F{1,0,0,1});
-      uniforms.Add(Vec4F{0,1,0,1});
+      for (const auto &uniform : pipelineState.uniforms) {
+        std::cout << "Uniform: " << std::get<0>(uniform) << std::endl;
+      }
 
-      std::vector<const Buffer*> buffers{
-        &r->GetBuffer("position"),
-        &r->GetBuffer("color")
-      };
-      std::vector<VertexAttributeDescription> vertexDescription = {
-        {VertexAttributeSemantics::Position, Type::Vec4, 4, sizeof(float)},
-        {VertexAttributeSemantics::Color, Type::Vec4, 4, sizeof(float)},
-      };
-      InterleavedBuffer buffer(vertexDescription, buffers);
+      ////////////////////////////////////////
+      // Prepare the vertex buffer
+      ////////////////////////////////////////
+      const auto &vertexAttributeDescription = pipelineState.vertexAttributes;
+      std::vector<const Buffer *> buffers;
+      for (const auto &attr : vertexAttributeDescription) {
+        buffers.push_back(r->GetBuffer(attr.name));
+      }
+      InterleavedBuffer buffer(vertexAttributeDescription, buffers);
 
-      [renderEncoder setVertexBytes: buffer.GetData()
-                             length: buffer.GetSize()
-                            atIndex: 0];
+      [renderEncoder setVertexBytes:buffer.GetData()
+                             length:buffer.GetSize()
+                            atIndex:0];
 
-      [renderEncoder setVertexBytes: uniforms.GetData()
-                             length: uniforms.GetSize()
-                            atIndex: 1];
+      [renderEncoder setVertexBytes:uniforms.GetData()
+                             length:uniforms.GetSize()
+                            atIndex:1];
 
-      [renderEncoder setFragmentBytes: uniforms.GetData()
-                               length: uniforms.GetSize()
-                              atIndex: 0];
+      [renderEncoder setFragmentBytes:uniforms.GetData()
+                               length:uniforms.GetSize()
+                              atIndex:0];
 
-      // Draw the 3 vertices
-      [renderEncoder drawPrimitives: MTLPrimitiveTypeTriangle
-                        vertexStart: 0
-                        vertexCount: r->GetVertexCount()];
+      [renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle
+                        vertexStart:0
+                        vertexCount:r->GetVertexCount()];
     }
 
     [renderEncoder endEncoding];
 
-    [commandBuffer presentDrawable: drawable];
+    [commandBuffer presentDrawable:drawable];
     [commandBuffer commit];
   }
 }
 
-}  // namespace pgeditor::gui::renderer::metal
+} // namespace pgeditor::renderer::metal
