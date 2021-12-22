@@ -2,15 +2,13 @@
 
 #include <QWidget>
 
-namespace pgeditor::gui::viewer
-{
-class MetalViewer : public QWidget
-{
-	public:
-	MetalViewer(QWidget* parent);
-	~MetalViewer() override;
+namespace pgeditor::gui::viewer {
+class MetalViewer : public QWidget {
+public:
+  MetalViewer(QWidget *parent);
+  ~MetalViewer() override;
 
-	protected:
-	private:
+protected:
+private:
 };
-}  // namespace pgeditor::gui::viewer
+} // namespace pgeditor::gui::viewer

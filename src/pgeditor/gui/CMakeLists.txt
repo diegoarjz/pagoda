@@ -1,4 +1,5 @@
-set(GUI_SRCS
+set(
+  GUI_SRCS
   "main_window.cpp"
   "main_window.h"
   "graph/edge.cpp"
@@ -28,6 +29,8 @@ set(GUI_SRCS
   "graph/node_style.h"
   "graph/new_node_popup.cpp"
   "graph/new_node_popup.h"
+  "viewer/camera_controller.cpp"
+  "viewer/camera_controller.h"
   "viewer/viewer.cpp"
   "viewer/viewer.h"
   "viewer/metal_viewer.mm"
@@ -35,17 +38,16 @@ set(GUI_SRCS
 )
 
 add_pagoda_module(
-  NAME          gui
-  SOURCES       ${GUI_SRCS}
-  DEPENDENCIES  libpagoda common graph renderer Qt6::Widgets Qt6::Core Qt6::OpenGL Qt6::OpenGLWidgets GLEW::GLEW
+  NAME gui
+  SOURCES ${GUI_SRCS}
+  DEPENDENCIES libpagoda common graph renderer Qt6::Widgets Qt6::Core Qt6::OpenGL Qt6::OpenGLWidgets GLEW::GLEW
 )
 
 #########################################################################
 # Unit tests
 #########################################################################
-set(GUI_UNIT_TESTS
-)
+set(GUI_UNIT_TESTS)
 
 foreach(unit_test_src ${GUI_UNIT_TESTS})
-    add_unit_test(${unit_test_src})
+  add_unit_test(${unit_test_src})
 endforeach()

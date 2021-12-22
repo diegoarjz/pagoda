@@ -11,6 +11,9 @@
 #include <pgeditor/renderer/uniform_buffer.h>
 #include <pgeditor/renderer/vertex_attribute.h>
 
+#include <pagoda/math/matrix_base.h>
+#include <pagoda/scene/camera.h>
+
 #include <pagoda/common/debug/logger.h>
 
 #include <MetalKit/MetalKit.h>
@@ -18,6 +21,7 @@
 #include <unordered_map>
 
 using namespace pagoda::math;
+using namespace pagoda::scene;
 
 namespace pgeditor::renderer::metal {
 class MetalRenderer::Impl {
@@ -30,6 +34,8 @@ public:
       m_defaultPipeline; // TODO: This doesn't belong here
   id<MTLCommandQueue> m_commandQueue;
   std::shared_ptr<RenderPipelineStateManager> m_pipelineManager;
+
+  Camera m_camera;
 };
 
 MetalRenderer::MetalRenderer(void *handle)
@@ -99,7 +105,16 @@ void MetalRenderer::Draw(const Collection &collection) {
       ////////////////////////////////////////
       UniformBuffer uniforms;
       for (const auto &uniform : pipelineState.uniforms) {
-        std::cout << "Uniform: " << std::get<0>(uniform) << std::endl;
+        const auto &uniformName = std::get<0>(uniform);
+        if (uniformName == "modelMatrix") {
+          uniforms.Add<Mat4x4F>(boost::qvm::transposed(r->GetModelMatrix()));
+        } else if (uniformName == "viewMatrix") {
+          uniforms.Add<Mat4x4F>(
+              boost::qvm::transposed(m_impl->m_camera.GetViewMatrix()));
+        } else if (uniformName == "projectionMatrix") {
+          uniforms.Add<Mat4x4F>(
+              boost::qvm::transposed(m_impl->m_camera.GetProjectionMatrix()));
+        }
       }
 
       ////////////////////////////////////////
@@ -136,4 +151,16 @@ void MetalRenderer::Draw(const Collection &collection) {
   }
 }
 
+void MetalRenderer::SetCamera(pagoda::scene::Camera &cam) {
+  m_impl->m_camera = cam;
+}
+
+void MetalRenderer::SetDisplaySize(const pagoda::math::Vec2U &size) {
+  if (m_impl->m_layer) {
+    CGSize cgSize;
+    cgSize.width = X(size);
+    cgSize.height = Y(size);
+    [m_impl->m_layer setDrawableSize:cgSize];
+  }
+}
 } // namespace pgeditor::renderer::metal

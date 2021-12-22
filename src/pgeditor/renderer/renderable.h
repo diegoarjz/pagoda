@@ -27,11 +27,15 @@ public:
     m_material = material;
   }
 
+  void SetModelMatrix(const pagoda::math::Mat4x4F &m) { m_modelMatrix = m; }
+  const pagoda::math::Mat4x4F GetModelMatrix() const { return m_modelMatrix; }
+
 private:
   PrimitiveType m_primitiveType;
 
   std::unordered_map<std::string, Buffer> m_buffers;
   std::shared_ptr<MaterialNetwork> m_material;
+  pagoda::math::Mat4x4F m_modelMatrix;
 };
 
 using RenderablePtr = std::shared_ptr<Renderable>;

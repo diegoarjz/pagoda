@@ -1,7 +1,12 @@
 #include "metal_viewer.h"
 
+#include "camera_controller.h"
+
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/math/vec_base.h>
+
+#include <pagoda/scene/camera.h>
+#include <pagoda/scene/transformation.h>
 
 #include <pgeditor/renderer/metal/metal_renderer.h>
 
@@ -11,6 +16,7 @@
 #include <pgeditor/renderer/vertex_attribute.h>
 
 #include <QHBoxLayout>
+#include <QResizeEvent>
 #include <QWindow>
 
 #import <MetalKit/MetalKit.h>
@@ -20,15 +26,18 @@
 #include <vector>
 
 using namespace pagoda::math;
+using namespace pagoda::scene;
 using namespace pgeditor::renderer;
 
 namespace pgeditor::gui::viewer {
-class MetalWindow : public QWindow {
+class MetalWindow : public QWindow, public CameraController {
 public:
   MetalWindow() {
     setSurfaceType(QSurface::MetalSurface);
 
-    std::vector<Vec4F> translations{{-0.1, 0, 0, 0}, {0.1, 0, 0, 0}};
+    Lens l;
+    l.SetPerspective(MathUtils<float>::degrees_to_radians(30), 1, 0.001, 100);
+    std::vector<Vec3F> translations{{0.0, 0, -3.5}, {0.1, 0, 0}};
 
     static const std::vector<Vec4F> position{
         {-1, -1, 0, 1}, {1, -1, 0, 1}, {0, 1, 0, 1}};
@@ -44,6 +53,9 @@ public:
     auto defaultVert =
         network->CreateMaterialNode("defaultVert", "defaultVert");
     defaultVert->SetInput("position", {"position", Type::Vec4});
+    defaultVert->SetInput("projectionMatrix", {"position", Type::Mat4});
+    defaultVert->SetInput("viewMatrix", {"position", Type::Mat4});
+    defaultVert->SetInput("modelMatrix", {"position", Type::Mat4});
     defaultVert->SetOutput("position", {"position", Type::Vec4});
     network->SetStageTerminalNode(MaterialNetwork::ShaderStage::Vertex,
                                   "defaultVert");
@@ -55,14 +67,33 @@ public:
         "semantics", static_cast<int>(VertexAttributeSemantics::Position));
     positionNode->SetParameter("type", static_cast<int>(Type::Vec4));
 
+    auto projMatrix =
+        network->CreateMaterialNode("uniformView", "projectionMatrix");
+    projMatrix->SetOutput("projectionMatrix", {"projectionMatrix", Type::Mat4});
+    projMatrix->SetParameter("uniformName", "projectionMatrix");
+    projMatrix->SetParameter("type", static_cast<int>(Type::Mat4));
+
+    auto viewMatrix = network->CreateMaterialNode("uniformView", "viewMatrix");
+    viewMatrix->SetOutput("viewMatrix", {"viewMatrix", Type::Mat4});
+    viewMatrix->SetParameter("uniformName", "viewMatrix");
+    viewMatrix->SetParameter("type", static_cast<int>(Type::Mat4));
+
+    auto modelMatrix =
+        network->CreateMaterialNode("uniformView", "modelMatrix");
+    modelMatrix->SetOutput("modelMatrix", {"modelMatrix", Type::Mat4});
+    modelMatrix->SetParameter("uniformName", "modelMatrix");
+    modelMatrix->SetParameter("type", static_cast<int>(Type::Mat4));
+
     defaultVert->ConnectInput("position", positionNode, "position");
+    defaultVert->ConnectInput("projectionMatrix", projMatrix,
+                              "projectionMatrix");
+    defaultVert->ConnectInput("viewMatrix", viewMatrix, "viewMatrix");
+    defaultVert->ConnectInput("modelMatrix", modelMatrix, "modelMatrix");
 
     // The frag shader network
     auto defaultFrag =
         network->CreateMaterialNode("defaultFrag", "defaultFrag");
     defaultFrag->SetInput("color", {"color", Type::Vec4});
-    defaultFrag->SetInput("scale", {"color", Type::Vec4});
-    defaultFrag->SetInput("bias", {"color", Type::Vec4});
     defaultFrag->SetOutput("color", {"color", Type::Vec4});
 
     auto colorNode = network->CreateMaterialNode("bufferView", "color");
@@ -72,34 +103,23 @@ public:
                             static_cast<int>(VertexAttributeSemantics::Color));
     colorNode->SetParameter("type", static_cast<int>(Type::Vec4));
 
-    auto scaleUniformNode = network->CreateMaterialNode("uniformView", "scale");
-    scaleUniformNode->SetOutput("scale", {"scale", Type::Vec4});
-    scaleUniformNode->SetParameter("uniformName", "scale");
-    scaleUniformNode->SetParameter("type", static_cast<int>(Type::Vec4));
-
-    auto biasUniformNode = network->CreateMaterialNode("uniformView", "bias");
-    biasUniformNode->SetOutput("bias", {"bias", Type::Vec4});
-    biasUniformNode->SetParameter("uniformName", "bias");
-    biasUniformNode->SetParameter("type", static_cast<int>(Type::Vec4));
-
     defaultFrag->ConnectInput("color", colorNode, "color");
-    defaultFrag->ConnectInput("scale", scaleUniformNode, "scale");
-    defaultFrag->ConnectInput("bias", biasUniformNode, "bias");
 
     network->SetStageTerminalNode(MaterialNetwork::ShaderStage::Fragment,
                                   "defaultFrag");
 
     for (const auto &t : translations) {
       auto renderable = std::make_shared<Renderable>();
+      Transformation transform;
+      transform.Translate(t);
 
       auto pointsCopy = position;
       auto colorsCopy = colors;
-      for (auto &p : pointsCopy) {
-        p += t;
-      }
       renderable->GetBuffer("position")->SetData(pointsCopy);
       renderable->GetBuffer("color")->SetData(colorsCopy);
       renderable->SetMaterial(network);
+
+      renderable->SetModelMatrix(transform.GetTransformationMatrix());
 
       m_renderCollection.Add(renderable);
     }
@@ -109,11 +129,34 @@ public:
 
   void exposeEvent(QExposeEvent *e) override {
     initMetal();
+    m_metalRenderer->SetCamera(m_camera);
     m_metalRenderer->Draw(m_renderCollection);
     requestUpdate();
   }
 
-  void updateEvent() { m_metalRenderer->Draw(m_renderCollection); }
+  void updateEvent() {
+    m_metalRenderer->SetCamera(m_camera);
+    m_metalRenderer->Draw(m_renderCollection);
+  }
+
+  void resizeEvent(QResizeEvent *e) override {
+    QWindow::resizeEvent(e);
+    const float width = e->size().width();
+    const float height = e->size().height();
+    const auto pixelRatio = QWindow::devicePixelRatio();
+    Lens l;
+    l.SetPerspective(MathUtils<float>::degrees_to_radians(30), width / height,
+                     0.001, 100);
+    m_camera.SetLens(l);
+
+    if (m_metalRenderer != nullptr) {
+      m_metalRenderer->SetDisplaySize(
+          {static_cast<uint32_t>(e->size().width() * pixelRatio),
+           static_cast<uint32_t>(e->size().height() * pixelRatio)});
+      m_metalRenderer->SetCamera(m_camera);
+      m_metalRenderer->Draw(m_renderCollection);
+    }
+  }
 
   bool event(QEvent *e) override {
     if (e->type() == QEvent::UpdateRequest) {
@@ -133,6 +176,25 @@ public:
     m_metalRenderer =
         std::make_shared<renderer::metal::MetalRenderer>(metalLayer);
     m_metalRenderer->InitRenderer();
+  }
+
+  void mouseMoveEvent(QMouseEvent *event) override {
+    MouseMoveEvent(event);
+    updateEvent();
+  }
+  void mousePressEvent(QMouseEvent *event) override {
+    MousePressEvent(event);
+    QWindow::mousePressEvent(event);
+  }
+  void mouseReleaseEvent(QMouseEvent *event) override {
+    MouseReleaseEvent(event);
+    QWindow::mouseReleaseEvent(event);
+  }
+
+  void wheelEvent(QWheelEvent *event) override {
+    WheelEvent(event);
+    QWindow::wheelEvent(event);
+    updateEvent();
   }
 
 private:

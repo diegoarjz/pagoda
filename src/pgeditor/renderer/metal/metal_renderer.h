@@ -1,23 +1,31 @@
 #pragma once
 
+#include <pagoda/math/vec_base.h>
+
 #include <pgeditor/renderer/collection.h>
 
 #include <memory>
 
-namespace pgeditor::renderer::metal
-{
-class MetalRenderer
-{
-	public:
-	MetalRenderer(void* CAMetalLayerHandle);
-	~MetalRenderer();
+namespace pagoda::scene {
+class Camera;
+}
 
-	void InitRenderer();
+namespace pgeditor::renderer::metal {
+class MetalRenderer {
+public:
+  MetalRenderer(void *CAMetalLayerHandle);
+  ~MetalRenderer();
 
-	void Draw(const Collection& c);
+  void InitRenderer();
 
-	private:
-	class Impl;
-	std::unique_ptr<Impl> m_impl;
+  void Draw(const Collection &c);
+
+  void SetCamera(pagoda::scene::Camera &cam);
+
+  void SetDisplaySize(const pagoda::math::Vec2U &size);
+
+private:
+  class Impl;
+  std::unique_ptr<Impl> m_impl;
 };
-}  // namespace pgeditor::renderer::metal
+} // namespace pgeditor::renderer::metal

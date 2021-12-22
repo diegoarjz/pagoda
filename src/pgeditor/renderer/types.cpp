@@ -48,7 +48,19 @@ TypeDescription TypeDescription::Description(Type type) {
   return iter->second;
 }
 
+////////////////////////////////////////
+// Float
+////////////////////////////////////////
+template <> const std::size_t TypeTraits<float>::componentsPerElement = 1;
+
+template <>
+const std::size_t TypeTraits<float>::bytesPerComponent = sizeof(float);
+
+template <> const Format TypeTraits<float>::format = Format::F32;
+
+////////////////////////////////////////
 // Vec3F
+////////////////////////////////////////
 template <>
 const std::size_t TypeTraits<pagoda::math::Vec3F>::componentsPerElement = 3;
 
@@ -58,7 +70,9 @@ const std::size_t
 
 template <> const Format TypeTraits<pagoda::math::Vec3F>::format = Format::F32;
 
+////////////////////////////////////////
 // Vec3F
+////////////////////////////////////////
 template <>
 const std::size_t TypeTraits<pagoda::math::Vec4F>::componentsPerElement = 4;
 
@@ -68,12 +82,17 @@ const std::size_t
 
 template <> const Format TypeTraits<pagoda::math::Vec4F>::format = Format::F32;
 
-// Float
-template <> const std::size_t TypeTraits<float>::componentsPerElement = 1;
+////////////////////////////////////////
+// Mat4x4F
+////////////////////////////////////////
+template <>
+const std::size_t TypeTraits<pagoda::math::Mat4x4F>::componentsPerElement = 16;
 
 template <>
-const std::size_t TypeTraits<float>::bytesPerComponent = sizeof(float);
+const std::size_t
+    TypeTraits<pagoda::math::Mat4x4F>::bytesPerComponent = sizeof(float);
 
-template <> const Format TypeTraits<float>::format = Format::F32;
+template <>
+const Format TypeTraits<pagoda::math::Mat4x4F>::format = Format::F32;
 
 } // namespace pgeditor::renderer
