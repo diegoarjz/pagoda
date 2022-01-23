@@ -28,7 +28,7 @@ MainWindow::MainWindow()
 	using namespace pagoda::graph::io;
 
 	// Register the rendering system with pagoda
-	renderer::RenderingSystem::Registration(&m_pagoda);
+	//renderer::RenderingSystem::Registration(&m_pagoda);
 
 	// InitializeGL();
 	InitializeGUI();

@@ -3,6 +3,7 @@
 #include <pagoda/math/vec_base.h>
 
 #include <pgeditor/renderer/collection.h>
+#include <pgeditor/renderer/renderer.h>
 
 #include <memory>
 
@@ -11,18 +12,26 @@ class Camera;
 }
 
 namespace pgeditor::renderer::metal {
-class MetalRenderer {
+class MetalRenderer : public Renderer {
 public:
   MetalRenderer(void *CAMetalLayerHandle);
-  ~MetalRenderer();
+  ~MetalRenderer() override;
 
-  void InitRenderer();
+  void InitRenderer() override;
 
-  void Draw(const Collection &c);
+  void StartFrame() override;
+  void EndFrame() override;
+  void StartRenderPass() override;
+  void EndRenderPass() override;
 
-  void SetCamera(pagoda::scene::Camera &cam);
+  void Draw(const Collection &c) override;
 
-  void SetDisplaySize(const pagoda::math::Vec2U &size);
+  void SetCamera(pagoda::scene::Camera &cam) override;
+
+  void SetDisplaySize(const pagoda::math::Vec2U &size) override;
+
+protected:
+  void updateRenderState(const RenderState::Diff_t& changedState) override;
 
 private:
   class Impl;

@@ -31,8 +31,8 @@ set(
   "graph/new_node_popup.h"
   "viewer/camera_controller.cpp"
   "viewer/camera_controller.h"
-  "viewer/viewer.cpp"
-  "viewer/viewer.h"
+  #"viewer/viewer.cpp"
+  #"viewer/viewer.h"
   "viewer/metal_viewer.mm"
   "viewer/metal_viewer.h"
 )

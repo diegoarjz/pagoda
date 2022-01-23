@@ -69,6 +69,9 @@ const RenderPipelineState &RenderPipelineStateManager::GetRenderPipelineState(
   pipelineDescriptor.fragmentFunction = fragmentFunction;
   pipelineDescriptor.colorAttachments[0].pixelFormat = m_pixelFormat;
 
+  // Set the depth state pixelFormat
+  pipelineDescriptor.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float;
+
   id<MTLRenderPipelineState> pipeline =
       [m_device newRenderPipelineStateWithDescriptor:pipelineDescriptor
                                                error:&error];

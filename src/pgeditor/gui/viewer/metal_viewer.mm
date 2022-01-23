@@ -9,11 +9,13 @@
 #include <pagoda/scene/transformation.h>
 
 #include <pgeditor/renderer/metal/metal_renderer.h>
+#include <pgeditor/renderer/render_pass.h>
 
 #include <pgeditor/renderer/buffer.h>
 #include <pgeditor/renderer/collection.h>
 #include <pgeditor/renderer/renderable.h>
 #include <pgeditor/renderer/vertex_attribute.h>
+#include <pgeditor/renderer/rendering_system.h>
 
 #include <QHBoxLayout>
 #include <QResizeEvent>
@@ -123,20 +125,27 @@ public:
 
       m_renderCollection.Add(renderable);
     }
+
+    m_renderPass = std::make_shared<renderer::RenderPass>(m_renderCollection);
   }
 
   ~MetalWindow() override {}
 
   void exposeEvent(QExposeEvent *e) override {
-    initMetal();
-    m_metalRenderer->SetCamera(m_camera);
-    m_metalRenderer->Draw(m_renderCollection);
     requestUpdate();
   }
 
   void updateEvent() {
+    initMetal();
+    const auto pixelRatio = QWindow::devicePixelRatio();
+    m_metalRenderer->SetDisplaySize({
+      static_cast<uint32_t>(size().width() * pixelRatio),
+      static_cast<uint32_t>(size().height() * pixelRatio)});
     m_metalRenderer->SetCamera(m_camera);
-    m_metalRenderer->Draw(m_renderCollection);
+
+    m_metalRenderer->StartFrame();
+    m_renderPass->Render(m_metalRenderer.get());
+    m_metalRenderer->EndFrame();
   }
 
   void resizeEvent(QResizeEvent *e) override {
@@ -154,8 +163,8 @@ public:
           {static_cast<uint32_t>(e->size().width() * pixelRatio),
            static_cast<uint32_t>(e->size().height() * pixelRatio)});
       m_metalRenderer->SetCamera(m_camera);
-      m_metalRenderer->Draw(m_renderCollection);
     }
+    requestUpdate();
   }
 
   bool event(QEvent *e) override {
@@ -197,21 +206,33 @@ public:
     updateEvent();
   }
 
+  void SetRenderingSystem(const RenderingSystemPtr& renderingSystem)
+  {
+    m_renderingSystem = renderingSystem;
+  }
+
 private:
   std::shared_ptr<renderer::metal::MetalRenderer> m_metalRenderer;
+  RenderingSystemPtr m_renderingSystem;
 
   renderer::Collection m_renderCollection;
+  std::shared_ptr<renderer::RenderPass> m_renderPass;
 };
 
 MetalViewer::MetalViewer(QWidget *parent) : QWidget(parent) {
   QHBoxLayout *hLayout = new QHBoxLayout();
   this->setLayout(hLayout);
 
-  auto window = new MetalWindow;
-  QWidget *widget = QWidget::createWindowContainer(window);
+  m_metalWindow = new MetalWindow;
+  QWidget *widget = QWidget::createWindowContainer(m_metalWindow);
   widget->setContentsMargins(0, 0, 0, 0);
   hLayout->addWidget(widget);
 }
 
 MetalViewer::~MetalViewer() {}
+
+void MetalViewer::SetRenderingSystem(const RenderingSystemPtr& renderingSystem)
+{
+  static_cast<MetalWindow*>(m_metalWindow)->SetRenderingSystem(renderingSystem);
+}
 } // namespace pgeditor::gui::viewer
