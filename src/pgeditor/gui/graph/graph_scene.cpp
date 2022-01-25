@@ -9,6 +9,7 @@
 #include "new_node_popup.h"
 #include "node_style.h"
 #include "operation_node.h"
+#include "pagoda/objects/interface_callback.h"
 
 #include <pagoda/graph/query/topology.h>
 #include <pagoda/graph/query/type.h>
@@ -116,34 +117,51 @@ void GraphScene::ConnectedNodes(GraphPort* from, GraphPort* to)
 	m_connectorsByNode[to->GetPortConnection()->GetNode()].insert(connector);
 }
 
+namespace {
+using namespace pagoda::objects;
+
+class Creator : public pagoda::objects::InterfaceCallback {
+public:
+  Creator(const std::shared_ptr<Graph>& graph, const std::string& nodeName)
+    : m_graph{graph}, m_nodeName{nodeName}
+  {}
+
+  void InputInterface(InterfacePtr& interface, const std::string& name, const std::string& label, Interface::Arity arity) override
+  {
+		const std::string inName = m_graph->CreateNode<InputInterfaceNode>(m_nodeName + "_" + name);
+		auto inNode = std::dynamic_pointer_cast<InputInterfaceNode>(m_graph->GetNode(inName));
+		inNode->SetInterfaceName(name);
+		m_graph->CreateEdge(inName, m_nodeName);
+  }
+
+  void OutputInterface(InterfacePtr& interface, const std::string& name, const std::string& label, Interface::Arity arity) override
+  {
+		const std::string outName = m_graph->CreateNode<OutputInterfaceNode>(m_nodeName + "_" + name);
+		auto outNode = std::dynamic_pointer_cast<OutputInterfaceNode>(m_graph->GetNode(outName));
+		outNode->SetInterfaceName(name);
+		m_graph->CreateEdge(m_nodeName, outName);
+  }
+
+  private:
+  const std::shared_ptr<Graph>& m_graph;
+  const std::string& m_nodeName;
+};
+}
+
 GraphNode* GraphScene::createOperation(const QString& opName)
 {
 	auto operation = m_pagoda->GetOperationFactory()->Create(opName.toStdString());
 	if (operation == nullptr) {
-		// TODO: throw error
+    LOG_ERROR("No operation named '" << opName.toStdString() << "' found.");
+    return nullptr;
 	}
 
 	auto nodeName = m_graph->CreateNode<pagoda::graph::OperationNode>(opName.toStdString());
 	auto node = m_graph->GetNode(nodeName);
 	std::dynamic_pointer_cast<pagoda::graph::OperationNode>(node)->SetOperation(operation);
 
-  assert(false); // Need to reimplement the stuff below
-
-  /*
-	operation->ForEachInputInterface([this, &nodeName](const std::string& i) {
-		auto inName = m_graph->CreateNode<InputInterfaceNode>(nodeName + "_" + i);
-		auto inNode = std::dynamic_pointer_cast<InputInterfaceNode>(m_graph->GetNode(inName));
-		inNode->SetInterfaceName(i);
-		m_graph->CreateEdge(inName, nodeName);
-	});
-
-	operation->ForEachOutputInterface([this, &nodeName](const std::string& i) {
-		auto outName = m_graph->CreateNode<OutputInterfaceNode>(nodeName + "_" + i);
-		auto outNode = std::dynamic_pointer_cast<OutputInterfaceNode>(m_graph->GetNode(outName));
-		outNode->SetInterfaceName(i);
-		m_graph->CreateEdge(nodeName, outName);
-	});
-  */
+  Creator creator{m_graph, nodeName};
+  operation->Interfaces(&creator);
 
 	OperationNode* guiNode = new OperationNode(m_graph, node);
 	guiNode->InitializeGUI();
