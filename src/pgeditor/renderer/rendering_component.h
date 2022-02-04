@@ -2,29 +2,27 @@
 
 #include <pagoda/objects/procedural_component.h>
 
-namespace pgeditor::renderer
-{
-namespace gl
-{
-using MeshPtr = std::shared_ptr<class Mesh>;
-}
+namespace pgeditor::renderer {
+
+using RenderablePtr = std::shared_ptr<class Renderable>;
 
 /**
  * A RenderingComponent for ProceduralObject.
  */
-class RenderingComponent : public pagoda::objects::ProceduralComponent
-{
-	public:
-	static std::string GetComponentSystemName();
+class RenderingComponent : public pagoda::objects::ProceduralComponent {
+public:
+  static std::string GetComponentSystemName();
 
-	std::string GetType() const override { return GetComponentSystemName(); }
+  std::string GetType() const override { return GetComponentSystemName(); }
 
-	~RenderingComponent() override {}
+  ~RenderingComponent() override {}
 
-	void SetMesh(pgeditor::renderer::gl::MeshPtr mesh);
-	const pgeditor::renderer::gl::MeshPtr& GetMesh() const;
+  void SetRenderable(const RenderablePtr& renderable);
+  const RenderablePtr& GetRenderable() const;
 
-	private:
-	pgeditor::renderer::gl::MeshPtr m_mesh;
+private:
+  RenderablePtr m_renderable;
 };
-}  // namespace pgeditor::renderer
+
+using RenderingComponentPtr = std::shared_ptr<RenderingComponent>;
+} // namespace pgeditor::renderer

@@ -143,9 +143,8 @@ public:
       static_cast<uint32_t>(size().height() * pixelRatio)});
     m_metalRenderer->SetCamera(m_camera);
 
-    m_metalRenderer->StartFrame();
-    m_renderPass->Render(m_metalRenderer.get());
-    m_metalRenderer->EndFrame();
+    m_renderingSystem->SetRenderer(m_metalRenderer);
+    m_renderingSystem->Render();
   }
 
   void resizeEvent(QResizeEvent *e) override {
@@ -209,6 +208,7 @@ public:
   void SetRenderingSystem(const RenderingSystemPtr& renderingSystem)
   {
     m_renderingSystem = renderingSystem;
+    m_renderingSystem->SetRenderer(m_metalRenderer);
   }
 
 private:

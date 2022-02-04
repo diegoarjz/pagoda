@@ -1,7 +1,12 @@
 #include "renderable.h"
 
+#include <boost/qvm/mat_operations.hpp>
+
 namespace pgeditor::renderer {
-Renderable::Renderable() : m_primitiveType{PrimitiveType::Triangle} {}
+Renderable::Renderable() : m_primitiveType{PrimitiveType::Triangle}
+{
+  m_modelMatrix = boost::qvm::identity_mat<float, 4>();
+}
 
 Buffer *Renderable::GetBuffer(const std::string &name) {
   auto iter = m_buffers.find(name);

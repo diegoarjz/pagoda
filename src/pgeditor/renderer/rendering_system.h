@@ -1,9 +1,7 @@
 #pragma once
 
 #include "rendering_component.h"
-
-#include "gl/grid_render_task.h"
-#include "gl/render_pass.h"
+#include "renderer.h"
 
 #include <pagoda/objects/procedural_component_system.h>
 
@@ -32,6 +30,8 @@ class RenderingSystem : public pagoda::objects::ProceduralComponentSystem<Render
 	RenderingSystem();
 	~RenderingSystem() override {}
 
+  void SetRenderer(const std::shared_ptr<Renderer>& renderer);
+
 	void Render();
 	pagoda::scene::CameraPtr& GetCamera();
 
@@ -39,10 +39,9 @@ class RenderingSystem : public pagoda::objects::ProceduralComponentSystem<Render
 	void DoClone(std::shared_ptr<Component_t> from, std::shared_ptr<Component_t> to) override;
 
 	private:
-	std::shared_ptr<gl::GridRenderTask> m_gridTask;
-	std::shared_ptr<gl::RenderPass> m_renderPass;
 	pagoda::scene::CameraPtr m_camera;
 
+  std::shared_ptr<Renderer> m_renderer;
 	std::unordered_set<RenderingComponentPtr> m_lastRendered;
 };
 }  // namespace pgeditor::renderer

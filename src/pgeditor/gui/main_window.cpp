@@ -28,7 +28,7 @@ MainWindow::MainWindow()
 	using namespace pagoda::graph::io;
 
 	// Register the rendering system with pagoda
-	//renderer::RenderingSystem::Registration(&m_pagoda);
+	renderer::RenderingSystem::Registration(&m_pagoda);
 
 	// InitializeGL();
 	InitializeGUI();
@@ -86,6 +86,8 @@ void MainWindow::InitializeGUI()
 	*/
 
 	m_metalViewer = new MetalViewer(this);
+  m_metalViewer->SetRenderingSystem(
+	  m_pagoda.GetProceduralObjectSystem()->GetComponentSystem<renderer::RenderingSystem>());
 	setCentralWidget(m_metalViewer);
 }
 
