@@ -31,6 +31,7 @@ ConvertGeometry(std::shared_ptr<Geometry> pagodaGeom) {
 
   std::vector<Vec4F> points;
   std::vector<Vec4F> colors;
+  std::vector<uint32_t> indices;
 
   for (auto fIter = pagodaGeom->FacesBegin(); fIter != pagodaGeom->FacesEnd();
        ++fIter) {
@@ -42,14 +43,13 @@ ConvertGeometry(std::shared_ptr<Geometry> pagodaGeom) {
 
       points.push_back(Vec4F{X(pos), Y(pos), Z(pos), 1.0f});
       colors.push_back(Vec4F{X(normal), Y(normal), Z(normal), 1.0f});
-
-      std::cout << "Pos: " << points.back() << std::endl;
-      std::cout << "Col: " << colors.back() << std::endl;
+      indices.push_back(indices.size());
     }
   }
 
   renderable->GetBuffer("position")->SetData(points);
   renderable->GetBuffer("color")->SetData(colors);
+  renderable->GetIndexBuffer()->SetData(indices);
 
   return renderable;
 }

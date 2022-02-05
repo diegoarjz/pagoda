@@ -6,11 +6,12 @@
 #include "shader_gen.h"
 
 #include <pgeditor/renderer/interleaved_buffer.h>
-#include <pgeditor/renderer/material_network.h>
-#include <pgeditor/renderer/material_node.h>
 #include <pgeditor/renderer/renderable.h>
 #include <pgeditor/renderer/uniform_buffer.h>
 #include <pgeditor/renderer/vertex_attribute.h>
+
+#include <pagoda/material/material_network.h>
+#include <pagoda/material/material_node.h>
 
 #include <pagoda/math/matrix_base.h>
 #include <pagoda/scene/camera.h>

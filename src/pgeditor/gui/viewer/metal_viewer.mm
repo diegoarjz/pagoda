@@ -27,8 +27,10 @@
 #include <iostream>
 #include <vector>
 
+using namespace pagoda::common;
 using namespace pagoda::math;
 using namespace pagoda::scene;
+using namespace pagoda::material;
 using namespace pgeditor::renderer;
 
 namespace pgeditor::gui::viewer {

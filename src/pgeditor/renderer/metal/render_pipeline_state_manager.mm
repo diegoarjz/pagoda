@@ -2,11 +2,15 @@
 
 #include "shader_gen.h"
 
-#include <pgeditor/renderer/material_network.h>
+#include <pagoda/material/material_network.h>
+#include <pagoda/material/material_node.h>
 
 #include <pagoda/common/debug/logger.h>
 
 #include <ios>
+
+using namespace pagoda::common;
+using namespace pagoda::material;
 
 namespace pgeditor::renderer::metal {
 RenderPipelineStateManager::RenderPipelineStateManager(

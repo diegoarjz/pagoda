@@ -8,6 +8,7 @@
 
 using namespace pgeditor::renderer;
 using namespace pagoda::math;
+using namespace pagoda::common;
 
 TEST(Buffer, test_default_creation)
 {

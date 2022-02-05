@@ -15,6 +15,8 @@ set(COMMON_SRCS
     "fs/file_util.cpp"
     "fs/file_util.h"
     "range.h"
+    "types.cpp"
+    "types.h"
     "utils.cpp"
     "utils.h"
     "version.cpp"

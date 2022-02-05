@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include <pagoda/common/types.h>
 
 namespace pgeditor::renderer {
 enum class VertexAttributeSemantics {
@@ -15,7 +15,7 @@ enum class VertexAttributeSemantics {
 struct VertexAttributeDescription {
   std::string name;
   VertexAttributeSemantics m_semantics;
-  Type m_type;
+  pagoda::common::Type m_type;
   std::size_t m_componentsPerElement;
   std::size_t m_bytesPerComponent;
 };

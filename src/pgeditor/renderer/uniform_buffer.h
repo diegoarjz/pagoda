@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include <pagoda/common/types.h>
 
 #include <cstddef>
 #include <vector>
@@ -27,7 +27,7 @@ class UniformBuffer
   template<typename T>
   void Add(const T& value)
   {
-    const TypeDescription desc = TypeTraits<T>::Description();
+    const pagoda::common::TypeDescription desc = pagoda::common::TypeTraits<T>::Description();
     const std::size_t valueSize = desc.componentsPerElement * desc.bytesPerComponent;
 
     if (m_data == nullptr) {
@@ -51,6 +51,6 @@ class UniformBuffer
   std::byte* m_data{nullptr};
   std::size_t m_reservedSize{0};
   std::size_t m_bufferSize{0};
-  std::vector<TypeDescription> m_storedTypes;
+  std::vector<pagoda::common::TypeDescription> m_storedTypes;
 };
 }

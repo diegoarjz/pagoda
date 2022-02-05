@@ -1,7 +1,8 @@
 #pragma once
 
+#include <pagoda/material/material_network.h>
+
 #include "buffer.h"
-#include "material_network.h"
 
 #include <pagoda/math/vec_base.h>
 
@@ -20,21 +21,19 @@ public:
   std::size_t GetVertexCount();
 
   Buffer *GetBuffer(const std::string &name);
-  const std::shared_ptr<MaterialNetwork> &GetMaterial() const {
-    return m_material;
-  }
-  void SetMaterial(const std::shared_ptr<MaterialNetwork> &material) {
-    m_material = material;
-  }
+  Buffer *GetIndexBuffer();
 
-  void SetModelMatrix(const pagoda::math::Mat4x4F &m) { m_modelMatrix = m; }
-  const pagoda::math::Mat4x4F GetModelMatrix() const { return m_modelMatrix; }
+  const std::shared_ptr<pagoda::material::MaterialNetwork> &GetMaterial() const;
+  void SetMaterial(const std::shared_ptr<pagoda::material::MaterialNetwork> &material);
+  void SetModelMatrix(const pagoda::math::Mat4x4F &m);
+  const pagoda::math::Mat4x4F GetModelMatrix() const;
 
 private:
   PrimitiveType m_primitiveType;
 
   std::unordered_map<std::string, Buffer> m_buffers;
-  std::shared_ptr<MaterialNetwork> m_material;
+  Buffer m_indexBuffer;
+  std::shared_ptr<pagoda::material::MaterialNetwork> m_material;
   pagoda::math::Mat4x4F m_modelMatrix;
 };
 

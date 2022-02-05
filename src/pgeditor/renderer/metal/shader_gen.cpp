@@ -2,17 +2,18 @@
 
 #include <pagoda/common/debug/logger.h>
 
-#include <pgeditor/renderer/material_network.h>
-#include <pgeditor/renderer/material_node.h>
+#include <pagoda/material/material_network.h>
+#include <pagoda/material/material_node.h>
 
 #include <iostream>
 #include <stack>
 
 using namespace pagoda::math;
+using namespace pagoda::material;
 
 namespace pgeditor::renderer::metal {
 namespace {
-inline const std::string &typeName(Type t) {
+inline const std::string &typeName(pagoda::common::Type t) {
   static const std::string sTypenames[] = {
       "int",    "int2",   "uint",   "uint2",    "float",    "double",
       "float2", "float3", "float4", "float2x2", "float3x3", "float4x4",
@@ -25,7 +26,7 @@ inline const std::string &shaderTypeName(MaterialNetwork::ShaderStage stage) {
   return sNames[static_cast<int>(stage)];
 }
 
-void writeStructMember(std::stringstream &ss, Type type,
+void writeStructMember(std::stringstream &ss, pagoda::common::Type type,
                        const std::string &name,
                        VertexAttributeSemantics semantics,
                        bool withAttributes) {
@@ -140,7 +141,7 @@ void bufferView(MaterialNetworkVisitor *vis, const std::string &outputName,
   }
   genCtx.bufferInputs.emplace_back(
       *bufferName, static_cast<VertexAttributeSemantics>(*semantics),
-      static_cast<Type>(*type));
+      static_cast<pagoda::common::Type>(*type));
   genCtx.bufferInputsPerStage[genCtx.shaderStage].emplace_back(
       genCtx.bufferInputs.size() - 1);
 
@@ -164,7 +165,7 @@ void uniformView(MaterialNetworkVisitor *vis, const std::string &outputName,
     return;
   }
 
-  genCtx.uniformRequests.emplace_back(*uniformName, static_cast<Type>(*type));
+  genCtx.uniformRequests.emplace_back(*uniformName, static_cast<pagoda::common::Type>(*type));
   genCtx.uniformRequestsPerStage[genCtx.shaderStage].emplace_back(
       genCtx.uniformRequests.size() - 1);
 

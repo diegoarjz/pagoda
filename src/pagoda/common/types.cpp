@@ -8,7 +8,7 @@
 
 using namespace pagoda::math;
 
-namespace pgeditor::renderer {
+namespace pagoda::common {
 
 static const std::unordered_map<std::size_t, Type> sTypeInfoToTypeTable = {
     {typeid(int32_t).hash_code(), Type::Int},
@@ -47,6 +47,26 @@ TypeDescription TypeDescription::Description(Type type) {
                  "Description not found for type");
   return iter->second;
 }
+
+////////////////////////////////////////
+// Int32
+////////////////////////////////////////
+template <> const std::size_t TypeTraits<int32_t>::componentsPerElement = 1;
+
+template <>
+const std::size_t TypeTraits<int32_t>::bytesPerComponent = sizeof(int32_t);
+
+template <> const Format TypeTraits<int32_t>::format = Format::I32;
+
+////////////////////////////////////////
+// UInt32
+////////////////////////////////////////
+template <> const std::size_t TypeTraits<uint32_t>::componentsPerElement = 1;
+
+template <>
+const std::size_t TypeTraits<uint32_t>::bytesPerComponent = sizeof(uint32_t);
+
+template <> const Format TypeTraits<uint32_t>::format = Format::U32;
 
 ////////////////////////////////////////
 // Float

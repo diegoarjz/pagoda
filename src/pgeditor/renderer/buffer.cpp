@@ -31,14 +31,14 @@ void Buffer::Free()
 	}
 	m_data = nullptr;
 
-	m_format = Format::Invalid;
+	m_format = pagoda::common::Format::Invalid;
 	m_componentsPerElement = 0;
 	m_bytesPerComponent = 0;
 	m_bufferSize = 0;
 	m_typeHash = 0;
 }
 
-Format Buffer::GetFormat() const { return m_format; }
+pagoda::common::Format Buffer::GetFormat() const { return m_format; }
 std::size_t Buffer::GetComponentsPerElement() const { return m_componentsPerElement; }
 std::size_t Buffer::GetBytesPerComponent() const { return m_bytesPerComponent; }
 std::size_t Buffer::GetBufferSize() const { return m_bufferSize; }

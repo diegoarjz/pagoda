@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include <pagoda/common/types.h>
 
 #include <typeinfo>
 #include <vector>
@@ -27,7 +27,7 @@ class Buffer
 	~Buffer();
 
 	/// Returns the storage format
-	Format GetFormat() const;
+  pagoda::common::Format GetFormat() const;
 
 	/// How many components has each separate element.
 	/// E.g. Vec3F has 3
@@ -65,8 +65,8 @@ class Buffer
 	template<class T>
 	void SetData(const std::vector<T>& data)
 	{
-		const std::size_t newComponentsPerElement = TypeTraits<T>::componentsPerElement;
-		const std::size_t newBytesPerComponent = TypeTraits<T>::bytesPerComponent;
+		const std::size_t newComponentsPerElement = pagoda::common::TypeTraits<T>::componentsPerElement;
+		const std::size_t newBytesPerComponent = pagoda::common::TypeTraits<T>::bytesPerComponent;
 
 		if (m_data != nullptr) {
 			delete[] reinterpret_cast<std::byte*>(m_data);
@@ -76,7 +76,7 @@ class Buffer
 		m_componentsPerElement = newComponentsPerElement;
 		m_bytesPerComponent = newBytesPerComponent;
 		m_bufferSize = newBufferSize;
-		m_format = TypeTraits<T>::format;
+		m_format = pagoda::common::TypeTraits<T>::format;
 		m_numElements = data.size();
 
 		m_data = new std::byte[newBufferSize];
@@ -97,8 +97,8 @@ class Buffer
 			return nullptr;
 		}
 
-		const std::size_t componentsPerElement = TypeTraits<T>::componentsPerElement;
-		const std::size_t bytesPerComponent = TypeTraits<T>::bytesPerComponent;
+		const std::size_t componentsPerElement = pagoda::common::TypeTraits<T>::componentsPerElement;
+		const std::size_t bytesPerComponent = pagoda::common::TypeTraits<T>::bytesPerComponent;
 		const std::size_t offset = i * componentsPerElement * bytesPerComponent;
 
 		if (offset > m_bufferSize) {
@@ -129,7 +129,7 @@ class Buffer
 	Buffer(const Buffer&) = delete;
 	Buffer& operator=(const Buffer&) = delete;
 
-	Format m_format{Format::Invalid};
+  pagoda::common::Format m_format{pagoda::common::Format::Invalid};
 
 	std::size_t m_componentsPerElement{0};
 	std::size_t m_bytesPerComponent{0};

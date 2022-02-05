@@ -1,7 +1,7 @@
 #include "shader_gen.h"
 
-#include <pgeditor/renderer/material_network.h>
-#include <pgeditor/renderer/material_node.h>
+#include <pagoda/material/material_network.h>
+#include <pagoda/material/material_node.h>
 
 #include <pagoda/math/vec_base.h>
 
@@ -11,6 +11,8 @@
 
 using namespace pgeditor::renderer;
 using namespace pagoda::math;
+using namespace pagoda::common;
+using namespace pagoda::material;
 
 TEST(ShaderGen, test_simple_node)
 {

@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <variant>
 
-namespace pgeditor::renderer {
+namespace pagoda::common {
 // clang-format off
 using Value = std::variant<int,
                           float,
