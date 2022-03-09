@@ -57,11 +57,10 @@ add_pagoda_module(
 set(
   RENDERER_UNIT_TESTS
   "buffer.test.cpp"
-  "metal/shader_gen.test.cpp"
+  #"metal/shader_gen.test.cpp"
 )
 
 foreach(unit_test_src ${RENDERER_UNIT_TESTS})
   add_unit_test(${unit_test_src})
 endforeach()
 target_link_libraries("buffer_test" PRIVATE libpgeditor)
-target_link_libraries("shader_gen_test" PRIVATE libpgeditor)

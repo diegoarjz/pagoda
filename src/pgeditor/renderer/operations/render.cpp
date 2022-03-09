@@ -9,11 +9,13 @@
 
 #include <pagoda/objects/procedural_object_system.h>
 
+#include <pagoda/geometry/algorithms/ear_clipping.h>
+#include <pagoda/geometry/core/geometry.h>
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
 
-#include <pagoda/geometry/algorithms/ear_clipping.h>
-#include <pagoda/geometry/core/geometry.h>
+#include <pagoda/material/material_component.h>
+#include <pagoda/material/material_system.h>
 
 #include <pagoda/math/vec_base.h>
 
@@ -22,6 +24,7 @@ using namespace pagoda::objects;
 using namespace pagoda::geometry;
 using namespace pagoda::geometry::core;
 using namespace pagoda::geometry::algorithms;
+using namespace pagoda::material;
 
 namespace pgeditor::renderer::operations {
 namespace {
@@ -30,7 +33,7 @@ ConvertGeometry(std::shared_ptr<Geometry> pagodaGeom) {
   RenderablePtr renderable = std::make_shared<Renderable>();
 
   std::vector<Vec4F> points;
-  std::vector<Vec4F> colors;
+  std::vector<Vec3F> normals;
   std::vector<uint32_t> indices;
 
   for (auto fIter = pagodaGeom->FacesBegin(); fIter != pagodaGeom->FacesEnd();
@@ -42,13 +45,13 @@ ConvertGeometry(std::shared_ptr<Geometry> pagodaGeom) {
       Geometry::PositionType pos = pagodaGeom->GetPosition(*pCirc);
 
       points.push_back(Vec4F{X(pos), Y(pos), Z(pos), 1.0f});
-      colors.push_back(Vec4F{X(normal), Y(normal), Z(normal), 1.0f});
+      normals.push_back(Vec3F{X(normal), Y(normal), Z(normal)});
       indices.push_back(indices.size());
     }
   }
 
   renderable->GetBuffer("position")->SetData(points);
-  renderable->GetBuffer("color")->SetData(colors);
+  renderable->GetBuffer("color")->SetData(normals);
   renderable->GetIndexBuffer()->SetData(indices);
 
   return renderable;
@@ -80,6 +83,8 @@ void Render::DoWork() {
       m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
   auto renderingSystem =
       m_proceduralObjectSystem->GetComponentSystem<RenderingSystem>();
+  auto materialSystem =
+      m_proceduralObjectSystem->GetComponentSystem<MaterialSystem>();
   EarClipping<Geometry> earClipping;
 
   LOG_INFO("Render::DoWork processing input");
@@ -90,11 +95,15 @@ void Render::DoWork() {
   auto geometry = geometryComponent->GetGeometry();
   auto triagulatedGeometry = std::make_shared<Geometry>();
 
+  auto materialComponent = materialSystem->GetComponentAs<MaterialComponent>(inObject);
+
   earClipping.Execute(geometry, triagulatedGeometry);
 
   auto renderingComponent =
       renderingSystem->CreateComponentAs<RenderingComponent>(inObject);
 
-  renderingComponent->SetRenderable(ConvertGeometry(triagulatedGeometry));
+  RenderablePtr renderable = ConvertGeometry(triagulatedGeometry);
+  renderable->SetMaterial(materialComponent->GetMaterial());
+  renderingComponent->SetRenderable(renderable);
 }
 } // namespace pgeditor::renderer::operations

@@ -35,7 +35,8 @@ enum class Type {
   Mat2,
   Mat3,
   Mat4,
-  String
+  String,
+  Invalid
 };
 
 struct TypeDescription {

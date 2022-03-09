@@ -74,25 +74,44 @@ void MetalRenderer::Draw(const Collection &collection) {
 
   for (const auto &r : collection) {
     auto materialNetwork = r->GetMaterial();
+    if (materialNetwork == nullptr) {
+      continue;
+    }
     auto pipelineState =
         m_impl->m_pipelineManager->GetRenderPipelineState(materialNetwork);
     id<MTLRenderPipelineState> pipeline = pipelineState.pipelineState;
     [m_impl->m_renderEncoder setRenderPipelineState:pipeline];
 
     ////////////////////////////////////////
-    // Prepare the uniform buffer
+    // Prepare the uniform buffers
     ////////////////////////////////////////
-    UniformBuffer uniforms;
-    for (const auto &uniform : pipelineState.uniforms) {
+    UniformBuffer vertexUniforms;
+    for (const auto &uniform : pipelineState.vertexUniforms) {
       const auto &uniformName = std::get<0>(uniform);
       if (uniformName == "modelMatrix") {
-        uniforms.Add<Mat4x4F>(boost::qvm::transposed(r->GetModelMatrix()));
+        vertexUniforms.Add<Mat4x4F>(boost::qvm::transposed(r->GetModelMatrix()));
       } else if (uniformName == "viewMatrix") {
-        uniforms.Add<Mat4x4F>(
+        vertexUniforms.Add<Mat4x4F>(
             boost::qvm::transposed(m_impl->m_camera.GetViewMatrix()));
       } else if (uniformName == "projectionMatrix") {
-        uniforms.Add<Mat4x4F>(
+        vertexUniforms.Add<Mat4x4F>(
             boost::qvm::transposed(m_impl->m_camera.GetProjectionMatrix()));
+      }
+    }
+
+    UniformBuffer fragmentUniforms;
+    for (const auto &uniform : pipelineState.fragmentUniforms) {
+      const auto &uniformName = std::get<0>(uniform);
+      if (uniformName == "modelMatrix") {
+        fragmentUniforms.Add<Mat4x4F>(boost::qvm::transposed(r->GetModelMatrix()));
+      } else if (uniformName == "viewMatrix") {
+        fragmentUniforms.Add<Mat4x4F>(
+            boost::qvm::transposed(m_impl->m_camera.GetViewMatrix()));
+      } else if (uniformName == "projectionMatrix") {
+        fragmentUniforms.Add<Mat4x4F>(
+            boost::qvm::transposed(m_impl->m_camera.GetProjectionMatrix()));
+      } else if (uniformName == "color") {
+        fragmentUniforms.Add<Vec4F>({1,0,0,1});
       }
     }
 
@@ -110,12 +129,12 @@ void MetalRenderer::Draw(const Collection &collection) {
                            length:buffer.GetSize()
                           atIndex:0];
 
-    [m_impl->m_renderEncoder setVertexBytes:uniforms.GetData()
-                           length:uniforms.GetSize()
+    [m_impl->m_renderEncoder setVertexBytes:vertexUniforms.GetData()
+                           length:vertexUniforms.GetSize()
                           atIndex:1];
 
-    [m_impl->m_renderEncoder setFragmentBytes:uniforms.GetData()
-                             length:uniforms.GetSize()
+    [m_impl->m_renderEncoder setFragmentBytes:fragmentUniforms.GetData()
+                             length:fragmentUniforms.GetSize()
                             atIndex:0];
 
     [m_impl->m_renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle
@@ -159,7 +178,7 @@ void MetalRenderer::updateRenderState(const RenderState::Diff_t& changedState)
   m_impl->m_renderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
   m_impl->m_renderPassDescriptor.colorAttachments[0].texture = m_impl->m_drawable.texture;
   m_impl->m_renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-  m_impl->m_renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
+  m_impl->m_renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.1, 0.1, 0.1, 1.0);
   m_impl->m_renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
 
   ////////////////////////////////////////

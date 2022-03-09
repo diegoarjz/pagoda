@@ -1,9 +1,8 @@
 #include "render_pipeline_state_manager.h"
 
-#include "shader_gen.h"
-
 #include <pagoda/material/material_network.h>
 #include <pagoda/material/material_node.h>
+#include <pagoda/material/shader_gen.h>
 
 #include <pagoda/common/debug/logger.h>
 
@@ -19,81 +18,8 @@ RenderPipelineStateManager::RenderPipelineStateManager(
 
 const RenderPipelineState &RenderPipelineStateManager::GetRenderPipelineState(
     const std::shared_ptr<MaterialNetwork> &materialNetwork) {
-  auto material = materialNetwork;
-  if (material == nullptr) {
-    static std::shared_ptr<MaterialNetwork> defaultMaterialNetwork;
-
-    if (defaultMaterialNetwork == nullptr) {
-      // Create a material network
-      defaultMaterialNetwork = std::make_shared<MaterialNetwork>("default");
-      // The Vert shader network
-      auto defaultVert = defaultMaterialNetwork->CreateMaterialNode(
-          "defaultVert", "defaultVert");
-      defaultVert->SetInput("position", {"position", Type::Vec4});
-      defaultVert->SetInput("projectionMatrix", {"position", Type::Mat4});
-      defaultVert->SetInput("viewMatrix", {"position", Type::Mat4});
-      defaultVert->SetInput("modelMatrix", {"position", Type::Mat4});
-      defaultVert->SetOutput("position", {"position", Type::Vec4});
-      defaultMaterialNetwork->SetStageTerminalNode(
-          MaterialNetwork::ShaderStage::Vertex, "defaultVert");
-
-      auto positionNode =
-          defaultMaterialNetwork->CreateMaterialNode("bufferView", "position");
-      positionNode->SetOutput("position", {"position", Type::Vec4});
-      positionNode->SetParameter("bufferName", "position");
-      positionNode->SetParameter(
-          "semantics", static_cast<int>(VertexAttributeSemantics::Position));
-      positionNode->SetParameter("type", static_cast<int>(Type::Vec4));
-
-      auto projMatrix = defaultMaterialNetwork->CreateMaterialNode(
-          "uniformView", "projectionMatrix");
-      projMatrix->SetOutput("projectionMatrix",
-                            {"projectionMatrix", Type::Mat4});
-      projMatrix->SetParameter("uniformName", "projectionMatrix");
-      projMatrix->SetParameter("type", static_cast<int>(Type::Mat4));
-
-      auto viewMatrix = defaultMaterialNetwork->CreateMaterialNode(
-          "uniformView", "viewMatrix");
-      viewMatrix->SetOutput("viewMatrix", {"viewMatrix", Type::Mat4});
-      viewMatrix->SetParameter("uniformName", "viewMatrix");
-      viewMatrix->SetParameter("type", static_cast<int>(Type::Mat4));
-
-      auto modelMatrix = defaultMaterialNetwork->CreateMaterialNode(
-          "uniformView", "modelMatrix");
-      modelMatrix->SetOutput("modelMatrix", {"modelMatrix", Type::Mat4});
-      modelMatrix->SetParameter("uniformName", "modelMatrix");
-      modelMatrix->SetParameter("type", static_cast<int>(Type::Mat4));
-
-      defaultVert->ConnectInput("position", positionNode, "position");
-      defaultVert->ConnectInput("projectionMatrix", projMatrix,
-                                "projectionMatrix");
-      defaultVert->ConnectInput("viewMatrix", viewMatrix, "viewMatrix");
-      defaultVert->ConnectInput("modelMatrix", modelMatrix, "modelMatrix");
-
-      // The frag shader network
-      auto defaultFrag = defaultMaterialNetwork->CreateMaterialNode(
-          "defaultFrag", "defaultFrag");
-      defaultFrag->SetInput("color", {"color", Type::Vec4});
-      defaultFrag->SetOutput("color", {"color", Type::Vec4});
-
-      auto colorNode =
-          defaultMaterialNetwork->CreateMaterialNode("bufferView", "color");
-      colorNode->SetOutput("color", {"color", Type::Vec4});
-      colorNode->SetParameter("bufferName", "color");
-      colorNode->SetParameter(
-          "semantics", static_cast<int>(VertexAttributeSemantics::Color));
-      colorNode->SetParameter("type", static_cast<int>(Type::Vec4));
-
-      defaultFrag->ConnectInput("color", colorNode, "color");
-
-      defaultMaterialNetwork->SetStageTerminalNode(
-          MaterialNetwork::ShaderStage::Fragment, "defaultFrag");
-    }
-
-    material = defaultMaterialNetwork;
-  }
   std::size_t materialHash = 0;
-  material->AppendHash(materialHash);
+  materialNetwork->AppendHash(materialHash);
 
   auto iter = m_renderPipelineStates.find(materialHash);
   if (iter != m_renderPipelineStates.end()) {
@@ -101,7 +27,7 @@ const RenderPipelineState &RenderPipelineStateManager::GetRenderPipelineState(
   }
 
   LOG_DEBUG("Creating a RenderPipelineState.");
-  LOG_DEBUG("  Material: " << material->GetName() << " (0x" << std::hex
+  LOG_DEBUG("  Material: " << materialNetwork->GetName() << " (0x" << std::hex
                            << materialHash << ")");
 
   // We didn't find a render pipeline state for the hash, so we need to create
@@ -109,8 +35,24 @@ const RenderPipelineState &RenderPipelineStateManager::GetRenderPipelineState(
   NSError *error = nil;
 
   // Start by generating the shader code
-  ShaderGen shaderGen{*material};
-  const std::string shaderSource = shaderGen.Generate();
+  ShaderGen shaderGen{*materialNetwork};
+  std::string shaderSource = R"(#include <metal_stdlib>
+#include <simd/simd.h>
+using namespace metal;
+)";
+  for (const auto &stage : {MaterialNetwork::ShaderStage::Vertex,
+                            MaterialNetwork::ShaderStage::Fragment}) {
+    std::stringstream stageSource;
+    auto source =
+        ShaderSource::Create(ShaderSource::ShadingLanguage::MSL, stageSource);
+    auto shaderStage = shaderGen.GetStage(stage);
+    shaderStage->GetSource(*source);
+
+    shaderSource += stageSource.str() + "\n\n";
+  }
+
+  std::cout << "----------------------------------------" << std::endl;
+  std::cout << shaderSource << "\n\n" << std::endl;
 
   ////////////////////////////////////////
   // Create the library
@@ -124,15 +66,15 @@ const RenderPipelineState &RenderPipelineStateManager::GetRenderPipelineState(
 
   if (error != nil) {
     LOG_FATAL("Failed to compile MTLLibrary for MaterialNetwork: "
-              << material->GetName() << ".");
+              << materialNetwork->GetName() << ".");
     LOG_FATAL([error.description UTF8String]);
     // return nil;
   }
 
   id<MTLFunction> vertexFunction =
-      [library newFunctionWithName:@"vertexShader"];
+      [library newFunctionWithName:@"main_vertex"];
   id<MTLFunction> fragmentFunction =
-      [library newFunctionWithName:@"fragmentShader"];
+      [library newFunctionWithName:@"main_fragment"];
 
   ////////////////////////////////////////
   // Now create the RenderPipeline
@@ -140,7 +82,7 @@ const RenderPipelineState &RenderPipelineStateManager::GetRenderPipelineState(
   MTLRenderPipelineDescriptor *pipelineDescriptor =
       [[MTLRenderPipelineDescriptor alloc] init];
   pipelineDescriptor.label =
-      [NSString stringWithCString:material->GetName().c_str()
+      [NSString stringWithCString:materialNetwork->GetName().c_str()
                          encoding:[NSString defaultCStringEncoding]];
   pipelineDescriptor.vertexFunction = vertexFunction;
   pipelineDescriptor.fragmentFunction = fragmentFunction;
@@ -165,23 +107,30 @@ const RenderPipelineState &RenderPipelineStateManager::GetRenderPipelineState(
   ////////////////////////////////////////
   // Create the vertex attribute description
   ////////////////////////////////////////
-  const auto &bufferRequests = shaderGen.GetBufferRequests();
+  auto vertStage = shaderGen.GetStage(MaterialNetwork::ShaderStage::Vertex);
+  const auto &bufferRequests = vertStage->GetStageInputRequests();
   std::vector<VertexAttributeDescription> vertexAttributeDescription;
   for (const auto &b : bufferRequests) {
     const auto desc = TypeDescription::Description(b.type);
     vertexAttributeDescription.push_back(VertexAttributeDescription{
-        b.name, b.semantics, b.type, desc.componentsPerElement,
-        desc.bytesPerComponent});
+        b.name, b.type, desc.componentsPerElement, desc.bytesPerComponent});
   }
   pipelineState.vertexAttributes = vertexAttributeDescription;
 
   ////////////////////////////////////////
   // Create the buffer requests
   ////////////////////////////////////////
-  const auto &uniformRequests = shaderGen.GetUniformRequests();
-  for (const auto &r : uniformRequests) {
-    pipelineState.uniforms.emplace_back(r.name, r.type);
+  const auto &vertUniforms = vertStage->GetUniformRequests();
+  for (const auto &r : vertUniforms) {
+    pipelineState.vertexUniforms.emplace_back(r.name, r.type);
   }
+
+  auto fragStage = shaderGen.GetStage(MaterialNetwork::ShaderStage::Fragment);
+  const auto& fragUniforms = fragStage->GetUniformRequests();
+  for (const auto &r : fragUniforms) {
+    pipelineState.fragmentUniforms.emplace_back(r.name, r.type);
+  }
+
 
   auto i = m_renderPipelineStates.emplace(materialHash, pipelineState);
   return i.first->second;

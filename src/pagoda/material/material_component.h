@@ -1,6 +1,6 @@
 #pragma once
 
-#include "material.h"
+#include "material_network.h"
 
 #include <pagoda/objects/procedural_component.h>
 
@@ -8,6 +8,8 @@ namespace pagoda
 {
 namespace material
 {
+using MaterialNetworkPtr = std::shared_ptr<class MaterialNetwork>;
+
 class MaterialComponent : public objects::ProceduralComponent
 {
 	public:
@@ -17,12 +19,12 @@ class MaterialComponent : public objects::ProceduralComponent
 
 	std::string GetType() const override;
 
-	void SetMaterial(const Material& m);
-	const Material& GetMaterial() const;
-	Material& GetMaterial();
+	void SetMaterial(const MaterialNetworkPtr& m);
+	const MaterialNetworkPtr& GetMaterial() const;
+	MaterialNetworkPtr& GetMaterial();
 
 	private:
-	Material m_material;
+	MaterialNetworkPtr m_material;
 };
 }  // namespace material
 }  // namespace pagoda

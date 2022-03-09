@@ -2,6 +2,7 @@
 
 #include "material.h"
 #include "material_component.h"
+#include "material_node_registry.h"
 
 #include <pagoda/objects/procedural_component_system.h>
 
@@ -33,6 +34,8 @@ class MaterialSystem : public objects::ProceduralComponentSystem<MaterialCompone
 	void SetNamedMaterial(const std::string &name, const Material &material);
 	const Material &GetNamedMaterial(const std::string &name);
 
+  MaterialNodeRegistry* GetMaterialNodeRegistry();
+
 	/**
 	 * Performs the registration of the Material System with \p pagoda.
 	 */
@@ -43,6 +46,7 @@ class MaterialSystem : public objects::ProceduralComponentSystem<MaterialCompone
 
 	private:
 	std::unordered_map<std::string, Material> m_namedMaterials;
+  std::unique_ptr<MaterialNodeRegistry> m_materialNodeRegistry;
 };
 }  // namespace material
 }  // namespace pagoda

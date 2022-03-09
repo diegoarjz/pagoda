@@ -21,10 +21,12 @@ inline const std::string &typeName(pagoda::common::Type t) {
   return sTypenames[static_cast<int>(t)];
 }
 
+/*
 inline const std::string &shaderTypeName(MaterialNetwork::ShaderStage stage) {
   static const std::string sNames[] = {"Vertex", "Fragment"};
   return sNames[static_cast<int>(stage)];
 }
+*/
 
 void writeStructMember(std::stringstream &ss, pagoda::common::Type type,
                        const std::string &name,
@@ -50,11 +52,12 @@ void writeStruct(std::stringstream &ss, const std::string &name,
 }
 
 inline std::string structName(const std::string &baseName) {
-  return baseName + "Input";
+  return baseName + "Output";
 }
 
+  /*
 std::string resolveInput(const MaterialNetwork *network,
-                         const MaterialNode *node, const std::string &inputName,
+                         const MaterialNodePtr& node, const std::string &inputName,
                          const std::string &defaultResult) {
   struct {
     void operator()(const int &v) { result = std::to_string(v); }
@@ -95,13 +98,15 @@ std::string resolveInput(const MaterialNetwork *network,
   }
   return "";
 }
+  */
 
 using NodeVisitorImplementation =
     std::function<void(MaterialNetworkVisitor *, const std::string &,
-                       const MaterialNode *, ShaderGenContext &)>;
+                       const MaterialNodePtr&, ShaderGenContext &)>;
 
 void defaultVert(MaterialNetworkVisitor *vis, const std::string &outputName,
-                 const MaterialNode *node, ShaderGenContext &genCtx) {
+                 const MaterialNodePtr& node, ShaderGenContext &genCtx) {
+  /*
   std::stringstream &code = *genCtx.nodeCode;
   const auto &network = genCtx.materialNetwork;
   const std::string positionInput =
@@ -117,20 +122,25 @@ void defaultVert(MaterialNetworkVisitor *vis, const std::string &outputName,
               viewMatrix + " * " + modelMatrix + ";\n";
   code << "  out.position = modelViewProjection * " << positionInput << ";\n";
   code << "  return out;\n";
+  */
 }
 
 void defaultFrag(MaterialNetworkVisitor *vis, const std::string &outputName,
-                 const MaterialNode *node, ShaderGenContext &genCtx) {
+                 const MaterialNodePtr& node, ShaderGenContext &genCtx) {
+  /*
   std::stringstream &code = *genCtx.nodeCode;
-  std::string colorInput =
-      resolveInput(genCtx.materialNetwork, node, "color", "float4(1,0,0,1)");
+  std::string normalInput =
+      resolveInput(genCtx.materialNetwork, node, "normal", "float3(1,0,0)");
   code << "  " << outputName << " out;\n";
-  code << "  out.color = " << colorInput << ";\n";
+  //code << "  out.normal = " << normalInput << ";\n";
+  code << "  out.color = float4(1,0,0,1);\n";
   code << "  return out;\n";
+  */
 }
 
 void bufferView(MaterialNetworkVisitor *vis, const std::string &outputName,
-                const MaterialNode *node, ShaderGenContext &genCtx) {
+                const MaterialNodePtr& node, ShaderGenContext &genCtx) {
+  /*
   auto bufferName = std::get_if<std::string>(node->GetParameter("bufferName"));
   auto semantics = std::get_if<int>(node->GetParameter("semantics"));
   auto type = std::get_if<int>(node->GetParameter("type"));
@@ -152,10 +162,12 @@ void bufferView(MaterialNetworkVisitor *vis, const std::string &outputName,
   code << "  " << outputName << " out;\n";
   code << "  out." << structOutName << " = in." << *bufferName << ";\n";
   code << "  return out;\n";
+  */
 }
 
 void uniformView(MaterialNetworkVisitor *vis, const std::string &outputName,
-                 const MaterialNode *node, ShaderGenContext &genCtx) {
+                 const MaterialNodePtr& node, ShaderGenContext &genCtx) {
+  /*
   auto uniformName =
       std::get_if<std::string>(node->GetParameter("uniformName"));
   auto type = std::get_if<int>(node->GetParameter("type"));
@@ -176,6 +188,7 @@ void uniformView(MaterialNetworkVisitor *vis, const std::string &outputName,
   *genCtx.nodeCode << "  out." << structOutName << " = uniforms->"
                    << *uniformName << ";\n";
   *genCtx.nodeCode << "  return out;\n";
+  */
 }
 
 // clang-format off
@@ -191,7 +204,8 @@ static const std::unordered_map<std::string, NodeVisitorImplementation> sNodeVis
 
 ShaderGen::ShaderGen(MaterialNetwork &network) : m_network(network) {}
 
-void ShaderGen::Visit(const MaterialNode *node) {
+void ShaderGen::Visit(const MaterialNodePtr& node) {
+  /*
   const auto &nodeId = node->GetId();
 
   auto visIter = sNodeVisitors.find(nodeId);
@@ -230,6 +244,7 @@ void ShaderGen::Visit(const MaterialNode *node) {
 
   m_shaderCode << "//// End " << shaderTypeName(shaderType)
                << " Vertex Shader Material Node '" << nodeName << "'\n";
+               */
 }
 
 std::string ShaderGen::Generate() {
@@ -403,15 +418,11 @@ typedef struct
   source << vertex.str() << "\n";
   source << fragment.str() << "\n";
 
-  /*
   std::cout << "---------------------------------------------------------------"
-               "-----------------"
             << std::endl;
   std::cout << source.str() << std::endl;
   std::cout << "---------------------------------------------------------------"
-               "-----------------"
             << std::endl;
-            */
 
   return source.str();
 }

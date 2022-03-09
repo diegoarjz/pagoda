@@ -1,6 +1,8 @@
 #include "set_material.h"
 
 #include <pagoda/objects/parameter_callback.h>
+#include <pagoda/objects/interface.h>
+#include <pagoda/objects/interface_callback.h>
 
 #include <pagoda/material/material_component.h>
 #include <pagoda/material/material_system.h>
@@ -22,7 +24,8 @@ using namespace dynamic;
 using namespace geometry;
 using namespace objects;
 
-const std::string SetMaterial::inputObject("in");
+const std::string SetMaterial::inputObject("geo");
+const std::string SetMaterial::inputMaterial("material");
 const std::string SetMaterial::outputObject("out");
 
 SetMaterial::SetMaterial(objects::ProceduralObjectSystemPtr objectSystem)
@@ -36,22 +39,19 @@ SetMaterial::~SetMaterial()
 
 void SetMaterial::SetParameters(objects::ParameterCallback* cb)
 {
-	for (uint32_t i = 0u; i < 8; ++i) {
-		auto texture = "texture_" + std::to_string(i);
-		RegisterMember(texture, cb->StringArgument(
-		                          texture.c_str(),
-		                          ("Texture " + std::to_string(i)).c_str(), ""));
-	}
+}
+
+void SetMaterial::Interfaces(objects::InterfaceCallback* cb)
+{
+  cb->InputInterface(m_inputGeometry, inputObject, "Geo", Interface::Arity::Many);
+  cb->InputInterface(m_inputMaterial, inputMaterial, "Material", Interface::Arity::One);
+  cb->OutputInterface(m_outputGeometry, outputObject, "Out", Interface::Arity::Many);
 }
 
 const std::string& SetMaterial::GetOperationName() const
 {
 	static const std::string sName{"SetMaterial"};
 	return sName;
-}
-
-void SetMaterial::Interfaces(InterfaceCallback* cb)
-{
 }
 
 void SetMaterial::DoWork()
@@ -63,33 +63,18 @@ void SetMaterial::DoWork()
 	auto geometrySystem =
 	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	/*
-	while (HasInput(inputObject)) {
-	  ProceduralObjectPtr inObject = GetInputProceduralObject(inputObject);
-	  ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+  // Geometry
+  auto inGeo = m_inputGeometry->GetNext();
+  auto inGeometryComponent = geometrySystem->GetComponentAs<GeometryComponent>(inGeo);
 
-	  for (uint32_t i = 0u; i < 8; ++i) {
-	    std::string texture = "texture_" + std::to_string(i);
-	    UpdateValue(texture);
-	    std::shared_ptr<MaterialComponent> materialComponent =
-	      materialSystem->CreateComponentAs<MaterialComponent>(outObject);
-	    auto value = GetValue(texture);
-	    if (value != nullptr) {
-	      materialComponent->GetMaterial().SetTexture(
-	        i, get_value_as<std::string>(*value));
-	    }
-	  }
+  // Material
+  auto inMat = m_inputMaterial->Get();
+  auto inMaterialComponent = materialSystem->GetComponentAs<MaterialComponent>(inMat);
 
-	  // geometry
-	  auto inGeometryComponent =
-	    geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-	  auto outGeometryComponent =
-	    geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-	  auto geom = std::make_shared<core::Geometry>();
-	  *geom = *inGeometryComponent->GetGeometry();
-	  outGeometryComponent->SetGeometry(geom);
-	  outGeometryComponent->SetScope(inGeometryComponent->GetScope());
-	}
-	*/
+  auto outObject = CreateOutputProceduralObject(inGeo);
+  auto newMaterialComponent = materialSystem->CreateComponentAs<MaterialComponent>(outObject);
+  newMaterialComponent->SetMaterial(inMaterialComponent->GetMaterial());
+
+  m_outputGeometry->SetNext(outObject);
 }
 }  // namespace pagoda::material::operations

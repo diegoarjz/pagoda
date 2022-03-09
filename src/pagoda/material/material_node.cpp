@@ -5,6 +5,8 @@
 using namespace pagoda::math;
 
 namespace pagoda::material {
+MaterialNode::MaterialNode(const std::string &nodeId) : m_id{nodeId} {}
+
 MaterialNode::MaterialNode(const std::string &nodeId, const std::string &name)
     : m_name{name}, m_id{nodeId} {}
 
@@ -15,9 +17,9 @@ MaterialNode::MaterialNode(MaterialNode &&node)
 
 MaterialNode::~MaterialNode() {}
 
-void MaterialNode::SetInput(const std::string &name, const Input &connection) {
-  m_inputs[name] = connection;
-}
+////////////////////////////////////////
+/// \name Inputs
+////////////////////////////////////////
 const MaterialNode::Input *
 MaterialNode::GetInput(const std::string &name) const {
   auto iter = m_inputs.find(name);
@@ -27,10 +29,38 @@ MaterialNode::GetInput(const std::string &name) const {
   return &iter->second;
 }
 
-void MaterialNode::SetOutput(const std::string &name,
-                             const Output &connection) {
-  m_outputs[name] = connection;
+void MaterialNode::Inputs(std::function<void(const Input &)> f) const {
+  for (const auto &i : m_inputs) {
+    f(i.second);
+  }
 }
+
+const MaterialNode::Type_t
+MaterialNode::InputType(const std::string &name) const {
+  const auto input = GetInput(name);
+  if (input != nullptr) {
+    return input->type;
+  }
+  return MaterialNode::Type_t::Invalid;
+}
+
+const MaterialNode::Value_t &
+MaterialNode::InputDefaultValue(const std::string &name) const {
+  const auto input = GetInput(name);
+  if (input != nullptr) {
+    return input->defaultValue;
+  }
+  static const Value_t sInvalid;
+  return sInvalid;
+}
+
+bool MaterialNode::HasInput(const std::string &name) const {
+  return GetInput(name) != nullptr;
+}
+
+////////////////////////////////////////
+/// \name Outputs
+////////////////////////////////////////
 const MaterialNode::Output *
 MaterialNode::GetOutput(const std::string &name) const {
   auto iter = m_outputs.find(name);
@@ -41,30 +71,78 @@ MaterialNode::GetOutput(const std::string &name) const {
   return &iter->second;
 }
 
+void MaterialNode::Outputs(std::function<void(const Output &)> f) const {
+  for (const auto &o : m_outputs) {
+    f(o.second);
+  }
+}
+
+const MaterialNode::Type_t MaterialNode::OutputType(const std::string &name) {
+  const auto output = GetOutput(name);
+  if (output != nullptr) {
+    return output->type;
+  }
+  return MaterialNode::Type_t::Invalid;
+}
+
+bool MaterialNode::HasOutput(const std::string &name) const {
+  return GetOutput(name) != nullptr;
+}
+
+////////////////////////////////////////
+/// \name Connections
+////////////////////////////////////////
 bool MaterialNode::ConnectInput(const std::string &inputName,
-                                const MaterialNode *node,
+                                const MaterialNodePtr &node,
                                 const std::string &upstreamName) {
-  if (node == nullptr) {
+  if (!CanConnectInput(inputName, node, upstreamName)) {
     return false;
   }
-  auto inIter = m_inputs.find(inputName);
-  auto outIter = node->m_outputs.find(upstreamName);
-  if (inIter == m_inputs.end() || outIter == node->m_outputs.end()) {
-    return false;
-  }
-  if (inIter->second.type != outIter->second.type) {
-    return false;
-  }
-  inIter->second.upstreamNode = node->GetName();
-  inIter->second.upstreamOutput = upstreamName;
+
+  m_connections[inputName] = Connection{inputName, node, upstreamName};
+
   return true;
 }
 
-void MaterialNode::SetParameter(const std::string &name, const pagoda::common::Value &par) {
-  m_parameters[name] = par;
+bool MaterialNode::CanConnectInput(const std::string &inputName,
+                                   const MaterialNodePtr &node,
+                                   const std::string &upstreamName) {
+  if (node == nullptr || !node->HasOutput(upstreamName)) {
+    return false;
+  }
+
+  if (InputType(inputName) != node->OutputType(upstreamName)) {
+    return false;
+  }
+
+  return true;
 }
 
-const pagoda::common::Value *MaterialNode::GetParameter(const std::string &name) const {
+void MaterialNode::DisconnectInput(const std::string &inputName) {
+  m_connections.erase(inputName);
+}
+
+const MaterialNode::ConnectionContainer_t &
+MaterialNode::GetConnections() const {
+  return m_connections;
+}
+
+void MaterialNode::Connections(
+    std::function<void(const Connection &)> f) const {
+  for (const auto &c : m_connections) {
+    f(c.second);
+  }
+}
+
+bool MaterialNode::IsInputConnected(const std::string &inputName) const {
+  return m_connections.find(inputName) != m_connections.end();
+}
+
+////////////////////////////////////////
+/// \name Parameters
+////////////////////////////////////////
+const MaterialNode::Parameter *
+MaterialNode::GetParameter(const std::string &name) const {
   auto iter = m_parameters.find(name);
   if (iter == m_parameters.end()) {
     return nullptr;
@@ -72,6 +150,64 @@ const pagoda::common::Value *MaterialNode::GetParameter(const std::string &name)
   return &iter->second;
 }
 
+void MaterialNode::Parameters(std::function<void(const Parameter &p)> f) const {
+  for (const auto &p : m_parameters) {
+    f(p.second);
+  }
+}
+
+bool MaterialNode::IsParameterDefault(const std::string &name) const {
+  if (const auto parameter = GetParameter(name)) {
+    return parameter->value == parameter->defaultValue;
+  }
+  return false;
+}
+
+const MaterialNode::Type_t
+MaterialNode::ParameterType(const std::string &name) const {
+  if (const auto parameter = GetParameter(name)) {
+    return parameter->type;
+  }
+  return Type_t::Invalid;
+}
+
+const common::Value &
+MaterialNode::ParameterValue(const std::string &name) const {
+  if (const auto parameter = GetParameter(name)) {
+    // if value is set return it. otherwise return the default value.
+    return parameter->value.index() == std::variant_npos
+               ? parameter->defaultValue
+               : parameter->value;
+  }
+  static const Value_t sEmptyValue;
+  return sEmptyValue;
+}
+
+const common::Value &
+MaterialNode::ParameterDefaultValue(const std::string &name) const {
+  if (const auto parameter = GetParameter(name)) {
+    return parameter->defaultValue;
+  }
+  static const Value_t sEmptyValue;
+  return sEmptyValue;
+}
+
+void MaterialNode::ResetParameter(const std::string &name) {
+  auto iter = m_parameters.find(name);
+  if (iter != m_parameters.end()) {
+    auto &parameter = iter->second;
+    parameter.value = parameter.defaultValue;
+  }
+}
+
+////////////////////////////////////////
+/// \name Hints
+////////////////////////////////////////
+const MaterialNode::Hints_t &MaterialNode::GetHints() const { return m_hints; }
+
+////////////////////////////////////////
+/// \name Hash
+////////////////////////////////////////
 void MaterialNode::AppendHash(std::size_t &hash) const {
   struct {
     void operator()(const int &v) { boost::hash_combine(m_hash, v); }
@@ -94,9 +230,13 @@ void MaterialNode::AppendHash(std::size_t &hash) const {
     const auto &input = i.second;
     boost::hash_combine(hash, input.name);
     boost::hash_combine(hash, input.type);
-    boost::hash_combine(hash, input.upstreamNode);
-    boost::hash_combine(hash, input.upstreamOutput);
     std::visit(paramHash, input.defaultValue);
+  }
+
+  for (const auto &c : m_connections) {
+    boost::hash_combine(hash, c.second.input);
+    boost::hash_combine(hash, c.second.upstreamNode);
+    boost::hash_combine(hash, c.second.upstreamOutput);
   }
 
   for (const auto &o : m_outputs) {
@@ -107,8 +247,9 @@ void MaterialNode::AppendHash(std::size_t &hash) const {
 
   for (const auto &p : m_parameters) {
     const auto &parameter = p.second;
-    boost::hash_combine(hash, p.first);
-    std::visit(paramHash, parameter);
+    boost::hash_combine(hash, parameter.name);
+    std::visit(paramHash, parameter.defaultValue);
+    std::visit(paramHash, parameter.value);
   }
 }
 } // namespace pagoda::material

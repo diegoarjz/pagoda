@@ -18,7 +18,8 @@ namespace pgeditor::renderer::metal {
 
 struct RenderPipelineState {
   std::vector<VertexAttributeDescription> vertexAttributes;
-  std::vector<std::pair<std::string, pagoda::common::Type>> uniforms;
+  std::vector<std::pair<std::string, pagoda::common::Type>> vertexUniforms;
+  std::vector<std::pair<std::string, pagoda::common::Type>> fragmentUniforms;
   id<MTLRenderPipelineState> pipelineState;
 };
 

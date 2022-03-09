@@ -51,6 +51,7 @@ public:
         {0, 0, 1, 1},
     };
 
+/*
     // Create a material network
     auto network = std::make_shared<MaterialNetwork>("default");
     // The Vert shader network
@@ -129,6 +130,7 @@ public:
     }
 
     m_renderPass = std::make_shared<renderer::RenderPass>(m_renderCollection);
+    */
   }
 
   ~MetalWindow() override {}

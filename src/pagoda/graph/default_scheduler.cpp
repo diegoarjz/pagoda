@@ -79,9 +79,14 @@ class OperationLinker : public Rule
 void DefaultScheduler::Initialize()
 {
 	traversal::Forward f(m_graph);
+  std::unordered_set<NodePtr> visitedNodes;
 	while (f.HasNext()) {
-		m_nodeQueue.push(f.Get());
-		f.Advance();
+    NodePtr n = f.Get();
+    if (visitedNodes.find(n) == visitedNodes.end()) {
+      visitedNodes.insert(n);
+      m_nodeQueue.push(n);
+    }
+    f.Advance();
 	}
 	/*
 	GraphGrammar graphGrammar(m_graph);

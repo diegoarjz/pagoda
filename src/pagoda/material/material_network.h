@@ -9,6 +9,22 @@
 #include <vector>
 
 namespace pagoda::material {
+class MaterialNodeRegistry;
+
+// TODO: This was copied from pgeditor/renderer/vertex_attribute
+//       and should be defined at a material level and not at a renderer level
+enum class VertexAttributeSemantics {
+  Position,
+  Normal,
+  TexCoord,
+  Color,
+  Custom,
+  Invalid
+};
+
+
+using MaterialNodeMap = std::unordered_map<std::string, MaterialNodePtr>;
+
 class MaterialNetwork {
 public:
   enum class ShaderStage { Vertex, Fragment };
@@ -16,7 +32,8 @@ public:
   ////////////////////////////////////////
   /// \n name Constructors
   ////////////////////////////////////////
-  MaterialNetwork(const std::string &materialName);
+  MaterialNetwork(MaterialNodeRegistry *nodeRegistry,
+                  const std::string &materialName);
   ~MaterialNetwork();
 
   ////////////////////////////////////////
@@ -27,16 +44,16 @@ public:
   ////////////////////////////////////////
   /// \n name Material Nodes
   ////////////////////////////////////////
-  MaterialNode *CreateMaterialNode(const std::string &nodeId,
-                                   const std::string &name);
-  const MaterialNode *GetMaterialNode(const std::string &name) const;
-  MaterialNode *GetMaterialNode(const std::string &name);
+  MaterialNodePtr CreateMaterialNode(const std::string &nodeId,
+                                     const std::string &name);
+  const MaterialNodePtr GetMaterialNode(const std::string &name) const;
+  MaterialNodePtr GetMaterialNode(const std::string &name);
 
   ////////////////////////////////////////
   /// \n name Terminal Nodes
   ////////////////////////////////////////
   void SetStageTerminalNode(ShaderStage stage, const std::string &name);
-  MaterialNode *GetStageTerminalNode(ShaderStage stage);
+  MaterialNodePtr GetStageTerminalNode(ShaderStage stage);
 
   ////////////////////////////////////////
   /// \name Hash
@@ -44,8 +61,9 @@ public:
   void AppendHash(std::size_t &hash) const;
 
 private:
+  MaterialNodeRegistry* m_nodeRegistry;
   std::string m_materialName;
   std::array<std::string, 2> m_terminalNodes;
-  std::unordered_map<std::string, MaterialNode> m_nodes;
+  MaterialNodeMap m_nodes;
 };
 } // namespace pagoda::material

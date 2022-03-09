@@ -10,7 +10,7 @@ MaterialComponent::~MaterialComponent() {}
 
 std::string MaterialComponent::GetType() const { return GetComponentSystemName(); }
 
-void MaterialComponent::SetMaterial(const Material& m) { m_material = m; }
-const Material& MaterialComponent::GetMaterial() const { return m_material; }
-Material& MaterialComponent::GetMaterial() { return m_material; }
+void MaterialComponent::SetMaterial(const MaterialNetworkPtr& m) { m_material = m; }
+const MaterialNetworkPtr& MaterialComponent::GetMaterial() const { return m_material; }
+MaterialNetworkPtr& MaterialComponent::GetMaterial() { return m_material; }
 }  // namespace pagoda::material

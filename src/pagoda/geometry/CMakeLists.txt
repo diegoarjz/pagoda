@@ -11,8 +11,8 @@ set(GEOMETRY_SRCS
     "core/planar_texture_projection.cpp"
     "core/polygon.h"
     "io/geometry_exporter.h"
-    "io/geojson_reader.cpp"
-    "io/geojson_reader.h"
+    #"io/geojson_reader.cpp"
+    #"io/geojson_reader.h"
     "algorithms/create_box.h"
     "algorithms/create_rect.h"
     "algorithms/create_sphere.h"
@@ -57,8 +57,8 @@ set(GEOMETRY_SRCS
     "operations/triangulate_geometry.h"
     "operations/scope_texture_projection.cpp"
     "operations/scope_texture_projection.h"
-    "operations/read_geojson.cpp"
-    "operations/read_geojson.h"
+    #"operations/read_geojson.cpp"
+    #"operations/read_geojson.h"
     "geometry_component.cpp"
     "geometry_component.h"
     "geometry_system.cpp"
@@ -91,7 +91,7 @@ set(GEOMETRY_UNIT_TESTS
     "core/planar_texture_projection.test.cpp"
     "core/polygon.test.cpp"
     "algorithms/traverse.test.cpp"
-    "io/geojson_reader.test.cpp"
+    #"io/geojson_reader.test.cpp"
 )
 
 foreach(unit_test_src ${GEOMETRY_UNIT_TESTS})

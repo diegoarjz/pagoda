@@ -14,7 +14,6 @@ enum class VertexAttributeSemantics {
 
 struct VertexAttributeDescription {
   std::string name;
-  VertexAttributeSemantics m_semantics;
   pagoda::common::Type m_type;
   std::size_t m_componentsPerElement;
   std::size_t m_bytesPerComponent;

@@ -21,7 +21,6 @@ InterleavedBuffer::InterleavedBuffer(const std::vector<VertexAttributeDescriptio
 
 	const std::size_t numBuffers = buffers.size();
 	const std::size_t numElements = buffers[0]->GetNumElements();
-	std::size_t offset = 0;
 	m_bufferSize = 0;
 	for (std::size_t i = 0; i < numBuffers; ++i) {
 		const auto& vert = m_vertexDescription[i];
@@ -31,7 +30,6 @@ InterleavedBuffer::InterleavedBuffer(const std::vector<VertexAttributeDescriptio
 		DBG_ASSERT(numElements == buffer->GetNumElements());
 
 		m_bufferSize += buffer->GetBufferSize();
-		offset += vert.m_bytesPerComponent * vert.m_componentsPerElement;
 	}
 
 	m_data = new std::byte[m_bufferSize];

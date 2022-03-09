@@ -60,9 +60,9 @@ class ShaderGen : public pagoda::material::MaterialNetworkVisitor
 	const std::vector<UniformRequest>& GetUniformRequests() const;
 
 	private:
-	void Visit(const pagoda::material::MaterialNode* node) override;
+	void Visit(const pagoda::material::MaterialNodePtr& node) override;
 
-	std::unordered_set<const pagoda::material::MaterialNode*> m_visitedNodes;
+	std::unordered_set<pagoda::material::MaterialNodePtr> m_visitedNodes;
 	std::stringstream m_shaderCode;
 
 	ShaderGenContext m_genCtx;
