@@ -21,6 +21,7 @@ BufferView::BufferView(const std::string &suffix, common::Type type,
 void BufferView::SetVertexAttributeName(const std::string& name)
 {
   m_inputs["inputBuffer"].hints["vertex-attribute"] = name;
+  m_inputs["inputBuffer"].hints[HintKeys::stageIn] = name;
 }
 
 const std::vector<std::string>& BufferView::InputOrder()
@@ -32,7 +33,9 @@ const std::vector<std::string>& BufferView::InputOrder()
 bool BufferView::SourceCode(ShaderSource &source) {
   if (source.TargetLanguage() == ShaderSource::ShadingLanguage::MSL) {
     source.EmitFunctionStart(InputOrder());
+    source.EmitLine("  buffer_view_vec3_output output;");
     source.EmitLine("  output.result = inputBuffer;");
+    source.EmitLine("  return output;");
     source.EmitFunctionEnd();
     return true;
   }
