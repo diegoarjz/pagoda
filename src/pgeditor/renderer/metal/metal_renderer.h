@@ -24,6 +24,7 @@ public:
   void StartRenderPass() override;
   void EndRenderPass() override;
 
+  void DrawImmediate(const Collection &c) override;
   void Draw(const Collection &c) override;
 
   void SetCamera(pagoda::scene::Camera &cam) override;

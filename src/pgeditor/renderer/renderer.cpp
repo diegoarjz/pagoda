@@ -7,4 +7,5 @@ void Renderer::SetRenderState(const RenderState &s) {
   updateRenderState(m_newRenderState.ComputeDiff(m_lastRenderState));
   m_lastRenderState = s;
 }
+
 } // namespace pgeditor::renderer

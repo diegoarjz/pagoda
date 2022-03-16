@@ -9,7 +9,7 @@ RenderPass::RenderPass(const Collection &collection)
 void RenderPass::Render(Renderer *r) {
   r->SetRenderState(m_renderState);
   r->StartRenderPass();
-  r->Draw(m_collection);
+  r->DrawImmediate(m_collection);
   r->EndRenderPass();
 }
 } // namespace pgeditor::renderer

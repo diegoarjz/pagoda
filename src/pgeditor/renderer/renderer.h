@@ -4,6 +4,7 @@
 #include <pagoda/scene/camera.h>
 
 #include "collection.h"
+#include "pgeditor/renderer/uniform_buffer.h"
 #include "render_state.h"
 
 namespace pgeditor::renderer {
@@ -20,6 +21,7 @@ public:
   virtual void EndRenderPass() = 0;
   void SetRenderState(const RenderState &s);
 
+  virtual void DrawImmediate(const Collection &c) {}
   virtual void Draw(const Collection &c) {}
 
   virtual void SetCamera(pagoda::scene::Camera &cam) {}
