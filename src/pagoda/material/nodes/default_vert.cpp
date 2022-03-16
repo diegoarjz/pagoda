@@ -13,6 +13,7 @@ DefaultVert::DefaultVert()
 
   m_inputs = {
     {"position", {"position", Type_t::Vec4, Vec4F{0,0,0,1}, {{HintKeys::stageIn, "position"}}}},
+    {"normal", {"normal", Type_t::Vec3, Vec3F{0,0,0}, {}}},
     {"modelMatrix", {"modelMatrix", Type_t::Mat4, identity, {{HintKeys::uniform, "modelMatrix"}}}},
     {"viewMatrix", {"viewMatrix", Type_t::Mat4, identity, {{HintKeys::uniform, "viewMatrix"}}}},
     {"projMatrix", {"projMatrix", Type_t::Mat4, identity, {{HintKeys::uniform, "projectionMatrix"}}}},
@@ -30,7 +31,7 @@ DefaultVert::~DefaultVert()
 
 const std::vector<std::string>& DefaultVert::InputOrder()
 {
-  static const std::vector<std::string> sInputOrder{"position", "modelMatrix", "viewMatrix", "projMatrix"};
+  static const std::vector<std::string> sInputOrder{"position", "normal", "modelMatrix", "viewMatrix", "projMatrix"};
   return sInputOrder;
 }
 
@@ -40,7 +41,7 @@ bool DefaultVert::SourceCode(ShaderSource &source) {
     source.EmitLine("  float4x4 mvp = projMatrix * viewMatrix * modelMatrix;");
     source.EmitLine("  default_vert_output output;");
     source.EmitLine("  output.position = mvp * position;");
-    source.EmitLine("  output.normal = float3(1,0,0);");
+    source.EmitLine("  output.normal = normal;");
     source.EmitText("  return output;");
     source.EmitFunctionEnd();
   }

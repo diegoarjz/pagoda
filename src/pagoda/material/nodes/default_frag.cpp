@@ -33,7 +33,7 @@ bool DefaultFrag::SourceCode(ShaderSource &source) {
   if (source.TargetLanguage() == ShaderSource::ShadingLanguage::MSL) {
     source.EmitFunctionStart(InputOrder());
     source.EmitLine("  default_frag_output output;");
-    source.EmitLine("  output.color = float4(normal, 1.0) + color;");
+    source.EmitLine("  output.color = float4(normal, 1.0);");
     source.EmitText("  return output;");
     source.EmitFunctionEnd();
     return true;
