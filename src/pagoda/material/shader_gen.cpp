@@ -232,12 +232,19 @@ public:
             auto stageIn = hints.find(MaterialNode::HintKeys::stageIn);
             auto uniform = hints.find(MaterialNode::HintKeys::uniform);
             if (stageIn != hints.end()) {
+              auto vertexAttribute = hints.find("vertex-attribute");
               // TODO: Checking the stage type here should be avoided. Maybe
               // there should be a hint saying whether the input is a pointer
               // or not
               if (m_stage->GetStageType() ==
                   MaterialNetwork::ShaderStage::Vertex) {
-                source.EmitText("      " + stageInputName + "[vertexID]." + input.name);
+                if (vertexAttribute != hints.end()) {
+                  source.EmitText("      " + stageInputName + "[vertexID]." +
+                                  vertexAttribute->second);
+                } else {
+                  source.EmitText("      " + stageInputName + "[vertexID]." +
+                                  input.name);
+                }
               } else {
                 source.EmitText("      " + stageInputName + "." + input.name);
               }
