@@ -2,6 +2,7 @@
 
 #include <pagoda/material/nodes/default_frag.h>
 #include <pagoda/material/nodes/default_vert.h>
+#include <pagoda/material/nodes/buffer_view.h>
 
 #include <pagoda/material/material_network.h>
 #include <pagoda/material/material_node.h>
@@ -41,9 +42,19 @@ void DefaultMaterial::DoWork() {
   auto materialNetwork = std::make_shared<MaterialNetwork>(
       materialSystem->GetMaterialNodeRegistry(), "default");
 
+  const std::string normalBufferView = "normalBufferView";
   const std::string vertShaderName = "vertexShader";
   const std::string fragShaderName = "fragmentShader";
-  materialNetwork->CreateMaterialNode(DefaultVert::nodeName, vertShaderName);
+
+  // Vertex shader
+  auto normal = materialNetwork->CreateMaterialNode("buffer_view_vec3", normalBufferView);
+  if (auto bufferView = std::dynamic_pointer_cast<BufferView>(normal)) {
+    bufferView->SetVertexAttributeName("normal");
+  }
+  auto vert = materialNetwork->CreateMaterialNode(DefaultVert::nodeName, vertShaderName);
+  vert->ConnectInput("normal", normal, "result");
+
+  // Fragment shader
   materialNetwork->CreateMaterialNode(DefaultFrag::nodeName, fragShaderName);
   materialNetwork->SetStageTerminalNode(MaterialNetwork::ShaderStage::Vertex,
                                         vertShaderName);

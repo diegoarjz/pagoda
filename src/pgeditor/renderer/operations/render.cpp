@@ -51,7 +51,7 @@ ConvertGeometry(std::shared_ptr<Geometry> pagodaGeom) {
   }
 
   renderable->GetBuffer("position")->SetData(points);
-  renderable->GetBuffer("color")->SetData(normals);
+  renderable->GetBuffer("normal")->SetData(normals);
   renderable->GetIndexBuffer()->SetData(indices);
 
   return renderable;

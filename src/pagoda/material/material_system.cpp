@@ -10,6 +10,7 @@
 
 #include "nodes/default_frag.h"
 #include "nodes/default_vert.h"
+#include "nodes/buffer_view.h"
 
 #include <memory>
 #include <pagoda/pagoda.h>
@@ -63,6 +64,13 @@ void MaterialSystem::Registration(Pagoda *pagoda) {
   // Material Nodes
   registerMaterialNode<nodes::DefaultFrag>(materialNodeRegistry);
   registerMaterialNode<nodes::DefaultVert>(materialNodeRegistry);
+  materialNodeRegistry->Register("buffer_view_vec3", []() {
+    return std::make_shared<nodes::BufferView>("vec3", common::Type::Vec3, math::Vec3F{0,0,0});
+  });
+  materialNodeRegistry->Register("buffer_view_vec4", []() {
+    return std::make_shared<nodes::BufferView>("vec4", common::Type::Vec4, math::Vec4F{0,0,0,0});
+  });
+
 
   auto operationFactory = pagoda->GetOperationFactory();
   auto objectSystem = pagoda->GetProceduralObjectSystem();

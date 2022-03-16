@@ -91,7 +91,7 @@ const std::size_t
 template <> const Format TypeTraits<pagoda::math::Vec3F>::format = Format::F32;
 
 ////////////////////////////////////////
-// Vec3F
+// Vec4F
 ////////////////////////////////////////
 template <>
 const std::size_t TypeTraits<pagoda::math::Vec4F>::componentsPerElement = 4;
