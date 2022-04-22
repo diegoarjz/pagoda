@@ -53,6 +53,7 @@ add_pagoda_module(
 
 set(COMMON_UNIT_TESTS
     "utils.test.cpp"
+    "visitor.test.cpp"
 )
 
 foreach(unit_test_src ${COMMON_UNIT_TESTS})

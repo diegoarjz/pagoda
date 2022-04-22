@@ -10,6 +10,11 @@
 namespace pagoda
 {
 class Pagoda;
+
+namespace scene
+{
+  using SceneGraphPtr = std::shared_ptr<class SceneGraph>;
+}
 }
 
 namespace pagoda::objects
@@ -73,12 +78,16 @@ class ProceduralObjectSystem
 	}
 	std::shared_ptr<ProceduralObjectPredicateRegistry> GetPredicateRegistry() const { return m_predicateRegistry; }
 
+  void SetSceneGraph(const scene::SceneGraphPtr& sceneGraph) { m_sceneGraph = sceneGraph; }
+  scene::SceneGraphPtr GetSceneGraph() { return m_sceneGraph; }
+
 	static void Registration(Pagoda* pagoda);
 
 	private:
 	std::unordered_set<std::shared_ptr<ProceduralObject>> m_proceduralObjects;
 	std::unordered_map<std::string, std::shared_ptr<ProceduralComponentSystemBase>> m_proceduralComponentSystems;
 	std::shared_ptr<ProceduralObjectPredicateRegistry> m_predicateRegistry;
+  scene::SceneGraphPtr m_sceneGraph;
 };  // class ProceduralObjectSystem
 
 using ProceduralObjectSystemPtr = std::shared_ptr<ProceduralObjectSystem>;

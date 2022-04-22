@@ -17,6 +17,7 @@ find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(EnTT REQUIRED)
 
 # Export compile comands
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

@@ -32,6 +32,7 @@ set(PAGODA_DEPENDENCIES
     BZip2::BZip2
     PNG::PNG
     ZLIB::ZLIB
+    EnTT::EnTT
 )
 
 add_pagoda_library(
