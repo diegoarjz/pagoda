@@ -13,65 +13,66 @@
 #include <pagoda/objects/procedural_component.h>
 #include <pagoda/objects/procedural_object_system.h>
 
+#include <pagoda/scene/nodes/geometry.h>
+#include <pagoda/scene/path.h>
+#include <pagoda/scene/scene_graph.h>
+
 #include <boost/qvm/map_vec_mat.hpp>
 
-namespace pagoda::geometry::operations
-{
+namespace pagoda::geometry::operations {
 using namespace math;
 using namespace geometry::core;
 using namespace geometry::algorithms;
 using namespace objects;
 using namespace dynamic;
+using namespace scene;
 
 const std::string CreateBoxGeometry::outputGeometry("out");
-const char* CreateBoxGeometry::name = "CreateBoxGeometry";
+const char *CreateBoxGeometry::name = "CreateBoxGeometry";
 
 CreateBoxGeometry::CreateBoxGeometry(ProceduralObjectSystemPtr objectSystem)
-  : ProceduralOperation(objectSystem)
-{
-	START_PROFILE;
+    : ProceduralOperation(objectSystem) {
+  START_PROFILE;
 }
 
-CreateBoxGeometry::~CreateBoxGeometry()
-{
+CreateBoxGeometry::~CreateBoxGeometry() {}
+
+void CreateBoxGeometry::Parameters(objects::NewParameterCallback *cb) {
+  cb->FloatParameter(&m_width, "width", "Width", 1.0f);
+  cb->FloatParameter(&m_height, "height", "Height", 1.0f);
+  cb->FloatParameter(&m_depth, "depth", "Depth", 1.0f);
 }
 
-void CreateBoxGeometry::Parameters(objects::NewParameterCallback* cb)
-{
-	cb->FloatParameter(&m_width, "width", "Width", 1.0f);
-	cb->FloatParameter(&m_height, "height", "Height", 1.0f);
-	cb->FloatParameter(&m_depth, "depth", "Depth", 1.0f);
+const std::string &CreateBoxGeometry::GetOperationName() const {
+  static const std::string sName{"CreateBoxGeometry"};
+  return sName;
 }
 
-const std::string& CreateBoxGeometry::GetOperationName() const
-{
-	static const std::string sName{"CreateBoxGeometry"};
-	return sName;
+void CreateBoxGeometry::Interfaces(InterfaceCallback *cb) {
+  cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::One);
 }
 
-void CreateBoxGeometry::Interfaces(InterfaceCallback* cb)
-{
-	cb->OutputInterface(m_output, outputGeometry, "Out", Interface::Arity::One);
+void CreateBoxGeometry::DoWork() {
+  START_PROFILE;
+
+  auto geometrySystem =
+      m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+
+  CreateBox<Geometry> createBox(m_width, m_depth, m_height);
+  auto geometry = std::make_shared<Geometry>();
+  createBox.Execute(geometry);
+
+  ProceduralObjectPtr object = CreateOutputProceduralObject();
+  std::shared_ptr<GeometryComponent> geometryComponent =
+      geometrySystem->CreateComponentAs<GeometryComponent>(object);
+  m_output->Set(object);
+
+  geometryComponent->SetGeometry(geometry);
+  geometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
+      geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
+
+  m_proceduralObjectSystem->GetSceneGraph()
+      ->CreateNode<nodes::Geometry>(Path{name})
+      ->SetGeometry(geometry);
 }
-
-void CreateBoxGeometry::DoWork()
-{
-	START_PROFILE;
-
-	auto geometrySystem =
-	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-
-	CreateBox<Geometry> createBox(m_width, m_depth, m_height);
-	auto geometry = std::make_shared<Geometry>();
-	createBox.Execute(geometry);
-
-	ProceduralObjectPtr object = CreateOutputProceduralObject();
-	std::shared_ptr<GeometryComponent> geometry_component =
-	  geometrySystem->CreateComponentAs<GeometryComponent>(object);
-	m_output->Set(object);
-
-	geometry_component->SetGeometry(geometry);
-	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
-	  geometry, Mat3x3F(boost::qvm::diag_mat(Vec3F{1.0f, 1.0f, 1.0f}))));
-}
-}  // namespace pagoda::geometry::operations
+} // namespace pagoda::geometry::operations
