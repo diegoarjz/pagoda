@@ -13,8 +13,6 @@ namespace pagoda::objects
 // Forward Declaration
 ////////////////////////////////////////////////////////////
 using ProceduralObjectPtr = std::shared_ptr<class ProceduralObject>;
-using InterfacePtr = std::shared_ptr<class Interface>;
-using InterfaceWeakPtr = std::weak_ptr<class Interface>;
 
 /**
  * Represents an input or output interface for a ProceduralOperation.
@@ -84,24 +82,24 @@ class Interface : public std::enable_shared_from_this<Interface>
 	/**
 	 * Checks if the interface can be connected to \p i.
 	 */
-	bool Accepts(const InterfaceWeakPtr& i) const;
+	bool Accepts(const std::weak_ptr<Interface>& i) const;
 
 	/**
 	 * Connects an Interface to this one.
 	 * Checks if both Accept before connecting.
 	 * @return true if the connection is possible, false otherwise.
 	 */
-	bool Connect(const InterfaceWeakPtr& interface);
+	bool Connect(const std::weak_ptr<Interface>& i);
 
 	/**
 	 * Disconnects an interface.
 	 */
-	void Disconnect(const InterfaceWeakPtr& interface);
+	void Disconnect(const std::weak_ptr<Interface>& i);
 
 	/**
 	 * Iterates over all connected interfaces.
 	 */
-	void ConnectedInterfaces(std::function<void(InterfacePtr)> f) const;
+	void ConnectedInterfaces(std::function<void(std::shared_ptr<Interface>)> f) const;
 
 	/**
 	 * Returns the number of connected Interface.
@@ -148,21 +146,21 @@ class Interface : public std::enable_shared_from_this<Interface>
 	 */
 	struct InterfaceWeakPtrHasher
 	{
-		size_t operator()(const InterfaceWeakPtr& ptr) const
+		size_t operator()(const std::weak_ptr<Interface>& ptr) const
 		{
 			auto sh_ptr = ptr.lock();
 			return std::hash<std::shared_ptr<Interface>>()(sh_ptr);
 		}
 
-		bool operator()(const InterfaceWeakPtr& lhs,
-		                const InterfaceWeakPtr& rhs) const
+		bool operator()(const std::weak_ptr<Interface>& lhs,
+		                const std::weak_ptr<Interface>& rhs) const
 		{
 			return lhs.lock().get() == rhs.lock().get();
 		}
 	};
 	/// Holds a collection of weak pointers to Interface objects
 	using ConnectionContainer_t =
-	  std::unordered_set<InterfaceWeakPtr, InterfaceWeakPtrHasher,
+	  std::unordered_set<std::weak_ptr<Interface>, InterfaceWeakPtrHasher,
 	                     InterfaceWeakPtrHasher>;
 
 	std::string m_name;  ///< The name.
@@ -172,4 +170,7 @@ class Interface : public std::enable_shared_from_this<Interface>
 	  m_objects;  ///< The objects contained in this interface.
 	ConnectionContainer_t m_connectedInterfaces;  ///< The connected Interfaces.
 };
+
+using InterfacePtr = std::shared_ptr<Interface>;
+using InterfaceWeakPtr = std::weak_ptr<Interface>;
 }  // namespace pagoda::objects

@@ -34,6 +34,8 @@ endif()
 
 string(TIMESTAMP PAGODA_BUILD_DATE "%d/%m/%Y %H:%M:%S")
 
+option(PAGODA_SHARED_LIB "Build pagoda with shared libraries" OFF)
+
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
   option(PAGODA_PROFILER_ACTIVE "Enable or disable built in profiling" OFF)
   option(PAGODA_ENABLE_ASSERTIONS "Enable or disable assertions" OFF)
@@ -109,7 +111,11 @@ function (add_pagoda_build_unit)
   elseif (${PARSED_ARGS_TYPE} STREQUAL "EXECUTABLE")
     add_executable(${PARSED_ARGS_NAME} ${PARSED_ARGS_SOURCES})
   elseif (${PARSED_ARGS_TYPE} STREQUAL "LIBRARY")
-    add_library(${PARSED_ARGS_NAME} ${PARSED_ARGS_SOURCES})
+    if (${PAGODA_SHARED_LIB})
+      add_library(${PARSED_ARGS_NAME} SHARED ${PARSED_ARGS_SOURCES})
+    else()
+      add_library(${PARSED_ARGS_NAME} STATIC ${PARSED_ARGS_SOURCES})
+    endif()
   else ()
     message(FATAL_ERROR "Unknown type ${PARSED_ARGS_TYPE}")
   endif()
@@ -134,6 +140,7 @@ function (add_pagoda_build_unit)
     ${PARSED_ARGS_NAME}
     PUBLIC
       $<INSTALL_INTERFACE:pagoda>
+      $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
       $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
     PRIVATE
       ${Boost_INCLUDE_DIRS}
@@ -151,6 +158,8 @@ function (add_pagoda_build_unit)
       $<$<PLATFORM_ID:Darwin>:PAGODA_OS_MACOS>
       $<$<PLATFORM_ID:Linux>:PAGODA_OS_LINUX>
       $<$<PLATFORM_ID:Windows>:PAGODA_OS_WINDOWS>
+      # Shared libraries
+      $<$<BOOL:${PAGODA_SHARED_LIB}>:PAGODA_SHARED_LIB>
       ${PARSED_ARGS_COMPILE_DEFINITIONS}
   )
 
@@ -160,14 +169,6 @@ function (add_pagoda_build_unit)
       Boost::filesystem
       ${PARSED_ARGS_DEPENDENCIES}
   )
-
-  if (${PARSED_ARGS_TYPE} STREQUAL "EXECUTABLE")
-    include(GNUInstallDirs)
-    install(TARGETS ${PARSED_ARGS_NAME}
-      EXPORT pagoda-export
-      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
-  endif()
 endfunction()
 
 # Adds a pagoda module
@@ -252,6 +253,19 @@ function (add_pagoda_executable)
     COMPILE_DEFINITIONS ${PARSED_ARGS_COMPILE_DEFINITIONS}
   )
 
+  include(GNUInstallDirs)
+  install(TARGETS ${PARSED_ARGS_NAME}
+    EXPORT pagoda-export
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+
+  if(APPLE)
+    set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
+      INSTALL_RPATH "@loader_path")
+  elseif(UNIX)
+    set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
+      INSTALL_RPATH "$ORIGIN")
+  endif()
 endfunction()
 
 # Adds a library to pagoda
@@ -288,7 +302,20 @@ function (add_pagoda_library)
   )
 
   set_target_properties(${PARSED_ARGS_NAME} PROPERTIES PREFIX "")
-  set_target_properties(${PARSED_ARGS_NAME} PROPERTIES OUTPUT_NAME "lib${PARSED_ARGS_NAME}")
+
+  include(GNUInstallDirs)
+  install(TARGETS ${PARSED_ARGS_NAME}
+    EXPORT pagoda-export
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
+
+  if(APPLE)
+    set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
+      INSTALL_RPATH "@loader_path")
+  elseif(UNIX)
+    set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
+      INSTALL_RPATH "$ORIGIN")
+  endif()
 endfunction()
 
 # TODO: once all tests use the add_unit_test function we can remove
@@ -319,4 +346,10 @@ function (add_unit_test unit_test_src)
   )
 
   add_test(NAME ${test_name} COMMAND ${test_name})
+
+  add_custom_command(
+    TARGET ${test_name} POST_BUILD
+    COMMAND ${test_name}
+    COMMENT "Running ${test_name} unit test"
+  )
 endfunction()

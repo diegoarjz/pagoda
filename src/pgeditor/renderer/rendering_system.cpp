@@ -3,9 +3,11 @@
 #include "gl/mesh.h"
 #include "operations/render.h"
 
-#include <pagoda/pagoda.h>
-
 #include <pagoda/scene/camera.h>
+#include <pagoda/objects/operation_factory.h>
+#include <pagoda/objects/procedural_object_system.h>
+
+#include <pagoda/pagoda.h>
 
 #include <functional>
 

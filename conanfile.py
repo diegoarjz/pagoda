@@ -39,7 +39,7 @@ class Pagoda(ConanFile):
         self.requires("glew/2.1.0")
 
 
-    def build(self):
+    def _configure_cmake(self):
         cmake = CMake(self, build_type=self.settings.build_type)
 
         # CI Definitions
@@ -53,18 +53,46 @@ class Pagoda(ConanFile):
             cmake.definitions['CMAKE_BUILD_TYPE'] = 'Debug'
 
         cmake.configure(defs=cmake.definitions)
+        return cmake
+
+
+    def build(self):
+        cmake = self._configure_cmake()
         cmake.build()
 
 
     def imports(self):
-        self.copy("*.dylib", src="", dst="bin", root_package="qt", keep_path=False)
+        self.copy("lib/*Qt6OpenGLWidgets*", src="", dst="src/bin", root_package="qt", keep_path=False)
+        self.copy("lib/*Qt6Widgets*", src="", dst="src/bin", root_package="qt", keep_path=False)
+        self.copy("lib/*Qt6OpenGL*", src="", dst="src/bin", root_package="qt", keep_path=False)
+        self.copy("lib/*Qt6Gui*", src="", dst="src/bin", root_package="qt", keep_path=False)
+        self.copy("lib/*Qt6Core*", src="", dst="src/bin", root_package="qt", keep_path=False)
+
+        self.copy("res/archdatadir/plugins/platforms/*.dylib", src="", dst="src/bin/platforms", root_package="qt", keep_path=False)
+        self.copy("res/archdatadir/plugins/platforms/*.so", src="", dst="src/bin/platforms", root_package="qt", keep_path=False)
+        self.copy("res/archdatadir/plugins/platforms/*.dll", src="", dst="src/bin/platforms", root_package="qt", keep_path=False)
 
 
     def package(self):
-        self.copy("bin/pagoda", "bin", keep_path=False)
-        self.copy("bin/pagoda.exe", "bin", keep_path=False)
-        self.copy("lib/*", "lib", keep_path=False)
+        cmake = CMake(self, build_type=self.settings.build_type)
+        cmake.install()
+
+        self.copy("src/bin/pagoda",             "bin", keep_path=False)
+        self.copy("src/bin/pgeditor",           "bin", keep_path=False)
+        self.copy("src/bin/platforms/*.dylib",  "bin/platforms", keep_path=False)
+        self.copy("src/bin/platforms/*.dll",    "bin/platforms", keep_path=False)
+        self.copy("src/bin/platforms/*.so",     "bin/platforms", keep_path=False)
+        self.copy("src/bin/*.dylib",            "bin", keep_path=False)
+        self.copy("src/bin/*.dll",              "bin", keep_path=False)
+        self.copy("src/bin/*.so",               "bin", keep_path=False)
+        self.copy("src/bin/pagoda.exe",         "bin", keep_path=False)
+        self.copy("src/bin/pgeditor.exe",       "bin", keep_path=False)
+        self.copy("src/pagoda/libpagoda.a",     "lib", keep_path=False)
+        self.copy("src/pgeditor/libpgeditor.a", "lib", keep_path=False)
 
 
     def package_info(self):
+        self.cpp_info.includedirs = ["include"]
+        self.cpp_info.libdirs = ["lib"]
         self.cpp_info.libs = ["pagoda"]
+        self.cpp_info.bindirs = ["bin"]

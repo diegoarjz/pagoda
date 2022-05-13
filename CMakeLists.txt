@@ -1,6 +1,8 @@
 cmake_policy(SET CMP0048 NEW)
 
-project("Pagoda" LANGUAGES CXX VERSION 0.1.0)
+set(version 0.1.0)
+
+project("Pagoda" LANGUAGES CXX VERSION ${version})
 cmake_minimum_required(VERSION 3.11.0 FATAL_ERROR)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
@@ -18,9 +20,27 @@ find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)
 find_package(GLEW REQUIRED)
 
-# Export compile comands
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 enable_testing()
+add_subdirectory(include)
 add_subdirectory(src)
+
 add_subdirectory(tests)
+
+include(GNUInstallDirs)
+install(EXPORT pagoda-export
+        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+configure_file(
+  ${CMAKE_SOURCE_DIR}/cmake/pagoda-config.cmake.in
+  ${CMAKE_BINARY_DIR}/pagoda-config.cmake @ONLY)
+
+configure_file(
+  ${CMAKE_SOURCE_DIR}/cmake/pagoda-config-version.cmake.in
+  ${CMAKE_BINARY_DIR}/pagoda-config-version.cmake @ONLY)
+
+install(
+  FILES
+    ${CMAKE_BINARY_DIR}/pagoda-config.cmake
+    ${CMAKE_BINARY_DIR}/pagoda-config-version.cmake
+  DESTINATION
+    ${CMAKE_INSTALL_LIBDIR})

@@ -1,4 +1,5 @@
-#include "pagoda.h"
+#include "pagoda/pagoda.h"
+
 
 #include <pagoda/common/debug/logger.h>
 #include <pagoda/common/factory.h>
@@ -6,6 +7,7 @@
 #include <memory>
 
 #include <pagoda/graph/graph.h>
+#include "pagoda/graph/node_factory.h"
 #include <pagoda/graph/input_interface_node.h>
 #include <pagoda/graph/io/reader.h>
 #include <pagoda/graph/operation_node.h>
@@ -40,6 +42,8 @@
 #include <pagoda/geometry/scope_axis_direction_predicate.h>
 #include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object_predicate_registry.h>
+#include "pagoda/objects/operation_factory.h"
+#include "pagoda/objects/procedural_object_system.h"
 
 namespace pagoda
 {

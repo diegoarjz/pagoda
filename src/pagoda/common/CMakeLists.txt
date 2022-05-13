@@ -18,7 +18,6 @@ set(COMMON_SRCS
     "utils.cpp"
     "utils.h"
     "version.cpp"
-    "version.h"
 )
 
 set(COMMON_COMPILE_DEFINITIONS

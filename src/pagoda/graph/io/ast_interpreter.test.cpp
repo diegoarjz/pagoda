@@ -41,7 +41,7 @@ TEST_F(AstInterpreterTest,
 {
 	NodeDefinitionNode::ExecutionArgumentContainer_t executionArgs = {
 	  std::make_shared<NamedArgument>(
-	    "interface", NamedArgument::ArgumentType::String, "out")};
+	    "interface", NamedArgument::ArgumentType::String, "\"out\"")};
 	NodeDefinitionNode n("name", "InputInterface", executionArgs);
 	m_interpreter->Visit(&n);
 	EXPECT_EQ(m_graph->GetNodeCount(), 1u);
@@ -55,7 +55,7 @@ TEST_F(AstInterpreterTest,
 	for (auto name : {"n1", "n2"}) {
 		NodeDefinitionNode::ExecutionArgumentContainer_t executionArgs = {
 		  std::make_shared<NamedArgument>(
-		    "interface", NamedArgument::ArgumentType::String, "out")};
+		    "interface", NamedArgument::ArgumentType::String, "\"out\"")};
 		NodeDefinitionNode n(name, "InputInterface", executionArgs);
 		m_interpreter->Visit(&n);
 
