@@ -16,6 +16,7 @@
 
 #include <pagoda/common/exception/exception.h>
 #include <pagoda/common/fs/file_util.h>
+#include <pagoda/common/debug/logger.h>
 
 #include <boost/filesystem/path.hpp>
 

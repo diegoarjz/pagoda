@@ -10,13 +10,11 @@ add_subdirectory(dynamic)
 add_subdirectory(pgscript)
 
 set(PAGODA_SOURCES
-  "pagoda.h"
   "pagoda.cpp"
   $<TARGET_OBJECTS:common>
   $<TARGET_OBJECTS:geometry>
   $<TARGET_OBJECTS:image>
   $<TARGET_OBJECTS:material>
-  #$<TARGET_OBJECTS:math>
   $<TARGET_OBJECTS:scene>
   $<TARGET_OBJECTS:graph>
   $<TARGET_OBJECTS:objects>
@@ -39,3 +37,4 @@ add_pagoda_library(
   SOURCES       ${PAGODA_SOURCES}
   DEPENDENCIES  ${PAGODA_DEPENDENCIES}
 )
+

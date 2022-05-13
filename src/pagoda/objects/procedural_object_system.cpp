@@ -3,6 +3,7 @@
 #include "operations/router.h"
 #include "procedural_component_system.h"
 #include "procedural_object.h"
+#include "operation_factory.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>

@@ -43,7 +43,9 @@ jobs:
                   }
         steps:
             - name: Check out repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
+              with:
+                path: 'pagoda'
 
             - name: Download and Install Dependencies
               run: |
@@ -61,10 +63,11 @@ jobs:
                 CONAN_SYSREQUIRES_MODE: "enabled"
               run: |
                   ${{ matrix.config.set_path }}
+                  pushd ${{ github.workspace }}/pagoda
                   git submodule update --init --recursive
-                  conan install -if ${{ github.workspace }}/build -pr ${{ matrix.config.conan_profile }} ${{ github.workspace }} --build=missing
-                  cd ${{ github.workspace }}/build
-                  conan build ${{ github.workspace }}
+                  popd
+                  conan install -if ${{ github.workspace }}/build -pr ${{ github.workspace}}/pagoda/${{ matrix.config.conan_profile }} ${{ github.workspace }}/pagoda --build=missing
+                  conan build -bf ${{ github.workspace }}/build ${{ github.workspace }}/pagoda
 
             - name: Run tests
               run: |
@@ -74,7 +77,7 @@ jobs:
             - name: Create package
               run: |
                   ${{ matrix.config.set_path }}
-                  conan package -bf build -if build -pf package .
+                  conan package -bf ${{ github.workspace }}/build -pf ${{ github.workspace }}/build/pagoda ${{ github.workspace }}/pagoda
 
             - name: Pack Build Results
               if: always()
@@ -93,13 +96,13 @@ jobs:
             - name: Install
               run: |
                   mkdir -p ${{ github.workspace }}/install_dir
-                  cmake --install ${{ github.workspace }}/build --prefix ${{ github.workspace }}/install_dir
+                  cmake --install ${{ github.workspace }}/build --prefix ${{ github.workspace }}/build/pagoda
 
             - name: Pack
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar cJfv "${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/install_dir")
+                                          -E tar cJfv "${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/build/pagoda")
 
             - name: Upload
               uses: actions/upload-artifact@v1

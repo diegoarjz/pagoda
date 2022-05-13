@@ -7,6 +7,8 @@
 #include "operations/set_shader.h"
 #include "operations/set_texture.h"
 
+#include "pagoda/objects/operation_factory.h"
+
 #include <pagoda/pagoda.h>
 #include <memory>
 

@@ -3,6 +3,9 @@
 #include <pagoda/pagoda.h>
 #include "hierarchical_component.h"
 
+#include "pagoda/objects/operation_factory.h"
+#include "pagoda/objects/procedural_object_system.h"
+
 #include <memory>
 
 namespace pagoda::objects

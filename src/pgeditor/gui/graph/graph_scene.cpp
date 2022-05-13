@@ -10,6 +10,7 @@
 #include "node_style.h"
 #include "operation_node.h"
 #include "pagoda/objects/interface_callback.h"
+#include "pagoda/objects/operation_factory.h"
 
 #include <pagoda/graph/query/topology.h>
 #include <pagoda/graph/query/type.h>

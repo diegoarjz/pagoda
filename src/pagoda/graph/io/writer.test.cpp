@@ -6,6 +6,8 @@
 #include <pagoda/graph/operation_node.h>
 #include <pagoda/graph/output_interface_node.h>
 
+#include <pagoda/objects/operation_factory.h>
+
 #include <pagoda/dynamic/float_value.h>
 
 #include <pagoda/pagoda.h>

@@ -8,6 +8,9 @@
 #include <pagoda/graph/io/reader.h>
 #include <pagoda/graph/io/writer.h>
 
+#include <pagoda/objects/procedural_object_system.h>
+#include <pagoda/objects/operation_factory.h>
+
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QLabel>

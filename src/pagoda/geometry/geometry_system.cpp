@@ -21,15 +21,16 @@
 #include "operations/triangulate_geometry.h"
 
 #include <pagoda/geometry/geometry_component.h>
-#include <memory>
 
 #include <pagoda/objects/procedural_object.h>
+#include "pagoda/objects/operation_factory.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/instrument/profiler.h>
 
 #include <pagoda/pagoda.h>
 
+#include <memory>
 namespace pagoda::geometry
 {
 using namespace operations;

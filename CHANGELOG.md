@@ -26,11 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - *Or* combines several queries with an or logical operation.
     - *OutputNode* finds nodes that don't have downstream nodes.
     - *Type* finds nodes based on their c++ type.
-- New API for setting parameters in operations.
-- Parameters callback into external functions on value change.
-- Parameters have expressions.
-- Parameters are stored in nodes.
-- New API for setting interfaces in operations.
 - Query topology specifying how a set of queries are combined to match subgraphs.
 - Graph Grammar system.
 - Traversal operations for geometry, providing a cleaner interface for
@@ -50,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - OpenGL scene viewer with basic mouse navigation.
   - Rendering system, rendering components and a render operation to display
     procedural objects.
+- Improved packaging and distribution.
 
 ### Changed
 
@@ -63,6 +59,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     following syntax `node1>out -> in<node2>out -> in<node3;`
   - Can create operation nodes with just the operation name. E.g.
     `n = ExtrudeGeometry { extrusion_amount : 10 }`
+- New API for setting parameters in operations.
+- Parameters callback into external functions on value change.
+- Parameters have expressions.
+- Parameters are stored in nodes.
+- New API for setting interfaces in operations.
 
 ## [0.1.0] - 2020-04-28
 
