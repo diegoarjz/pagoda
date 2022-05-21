@@ -17,6 +17,7 @@ set(COMMON_SRCS
     "range.h"
     "utils.cpp"
     "utils.h"
+    "plugin.cpp"
     "version.cpp"
 )
 

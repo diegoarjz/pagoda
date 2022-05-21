@@ -7,6 +7,11 @@
 
 namespace pagoda::common::fs
 {
+/**
+ * Returns the path to the current executable.
+ */
+boost::filesystem::path GetExecutablePath();
+
 std::string LoadFileToString(const boost::filesystem::path &path);
 
 void WriteStringToFile(const boost::filesystem::path &filePath, const std::string &contents);

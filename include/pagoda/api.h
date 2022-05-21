@@ -31,3 +31,26 @@
     #define PAGODA_API
     #define PAGODA_HIDDEN
 #endif
+
+#if defined _WIN32 || defined __CYGWIN__
+  #ifdef WIN_EXPORT
+    // Exporting...
+    #ifdef __GNUC__
+      #define PAGODA_PLUGIN __attribute__ ((dllexport))
+    #else
+      #define PAGODA_PLUGIN __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
+    #endif
+  #else
+    #ifdef __GNUC__
+      #define PAGODA_PLUGIN __attribute__ ((dllimport))
+    #else
+      #define PAGODA_PLUGIN __declspec(dllimport) // Note: actually gcc seems to also supports this syntax.
+    #endif
+  #endif
+#else
+  #if __GNUC__ >= 4
+    #define PAGODA_PLUGIN __attribute__ ((visibility ("default")))
+  #else
+    #define PAGODA_PLUGIN
+  #endif
+#endif
