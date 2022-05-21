@@ -2,6 +2,7 @@ set(PAGODA_PUBLIC_HEADERS
   "pagoda/pagoda.h"
   "pagoda/api.h"
   "pagoda/common/version.h"
+  "pagoda/common/plugin.h"
 )
 
 add_pagoda_header_only(

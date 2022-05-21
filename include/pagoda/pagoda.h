@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace pagoda {
 
@@ -74,6 +75,20 @@ public:
    * Creates a \c Graph from the contents of \c graphStr.
    */
   graph::GraphPtr CreateGraphFromString(const std::string &graphStr);
+
+  /**
+   * Holds information about loaded plugins.
+   */
+  struct PluginInfo
+  {
+    std::string name;
+    std::string path;
+  };
+
+  /**
+   * Returns info about loaded plugins.
+   */
+  const std::vector<PluginInfo>& GetPluginInfo() const;
 
 private:
   class Impl;

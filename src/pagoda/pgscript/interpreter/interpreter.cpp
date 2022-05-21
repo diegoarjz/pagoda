@@ -23,7 +23,7 @@ std::shared_ptr<T> constructor_wrapper(const std::vector<DynamicValueBasePtr> &a
 	return instance;
 }
 
-void print(const std::vector<dynamic::DynamicValueBasePtr> &args)
+static void print(const std::vector<dynamic::DynamicValueBasePtr> &args)
 {
 	auto out = Interpreter::GetStdOutStream();
 	for (const auto &d : args) {
