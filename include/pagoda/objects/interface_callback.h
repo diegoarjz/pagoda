@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface.h"
+#include "pagoda/objects/interface.h"
 
 #include <string>
 

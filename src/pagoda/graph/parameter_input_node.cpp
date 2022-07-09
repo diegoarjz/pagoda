@@ -1,4 +1,4 @@
-#include "parameter_input_node.h"
+#include "pagoda/graph/parameter_input_node.h"
 
 #include <pagoda/dynamic/get_value_as.h>
 #include <pagoda/dynamic/string_value.h>

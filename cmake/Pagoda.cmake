@@ -140,8 +140,8 @@ function (add_pagoda_build_unit)
     ${PARSED_ARGS_NAME}
     PUBLIC
       $<INSTALL_INTERFACE:pagoda>
-      $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-      $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+      $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
     PRIVATE
       ${Boost_INCLUDE_DIRS}
   )
@@ -328,6 +328,7 @@ set(PAGODA_GTEST_LIBS GTest::gtest GTest::gtest_main)
 #
 # param unit_test_src: the source file.
 function (add_unit_test unit_test_src)
+  #[[
   get_filename_component(unit_test_base_name ${unit_test_src} NAME)
   string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
   set(unit_test_libs GTest::gtest GTest::gtest_main)
@@ -352,4 +353,5 @@ function (add_unit_test unit_test_src)
     COMMAND ${test_name}
     COMMENT "Running ${test_name} unit test"
   )
+  ]]
 endfunction()

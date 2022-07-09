@@ -11,7 +11,6 @@ set(COMMON_SRCS
     "instrument/profiler.h"
     "instrument/statistics.cpp"
     "instrument/statistics.h"
-    "factory.h"
     "fs/file_util.cpp"
     "fs/file_util.h"
     "range.h"

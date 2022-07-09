@@ -1,4 +1,4 @@
-#include "parameter.h"
+#include "pagoda/objects/parameter.h"
 
 #include <pagoda/pgscript/interpreter/interpreter.h>
 #include <pagoda/pgscript/parser/parser.h>

@@ -3,7 +3,7 @@
 
 #include "pagoda/common/factory.h"
 
-#include "node.h"
+#include "pagoda/graph/node.h"
 
 namespace pagoda::graph
 {

@@ -1,4 +1,4 @@
-#include "procedural_component.h"
+#include "pagoda/objects/procedural_component.h"
 
 namespace pagoda::objects
 {

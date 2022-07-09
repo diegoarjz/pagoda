@@ -1,4 +1,4 @@
-#include "parameter_node.h"
+#include "pagoda/graph/parameter_node.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>

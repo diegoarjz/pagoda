@@ -1,9 +1,9 @@
-#include "procedural_object_system.h"
+#include "pagoda/objects/procedural_object_system.h"
 
-#include "operations/router.h"
-#include "procedural_component_system.h"
-#include "procedural_object.h"
-#include "operation_factory.h"
+#include "pagoda/objects/operations/router.h"
+#include "pagoda/objects/procedural_component_system.h"
+#include "pagoda/objects/procedural_object.h"
+#include "pagoda/objects/operation_factory.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>

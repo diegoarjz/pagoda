@@ -1,11 +1,11 @@
-#include "operation_node.h"
+#include "pagoda/graph/operation_node.h"
 
-#include "graph.h"
-#include "input_interface_node.h"
-#include "node.h"
-#include "node_set_visitor.h"
-#include "output_interface_node.h"
-#include "unsupported_node_link.h"
+#include "pagoda/graph/graph.h"
+#include "pagoda/graph/input_interface_node.h"
+#include "pagoda/graph/node.h"
+#include "pagoda/graph/node_set_visitor.h"
+#include "pagoda/graph/output_interface_node.h"
+#include "pagoda/graph/unsupported_node_link.h"
 
 #include <pagoda/common/utils.h>
 

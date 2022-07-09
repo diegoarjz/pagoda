@@ -1,7 +1,7 @@
-#include "node_set.h"
+#include "pagoda/graph/node_set.h"
 
-#include "node.h"
-#include "query/query.h"
+#include "pagoda/graph/node.h"
+#include "pagoda/graph/query/query.h"
 
 #include <pagoda/common/debug/assertions.h>
 

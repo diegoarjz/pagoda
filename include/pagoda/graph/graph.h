@@ -1,8 +1,8 @@
 #pragma once
 
-#include "node_set.h"
-#include "scheduler.h"
-#include "traversal/traversal.h"
+#include "pagoda/graph/node_set.h"
+#include "pagoda/graph/scheduler.h"
+#include "pagoda/graph/traversal/traversal.h"
 
 #include <functional>
 #include <list>

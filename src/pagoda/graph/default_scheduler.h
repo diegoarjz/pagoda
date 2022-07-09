@@ -1,8 +1,8 @@
 #ifndef PAGODA_PROCEDURAL_GRAPH_DEFAULT_SCHEDULER_H_
 #define PAGODA_PROCEDURAL_GRAPH_DEFAULT_SCHEDULER_H_
 
-#include "graph.h"
-#include "node.h"
+#include "pagoda/graph/graph.h"
+#include "pagoda/graph/node.h"
 
 #include "scheduler.h"
 

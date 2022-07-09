@@ -1,4 +1,4 @@
-#include "interface.h"
+#include "pagoda/objects/interface.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
@@ -143,6 +143,9 @@ ProceduralObjectPtr Interface::GetNext()
 		LOG_TRACE(ProceduralObjects, "  Arity Mismatch");
 		return nullptr;
 	}
+  if (m_objects.empty()) {
+    return nullptr;
+  }
 	auto obj = m_objects[0];
 	m_objects[0] = nullptr;
 	return obj;

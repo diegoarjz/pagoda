@@ -1,6 +1,6 @@
 #pragma once
 
-#include "node_set.h"
+#include "pagoda/graph/node_set.h"
 
 #include <pagoda/common/factory.h>
 #include <pagoda/dynamic/builtin_class.h>

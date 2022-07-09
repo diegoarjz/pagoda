@@ -1,10 +1,10 @@
-#include "procedural_operation.h"
+#include "pagoda/objects/procedural_operation.h"
 
-#include "hierarchical_component.h"
-#include "hierarchical_system.h"
-#include "interface_callback.h"
-#include "procedural_object.h"
-#include "procedural_object_system.h"
+#include "pagoda/objects/hierarchical_component.h"
+#include "pagoda/objects/hierarchical_system.h"
+#include "pagoda/objects/interface_callback.h"
+#include "pagoda/objects/procedural_object.h"
+#include "pagoda/objects/procedural_object_system.h"
 
 #include <pagoda/common/debug/assertions.h>
 

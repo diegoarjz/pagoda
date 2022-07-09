@@ -2,7 +2,7 @@
 #ifndef PAGODA_PROCEDURAL_GRAPH_OUTPUT_INTERFACE_EXECUTION_H_
 #define PAGODA_PROCEDURAL_GRAPH_OUTPUT_INTERFACE_EXECUTION_H_
 
-#include "node.h"
+#include "pagoda/graph/node.h"
 
 #include <list>
 

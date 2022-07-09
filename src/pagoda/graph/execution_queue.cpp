@@ -1,10 +1,10 @@
-#include "execution_queue.h"
+#include "pagoda/graph/execution_queue.h"
 
-#include "query/query.h"
-#include "traversal/forward.h"
+#include "pagoda/graph/query/query.h"
+#include "pagoda/graph/traversal/forward.h"
 
-#include "graph.h"
-#include "node.h"
+#include "pagoda/graph/graph.h"
+#include "pagoda/graph/node.h"
 
 #include <pagoda/common/instrument/profiler.h>
 

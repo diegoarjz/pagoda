@@ -10,7 +10,7 @@ public:
   ~TestPlugin() override {}
   const char *Name() override { return "TestPlugin"; }
 
-  bool Register(const pagoda::Pagoda* pagoda) override {
+  bool Register(pagoda::Pagoda* pagoda) override {
     return true;
   }
 };

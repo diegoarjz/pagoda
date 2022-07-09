@@ -32,7 +32,7 @@ namespace pagoda::common
       /**
        * Called to perform the registration in the pagoda instance.
        */
-      virtual bool Register(const Pagoda* pagoda) = 0;
+      virtual bool Register(Pagoda* pagoda) = 0;
 
       /**
        * Returns the path to the directory where plugins are installed.

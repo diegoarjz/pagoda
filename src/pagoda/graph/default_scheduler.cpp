@@ -1,20 +1,20 @@
-#include "default_scheduler.h"
+#include "pagoda/graph/default_scheduler.h"
 
-#include "input_interface_node.h"
-#include "operation_node.h"
-#include "output_interface_node.h"
-#include "parameter_node.h"
+#include "pagoda/graph/input_interface_node.h"
+#include "pagoda/graph/operation_node.h"
+#include "pagoda/graph/output_interface_node.h"
+#include "pagoda/graph/parameter_node.h"
 
-#include "query/adjacent.h"
-#include "query/and.h"
-#include "query/graph_grammar.h"
-#include "query/input_node.h"
-#include "query/query.h"
-#include "query/rule.h"
-#include "query/topology.h"
-#include "query/type.h"
+#include "pagoda/graph/query/adjacent.h"
+#include "pagoda/graph/query/and.h"
+#include "pagoda/graph/query/graph_grammar.h"
+#include "pagoda/graph/query/input_node.h"
+#include "pagoda/graph/query/query.h"
+#include "pagoda/graph/query/rule.h"
+#include "pagoda/graph/query/topology.h"
+#include "pagoda/graph/query/type.h"
 
-#include "traversal/forward.h"
+#include "pagoda/graph/traversal/forward.h"
 
 #include <pagoda/common/exception/exception.h>
 #include <pagoda/common/instrument/profiler.h>

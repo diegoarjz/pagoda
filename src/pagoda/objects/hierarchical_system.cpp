@@ -1,7 +1,7 @@
 #include "hierarchical_system.h"
 
 #include <pagoda/pagoda.h>
-#include "hierarchical_component.h"
+#include "pagoda/objects/hierarchical_component.h"
 
 #include "pagoda/objects/operation_factory.h"
 #include "pagoda/objects/procedural_object_system.h"

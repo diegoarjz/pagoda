@@ -1,6 +1,6 @@
 #pragma once
 
-#include "parameter.h"
+#include "pagoda/objects/parameter.h"
 
 #include <memory>
 #include <string>

@@ -1,4 +1,4 @@
-#include "node_factory.h"
+#include "pagoda/graph/node_factory.h"
 
 namespace pagoda::graph
 {

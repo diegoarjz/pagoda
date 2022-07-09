@@ -1,6 +1,6 @@
 #pragma once
 
-#include "node.h"
+#include "pagoda/graph/node.h"
 
 namespace pagoda::dynamic
 {

@@ -1,4 +1,4 @@
-#include "node.h"
+#include "pagoda/graph/node.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/dynamic/expression.h>

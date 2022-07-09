@@ -1,4 +1,4 @@
-#include "unknown_node_type.h"
+#include "pagoda/graph/unknown_node_type.h"
 
 namespace pagoda::graph
 {

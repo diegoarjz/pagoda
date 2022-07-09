@@ -1,15 +1,15 @@
-#include "graph.h"
+#include "pagoda/graph/graph.h"
 
-#include "query/input_node.h"
-#include "query/output_node.h"
-#include "query/query.h"
+#include "pagoda/graph/query/input_node.h"
+#include "pagoda/graph/query/output_node.h"
+#include "pagoda/graph/query/query.h"
 
-#include "traversal/linear.h"
+#include "pagoda/graph/traversal/linear.h"
 
-#include "default_scheduler.h"
-#include "node.h"
-#include "node_factory.h"
-#include "unknown_node_type.h"
+#include "pagoda/graph/default_scheduler.h"
+#include "pagoda/graph/node.h"
+#include "pagoda/graph/node_factory.h"
+#include "pagoda/graph/unknown_node_type.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/exception/exception.h>

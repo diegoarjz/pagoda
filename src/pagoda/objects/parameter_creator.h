@@ -1,6 +1,6 @@
 #pragma once
 
-#include "parameter_callback.h"
+#include "pagoda/objects/parameter_callback.h"
 
 #include <functional>
 

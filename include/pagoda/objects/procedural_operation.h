@@ -1,8 +1,8 @@
 #pragma once
 
-#include "interface.h"
-#include "interface_callback.h"
-#include "procedural_component.h"
+#include "pagoda/objects/interface.h"
+#include "pagoda/objects/interface_callback.h"
+#include "pagoda/objects/procedural_component.h"
 
 #include <pagoda/common/factory.h>
 #include <pagoda/dynamic/builtin_class.h>

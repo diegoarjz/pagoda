@@ -1,7 +1,7 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_HIERARCHICAL_COMPONENT_H_
 #define PAGODA_PROCEDURAL_OBJECTS_HIERARCHICAL_COMPONENT_H_
 
-#include "procedural_component.h"
+#include "pagoda/objects/procedural_component.h"
 
 #include <list>
 #include <string>

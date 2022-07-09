@@ -1,7 +1,6 @@
 #pragma once
 
 #include <pagoda/common/debug/assertions.h>
-#include <pagoda/common/instrument/profiler.h>
 
 #include <memory>
 #include <unordered_map>
@@ -41,7 +40,6 @@ class ProceduralObjectSystem
 	{
 		DBG_ASSERT_MSG(m_proceduralObjects.size() == 0,
 		               "Unregistering a ComponentSystem while there are procedural objects may cause incorrect behaviour.");
-		START_PROFILE;
 
 		std::string type = System::GetComponentSystem();
 

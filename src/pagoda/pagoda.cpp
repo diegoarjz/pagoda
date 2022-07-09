@@ -253,7 +253,7 @@ private:
       }
 
       LOG_TRACE(Core, "Registering '" << pagodaPlugin->Name() << "'");
-      if (!pagodaPlugin->Register(nullptr)) {
+      if (!pagodaPlugin->Register(m_pagoda)) {
         LOG_WARNING("Plugin '" << pagodaPlugin->Name() << "' (" << pluginPath
                                << ") failed to register.");
       }

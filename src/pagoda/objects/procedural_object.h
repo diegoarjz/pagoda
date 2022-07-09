@@ -1,8 +1,6 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 #define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 
-#include "procedural_component.h"
-
 #include <pagoda/dynamic/builtin_class.h>
 #include <pagoda/geometry/core/geometry.h>
 

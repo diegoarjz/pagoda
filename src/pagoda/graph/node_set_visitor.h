@@ -1,8 +1,8 @@
 #ifndef PAGODA_PROCEDURAL_GRAPH_NODE_SET_VISITOR_H_
 #define PAGODA_PROCEDURAL_GRAPH_NODE_SET_VISITOR_H_
 
-#include "node.h"
-#include "node_set.h"
+#include "pagoda/graph/node.h"
+#include "pagoda/graph/node_set.h"
 
 namespace pagoda::graph
 {

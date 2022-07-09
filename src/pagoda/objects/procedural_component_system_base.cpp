@@ -1,4 +1,4 @@
-#include "procedural_component_system_base.h"
+#include "pagoda/objects/procedural_component_system_base.h"
 
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
