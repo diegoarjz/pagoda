@@ -40,6 +40,9 @@ const std::string& OutputInterfaceNode::GetInterfaceName() const
 
 void OutputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object)
 {
+  if (object == nullptr) {
+    return;
+  }
 	m_proceduralObjects.push_back(object);
 }
 
