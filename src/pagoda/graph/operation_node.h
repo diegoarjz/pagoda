@@ -6,6 +6,9 @@ namespace pagoda::objects
 {
 using ProceduralOperationPtr = std::shared_ptr<class ProceduralOperation>;
 using OperationFactoryPtr = std::shared_ptr<class OperationFactory>;
+
+using InterfacePtr = std::shared_ptr<Interface>;
+using InterfacePtrMap = std::unordered_map<std::string, InterfacePtr>;
 }  // namespace pagoda::objects
 
 namespace pagoda::graph
@@ -29,11 +32,16 @@ class OperationNode : public Node
 	  const std::function<void(const std::string &,
 	                           const dynamic::DynamicValueBasePtr &)> &f) const;
 
+  objects::InterfacePtr GetInputInterface(const std::string& name) const;
+  objects::InterfacePtr GetOutputInterface(const std::string& name) const;
+
 	const char *const GetNodeType() override;
 
 	private:
-	pagoda::objects::ProceduralOperationPtr m_operation;
-	pagoda::objects::OperationFactoryPtr m_operationFactory;
+	objects::ProceduralOperationPtr m_operation;
+	objects::OperationFactoryPtr m_operationFactory;
+  objects::InterfacePtrMap m_inputInterfaces;
+  objects::InterfacePtrMap m_outputInterfaces;
 	std::string m_operationName;
 };  // class OperationNode
 }  // namespace pagoda::graph

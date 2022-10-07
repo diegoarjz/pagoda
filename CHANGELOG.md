@@ -46,6 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Rendering system, rendering components and a render operation to display
     procedural objects.
 - Improved packaging and distribution.
+- Added Prepare and Finish to ProceduralOperation to allow operations to
+  execute code before and after graphs are executed.
 
 ### Changed
 

@@ -19,29 +19,6 @@ namespace pagoda::objects
 {
 class Node;
 
-class ParameterCallback
-{
-	public:
-	virtual dynamic::DynamicValueBasePtr StringArgument(
-	  const char* const name, const char* const label,
-	  const std::string& defaultValue = "") = 0;
-
-	virtual dynamic::DynamicValueBasePtr FloatArgument(
-	  const char* const name, const char* const label,
-	  float defaultValue = 0.0f) = 0;
-
-	virtual dynamic::DynamicValueBasePtr IntegerArgument(
-	  const char* const name, const char* const label, int defaultValue = 0) = 0;
-
-	virtual dynamic::DynamicValueBasePtr BooleanArgument(
-	  const char* const name, const char* const label,
-	  bool defaultValue = false) = 0;
-
-	virtual dynamic::DynamicValueBasePtr PlaneArgument(
-	  const char* const name, const char* const label,
-	  math::Plane<float> defaultValue = math::Plane<float>{}) = 0;
-};
-
 class NewParameterCallback
 {
 	public:
