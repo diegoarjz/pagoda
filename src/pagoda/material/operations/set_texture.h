@@ -14,8 +14,6 @@ class SetTexture : public objects::ProceduralOperation
 	SetTexture(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~SetTexture();
 
-	void SetParameters(objects::ParameterCallback* cb) override;
-
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;
 

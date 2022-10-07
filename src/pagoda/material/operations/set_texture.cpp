@@ -31,10 +31,6 @@ SetTexture::~SetTexture()
 {
 }
 
-void SetTexture::SetParameters(objects::ParameterCallback* cb)
-{
-}
-
 const std::string& SetTexture::GetOperationName() const
 {
 	static const std::string sName{"SetTexture"};

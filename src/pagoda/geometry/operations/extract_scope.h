@@ -15,9 +15,6 @@ class ExtractScope : public objects::ProceduralOperation
 	ExtractScope(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~ExtractScope();
 
-	void SetParameters(objects::ParameterCallback* cb) override
-	{
-	}
 
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;

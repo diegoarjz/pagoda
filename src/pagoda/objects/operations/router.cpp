@@ -27,10 +27,6 @@ Router::~Router()
 {
 }
 
-void Router::SetParameters(objects::ParameterCallback* cb)
-{
-}
-
 const std::string& Router::GetOperationName() const
 {
 	static const std::string sName{"Router"};

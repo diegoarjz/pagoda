@@ -67,10 +67,6 @@ Render::~Render()
 {
 }
 
-void Render::SetParameters(pagoda::objects::ParameterCallback* cb)
-{
-}
-
 const std::string& Render::GetOperationName() const
 {
 	static const std::string kName{"Render"};

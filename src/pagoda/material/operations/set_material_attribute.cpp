@@ -38,11 +38,6 @@ SetMaterialAttribute::~SetMaterialAttribute()
 {
 }
 
-void SetMaterialAttribute::SetParameters(objects::ParameterCallback* cb)
-{
-	// RegisterMember("name", cb->
-}
-
 const std::string& SetMaterialAttribute::GetOperationName() const
 {
 	static const std::string sName{"SetMaterialAttribute"};

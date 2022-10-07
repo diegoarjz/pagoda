@@ -22,9 +22,6 @@ class RepeatSplit : public objects::ProceduralOperation
 	RepeatSplit(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~RepeatSplit();
 
-	void SetParameters(objects::ParameterCallback *cb) override
-	{
-	}
 	void Parameters(objects::NewParameterCallback *cb) override;
 
 	const std::string &GetOperationName() const override;

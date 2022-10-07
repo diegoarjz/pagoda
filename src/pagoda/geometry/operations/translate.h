@@ -15,9 +15,6 @@ class Translate : public objects::ProceduralOperation
 	Translate(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Translate();
 
-	void SetParameters(objects::ParameterCallback* cb) override
-	{
-	}
 	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;

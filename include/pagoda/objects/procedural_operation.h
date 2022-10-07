@@ -79,8 +79,6 @@ class ProceduralOperation : public dynamic::BuiltinClass
 	  const std::function<void(const std::string&,
 	                           const dynamic::DynamicValueBasePtr& type)>& f);
 
-	virtual void SetParameters(objects::ParameterCallback* cb) = 0;
-
 	virtual void Parameters(objects::NewParameterCallback* cb)
 	{
 	}

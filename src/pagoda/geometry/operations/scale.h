@@ -13,9 +13,6 @@ class Scale : public objects::ProceduralOperation
 	Scale(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Scale();
 
-	void SetParameters(objects::ParameterCallback* cb) override
-	{
-	}
 	void Parameters(objects::NewParameterCallback* cb) override;
 	const std::string& GetOperationName() const override;
 	void Interfaces(objects::InterfaceCallback* cb) override;

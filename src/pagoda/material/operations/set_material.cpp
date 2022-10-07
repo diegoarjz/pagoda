@@ -34,16 +34,6 @@ SetMaterial::~SetMaterial()
 {
 }
 
-void SetMaterial::SetParameters(objects::ParameterCallback* cb)
-{
-	for (uint32_t i = 0u; i < 8; ++i) {
-		auto texture = "texture_" + std::to_string(i);
-		RegisterMember(texture, cb->StringArgument(
-		                          texture.c_str(),
-		                          ("Texture " + std::to_string(i)).c_str(), ""));
-	}
-}
-
 const std::string& SetMaterial::GetOperationName() const
 {
 	static const std::string sName{"SetMaterial"};

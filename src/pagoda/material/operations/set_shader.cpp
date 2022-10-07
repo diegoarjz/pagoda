@@ -34,10 +34,6 @@ SetShader::~SetShader()
 {
 }
 
-void SetShader::SetParameters(objects::ParameterCallback* cb)
-{
-}
-
 const std::string& SetShader::GetOperationName() const
 {
 	static const std::string sName{"SetShader"};

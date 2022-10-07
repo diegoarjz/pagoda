@@ -14,9 +14,6 @@ class Split : public objects::ProceduralOperation
 	Split(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Split();
 
-	void SetParameters(objects::ParameterCallback* cb) override
-	{
-	}
 	void Parameters(objects::NewParameterCallback* cb) override;
 	void ParameterChanged(std::shared_ptr<objects::ParameterBase> par) override;
 

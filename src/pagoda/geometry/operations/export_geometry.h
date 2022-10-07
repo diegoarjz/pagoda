@@ -14,9 +14,6 @@ class ExportGeometry : public objects::ProceduralOperation
 	ExportGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	~ExportGeometry();
 
-	void SetParameters(objects::ParameterCallback* cb) override
-	{
-	}
 	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;

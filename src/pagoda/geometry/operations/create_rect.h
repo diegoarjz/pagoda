@@ -18,9 +18,6 @@ class CreateRectGeometry : public objects::ProceduralOperation
 	CreateRectGeometry(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~CreateRectGeometry();
 
-	void SetParameters(objects::ParameterCallback* cb) override
-	{
-	}
 	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;

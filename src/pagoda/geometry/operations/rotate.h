@@ -13,9 +13,6 @@ class Rotate : public objects::ProceduralOperation
 	Rotate(objects::ProceduralObjectSystemPtr objectSystem);
 	virtual ~Rotate();
 
-	void SetParameters(objects::ParameterCallback* cb) override
-	{
-	}
 	void Parameters(objects::NewParameterCallback* cb) override;
 
 	const std::string& GetOperationName() const override;
