@@ -19,8 +19,7 @@
 
 using namespace boost;
 
-namespace pagoda::geometry::operations
-{
+namespace pagoda::geometry::operations {
 using namespace objects;
 using namespace math;
 using namespace geometry::core;
@@ -30,92 +29,85 @@ const std::string ScopeTextureProjection::s_inputGeometry("in");
 const std::string ScopeTextureProjection::s_outputGeometry("out");
 
 ScopeTextureProjection::ScopeTextureProjection(
-  objects::ProceduralObjectSystemPtr objectSystem)
-  : ProceduralOperation(objectSystem)
-{
+    objects::ProceduralObjectSystemPtr objectSystem)
+    : ProceduralOperation(objectSystem) {}
+
+ScopeTextureProjection::~ScopeTextureProjection() {}
+
+void ScopeTextureProjection::Parameters(objects::NewParameterCallback *cb) {
+  cb->StringParameter(&m_axis, "axis", "Axis", "z");
+  cb->FloatParameter(&m_scale.a[0], "scale_u", "Scale U", 1.0f);
+  cb->FloatParameter(&m_scale.a[1], "scale_v", "Scale V", 1.0f);
+  cb->FloatParameter(&m_offset.a[0], "offset_u", "Offset U", 0.0f);
+  cb->FloatParameter(&m_offset.a[1], "offset_v", "Offset V", 0.0f);
+  cb->BooleanParameter(&m_clamp, "clamp", "Clamp", false);
 }
 
-ScopeTextureProjection::~ScopeTextureProjection()
-{
+const std::string &ScopeTextureProjection::GetOperationName() const {
+  static const std::string sName{"ScopeTextureProjection"};
+  return sName;
 }
 
-void ScopeTextureProjection::Parameters(objects::NewParameterCallback* cb)
-{
-	cb->StringParameter(&m_axis, "axis", "Axis", "z");
-	cb->FloatParameter(&m_scale.a[0], "scale_u", "Scale U", 1.0f);
-	cb->FloatParameter(&m_scale.a[1], "scale_v", "Scale V", 1.0f);
-	cb->FloatParameter(&m_offset.a[0], "offset_u", "Offset U", 0.0f);
-	cb->FloatParameter(&m_offset.a[1], "offset_v", "Offset V", 0.0f);
-	cb->BooleanParameter(&m_clamp, "clamp", "Clamp", false);
+void ScopeTextureProjection::Interfaces(InterfaceCallback *cb) {
+  cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_output, s_outputGeometry, "Out",
+                      Interface::Arity::Many);
 }
 
-const std::string& ScopeTextureProjection::GetOperationName() const
-{
-	static const std::string sName{"ScopeTextureProjection"};
-	return sName;
+void ScopeTextureProjection::DoWork() {
+  START_PROFILE;
+
+  auto geometrySystem =
+      m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+
+  while (ProceduralObjectPtr inObject = m_input->GetNext()) {
+    ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+    m_output->SetNext(outObject);
+
+    auto inGeometryComponent =
+        geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+    GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
+    auto outGeometryComponent =
+        geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+
+    auto outGeometry = std::make_shared<Geometry>();
+    *outGeometry = *inGeometry;
+    outGeometryComponent->SetGeometry(outGeometry);
+    outGeometryComponent->SetScope(inGeometryComponent->GetScope());
+
+    auto &scope = outGeometryComponent->GetScope();
+    auto scopeSize = scope.GetSize();
+    qvm::vec<float, 3> scopePos = scope.GetPosition();
+    qvm::vec<float, 3> uAxis;
+    qvm::vec<float, 3> vAxis;
+
+    if (m_axis == "x") {
+      uAxis = scope.GetAxis('y');
+      vAxis = scope.GetAxis('z');
+      m_scale.a[0] *= Y(scopeSize);
+      m_scale.a[1] *= Z(scopeSize);
+    } else if (m_axis == "y") {
+      uAxis = scope.GetAxis('x');
+      vAxis = scope.GetAxis('z');
+      m_scale.a[0] *= X(scopeSize);
+      m_scale.a[1] *= Z(scopeSize);
+    } else if (m_axis == "z") {
+      uAxis = scope.GetAxis('x');
+      vAxis = scope.GetAxis('y');
+      m_scale.a[0] *= X(scopeSize);
+      m_scale.a[1] *= Y(scopeSize);
+    }
+
+    PlanarTextureProjection ptp(scopePos, uAxis, vAxis);
+    ptp.SetScale(m_scale.a[0], m_scale.a[1]);
+    ptp.SetOffset(m_offset.a[0], m_offset.a[1]);
+    ptp.SetClamp(m_clamp);
+
+    for (auto i = outGeometry->PointsBegin(); i != outGeometry->PointsEnd();
+         ++i) {
+      outGeometry->GetVertexAttributes(*i).m_texCoords =
+          ptp.GetProjection(outGeometry->GetPosition(*i));
+    }
+  }
 }
-
-void ScopeTextureProjection::Interfaces(InterfaceCallback* cb)
-{
-	cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
-	cb->OutputInterface(m_output, s_outputGeometry, "Out",
-	                    Interface::Arity::Many);
-}
-
-void ScopeTextureProjection::DoWork()
-{
-	START_PROFILE;
-
-	auto geometrySystem =
-	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-
-	ProceduralObjectPtr inObject = m_input->GetNext();
-	ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-	m_output->SetNext(outObject);
-
-	auto inGeometryComponent =
-	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-	GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
-	auto outGeometryComponent =
-	  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-
-	auto outGeometry = std::make_shared<Geometry>();
-	*outGeometry = *inGeometry;
-	outGeometryComponent->SetGeometry(outGeometry);
-	outGeometryComponent->SetScope(inGeometryComponent->GetScope());
-
-	auto& scope = outGeometryComponent->GetScope();
-	auto scopeSize = scope.GetSize();
-	qvm::vec<float, 3> scopePos = scope.GetPosition();
-	qvm::vec<float, 3> uAxis;
-	qvm::vec<float, 3> vAxis;
-
-	if (m_axis == "x") {
-		uAxis = scope.GetAxis('y');
-		vAxis = scope.GetAxis('z');
-		m_scale.a[0] *= Y(scopeSize);
-		m_scale.a[1] *= Z(scopeSize);
-	} else if (m_axis == "y") {
-		uAxis = scope.GetAxis('x');
-		vAxis = scope.GetAxis('z');
-		m_scale.a[0] *= X(scopeSize);
-		m_scale.a[1] *= Z(scopeSize);
-	} else if (m_axis == "z") {
-		uAxis = scope.GetAxis('x');
-		vAxis = scope.GetAxis('y');
-		m_scale.a[0] *= X(scopeSize);
-		m_scale.a[1] *= Y(scopeSize);
-	}
-
-	PlanarTextureProjection ptp(scopePos, uAxis, vAxis);
-	ptp.SetScale(m_scale.a[0], m_scale.a[1]);
-	ptp.SetOffset(m_offset.a[0], m_offset.a[1]);
-	ptp.SetClamp(m_clamp);
-
-	for (auto i = outGeometry->PointsBegin(); i != outGeometry->PointsEnd();
-	     ++i) {
-		outGeometry->GetVertexAttributes(*i).m_texCoords =
-		  ptp.GetProjection(outGeometry->GetPosition(*i));
-	}
-}
-}  // namespace pagoda::geometry::operations
+} // namespace pagoda::geometry::operations

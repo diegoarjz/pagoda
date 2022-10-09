@@ -18,8 +18,7 @@
 #include <boost/qvm/map_mat_vec.hpp>
 #include <boost/qvm/map_vec_mat.hpp>
 
-namespace pagoda::geometry::operations
-{
+namespace pagoda::geometry::operations {
 using namespace objects;
 using namespace math;
 using namespace geometry::algorithms;
@@ -30,66 +29,59 @@ const std::string Translate::s_inputGeometry("in");
 const std::string Translate::s_outputGeometry("out");
 
 Translate::Translate(ProceduralObjectSystemPtr objectSystem)
-  : ProceduralOperation(objectSystem)
-{
-}
-Translate::~Translate()
-{
-}
+    : ProceduralOperation(objectSystem) {}
+Translate::~Translate() {}
 
-void Translate::Parameters(objects::NewParameterCallback* cb)
-{
-	cb->FloatParameter(&m_translate.a[0], "x", "X", 0.0f);
-	cb->FloatParameter(&m_translate.a[1], "y", "Y", 0.0f);
-	cb->FloatParameter(&m_translate.a[2], "z", "Z", 0.0f);
-	cb->BooleanParameter(&m_world, "world", "World", false);
+void Translate::Parameters(objects::NewParameterCallback *cb) {
+  cb->FloatParameter(&m_translate.a[0], "x", "X", 0.0f);
+  cb->FloatParameter(&m_translate.a[1], "y", "Y", 0.0f);
+  cb->FloatParameter(&m_translate.a[2], "z", "Z", 0.0f);
+  cb->BooleanParameter(&m_world, "world", "World", false);
 }
 
-const std::string& Translate::GetOperationName() const
-{
-	static const std::string sName{"Translate"};
-	return sName;
+const std::string &Translate::GetOperationName() const {
+  static const std::string sName{"Translate"};
+  return sName;
 }
 
-void Translate::Interfaces(InterfaceCallback* cb)
-{
-	cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
-	cb->OutputInterface(m_output, s_outputGeometry, "Out",
-	                    Interface::Arity::Many);
+void Translate::Interfaces(InterfaceCallback *cb) {
+  cb->InputInterface(m_input, s_inputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_output, s_outputGeometry, "Out",
+                      Interface::Arity::Many);
 }
 
-void Translate::DoWork()
-{
-	START_PROFILE;
+void Translate::DoWork() {
+  START_PROFILE;
 
-	auto geometrySystem =
-	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+  auto geometrySystem =
+      m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-	ProceduralObjectPtr inObject = m_input->GetNext();
-	ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-	m_output->SetNext(outObject);
+  while (ProceduralObjectPtr inObject = m_input->GetNext()) {
+    ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+    m_output->SetNext(outObject);
 
-	auto inGeometryComponent =
-	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-	GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
-	auto outGeometryComponent =
-	  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-	auto outGeometry = std::make_shared<Geometry>();
-	outGeometryComponent->SetGeometry(outGeometry);
+    auto inGeometryComponent =
+        geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+    GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
+    auto outGeometryComponent =
+        geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+    auto outGeometry = std::make_shared<Geometry>();
+    outGeometryComponent->SetGeometry(outGeometry);
 
-	auto inScope = inGeometryComponent->GetScope();
+    auto inScope = inGeometryComponent->GetScope();
 
-	Mat4x4F matrix;
-	if (m_world) {
-		matrix = boost::qvm::translation_mat(m_translate);
-	} else {
-		matrix = boost::qvm::translation_mat(inScope.GetLocalVector(m_translate));
-	}
-	MatrixTransform<Geometry> transform(matrix);
+    Mat4x4F matrix;
+    if (m_world) {
+      matrix = boost::qvm::translation_mat(m_translate);
+    } else {
+      matrix = boost::qvm::translation_mat(inScope.GetLocalVector(m_translate));
+    }
+    MatrixTransform<Geometry> transform(matrix);
 
-	transform.Execute(inGeometry, outGeometry);
+    transform.Execute(inGeometry, outGeometry);
 
-	outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
-	  outGeometry, inScope.GetRotation()));
+    outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
+        outGeometry, inScope.GetRotation()));
+  }
 }
-}  // namespace pagoda::geometry::operations
+} // namespace pagoda::geometry::operations

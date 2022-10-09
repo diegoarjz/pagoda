@@ -20,65 +20,58 @@
 
 #include <fstream>
 
-namespace pagoda::geometry::operations
-{
+namespace pagoda::geometry::operations {
 using namespace objects;
 using namespace geometry::core;
 using namespace geometry::io;
 using namespace dynamic;
 
-const char* ExportGeometry::name = "ExportGeometry";
+const char *ExportGeometry::name = "ExportGeometry";
 const std::string ExportGeometry::inputGeometry("in");
 
 ExportGeometry::ExportGeometry(ProceduralObjectSystemPtr objectSystem)
-  : ProceduralOperation(objectSystem), m_objectCount(0)
-{
+    : ProceduralOperation(objectSystem), m_objectCount(0) {}
+
+ExportGeometry::~ExportGeometry() {}
+
+void ExportGeometry::Parameters(objects::NewParameterCallback *cb) {
+  if (auto par = cb->IntegerParameter(&m_objectCount, "count", "Count", 0)) {
+    par->SetFlag(ParameterBase::Flag::NoWrite, true);
+  }
+  cb->StringParameter(&m_path, "path", "Path", "");
 }
 
-ExportGeometry::~ExportGeometry()
-{
+const std::string &ExportGeometry::GetOperationName() const {
+  static const std::string sName{"ExportGeometry"};
+  return sName;
 }
 
-void ExportGeometry::Parameters(objects::NewParameterCallback* cb)
-{
-	if (auto par = cb->IntegerParameter(&m_objectCount, "count", "Count", 0)) {
-		par->SetFlag(ParameterBase::Flag::NoWrite, true);
-	}
-	cb->StringParameter(&m_path, "path", "Path", "");
+void ExportGeometry::Interfaces(InterfaceCallback *cb) {
+  cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
 }
 
-const std::string& ExportGeometry::GetOperationName() const
-{
-	static const std::string sName{"ExportGeometry"};
-	return sName;
+void ExportGeometry::DoWork() {
+  START_PROFILE;
+
+  auto geometrySystem =
+      m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+
+  while (ProceduralObjectPtr inObject = m_input->GetNext()) {
+
+    auto geometryComponent =
+        geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+    auto geometry = geometryComponent->GetGeometry();
+    ObjExporter<Geometry> exporter(geometry);
+
+    common::fs::CreateDirectories(
+        boost::filesystem::path(m_path).parent_path());
+
+    std::ofstream out_file(m_path.c_str());
+    exporter.Export(out_file);
+    out_file.close();
+
+    ++m_objectCount;
+  }
 }
 
-void ExportGeometry::Interfaces(InterfaceCallback* cb)
-{
-	cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
-}
-
-void ExportGeometry::DoWork()
-{
-	START_PROFILE;
-
-	auto geometrySystem =
-	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
-
-	ProceduralObjectPtr inObject = m_input->GetNext();
-
-	auto geometryComponent =
-	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-	auto geometry = geometryComponent->GetGeometry();
-	ObjExporter<Geometry> exporter(geometry);
-
-	common::fs::CreateDirectories(boost::filesystem::path(m_path).parent_path());
-
-	std::ofstream out_file(m_path.c_str());
-	exporter.Export(out_file);
-	out_file.close();
-
-	++m_objectCount;
-}
-
-}  // namespace pagoda::geometry::operations
+} // namespace pagoda::geometry::operations

@@ -16,91 +16,84 @@
 
 #include <memory>
 
-namespace pagoda::geometry::operations
-{
+namespace pagoda::geometry::operations {
 using namespace objects;
 using namespace geometry::core;
 using namespace geometry::algorithms;
 using namespace dynamic;
 
-const char* FaceOffsetOperation::name = "FaceOffsetOperation";
+const char *FaceOffsetOperation::name = "FaceOffsetOperation";
 const std::string FaceOffsetOperation::inputGeometry("in");
 const std::string FaceOffsetOperation::outputInnerGeometry("inner");
 const std::string FaceOffsetOperation::outputOuterGeometry("outer");
 
 FaceOffsetOperation::FaceOffsetOperation(ProceduralObjectSystemPtr objectSystem)
-  : ProceduralOperation(objectSystem)
-{
-	START_PROFILE;
+    : ProceduralOperation(objectSystem) {
+  START_PROFILE;
 }
 
-FaceOffsetOperation::~FaceOffsetOperation()
-{
+FaceOffsetOperation::~FaceOffsetOperation() {}
+
+void FaceOffsetOperation::Parameters(objects::NewParameterCallback *cb) {
+  cb->FloatParameter(&m_amount, "amount", "Amount", 0.0f);
 }
 
-void FaceOffsetOperation::Parameters(objects::NewParameterCallback* cb)
-{
-	cb->FloatParameter(&m_amount, "amount", "Amount", 0.0f);
+const std::string &FaceOffsetOperation::GetOperationName() const {
+  static const std::string sName{"FaceOffset"};
+  return sName;
 }
 
-const std::string& FaceOffsetOperation::GetOperationName() const
-{
-	static const std::string sName{"FaceOffset"};
-	return sName;
+void FaceOffsetOperation::Interfaces(InterfaceCallback *cb) {
+  cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
+  cb->OutputInterface(m_inner, outputInnerGeometry, "Inner",
+                      Interface::Arity::All);
+  cb->OutputInterface(m_outer, outputOuterGeometry, "Outer",
+                      Interface::Arity::All);
 }
 
-void FaceOffsetOperation::Interfaces(InterfaceCallback* cb)
-{
-	cb->InputInterface(m_input, inputGeometry, "In", Interface::Arity::Many);
-	cb->OutputInterface(m_inner, outputInnerGeometry, "Inner",
-	                    Interface::Arity::All);
-	cb->OutputInterface(m_outer, outputOuterGeometry, "Outer",
-	                    Interface::Arity::All);
-}
+void FaceOffsetOperation::DoWork() {
+  START_PROFILE;
+  auto geometrySystem =
+      m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
 
-void FaceOffsetOperation::DoWork()
-{
-	START_PROFILE;
-	auto geometrySystem =
-	  m_proceduralObjectSystem->GetComponentSystem<GeometrySystem>();
+  while (ProceduralObjectPtr inObject = m_input->GetNext()) {
 
-	ProceduralObjectPtr inObject = m_input->GetNext();
+    FaceOffset<Geometry> offset(m_amount);
 
-	FaceOffset<Geometry> offset(m_amount);
+    std::vector<GeometryPtr> innerGeometries;
+    std::vector<GeometryPtr> outerGeometries;
 
-	std::vector<GeometryPtr> innerGeometries;
-	std::vector<GeometryPtr> outerGeometries;
+    std::shared_ptr<GeometryComponent> inGeometryComponent =
+        geometrySystem->GetComponentAs<GeometryComponent>(inObject);
+    GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
 
-	std::shared_ptr<GeometryComponent> inGeometryComponent =
-	  geometrySystem->GetComponentAs<GeometryComponent>(inObject);
-	GeometryPtr inGeometry = inGeometryComponent->GetGeometry();
+    offset.Execute(inGeometry, std::back_inserter(innerGeometries),
+                   std::back_inserter(outerGeometries));
 
-	offset.Execute(inGeometry, std::back_inserter(innerGeometries),
-	               std::back_inserter(outerGeometries));
+    for (const auto &i : innerGeometries) {
+      ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+      outObject->RegisterOrSetMember("offset_tag",
+                                     std::make_shared<String>("inner"));
+      m_inner->Add(outObject);
 
-	for (const auto& i : innerGeometries) {
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-		outObject->RegisterOrSetMember("offset_tag",
-		                               std::make_shared<String>("inner"));
-		m_inner->Add(outObject);
+      std::shared_ptr<GeometryComponent> geometryComponent =
+          geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+      geometryComponent->SetGeometry(i);
+      geometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
+          i, inGeometryComponent->GetScope().GetRotation()));
+    }
 
-		std::shared_ptr<GeometryComponent> geometryComponent =
-		  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-		geometryComponent->SetGeometry(i);
-		geometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
-		  i, inGeometryComponent->GetScope().GetRotation()));
-	}
+    for (const auto &i : outerGeometries) {
+      ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
+      outObject->RegisterOrSetMember("offset_tag",
+                                     std::make_shared<String>("outer"));
+      m_outer->Add(outObject);
 
-	for (const auto& i : outerGeometries) {
-		ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-		outObject->RegisterOrSetMember("offset_tag",
-		                               std::make_shared<String>("outer"));
-		m_outer->Add(outObject);
-
-		std::shared_ptr<GeometryComponent> geometryComponent =
-		  geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-		geometryComponent->SetGeometry(i);
-		geometryComponent->SetScope(Scope::FromGeometry(i));
-	}
-}  // namespace pagoda::geometry::operations
-}  // namespace pagoda::geometry::operations
+      std::shared_ptr<GeometryComponent> geometryComponent =
+          geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
+      geometryComponent->SetGeometry(i);
+      geometryComponent->SetScope(Scope::FromGeometry(i));
+    }
+  }
+} // namespace pagoda::geometry::operations
+} // namespace pagoda::geometry::operations
