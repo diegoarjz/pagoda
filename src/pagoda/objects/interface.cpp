@@ -1,5 +1,7 @@
 #include "pagoda/objects/interface.h"
 
+#include "pagoda/objects/procedural_object.h"
+
 #include <pagoda/common/debug/assertions.h>
 #include <pagoda/common/debug/logger.h>
 
@@ -105,66 +107,27 @@ ProceduralObjectPtr Interface::Get()
 	LOG_TRACE(ProceduralObjects, "Getting object from interface "
 	                               << GetName() << " with arity "
 	                               << GetArityName());
-	if (m_arity != Arity::One) {
-		DBG_ASSERT_MSG(
-		  false, "Can only call Interface::Get() on an interface with Arity::One");
-		LOG_TRACE(ProceduralObjects, "  Arity Mismatch");
-		return nullptr;
-	}
-	auto obj = m_objects[0];
-	m_objects[0] = nullptr;
+  if (m_objects.empty()) {
+    return nullptr;
+  }
+	auto obj = m_objects.front();
+  m_objects.pop_front();
 	return obj;
 }
 
 void Interface::Set(ProceduralObjectPtr object)
 {
-	LOG_TRACE(ProceduralObjects, "Setting object on interface "
-	                               << GetName() << " with arity "
-	                               << GetArityName());
-	if (m_arity != Arity::One) {
-		DBG_ASSERT_MSG(
-		  false, "Can only call Interface::Set() on an interface with Arity::One");
-		LOG_TRACE(ProceduralObjects, "  Arity Mismatch");
-		return;
-	}
-	m_objects.resize(1);
-	m_objects[0] = object;
+  Add(object);
 }
 
 ProceduralObjectPtr Interface::GetNext()
 {
-	LOG_TRACE(ProceduralObjects, "Getting next object from interface "
-	                               << GetName() << " with arity "
-	                               << GetArityName());
-	DBG_ASSERT_MSG(
-	  m_arity == Arity::Many,
-	  "Can only call Interface::GetNext() on an interface with Arity::Many");
-	if (m_arity != Arity::Many) {
-		LOG_TRACE(ProceduralObjects, "  Arity Mismatch");
-		return nullptr;
-	}
-  if (m_objects.empty()) {
-    return nullptr;
-  }
-	auto obj = m_objects[0];
-	m_objects[0] = nullptr;
-	return obj;
+  return Get();
 }
 
 void Interface::SetNext(ProceduralObjectPtr object)
 {
-	LOG_TRACE(ProceduralObjects, "Setting next object on interface "
-	                               << GetName() << " with arity "
-	                               << GetArityName());
-	if (m_arity != Arity::Many) {
-		DBG_ASSERT_MSG(
-		  false,
-		  "Can only call Interface::SetNext() on an interface with Arity::Many");
-		LOG_TRACE(ProceduralObjects, "  Arity Mismatch");
-		return;
-	}
-	m_objects.resize(1);
-	m_objects[0] = object;
+  Add(object);
 }
 
 std::size_t Interface::GetAll(std::function<void(ProceduralObjectPtr&)> f)
@@ -172,13 +135,6 @@ std::size_t Interface::GetAll(std::function<void(ProceduralObjectPtr&)> f)
 	LOG_TRACE(ProceduralObjects, "Getting all objects from interface "
 	                               << GetName() << " with arity "
 	                               << GetArityName());
-	if (m_arity != Arity::All) {
-		DBG_ASSERT_MSG(
-		  false,
-		  "Can only call Interface::GetAll() on an interface with Arity::All");
-		LOG_TRACE(ProceduralObjects, "  Arity Mismatch");
-		return 0;
-	}
 
 	for (auto& o : m_objects) {
 		f(o);
@@ -193,13 +149,9 @@ void Interface::Add(ProceduralObjectPtr object)
 	LOG_TRACE(ProceduralObjects, "Adding object to interface " << GetName()
 	                                                           << " with arity "
 	                                                           << GetArityName());
-	if (m_arity != Arity::All) {
-		DBG_ASSERT_MSG(
-		  false, "Can only call Interface::Add() on an interface with Arity::All");
-		LOG_TRACE(ProceduralObjects, "  Arity Mismatch");
-		return;
-	}
-	m_objects.push_back(object);
+  for (auto& i : m_connectedInterfaces) {
+    i.lock()->m_objects.push_back(object->Clone());
+  }
 }
 
 const ProceduralObjectPtr Interface::PeekObject() const

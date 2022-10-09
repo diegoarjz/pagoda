@@ -1,6 +1,7 @@
 #ifndef PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 #define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 
+
 #include <pagoda/dynamic/builtin_class.h>
 #include <pagoda/geometry/core/geometry.h>
 
@@ -18,25 +19,31 @@ using TypeInfoPtr = std::shared_ptr<TypeInfo>;
 
 namespace pagoda::objects
 {
-class Context;
-using ContextPtr = std::shared_ptr<Context>;
 
-class ProceduralObject : public std::enable_shared_from_this<ProceduralObject>, public dynamic::BuiltinClass
+using ProceduralObjectSystemWeakPtr = std::weak_ptr<class ProceduralObjectSystem>;
+
+using ProceduralObjectPtr = std::shared_ptr<class ProceduralObject>;
+using ProceduralObjectWeakPtr = std::weak_ptr<class ProceduralObject>;
+
+class ProceduralObject :  public dynamic::BuiltinClass
 {
 	public:
 	static const dynamic::TypeInfoPtr s_typeInfo;
 
-	ProceduralObject();
+	ProceduralObject(const ProceduralObjectSystemWeakPtr& owner);
 	virtual ~ProceduralObject();
+
+  ProceduralObjectPtr Clone();
 
 	std::string ToString() const override;
 
 	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
 
-};  // class ProceduralObject
+  private:
 
-using ProceduralObjectPtr = std::shared_ptr<ProceduralObject>;
-using ProceduralObjectWeakPtr = std::weak_ptr<ProceduralObject>;
+  ProceduralObjectSystemWeakPtr m_owner;
+
+};  // class ProceduralObject
 
 }  // namespace pagoda::objects
 

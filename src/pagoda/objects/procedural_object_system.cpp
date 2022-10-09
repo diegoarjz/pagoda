@@ -25,7 +25,7 @@ std::shared_ptr<ProceduralObject> ProceduralObjectSystem::CreateProceduralObject
 {
 	START_PROFILE;
 
-	auto object = std::make_shared<ProceduralObject>();
+	auto object = std::make_shared<ProceduralObject>(shared_from_this());
 	m_proceduralObjects.insert(object);
 
 	return object;

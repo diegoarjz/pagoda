@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <list>
 #include <functional>
 #include <variant>
 
@@ -166,7 +167,7 @@ class Interface : public std::enable_shared_from_this<Interface>
 	std::string m_name;  ///< The name.
 	Type m_type;         ///< The Type.
 	Arity m_arity;       ///< Tye Arity.
-	std::vector<ProceduralObjectPtr>
+	std::list<ProceduralObjectPtr>
 	  m_objects;  ///< The objects contained in this interface.
 	ConnectionContainer_t m_connectedInterfaces;  ///< The connected Interfaces.
 };

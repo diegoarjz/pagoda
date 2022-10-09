@@ -22,7 +22,7 @@ class ProceduralObjectPredicateRegistry;
  *
  * All \c ProceduralObject should be created and killed through a \c ProceduralObjectSystem.
  */
-class ProceduralObjectSystem
+class ProceduralObjectSystem : public std::enable_shared_from_this<ProceduralObjectSystem>
 {
 	public:
 	ProceduralObjectSystem();
