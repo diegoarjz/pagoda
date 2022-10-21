@@ -42,6 +42,9 @@
 
 [build_requires]
 
+[conf]
+tools.system.package_manager:mode=install
+
 [env]
   CC=gcc-9
   CXX=g++-9
