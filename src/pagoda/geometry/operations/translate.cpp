@@ -58,7 +58,6 @@ void Translate::DoWork() {
 
   while (ProceduralObjectPtr inObject = m_input->GetNext()) {
     ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-    m_output->SetNext(outObject);
 
     auto inGeometryComponent =
         geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -82,6 +81,8 @@ void Translate::DoWork() {
 
     outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
         outGeometry, inScope.GetRotation()));
+
+    m_output->SetNext(outObject);
   }
 }
 } // namespace pagoda::geometry::operations

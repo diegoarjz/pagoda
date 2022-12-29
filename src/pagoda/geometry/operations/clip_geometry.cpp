@@ -71,7 +71,6 @@ void ClipGeometry::DoWork() {
             frontProceduralObject);
     auto front = std::make_shared<Geometry>();
     frontGeometryComponent->SetGeometry(front);
-    m_frontGeometry->SetNext(frontProceduralObject);
 
     auto backProceduralObject = CreateOutputProceduralObject(inObject);
     auto backGeometryComponent =
@@ -79,7 +78,6 @@ void ClipGeometry::DoWork() {
             backProceduralObject);
     auto back = std::make_shared<Geometry>();
     backGeometryComponent->SetGeometry(back);
-    m_backGeometry->SetNext(backProceduralObject);
 
     clip.Execute(inGeometry, front, back);
 
@@ -87,6 +85,9 @@ void ClipGeometry::DoWork() {
         front, inGeometryComponent->GetScope().GetRotation()));
     backGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
         back, inGeometryComponent->GetScope().GetRotation()));
+
+    m_frontGeometry->SetNext(frontProceduralObject);
+    m_backGeometry->SetNext(backProceduralObject);
   }
 }
 } // namespace pagoda::geometry::operations

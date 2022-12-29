@@ -63,7 +63,6 @@ void Rotate::DoWork() {
 
   while (ProceduralObjectPtr inObject = m_input->GetNext()) {
     ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-    m_output->SetNext(outObject);
 
     auto inGeometryComponent =
         geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -127,6 +126,8 @@ void Rotate::DoWork() {
     boost::qvm::col<2>(rot) = XYZ(boost::qvm::col<2>(matrix));
     outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
         outGeometry, rot * inScope.GetRotation()));
+
+    m_output->SetNext(outObject);
   }
 } // namespace pagoda
 } // namespace pagoda::geometry::operations

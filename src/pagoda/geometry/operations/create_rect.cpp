@@ -91,11 +91,12 @@ void CreateRectGeometry::DoWork()
 	ProceduralObjectPtr object = CreateOutputProceduralObject();
 	std::shared_ptr<GeometryComponent> geometry_component =
 	  geometrySystem->CreateComponentAs<GeometryComponent>(object);
-	m_out->Set(object);
 
 	geometry_component->SetGeometry(geometry);
 	geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
 	  geometry,
 	  math::Mat3x3F(boost::qvm::diag_mat(math::Vec3F{1.0f, 1.0f, 1.0f}))));
+
+	m_out->Set(object);
 }
 }  // namespace pagoda::geometry::operations

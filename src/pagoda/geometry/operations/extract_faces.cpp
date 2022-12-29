@@ -59,7 +59,6 @@ void ExtractFaces::DoWork() {
       auto outObject = CreateOutputProceduralObject(inObject);
       auto outGeometryComponent =
           geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
-      m_output->Add(outObject);
 
       outGeometryComponent->SetGeometry(g);
       if (boost::qvm::dot(faceNormal, inScopeZAxis) == 0) {
@@ -74,6 +73,8 @@ void ExtractFaces::DoWork() {
       } else {
         outGeometryComponent->SetScope(Scope::FromGeometry(g));
       }
+
+      m_output->Add(outObject);
     }
   }
 }

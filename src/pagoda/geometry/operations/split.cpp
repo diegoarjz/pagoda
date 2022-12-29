@@ -134,7 +134,6 @@ void Split::DoWork() {
          i < static_cast<uint32_t>(m_splitCount) && i < splitGeometries.size();
          ++i) {
       auto outProceduralObject = CreateOutputProceduralObject(inObject);
-      m_outputs[i]->SetNext(outProceduralObject);
       auto outGeometryComponent =
           geometrySystem->CreateComponentAs<GeometryComponent>(
               outProceduralObject);
@@ -142,6 +141,8 @@ void Split::DoWork() {
       outGeometryComponent->SetGeometry(splitGeometries[i]);
       outGeometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
           splitGeometries[i], inScope.GetRotation()));
+
+      m_outputs[i]->SetNext(outProceduralObject);
     }
   }
 }

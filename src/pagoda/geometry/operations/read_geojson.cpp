@@ -91,7 +91,6 @@ void ReadGeoJson::DoWork()
 		ProceduralObjectPtr object = CreateOutputProceduralObject();
 		auto geometryComponent =
 		  geometrySystem->CreateComponentAs<GeometryComponent>(object);
-		m_output->Add(object);
 
 		geometryComponent->SetGeometry(geometry);
 		geometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
@@ -100,6 +99,8 @@ void ReadGeoJson::DoWork()
 		for (const auto &property : f.m_properties) {
 			object->RegisterMember(property.first, property.second);
 		}
+
+		m_output->Add(object);
 
 		return true;
 	});

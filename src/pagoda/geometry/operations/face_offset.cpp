@@ -74,25 +74,27 @@ void FaceOffsetOperation::DoWork() {
       ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
       outObject->RegisterOrSetMember("offset_tag",
                                      std::make_shared<String>("inner"));
-      m_inner->Add(outObject);
 
       std::shared_ptr<GeometryComponent> geometryComponent =
           geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
       geometryComponent->SetGeometry(i);
       geometryComponent->SetScope(Scope::FromGeometryAndConstrainedRotation(
           i, inGeometryComponent->GetScope().GetRotation()));
+
+      m_inner->Add(outObject);
     }
 
     for (const auto &i : outerGeometries) {
       ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
       outObject->RegisterOrSetMember("offset_tag",
                                      std::make_shared<String>("outer"));
-      m_outer->Add(outObject);
 
       std::shared_ptr<GeometryComponent> geometryComponent =
           geometrySystem->CreateComponentAs<GeometryComponent>(outObject);
       geometryComponent->SetGeometry(i);
       geometryComponent->SetScope(Scope::FromGeometry(i));
+
+      m_outer->Add(outObject);
     }
   }
 } // namespace pagoda::geometry::operations

@@ -45,7 +45,6 @@ void ExtractScope::DoWork() {
   // Geometry
   while (ProceduralObjectPtr inObject = m_input->GetNext()) {
     ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-    m_output->SetNext(outObject);
 
     std::shared_ptr<GeometryComponent> inGeometryComponent =
         geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -60,6 +59,8 @@ void ExtractScope::DoWork() {
 
     outGeometryComponent->SetGeometry(outGeometry);
     outGeometryComponent->SetScope(inGeometryComponent->GetScope());
+
+    m_output->SetNext(outObject);
   }
 }
 } // namespace pagoda::geometry::operations

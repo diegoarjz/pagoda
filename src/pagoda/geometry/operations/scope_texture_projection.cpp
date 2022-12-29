@@ -62,7 +62,6 @@ void ScopeTextureProjection::DoWork() {
 
   while (ProceduralObjectPtr inObject = m_input->GetNext()) {
     ProceduralObjectPtr outObject = CreateOutputProceduralObject(inObject);
-    m_output->SetNext(outObject);
 
     auto inGeometryComponent =
         geometrySystem->GetComponentAs<GeometryComponent>(inObject);
@@ -108,6 +107,8 @@ void ScopeTextureProjection::DoWork() {
       outGeometry->GetVertexAttributes(*i).m_texCoords =
           ptp.GetProjection(outGeometry->GetPosition(*i));
     }
+
+    m_output->SetNext(outObject);
   }
 }
 } // namespace pagoda::geometry::operations

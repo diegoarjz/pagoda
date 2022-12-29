@@ -63,7 +63,6 @@ void ExtrudeGeometry::DoWork() {
     std::shared_ptr<GeometryComponent> in_geometry_component =
         geometrySystem->GetComponentAs<GeometryComponent>(in_object);
     GeometryPtr in_geometry = in_geometry_component->GetGeometry();
-    m_out->SetNext(out_object);
 
     auto out_geometry = std::make_shared<Geometry>();
     extrude.Execute(in_geometry, out_geometry);
@@ -71,6 +70,8 @@ void ExtrudeGeometry::DoWork() {
     geometry_component->SetGeometry(out_geometry);
     geometry_component->SetScope(Scope::FromGeometryAndConstrainedRotation(
         out_geometry, in_geometry_component->GetScope().GetRotation()));
+
+    m_out->SetNext(out_object);
   }
 }
 } // namespace pagoda::geometry::operations

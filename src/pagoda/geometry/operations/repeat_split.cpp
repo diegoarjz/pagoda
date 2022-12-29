@@ -78,11 +78,12 @@ void RepeatSplit::DoWork() {
       auto outGeometryComponent =
           geometrySystem->CreateComponentAs<GeometryComponent>(
               outProceduralObject);
-      m_output->Add(outProceduralObject);
 
       outGeometryComponent->SetGeometry(g);
       outGeometryComponent->SetScope(
           Scope::FromGeometryAndConstrainedRotation(g, inScope.GetRotation()));
+
+      m_output->Add(outProceduralObject);
     }
   }
 }
