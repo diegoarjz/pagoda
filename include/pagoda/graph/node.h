@@ -5,6 +5,7 @@
 #include <pagoda/common/factory.h>
 #include <pagoda/dynamic/builtin_class.h>
 #include <pagoda/objects/procedural_operation.h>
+#include <pagoda/objects/parameter.h>
 
 #include <memory>
 #include <map>
@@ -13,7 +14,6 @@
 namespace pagoda::objects
 {
 class NewParameterCallback;
-using ParameterBasePtr = std::shared_ptr<class ParameterBase>;
 }  // namespace pagoda::objects
 
 namespace pagoda::graph

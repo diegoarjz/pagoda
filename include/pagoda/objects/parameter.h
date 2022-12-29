@@ -225,6 +225,8 @@ class Parameter : public ParameterBase
 	VALUE* m_valuePtr;  ///< The pointer to the value.
 };
 
+using ParameterBasePtr = std::shared_ptr<ParameterBase>;
+
 using StringParameter = Parameter<std::string>;
 using StringParameterPtr = std::shared_ptr<StringParameter>;
 template<>
