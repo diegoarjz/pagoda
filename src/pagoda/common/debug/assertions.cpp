@@ -30,8 +30,8 @@ typename Fail::FailBehaviour Fail::ReportFail(const char *condition, const char 
                                               const char *message, ...)
 {
 	const char *final_message = nullptr;
+  char messageBuffer[1024];
 	if (message != nullptr) {
-		char messageBuffer[1024];
 		{
 			va_list args;
 			va_start(args, message);
