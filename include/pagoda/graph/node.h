@@ -75,12 +75,17 @@ class Node : public dynamic::BuiltinClass
 	objects::ParameterBasePtr GetParameter(const std::string &name) const;
 	void ForEachParameter(std::function<void(objects::ParameterBasePtr)> f) const;
 
+  void SetPos(const math::Vec2F pos);
+  math::Vec2F GetPos() const;
+
 	protected:
 	std::map<std::string, objects::ParameterBasePtr> m_parameters;
 
 	private:
 	std::string m_nodeName;
 	uint32_t m_nodeId;
+  float m_posX;
+  float m_posY;
 };  // class Node
 
 using NodePtr = std::shared_ptr<Node>;
