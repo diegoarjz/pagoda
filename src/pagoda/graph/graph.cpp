@@ -75,6 +75,31 @@ class Graph::Impl
 		return iter->second.lock();
 	}
 
+  bool RenameNode(const NodeIdentifier_t &name, const NodeIdentifier_t& newName) {
+    if (GetNode(newName) != nullptr && name != newName) {
+      return false;
+    }
+
+    if (auto node = GetNode(name)) {
+      m_nodesByIdentifier.erase(name);
+      m_nodesByIdentifier.emplace(newName, node);
+      
+      auto adjacencyIter = m_adjacencies.find(name);
+      m_adjacencies.emplace(newName, std::move(adjacencyIter->second));
+      m_adjacencies.erase(name);
+
+      node->SetName(newName);
+
+      auto in = InNodes(newName);
+      auto out = OutNodes(newName);
+    }
+    else {
+      return false;
+    }
+
+    return true;
+  }
+
 	Graph::EdgeCreated CreateEdge(const NodeIdentifier_t &source_node,
 	                              const NodeIdentifier_t &target_node)
 	{
@@ -271,6 +296,8 @@ NodePtr Graph::GetNode(const NodeIdentifier_t &name) const
 {
 	return m_implementation->GetNode(name);
 }
+
+bool Graph::RenameNode(const NodeIdentifier_t &name, const NodeIdentifier_t& newName) { return m_implementation->RenameNode(name, newName); }
 
 Graph::EdgeCreated Graph::CreateEdge(const NodeIdentifier_t &source_node,
                                      const NodeIdentifier_t &target_node)

@@ -144,6 +144,11 @@ class Graph
 	 */
 	NodePtr GetNode(const NodeIdentifier_t &name) const;
 
+  /**
+   * Renames a \c Node to \p name.
+   */
+  bool RenameNode(const NodeIdentifier_t &name, const NodeIdentifier_t& newName);
+
 	/**
 	 * Creates an edge between two \c Node objects in this \c Graph.
 	 *
