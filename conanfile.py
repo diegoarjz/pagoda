@@ -37,6 +37,7 @@ class Pagoda(ConanFile):
         self.requires("qt/6.1.1")
         self.requires("entt/3.6.0")
         self.requires("glew/2.1.0")
+        self.requires("libffi/3.4.4", override=True)
 
 
     def _configure_cmake(self):

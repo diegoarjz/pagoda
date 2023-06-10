@@ -8,6 +8,7 @@
 #include <pagoda/objects/hierarchical_component.h>
 #include <pagoda/objects/hierarchical_system.h>
 #include <pagoda/objects/procedural_object.h>
+#include <pagoda/pagoda.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -33,11 +34,12 @@ class GeometrySystemTest : public ::testing::Test
 	std::shared_ptr<GeometrySystem> geometry_system;
 	std::shared_ptr<GeometryComponent> component;
 	GeometryPtr geometry;
+  Pagoda m_pagoda;
 };
 
 TEST_F(GeometrySystemTest, test_create_component)
 {
-	auto proceduralObject = std::make_shared<ProceduralObject>();
+	auto proceduralObject = std::make_shared<ProceduralObject>(m_pagoda.GetProceduralObjectSystem());
 	auto procedural_component = geometry_system->CreateComponent(proceduralObject);
 	component = std::dynamic_pointer_cast<GeometryComponent>(procedural_component);
 
@@ -50,7 +52,7 @@ TEST_F(GeometrySystemTest, test_create_component)
 
 TEST_F(GeometrySystemTest, test_kill_component)
 {
-	auto proceduralObject = std::make_shared<ProceduralObject>();
+	auto proceduralObject = std::make_shared<ProceduralObject>(m_pagoda.GetProceduralObjectSystem());
 	auto component = geometry_system->CreateComponent(proceduralObject);
 
 	geometry_system->KillProceduralComponent(proceduralObject);

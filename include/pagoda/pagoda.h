@@ -76,20 +76,6 @@ public:
    */
   graph::GraphPtr CreateGraphFromString(const std::string &graphStr);
 
-  /**
-   * Holds information about loaded plugins.
-   */
-  struct PluginInfo
-  {
-    std::string name;
-    std::string path;
-  };
-
-  /**
-   * Returns info about loaded plugins.
-   */
-  const std::vector<PluginInfo>& GetPluginInfo() const;
-
 private:
   class Impl;
   std::unique_ptr<Impl> m_implementation;

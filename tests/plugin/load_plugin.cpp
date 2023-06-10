@@ -1,36 +1,37 @@
-#include "pagoda/pagoda.h"
+#include "plugin.h"
+
 #include "pagoda/common/plugin.h"
+#include "pagoda/pagoda.h"
 
 #include <iostream>
 #include <vector>
 
 int main(int argc, char *argv[]) {
+  auto &instance = pagoda::common::PluginRegistry::Instance();
 
-  std::cout << "Loading plugins from: " << pagoda::common::Plugin::GetPluginPath() << std::endl;
-
-  uint32_t successfulAttempts = 0;
-  for (int i = 0; i < 2; ++i) {
-    pagoda::Pagoda p;
-
-    p.CreateGraph();
-
-    const auto &plugins = p.GetPluginInfo();
-    bool found = false;
-    for (const auto &plugin : plugins) {
-      std::cout << "Plugin '" << plugin.name << "' @" << plugin.path
-                << std::endl;
-      found |= plugin.name == "TestPlugin";
-    }
-    found &= (plugins.size() == 1);
-
-    successfulAttempts += found ? 1 : 0;
+  static const auto pluginDirEnv = std::getenv("PAGODA_PLUGIN_PATH");
+  if (pluginDirEnv != nullptr) {
+    instance.AppendPluginLoadDirectory(pluginDirEnv);
   }
 
-  if (successfulAttempts != 2) {
+  instance.LoadAllPlugins();
+
+  const auto &plugins = instance.GetPluginsForRegistry("Pagoda");
+  if (plugins.size() != 1) {
     std::cout << "----------------------------------------" << std::endl;
     std::cout << "Unable to load any plugin" << std::endl;
     std::cout << "----------------------------------------" << std::endl;
+    return 1;
   }
 
-  return successfulAttempts == 2 ? 0 : 1;
+  auto *mockPlugin =
+      plugins.front()->GetRegistrationClass<tests::plugin::TestPlugin>();
+  if (mockPlugin == nullptr ||
+      mockPlugin->GetMessage() != "Created a Test Plugin") {
+    std::cout << "----------------------------------------" << std::endl;
+    std::cout << "Unable to get plugin registration object" << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
+    return 1;
+  }
+  return 0;
 }

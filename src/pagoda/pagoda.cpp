@@ -178,88 +178,21 @@ public:
     loadPlugins();
   }
 
-  const std::vector<PluginInfo> &GetPluginInfo() const {
-    return m_loadedPlugins;
-  }
-
 private:
   void loadPlugins() {
-    using namespace boost::filesystem;
-    path pluginDir = common::Plugin::GetPluginPath();
-    LOG_TRACE(Core, "Loading plugins from " << pluginDir);
+    auto& instance = common::PluginRegistry::Instance();
 
-    std::vector<path> plugins;
-#if PAGODA_OS_MACOS
-    common::fs::GetAllFilesWithExtension(pluginDir, ".dylib",
-                                         std::back_inserter(plugins));
-#elif PAGODA_OS_WINDOWS
-    common::fs::GetAllFilesWithExtension(pluginDir, ".dll",
-                                         std::back_inserter(plugins));
-#elif PAGODA_OS_LINUX
-    common::fs::GetAllFilesWithExtension(pluginDir, ".so",
-                                         std::back_inserter(plugins));
-#endif
+    static const auto pluginDirEnv = std::getenv("PAGODA_PLUGIN_PATH");
+    if (pluginDirEnv != nullptr) {
+      instance.AppendPluginLoadDirectory(pluginDirEnv);
+    }
 
-    for (const auto &p : plugins) {
-      path pluginPath = pluginDir / p;
-      LOG_TRACE(Core, "Loading Plugin " << pluginPath);
-      boost::shared_ptr<common::Plugin> plugin;
-
-      common::Plugin *pagodaPlugin = nullptr;
-      auto iter = s_pluginData.find(pluginPath.string());
-      if (iter == s_pluginData.end()) {
-        LOG_TRACE(Core, "Plugin " << pluginPath << " not in cache. Creating");
-        try {
-          boost::dll::shared_library lib(pluginPath,
-                                         boost::dll::load_mode::default_mode);
-          if (!lib.has("CreatePlugin")) {
-            LOG_TRACE(Core, "Plugin "
-                                << pluginPath
-                                << " doesn't have a 'CreatePlugin' function.");
-            LOG_TRACE(Core, " Not loading.");
-            continue;
-          }
-
-          auto CreatePlugin = lib.get<common::Plugin *()>("CreatePlugin");
-
-          pagodaPlugin = CreatePlugin();
-          if (pagodaPlugin == nullptr) {
-            LOG_WARNING("Plugin " << pluginPath
-                                  << " didn't create a Plugin object.");
-            continue;
-          }
-          LOG_TRACE(Core, "Plugin " << pluginPath << " loaded the '"
-                                    << pagodaPlugin->Name() << "' plugin");
-
-          iter = s_pluginData.emplace(pluginPath.string(), PluginData{lib, pagodaPlugin})
-                     .first;
-
-        } catch (const boost::wrapexcept<boost::system::system_error> &e) {
-          LOG_ERROR("Unable to load plugin " << pluginPath << " with error:");
-          LOG_ERROR(e.what());
-        } catch (...) {
-          LOG_ERROR("Unable to load plugin " << pluginPath
-                                             << " with unknown error.");
-        }
-      }
-      else {
-        LOG_TRACE(Core, "Plugin " << pluginPath << " in cache. Reusing");
-        pagodaPlugin = iter->second.plugin;
-      }
-
-      if (pagodaPlugin == nullptr) {
-        LOG_ERROR("Couldn't get a valid plugin for " << pluginPath);
-        continue;
-      }
-
-      LOG_TRACE(Core, "Registering '" << pagodaPlugin->Name() << "'");
-      if (!pagodaPlugin->Register(m_pagoda)) {
-        LOG_WARNING("Plugin '" << pagodaPlugin->Name() << "' (" << pluginPath
-                               << ") failed to register.");
-      }
-
-      m_loadedPlugins.emplace_back(
-          Pagoda::PluginInfo{pagodaPlugin->Name(), pluginPath.string()});
+    instance.LoadAllPlugins();
+    auto pagodaPlugins = instance.GetPluginsForRegistry("Pagoda");
+    for (const auto& p : pagodaPlugins) {
+      LOG_WARNING(" " << p->GetPluginName());
+      common::PagodaPlugin* plugin = p->GetRegistrationClass<common::PagodaPlugin>();
+      plugin->Register(m_pagoda);
     }
   }
 
@@ -269,15 +202,7 @@ private:
   ProceduralObjectPredicateRegistryPtr m_predicateRegistry;
   Pagoda *m_pagoda;
   bool m_initialized;
-  std::vector<Pagoda::PluginInfo> m_loadedPlugins;
-
-  struct PluginData {
-    boost::dll::shared_library library;
-    common::Plugin *plugin;
-  };
-  static std::unordered_map<std::string, PluginData> s_pluginData;
 };
-std::unordered_map<std::string, Pagoda::Impl::PluginData> Pagoda::Impl::s_pluginData;
 
 Pagoda::Pagoda() : m_implementation(std::make_unique<Pagoda::Impl>(this)) {}
 Pagoda::~Pagoda() {}
@@ -302,9 +227,5 @@ GraphPtr Pagoda::CreateGraphFromFile(const std::string &filePath) {
 
 graph::GraphPtr Pagoda::CreateGraphFromString(const std::string &graphStr) {
   return m_implementation->CreateGraphFromString(graphStr);
-}
-
-const std::vector<Pagoda::PluginInfo> &Pagoda::GetPluginInfo() const {
-  return m_implementation->GetPluginInfo();
 }
 } // namespace pagoda

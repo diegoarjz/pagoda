@@ -41,6 +41,7 @@ add_pagoda_module(
   NAME                common
   SOURCES             ${COMMON_SRCS}
   COMPILE_DEFINITIONS "${COMMON_COMPILE_DEFINITIONS}"
+  DEPENDENCIES        nlohmann_json::nlohmann_json
 )
 
 

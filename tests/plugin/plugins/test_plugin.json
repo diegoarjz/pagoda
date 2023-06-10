@@ -1,0 +1,7 @@
+{
+  "pagodaVersion": "0.1",
+  "name": "TestPlugin",
+  "pluginFile": "test_plugin",
+  "registry": "Pagoda",
+  "method": "CreatePlugin"
+}
