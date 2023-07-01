@@ -32,6 +32,7 @@ class Pagoda(ConanFile):
         self.requires("nlohmann_json/3.9.1")
         self.requires("openssl/1.1.1k", override=True)
         self.requires("zlib/1.2.12", override=True)
+        self.requires("bzip2/1.0.8")
         self.requires("entt/3.6.0")
         self.requires("libffi/3.4.4", override=True)
 
