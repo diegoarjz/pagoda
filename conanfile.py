@@ -59,18 +59,6 @@ class Pagoda(ConanFile):
         cmake.build()
 
 
-    def imports(self):
-        self.copy("lib/*Qt6OpenGLWidgets*", src="", dst="src/bin", root_package="qt", keep_path=False)
-        self.copy("lib/*Qt6Widgets*", src="", dst="src/bin", root_package="qt", keep_path=False)
-        self.copy("lib/*Qt6OpenGL*", src="", dst="src/bin", root_package="qt", keep_path=False)
-        self.copy("lib/*Qt6Gui*", src="", dst="src/bin", root_package="qt", keep_path=False)
-        self.copy("lib/*Qt6Core*", src="", dst="src/bin", root_package="qt", keep_path=False)
-
-        self.copy("res/archdatadir/plugins/platforms/*.dylib", src="", dst="src/bin/platforms", root_package="qt", keep_path=False)
-        self.copy("res/archdatadir/plugins/platforms/*.so", src="", dst="src/bin/platforms", root_package="qt", keep_path=False)
-        self.copy("res/archdatadir/plugins/platforms/*.dll", src="", dst="src/bin/platforms", root_package="qt", keep_path=False)
-
-
     def package(self):
         cmake = CMake(self, build_type=self.settings.build_type)
         cmake.install()
