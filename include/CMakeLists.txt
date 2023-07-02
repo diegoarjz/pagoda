@@ -2,6 +2,7 @@ set(PAGODA_PUBLIC_HEADERS
   "pagoda/pagoda.h"
   "pagoda/api.h"
   "pagoda/common/factory.h"
+  "pagoda/common/pluggable_factory.h"
   "pagoda/common/version.h"
   "pagoda/common/plugin.h"
   "pagoda/graph/graph.h"

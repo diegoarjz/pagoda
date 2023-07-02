@@ -2,7 +2,7 @@
 
 namespace pagoda::objects
 {
-OperationFactory::OperationFactory() : Factory<ProceduralOperation>("ProceduralOperation") {}
+OperationFactory::OperationFactory() : PluggableFactory<ProceduralOperation>("ProceduralOperation") {}
 
 OperationFactory::~OperationFactory() {}
 }  // namespace pagoda::objects
