@@ -178,7 +178,7 @@ void PluginRegistry::LoadAllPlugins() {
       for (const auto &pluginFile : dir.GetPluginFiles()) {
         auto p = std::make_shared<PluginInfo>(pluginFile);
         if (p->IsValid()) {
-          m_plugins.emplace(pluginFile, p);
+          m_plugins.emplace(pluginFile.string(), p);
         }
       }
     }
