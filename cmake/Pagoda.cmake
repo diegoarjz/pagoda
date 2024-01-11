@@ -123,7 +123,7 @@ function (add_pagoda_build_unit)
   target_compile_features(
     ${PARSED_ARGS_NAME}
     PRIVATE
-      cxx_std_17
+      cxx_std_20
   )
 
   target_compile_options(
@@ -204,7 +204,7 @@ function (add_pagoda_header_only)
   target_compile_features(
     ${PARSED_ARGS_NAME}
     INTERFACE
-      cxx_std_17
+      cxx_std_20
   )
 
   target_compile_options(
@@ -316,6 +316,72 @@ function (add_pagoda_library)
     set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
       INSTALL_RPATH "$ORIGIN")
   endif()
+endfunction()
+
+# Adds a pagoda plugin
+# Example Usage
+#   add_pagoda_plugin(
+#     NAME                  <plugin name>
+#     SOURCES               <source files>
+#     DEPENDENCIES          <list of plugin dependencies>
+#     COMPILE_DEFINITIONS   <list of compiler definitions>
+#     REGISTRY              <plugin registry>
+#     FUNCTION              <plugin creation function>
+#     DESTINATION           <plugin destination directory>
+#     JSON                  <optional json file. if not provided default will be used>
+#   )
+function(add_pagoda_plugin)
+  set(multiValue SOURCES DEPENDENCIES COMPILE_DEFINITIONS)
+  set(singleValue NAME REGISTRY FUNCTION DESTINATION JSON)
+  include(CMakeParseArguments)
+  cmake_parse_arguments(
+      PARSED_ARGS       # prefix of output variables
+      ""                # list of names of the boolean arguments (only defined ones will be true)
+      "${singleValue}"  # list of names of mono-valued arguments
+      "${multiValue}"   # list of names of multi-valued arguments (output variables are lists)
+      ${ARGN}           # arguments of the function to parse, here we take the all original ones
+  )
+  # note: remaining unparsed arguments can be found in variable PARSED_ARGS_UNPARSED_ARGUMENTS
+
+  add_library(
+    ${PARSED_ARGS_NAME}
+    SHARED
+    ${PARSED_ARGS_SOURCES}
+  )
+
+  target_link_libraries(
+    ${PARSED_ARGS_NAME}
+    PRIVATE
+    libpagoda
+    ${PARSED_ARGS_DEPENDENCIES}
+  )
+
+  target_compile_features(${PARSED_ARGS_NAME} PRIVATE cxx_std_20)
+  set_target_properties(${PARSED_ARGS_NAME} PROPERTIES PREFIX "")
+
+  add_custom_command(
+    TARGET ${PARSED_ARGS_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${PARSED_ARGS_NAME}>" "${PARSED_ARGS_DESTINATION}"
+    DEPENDS "${PARSED_ARGS_NAME}"
+    COMMENT "Copying ${PARSED_ARGS_NAME} to ${PARSED_ARGS_DESTINATION}"
+  )
+
+  # Generate plugin json file
+  set(PAGODA_PLUGIN_NAME ${PARSED_ARGS_NAME})
+  set(PAGODA_PLUGIN_REGISTRY ${PARSED_ARGS_REGISTRY})
+  set(PAGODA_PLUGIN_FUNCTION ${PARSED_ARGS_FUNCTION})
+
+  if (NOT DEFINED PARSED_ARGS_JSON)
+    set(JSON_FILE "${PROJECT_SOURCE_DIR}/tools/plugin.json")
+  else()
+    set(JSON_FILE ${PARSED_ARGS_JSON})
+  endif()
+
+  configure_file(
+    "${JSON_FILE}"
+    "${PARSED_ARGS_DESTINATION}/${PAGODA_PLUGIN_NAME}.json"
+  )
 endfunction()
 
 # TODO: once all tests use the add_unit_test function we can remove
