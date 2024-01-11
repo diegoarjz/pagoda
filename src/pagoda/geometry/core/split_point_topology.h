@@ -370,9 +370,9 @@ public:
 			return *this;
 		}
 
-		bool operator==(const Iterator &other) { return m_currentIterator == other.m_currentIterator; }
+		bool operator==(const Iterator &other) const { return m_currentIterator == other.m_currentIterator; }
 
-		bool operator!=(const Iterator &other) { return m_currentIterator != other.m_currentIterator; }
+		bool operator!=(const Iterator &other) const { return m_currentIterator != other.m_currentIterator; }
 
 private:
 		typename ContainerType::iterator m_currentIterator;
@@ -414,8 +414,8 @@ public:
 			return *this;
 		}
 
-		bool operator==(const PointEdgeIterator &other) { return m_currentIterator == other.m_currentIterator; }
-		bool operator!=(const PointEdgeIterator &other) { return m_currentIterator != other.m_currentIterator; }
+		bool operator==(const PointEdgeIterator &other) const { return m_currentIterator == other.m_currentIterator; }
+		bool operator!=(const PointEdgeIterator &other) const { return m_currentIterator != other.m_currentIterator; }
 
 private:
 		std::unordered_set<Index_t>::iterator m_currentIterator;
@@ -447,8 +447,8 @@ public:
 			return *this;
 		}
 
-		bool operator==(const PointSplitPointIterator &other) { return m_currentIterator == other.m_currentIterator; }
-		bool operator!=(const PointSplitPointIterator &other) { return m_currentIterator != other.m_currentIterator; }
+		bool operator==(const PointSplitPointIterator &other) const { return m_currentIterator == other.m_currentIterator; }
+		bool operator!=(const PointSplitPointIterator &other) const { return m_currentIterator != other.m_currentIterator; }
 
 private:
 		const SplitPointTopology *m_topology;
@@ -481,8 +481,8 @@ public:
 			return *this;
 		}
 
-		bool operator==(const PointFaceIterator &other) { return m_currentIterator == other.m_currentIterator; }
-		bool operator!=(const PointFaceIterator &other) { return m_currentIterator != other.m_currentIterator; }
+		bool operator==(const PointFaceIterator &other) const { return m_currentIterator == other.m_currentIterator; }
+		bool operator!=(const PointFaceIterator &other) const { return m_currentIterator != other.m_currentIterator; }
 
 private:
 		const SplitPointTopology *m_topology;
@@ -521,8 +521,8 @@ public:
 			return *this;
 		}
 
-		bool operator==(const FaceEdgeCirculator &other) { return m_currentEdge == other.m_currentEdge; }
-		bool operator!=(const FaceEdgeCirculator &other) { return m_currentEdge != other.m_currentEdge; }
+		bool operator==(const FaceEdgeCirculator &other) const { return m_currentEdge == other.m_currentEdge; }
+		bool operator!=(const FaceEdgeCirculator &other) const { return m_currentEdge != other.m_currentEdge; }
 
 private:
 		const SplitPointTopology *m_topology;
@@ -559,8 +559,8 @@ public:
 			return *this;
 		}
 
-		bool operator==(const FaceSplitPointCirculator &other) { return m_currentCirculator == other.m_currentCirculator; }
-		bool operator!=(const FaceSplitPointCirculator &other) { return m_currentCirculator != other.m_currentCirculator; }
+		bool operator==(const FaceSplitPointCirculator &other) const { return m_currentCirculator == other.m_currentCirculator; }
+		bool operator!=(const FaceSplitPointCirculator &other) const { return m_currentCirculator != other.m_currentCirculator; }
 
 private:
 		const SplitPointTopology *m_topology;
@@ -595,8 +595,8 @@ public:
 			return *this;
 		}
 
-		bool operator==(const FacePointCirculator &other) { return m_currentCirculator == other.m_currentCirculator; }
-		bool operator!=(const FacePointCirculator &other) { return m_currentCirculator != other.m_currentCirculator; }
+		bool operator==(const FacePointCirculator &other) const { return m_currentCirculator == other.m_currentCirculator; }
+		bool operator!=(const FacePointCirculator &other) const { return m_currentCirculator != other.m_currentCirculator; }
 
 private:
 		const SplitPointTopology *m_topology;
