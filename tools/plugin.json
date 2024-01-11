@@ -1,0 +1,8 @@
+{
+  "pagodaVersion": "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}",
+  "name": "${PAGODA_PLUGIN_NAME}",
+  "pluginFile": "${PAGODA_PLUGIN_NAME}",
+  "registry": "${PAGODA_PLUGIN_REGISTRY}",
+  "method": "${PAGODA_PLUGIN_FUNCTION}"
+}
+
