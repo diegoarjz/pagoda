@@ -1,6 +1,4 @@
-#include "image.h"
-
-#include "image_type.h"
+#include "pagoda/image/image.h"
 
 #include <pagoda/image/core/image_implementation_factory.h>
 #include <pagoda/image/io/image_reader_factory.h>
@@ -9,42 +7,59 @@
 
 using namespace boost;
 
-namespace pagoda::image
-{
+namespace pagoda::image {
 using namespace core;
 using namespace io;
 
 std::unique_ptr<ImageImplementationFactory> Image::s_implementationFactory;
 std::unique_ptr<ImageReaderFactory> Image::s_imageReaderFactory;
 
-Image::Image(const filesystem::path& file) : m_implementation(GetImageImplementationFactory()->Create(ImageType::RGB8))
-{
-	m_implementation->SetImageReader(GetImageReaderFactory()->CreateFromFilePath(file));
+Image::Image(const Dimensions &d, Format format)
+    : m_impl{GetImageImplementationFactory()->Create(format)} {
+  m_impl->Reserve(d);
 }
 
-Image::Dimensions Image::GetDimensions() const { return m_implementation->GetDimensions(); }
-bool Image::IsLoaded() const { return m_implementation->IsLoaded(); }
-void Image::Load() { m_implementation->Load(); }
+Image::Image(std::unique_ptr<core::ImageImplementationBase> &&image)
+    : m_impl{std::move(image)} {}
 
-void Image::CopyImageData(std::vector<uint8_t>& data) { m_implementation->CopyImageData(data); }
-
-ImageImplementationFactory* Image::GetImageImplementationFactory()
-{
-	if (s_implementationFactory == nullptr) {
-		s_implementationFactory = std::make_unique<ImageImplementationFactory>();
-	}
-
-	return s_implementationFactory.get();
+Image::Dimensions Image::GetDimensions() const {
+  return m_impl->GetDimensions();
 }
 
-ImageReaderFactory* Image::GetImageReaderFactory()
-{
-	//
-	if (s_imageReaderFactory == nullptr) {
-		s_imageReaderFactory = std::make_unique<ImageReaderFactory>();
-	}
+bool Image::IsLoaded() const { return m_impl->IsLoaded(); }
 
-	return s_imageReaderFactory.get();
+void Image::CopyImageData(std::vector<uint8_t> &data) {
+  m_impl->CopyImageData(data);
 }
 
-}  // namespace pagoda::image
+Image::Pixel Image::GetPixel(std::size_t x, std::size_t y) const {
+  return m_impl->GetPixel(x, y);
+}
+
+void Image::SetPixel(std::size_t x, std::size_t y, const Pixel &p) {
+  m_impl->SetPixel(x, y, p);
+}
+
+ImageImplementationFactory *Image::GetImageImplementationFactory() {
+  if (s_implementationFactory == nullptr) {
+    s_implementationFactory = std::make_unique<ImageImplementationFactory>();
+  }
+
+  return s_implementationFactory.get();
+}
+
+ImageReaderFactory *Image::GetImageReaderFactory() {
+  if (s_imageReaderFactory == nullptr) {
+    s_imageReaderFactory = std::make_unique<ImageReaderFactory>();
+  }
+
+  return s_imageReaderFactory.get();
+}
+
+std::shared_ptr<Image> Image::CreateFromFile(const std::filesystem::path &file,
+                                             Format format) {
+  auto reader = GetImageReaderFactory()->CreateFromFilePath(file);
+  return reader->Read(format);
+}
+
+} // namespace pagoda::image

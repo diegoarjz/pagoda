@@ -12,10 +12,11 @@ class PngReader : public ImageReader
 	PngReader();
 	virtual ~PngReader();
 
-	void SetFilePath(const boost::filesystem::path& p) override;
+	void SetFilePath(const std::filesystem::path& p) override;
 	void Read(boost::gil::rgb8_image_t& img) override;
+  std::shared_ptr<Image> Read(Image::Format f) override;
 
 	private:
-	boost::filesystem::path m_filePath;
+  std::filesystem::path m_filePath;
 };
 }  // namespace pagoda::image::io

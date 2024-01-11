@@ -7,9 +7,9 @@
 namespace pagoda::image::core
 {
 ImageImplementationFactory::ImageImplementationFactory()
-  : Factory<ImageImplementation, ImageType>("ImageImplementation")
+  : Factory<ImageImplementationBase, Image::Format>("ImageImplementation")
 {
-	Register(ImageType::RGB8, []() { return std::make_shared<RGB8Image>(); });
+	Register(Image::Format::RGB8, []() { return std::make_shared<RGB8Image>(); });
 }
 
 ImageImplementationFactory::~ImageImplementationFactory() {}

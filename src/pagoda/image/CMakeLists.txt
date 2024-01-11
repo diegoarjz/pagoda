@@ -9,8 +9,9 @@ set(IMAGE_SRCS
     "io/image_reader_factory.h"
     "io/png_reader.cpp"
     "io/png_reader.h"
+    "operations/read_image.cpp"
     "image.cpp"
-    "image.h"
+    "image_system.cpp"
 )
 
 find_package(PNG REQUIRED)
