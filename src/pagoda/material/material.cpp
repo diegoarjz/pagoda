@@ -15,7 +15,7 @@ Material::Material() {}
 
 void Material::SetTexture(uint32_t slot, const std::string &textureFile)
 {
-	m_textures[slot] = std::make_shared<Image>(textureFile);
+	//m_textures[slot] = std::make_shared<Image>(textureFile);
 }
 
 void Material::SetTexture(uint32_t slot, const image::ImagePtr texture) { m_textures[slot] = texture; }

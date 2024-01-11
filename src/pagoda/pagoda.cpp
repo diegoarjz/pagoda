@@ -14,28 +14,9 @@
 #include <pagoda/graph/parameter_input_node.h>
 #include <pagoda/graph/parameter_node.h>
 
-#include <pagoda/geometry/operations/clip_geometry.h>
-#include <pagoda/geometry/operations/create_box.h>
-#include <pagoda/geometry/operations/create_rect.h>
-#include <pagoda/geometry/operations/create_sphere.h>
-#include <pagoda/geometry/operations/export_geometry.h>
-#include <pagoda/geometry/operations/extract_faces.h>
-#include <pagoda/geometry/operations/extract_scope.h>
-#include <pagoda/geometry/operations/extrude_geometry.h>
-#include <pagoda/geometry/operations/face_offset.h>
-#include <pagoda/geometry/operations/repeat_split.h>
-#include <pagoda/geometry/operations/rotate.h>
-#include <pagoda/geometry/operations/scale.h>
-#include <pagoda/geometry/operations/scope_texture_projection.h>
-#include <pagoda/geometry/operations/split.h>
-#include <pagoda/geometry/operations/translate.h>
-#include <pagoda/geometry/operations/triangulate_geometry.h>
-
 #include <pagoda/material/material_system.h>
-#include <pagoda/material/operations/set_material.h>
-#include <pagoda/material/operations/set_material_attribute.h>
-#include <pagoda/material/operations/set_shader.h>
-#include <pagoda/material/operations/set_texture.h>
+
+#include <pagoda/image/image_system.h>
 
 #include "pagoda/objects/operation_factory.h"
 #include "pagoda/objects/procedural_object_system.h"
@@ -55,10 +36,9 @@ using namespace graph;
 using namespace graph::io;
 
 using namespace geometry;
-using namespace geometry::operations;
+using namespace image;
 
 using namespace material;
-using namespace material::operations;
 
 class Pagoda::Impl {
 public:
@@ -122,6 +102,7 @@ public:
     HierarchicalSystem::Registration(m_pagoda);
     GeometrySystem::Registration(m_pagoda);
     MaterialSystem::Registration(m_pagoda);
+    ImageSystem::Registration(m_pagoda);
 
     // Register Nodes
     {
