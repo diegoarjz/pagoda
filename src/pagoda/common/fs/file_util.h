@@ -12,6 +12,11 @@ namespace pagoda::common::fs
  */
 boost::filesystem::path GetExecutablePath();
 
+/**
+ * Returns the path to the directory containing the executable.
+ */
+boost::filesystem::path GetExecutableDir();
+
 std::string LoadFileToString(const boost::filesystem::path &path);
 
 void WriteStringToFile(const boost::filesystem::path &filePath, const std::string &contents);
