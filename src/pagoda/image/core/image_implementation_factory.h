@@ -2,7 +2,7 @@
 
 #include "image_implementation.h"
 
-#include <pagoda/image/image_type.h>
+#include <pagoda/image/image.h>
 
 #include <pagoda/common/factory.h>
 
@@ -12,7 +12,7 @@
 
 namespace pagoda::image::core
 {
-class ImageImplementationFactory : public common::Factory<ImageImplementation, ImageType>
+class ImageImplementationFactory : public common::Factory<ImageImplementationBase, Image::Format>
 {
 	public:
 	ImageImplementationFactory();

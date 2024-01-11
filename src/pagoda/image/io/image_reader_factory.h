@@ -15,7 +15,7 @@ class ImageReaderFactory : public common::Factory<ImageReader>
 	ImageReaderFactory();
 	virtual ~ImageReaderFactory();
 
-	std::shared_ptr<ImageReader> CreateFromFilePath(const boost::filesystem::path &p);
+	std::shared_ptr<ImageReader> CreateFromFilePath(const std::filesystem::path &p);
 
 	private:
 };
