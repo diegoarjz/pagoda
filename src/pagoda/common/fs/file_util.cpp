@@ -13,6 +13,9 @@ boost::filesystem::path GetExecutablePath() {
   return boost::dll::program_location();
 }
 
+boost::filesystem::path GetExecutableDir() {
+  return boost::dll::program_location().parent_path();
+}
 std::string LoadFileToString(const boost::filesystem::path &path) {
   std::string str;
   std::ifstream file(path.string());
