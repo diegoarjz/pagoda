@@ -608,8 +608,8 @@ SplitPointTopology::EdgeHandleSet SplitPointTopology::GetEdges(const PointHandle
 	edgesToCheck.insert(std::begin(point1.m_edges), std::end(point1.m_edges));
 
 	for (const auto &edgeIndex : edgesToCheck) {
-		const Index_t sourcePointIndex = GetPoint(GetSource(edgeIndex));
-		const Index_t destinationPointIndex = GetPoint(GetDestination(edgeIndex));
+		const PointHandle sourcePointIndex = GetPoint(GetSource(edgeIndex));
+		const PointHandle destinationPointIndex = GetPoint(GetDestination(edgeIndex));
 
 		if ((sourcePointIndex == p0 && destinationPointIndex == p1) ||
 		    (sourcePointIndex == p1 && destinationPointIndex == p0)) {

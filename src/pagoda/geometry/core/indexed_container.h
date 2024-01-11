@@ -126,9 +126,9 @@ public:
 			return *this;
 		}
 
-		bool operator==(const iterator& other) { return m_currentIndex == other.m_currentIndex; }
+		bool operator==(const iterator& other) const { return m_currentIndex == other.m_currentIndex; }
 
-		bool operator!=(const iterator& other) { return m_currentIndex != other.m_currentIndex; }
+		bool operator!=(const iterator& other) const { return m_currentIndex != other.m_currentIndex; }
 
 private:
 		std::size_t FindNextValid(const std::size_t index) const
