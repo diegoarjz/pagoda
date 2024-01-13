@@ -35,6 +35,8 @@ class Pagoda(ConanFile):
         self.requires("bzip2/1.0.8")
         self.requires("entt/3.6.0")
         self.requires("libffi/3.4.4", override=True)
+        self.requires("imgui/cci.20220621+1.88.docking")
+        self.requires("glfw/3.3.8")
 
 
     def _configure_cmake(self):

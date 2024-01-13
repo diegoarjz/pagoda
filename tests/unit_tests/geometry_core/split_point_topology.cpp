@@ -233,7 +233,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_points_should_go_thr
 	std::vector<SplitPointTopology::Index_t> seenPoints;
 
 	for (; iter != endIter; ++iter) {
-		EXPECT_TRUE(std::find(seenPoints.begin(), seenPoints.end(), *iter) == seenPoints.end());
+		EXPECT_TRUE(std::find(seenPoints.begin(), seenPoints.end(), static_cast<SplitPointTopology::Index_t>(*iter)) == seenPoints.end());
 		seenPoints.push_back((*iter).GetIndex());
 	}
 	EXPECT_EQ(seenPoints.size(), 3u);
@@ -249,7 +249,7 @@ TEST_F(SplitPointTopologyIteratorsTest, when_iterating_over_split_points_should_
 	std::vector<SplitPointTopology::Index_t> seenSplitPoints;
 
 	for (; iter != endIter; ++iter) {
-		EXPECT_TRUE(std::find(seenSplitPoints.begin(), seenSplitPoints.end(), *iter) == seenSplitPoints.end());
+		EXPECT_TRUE(std::find(seenSplitPoints.begin(), seenSplitPoints.end(), static_cast<SplitPointTopology::Index_t>(*iter)) == seenSplitPoints.end());
 		seenSplitPoints.push_back((*iter).GetIndex());
 	}
 	EXPECT_EQ(seenSplitPoints.size(), 3u);

@@ -28,6 +28,6 @@ add_pagoda_plugin(
   REGISTRY      "PlatformWindow"
   FUNCTION      "CreateWindow"
   DESTINATION   "${CMAKE_BINARY_DIR}/alpha/bin/plugins"
-  JSON          "${CMAKE_SOURCE_DIR}/third_party/pagoda/tools/plugin.json"
+  JSON          "${CMAKE_SOURCE_DIR}/tools/plugin.json"
 )
 
