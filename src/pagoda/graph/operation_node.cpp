@@ -43,8 +43,11 @@ OperationNode::~OperationNode() {}
 
 class InterfaceCreator : public InterfaceCallback {
 public:
-  InterfaceCreator(InterfacePtrMap &inputs, InterfacePtrMap &outputs)
-      : m_inputs{inputs}, m_outputs{outputs} {}
+  InterfaceCreator(const std::string& nodeName,
+                   InterfacePtrMap &inputs,
+                   InterfacePtrMap &outputs,
+                   Graph* graph)
+      : m_nodeName{nodeName}, m_inputs{inputs}, m_outputs{outputs}, m_graph{graph} {}
 
   void InputInterface(InterfacePtr &interface, const std::string &name,
                       const std::string &label,
@@ -52,6 +55,18 @@ public:
     interface =
         std::make_shared<Interface>(name, Interface::Type::Input, arity);
     m_inputs.emplace(name, interface);
+
+    const auto inputInterfaceName = m_nodeName + "_" + name;
+    if (m_graph->GetNode(inputInterfaceName) != nullptr) {
+      LOG_WARNING("InputInterfaceNode '" << inputInterfaceName << "' already exists");
+    }
+    auto interfaceName = m_graph->CreateNode<InputInterfaceNode>(m_nodeName + "_" + name);
+    std::dynamic_pointer_cast<InputInterfaceNode>(m_graph->GetNode(interfaceName))->SetInterfaceName(name);
+    auto res = m_graph->CreateEdge(interfaceName, m_nodeName);
+    if (res != Graph::EdgeCreated::Created) {
+      LOG_ERROR("Could not create edge between InputInterfaceNode '" 
+          << interfaceName << "' and node '" << m_nodeName << "'");
+    }
   }
 
   void OutputInterface(InterfacePtr &interface, const std::string &name,
@@ -60,22 +75,38 @@ public:
     interface =
         std::make_shared<Interface>(name, Interface::Type::Output, arity);
     m_outputs.emplace(name, interface);
+
+    const auto outputInterfaceName = m_nodeName + "_" + name;
+    if (m_graph->GetNode(outputInterfaceName) != nullptr) {
+      LOG_WARNING("OutputInterfaceNode '" << outputInterfaceName << "' already exists");
+    }
+    auto interfaceName = m_graph->CreateNode<OutputInterfaceNode>(m_nodeName + "_" + name);
+    std::dynamic_pointer_cast<OutputInterfaceNode>(m_graph->GetNode(interfaceName))->SetInterfaceName(name);
+    auto res = m_graph->CreateEdge(m_nodeName, interfaceName);
+    if (res != Graph::EdgeCreated::Created) {
+      LOG_ERROR("Could not create edge between OutputInterfaceNode '" 
+          << interfaceName << "' and node '" << m_nodeName << "'");
+    }
   }
 
 private:
+  const std::string& m_nodeName;
   InterfacePtrMap &m_inputs;
   InterfacePtrMap &m_outputs;
+  Graph* m_graph;
 };
 
 void OperationNode::SetOperation(ProceduralOperationPtr operation) {
   m_operation = operation;
+
+  // Create the interfaces
+  InterfaceCreator interfaceCreator{GetName(), m_inputInterfaces, m_outputInterfaces, GetGraph()};
+  m_operation->Interfaces(&interfaceCreator);
+
+  // Create the parameters
   ParameterCreator paramCreator([this](ParameterBasePtr p) {
     return m_parameters.insert({p->GetName(), p}).second;
   });
-
-  InterfaceCreator interfaceCreator{m_inputInterfaces, m_outputInterfaces};
-  m_operation->Interfaces(&interfaceCreator);
-
   m_operation->Parameters(&paramCreator);
 
   RegisterOrSetMember("op", m_operation);
@@ -105,52 +136,6 @@ OperationNode::GetOutputInterface(const std::string &name) const {
   return iter->second;
 }
 
-namespace {
-class InterfaceObjectProvider : public InterfaceCallback {
-public:
-  using Inserter_t = std::back_insert_iterator<std::vector<InterfacePtr>>;
-
-  InterfaceObjectProvider(Inserter_t inputs, Inserter_t outputs)
-      : m_inputs{inputs}, m_outputs{outputs} {}
-
-  void InputInterface(InterfacePtr &interface, const std::string &name,
-                      const std::string &label,
-                      Interface::Arity arity) override {
-    CRITICAL_ASSERT_MSG(interface != nullptr,
-                        "Input Interface not set when executing a node");
-    m_inputs = interface;
-  }
-
-  void OutputInterface(InterfacePtr &interface, const std::string &name,
-                       const std::string &label,
-                       Interface::Arity arity) override {
-    CRITICAL_ASSERT_MSG(interface != nullptr,
-                        "Output Interface not set when executing a node");
-    m_outputs = interface;
-  }
-
-  std::back_insert_iterator<std::vector<InterfacePtr>> m_inputs;
-  std::back_insert_iterator<std::vector<InterfacePtr>> m_outputs;
-};
-
-template <class T>
-void pairInterfaceWithNodes(
-    const std::vector<InterfacePtr> &interfaces, const NodeSet &nodes,
-    std::unordered_map<InterfacePtr, std::shared_ptr<T>> &pairings) {
-  for (auto &inputInterface : interfaces) {
-    auto interfaceName = inputInterface->GetName();
-    for (auto &n : nodes) {
-      if (auto interfaceNode = std::dynamic_pointer_cast<T>(n)) {
-        if (interfaceNode->GetInterfaceName() == interfaceName) {
-          pairings.emplace(inputInterface, interfaceNode);
-        }
-      }
-    }
-  }
-}
-
-} // namespace
-
 void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes) {
   LOG_TRACE(ProceduralGraph,
             "Executing OperationNode '" << GetName() << "'(" << GetId() << ")");
@@ -162,6 +147,24 @@ void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes) {
 const char *const OperationNode::GetNodeType() {
   static const char *const sNodeType = "Operation";
   return sNodeType;
+}
+
+void OperationNode::Interfaces(objects::InterfaceCallback* cb) {
+  if (m_operation != nullptr) {
+    m_operation->Interfaces(cb);
+  }
+}
+
+void OperationNode::InputInterfaces(objects::InterfaceCallback* cb) {
+  if (m_operation != nullptr) {
+    m_operation->InputInterfaces(cb);
+  }
+}
+
+void OperationNode::OutputInterfaces(objects::InterfaceCallback* cb) {
+  if (m_operation != nullptr) {
+    m_operation->OutputInterfaces(cb);
+  }
 }
 
 } // namespace pagoda::graph

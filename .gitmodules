@@ -1,3 +1,9 @@
 [submodule "third_party/WGS84toCartesian"]
 	path = third_party/WGS84toCartesian
 	url = https://github.com/chrberger/WGS84toCartesian.git
+[submodule "third_party/imgui-node-editor"]
+	path = third_party/imgui-node-editor
+	url = https://github.com/thedmd/imgui-node-editor.git
+[submodule "third_party/ImGuiFileDialog"]
+	path = third_party/ImGuiFileDialog
+	url = https://github.com/aiekick/ImGuiFileDialog.git

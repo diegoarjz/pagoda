@@ -28,18 +28,11 @@ class OutputInterfaceNode : public Node
 
 	void SetInterfaceName(const std::string& name);
 	const std::string& GetInterfaceName() const;
-	const std::list<pagoda::objects::ProceduralObjectPtr>& GetProceduralObjects()
-	  const
-	{
-		return m_proceduralObjects;
-	}
-	void AddProceduralObject(pagoda::objects::ProceduralObjectPtr object);
 
 	const char* const GetNodeType() override;
 
 	private:
 	std::string m_interfaceName;
-	std::list<pagoda::objects::ProceduralObjectPtr> m_proceduralObjects;
 };  // class OutputInterfaceNode
 
 using OutputInterfaceNodePtr = std::shared_ptr<OutputInterfaceNode>;
