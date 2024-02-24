@@ -2,7 +2,7 @@
 
 namespace pagoda::graph
 {
-NodeFactory::NodeFactory() : Factory<Node>("Node") {}
+NodeFactory::NodeFactory() : pagoda::common::PluggableFactory<Node>("Node") {}
 
 NodeFactory::~NodeFactory() {}
 }  // namespace pagoda::graph
