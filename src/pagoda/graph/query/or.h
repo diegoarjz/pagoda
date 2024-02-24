@@ -15,6 +15,7 @@ namespace pagoda::graph::query
 class Or : public Query
 {
 	public:
+  Or();
 	Or(Graph &graph, QueryHandle_t queryHandle);
 	Or(Graph &graph, NodeSet &nodeSet);
 	Or(Graph &graph, QueryHandle_t queryHandle, QueryContainer_t &&queries);
