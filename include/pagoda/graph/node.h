@@ -65,6 +65,25 @@ class Node : public dynamic::BuiltinClass
   virtual void AttachToGraph(Graph* graph);
 
   /**
+   * Called by \c Graph when destroying the \c Node.
+   * Subclasses can override to perform more tasks,
+   * including creating new nodes.
+   */
+  virtual void DetachFromGraph(Graph* graph);
+
+  /**
+   * Called by \c Graph when creating an edge with this \c Node.
+   * Subclasses can override to perform more tasks.
+   */
+  virtual void ConnectedToNode(const NodePtr& node);
+
+  /**
+   * Called by \c Graph when destroying an edge with this \c Node.
+   * Subclasses can override to perform more tasks.
+   */
+  virtual void DisconnectedFromNode(const NodePtr& node);
+
+  /**
    * Get the \c this \c Node is attached to.
    */
   Graph* GetGraph() const { return m_graph; }
@@ -99,19 +118,6 @@ class Node : public dynamic::BuiltinClass
 
 	objects::ParameterBasePtr GetParameter(const std::string &name) const;
 	void ForEachParameter(std::function<void(objects::ParameterBasePtr)> f) const;
-
-  /**
-   * Calls \a cb on each input and output interface.
-   */
-  virtual void Interfaces(objects::InterfaceCallback* cb) {}
-  /**
-   * Calls \b cb on each input interface.
-   */
-  virtual void InputInterfaces(objects::InterfaceCallback* cb) {}
-  /**
-   * Calls \b cb on each output interface.
-   */
-  virtual void OutputInterfaces(objects::InterfaceCallback* cb) {}
 
 	protected:
 	std::map<std::string, objects::ParameterBasePtr> m_parameters;

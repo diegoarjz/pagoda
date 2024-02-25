@@ -3,7 +3,6 @@
 #include "pagoda/graph/graph.h"
 #include "pagoda/graph/input_interface_node.h"
 #include "pagoda/graph/node.h"
-#include "pagoda/graph/node_set_visitor.h"
 #include "pagoda/graph/operation_node.h"
 #include "pagoda/graph/unsupported_node_link.h"
 
@@ -50,5 +49,55 @@ const char* const OutputInterfaceNode::GetNodeType()
 {
 	static const char* const sNodeType = "OutputInterface";
 	return sNodeType;
+}
+
+void OutputInterfaceNode::ConnectedToNode(const NodePtr& node) {
+  Node::ConnectedToNode(node);
+
+  if (auto input = std::dynamic_pointer_cast<InputInterfaceNode>(node)) {
+    LOG_TRACE(ProceduralGraph, "Connected Output Interface Node '" << input->GetName() 
+        << "' with interface name '" << input->GetInterfaceName() << "' (" << input->GetInterface()
+        << ") in Output Interface Node '" << GetName() << "' with interface name '"
+        << GetInterfaceName() << "' (" << GetInterface() << ".");
+    if (input->GetInterface() != nullptr && GetInterface() != nullptr) {
+      // Interface::Connect() doesn't create duplicate connections
+      if (!input->GetInterface()->Connect(GetInterface())) {
+        LOG_ERROR("Unable to connect interface '" << GetInterfaceName() << "' of node '"
+            << std::dynamic_pointer_cast<Node>(GetInterfaceableNode())->GetName()
+            << "' to interface '" << input->GetInterfaceName() << "' of node '"
+            << std::dynamic_pointer_cast<Node>(input->GetInterfaceableNode())->GetName() << "'");
+      }
+    }
+  }
+  else if (auto opNode = std::dynamic_pointer_cast<InterfaceableNode>(node)) {
+    m_interfaceableNode = opNode;
+  }
+}
+
+void OutputInterfaceNode::DisconnectedFromNode(const NodePtr& node) {
+  Node::DisconnectedFromNode(node);
+
+  if (auto input = std::dynamic_pointer_cast<InputInterfaceNode>(node)) {
+    input->GetInterface()->Disconnect(GetInterface());
+  }
+  else if (auto opNode = std::dynamic_pointer_cast<InterfaceableNode>(node)) {
+    m_interfaceableNode.reset();
+  }
+}
+
+InterfaceableNodePtr OutputInterfaceNode::GetInterfaceableNode() const {
+  if (m_interfaceableNode.expired()) {
+    LOG_WARNING("Trying to get the Interfaceable Node from an OutputInterfaceNode but it is not conneted to an Interfaceable Node.")
+    return nullptr;
+  }
+  return m_interfaceableNode.lock();
+}
+
+objects::InterfacePtr OutputInterfaceNode::GetInterface() const {
+  if (m_interfaceableNode.expired()) {
+    LOG_WARNING("Trying to get the interface from an OutputInterfaceNode but it is not connected to an Interfaceable Node.")
+    return nullptr;
+  }
+  return GetInterfaceableNode()->GetOutputInterface(m_interfaceName);
 }
 }  // namespace pagoda::graph

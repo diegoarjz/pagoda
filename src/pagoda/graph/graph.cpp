@@ -62,6 +62,7 @@ class Graph::Impl
 		m_adjacencies.erase(nodeName);
 		m_nodes.erase(node);
 		m_nodesByIdentifier.erase(nodeName);
+    node->DetachFromGraph(m_graph);
 		DBG_ASSERT(m_nodes.size() == nodeCount - 1);
 		DBG_ASSERT(GetNode(nodeName) == nullptr);
 	}
@@ -103,15 +104,22 @@ class Graph::Impl
 	Graph::EdgeCreated CreateEdge(const NodeIdentifier_t &source_node,
 	                              const NodeIdentifier_t &target_node)
 	{
+    LOG_TRACE(ProceduralGraph, "Creating edge between '" << source_node
+        << "' and '" << target_node << "' in graph " << m_graph << ".");
 		auto &source_node_out = OutNodes(source_node);
 		auto &target_node_in = InNodes(target_node);
 
-		auto out_link_inserted = source_node_out.insert(GetNode(target_node));
-		auto in_link_inserted = target_node_in.insert(GetNode(source_node));
+    auto sourceNodePtr = GetNode(source_node);
+    auto targetNodePtr = GetNode(target_node);
+		auto out_link_inserted = source_node_out.insert(targetNodePtr);
+		auto in_link_inserted = target_node_in.insert(sourceNodePtr);
 
 		if (!out_link_inserted.second || !in_link_inserted.second) {
 			return EdgeCreated::EdgeExists;
 		}
+
+    sourceNodePtr->ConnectedToNode(targetNodePtr);
+    targetNodePtr->ConnectedToNode(sourceNodePtr);
 
 		return EdgeCreated::Created;
 	}
@@ -185,6 +193,8 @@ class Graph::Impl
 	NodeIdentifier_t CreateNode(const std::string &nodeType,
 	                            const NodeIdentifier_t &nodeName)
 	{
+    LOG_TRACE(ProceduralGraph, "Creating node '" << nodeName << "' of type '"
+        << nodeType << "' in graph " << m_graph << ".");
 		auto node = m_nodeFactory->Create(nodeType);
 		if (node == nullptr) {
 			throw UnknownNodeTypeException(nodeType);

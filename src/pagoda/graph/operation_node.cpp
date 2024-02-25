@@ -43,18 +43,14 @@ OperationNode::~OperationNode() {}
 
 class InterfaceCreator : public InterfaceCallback {
 public:
-  InterfaceCreator(const std::string& nodeName,
-                   InterfacePtrMap &inputs,
-                   InterfacePtrMap &outputs,
-                   Graph* graph)
-      : m_nodeName{nodeName}, m_inputs{inputs}, m_outputs{outputs}, m_graph{graph} {}
+  InterfaceCreator(const std::string& nodeName, Graph* graph)
+      : m_nodeName{nodeName}, m_graph{graph} {}
 
   void InputInterface(InterfacePtr &interface, const std::string &name,
                       const std::string &label,
                       Interface::Arity arity) override {
     interface =
         std::make_shared<Interface>(name, Interface::Type::Input, arity);
-    m_inputs.emplace(name, interface);
 
     const auto inputInterfaceName = m_nodeName + "_" + name;
     if (m_graph->GetNode(inputInterfaceName) != nullptr) {
@@ -74,7 +70,6 @@ public:
                        Interface::Arity arity) override {
     interface =
         std::make_shared<Interface>(name, Interface::Type::Output, arity);
-    m_outputs.emplace(name, interface);
 
     const auto outputInterfaceName = m_nodeName + "_" + name;
     if (m_graph->GetNode(outputInterfaceName) != nullptr) {
@@ -91,16 +86,16 @@ public:
 
 private:
   const std::string& m_nodeName;
-  InterfacePtrMap &m_inputs;
-  InterfacePtrMap &m_outputs;
   Graph* m_graph;
 };
 
 void OperationNode::SetOperation(ProceduralOperationPtr operation) {
+  LOG_TRACE(ProceduralGraph, "Setting Procedural Operation '" << operation->GetOperationName()
+      << "' in Operation Node '" << GetName() << "'.");
   m_operation = operation;
 
   // Create the interfaces
-  InterfaceCreator interfaceCreator{GetName(), m_inputInterfaces, m_outputInterfaces, GetGraph()};
+  InterfaceCreator interfaceCreator{GetName(), GetGraph()};
   m_operation->Interfaces(&interfaceCreator);
 
   // Create the parameters
@@ -118,22 +113,46 @@ void OperationNode::ForEachOperationParameter(
   m_operation->ForEachParameter(f);
 }
 
+namespace {
+class Callback : public objects::InterfaceCallback {
+public:
+  Callback(const std::string& name, bool input, InterfacePtr& iface)
+    : name{name}, isInput{input}, interface{iface} {}
+
+  void InputInterface(InterfacePtr& i, const std::string& name, const std::string& label,
+                              Interface::Arity arity) override {
+    if (isInput && name == this->name) {
+      interface = i;
+    }
+  }
+
+  void OutputInterface(InterfacePtr& i, const std::string& name, const std::string& label,
+                               Interface::Arity arity) override {
+    if (!isInput && name == this->name) {
+      interface = i;
+    }
+  }
+  
+  std::string name;
+  bool isInput;
+  InterfacePtr& interface;
+};
+}
+
 objects::InterfacePtr
 OperationNode::GetInputInterface(const std::string &name) const {
-  auto iter = m_inputInterfaces.find(name);
-  if (iter == m_inputInterfaces.end()) {
-    return nullptr;
-  }
-  return iter->second;
+  InterfacePtr interface = nullptr;
+  Callback cb{name, true, interface};
+  m_operation->Interfaces(&cb);
+  return interface;
 }
 
 objects::InterfacePtr
 OperationNode::GetOutputInterface(const std::string &name) const {
-  auto iter = m_outputInterfaces.find(name);
-  if (iter == m_outputInterfaces.end()) {
-    return nullptr;
-  }
-  return iter->second;
+  InterfacePtr interface = nullptr;
+  Callback cb{name, false, interface};
+  m_operation->Interfaces(&cb);
+  return interface;
 }
 
 void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes) {

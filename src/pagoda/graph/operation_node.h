@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pagoda/graph/node.h"
+#include "pagoda/graph/interfaceable_node.h"
 
 namespace pagoda::objects
 {
@@ -13,7 +14,7 @@ using InterfacePtrMap = std::unordered_map<std::string, InterfacePtr>;
 
 namespace pagoda::graph
 {
-class OperationNode : public Node
+class OperationNode : public Node, public InterfaceableNode
 {
 	public:
 	static const char *name;
@@ -32,20 +33,17 @@ class OperationNode : public Node
 	  const std::function<void(const std::string &,
 	                           const dynamic::DynamicValueBasePtr &)> &f) const;
 
-  objects::InterfacePtr GetInputInterface(const std::string& name) const;
-  objects::InterfacePtr GetOutputInterface(const std::string& name) const;
-
 	const char *const GetNodeType() override;
 
   void Interfaces(objects::InterfaceCallback* cb) override;
   void InputInterfaces(objects::InterfaceCallback* cb) override;
   void OutputInterfaces(objects::InterfaceCallback* cb) override;
+  objects::InterfacePtr GetInputInterface(const std::string& name) const override;
+  objects::InterfacePtr GetOutputInterface(const std::string& name) const override;
 
 	private:
 	objects::ProceduralOperationPtr m_operation;
 	objects::OperationFactoryPtr m_operationFactory;
-  objects::InterfacePtrMap m_inputInterfaces;
-  objects::InterfacePtrMap m_outputInterfaces;
 	std::string m_operationName;
 };  // class OperationNode
 }  // namespace pagoda::graph

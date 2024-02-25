@@ -27,7 +27,27 @@ void Node::SetName(const std::string &name) { m_nodeName = name; }
 const std::string &Node::GetName() const { return m_nodeName; }
 
 void Node::AttachToGraph(Graph* graph) {
+  LOG_TRACE(ProceduralGraph, "Attaching node '" << GetName() << "' to graph " << graph << ".");
   m_graph = graph;
+}
+
+void Node::DetachFromGraph(Graph* graph) {
+  LOG_TRACE(ProceduralGraph, "Detaching node '" << GetName() << "' from graph " << graph << ".");
+  if (m_graph != graph) {
+    LOG_WARNING(
+        "Node is being detached from a different graph than the"
+        " one previously attached.");
+  }
+  m_graph = nullptr;
+}
+
+void Node::ConnectedToNode(const NodePtr& node) {
+  LOG_TRACE(ProceduralGraph, "Connecting node '" << GetName() << "' to node " << node->GetName() << ".");
+
+}
+
+void Node::DisconnectedFromNode(const NodePtr& node) { 
+  LOG_TRACE(ProceduralGraph, "Disconnecting node '" << GetName() << "' from node " << node->GetName() << ".");
 }
 
 std::string Node::ToString() const { return "<Node>"; }
