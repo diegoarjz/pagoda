@@ -54,7 +54,7 @@ jobs:
             - name: Download and Install Dependencies (Ubuntu)
               if: ${{ contains(matrix.config.os, 'Ubuntu') }}
               run: |
-                  sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev build-essential
+                  sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev build-essential libxss-dev libxxf86vm-dev libxkbfile-dev libxv-dev
 
             - name: Configure and Build
               env:
