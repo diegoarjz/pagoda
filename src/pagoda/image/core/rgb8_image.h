@@ -52,7 +52,7 @@ public:
     const auto dims = GetDimensions();
     data.reserve(dims.x * dims.y * NumChannels);
     boost::gil::for_each_pixel(
-        view, [&data](Pixel_t &p) { /*copyPixelValue(data, p);*/ });
+        view, [](Pixel_t &p) { /*copyPixelValue(data, p);*/ });
   }
 
   Image::Pixel GetPixel(std::size_t x, std::size_t y) const override {
