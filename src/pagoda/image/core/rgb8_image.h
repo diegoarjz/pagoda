@@ -52,59 +52,22 @@ public:
     const auto dims = GetDimensions();
     data.reserve(dims.x * dims.y * NumChannels);
     boost::gil::for_each_pixel(
-        view, [&data](Pixel_t &p) { copyPixelValue(data, p); });
+        view, [&data](Pixel_t &p) { /*copyPixelValue(data, p);*/ });
   }
 
   Image::Pixel GetPixel(std::size_t x, std::size_t y) const override {
-    auto view = boost::gil::view(*m_imageData);
-    Image::Pixel p;
-    copyToPixel<NumChannels>(p, view(x, y));
+    //auto view = boost::gil::view(*m_imageData);
+    Image::Pixel p{};
+    //copyToPixel<NumChannels>(p, view(x, y));
     return p;
   }
 
   void SetPixel(std::size_t x, std::size_t y, const Image::Pixel &p) override {
-    auto view = boost::gil::view(*m_imageData);
-    copyFromPixel<NumChannels>(p, view(x, y));
+    //auto view = boost::gil::view(*m_imageData);
+    //copyFromPixel<NumChannels>(p, view(x, y));
   }
 
 private:
-  template <int N>
-  static void copyPixelValueImpl(std::vector<uint8_t> &data,
-                                 const Pixel_t &pixel) {
-    copyPixelValueImpl<N - 1>(data, pixel);
-    data.push_back(boost::gil::at_c<N>(pixel));
-  }
-
-  template <>
-  static void copyPixelValueImpl<0>(std::vector<uint8_t> &data,
-                                    const Pixel_t &pixel) {
-    data.push_back(boost::gil::at_c<0>(pixel));
-  }
-
-  static void copyPixelValue(std::vector<uint8_t> &data, const Pixel_t &pixel) {
-    copyPixelValueImpl<NumChannels>(data, pixel);
-  }
-
-  template <int N>
-  static void copyToPixel(Image::Pixel &outP, const Pixel_t &p) {
-    outP.at<N>() = boost::gil::at_c<N>(p);
-    copyToPixel<N - 1>(outP, p);
-  }
-
-  template <> static void copyToPixel<0>(Image::Pixel &outP, const Pixel_t &p) {
-    outP.at<0>() = boost::gil::at_c<0>(p);
-  }
-
-  template <int N>
-  static void copyFromPixel(const Image::Pixel &inP, Pixel_t &p) {
-    boost::gil::at_c<N>(p) = inP.at<N>();
-    copyFromPixel<N - 1>(inP, p);
-  }
-
-  template <>
-  static void copyFromPixel<0>(const Image::Pixel &inP, Pixel_t &p) {
-    boost::gil::at_c<0>(p) = inP.at<0>();
-  }
 
   std::unique_ptr<ImageData> m_imageData;
 };

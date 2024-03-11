@@ -163,6 +163,9 @@ function (add_pagoda_build_unit)
       ${PARSED_ARGS_COMPILE_DEFINITIONS}
   )
 
+  set_target_properties(${PARSED_ARGS_NAME}
+    PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
   target_link_libraries(
     ${PARSED_ARGS_NAME}
     PRIVATE
