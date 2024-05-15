@@ -67,7 +67,7 @@ class ParameterBase : public std::enable_shared_from_this<ParameterBase>
 
 	class VariableProvider
 	{
-public:
+  public:
 		virtual bool GetVariable(const std::list<std::string>& path,
 		                         Variable_t& outVar) = 0;
 	};
@@ -231,6 +231,33 @@ using StringParameter = Parameter<std::string>;
 using StringParameterPtr = std::shared_ptr<StringParameter>;
 template<>
 dynamic::DynamicValueBasePtr Parameter<std::string>::ToDynamicValue();
+
+class PathParameter : public StringParameter
+{
+public:
+	PathParameter(std::string* value, const std::string& name)
+	  : StringParameter(value, name)
+	{
+	}
+
+	/**
+	 * Constructs a Parameter with \p value, a \p name and a \p name.
+	 */
+	PathParameter(std::string* value, const std::string& name, const std::string& label)
+	  : StringParameter(value, name, label)
+	{
+	}
+
+	~PathParameter() override
+	{
+	}
+
+  void SetDirectoryOnly(bool dirOnly) { m_directoryOnly = dirOnly; }
+  bool GetDirectoryOnly() const { return m_directoryOnly; }
+private:
+  bool m_directoryOnly;
+};
+using PathParameterPtr = std::shared_ptr<PathParameter>;
 
 using FloatParameter = Parameter<float>;
 using FloatParameterPtr = std::shared_ptr<FloatParameter>;

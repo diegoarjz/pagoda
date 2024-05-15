@@ -24,6 +24,11 @@ public:
                   const std::string &label,
                   const std::string &defaultValue = "") = 0;
 
+  virtual PathParameterPtr
+  PathParameter(std::string *v, const std::string &name,
+                const std::string &label,
+                const std::string &defaultValue = "") = 0;
+
   virtual FloatParameterPtr FloatParameter(float *v, const std::string &name,
                                            const std::string &label,
                                            float defaultValue = 0.0f) = 0;
