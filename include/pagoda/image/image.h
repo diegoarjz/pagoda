@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <utility>
-
+#include <vector>
 #include <filesystem>
 
 namespace pagoda::image {

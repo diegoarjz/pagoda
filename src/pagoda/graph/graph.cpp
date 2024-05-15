@@ -207,6 +207,8 @@ class Graph::Impl
 		m_nodes.insert(node);
 		m_adjacencies[name] = Adjacency{};
 
+    node->AttachToGraph(m_graph);
+
 		return name;
 	}
 

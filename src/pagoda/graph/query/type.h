@@ -3,6 +3,8 @@
 #include <memory>
 #include "query.h"
 
+#include "pagoda/graph/node.h"
+
 namespace pagoda::graph::query
 {
 /**
@@ -22,7 +24,7 @@ class Type : public Query
 	}
 
 	private:
-	bool matches(NodePtr n) override { return std::dynamic_pointer_cast<T>(n) != nullptr; }
+	bool matches(NodePtr n) override { return std::strcmp(T::name, n->GetNodeType()) == 0; }
 };
 
 template<class T, class... Args>

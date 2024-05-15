@@ -5,6 +5,7 @@
 
 namespace pagoda::graph::query
 {
+Or::Or() : Query{} {}
 Or::Or(Graph &graph, QueryHandle_t queryHandle) : Query(graph, queryHandle) {}
 Or::Or(Graph &graph, NodeSet &nodeSet) : Query(graph, nodeSet) {}
 Or::Or(Graph &graph, QueryHandle_t queryHandle, QueryContainer_t &&queries) : Query(graph, queryHandle)

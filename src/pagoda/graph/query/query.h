@@ -84,7 +84,7 @@ class Query
 	void SetTraversal(std::shared_ptr<traversal::Traversal> traversal);
 
 	protected:
-	std::shared_ptr<traversal::Traversal> m_traversal;
+	std::shared_ptr<traversal::Traversal> m_traversal{nullptr};
 	Graph* m_graph;
 	QueryHandle_t m_queryHandle;
 	QueryContainer_t m_subQueries;

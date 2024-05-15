@@ -38,24 +38,12 @@ const std::string& InputInterfaceNode::GetInterfaceName() const
 	return m_interfaceName;
 }
 
-void InputInterfaceNode::AddProceduralObject(ProceduralObjectPtr object)
-{
-	m_proceduralObjects.push_back(object);
-}
-
-void InputInterfaceNode::ClearProceduralObjects()
-{
-	m_proceduralObjects.clear();
-}
-
 void InputInterfaceNode::Execute(const NodeSet& inNodes,
                                  const NodeSet& outNodes)
 {
 	START_PROFILE;
 	LOG_TRACE(ProceduralGraph,
 	          "Executing InputInterfaceNode for interface " << m_interfaceName);
-	LOG_TRACE(ProceduralGraph,
-	          "  with " << m_proceduralObjects.size() << " objects.");
 }
 
 const char* const InputInterfaceNode::GetNodeType()

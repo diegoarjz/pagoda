@@ -6,6 +6,7 @@
 #include <pagoda/dynamic/builtin_class.h>
 #include <pagoda/objects/procedural_operation.h>
 #include <pagoda/objects/parameter.h>
+#include <pagoda/objects/interface.h>
 
 #include <memory>
 #include <map>
@@ -18,8 +19,8 @@ class NewParameterCallback;
 
 namespace pagoda::graph
 {
-class Node;
-using NodePtr = std::shared_ptr<Node>;
+using NodePtr = std::shared_ptr<class Node>;
+using GraphPtr = std::shared_ptr<class Graph>;
 
 /**
  * Represents a \c Node in a \c Graph.
@@ -56,6 +57,30 @@ class Node : public dynamic::BuiltinClass
 	 */
 	const std::string &GetName() const;
 
+  /**
+   * Called by \c Graph when creating the \c Node.
+   * Subclasses can override to perform more tasks,
+   * including creating new nodes.
+   */
+  virtual void AttachToGraph(Graph* graph);
+
+  /**
+   * Get the \c this \c Node is attached to.
+   */
+  Graph* GetGraph() const { return m_graph; }
+
+  /**
+   * Sets the \c Node position in the graph.
+   * This is stored in the `posX` and a `posY`
+   * parameters.
+   */
+  void SetPos(const math::Vec2F pos);
+  /**
+   * Returns the \c Node position in the graph.
+   */
+  math::Vec2F GetPos() const;
+
+
 	/**
 	 * Executes some operation in the procedural graph.
 	 *
@@ -75,13 +100,24 @@ class Node : public dynamic::BuiltinClass
 	objects::ParameterBasePtr GetParameter(const std::string &name) const;
 	void ForEachParameter(std::function<void(objects::ParameterBasePtr)> f) const;
 
-  void SetPos(const math::Vec2F pos);
-  math::Vec2F GetPos() const;
+  /**
+   * Calls \a cb on each input and output interface.
+   */
+  virtual void Interfaces(objects::InterfaceCallback* cb) {}
+  /**
+   * Calls \b cb on each input interface.
+   */
+  virtual void InputInterfaces(objects::InterfaceCallback* cb) {}
+  /**
+   * Calls \b cb on each output interface.
+   */
+  virtual void OutputInterfaces(objects::InterfaceCallback* cb) {}
 
 	protected:
 	std::map<std::string, objects::ParameterBasePtr> m_parameters;
 
 	private:
+  Graph* m_graph{nullptr};
 	std::string m_nodeName;
 	uint32_t m_nodeId;
   float m_posX;

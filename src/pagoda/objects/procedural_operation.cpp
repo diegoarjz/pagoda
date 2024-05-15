@@ -16,8 +16,7 @@
 
 using namespace pagoda::dynamic;
 
-namespace pagoda::objects
-{
+namespace pagoda::objects {
 const TypeInfoPtr ProceduralOperation::s_typeInfo =
   std::make_shared<TypeInfo>("ProceduralOperation");
 
@@ -55,6 +54,43 @@ void ProceduralOperation::Execute()
 	}
 
 	DoWork();
+}
+
+namespace {
+class InterfaceCallbackFilter : public InterfaceCallback
+{
+	public:
+	void InputInterface(InterfacePtr& i, const std::string& name, const std::string& label,
+	                            Interface::Arity arity) override {
+    if (m_onlyInputs) {
+      m_cb->InputInterface(i, name, label, arity);
+    }
+  }
+
+	void OutputInterface(InterfacePtr& i, const std::string& name, const std::string& label,
+	                             Interface::Arity arity) override {
+    if (!m_onlyInputs) {
+      m_cb->InputInterface(i, name, label, arity);
+    }
+  }
+
+  InterfaceCallback* m_cb;
+  bool m_onlyInputs;
+};
+}
+
+void ProceduralOperation::InputInterfaces(InterfaceCallback *cb) {
+  InterfaceCallbackFilter f;
+  f.m_cb = cb;
+  f.m_onlyInputs = true;
+  Interfaces(&f);
+}
+
+void ProceduralOperation::OutputInterfaces(InterfaceCallback *cb) {
+  InterfaceCallbackFilter f;
+  f.m_cb = cb;
+  f.m_onlyInputs = false;
+  Interfaces(&f);
 }
 
 ProceduralObjectPtr ProceduralOperation::CreateOutputProceduralObject()

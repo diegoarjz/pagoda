@@ -37,6 +37,10 @@ class OperationNode : public Node
 
 	const char *const GetNodeType() override;
 
+  void Interfaces(objects::InterfaceCallback* cb) override;
+  void InputInterfaces(objects::InterfaceCallback* cb) override;
+  void OutputInterfaces(objects::InterfaceCallback* cb) override;
+
 	private:
 	objects::ProceduralOperationPtr m_operation;
 	objects::OperationFactoryPtr m_operationFactory;

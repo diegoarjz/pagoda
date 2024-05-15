@@ -93,30 +93,6 @@ void AstInterpreter::Visit(NodeLinkNode *nodeLink)
 
 void AstInterpreter::Visit(NodeLinkDefinition *nodeLinkDefinition)
 {
-	auto inInterface = nodeLinkDefinition->GetInputInterface();
-	auto node = nodeLinkDefinition->GetNodeName();
-	auto outInterface = nodeLinkDefinition->GetOutputInterface();
-
-	if (!inInterface.empty()) {
-		auto inputInterfaceName = nodeLinkDefinition->GetInNode();
-		if (m_graph->GetNode(inputInterfaceName) == nullptr) {
-			m_graph->CreateNode<InputInterfaceNode>(inputInterfaceName);
-			auto inInterfaceNode = std::dynamic_pointer_cast<InputInterfaceNode>(
-			  m_graph->GetNode(inputInterfaceName));
-			inInterfaceNode->SetInterfaceName(inInterface);
-		}
-		m_graph->CreateEdge(inputInterfaceName, node);
-	}
-	if (!outInterface.empty()) {
-		auto outputInterfaceName = nodeLinkDefinition->GetOutNode();
-		if (m_graph->GetNode(outputInterfaceName) == nullptr) {
-			m_graph->CreateNode<OutputInterfaceNode>(outputInterfaceName);
-			auto outInterfaceNode = std::dynamic_pointer_cast<OutputInterfaceNode>(
-			  m_graph->GetNode(outputInterfaceName));
-			outInterfaceNode->SetInterfaceName(outInterface);
-		}
-		m_graph->CreateEdge(node, outputInterfaceName);
-	}
 }
 
 }  // namespace pagoda::graph::io

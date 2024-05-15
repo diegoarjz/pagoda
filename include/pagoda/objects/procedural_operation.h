@@ -4,7 +4,6 @@
 #include "pagoda/objects/interface_callback.h"
 #include "pagoda/objects/procedural_component.h"
 
-#include <boost/signals2.hpp>
 #include <pagoda/common/factory.h>
 #include <pagoda/dynamic/builtin_class.h>
 
@@ -72,6 +71,14 @@ public:
    * an Interface.
    */
   virtual void Interfaces(InterfaceCallback *cb) = 0;
+  /**
+   * Calls \b cb on each input interface.
+   */
+  void InputInterfaces(InterfaceCallback *cb);
+  /**
+   * Calls \b cb on each output interface.
+   */
+  void OutputInterfaces(InterfaceCallback *cb);
 
   ////////////////////////////////////////////////////////////
   /// \name Parameters
