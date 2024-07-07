@@ -48,6 +48,12 @@ add_pagoda_module(
   DEPENDENCIES        nlohmann_json::nlohmann_json
 )
 
+target_include_directories(
+  common
+  INTERFACE
+  ${Boost_INCLUDE_DIR}
+)
+
 
 #########################################################################
 # Unit tests
@@ -55,6 +61,7 @@ add_pagoda_module(
 
 set(COMMON_UNIT_TESTS
     "utils.test.cpp"
+    "visitor.test.cpp"
     "buffer.test.cpp"
 )
 
