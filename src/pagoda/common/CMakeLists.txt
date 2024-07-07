@@ -13,8 +13,14 @@ set(COMMON_SRCS
     "instrument/statistics.h"
     "fs/file_util.cpp"
     "fs/file_util.h"
+    "buffer.cpp"
+    "buffer.h"
     "range.h"
+    "types.cpp"
+    "types.h"
     "utils.cpp"
+
+    Also adds fmt and magic_enum dependencies
     "utils.h"
     "plugin.cpp"
     "version.cpp"
@@ -51,6 +57,7 @@ add_pagoda_module(
 
 set(COMMON_UNIT_TESTS
     "utils.test.cpp"
+    "buffer.test.cpp"
 )
 
 foreach(unit_test_src ${COMMON_UNIT_TESTS})
