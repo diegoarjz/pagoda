@@ -3,6 +3,8 @@ set(SCENE_SRCS
   "camera.h"
   "lens.cpp"
   "lens.h"
+  "path.cpp"
+  "path.h"
   "transformation.cpp"
   "transformation.h"
 )
@@ -19,6 +21,7 @@ add_pagoda_module(
 
 set(SCENE_UNIT_TESTS
   "transformation.test.cpp"
+  "path.test.cpp"
 )
 
 foreach(unit_test_src ${SCENE_UNIT_TESTS})

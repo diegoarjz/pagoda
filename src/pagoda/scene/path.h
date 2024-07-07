@@ -31,6 +31,7 @@ public:
   bool IsRoot() const;
   bool IsValid() const;
   std::size_t GetNumComponents() const;
+  Path GetComponent(std::size_t i) const;
   bool HasPrefix(const Path &path) const;
 
   std::string ToString() const;

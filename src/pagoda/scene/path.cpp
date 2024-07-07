@@ -112,6 +112,13 @@ bool Path::IsValid() const { return m_isValid; }
 
 std::size_t Path::GetNumComponents() const { return m_path.size(); }
 
+Path Path::GetComponent(std::size_t i) const {
+  if (i > GetNumComponents()) {
+    return {};
+  }
+  return Path{m_path[i]};
+}
+
 bool Path::HasPrefix(const Path &p) const {
   if (p.m_absoute != m_absoute || m_path.size() < p.m_path.size()) {
     return false;
