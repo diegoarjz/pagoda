@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
+#include <vector>
 
 namespace pgframes {
 class Window;

@@ -28,6 +28,14 @@ ParameterCreator::StringParameter(std::string *v, const std::string &name,
                                                    m_parameterCreated);
 }
 
+PathParameterPtr
+ParameterCreator::PathParameter(std::string *v, const std::string &name,
+                                const std::string &label,
+                                const std::string &defaultValue) {
+  return createParameter<objects::PathParameter>(v, name, label, defaultValue,
+                                                 m_parameterCreated);
+}
+
 FloatParameterPtr ParameterCreator::FloatParameter(float *v,
                                                    const std::string &name,
                                                    const std::string &label,

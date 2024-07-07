@@ -23,7 +23,6 @@ public:
     return BaseClass::Create(name);
   }
 
-private:
   void LoadPlugins() {
     if (!m_pluginsLoaded) {
       auto &registry = PluginRegistry::Instance();
@@ -38,6 +37,7 @@ private:
     m_pluginsLoaded = true;
   }
 
+private:
   bool m_pluginsLoaded{false};
 };
 } // namespace pagoda::common

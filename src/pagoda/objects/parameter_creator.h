@@ -14,6 +14,11 @@ public:
   StringParameter(std::string *v, const std::string &name,
                   const std::string &label,
                   const std::string &defaultValue = "") override;
+  PathParameterPtr
+  PathParameter(std::string *v, const std::string &name,
+                const std::string &label,
+                const std::string &defaultValue = "") override;
+
 
   FloatParameterPtr FloatParameter(float *v, const std::string &name,
                                    const std::string &label,

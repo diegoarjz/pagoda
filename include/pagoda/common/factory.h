@@ -49,11 +49,11 @@ public:
 
 protected:
   auto &factoryMethods() {
-    static std::unordered_map<KeyType, FactoryMethod_t> s_factoryMethods;
-    return s_factoryMethods;
+    return m_factoryMethods;
   }
 
   std::string m_name;
+  std::unordered_map<KeyType, FactoryMethod_t> m_factoryMethods;
 };
 
 } // namespace pagoda::common

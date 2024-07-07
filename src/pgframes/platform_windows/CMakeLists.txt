@@ -1,1 +1,3 @@
-add_subdirectory(metal)
+if (APPLE)
+  add_subdirectory(metal)
+endif()
