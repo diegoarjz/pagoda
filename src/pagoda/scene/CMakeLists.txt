@@ -5,6 +5,10 @@ set(SCENE_SRCS
   "lens.h"
   "path.cpp"
   "path.h"
+  "scene_graph.h"
+  "scene_graph.cpp"
+  "scene_node.h"
+  "scene_node.cpp"
   "transformation.cpp"
   "transformation.h"
 )
@@ -12,7 +16,7 @@ set(SCENE_SRCS
 add_pagoda_module(
   NAME          scene
   SOURCES       ${SCENE_SRCS}
-  DEPENDENCIES  common math
+  DEPENDENCIES  common math EnTT::EnTT
 )
 
 #########################################################################
@@ -21,6 +25,7 @@ add_pagoda_module(
 
 set(SCENE_UNIT_TESTS
   "transformation.test.cpp"
+  "scene_graph.test.cpp"
   "path.test.cpp"
 )
 
