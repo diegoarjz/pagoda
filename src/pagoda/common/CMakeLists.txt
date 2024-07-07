@@ -19,8 +19,6 @@ set(COMMON_SRCS
     "types.cpp"
     "types.h"
     "utils.cpp"
-
-    Also adds fmt and magic_enum dependencies
     "utils.h"
     "plugin.cpp"
     "version.cpp"
