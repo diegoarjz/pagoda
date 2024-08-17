@@ -124,7 +124,7 @@ bool Path::HasPrefix(const Path &p) const {
     return false;
   }
 
-  for (auto i = 0; i < p.m_path.size(); ++i) {
+  for (std::size_t i = 0; i < p.m_path.size(); ++i) {
     if (m_path[i] != p.m_path[i]) {
       return false;
     }
@@ -156,7 +156,7 @@ bool Path::operator==(const Path& p) const{
     return false;
   }
 
-  for (auto i=0; i< m_path.size(); ++i) {
+  for (std::size_t i=0; i< m_path.size(); ++i) {
     if (m_path[i] != p.m_path[i]) {
       return false;
     }

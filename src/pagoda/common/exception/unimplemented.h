@@ -2,6 +2,8 @@
 
 #include "pagoda/common/exception/exception.h"
 
+#include <cstdint>
+
 namespace pagoda::common::exception
 {
 class Unimplemented : public Exception
