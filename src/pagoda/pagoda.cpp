@@ -16,7 +16,6 @@
 
 #include <pagoda/material/material_system.h>
 
-#include <pagoda/image/image_system.h>
 
 #include "pagoda/objects/operation_factory.h"
 #include "pagoda/objects/procedural_object_system.h"
@@ -36,7 +35,6 @@ using namespace graph;
 using namespace graph::io;
 
 using namespace geometry;
-using namespace image;
 
 using namespace material;
 
@@ -102,7 +100,6 @@ public:
     HierarchicalSystem::Registration(m_pagoda);
     GeometrySystem::Registration(m_pagoda);
     MaterialSystem::Registration(m_pagoda);
-    ImageSystem::Registration(m_pagoda);
 
     // Register Nodes
     {
