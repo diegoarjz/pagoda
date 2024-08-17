@@ -18,14 +18,6 @@ jobs:
                     cxx: "g++-9"
                   }
                 - {
-                    name: "Ubuntu-clang",
-                    os: ubuntu-latest,
-                    set_path: "export PATH=$PATH:/home/runner/.local/bin",
-                    conan_profile: './tools/profiles/ubuntu_clang_Release_gh.txt',
-                    cc: "clang",
-                    cxx: "clang++"
-                  }
-                - {
                     name: "macOs-clang",
                     os: macos-latest,
                     set_path: "",
@@ -49,8 +41,11 @@ jobs:
 
             - name: Download and Install Dependencies
               run: |
+                  python3 -m venv ${{ github.workspace }}/build_env
+                  source ${{ github.workspace }}/build_env/bin/activate
                   pip3 install wheel setuptools numpy
-                  pip3 install conan==1.58.0
+                  pip3 install -r ${{ github.workspace }}/pagoda/requirements.txt
+
             - name: Download and Install Dependencies (Ubuntu)
               if: ${{ contains(matrix.config.os, 'Ubuntu') }}
               run: |
@@ -62,22 +57,19 @@ jobs:
                 CXX: ${{ matrix.config.cxx }}
                 CONAN_SYSREQUIRES_MODE: "enabled"
               run: |
+                  source ${{ github.workspace }}/build_env/bin/activate
                   ${{ matrix.config.set_path }}
                   pushd ${{ github.workspace }}/pagoda
                   git submodule update --init --recursive
+                  conan install --profile:build=${{ github.workspace}}/pagoda/${{ matrix.config.conan_profile }} --profile:host=${{ github.workspace}}/pagoda/${{ matrix.config.conan_profile }} -of ${{ github.workspace }}/build ${{ github.workspace }}/pagoda --build=missing
+                  cmake --preset conan-release
+                  cmake --build ${{ github.workspace }}/build -j 24
                   popd
-                  conan install -if ${{ github.workspace }}/build -pr ${{ github.workspace}}/pagoda/${{ matrix.config.conan_profile }} ${{ github.workspace }}/pagoda --build=missing
-                  conan build -bf ${{ github.workspace }}/build ${{ github.workspace }}/pagoda
 
             - name: Run tests
               run: |
                   cd build
                   ctest -C Release
-
-            - name: Create package
-              run: |
-                  ${{ matrix.config.set_path }}
-                  conan package -bf ${{ github.workspace }}/build -pf ${{ github.workspace }}/build/pagoda ${{ github.workspace }}/pagoda
 
             - name: Pack Build Results
               if: always()
@@ -109,82 +101,3 @@ jobs:
               with:
                   path: ./${{ matrix.config.name }}.tar.xz
                   name: ${{ matrix.config.name }}.tar.xz
-
-    release:
-        if: contains(github.ref, 'tags/v')
-        runs-on: ubuntu-latest
-        needs: build
-
-        steps:
-            - name: Create Release
-              id: create_release
-              uses: actions/create-release@v1.0.0
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                tag_name: ${{ github.ref }}
-                release_name: Release ${{ github.ref }}
-                draft: false
-                prerelease: false
-
-            - name: Store Release url
-              run: |
-                echo "${{ steps.create_release.outputs.upload_url }}" > ./upload_url
-
-            - uses: actions/upload-artifact@v1
-              with:
-                path: ./upload_url
-                name: upload_url
-
-    publish:
-        if: contains(github.ref, 'tags/v')
-        runs-on: ${{ matrix.config.os }}
-        needs: release
-        strategy:
-            fail-fast: false
-            matrix:
-                config:
-                - {
-                    name: "Ubuntu-gcc",
-                    os: ubuntu-latest,
-                  }
-                - {
-                    name: "Ubuntu-clang",
-                    os: ubuntu-latest,
-                  }
-                - {
-                    name: "macOs-clang",
-                    os: ubuntu-latest,
-                  }
-                - {
-                    name: "Windows-msvc",
-                    os: windows-latest,
-                  }
-
-        steps:
-            - name: Download artifact
-              uses: actions/download-artifact@v1
-              with:
-                  name: ${{ matrix.config.name }}.tar.xz
-                  path: ./
-
-            - name: Download URL
-              uses: actions/download-artifact@v1
-              with:
-                name: upload_url
-                path: ./
-            - id: set_upload_url
-              run: |
-                upload_url=`cat ./upload_url`
-                echo ::set-output name=upload_url::$upload_url
-
-            - name: Upload to Release
-              id: upload_to_release
-              uses: actions/upload-release-asset@v1.0.1
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
-                asset_path: ./${{ matrix.config.name }}.tar.xz
-                asset_name: ${{ matrix.config.name }}.tar.xz
-                asset_content_type: application/x-gtar
