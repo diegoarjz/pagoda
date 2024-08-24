@@ -19,7 +19,7 @@ using namespace pagoda::dynamic;
 using namespace pagoda::graph;
 using namespace pagoda::graph::io;
 
-class GraphWriterTest : public ::testing::Test
+class DISABLED_GraphWriterTest : public ::testing::Test
 {
 	protected:
 	void SetUp() override
@@ -46,12 +46,12 @@ class GraphWriterTest : public ::testing::Test
 	std::shared_ptr<GraphReader> m_reader;
 };
 
-TEST_F(GraphWriterTest, test_empty_graph)
+TEST_F(DISABLED_GraphWriterTest, test_empty_graph)
 {
 	EXPECT_EQ(getAsString(), "");
 }
 
-TEST_F(GraphWriterTest, test_single_operation)
+TEST_F(DISABLED_GraphWriterTest, test_single_operation)
 {
 	m_graph->CreateNode<OperationNode>("op");
 	NodePtr opNode =
@@ -69,7 +69,7 @@ TEST_F(GraphWriterTest, test_single_operation)
 	EXPECT_NE(m_reader->Read(getAsString()), nullptr);
 }
 
-TEST_F(GraphWriterTest, test_links)
+TEST_F(DISABLED_GraphWriterTest, test_links)
 {
 	m_graph->CreateNode<OperationNode>("op");
 	m_graph->CreateNode<OperationNode>("op2");

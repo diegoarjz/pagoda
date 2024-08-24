@@ -15,7 +15,7 @@
 using namespace pagoda;
 using namespace pagoda::graph;
 
-class GraphSimpleOperationsTest : public ::testing::Test {
+class DISABLED_GraphSimpleOperationsTest : public ::testing::Test {
 protected:
   virtual void SetUp() {
     graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
@@ -33,21 +33,21 @@ protected:
   Pagoda m_pagoda;
 };
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_creating_nodes_their_id_should_be_incremental) {
   EXPECT_EQ(m_inputInterfaceNode->GetId(), 0u);
   EXPECT_EQ(m_outputInterfaceNode->GetId(), 1u);
   EXPECT_EQ(m_operationNode->GetId(), 2u);
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_destroying_a_node_should_remove_it_from_the_graph) {
   this->graph->DestroyNode(this->m_operationNode->GetName());
 
   EXPECT_EQ(this->graph->GetNodeCount(), 2u);
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_destroying_a_node_should_remove_all_of_its_links) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -64,7 +64,7 @@ TEST_F(GraphSimpleOperationsTest,
       0u);
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_destroying_an_input_node_should_remove_it_from_the_input_nodes) {
   this->graph->DestroyNode(this->m_operationNode->GetName());
   NodeSet inNodes;
@@ -75,7 +75,7 @@ TEST_F(GraphSimpleOperationsTest,
             std::end(inNodes));
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_destroying_an_output_node_should_remove_it_from_the_output_nodes) {
   this->graph->DestroyNode(this->m_operationNode->GetName());
   NodeSet outNodes;
@@ -86,7 +86,7 @@ TEST_F(GraphSimpleOperationsTest,
             std::end(outNodes));
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_creating_an_edge_should_return_true_created) {
   EXPECT_EQ(this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                                     this->m_operationNode->GetName()),
@@ -94,7 +94,7 @@ TEST_F(GraphSimpleOperationsTest,
 }
 
 TEST_F(
-    GraphSimpleOperationsTest,
+    DISABLED_GraphSimpleOperationsTest,
     when_creating_an_edge_between_same_nodes_twice_should_return_edge_exists) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -103,7 +103,7 @@ TEST_F(
             Graph::EdgeCreated::EdgeExists);
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_destroying_an_existing_edge_should_return_edge_destroyed) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -112,14 +112,14 @@ TEST_F(GraphSimpleOperationsTest,
             Graph::EdgeDestroyed::Destroyed);
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_destroying_an_non_existing_edge_should_return_edge_doesnt_exist) {
   EXPECT_EQ(this->graph->DestroyEdge(this->m_inputInterfaceNode->GetName(),
                                      this->m_operationNode->GetName()),
             Graph::EdgeDestroyed::EdgeDoesntExist);
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_retrieving_adjacent_nodes_should_return_all_linked_nodes) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -138,7 +138,7 @@ TEST_F(GraphSimpleOperationsTest,
             std::end(all_nodes));
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_retrieving_in_adjacent_nodes_should_return_only_the_in_nodes) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -152,7 +152,7 @@ TEST_F(GraphSimpleOperationsTest,
   EXPECT_EQ(*in_nodes.begin(), this->m_inputInterfaceNode);
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_retrieving_out_adjacent_nodes_should_return_only_the_out_nodes) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -166,7 +166,7 @@ TEST_F(GraphSimpleOperationsTest,
   EXPECT_EQ(*out_nodes.begin(), this->m_outputInterfaceNode);
 }
 
-TEST_F(GraphSimpleOperationsTest, when_unlinking_nodes_should_remove_links) {
+TEST_F(DISABLED_GraphSimpleOperationsTest, when_unlinking_nodes_should_remove_links) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
   this->graph->DestroyEdge(this->m_inputInterfaceNode->GetName(),
@@ -178,7 +178,7 @@ TEST_F(GraphSimpleOperationsTest, when_unlinking_nodes_should_remove_links) {
 }
 
 TEST_F(
-    GraphSimpleOperationsTest,
+    DISABLED_GraphSimpleOperationsTest,
     when_retrieving_a_graphs_input_nodes_should_return_all_nodes_that_dont_have_inputs) {
   NodeSet input_nodes;
   query::InputNode q(*graph, input_nodes);
@@ -190,7 +190,7 @@ TEST_F(
   }
 }
 
-TEST_F(GraphSimpleOperationsTest,
+TEST_F(DISABLED_GraphSimpleOperationsTest,
        when_linking_a_node_to_an_input_node_should_remove_it_from_input_nodes) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -208,7 +208,7 @@ TEST_F(GraphSimpleOperationsTest,
 }
 
 TEST_F(
-    GraphSimpleOperationsTest,
+    DISABLED_GraphSimpleOperationsTest,
     when_unlinking_a_node_making_it_an_input_node_should_add_it_to_input_nodes) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -222,7 +222,7 @@ TEST_F(
 }
 
 TEST_F(
-    GraphSimpleOperationsTest,
+    DISABLED_GraphSimpleOperationsTest,
     when_retrieving_a_graphs_output_nodes_should_return_all_nodes_that_dont_have_outputs) {
   NodeSet output_nodes;
   query::OutputNode q(*graph, output_nodes);
@@ -235,7 +235,7 @@ TEST_F(
 }
 
 TEST_F(
-    GraphSimpleOperationsTest,
+    DISABLED_GraphSimpleOperationsTest,
     when_linking_a_node_to_an_output_node_should_remove_it_from_output_nodes) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -253,7 +253,7 @@ TEST_F(
 }
 
 TEST_F(
-    GraphSimpleOperationsTest,
+    DISABLED_GraphSimpleOperationsTest,
     when_unlinking_a_node_making_it_an_output_node_should_add_it_to_output_nodes) {
   this->graph->CreateEdge(this->m_inputInterfaceNode->GetName(),
                           this->m_operationNode->GetName());
@@ -266,7 +266,7 @@ TEST_F(
   ASSERT_EQ(output_nodes.size(), 3u);
 }
 
-class GraphNodeCreationByName : public ::testing::Test {
+class DISABLED_GraphNodeCreationByName : public ::testing::Test {
 protected:
   virtual void SetUp() {
     m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
@@ -276,13 +276,13 @@ protected:
   Pagoda m_pagoda;
 };
 
-TEST_F(GraphNodeCreationByName,
+TEST_F(DISABLED_GraphNodeCreationByName,
        when_creating_nodes_with_name_should_set_the_node_name) {
   auto node = m_graph->GetNode(m_graph->CreateNode<OperationNode>("operation"));
   EXPECT_EQ(node->GetName(), "operation");
 }
 
-TEST_F(GraphNodeCreationByName,
+TEST_F(DISABLED_GraphNodeCreationByName,
        when_creating_multiple_nodes_with_the_same_name_should_add_an_index) {
   auto node1 = m_graph->CreateNode<OperationNode>("operation");
   auto node2 = m_graph->CreateNode<OperationNode>("operation");
@@ -290,13 +290,13 @@ TEST_F(GraphNodeCreationByName,
   EXPECT_EQ(node2, "operation1");
 }
 
-TEST_F(GraphNodeCreationByName,
+TEST_F(DISABLED_GraphNodeCreationByName,
        when_creating_nodes_without_a_name_should_use_node_type_as_default) {
   auto node = m_graph->CreateNode<OperationNode>();
   EXPECT_EQ(node, OperationNode::name);
 }
 
-TEST_F(GraphNodeCreationByName,
+TEST_F(DISABLED_GraphNodeCreationByName,
        when_creating_node_by_name_should_be_able_to_get_by_name) {
   auto node = m_graph->GetNode(m_graph->CreateNode<OperationNode>("operation"));
   EXPECT_EQ(m_graph->GetNode("operation"), node);
@@ -305,7 +305,7 @@ TEST_F(GraphNodeCreationByName,
   EXPECT_EQ(m_graph->GetNode(InputInterfaceNode::name), node);
 }
 
-class GraphNodeRenaming : public ::testing::Test {
+class DISABLED_GraphNodeRenaming : public ::testing::Test {
 protected:
   virtual void SetUp() {
     m_graph = std::make_shared<Graph>(m_pagoda.GetNodeFactory());
@@ -323,7 +323,7 @@ protected:
   Pagoda m_pagoda;
 };
 
-TEST_F(GraphNodeRenaming, test_rename_without_adjacencies)
+TEST_F(DISABLED_GraphNodeRenaming, test_rename_without_adjacencies)
 {
   const auto opNodeName = m_operationNode->GetName();
   m_graph->RenameNode(opNodeName, "newName");

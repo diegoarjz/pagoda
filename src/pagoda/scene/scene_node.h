@@ -4,6 +4,7 @@
 
 #include <pagoda/common/visitor.h>
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <unordered_map>

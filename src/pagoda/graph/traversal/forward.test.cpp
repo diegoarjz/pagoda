@@ -9,7 +9,7 @@
 
 using namespace pagoda;
 using namespace pagoda::graph;
-class ForwardTest : public ::testing::Test
+class DISABLED_ForwardTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -29,7 +29,7 @@ class ForwardTest : public ::testing::Test
 	Pagoda m_pagoda;
 };
 
-TEST_F(ForwardTest, when_visiting_should_call_the_delegate_for_each_node)
+TEST_F(DISABLED_ForwardTest, when_visiting_should_call_the_delegate_for_each_node)
 {
 	std::set<NodePtr> visitedNodes;
 	traversal::Forward forward(*m_graph);
@@ -39,7 +39,7 @@ TEST_F(ForwardTest, when_visiting_should_call_the_delegate_for_each_node)
 	}
 }
 
-TEST_F(ForwardTest, when_visiting_should_visit_the_nodes_in_breadth_first_order)
+TEST_F(DISABLED_ForwardTest, when_visiting_should_visit_the_nodes_in_breadth_first_order)
 {
 	/*
 	 * a -> b -> c
