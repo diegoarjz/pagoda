@@ -37,7 +37,7 @@ class Pagoda(ConanFile):
 
     def requirements(self):
         self.requires("boost/1.73.0")
-        self.requires("gtest/1.10.0")
+        self.requires("gtest/1.15.0")
         self.requires("libpng/1.6.37")
         self.requires("nlohmann_json/3.9.1")
         self.requires("openssl/1.1.1k", override=True)
