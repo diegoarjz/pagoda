@@ -38,20 +38,6 @@ jobs:
                   cd build
                   ctest -C Release
 
-            - name: Pack Build Results
-              if: always()
-              shell: cmake -P {0}
-              run: |
-                  execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar cJfv "build-results-${{ matrix.config.name }}.tar.xz" "./")
-
-            - name: Upload Build Results
-              if: always()
-              uses: actions/upload-artifact@v1
-              with:
-                  path: ./build-results-${{ matrix.config.name }}.tar.xz
-                  name: build-results-${{ matrix.config.name }}.tar.xz
-
             - name: Install
               run: |
                   mkdir -p ${{ github.workspace }}/install_dir

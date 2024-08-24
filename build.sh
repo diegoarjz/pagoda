@@ -11,6 +11,16 @@ PAGODA_ROOT=${WORKSPACE}/pagoda
 CONAN_PROFILE_ROOT=${PAGODA_ROOT}/tools/profiles/
 CONAN_PROFILE=${CONAN_PROFILE_ROOT}/${OS}_${COMPILER}_Release_gh.txt
 
+echo "########################################"
+echo "Running build.sh"
+echo "    workspace: ${WORKSPACE}"
+echo "           os: ${OS}"
+echo "     compiler: ${COMPILER}"
+echo "  pagoda root: ${PAGODA_ROOT}"
+echo " profile root: ${CONAN_PROFILE_ROOT}"
+echo "      profile: ${CONAN_PROFILE}"
+echo "########################################"
+
 #----------------------------------------
 # install dependencies
 #----------------------------------------
