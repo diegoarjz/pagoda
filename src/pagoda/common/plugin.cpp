@@ -140,7 +140,7 @@ PluginRegistry::GetPluginLoadDirectories() const {
 void PluginRegistry::AppendPluginLoadDirectory(
     const std::filesystem::path &path) {
   if (!std::filesystem::is_directory(path)) {
-    LOG_ERROR("Path " << path.c_str() << " is not a directory.");
+    LOG_ERROR("Path " << path << " is not a directory.");
     return;
   }
   if (HasPluginLoadDirectory(path)) {
@@ -160,7 +160,7 @@ bool PluginRegistry::HasPluginLoadDirectory(const std::filesystem::path &path) {
 void PluginRegistry::PrependPluginLoadDirectory(
     const std::filesystem::path &path) {
   if (!std::filesystem::is_directory(path)) {
-    LOG_ERROR("Path " << path.c_str() << " is not a directory.");
+    LOG_ERROR("Path " << path << " is not a directory.");
     return;
   }
   if (HasPluginLoadDirectory(path)) {

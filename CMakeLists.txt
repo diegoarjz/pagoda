@@ -1,13 +1,16 @@
 cmake_policy(SET CMP0048 NEW)
+cmake_policy(SET CMP0091 NEW)
 
 set(version 0.1.0)
 
+cmake_minimum_required(VERSION 3.30.0 FATAL_ERROR)
 project("Pagoda" LANGUAGES CXX VERSION ${version})
-cmake_minimum_required(VERSION 3.11.0 FATAL_ERROR)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR}")
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR}")
+
+
 
 include("Pagoda")
 include("WGS84toCartesian")

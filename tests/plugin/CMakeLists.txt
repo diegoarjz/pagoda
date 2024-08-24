@@ -5,6 +5,7 @@ set_target_properties(test_plugin PROPERTIES PREFIX "")
 
 
 if (WIN32)
+  message(INFO "---------> ${CMAKE_BUILD_TYPE}")
   set(PLUGIN_EXTENSION "dll")
   set(TEST_PLUGIN_BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}")
 elseif (APPLE)

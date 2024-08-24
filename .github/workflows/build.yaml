@@ -10,28 +10,31 @@ jobs:
             matrix:
                 config:
                 - {
-                    name: "Ubuntu-gcc",
+                    name: "Linux",
                     os: ubuntu-latest,
-                    compiler: "gcc"
+                    compiler: "gcc",
+                    build_script: "build.sh"
                   }
                 - {
-                    name: "macOs-clang",
+                    name: "macOS",
                     os: macos-latest,
-                    compiler: "clang"
+                    compiler: "clang",
+                    build_script: "build.sh"
                   }
                 - {
-                    name: "Windows-msvc",
-                    os: windows-2019,
-                    compiler: "msvc"
+                    name: "Windows",
+                    os: windows-latest,
+                    compiler: "msvc",
+                    build_script: "build.bat"
                   }
         steps:
             - name: Check out repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                 path: 'pagoda'
 
             - name: Build
-              run: ${{ github.workspace }}/pagoda/build.sh ${{ github.workspace }} ${{ matrix.config.OS }} ${{ matrix.config.compiler }}
+              run: ${{ github.workspace }}/pagoda/${{ matrix.config.build_script}} ${{ github.workspace }} ${{ matrix.config.OS }} ${{ matrix.config.compiler }}
 
             - name: Run tests
               run: |
@@ -47,10 +50,10 @@ jobs:
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar cJfv "${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/build/pagoda")
+                                          -E tar cJfv "pagoda-${{ github.ref_name }}-${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/build/pagoda")
 
             - name: Upload
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@v4
               with:
-                  path: ./${{ matrix.config.name }}.tar.xz
-                  name: ${{ matrix.config.name }}.tar.xz
+                  path: ./pagoda-${{ github.ref_name }}-${{ matrix.config.name }}.tar.xz
+                  name: pagoda-${{ github.ref_name }}-${{ matrix.config.name }}.tar.xz

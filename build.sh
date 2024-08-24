@@ -6,9 +6,9 @@ COMPILER=${3}
 
 PY_VENV=${WORKSPACE}/buildenv
 PAGODA_ROOT=${WORKSPACE}/pagoda
+BUILD_ROOT=${WORKSPACE}/build
 
-PAGODA_ROOT=${WORKSPACE}/pagoda
-CONAN_PROFILE_ROOT=${PAGODA_ROOT}/tools/profiles/
+CONAN_PROFILE_ROOT=${PAGODA_ROOT}/tools/profiles
 CONAN_PROFILE=${CONAN_PROFILE_ROOT}/${OS}_${COMPILER}_Release_gh.txt
 
 echo "########################################"
@@ -16,9 +16,11 @@ echo "Running build.sh"
 echo "    workspace: ${WORKSPACE}"
 echo "           os: ${OS}"
 echo "     compiler: ${COMPILER}"
+echo "         venv: ${PY_VENV}"
 echo "  pagoda root: ${PAGODA_ROOT}"
 echo " profile root: ${CONAN_PROFILE_ROOT}"
 echo "      profile: ${CONAN_PROFILE}"
+echo "   build root: ${BUILD_ROOT}"
 echo "########################################"
 
 #----------------------------------------
@@ -32,18 +34,16 @@ pip3 install -r ${WORKSPACE}/pagoda/requirements.txt
 #----------------------------------------
 # install conan dependencies
 #----------------------------------------
-pushd ${WORKSPACE}/pagoda
-git submodule update --init --recursive
-conan install \
-  --profile:build=${WORKSPACE}/pagoda/${CONAN_PROFILE} \
-  --profile:host=${WORKSPACE}/pagoda/${CONAN_PROFILE} \
-  -of ${WORKSPACE}/build \
-  ${WORKSPACE}/pagoda \
+git -C ${PAGODA_ROOT} submodule update --init --recursive
+conan install                                     \
+  --profile:build=${CONAN_PROFILE} \
+  --profile:host=${CONAN_PROFILE}  \
+  -of ${BUILD_ROOT}                               \
+  ${PAGODA_ROOT}                                  \
   --build=missing
 
 #----------------------------------------
 # Build Pagoda
 #----------------------------------------
-cmake --preset conan-release
-cmake --build ${WORKSPACE}/build -j 24
-popd
+cmake -S${PAGODA_ROOT} --preset conan-release
+cmake --build ${BUILD_ROOT} -j 24
