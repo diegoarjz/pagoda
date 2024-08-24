@@ -161,6 +161,8 @@ function (add_pagoda_build_unit)
       # Shared libraries
       $<$<BOOL:${PAGODA_SHARED_LIB}>:PAGODA_SHARED_LIB>
       ${PARSED_ARGS_COMPILE_DEFINITIONS}
+      # Prevent Boost from using deprecated functions on mac
+      $<$<PLATFORM_ID:Darwin>:BOOST_NO_CXX98_FUNCTION_BASE>
   )
 
   set_target_properties(${PARSED_ARGS_NAME}
