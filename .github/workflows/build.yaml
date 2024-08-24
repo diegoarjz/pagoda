@@ -12,19 +12,16 @@ jobs:
                 - {
                     name: "Ubuntu-gcc",
                     os: ubuntu-latest,
-                    OS: "ubuntu",
                     compiler: "gcc"
                   }
                 - {
                     name: "macOs-clang",
                     os: macos-latest,
-                    OS: "macos",
                     compiler: "clang"
                   }
                 - {
                     name: "Windows-msvc",
                     os: windows-2019,
-                    OS: "win",
                     compiler: "msvc"
                   }
         steps:
