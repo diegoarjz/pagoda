@@ -12,26 +12,20 @@ jobs:
                 - {
                     name: "Ubuntu-gcc",
                     os: ubuntu-latest,
-                    set_path: "export PATH=$PATH:/home/runner/.local/bin",
-                    conan_profile: './tools/profiles/ubuntu_gcc_Release_gh.txt',
-                    cc: "gcc-9",
-                    cxx: "g++-9"
+                    OS: "ubuntu",
+                    compiler: "gcc"
                   }
                 - {
                     name: "macOs-clang",
                     os: macos-latest,
-                    set_path: "",
-                    conan_profile: './tools/profiles/macos_clang_Release_gh.txt',
-                    cc: "clang",
-                    cxx: "clang++"
+                    OS: "macos",
+                    compiler: "clang"
                   }
                 - {
                     name: "Windows-msvc",
                     os: windows-2019,
-                    set_path: "",
-                    conan_profile: './tools/profiles/win_msvc_Release_gh.txt',
-                    cc: "",
-                    cxx: ""
+                    OS: "win",
+                    compiler: "msvc"
                   }
         steps:
             - name: Check out repository
@@ -39,32 +33,8 @@ jobs:
               with:
                 path: 'pagoda'
 
-            - name: Download and Install Dependencies
-              run: |
-                  python3 -m venv ${{ github.workspace }}/build_env
-                  source ${{ github.workspace }}/build_env/bin/activate
-                  pip3 install wheel setuptools numpy
-                  pip3 install -r ${{ github.workspace }}/pagoda/requirements.txt
-
-            - name: Download and Install Dependencies (Ubuntu)
-              if: ${{ contains(matrix.config.os, 'Ubuntu') }}
-              run: |
-                  sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev build-essential
-
-            - name: Configure and Build
-              env:
-                CC: ${{ matrix.config.cc }}
-                CXX: ${{ matrix.config.cxx }}
-                CONAN_SYSREQUIRES_MODE: "enabled"
-              run: |
-                  source ${{ github.workspace }}/build_env/bin/activate
-                  ${{ matrix.config.set_path }}
-                  pushd ${{ github.workspace }}/pagoda
-                  git submodule update --init --recursive
-                  conan install --profile:build=${{ github.workspace}}/pagoda/${{ matrix.config.conan_profile }} --profile:host=${{ github.workspace}}/pagoda/${{ matrix.config.conan_profile }} -of ${{ github.workspace }}/build ${{ github.workspace }}/pagoda --build=missing
-                  cmake --preset conan-release
-                  cmake --build ${{ github.workspace }}/build -j 24
-                  popd
+            - name: Build
+              run: ${{ github.workspace }}/pagoda/build.sh ${{ github.workspace }} ${{ matrix.config.OS }} ${{ matrix.config.compiler }}
 
             - name: Run tests
               run: |
