@@ -39,7 +39,7 @@ jobs:
             - name: Run tests
               run: |
                   cd build
-                  ctest -C Release
+                  ctest -C Release --output-on-failure
 
             - name: Install
               run: |
