@@ -1,6 +1,6 @@
 add_subdirectory(common)
 add_subdirectory(geometry)
-add_subdirectory(image)
+#add_subdirectory(image)
 add_subdirectory(material)
 add_subdirectory(math)
 add_subdirectory(scene)
@@ -13,7 +13,7 @@ set(PAGODA_SOURCES
   "pagoda.cpp"
   $<TARGET_OBJECTS:common>
   $<TARGET_OBJECTS:geometry>
-  $<TARGET_OBJECTS:image>
+  #$<TARGET_OBJECTS:image>
   $<TARGET_OBJECTS:material>
   $<TARGET_OBJECTS:scene>
   $<TARGET_OBJECTS:graph>

@@ -16,7 +16,7 @@ set(METAL_WINDOW_SRCS
 
 set(METAL_WINDOW_DEPENDENCIES
   "imgui::imgui"
-  "glfw::glfw"
+  "glfw"
   "-framework Metal"
   "-framework QuartzCore"
 )

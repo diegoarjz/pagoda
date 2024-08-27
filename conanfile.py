@@ -1,4 +1,10 @@
-from conans import tools, ConanFile, CMake
+from conan import ConanFile
+from conan.tools.files import save, load
+from conan.tools.gnu import AutotoolsToolchain, AutotoolsDeps
+from conan.tools.microsoft import unix_path, VCVars, is_msvc
+from conan.errors import ConanInvalidConfiguration
+from conan.errors import ConanException
+
 
 import os
 
@@ -18,23 +24,26 @@ class Pagoda(ConanFile):
     options = {
         "shared" : [True, False],
     }
-    default_options = (
-        "shared=False",
-        "imgui:shared=True"
+    default_options = {
+        "shared":False,
+        "imgui/*:shared":True
+    }
+    generators = (
+        "CMakeDeps",
+        "CMakeToolchain"
     )
-    generators = "cmake_find_package"
     exports_sources = "*"
 
 
     def requirements(self):
         self.requires("boost/1.73.0")
-        self.requires("gtest/1.10.0")
+        self.requires("gtest/1.15.0")
         self.requires("libpng/1.6.37")
         self.requires("nlohmann_json/3.9.1")
         self.requires("openssl/1.1.1k", override=True)
         self.requires("zlib/1.2.12", override=True)
         self.requires("bzip2/1.0.8")
-        self.requires("entt/3.6.0")
+        self.requires("entt/3.13.2")
         self.requires("libffi/3.4.4", override=True)
         self.requires("fmt/8.1.1")
         self.requires("magic_enum/0.9.5")

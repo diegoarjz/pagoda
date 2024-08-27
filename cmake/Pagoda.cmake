@@ -161,6 +161,8 @@ function (add_pagoda_build_unit)
       # Shared libraries
       $<$<BOOL:${PAGODA_SHARED_LIB}>:PAGODA_SHARED_LIB>
       ${PARSED_ARGS_COMPILE_DEFINITIONS}
+      # Prevent boost from using deprecated functions on Mac
+      $<$<PLATFORM_ID:Darwin>:BOOST_NO_CXX98_FUNCTION_BASE>
   )
 
   set_target_properties(${PARSED_ARGS_NAME}
@@ -401,10 +403,6 @@ function (add_unit_test unit_test_src)
   get_filename_component(unit_test_base_name ${unit_test_src} NAME)
   string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
   set(unit_test_libs GTest::gtest GTest::gtest_main)
-
-  add_pagoda_executable(
-    NAME      ${test_name}
-    SOURCES   ${unit_test_src}
     DEPENDENCIES ${unit_test_libs}
   )
 

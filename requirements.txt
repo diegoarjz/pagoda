@@ -1,0 +1,5 @@
+wheel
+setuptools 
+numpy
+conan==2.6.0
+cmake==3.30.2

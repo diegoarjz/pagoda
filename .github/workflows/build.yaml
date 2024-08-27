@@ -10,88 +10,36 @@ jobs:
             matrix:
                 config:
                 - {
-                    name: "Ubuntu-gcc",
+                    name: "Linux",
                     os: ubuntu-latest,
-                    set_path: "export PATH=$PATH:/home/runner/.local/bin",
-                    conan_profile: './tools/profiles/ubuntu_gcc_Release_gh.txt',
-                    cc: "gcc-9",
-                    cxx: "g++-9"
+                    compiler: "gcc",
+                    build_script: "build.sh"
                   }
                 - {
-                    name: "Ubuntu-clang",
-                    os: ubuntu-latest,
-                    set_path: "export PATH=$PATH:/home/runner/.local/bin",
-                    conan_profile: './tools/profiles/ubuntu_clang_Release_gh.txt',
-                    cc: "clang",
-                    cxx: "clang++"
-                  }
-                - {
-                    name: "macOs-clang",
+                    name: "macOS",
                     os: macos-latest,
-                    set_path: "",
-                    conan_profile: './tools/profiles/macos_clang_Release_gh.txt',
-                    cc: "clang",
-                    cxx: "clang++"
+                    compiler: "clang",
+                    build_script: "build.sh"
                   }
                 - {
-                    name: "Windows-msvc",
-                    os: windows-2019,
-                    set_path: "",
-                    conan_profile: './tools/profiles/win_msvc_Release_gh.txt',
-                    cc: "",
-                    cxx: ""
+                    name: "Windows",
+                    os: windows-latest,
+                    compiler: "msvc",
+                    build_script: "build.bat"
                   }
         steps:
             - name: Check out repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                 path: 'pagoda'
 
-            - name: Download and Install Dependencies
-              run: |
-                  pip3 install wheel setuptools numpy
-                  pip3 install conan==1.58.0
-            - name: Download and Install Dependencies (Ubuntu)
-              if: ${{ contains(matrix.config.os, 'Ubuntu') }}
-              run: |
-                  sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev build-essential
-
-            - name: Configure and Build
-              env:
-                CC: ${{ matrix.config.cc }}
-                CXX: ${{ matrix.config.cxx }}
-                CONAN_SYSREQUIRES_MODE: "enabled"
-              run: |
-                  ${{ matrix.config.set_path }}
-                  pushd ${{ github.workspace }}/pagoda
-                  git submodule update --init --recursive
-                  popd
-                  conan install -if ${{ github.workspace }}/build -pr ${{ github.workspace}}/pagoda/${{ matrix.config.conan_profile }} ${{ github.workspace }}/pagoda --build=missing
-                  conan build -bf ${{ github.workspace }}/build ${{ github.workspace }}/pagoda
+            - name: Build
+              run: ${{ github.workspace }}/pagoda/${{ matrix.config.build_script}} ${{ github.workspace }} ${{ matrix.config.OS }} ${{ matrix.config.compiler }}
 
             - name: Run tests
               run: |
                   cd build
-                  ctest -C Release
-
-            - name: Create package
-              run: |
-                  ${{ matrix.config.set_path }}
-                  conan package -bf ${{ github.workspace }}/build -pf ${{ github.workspace }}/build/pagoda ${{ github.workspace }}/pagoda
-
-            - name: Pack Build Results
-              if: always()
-              shell: cmake -P {0}
-              run: |
-                  execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar cJfv "build-results-${{ matrix.config.name }}.tar.xz" "./")
-
-            - name: Upload Build Results
-              if: always()
-              uses: actions/upload-artifact@v1
-              with:
-                  path: ./build-results-${{ matrix.config.name }}.tar.xz
-                  name: build-results-${{ matrix.config.name }}.tar.xz
+                  ctest -C Release --output-on-failure
 
             - name: Install
               run: |
@@ -102,89 +50,10 @@ jobs:
               shell: cmake -P {0}
               run: |
                   execute_process(COMMAND ${CMAKE_COMMAND}
-                                          -E tar cJfv "${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/build/pagoda")
+                                          -E tar cJfv "pagoda-${{ github.ref_name }}-${{ matrix.config.name }}.tar.xz" "${{ github.workspace }}/build/pagoda")
 
             - name: Upload
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@v4
               with:
-                  path: ./${{ matrix.config.name }}.tar.xz
-                  name: ${{ matrix.config.name }}.tar.xz
-
-    release:
-        if: contains(github.ref, 'tags/v')
-        runs-on: ubuntu-latest
-        needs: build
-
-        steps:
-            - name: Create Release
-              id: create_release
-              uses: actions/create-release@v1.0.0
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                tag_name: ${{ github.ref }}
-                release_name: Release ${{ github.ref }}
-                draft: false
-                prerelease: false
-
-            - name: Store Release url
-              run: |
-                echo "${{ steps.create_release.outputs.upload_url }}" > ./upload_url
-
-            - uses: actions/upload-artifact@v1
-              with:
-                path: ./upload_url
-                name: upload_url
-
-    publish:
-        if: contains(github.ref, 'tags/v')
-        runs-on: ${{ matrix.config.os }}
-        needs: release
-        strategy:
-            fail-fast: false
-            matrix:
-                config:
-                - {
-                    name: "Ubuntu-gcc",
-                    os: ubuntu-latest,
-                  }
-                - {
-                    name: "Ubuntu-clang",
-                    os: ubuntu-latest,
-                  }
-                - {
-                    name: "macOs-clang",
-                    os: ubuntu-latest,
-                  }
-                - {
-                    name: "Windows-msvc",
-                    os: windows-latest,
-                  }
-
-        steps:
-            - name: Download artifact
-              uses: actions/download-artifact@v1
-              with:
-                  name: ${{ matrix.config.name }}.tar.xz
-                  path: ./
-
-            - name: Download URL
-              uses: actions/download-artifact@v1
-              with:
-                name: upload_url
-                path: ./
-            - id: set_upload_url
-              run: |
-                upload_url=`cat ./upload_url`
-                echo ::set-output name=upload_url::$upload_url
-
-            - name: Upload to Release
-              id: upload_to_release
-              uses: actions/upload-release-asset@v1.0.1
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
-                asset_path: ./${{ matrix.config.name }}.tar.xz
-                asset_name: ${{ matrix.config.name }}.tar.xz
-                asset_content_type: application/x-gtar
+                  path: ./pagoda-${{ github.ref_name }}-${{ matrix.config.name }}.tar.xz
+                  name: pagoda-${{ github.ref_name }}-${{ matrix.config.name }}.tar.xz

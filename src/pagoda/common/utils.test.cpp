@@ -10,7 +10,7 @@ using namespace pagoda::common;
 TEST(CartesianProductTest, test_empty)
 {
 	std::vector<std::vector<int>> values{{}, {}};
-	auto count = CartesianProduct(values, [](const std::vector<int>& v) {});
+  std::size_t count = CartesianProduct(values, [](const std::vector<int>& v) {});
 	EXPECT_EQ(count, 0);
 }
 

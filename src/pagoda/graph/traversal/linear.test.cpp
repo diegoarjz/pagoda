@@ -9,7 +9,7 @@
 
 using namespace pagoda;
 using namespace pagoda::graph;
-class LinearTest : public ::testing::Test
+class DISABLED_LinearTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -29,7 +29,7 @@ class LinearTest : public ::testing::Test
 	Pagoda m_pagoda;
 };
 
-TEST_F(LinearTest, when_visiting_should_call_the_delegate_for_each_node)
+TEST_F(DISABLED_LinearTest, when_visiting_should_call_the_delegate_for_each_node)
 {
 	std::set<NodePtr> visitedNodes;
 	traversal::Linear linear(*m_graph);

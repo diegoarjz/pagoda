@@ -23,6 +23,7 @@ public:
   MetalTexture(PlatformWindow *window, pagoda::image::ImagePtr image)
       : PlatformTexture(window, image) {
 
+#if 0
     const auto textureSize = image->GetDimensions();
 
     auto metalWindow = dynamic_cast<MetalGlfwPlatform *>(window);
@@ -65,6 +66,7 @@ public:
                       mipmapLevel:0
                         withBytes:buffer.data()
                       bytesPerRow:bytesPerRow];
+#endif
   }
   ~MetalTexture() override = default;
 

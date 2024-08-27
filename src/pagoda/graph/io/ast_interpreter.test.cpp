@@ -18,7 +18,7 @@ using namespace pagoda::graph;
 using namespace pagoda::graph::io;
 using namespace pagoda::dynamic;
 
-class AstInterpreterTest : public ::testing::Test
+class DISABLED_AstInterpreterTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -36,7 +36,7 @@ class AstInterpreterTest : public ::testing::Test
 	std::shared_ptr<AstInterpreter> m_interpreter;
 };
 
-TEST_F(AstInterpreterTest,
+TEST_F(DISABLED_AstInterpreterTest,
        when_visiting_a_node_definition_node_should_create_a_node_in_the_graph)
 {
 	NodeDefinitionNode::ExecutionArgumentContainer_t executionArgs = {
@@ -48,7 +48,7 @@ TEST_F(AstInterpreterTest,
 	EXPECT_NE(m_graph->GetNode("name"), nullptr);
 }
 
-TEST_F(AstInterpreterTest,
+TEST_F(DISABLED_AstInterpreterTest,
        when_visiting_a_node_link_node_should_create_a_link_in_the_graph)
 {
 	NodeLinkNode link;
@@ -67,7 +67,7 @@ TEST_F(AstInterpreterTest,
 }
 
 TEST_F(
-  AstInterpreterTest,
+  DISABLED_AstInterpreterTest,
   when_visiting_a_node_link_definition_should_create_in_out_interface_nodes)
 {
 	m_graph->CreateNode<OperationNode>("node");

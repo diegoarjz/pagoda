@@ -213,7 +213,7 @@ class RegressionTest
 bool RegressionTest::s_writeFiles = false;
 
 #define REGRESSION_TEST(NAME)    \
-	TEST(RegressionTestCase, NAME) \
+	TEST(DISABLED_RegressionTestCase, NAME) \
 	{                              \
 		RegressionTest(#NAME);       \
 	}

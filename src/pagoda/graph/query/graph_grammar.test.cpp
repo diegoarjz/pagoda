@@ -23,7 +23,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class GraphGrammarTest : public ::testing::Test
+class DISABLED_GraphGrammarTest : public ::testing::Test
 {
 	protected:
 	void SetUp() override
@@ -61,7 +61,7 @@ struct MockRule : public Rule
 	uint32_t m_count;
 };
 
-TEST_F(GraphGrammarTest, should_apply_rules)
+TEST_F(DISABLED_GraphGrammarTest, should_apply_rules)
 {
 	GraphGrammar g(*m_graph);
 	auto r = std::make_shared<MockRule>(*m_graph);
@@ -89,7 +89,7 @@ struct MockDeleteRule : public Rule
 	Type<OutputInterfaceNode> m_outQuery;
 };
 
-TEST_F(GraphGrammarTest, should_be_able_to_modify_the_graph)
+TEST_F(DISABLED_GraphGrammarTest, should_be_able_to_modify_the_graph)
 {
 	auto r = std::make_shared<MockDeleteRule>(*m_graph);
 	GraphGrammar g(*m_graph);

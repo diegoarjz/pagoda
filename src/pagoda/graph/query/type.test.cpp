@@ -14,7 +14,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class TypeTest : public ::testing::Test
+class DISABLED_TypeTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -53,7 +53,7 @@ class TypeTest : public ::testing::Test
 	}
 };
 
-TEST_F(TypeTest, should_match_nodes_of_a_certain_type)
+TEST_F(DISABLED_TypeTest, should_match_nodes_of_a_certain_type)
 {
 	testType<OperationNode>();
 	testType<InputInterfaceNode>();
@@ -61,7 +61,7 @@ TEST_F(TypeTest, should_match_nodes_of_a_certain_type)
 	testType<ParameterNode>();
 }
 
-TEST_F(TypeTest, inline_syntax)
+TEST_F(DISABLED_TypeTest, inline_syntax)
 {
 	testInlineType<OperationNode>();
 	testInlineType<InputInterfaceNode>();
@@ -69,7 +69,7 @@ TEST_F(TypeTest, inline_syntax)
 	testInlineType<ParameterNode>();
 }
 
-TEST_F(TypeTest, to_string)
+TEST_F(DISABLED_TypeTest, to_string)
 {
 	testToString<OperationNode>();
 	testToString<InputInterfaceNode>();

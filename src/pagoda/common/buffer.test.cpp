@@ -6,7 +6,6 @@
 
 #include <vector>
 
-using namespace pgeditor::renderer;
 using namespace pagoda::math;
 using namespace pagoda::common;
 
@@ -78,7 +77,7 @@ TEST(Buffer, test_to_vector)
 	std::vector<Vec3F> v2 = b.GetAsVector<Vec3F>();
 
 	EXPECT_EQ(v2.size(), 3);
-	for (auto i = 0; i < v.size(); ++i) {
+	for (std::size_t i = 0; i < v.size(); ++i) {
 		EXPECT_TRUE(v[i] == v2[i]);
 	}
 }
