@@ -19,7 +19,7 @@ using namespace pagoda::dynamic;
 using namespace pagoda::graph;
 using namespace pagoda::graph::io;
 
-class DISABLED_GraphWriterTest : public ::testing::Test
+class GraphWriterTest : public ::testing::Test
 {
 	protected:
 	void SetUp() override
@@ -46,12 +46,12 @@ class DISABLED_GraphWriterTest : public ::testing::Test
 	std::shared_ptr<GraphReader> m_reader;
 };
 
-TEST_F(DISABLED_GraphWriterTest, test_empty_graph)
+TEST_F(GraphWriterTest, test_empty_graph)
 {
 	EXPECT_EQ(getAsString(), "");
 }
 
-TEST_F(DISABLED_GraphWriterTest, test_single_operation)
+TEST_F(GraphWriterTest, test_single_operation)
 {
 	m_graph->CreateNode<OperationNode>("op");
 	NodePtr opNode =
@@ -62,6 +62,8 @@ TEST_F(DISABLED_GraphWriterTest, test_single_operation)
 	EXPECT_EQ(getAsString(), R"(op = CreateRectGeometry {
   height: 1.000000,
   plane: "z",
+  posX: 0.000000,
+  posY: 0.000000,
   width: 1.000000
 }
 )");
@@ -69,15 +71,10 @@ TEST_F(DISABLED_GraphWriterTest, test_single_operation)
 	EXPECT_NE(m_reader->Read(getAsString()), nullptr);
 }
 
-TEST_F(DISABLED_GraphWriterTest, test_links)
+TEST_F(GraphWriterTest, test_links)
 {
 	m_graph->CreateNode<OperationNode>("op");
 	m_graph->CreateNode<OperationNode>("op2");
-	m_graph->CreateNode<InputInterfaceNode>("in");
-	m_graph->CreateNode<OutputInterfaceNode>("out");
-	m_graph->CreateEdge("op", "out");
-	m_graph->CreateEdge("out", "in");
-	m_graph->CreateEdge("in", "op2");
 	auto opNode =
 	  std::dynamic_pointer_cast<OperationNode>(m_graph->GetNode("op"));
 	opNode->SetOperation(
@@ -85,22 +82,21 @@ TEST_F(DISABLED_GraphWriterTest, test_links)
 	auto opNode2 =
 	  std::dynamic_pointer_cast<OperationNode>(m_graph->GetNode("op2"));
 	opNode2->SetOperation(
-	  m_pagoda.GetOperationFactory()->Create("CreateRectGeometry"));
+	  m_pagoda.GetOperationFactory()->Create("ExtrudeGeometry"));
 
-	std::dynamic_pointer_cast<InputInterfaceNode>(m_graph->GetNode("in"))
-	  ->SetInterfaceName("in");
-	std::dynamic_pointer_cast<OutputInterfaceNode>(m_graph->GetNode("out"))
-	  ->SetInterfaceName("out");
+  m_graph->CreateEdge("op_out", "op2_in");
 
 	EXPECT_EQ(getAsString(), R"(op = CreateRectGeometry {
   height: 1.000000,
   plane: "z",
+  posX: 0.000000,
+  posY: 0.000000,
   width: 1.000000
 }
-op2 = CreateRectGeometry {
-  height: 1.000000,
-  plane: "z",
-  width: 1.000000
+op2 = ExtrudeGeometry {
+  amount: 1.000000,
+  posX: 0.000000,
+  posY: 0.000000
 }
 op>out -> in<op2;
 )");

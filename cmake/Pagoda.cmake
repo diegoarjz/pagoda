@@ -399,10 +399,13 @@ set(PAGODA_GTEST_LIBS GTest::gtest GTest::gtest_main)
 #
 # param unit_test_src: the source file.
 function (add_unit_test unit_test_src)
-  #[[
   get_filename_component(unit_test_base_name ${unit_test_src} NAME)
   string(REPLACE ".test.cpp" "_test" test_name ${unit_test_base_name})
   set(unit_test_libs GTest::gtest GTest::gtest_main)
+
+  add_pagoda_executable(
+    NAME      ${test_name}
+    SOURCES   ${unit_test_src}
     DEPENDENCIES ${unit_test_libs}
   )
 
@@ -415,10 +418,10 @@ function (add_unit_test unit_test_src)
 
   add_test(NAME ${test_name} COMMAND ${test_name})
 
-  add_custom_command(
-    TARGET ${test_name} POST_BUILD
-    COMMAND ${test_name}
-    COMMENT "Running ${test_name} unit test"
+  add_custom_target(
+    "run_${test_name}"
+    ALL
+    COMMAND $<TARGET_FILE:${test_name}>
+    DEPENDS ${test_name}
   )
-  ]]
 endfunction()

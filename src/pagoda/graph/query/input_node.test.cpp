@@ -11,7 +11,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class DISABLED_InputNodeTest : public ::testing::Test
+class InputNodeTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -31,7 +31,7 @@ class DISABLED_InputNodeTest : public ::testing::Test
 	GraphPtr m_graph;
 };
 
-TEST_F(DISABLED_InputNodeTest, should_only_match_input_nodes)
+TEST_F(InputNodeTest, should_only_match_input_nodes)
 {
 	NodeSet nodes;
 	InputNode q(*m_graph, nodes);
@@ -41,7 +41,7 @@ TEST_F(DISABLED_InputNodeTest, should_only_match_input_nodes)
 	EXPECT_NE(nodes.find(m_graph->GetNode("in2")), nodes.end());
 }
 
-TEST_F(DISABLED_InputNodeTest, inline_syntax)
+TEST_F(InputNodeTest, inline_syntax)
 {
 	NodeSet nodes;
 	InputNode q = input_node(*m_graph, nodes);
@@ -51,7 +51,7 @@ TEST_F(DISABLED_InputNodeTest, inline_syntax)
 	EXPECT_NE(nodes.find(m_graph->GetNode("in2")), nodes.end());
 }
 
-TEST_F(DISABLED_InputNodeTest, to_string)
+TEST_F(InputNodeTest, to_string)
 {
 	NodeSet nodes;
 	InputNode q = input_node(*m_graph, nodes);

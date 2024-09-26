@@ -18,7 +18,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class DISABLED_QueryTopologyTest : public ::testing::Test
+class QueryTopologyTest : public ::testing::Test
 {
 	protected:
 	void SetUp() override
@@ -35,14 +35,14 @@ class DISABLED_QueryTopologyTest : public ::testing::Test
 	Query m_query3;
 };
 
-TEST_F(DISABLED_QueryTopologyTest, stores_the_initial_query)
+TEST_F(QueryTopologyTest, stores_the_initial_query)
 {
 	QueryTopology t(&m_query1);
 	EXPECT_EQ(t.GetQueries().size(), 1u);
 	EXPECT_EQ(*(t.GetQueries().begin()), &m_query1);
 }
 
-TEST_F(DISABLED_QueryTopologyTest, can_create_adjacencies)
+TEST_F(QueryTopologyTest, can_create_adjacencies)
 {
 	QueryTopology t(&m_query1);
 	t.AddDownstreamQuery(&m_query1, &m_query2);
@@ -72,7 +72,7 @@ TEST_F(DISABLED_QueryTopologyTest, can_create_adjacencies)
 	EXPECT_EQ(*(upstream.begin()), &m_query3);
 }
 
-class DISABLED_QueryTopologyMatchTest : public ::testing::Test
+class QueryTopologyMatchTest : public ::testing::Test
 {
 	protected:
 	void SetUp() override
@@ -96,7 +96,7 @@ class DISABLED_QueryTopologyMatchTest : public ::testing::Test
 	GraphPtr m_graph;
 };
 
-TEST_F(DISABLED_QueryTopologyMatchTest, should_match_any)
+TEST_F(QueryTopologyMatchTest, should_match_any)
 {
 	Query query;
 	QueryTopology t(&query);
@@ -111,7 +111,7 @@ TEST_F(DISABLED_QueryTopologyMatchTest, should_match_any)
 	// TODO: add proper test of matching between query and node
 }
 
-TEST_F(DISABLED_QueryTopologyMatchTest, should_match_one)
+TEST_F(QueryTopologyMatchTest, should_match_one)
 {
 	Type<OperationNode> query;
 	QueryTopology t(&query);
@@ -122,7 +122,7 @@ TEST_F(DISABLED_QueryTopologyMatchTest, should_match_one)
 	EXPECT_EQ(matches[0][&query], m_graph->GetNode("op"));
 }
 
-TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_a_single_downstream_query)
+TEST_F(QueryTopologyMatchTest, should_match_with_a_single_downstream_query)
 {
 	Type<OperationNode> opQuery;
 	Type<OutputInterfaceNode> outQuery;
@@ -137,7 +137,7 @@ TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_a_single_downstream_qu
 	EXPECT_EQ(matches[0][&outQuery], m_graph->GetNode("out"));
 }
 
-TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_chained_downstream_queries)
+TEST_F(QueryTopologyMatchTest, should_match_with_chained_downstream_queries)
 {
 	Type<InputInterfaceNode> inQuery;
 	Type<OperationNode> opQuery;
@@ -154,7 +154,7 @@ TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_chained_downstream_que
 	EXPECT_EQ(matches[0][&inQuery], m_graph->GetNode("in"));
 }
 
-TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_alternatives)
+TEST_F(QueryTopologyMatchTest, should_match_with_alternatives)
 {
 	m_graph->CreateNode<OutputInterfaceNode>("out2");
 	m_graph->CreateEdge("op", "out2");
@@ -175,7 +175,7 @@ TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_alternatives)
 	EXPECT_NE(matches[0][&outQuery], matches[1][&outQuery]);
 }
 
-TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_a_downstream_and_an_upstream_query)
+TEST_F(QueryTopologyMatchTest, should_match_with_a_downstream_and_an_upstream_query)
 {
 	Type<OperationNode> opQuery;
 	Type<OutputInterfaceNode> outQuery;
@@ -193,7 +193,7 @@ TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_a_downstream_and_an_up
 	EXPECT_EQ(matches[0][&inQuery], m_graph->GetNode("in"));
 }
 
-TEST_F(DISABLED_QueryTopologyMatchTest, should_match_with_multiple_paths)
+TEST_F(QueryTopologyMatchTest, should_match_with_multiple_paths)
 {
 	m_graph->CreateNode<OutputInterfaceNode>("out2");
 	m_graph->CreateEdge("op", "out2");

@@ -9,7 +9,7 @@
 using namespace pagoda;
 using namespace pagoda::graph;
 
-class DISABLED_ExecutionQueueTest : public ::testing::Test
+class ExecutionQueueTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -33,7 +33,7 @@ class DISABLED_ExecutionQueueTest : public ::testing::Test
 	Pagoda m_pagoda;
 };
 
-TEST_F(DISABLED_ExecutionQueueTest, when_iterating_the_nodes_should_visit_them_by_depth)
+TEST_F(ExecutionQueueTest, when_iterating_the_nodes_should_visit_them_by_depth)
 {
 	/*
 	 * a -> b -> c
@@ -59,7 +59,7 @@ TEST_F(DISABLED_ExecutionQueueTest, when_iterating_the_nodes_should_visit_them_b
 	EXPECT_EQ(q.GetNextNode()->GetName(), "c");
 }
 
-TEST_F(DISABLED_ExecutionQueueTest, when_iterating_the_nodes_should_only_visit_them_once)
+TEST_F(ExecutionQueueTest, when_iterating_the_nodes_should_only_visit_them_once)
 {
 	/*
 	 * a -> b

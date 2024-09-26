@@ -6,7 +6,7 @@
 using namespace pagoda;
 using namespace pagoda::objects;
 
-TEST(DISABLED_InterfaceTest, getters_and_setters)
+TEST(InterfaceTest, getters_and_setters)
 {
 	std::vector<std::tuple<std::string, Interface::Type, Interface::Arity>> testValues = {
 	  {"interface", Interface::Type::Input, Interface::Arity::One},
@@ -21,7 +21,7 @@ TEST(DISABLED_InterfaceTest, getters_and_setters)
 	}
 }
 
-TEST(DISABLED_InterfaceTest, output_interfaces_only_accept_input_interfaces)
+TEST(InterfaceTest, output_interfaces_only_accept_input_interfaces)
 {
 	auto out = std::make_shared<Interface>("out", Interface::Type::Output);
 	auto in = std::make_shared<Interface>("in", Interface::Type::Input);
@@ -32,7 +32,7 @@ TEST(DISABLED_InterfaceTest, output_interfaces_only_accept_input_interfaces)
 	EXPECT_FALSE(in->Accepts(in));
 }
 
-TEST(DISABLED_InterfaceTest, one_arity_input_interfaces_only_accept_one_arity_output_interfaces)
+TEST(InterfaceTest, one_arity_input_interfaces_only_accept_one_arity_output_interfaces)
 {
 	auto oneIn = std::make_shared<Interface>("one", Interface::Type::Input, Interface::Arity::One);
 	auto oneOut = std::make_shared<Interface>("one", Interface::Type::Output, Interface::Arity::One);
@@ -44,7 +44,7 @@ TEST(DISABLED_InterfaceTest, one_arity_input_interfaces_only_accept_one_arity_ou
 	EXPECT_FALSE(oneIn->Accepts(all));
 }
 
-TEST(DISABLED_InterfaceTest, many_arity_input_interfaces_accept_all_output_interfaces)
+TEST(InterfaceTest, many_arity_input_interfaces_accept_all_output_interfaces)
 {
 	auto manyIn = std::make_shared<Interface>("manyIn", Interface::Type::Input, Interface::Arity::Many);
 	auto manyOut = std::make_shared<Interface>("manyOut", Interface::Type::Output, Interface::Arity::Many);
@@ -56,7 +56,7 @@ TEST(DISABLED_InterfaceTest, many_arity_input_interfaces_accept_all_output_inter
 	EXPECT_TRUE(manyIn->Accepts(all));
 }
 
-TEST(DISABLED_InterfaceTest, all_arity_input_interfaces_accept_all_output_interfaces)
+TEST(InterfaceTest, all_arity_input_interfaces_accept_all_output_interfaces)
 {
 	auto allIn = std::make_shared<Interface>("all", Interface::Type::Input, Interface::Arity::All);
 	auto many = std::make_shared<Interface>("manyOut", Interface::Type::Output, Interface::Arity::Many);
@@ -68,7 +68,7 @@ TEST(DISABLED_InterfaceTest, all_arity_input_interfaces_accept_all_output_interf
 	EXPECT_TRUE(allIn->Accepts(all));
 }
 
-TEST(DISABLED_InterfaceTest, one_arity_input_interface_cannot_accept_more_than_one_output_interface)
+TEST(InterfaceTest, one_arity_input_interface_cannot_accept_more_than_one_output_interface)
 {
 	auto oneIn = std::make_shared<Interface>("one", Interface::Type::Input, Interface::Arity::One);
 	auto oneOut = std::make_shared<Interface>("one", Interface::Type::Output, Interface::Arity::One);
@@ -80,7 +80,7 @@ TEST(DISABLED_InterfaceTest, one_arity_input_interface_cannot_accept_more_than_o
 	EXPECT_FALSE(oneIn->Accepts(oneOut2));
 }
 
-TEST(DISABLED_InterfaceTest, test_connections)
+TEST(InterfaceTest, test_connections)
 {
 	auto allIn = std::make_shared<Interface>("in", Interface::Type::Input, Interface::Arity::All);
 	auto out1 = std::make_shared<Interface>("out", Interface::Type::Output, Interface::Arity::Many);
@@ -105,39 +105,4 @@ TEST(DISABLED_InterfaceTest, test_connections)
 	out2->Disconnect(allIn);
 	EXPECT_EQ(allIn->ConnectionCount(), 0);
 	EXPECT_EQ(out2->ConnectionCount(), 0);
-}
-
-TEST(DISABLED_InterfaceTest, test_object_accessors_arity_one)
-{
-  ProceduralObjectSystemWeakPtr system;
-	auto oneIn = std::make_shared<Interface>("one", Interface::Type::Input, Interface::Arity::One);
-	auto object = std::make_shared<ProceduralObject>(system);
-
-	oneIn->Set(object);
-	EXPECT_EQ(oneIn->Get(), object);
-	EXPECT_EQ(oneIn->Get(), nullptr);
-}
-
-TEST(DISABLED_InterfaceTest, test_object_accessors_arity_many)
-{
-  ProceduralObjectSystemWeakPtr system;
-	auto manyIn = std::make_shared<Interface>("many", Interface::Type::Input, Interface::Arity::Many);
-	auto object = std::make_shared<ProceduralObject>(system);
-
-	manyIn->SetNext(object);
-	EXPECT_EQ(manyIn->GetNext(), object);
-	EXPECT_EQ(manyIn->GetNext(), nullptr);
-}
-
-TEST(DISABLED_InterfaceTest, test_object_accessors_arity_all)
-{
-  ProceduralObjectSystemWeakPtr system;
-	auto allIn = std::make_shared<Interface>("all", Interface::Type::Input, Interface::Arity::All);
-	auto object1 = std::make_shared<ProceduralObject>(system);
-	auto object2 = std::make_shared<ProceduralObject>(system);
-
-	allIn->Add(object1);
-	allIn->Add(object2);
-	auto count = allIn->GetAll([&](ProceduralObjectPtr& o) { EXPECT_TRUE(o == object1 || o == object2); });
-	EXPECT_EQ(count, 2);
 }

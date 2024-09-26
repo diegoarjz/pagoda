@@ -17,7 +17,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class DISABLED_QueryTest : public ::testing::Test
+class QueryTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -36,7 +36,7 @@ class DISABLED_QueryTest : public ::testing::Test
 	Pagoda m_pagoda;
 };
 
-TEST_F(DISABLED_QueryTest, should_match_all_nodes)
+TEST_F(QueryTest, should_match_all_nodes)
 {
 	NodeSet nodes;
 	Query q(*m_graph, nodes);
@@ -55,7 +55,7 @@ TEST_F(DISABLED_QueryTest, should_match_all_nodes)
 	}
 }
 
-TEST_F(DISABLED_QueryTest, inline_syntax)
+TEST_F(QueryTest, inline_syntax)
 {
 	NodeSet nodes;
 	Query q = all(*m_graph, nodes);
@@ -66,7 +66,7 @@ TEST_F(DISABLED_QueryTest, inline_syntax)
 	}
 }
 
-TEST_F(DISABLED_QueryTest, to_string)
+TEST_F(QueryTest, to_string)
 {
 	NodeSet nodes;
 	Query q = all(*m_graph, nodes);

@@ -16,7 +16,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class DISABLED_AndTest : public ::testing::Test
+class AndTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -38,7 +38,7 @@ class DISABLED_AndTest : public ::testing::Test
 	NodeSet m_nodes;
 };
 
-TEST_F(DISABLED_AndTest, should_do_an_and_operation)
+TEST_F(AndTest, should_do_an_and_operation)
 {
 	And q{*m_graph, m_nodes, {std::make_shared<Type<ParameterNode>>(), std::make_shared<InputNode>()}};
 	m_graph->ExecuteQuery(q);
@@ -46,7 +46,7 @@ TEST_F(DISABLED_AndTest, should_do_an_and_operation)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
 
-TEST_F(DISABLED_AndTest, inline_syntax)
+TEST_F(AndTest, inline_syntax)
 {
 	And q = type<ParameterNode>(*m_graph, m_nodes) & input_node();
 	m_graph->ExecuteQuery(q);
@@ -54,7 +54,7 @@ TEST_F(DISABLED_AndTest, inline_syntax)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
 
-TEST_F(DISABLED_AndTest, to_string)
+TEST_F(AndTest, to_string)
 {
 	And q = type<ParameterNode>(*m_graph, m_nodes) & input_node();
 	EXPECT_EQ(q.ToString(),

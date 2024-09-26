@@ -16,7 +16,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class DISABLED_NotTest : public ::testing::Test
+class NotTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -34,7 +34,7 @@ class DISABLED_NotTest : public ::testing::Test
 	NodeSet m_nodes;
 };
 
-TEST_F(DISABLED_NotTest, should_do_an_not_operation)
+TEST_F(NotTest, should_do_an_not_operation)
 {
 	Not q{*m_graph, m_nodes, std::make_shared<Type<ParameterNode>>()};
 	m_graph->ExecuteQuery(q);
@@ -42,7 +42,7 @@ TEST_F(DISABLED_NotTest, should_do_an_not_operation)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }
 
-TEST_F(DISABLED_NotTest, inline_syntax)
+TEST_F(NotTest, inline_syntax)
 {
 	Not q = ~type<ParameterNode>(*m_graph, m_nodes);
 	m_graph->ExecuteQuery(q);
@@ -50,7 +50,7 @@ TEST_F(DISABLED_NotTest, inline_syntax)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }
 
-TEST_F(DISABLED_NotTest, to_string)
+TEST_F(NotTest, to_string)
 {
 	Not q = ~type<ParameterNode>(*m_graph, m_nodes);
 	EXPECT_EQ(q.ToString(), "Not[Type<Parameter>]");

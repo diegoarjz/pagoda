@@ -10,7 +10,7 @@
 using namespace pagoda;
 using namespace pagoda::graph;
 
-class DISABLED_NodeTypeFilterTest : public ::testing::Test
+class NodeTypeFilterTest : public ::testing::Test
 {
 	protected:
 	virtual void SetUp()
@@ -31,7 +31,7 @@ class DISABLED_NodeTypeFilterTest : public ::testing::Test
 	Pagoda m_pagoda;
 };
 
-TEST_F(DISABLED_NodeTypeFilterTest, when_visiting_a_node_set_should_call_visitor_methods_for_different_node_types)
+TEST_F(NodeTypeFilterTest, when_visiting_a_node_set_should_call_visitor_methods_for_different_node_types)
 {
 	NodeSet nodes;
 

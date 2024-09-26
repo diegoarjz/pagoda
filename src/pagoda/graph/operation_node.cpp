@@ -56,7 +56,7 @@ public:
     if (m_graph->GetNode(inputInterfaceName) != nullptr) {
       LOG_WARNING("InputInterfaceNode '" << inputInterfaceName << "' already exists");
     }
-    auto interfaceName = m_graph->CreateNode<InputInterfaceNode>(m_nodeName + "_" + name);
+    auto interfaceName = m_graph->CreateNode<InputInterfaceNode>(inputInterfaceName);
     std::dynamic_pointer_cast<InputInterfaceNode>(m_graph->GetNode(interfaceName))->SetInterfaceName(name);
     auto res = m_graph->CreateEdge(interfaceName, m_nodeName);
     if (res != Graph::EdgeCreated::Created) {
@@ -149,10 +149,13 @@ OperationNode::GetInputInterface(const std::string &name) const {
 
 objects::InterfacePtr
 OperationNode::GetOutputInterface(const std::string &name) const {
-  InterfacePtr interface = nullptr;
-  Callback cb{name, false, interface};
-  m_operation->Interfaces(&cb);
-  return interface;
+  if (m_operation != nullptr) {
+    InterfacePtr interface = nullptr;
+    Callback cb{name, false, interface};
+    m_operation->Interfaces(&cb);
+    return interface;
+  }
+  return nullptr;
 }
 
 void OperationNode::Execute(const NodeSet &inNodes, const NodeSet &outNodes) {

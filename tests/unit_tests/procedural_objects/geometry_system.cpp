@@ -15,7 +15,7 @@
 
 using namespace pagoda;
 
-class DISABLED_GeometrySystemTest : public ::testing::Test
+class GeometrySystemTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -37,7 +37,7 @@ class DISABLED_GeometrySystemTest : public ::testing::Test
   Pagoda m_pagoda;
 };
 
-TEST_F(DISABLED_GeometrySystemTest, test_create_component)
+TEST_F(GeometrySystemTest, test_create_component)
 {
 	auto proceduralObject = std::make_shared<ProceduralObject>(m_pagoda.GetProceduralObjectSystem());
 	auto procedural_component = geometry_system->CreateComponent(proceduralObject);
@@ -50,7 +50,7 @@ TEST_F(DISABLED_GeometrySystemTest, test_create_component)
 	EXPECT_EQ(returned_component, std::dynamic_pointer_cast<GeometryComponent>(component));
 }
 
-TEST_F(DISABLED_GeometrySystemTest, test_kill_component)
+TEST_F(GeometrySystemTest, test_kill_component)
 {
 	auto proceduralObject = std::make_shared<ProceduralObject>(m_pagoda.GetProceduralObjectSystem());
 	auto component = geometry_system->CreateComponent(proceduralObject);

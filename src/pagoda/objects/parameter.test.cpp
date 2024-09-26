@@ -237,7 +237,7 @@ using MyTypes = ::testing::Types<std::string,
 // clang-format on
 INSTANTIATE_TYPED_TEST_SUITE_P(Instantiated, ParameterTest, MyTypes);
 
-TEST(DISABLED_ParameterTestExpression, evaluate_with_dynamic_value_variables)
+TEST(ParameterTestExpression, evaluate_with_dynamic_value_variables)
 {
 	class Provider : public ParameterBase::VariableProvider
 	{
@@ -258,7 +258,7 @@ public:
 	EXPECT_EQ(a, 4.0f);
 }
 
-TEST(DISABLED_ParameterTestExpression, evaluate_with_parameter_variables)
+TEST(ParameterTestExpression, evaluate_with_parameter_variables)
 {
 	class Provider : public ParameterBase::VariableProvider
 	{
@@ -282,7 +282,7 @@ public:
 	EXPECT_EQ(a, 125.0f);
 }
 
-TEST(DISABLED_ParameterTestExpression, evaluate_with_expression_variables)
+TEST(ParameterTestExpression, evaluate_with_expression_variables)
 {
 	class Provider : public ParameterBase::VariableProvider
 	{
@@ -307,7 +307,7 @@ public:
 	EXPECT_EQ(a, 348.0f);
 }
 
-TEST(DISABLED_ParameterTestExpression, evaluate_with_compound_variables)
+TEST(ParameterTestExpression, evaluate_with_compound_variables)
 {
 	class Provider : public ParameterBase::VariableProvider
 	{

@@ -19,7 +19,7 @@ using namespace pagoda;
 using namespace pagoda::graph;
 using namespace pagoda::graph::query;
 
-class DISABLED_AdjacentTest : public ::testing::Test
+class AdjacentTest : public ::testing::Test
 {
 	protected:
 	void SetUp()
@@ -40,7 +40,7 @@ class DISABLED_AdjacentTest : public ::testing::Test
 	NodeSet m_nodes;
 };
 
-TEST_F(DISABLED_AdjacentTest, should_check_downstream_nodes)
+TEST_F(AdjacentTest, should_check_downstream_nodes)
 {
 	Adjacent q{*m_graph, m_nodes, std::make_shared<OutputNode>(), 1};
 	m_graph->ExecuteQuery(q);
@@ -48,7 +48,7 @@ TEST_F(DISABLED_AdjacentTest, should_check_downstream_nodes)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
 
-TEST_F(DISABLED_AdjacentTest, should_check_upstream_nodes)
+TEST_F(AdjacentTest, should_check_upstream_nodes)
 {
 	Adjacent q{*m_graph, m_nodes, std::make_shared<InputNode>(), -1};
 	m_graph->ExecuteQuery(q);
@@ -56,7 +56,7 @@ TEST_F(DISABLED_AdjacentTest, should_check_upstream_nodes)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n2")), m_nodes.end());
 }
 
-TEST_F(DISABLED_AdjacentTest, should_check_adjacent_nodes)
+TEST_F(AdjacentTest, should_check_adjacent_nodes)
 {
 	m_graph->CreateEdge("n3", "n1");
 	Adjacent q{*m_graph, m_nodes, std::make_shared<Type<OutputInterfaceNode>>(), 0};
@@ -66,7 +66,7 @@ TEST_F(DISABLED_AdjacentTest, should_check_adjacent_nodes)
 	EXPECT_NE(m_nodes.find(m_graph->GetNode("n1")), m_nodes.end());
 }
 
-TEST_F(DISABLED_AdjacentTest, to_string)
+TEST_F(AdjacentTest, to_string)
 {
 	Adjacent q{*m_graph, m_nodes, std::make_shared<OutputNode>(), 1};
 	EXPECT_EQ(q.ToString(), "Downstream(1)[OutputNode]");
