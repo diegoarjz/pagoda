@@ -2,6 +2,7 @@
 
 #include "pagoda/common/pluggable_factory.h"
 #include <imgui.h>
+#include <imgui_internal.h>
 
 namespace pgframes {
 namespace {
@@ -67,7 +68,7 @@ WindowRef WindowManager::CreateWindow(const std::string &type) {
   if (auto w = WindowFactory::Instance().Create(type)) {
     w->m_identifier = uniqueIdentifier++;
     w->m_windowManager = shared_from_this();
-    WindowFactory::createdWindows.emplace(w->m_identifier, w);
+    WindowFactory::Instance().createdWindows.emplace(w->m_identifier, w);
     return w;
   }
   return WindowRef{};
@@ -85,7 +86,6 @@ std::vector<WindowPtr> WindowManager::GetOpenWindows() {
 }
 
 void WindowManager::SetupLayout() {
-  /*
   auto dockSpaceId = ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
   if (!m_layoutInitialized) {
@@ -108,7 +108,6 @@ void WindowManager::SetupLayout() {
     m_docks[DockHint::RightPanel] = rightPanel;
     m_docks[DockHint::BottomPanel] = bottomPanel;
   }
-  */
 }
 
 void WindowManager::DrawOpenWindows() {

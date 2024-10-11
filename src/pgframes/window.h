@@ -66,6 +66,7 @@ public:
 private:
   std::unordered_map<DockHint, uint32_t> m_docks;
   std::shared_ptr<PlatformWindow> m_platform;
+  bool m_layoutInitialized{false};
 };
 
 } // namespace pgframes
