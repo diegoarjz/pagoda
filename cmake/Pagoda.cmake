@@ -34,7 +34,7 @@ endif()
 
 string(TIMESTAMP PAGODA_BUILD_DATE "%d/%m/%Y %H:%M:%S")
 
-option(PAGODA_SHARED_LIB "Build pagoda with shared libraries" OFF)
+option(PAGODA_SHARED_LIB "Build pagoda with shared libraries" ON)
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
   option(PAGODA_PROFILER_ACTIVE "Enable or disable built in profiling" OFF)
