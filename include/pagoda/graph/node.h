@@ -126,8 +126,8 @@ class Node : public dynamic::BuiltinClass
   Graph* m_graph{nullptr};
 	std::string m_nodeName;
 	uint32_t m_nodeId;
-  float m_posX;
-  float m_posY;
+  float m_posX{0.0f};
+  float m_posY{0.0f};
 };  // class Node
 
 using NodePtr = std::shared_ptr<Node>;
