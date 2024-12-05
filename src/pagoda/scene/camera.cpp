@@ -2,6 +2,7 @@
 #include "transformation.h"
 
 #include <pagoda/common/instrument/profiler.h>
+#include <pagoda/math/degrees.h>
 
 #include <boost/qvm/gen/vec_operations2.hpp>
 #include <boost/qvm/gen/vec_operations4.hpp>
@@ -20,39 +21,9 @@ using namespace pagoda::math;
 
 using namespace boost;
 
-namespace pagoda::scene
-{
-Camera::Camera()
-  : m_position{0, 0, 0}, m_viewDirection{0, 0, -1}, m_viewMatrix(qvm::identity_mat<float, 4>()), m_viewMatrixDirty(true)
-{
-}
+namespace pagoda::scene {
 
-void Camera::SetPosition(const math::Vec3F &pos)
-{
-	if (m_position != pos) {
-		m_position = pos;
-		m_viewMatrixDirty = true;
-	}
-}
-
-void Camera::SetViewDirection(const math::Vec3F &dir)
-{
-	DBG_ASSERT(qvm::mag_sqr(dir) > 0);
-	if (m_viewDirection != dir) {
-		m_viewDirection = qvm::normalized(dir);
-		m_viewMatrixDirty = true;
-	}
-}
-
-void Camera::SetTransformation(const Transformation &t)
-{
-	SetPosition(t.GetPosition());
-	SetViewDirection(t.GetFrontDirection());
-}
-
-void Camera::SetLens(const Lens &lens) { m_lens = lens; }
-Lens &Camera::GetLens() { return m_lens; }
-
+namespace {
 template<typename T>
 qvm::mat<T, 4, 4> look_at(const qvm::vec<T, 3> &eye, const qvm::vec<T, 3> &target, const qvm::vec<T, 3> &upDirection)
 {
@@ -74,28 +45,54 @@ qvm::mat<T, 4, 4> look_at(const qvm::vec<T, 3> &eye, const qvm::vec<T, 3> &targe
 
 	return mat * translation_mat(-eye);
 }
-
-const math::Vec3F &Camera::GetPosition() const { return m_position; }
-
-const math::Vec3F &Camera::GetViewDirection() const { return m_viewDirection; }
-math::Vec3F Camera::GetRightVector() const
-{
-	return normalized(qvm::cross(Transformation::upVector, GetViewDirection()));
 }
-math::Vec3F Camera::GetUpVector() const { return normalized(qvm::cross(GetViewDirection(), GetRightVector())); }
 
-const math::Mat4x4F &Camera::GetViewMatrix()
+Camera::Camera()
 {
-	START_PROFILE;
+  m_viewMatrix = qvm::identity_mat<float, 4>();
+}
 
-	if (m_viewMatrixDirty) {
-		math::Vec3F target = m_position + m_viewDirection;
-		m_viewMatrix = look_at(m_position, target, Transformation::upVector);
-		m_viewMatrixDirty = false;
-	}
+void Camera::SetPosition(const math::Vec3F &pos) {
+  m_position = pos;
+}
+
+void Camera::SetTarget(const math::Vec3F &target) {
+  m_target = target;
+}
+
+const math::Vec3F& Camera::GetTarget() const { return m_target; }
+
+math::Vec3F Camera::GetViewDirection() const {
+  return XYZ(row<2>(m_viewMatrix));
+}
+
+math::Vec3F Camera::GetRightVector() const {
+  return XYZ(row<0>(m_viewMatrix));
+}
+
+math::Vec3F Camera::GetUpVector() const {
+  return XYZ(row<1>(m_viewMatrix));
+}
+
+void Camera::SetCameraView(const math::Vec3F& eye, const math::Vec3F& lookat)
+{
+  m_position = eye;
+  m_target = lookat;
+}
+
+void Camera::SetLens(const Lens &lens) { m_lens = lens; }
+Lens &Camera::GetLens() { return m_lens; }
+
+math::Vec3F Camera::GetPosition() const {
+  return m_position;
+}
+
+math::Mat4x4F Camera::GetViewMatrix()
+{
+  m_viewMatrix = look_at(m_position, m_target, Transformation::upVector);
 	return m_viewMatrix;
 }
 
 const math::Mat4x4F &Camera::GetProjectionMatrix() { return m_lens.GetProjectionMatrix(); }
 
-}  // namespace pagoda::scene
+} // namespace pagoda::scene

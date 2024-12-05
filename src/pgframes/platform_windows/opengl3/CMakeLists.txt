@@ -1,33 +1,33 @@
 find_package(imgui REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(glew REQUIRED)
 
 ########################################
-# Metal Window
+# OpenGL3 Window
 ########################################
 
-set(METAL_WINDOW_SRCS
+set(OPENGL3_WINDOW_SRCS
   "imgui_impl_glfw.h"
   "imgui_impl_glfw.cpp"
-  "imgui_impl_metal.h"
-  "imgui_impl_metal.mm"
-  "metal.mm"
-  "metal.h"
+  "imgui_impl_opengl3.h"
+  "imgui_impl_opengl3.cpp"
+  "opengl3.cpp"
 )
 
-set(METAL_WINDOW_DEPENDENCIES
+set(OPENGL3_WINDOW_DEPENDENCIES
   "imgui::imgui"
   "glfw"
-  "-framework Metal"
-  "-framework QuartzCore"
+  GLEW::GLEW
 )
 
 add_pagoda_plugin(
-  NAME          "pg_metal_window"
-  SOURCES       ${METAL_WINDOW_SRCS}
-  DEPENDENCIES  ${METAL_WINDOW_DEPENDENCIES}
+  NAME          "pg_gl3_window"
+  SOURCES       ${OPENGL3_WINDOW_SRCS}
+  DEPENDENCIES  ${OPENGL3_WINDOW_DEPENDENCIES}
   REGISTRY      "PlatformWindow"
   FUNCTION      "CreateWindow"
   DESTINATION   "${CMAKE_BINARY_DIR}/src/bin/plugins"
   JSON          "${CMAKE_SOURCE_DIR}/tools/plugin.json"
 )
+
 

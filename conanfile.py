@@ -49,6 +49,7 @@ class Pagoda(ConanFile):
         self.requires("magic_enum/0.9.5")
         self.requires("imgui/cci.20220621+1.88.docking")
         self.requires("glfw/3.3.8")
+        self.requires("glew/2.2.0")
 
 
     def _configure_cmake(self):

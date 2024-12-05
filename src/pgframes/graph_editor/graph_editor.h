@@ -1,16 +1,16 @@
 #pragma once
 
-#include "windows/window.h"
+#include "../window.h"
 
 #include <memory>
 
-namespace alpha::frontend {
-class GraphEditor : public Window {
+namespace pgframes::graph_editor {
+class GraphEditor : public pgframes::Window {
 public:
   GraphEditor();
   ~GraphEditor() override;
 
-  DockHint GetDockHint() const override { return DockHint::BottomPanel; }
+  pgframes::DockHint GetDockHint() const override { return pgframes::DockHint::BottomPanel; }
 
 protected:
   const std::string &WindowName() override;
@@ -20,5 +20,4 @@ private:
   class Impl;
   std::unique_ptr<Impl> m_impl;
 };
-} // namespace alpha::frontend
-
+} // namespace pgframes::graph_editor

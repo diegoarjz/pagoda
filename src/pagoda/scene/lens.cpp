@@ -1,5 +1,7 @@
 #include "lens.h"
 
+#include "pagoda/math/degrees.h"
+#include "pagoda/math/radians.h"
 #include <pagoda/math/vec_base.h>
 
 #include <boost/qvm/map_mat_vec.hpp>
@@ -17,7 +19,10 @@ Lens::Lens() : m_projectionMatrix(qvm::diag_mat(boost::qvm::vec<float, 4>{1, 1, 
 
 void Lens::SetPerspective(float fovY, float aspect, float near, float far)
 {
-	m_projectionMatrix = qvm::perspective_rh(fovY, aspect, near, far);
+  const math::Degrees<float> fovInDegrees(fovY);
+  const math::Radians<float> fovInRadians(fovInDegrees);
+	m_projectionMatrix = qvm::perspective_rh(
+      static_cast<float>(fovInRadians), aspect, near, far);
 }
 
 void Lens::SetOrthogonal(float left, float right, float top, float bottom)

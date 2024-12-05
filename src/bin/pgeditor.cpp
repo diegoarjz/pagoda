@@ -22,7 +22,11 @@ public:
     }
 
     instance.LoadAllPlugins();
+#ifdef PAGODA_OS_MACOS
     m_platform = pgframes::PlatformWindow::Get("metal");
+#else
+    m_platform = pgframes::PlatformWindow::Get("opengl3");
+#endif
     if (m_platform == nullptr) {
       LOG_ERROR("Unable to create platform window");
       return;
@@ -33,7 +37,8 @@ public:
 
     m_platform->Startup();
 
-    m_windowManager->CreateWindow("WindowBrowser");
+    m_windowManager->CreateWindow("GraphEditor");
+    m_windowManager->CreateWindow("ViewerWindow");
 
     m_platform->RunMainLoop();
 
@@ -48,11 +53,9 @@ private:
 int main(int argc, char *argv[]) {
   PagodaEditor p;
   p.ProcessArgs(argc, argv);
-  /*
   if (!p.Init()) {
     return 1;
   }
-  */
   p.Run();
   return 0;
 }

@@ -1,16 +1,14 @@
 set(SCENE_SRCS
   "camera.cpp"
-  "camera.h"
   "lens.cpp"
-  "lens.h"
   "path.cpp"
-  "path.h"
-  "scene_graph.h"
+  "render_target.cpp"
   "scene_graph.cpp"
-  "scene_node.h"
   "scene_node.cpp"
   "transformation.cpp"
-  "transformation.h"
+  "geometry.cpp"
+  "mesh.cpp"
+  "lines.cpp"
 )
 
 add_pagoda_module(

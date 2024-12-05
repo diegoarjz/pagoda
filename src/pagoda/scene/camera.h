@@ -1,39 +1,54 @@
 #pragma once
 
 #include "lens.h"
-#include "transformation.h"
 
 #include <pagoda/math/matrix_base.h>
 #include <pagoda/math/vec_base.h>
 
 namespace pagoda::scene
 {
-class Camera final
+//! Represents a Camera in the 3D scene.
+class Camera
 {
-	public:
-	Camera();
+public:
+  //! Constructs a camera in the origin of coordinates, looking towards
+  //! the negative z-axis.
+  Camera();
 
-	void SetPosition(const boost::qvm::vec<float, 3> &pos);
-	void SetViewDirection(const boost::qvm::vec<float, 3> &dir);
-	void SetTransformation(const Transformation &t);
+  //! Sets the camera position.
+  void SetPosition(const math::Vec3F &pos);
+  //! Sets to where the camera is looking
+  void SetTarget(const math::Vec3F &target);
+  //! Returns the camera target.
+  const math::Vec3F& GetTarget() const;
 
-	const math::Vec3F &GetPosition() const;
-	const math::Vec3F &GetViewDirection() const;
-	math::Vec3F GetRightVector() const;
-	math::Vec3F GetUpVector() const;
+  //! Returns the camera position.
+  math::Vec3F GetPosition() const;
+  //! Returns the camera view direction.
+  math::Vec3F GetViewDirection() const;
+  //! Returns the camera right direction.
+  math::Vec3F GetRightVector() const;
+  //! Returns the camera up direction.
+  math::Vec3F GetUpVector() const;
 
-	const math::Mat4x4F &GetViewMatrix();
-	const math::Mat4x4F &GetProjectionMatrix();
+  void SetCameraView(const math::Vec3F& eye, const math::Vec3F& lookat);
 
-	void SetLens(const Lens &lens);
-	Lens &GetLens();
+  //! Returns the view matrix.
+  math::Mat4x4F GetViewMatrix();
+  //! Returns the projection matrix which is provided by the Lens.
+  const math::Mat4x4F &GetProjectionMatrix();
 
-	private:
-	pagoda::math::Vec3F m_position;
-	pagoda::math::Vec3F m_viewDirection;
+  //! Sets the camera Lens.
+  void SetLens(const Lens &lens);
+  //! Returns the camera Lens.
+  Lens &GetLens();
 
-	pagoda::math::Mat4x4F m_viewMatrix;
-	Lens m_lens;
-	bool m_viewMatrixDirty;
+private:
+  math::Vec3F m_position;       //< The camera position.
+  math::Vec3F m_target;         //< Where the camera is looking at.
+  math::Mat4x4F m_viewMatrix;   //< The view matrix.
+	Lens m_lens;                  //< The camera Lens.
 };
+
+using CameraPtr = std::shared_ptr<Camera>;
 }  // namespace pagoda::scene
