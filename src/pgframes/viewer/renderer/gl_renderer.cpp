@@ -27,6 +27,8 @@ public:
 
   scene::RenderTargetPtr m_renderTarget;
   gl::FrameBufferPtr m_frameBuffer;
+
+  std::unordered_map<scene::Path, RenderablePtr> m_renderables;
 };
 
 GLRenderer::GLRenderer()
@@ -67,42 +69,45 @@ void GLRenderer::Render(const scene::SceneGraphPtr& scene, const scene::CameraPt
     return;
   }
 
-  // Collect renderables
-  std::vector<std::shared_ptr<Renderable>> renderables;
+  auto& cachedRenderables = m_impl->m_renderables;
 
+  // Collect renderables
   std::stack<scene::SceneNodePtr> nodes;
   nodes.push(root);
   while (!nodes.empty()) {
     auto node = nodes.top();
     nodes.pop();
 
+    const auto& nodePath = node->GetFullPath();
     if (auto geometryNode = std::dynamic_pointer_cast<scene::Geometry>(node)) {
-      const auto& verts = geometryNode->GetVertices();
-      const auto& indices = geometryNode->GetIndices();
-      const auto& colors = geometryNode->GetVertexColors();
-      std::vector<gl::Mesh::Vertex> vertices(verts.size());
+      if (cachedRenderables.find(nodePath) == cachedRenderables.end()) {
+        const auto& verts = geometryNode->GetVertices();
+        const auto& indices = geometryNode->GetIndices();
+        const auto& colors = geometryNode->GetVertexColors();
+        std::vector<gl::Mesh::Vertex> vertices(verts.size());
 
-      for (uint32_t i = 0; i < verts.size(); ++i) {
-        auto& vert = vertices[i];
-        vert.position = verts[i];
-        vert.color = colors[i];
+        for (uint32_t i = 0; i < verts.size(); ++i) {
+          auto& vert = vertices[i];
+          vert.position = verts[i];
+          vert.color = colors[i];
+        }
+
+        gl::Mesh::PrimitiveType primType;
+        switch (geometryNode->GetPrimitiveType()) {
+          case scene::Geometry::PrimitiveType::Triangles:  primType = gl::Mesh::PrimitiveType::Triangles;   break;
+          case scene::Geometry::PrimitiveType::Lines:      primType = gl::Mesh::PrimitiveType::Lines;       break;
+          case scene::Geometry::PrimitiveType::LineStrip:  primType = gl::Mesh::PrimitiveType::LineStrip;   break;
+          case scene::Geometry::PrimitiveType::LineLoop:   primType = gl::Mesh::PrimitiveType::LineLoop;    break;
+        };
+
+        auto mesh = std::make_shared<gl::Mesh>(vertices, indices, primType);
+        auto shader = std::make_shared<gl::ShaderProgram>();
+
+        auto renderable = std::make_shared<Renderable>(mesh, shader);
+        renderable->SetWorldMatrix({1.0});
+
+        cachedRenderables.emplace(nodePath, renderable);
       }
-
-      gl::Mesh::PrimitiveType primType;
-      switch (geometryNode->GetPrimitiveType()) {
-        case scene::Geometry::PrimitiveType::Triangles:  primType = gl::Mesh::PrimitiveType::Triangles;   break;
-        case scene::Geometry::PrimitiveType::Lines:      primType = gl::Mesh::PrimitiveType::Lines;       break;
-        case scene::Geometry::PrimitiveType::LineStrip:  primType = gl::Mesh::PrimitiveType::LineStrip;   break;
-        case scene::Geometry::PrimitiveType::LineLoop:   primType = gl::Mesh::PrimitiveType::LineLoop;    break;
-      };
-
-      auto mesh = std::make_shared<gl::Mesh>(vertices, indices, primType);
-      auto shader = std::make_shared<gl::ShaderProgram>();
-
-      auto renderable = std::make_shared<Renderable>(mesh, shader);
-      renderable->SetWorldMatrix({1.0});
-
-      renderables.push_back(renderable);
     }
 
     node->ForEachChild([&nodes] (const auto& n) {
@@ -114,9 +119,9 @@ void GLRenderer::Render(const scene::SceneGraphPtr& scene, const scene::CameraPt
   // Start rendering
   StartFrame();
 
-  for (auto& renderable : renderables) {
-    auto mesh = renderable->GetMesh();
-    auto shader = renderable->GetShader();
+  for (auto& renderable : cachedRenderables) {
+    auto mesh = renderable.second->GetMesh();
+    auto shader = renderable.second->GetShader();
 
     mesh->Load();
     shader->Load();

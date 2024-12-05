@@ -21,4 +21,5 @@ private:
   gl::ShaderProgramPtr m_shader;
   math::Mat4x4F m_worldMatrix;
 };
+using RenderablePtr = std::shared_ptr<Renderable>;
 }
