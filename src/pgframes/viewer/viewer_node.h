@@ -2,9 +2,9 @@
 #include "pagoda/graph/input_interface_node.h"
 #include "pagoda/graph/node.h"
 #include "pagoda/graph/interfaceable_node.h"
+#include "pgframes/window.h"
 
 namespace pgframes::viewer {
-class ViewerNode;
 
 class ViewerNode : public pagoda::graph::Node, public pagoda::graph::InterfaceableNode {
 public:
@@ -19,7 +19,7 @@ public:
 
   void AttachToGraph(pagoda::graph::Graph* graph) override;
 
-  void SetViewer(std::shared_ptr<ViewerNode> v);
+  void SetViewer(std::shared_ptr<Window> v);
 
   void Interfaces(pagoda::objects::InterfaceCallback* cb) override;
   void InputInterfaces(pagoda::objects::InterfaceCallback* cb) override;
@@ -27,7 +27,7 @@ public:
   pagoda::objects::InterfacePtr GetInputInterface(const std::string& name) const override;
   pagoda::objects::InterfacePtr GetOutputInterface(const std::string& name) const override;
 private:
-  std::shared_ptr<ViewerNode> m_viewer;
+  std::shared_ptr<Window> m_viewer;
   pagoda::graph::InputInterfaceNodePtr m_inputInterfaceNode;
   pagoda::objects::InterfacePtr m_inputInterface;
 };
