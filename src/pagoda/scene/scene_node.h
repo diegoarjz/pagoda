@@ -2,11 +2,13 @@
 
 #include "path.h"
 
+#include "pagoda/math/matrix_base.h"
+#include "pagoda/math/vec_base.h"
+
 #include <pagoda/common/visitor.h>
 
 #include <functional>
 #include <memory>
-#include <string>
 #include <unordered_map>
 #include <vector>
 #include <functional>
@@ -48,13 +50,39 @@ public:
   bool SetParent(const SceneNodePtr &newParent);
   void Remove();
 
+  ///----------------------------------------
+  /// \name Transform API
+  enum class RotOrder { XYZ, XZY, YXZ, YZX, ZXY, ZYX };
+
+  void SetPosition(const math::Vec3F& pos);
+  math::Vec3F GetPosition() const { return m_position; };
+  void SetScale(const math::Vec3F& scale);
+  math::Vec3F GetScale() const { return m_scale; };
+  void SetRotation(const math::Vec3F& rot, RotOrder rotOrder = RotOrder::XYZ);
+  math::Vec3F GetRotation() const { return m_rotation; };
+
+  math::Mat4x4F GetLocalMatrix();
+  math::Mat4x4F GetWorldMatrix();
+
 private:
+
+  void dirtyWorldMatrix();
+
   SceneGraphWeakPtr m_sceneGraph;
   Path m_name;
   Path m_fullPath;
 
   SceneNodeWeakPtr m_parent;
   SceneNodeMap m_children;
+
+  math::Vec3F m_position{0, 0, 0};
+  math::Vec3F m_scale{1, 1, 1};
+  math::Vec3F m_rotation{0, 0, 0};
+  RotOrder m_rotOrder{RotOrder::XYZ};
+  bool m_localMatrixDirty{true};
+  math::Mat4x4F m_localMatrix;
+  bool m_worldMatrixDirty{true};
+  math::Mat4x4F m_worldMatrix;
 
   friend class SceneGraph;
 };
