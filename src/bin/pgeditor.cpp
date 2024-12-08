@@ -38,7 +38,6 @@ public:
     m_platform->Startup();
 
     m_windowManager->CreateWindow("GraphEditor");
-    m_windowManager->CreateWindow("ViewerWindow");
 
     m_platform->RunMainLoop();
 
