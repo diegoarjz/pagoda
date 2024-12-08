@@ -34,7 +34,7 @@ set(PGFrames_Viewer_Node_SRC
 add_pagoda_plugin(
   NAME          "viewer_node"
   SOURCES       ${PGFrames_Viewer_Node_SRC}
-  DEPENDENCIES  libpagoda pgframes imgui::imgui magic_enum::magic_enum fmt::fmt Boost::filesystem
+  DEPENDENCIES  libpagoda pgframes imgui::imgui magic_enum::magic_enum fmt::fmt Boost::filesystem viewer_window
   REGISTRY      "Node"
   FUNCTION      "CreateNode"
   DESTINATION   "${CMAKE_BINARY_DIR}/src/bin/plugins"

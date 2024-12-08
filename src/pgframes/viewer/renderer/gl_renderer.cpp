@@ -101,10 +101,11 @@ void GLRenderer::Render(const scene::SceneGraphPtr& scene, const scene::CameraPt
         };
 
         auto mesh = std::make_shared<gl::Mesh>(vertices, indices, primType);
+        mesh->Load();
         auto shader = std::make_shared<gl::ShaderProgram>();
+        shader->Load();
 
         auto renderable = std::make_shared<Renderable>(mesh, shader);
-        renderable->SetWorldMatrix({1.0});
 
         cachedRenderables.emplace(nodePath, renderable);
       }
@@ -123,11 +124,11 @@ void GLRenderer::Render(const scene::SceneGraphPtr& scene, const scene::CameraPt
     auto mesh = renderable.second->GetMesh();
     auto shader = renderable.second->GetShader();
 
-    mesh->Load();
-    shader->Load();
+    auto node = scene->GetNodeAtPath(renderable.first);
+    renderable.second->SetWorldMatrix(node->GetWorldMatrix());
 
     shader->Use();
-    shader->SetModelMatrix({1.0});
+    shader->SetModelMatrix(renderable.second->GetWorldMatrix());
     shader->SetViewMatrix(camera->GetViewMatrix());
     shader->SetProjectionMatrix(camera->GetProjectionMatrix());
 

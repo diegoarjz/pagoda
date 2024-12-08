@@ -30,7 +30,7 @@ varying vec4 vertColor;
 
 void main()
 {
-  vec4 vertexPos = viewMatrix * vec4(aPos, 1.0);
+  vec4 vertexPos = viewMatrix * modelMatrix * vec4(aPos, 1.0);
   gl_Position = projectionMatrix * vertexPos;
   vertColor = aColor;
 }
