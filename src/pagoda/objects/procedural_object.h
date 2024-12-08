@@ -2,6 +2,7 @@
 #define PAGODA_PROCEDURAL_OBJECTS_PROCEDURAL_OBJECT_H_
 
 
+#include "pagoda/objects/procedural_object_system.h"
 #include <pagoda/dynamic/builtin_class.h>
 #include <pagoda/geometry/core/geometry.h>
 
@@ -38,6 +39,8 @@ class ProceduralObject :  public dynamic::BuiltinClass
 	std::string ToString() const override;
 
 	void AcceptVisitor(dynamic::ValueVisitorBase& visitor) override;
+
+  ProceduralObjectSystemPtr GetProceduralObjectSystem() const { return m_owner.lock(); }
 
   private:
 
