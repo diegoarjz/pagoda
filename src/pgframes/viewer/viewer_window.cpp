@@ -31,21 +31,6 @@ public:
     , m_camera{std::make_shared<Camera>()}
     , m_viewerCam{*m_camera}
   {
-    // Create the triangle
-    std::vector<math::Vec3F> verts{
-      {-1, 0, 0},
-      {1, 0, 0},
-      {0, 1, 0}
-    };
-    std::vector<uint32_t> indices{0, 1, 2};
-    auto mesh = m_sceneGraph->CreateNode<Mesh>(m_sceneGraph->GetRootNode(), Path{"triangle"}, verts, indices);
-    std::vector<math::Vec4F> triangleColors{
-      {1, 0, 0, 1},
-      {0, 1, 0, 1},
-      {0, 0, 1, 1}
-    };
-    mesh->SetVertexColors(triangleColors);
-
     // Create the axis
     auto axis = m_sceneGraph->CreateNode<Lines>(m_sceneGraph->GetRootNode(), Path{"axis"}, std::vector<math::Vec3F>{
         {0, 0, 0}, {10, 0, 0},
@@ -72,6 +57,31 @@ public:
   renderer::RenderSurfacePtr m_renderSurface;
   scene::CameraPtr m_camera;
   ViewerCamera m_viewerCam;
+
+  // TODO: Clean this
+  SceneNodePtr m_selectedSceneNode{nullptr};
+
+  void drawTreeNode(SceneNodePtr node) {
+    std::string label = node->GetFullPath().ToString();
+
+    if (node->GetChildCount() == 0) {
+      if (ImGui::Selectable( label.c_str())) {
+        m_selectedSceneNode = node;
+      }
+    }
+    else {
+      if (ImGui::TreeNodeEx(label.c_str())) {
+        if (ImGui::IsItemClicked()) {
+          m_selectedSceneNode = node;
+        }
+        node->ForEachChild([this](const SceneNodePtr& c) {
+          this->drawTreeNode(c);
+          return true;
+        });
+        ImGui::TreePop();
+      }
+    }
+  }
 };
 
 ViewerWindow::ViewerWindow() : m_impl{std::make_unique<Impl>()} {
@@ -87,15 +97,35 @@ const std::string &ViewerWindow::WindowName() {
   return name;
 }
 
+
 bool ViewerWindow::Draw() {
   static float col[] = {0, 0, 0};
   static float fov = 30;
 
-  /*
-  if (ImGui::BeginChild("opts", ImVec2(100, 0))) {
+  if (ImGui::BeginChild("opts", ImVec2(200, 0))) {
     ImGui::ColorEdit3("bgCol", col);
     ImGui::DragFloat("fov", &fov);
 
+    m_impl->drawTreeNode(m_impl->m_sceneGraph->GetRootNode());
+
+    auto& node = m_impl->m_selectedSceneNode;
+    if (node != nullptr) {
+      ImGui::Text("%s", node->GetFullPath().ToString().c_str());
+      auto pos = node->GetPosition();
+      auto rot = node->GetRotation();
+      auto scale = node->GetScale();
+      if (ImGui::DragFloat3("#position", pos.a)) {
+        node->SetPosition(pos);
+      }
+      if (ImGui::DragFloat3("#rotation", rot.a)) {
+        node->SetRotation(rot);
+      }
+      if (ImGui::DragFloat3("#scale", scale.a)) {
+        node->SetScale(scale);
+      }
+    }
+
+    /*
     ImGui::Text("Pan");
     if (ImGui::Button("left")) {
       m_impl->m_viewerCam.Pan(-10, 0);
@@ -127,17 +157,17 @@ bool ViewerWindow::Draw() {
     }
 
     if (ImGui::Button("reset")) {
-      auto& cam = m_impl->m_renderEngine->GetCamera();
-      cam.SetPosition({0, 0, 5});
-      cam.SetTarget({0, 0, 0});
+      auto& cam = m_impl->m_camera;
+      cam->SetPosition({0, 0, 5});
+      cam->SetTarget({0, 0, 0});
       m_impl->m_viewerCam.SetPivot({0, 0, 0});
     }
+    */
 
   }
   ImGui::EndChild();
 
   ImGui::SameLine();
-  */
 
   auto& camera = m_impl->m_camera;
 
@@ -159,30 +189,36 @@ bool ViewerWindow::Draw() {
 
     m_impl->m_renderSurface->Present(m_impl->m_renderTarget);
   }
-  ImGui::EndChild();
 
   // Handle mouse interaction.
-  if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
-    const auto dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
-    ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
-    auto& viewerCam = m_impl->m_viewerCam;
-    viewerCam.Orbit(dragDelta.x, dragDelta.y);
-  }
-  if (ImGui::IsMouseDragging(ImGuiMouseButton_Right)) {
-    const auto dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Right);
-    ImGui::ResetMouseDragDelta(ImGuiMouseButton_Right);
-    auto& viewerCam = m_impl->m_viewerCam;
-    viewerCam.Pan(dragDelta.x, -dragDelta.y);
-  }
   if (ImGui::IsItemHovered()) {
+    if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
+      const auto dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
+      ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
+      auto& viewerCam = m_impl->m_viewerCam;
+      viewerCam.Orbit(dragDelta.x, dragDelta.y);
+    }
+    if (ImGui::IsMouseDragging(ImGuiMouseButton_Right)) {
+      const auto dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Right);
+      ImGui::ResetMouseDragDelta(ImGuiMouseButton_Right);
+      auto& viewerCam = m_impl->m_viewerCam;
+      viewerCam.Pan(dragDelta.x, -dragDelta.y);
+    }
     auto io = ImGui::GetIO();
     if (io.MouseWheel != 0) {
       m_impl->m_viewerCam.Zoom(io.MouseWheel);
     }
   }
 
+  ImGui::EndChild();
+
   return true;
 }
+
+pagoda::scene::SceneGraphPtr ViewerWindow::GetSceneGraph() const {
+  return m_impl->m_sceneGraph;
+}
+
 } // namespace alpha::frontend
 
 extern "C" PAGODA_PLUGIN void *CreateWindow() {

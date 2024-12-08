@@ -64,7 +64,7 @@ public:
         auto viewerNode = reinterpret_cast<pagoda::graph::Node*>(nodeIdentifier);
         if (auto n = static_cast<viewer::ViewerNode*>(viewerNode)) {
           auto viewer = m_editor->GetWindowManager()->CreateWindow("ViewerWindow").lock();
-          n->SetViewer(std::dynamic_pointer_cast<viewer::ViewerNode>(viewer));
+          n->SetViewer(viewer);
         }
       }
     };
