@@ -119,13 +119,14 @@ bool OpenGL3GlfwPlatform::Startup() {
     return false;
   }
 
-  glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
   m_window = glfwCreateWindow(1280, 720, "Pagoda", nullptr, nullptr);
   if (m_window == nullptr) {
     return false;
   }
+
+  glfwMaximizeWindow(m_window);
 
   glfwMakeContextCurrent(m_window);
   glfwSwapInterval(1); // Enable vsync
