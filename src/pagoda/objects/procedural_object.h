@@ -42,9 +42,13 @@ class ProceduralObject :  public dynamic::BuiltinClass
 
   ProceduralObjectSystemPtr GetProceduralObjectSystem() const { return m_owner.lock(); }
 
+  void SetName(const std::string& name) { m_name = name; }
+  const std::string& GetName() const { return m_name; }
+
   private:
 
   ProceduralObjectSystemWeakPtr m_owner;
+  std::string m_name;
 
 };  // class ProceduralObject
 

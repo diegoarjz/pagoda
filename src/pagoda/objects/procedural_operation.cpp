@@ -93,16 +93,22 @@ void ProceduralOperation::OutputInterfaces(InterfaceCallback *cb) {
   Interfaces(&f);
 }
 
+// FIXME
+static uint32_t objectCount = 0;
+
 ProceduralObjectPtr ProceduralOperation::CreateOutputProceduralObject()
 {
 	START_PROFILE;
 
 	auto procedural_object = m_proceduralObjectSystem->CreateProceduralObject();
+  procedural_object->SetName(GetOperationName() + "_" + std::to_string(objectCount++));
 
 	auto hierarchicalSystem =
 	  m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
-	hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(
+	auto component = hierarchicalSystem->CreateComponentAs<HierarchicalComponent>(
 	  procedural_object);
+
+  hierarchicalSystem->SetParent(nullptr, component);
 
 	return procedural_object;
 }
@@ -111,6 +117,7 @@ ProceduralObjectPtr ProceduralOperation::CreateOutputProceduralObject(
   ProceduralObjectPtr& base)
 {
 	auto proceduralObject = m_proceduralObjectSystem->CloneProceduralObject(base);
+  proceduralObject->SetName(GetOperationName() + "_" + std::to_string(objectCount++));
 
 	auto hierarchicalSystem =
 	  m_proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();

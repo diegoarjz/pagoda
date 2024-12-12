@@ -37,6 +37,7 @@ std::shared_ptr<ProceduralObject> ProceduralObjectSystem::CloneProceduralObject(
 	START_PROFILE;
 
 	auto object = CreateProceduralObject();
+  object->SetName(toClone->GetName() + "_Clone"); //FIXME
 
 	for (auto& system : m_proceduralComponentSystems) {
 		system.second->CloneComponent(toClone, object);
