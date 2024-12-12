@@ -48,7 +48,7 @@ class Pagoda(ConanFile):
         self.requires("fmt/8.1.1")
         self.requires("magic_enum/0.9.5")
         self.requires("imgui/cci.20220621+1.88.docking")
-        self.requires("glfw/3.3.8")
+        self.requires("glfw/3.4")
         self.requires("glew/2.2.0")
 
 
