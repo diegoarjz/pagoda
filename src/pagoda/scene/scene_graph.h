@@ -38,6 +38,7 @@ public:
 
     std::shared_ptr<T> node = std::make_shared<T>(args...);
     node->m_name = name;
+    node->m_sceneGraph = shared_from_this();
     addNode(node, parent);
 
     return node;
