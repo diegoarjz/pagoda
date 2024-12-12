@@ -149,8 +149,13 @@ void Interface::Add(ProceduralObjectPtr object)
 	LOG_TRACE(ProceduralObjects, "Adding object to interface " << GetName()
 	                                                           << " with arity "
 	                                                           << GetArityName());
-  for (auto& i : m_connectedInterfaces) {
-    i.lock()->m_objects.push_back(object->Clone());
+  if (!m_connectedInterfaces.empty()) {
+    auto iter = m_connectedInterfaces.begin();
+    iter->lock()->m_objects.push_back(object);
+
+    for (++iter; iter != m_connectedInterfaces.end(); ++iter) {
+      iter->lock()->m_objects.push_back(object->Clone());
+    }
   }
 }
 
