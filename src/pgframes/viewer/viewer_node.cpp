@@ -12,9 +12,12 @@
 
 #include <pagoda/geometry/geometry_component.h>
 #include <pagoda/geometry/geometry_system.h>
+#include <pagoda/objects/hierarchical_system.h>
 
-#include "pagoda/scene/mesh.h"
-#include "pagoda/scene/scene_graph.h"
+#include <pagoda/scene/mesh.h>
+#include <pagoda/scene/scene_graph.h>
+
+#include <pagoda/api.h>
 
 using namespace pagoda;
 using namespace pagoda::objects;
@@ -27,6 +30,7 @@ const char *ViewerNode::name = "ViewerNode";
 namespace {
 std::shared_ptr<Mesh> ConvertGeometry(
     pagoda::geometry::core::GeometryPtr pagodaGeom,
+    scene::SceneNodePtr parentNode,
     scene::SceneGraphPtr sceneGraph,
     scene::Path path) {
   std::vector<math::Vec3F> verts;
@@ -52,40 +56,67 @@ std::shared_ptr<Mesh> ConvertGeometry(
       indices.push_back(indices.size());
     }
   }
-  return sceneGraph->CreateNode<scene::Mesh>(sceneGraph->GetRootNode(), path, verts, indices);
+  return sceneGraph->CreateNode<scene::Mesh>(parentNode, path, verts, indices);
 }
 } // namespace
 
 ViewerNode::ViewerNode()
   : m_inputInterface{
     std::make_shared<Interface>("in", Interface::Type::Input, Interface::Arity::All)} {
-  //
 }
 
-void ViewerNode::Execute(const pagoda::graph::NodeSet &inNodes, const pagoda::graph::NodeSet &outNodes) {
-  auto viewerWindow = std::dynamic_pointer_cast<ViewerWindow>(m_viewer);
-  auto sceneGraph = viewerWindow->GetSceneGraph();
+namespace {
+void addComponent(HierarchicalComponentPtr component, SceneNodePtr parentNode, SceneGraphPtr sceneGraph) {
+  std::cout << "Adding component " << component->GetParentObject()->GetName()  << "(" << component->GetParentObject() << ")"<< std::endl;
+  ProceduralObjectPtr object = component->GetParentObject();
+  auto path = scene::Path{object->GetName()};
 
-  uint32_t count = 0;
-  m_inputInterface->GetAll([this, &sceneGraph, &count](pagoda::objects::ProceduralObjectPtr object) {
-    pagoda::geometry::algorithms::EarClipping<pagoda::geometry::core::Geometry> earClipping;
-
+  if (component->ChildrenCount() == 0) {
+    // Add Geometry to scene graph
     auto proceduralObjectSystem = object->GetProceduralObjectSystem();
     auto geometrySystem =
-        proceduralObjectSystem->GetComponentSystem<pagoda::geometry::GeometrySystem>();
+        proceduralObjectSystem->GetComponentSystem<geometry::GeometrySystem>();
 
     auto geometryComponent =
         geometrySystem->GetComponentAs<pagoda::geometry::GeometryComponent>(object);
     auto geometry = geometryComponent->GetGeometry();
     auto triagulatedGeometry = std::make_shared<pagoda::geometry::core::Geometry>();
 
+    pagoda::geometry::algorithms::EarClipping<pagoda::geometry::core::Geometry> earClipping;
     earClipping.Execute(geometry, triagulatedGeometry);
 
-    auto path = scene::Path{GetName() + "_" + std::to_string(count)};
-    const auto mesh = ConvertGeometry(triagulatedGeometry, sceneGraph, path);
+    const auto mesh = ConvertGeometry(triagulatedGeometry, parentNode, sceneGraph, path);
+  }
+  else {
+    auto newParent = sceneGraph->CreateNode<SceneNode>(parentNode, path);
+    for (const auto& child : component->GetChildren()) {
+      addComponent(child.lock(), newParent, sceneGraph);
+    }
+  }
+}
+}
 
-    ++count;
+void ViewerNode::Execute(const pagoda::graph::NodeSet &inNodes, const pagoda::graph::NodeSet &outNodes) {
+  auto viewerWindow = std::dynamic_pointer_cast<ViewerWindow>(m_viewer);
+  auto sceneGraph = viewerWindow->GetSceneGraph();
+
+  // TODO: There should really only exist one.
+  //       We need to rethink how nodes & operations are executed
+  //       Should the procedural object system be part of an execution context?
+  std::set<HierarchicalSystemPtr> hierarchicalSystems;
+  m_inputInterface->GetAll([this, &hierarchicalSystems](pagoda::objects::ProceduralObjectPtr object) {
+    auto proceduralObjectSystem = object->GetProceduralObjectSystem();
+    auto hierarchicalSystem =
+        proceduralObjectSystem->GetComponentSystem<HierarchicalSystem>();
+    hierarchicalSystems.insert(hierarchicalSystem);
   });
+
+  for (auto& h : hierarchicalSystems) {
+    const auto& components = h->GetRootComponents();
+    for (auto c : components) {
+      addComponent(c.lock(), sceneGraph->GetRootNode(), sceneGraph);
+    }
+  }
 }
 
 const char *const ViewerNode::GetNodeType() { return name; }
