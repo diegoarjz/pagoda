@@ -18,24 +18,6 @@ class HierarchicalComponent;
 class HierarchicalSystem : public ProceduralComponentSystem<HierarchicalComponent>
 {
 	public:
-	using Component_t = HierarchicalComponent;
-
-	static const std::string GetComponentSystemName();
-
-	HierarchicalSystem();
-	virtual ~HierarchicalSystem();
-
-	void SetParent(std::shared_ptr<HierarchicalComponent> parent, std::shared_ptr<HierarchicalComponent> child);
-
-	/**
-	 * Performs the registration of the Hierarchical System with \p pagoda.
-	 */
-	static void Registration(Pagoda *pagoda);
-
-	protected:
-	void DoClone(std::shared_ptr<HierarchicalComponent> from, std::shared_ptr<HierarchicalComponent> to) override;
-
-	private:
 	struct HierarchicalComponentWeakPtrHasher
 	{
 		size_t operator()(const std::weak_ptr<HierarchicalComponent> &ptr) const
@@ -53,9 +35,30 @@ class HierarchicalSystem : public ProceduralComponentSystem<HierarchicalComponen
 		}
 	};  // struct HierarchicalComponentEqual
 
-	std::unordered_set<std::weak_ptr<HierarchicalComponent>, HierarchicalComponentWeakPtrHasher,
-	                   HierarchicalComponentEqual>
-	  root_components;
+	using Component_t = HierarchicalComponent;
+  using RootComponents_t = std::unordered_set<std::weak_ptr<HierarchicalComponent>, HierarchicalComponentWeakPtrHasher,
+	                   HierarchicalComponentEqual>;
+
+	static const std::string GetComponentSystemName();
+
+	HierarchicalSystem();
+	virtual ~HierarchicalSystem();
+
+	void SetParent(std::shared_ptr<HierarchicalComponent> parent, std::shared_ptr<HierarchicalComponent> child);
+
+  const RootComponents_t& GetRootComponents() const { return root_components; }
+
+	/**
+	 * Performs the registration of the Hierarchical System with \p pagoda.
+	 */
+	static void Registration(Pagoda *pagoda);
+
+	protected:
+	void DoClone(std::shared_ptr<HierarchicalComponent> from, std::shared_ptr<HierarchicalComponent> to) override;
+
+	private:
+
+  RootComponents_t root_components;
 };  // class GeometrySystem
 using HierarchicalSystemPtr = std::shared_ptr<HierarchicalSystem>;
 using HierarchicalSystemWeakPtr = std::weak_ptr<HierarchicalSystem>;

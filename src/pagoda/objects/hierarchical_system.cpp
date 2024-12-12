@@ -33,8 +33,8 @@ void HierarchicalSystem::SetParent(std::shared_ptr<HierarchicalComponent> parent
 
 void HierarchicalSystem::DoClone(std::shared_ptr<HierarchicalComponent> from, std::shared_ptr<HierarchicalComponent> to)
 {
-	to->parent = from->parent;
-	to->children = from->children;
+  // They share the same parent
+  SetParent(from->parent.lock(), to);
 }
 
 void HierarchicalSystem::Registration(Pagoda* pagoda)
