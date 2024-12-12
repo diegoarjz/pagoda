@@ -36,7 +36,9 @@ class ProceduralComponentSystemBase
 	template<typename C>
 	std::shared_ptr<C> CreateComponentAs(ProceduralObjectPtr object)
 	{
-		return std::dynamic_pointer_cast<C>(CreateComponent(object));
+		auto component = std::dynamic_pointer_cast<C>(CreateComponent(object));
+    component->SetParentObject(object);
+    return component;
 	}
 
 	private:
