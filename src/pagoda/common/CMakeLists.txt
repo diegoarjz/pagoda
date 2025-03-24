@@ -63,6 +63,7 @@ set(COMMON_UNIT_TESTS
     "utils.test.cpp"
     "visitor.test.cpp"
     "buffer.test.cpp"
+    "delegate.test.cpp"
 )
 
 foreach(unit_test_src ${COMMON_UNIT_TESTS})

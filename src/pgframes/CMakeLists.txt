@@ -5,6 +5,15 @@ set(PGFRAMES_SRCS
   "platform_window.cpp"
   "window.cpp"
   "main_loop.cpp"
+
+  "widgets/widget.cpp"
+  "widgets/button.cpp"
+  "widgets/label.cpp"
+  "widgets/color_edit.cpp"
+  "widgets/float_edit.cpp"
+  "widgets/tree_view.cpp"
+  "widgets/tree_view.cpp"
+
   "widgets/command_list.cpp"
   "widgets/field.cpp"
   "widgets/text_input.cpp"
@@ -18,6 +27,7 @@ add_pagoda_library(
     imgui::imgui
     magic_enum::magic_enum
     fmt::fmt
+    EnTT::EnTT
 )
 
 add_subdirectory(platform_windows)

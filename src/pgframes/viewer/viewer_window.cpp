@@ -2,6 +2,8 @@
 
 #include "pagoda/scene/camera.h"
 #include "pagoda/scene/lines.h"
+#include "pgframes/widgets/label.h"
+#include "pgframes/widgets/tree_view.h"
 #include "viewer_camera.h"
 
 #include "pagoda/scene/mesh.h"
@@ -11,10 +13,14 @@
 #include "pgframes/viewer/renderer/gl/frame_buffer.h"
 #include "pgframes/viewer/renderer/gl_renderer.h"
 
+#include "pgframes/widgets/color_edit.h"
+#include "pgframes/widgets/float_edit.h"
+
 #include "pagoda/common/pluggable_factory.h"
 #include "pagoda/pagoda.h"
 
 #include "imgui.h"
+#include <boost/qvm/gen/swizzle3.hpp>
 
 using namespace pagoda;
 using namespace pagoda::objects;
@@ -23,6 +29,36 @@ using namespace pagoda::scene;
 
 namespace pgframes::viewer {
 
+class SceneGraphTreeViewDelegate : public widgets::TreeView::Delegate {
+public:
+  SceneGraphTreeViewDelegate(const SceneGraphPtr& scenegraph)
+    : m_sceneGraph{scenegraph}
+  {
+  }
+
+  void Roots(widgets::TreeView::NodeHandleVisitor f) {
+    f(m_sceneGraph->GetRootNode());
+  }
+
+  std::string Label(const widgets::TreeView::NodeHandle& node) {
+    return std::any_cast<SceneNodePtr>(node)->GetFullPath().ToString();
+  }
+
+  void Children(const widgets::TreeView::NodeHandle& n, widgets::TreeView::NodeHandleVisitor f) {
+    SceneNodePtr node = std::any_cast<SceneNodePtr>(n);
+    node->ForEachChild([f](auto sceneNode) {
+      f(sceneNode);
+      return true;
+    });
+  }
+
+  uint32_t NumChildren(const widgets::TreeView::NodeHandle& node) const {
+    return std::any_cast<SceneNodePtr>(node)->GetChildCount();
+  }
+
+  SceneGraphPtr m_sceneGraph;
+};
+
 class ViewerWindow::Impl {
 public:
   Impl()
@@ -30,6 +66,7 @@ public:
     , m_sceneGraph{std::make_shared<SceneGraph>()}
     , m_camera{std::make_shared<Camera>()}
     , m_viewerCam{*m_camera}
+    , m_sceneGraphTreeViewDelegate{std::make_shared<SceneGraphTreeViewDelegate>(m_sceneGraph)}
   {
     // Create the axis
     auto axis = m_sceneGraph->CreateNode<Lines>(m_sceneGraph->GetRootNode(), Path{"axis"}, std::vector<math::Vec3F>{
@@ -67,12 +104,14 @@ public:
     if (node->GetChildCount() == 0) {
       if (ImGui::Selectable( label.c_str())) {
         m_selectedSceneNode = node;
+        m_selectedNodeLabel->SetText(m_selectedSceneNode->GetFullPath().ToString());
       }
     }
     else {
       if (ImGui::TreeNodeEx(label.c_str())) {
         if (ImGui::IsItemClicked()) {
           m_selectedSceneNode = node;
+          m_selectedNodeLabel->SetText(m_selectedSceneNode->GetFullPath().ToString());
         }
         node->ForEachChild([this](const SceneNodePtr& c) {
           this->drawTreeNode(c);
@@ -82,12 +121,75 @@ public:
       }
     }
   }
+
+  std::shared_ptr<widgets::VerticalLayout> m_sidebarLayout;
+  std::shared_ptr<widgets::ColorEdit> m_bgColorEdit;
+  std::shared_ptr<widgets::FloatEdit> m_fovEdit;
+
+  // selected node
+  std::shared_ptr<widgets::Label> m_selectedNodeLabel;
+  std::shared_ptr<widgets::Float3Edit> m_selecteNodePos;
+  std::shared_ptr<widgets::Float3Edit> m_selecteNodeRot;
+  std::shared_ptr<widgets::Float3Edit> m_selecteNodeScale;
+
+  // Scenegraph
+  std::shared_ptr<SceneGraphTreeViewDelegate> m_sceneGraphTreeViewDelegate;
+  std::shared_ptr<widgets::TreeView> m_sceneGraphTree;
+
+  math::Vec3F m_bgColor{0, 0, 0};
+  float m_fov{30.0f};
 };
 
 ViewerWindow::ViewerWindow() : m_impl{std::make_unique<Impl>()} {
   m_impl->m_renderer->InitRenderer();
   m_impl->m_renderSurface = std::make_shared<renderer::RenderSurface>(800, 600);
   m_impl->m_renderTarget = std::make_shared<scene::RenderTarget>(800, 600, 1);
+
+  // sidebar
+  m_impl->m_sidebarLayout = std::make_shared<widgets::VerticalLayout>();
+  m_impl->m_bgColorEdit = std::make_shared<widgets::ColorEdit>(math::Vec3F{0, 0, 0});
+  m_impl->m_fovEdit = std::make_shared<widgets::FloatEdit>(m_impl->m_fov);
+
+  m_impl->m_selectedNodeLabel = std::make_shared<widgets::Label>("selected node");
+  m_impl->m_selecteNodePos = std::make_shared<widgets::Float3Edit>(math::Vec3F{0, 0, 0});
+  m_impl->m_selecteNodeRot = std::make_shared<widgets::Float3Edit>(math::Vec3F{0, 0, 0});
+  m_impl->m_selecteNodeScale = std::make_shared<widgets::Float3Edit>(math::Vec3F{0, 0, 0});
+  m_impl->m_sceneGraphTree = std::make_shared<widgets::TreeView>(m_impl->m_sceneGraphTreeViewDelegate);
+
+  m_impl->m_sidebarLayout->AddWdiget(m_impl->m_bgColorEdit);
+  m_impl->m_sidebarLayout->AddWdiget(m_impl->m_fovEdit);
+
+  m_impl->m_sidebarLayout->AddWdiget(m_impl->m_selectedNodeLabel);
+  m_impl->m_sidebarLayout->AddWdiget(m_impl->m_selecteNodePos);
+  m_impl->m_sidebarLayout->AddWdiget(m_impl->m_selecteNodeRot);
+  m_impl->m_sidebarLayout->AddWdiget(m_impl->m_selecteNodeScale);
+
+  m_impl->m_sidebarLayout->AddWdiget(m_impl->m_sceneGraphTree);
+
+  m_impl->m_bgColorEdit->OnColorChanged([this](const auto& col) {
+    m_impl->m_bgColor = boost::qvm::XYZ(col);
+  });
+  m_impl->m_fovEdit->OnValueChanged([this](const auto& val) { m_impl->m_fov = val; });
+  m_impl->m_selecteNodePos->OnValueChanged([this](const auto& val) {
+    if (m_impl->m_selectedSceneNode != nullptr) {
+      m_impl->m_selectedSceneNode->SetPosition(val);
+    }
+  });
+  m_impl->m_selecteNodeRot->OnValueChanged([this](const auto& val) {
+    if (m_impl->m_selectedSceneNode != nullptr) {
+      m_impl->m_selectedSceneNode->SetRotation(val);
+    }
+  });
+  m_impl->m_selecteNodeScale->OnValueChanged([this](const auto& val) {
+    if (m_impl->m_selectedSceneNode != nullptr) {
+      m_impl->m_selectedSceneNode->SetScale(val);
+    }
+  });
+
+  m_impl->m_sceneGraphTree->OnPressed([this](const auto& val) {
+    m_impl->m_selectedSceneNode = std::any_cast<SceneNodePtr>(val);
+    m_impl->m_selectedNodeLabel->SetText(m_impl->m_selectedSceneNode->GetFullPath().ToString());
+  });
 }
 
 ViewerWindow::~ViewerWindow() {}
@@ -99,31 +201,10 @@ const std::string &ViewerWindow::WindowName() {
 
 
 bool ViewerWindow::Draw() {
-  static float col[] = {0, 0, 0};
-  static float fov = 30;
-
   if (ImGui::BeginChild("opts", ImVec2(200, 0))) {
-    ImGui::ColorEdit3("bgCol", col);
-    ImGui::DragFloat("fov", &fov);
+    m_impl->m_sidebarLayout->Draw();
 
-    m_impl->drawTreeNode(m_impl->m_sceneGraph->GetRootNode());
-
-    auto& node = m_impl->m_selectedSceneNode;
-    if (node != nullptr) {
-      ImGui::Text("%s", node->GetFullPath().ToString().c_str());
-      auto pos = node->GetPosition();
-      auto rot = node->GetRotation();
-      auto scale = node->GetScale();
-      if (ImGui::DragFloat3("#position", pos.a)) {
-        node->SetPosition(pos);
-      }
-      if (ImGui::DragFloat3("#rotation", rot.a)) {
-        node->SetRotation(rot);
-      }
-      if (ImGui::DragFloat3("#scale", scale.a)) {
-        node->SetScale(scale);
-      }
-    }
+    //m_impl->drawTreeNode(m_impl->m_sceneGraph->GetRootNode());
 
     /*
     ImGui::Text("Pan");
@@ -178,12 +259,12 @@ bool ViewerWindow::Draw() {
     m_impl->m_renderTarget->SetHeight(size.y);
 
     camera->GetLens().SetPerspective(
-        fov, size.x / size.y, 0.01, 1000
+        m_impl->m_fov, size.x / size.y, 0.01, 1000
     );
 
     m_impl->m_renderer->SetUpRenderTarget(m_impl->m_renderTarget);
     m_impl->m_renderer->SetViewPort(0, 0, size.x, size.y);
-    m_impl->m_renderer->SetClearColor(col[0], col[1], col[2]);
+    m_impl->m_renderer->SetClearColor(X(m_impl->m_bgColor), Y(m_impl->m_bgColor), Z(m_impl->m_bgColor));
 
     m_impl->m_renderer->Render(m_impl->m_sceneGraph, camera);
 
