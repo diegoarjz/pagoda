@@ -7,16 +7,16 @@ set(PGFrames_Graph_Editor_SRC
   "graph_properties.cpp"
   "graph_properties.h"
 
-  "${CMAKE_SOURCE_DIR}/third_party/imgui-node-editor/imgui_node_editor.cpp"
-  "${CMAKE_SOURCE_DIR}/third_party/imgui-node-editor/imgui_node_editor.h"
-  "${CMAKE_SOURCE_DIR}/third_party/imgui-node-editor/imgui_canvas.cpp"
-  "${CMAKE_SOURCE_DIR}/third_party/imgui-node-editor/imgui_canvas.h"
-  "${CMAKE_SOURCE_DIR}/third_party/imgui-node-editor/crude_json.cpp"
-  "${CMAKE_SOURCE_DIR}/third_party/imgui-node-editor/crude_json.h"
-  "${CMAKE_SOURCE_DIR}/third_party/imgui-node-editor/imgui_node_editor_api.cpp"
+  "${PROJECT_SOURCE_DIR}/third_party/imgui-node-editor/imgui_node_editor.cpp"
+  "${PROJECT_SOURCE_DIR}/third_party/imgui-node-editor/imgui_node_editor.h"
+  "${PROJECT_SOURCE_DIR}/third_party/imgui-node-editor/imgui_canvas.cpp"
+  "${PROJECT_SOURCE_DIR}/third_party/imgui-node-editor/imgui_canvas.h"
+  "${PROJECT_SOURCE_DIR}/third_party/imgui-node-editor/crude_json.cpp"
+  "${PROJECT_SOURCE_DIR}/third_party/imgui-node-editor/crude_json.h"
+  "${PROJECT_SOURCE_DIR}/third_party/imgui-node-editor/imgui_node_editor_api.cpp"
 
-  "${CMAKE_SOURCE_DIR}/third_party/ImGuiFileDialog/ImGuiFileDialog.cpp"
-  "${CMAKE_SOURCE_DIR}/third_party/ImGuiFileDialog/ImGuiFileDialog.h"
+  "${PROJECT_SOURCE_DIR}/third_party/ImGuiFileDialog/ImGuiFileDialog.cpp"
+  "${PROJECT_SOURCE_DIR}/third_party/ImGuiFileDialog/ImGuiFileDialog.h"
 )
 
 add_pagoda_plugin(
@@ -26,14 +26,14 @@ add_pagoda_plugin(
   REGISTRY      "WindowFactory"
   FUNCTION      "CreateWindow"
   DESTINATION   "${CMAKE_BINARY_DIR}/src/bin/plugins"
-  JSON          "${CMAKE_SOURCE_DIR}/tools/plugin.json"
+  JSON          "${PROJECT_SOURCE_DIR}/tools/plugin.json"
 )
 
 target_include_directories(
   graph_editor
   PRIVATE
-    "${CMAKE_SOURCE_DIR}/third_party/imgui-node-editor"
-    "${CMAKE_SOURCE_DIR}/third_party/ImGuiFileDialog"
+    "${PROJECT_SOURCE_DIR}/third_party/imgui-node-editor"
+    "${PROJECT_SOURCE_DIR}/third_party/ImGuiFileDialog"
 )
 
 target_compile_definitions(

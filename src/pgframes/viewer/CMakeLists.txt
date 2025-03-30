@@ -23,7 +23,7 @@ add_pagoda_plugin(
   REGISTRY      "WindowFactory"
   FUNCTION      "CreateWindow"
   DESTINATION   "${CMAKE_BINARY_DIR}/src/bin/plugins"
-  JSON          "${CMAKE_SOURCE_DIR}/tools/plugin.json"
+  JSON          "${PROJECT_SOURCE_DIR}/tools/plugin.json"
 )
 
 set(PGFrames_Viewer_Node_SRC
@@ -38,5 +38,5 @@ add_pagoda_plugin(
   REGISTRY      "Node"
   FUNCTION      "CreateNode"
   DESTINATION   "${CMAKE_BINARY_DIR}/src/bin/plugins"
-  JSON          "${CMAKE_SOURCE_DIR}/tools/plugin.json"
+  JSON          "${PROJECT_SOURCE_DIR}/tools/plugin.json"
 )

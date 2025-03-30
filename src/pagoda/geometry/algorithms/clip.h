@@ -7,6 +7,8 @@
 #include <pagoda/math/plane.h>
 #include <pagoda/math/vec_base.h>
 
+#include <map>
+
 namespace pagoda::geometry::algorithms
 {
 template<class G>
