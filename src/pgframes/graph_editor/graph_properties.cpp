@@ -6,6 +6,8 @@
 #include "pagoda/graph/operation_node.h"
 #include "pagoda/objects/parameter_callback.h"
 #include "pgframes/widgets/field.h"
+#include "pgframes/widgets/text_input.h"
+
 #include <fmt/format.h>
 #include <imgui.h>
 
@@ -26,6 +28,20 @@ namespace pgframes::graph_editor {
       widgets::field(
           label, fmt::format("{}_{}", m_node->GetName(), label),
           [&]() { return *v; }, [&](auto val) { par->SetValue(val); });
+      return par;
+    }
+
+    StringParameterPtr
+    TextParameter(std::string *v, const std::string &name,
+                    const std::string &label,
+                    const std::string &defaultValue = "") override {
+      auto par = std::dynamic_pointer_cast<Parameter<std::string>>(
+          m_node->GetParameter(name));
+      std::string text = par->GetValue();
+      if (widgets::MultiLineTextInput(fmt::format("{}_{}", m_node->GetName(), label).c_str(),
+                                      text, true)) {
+        par->SetValue(text);
+      }
       return par;
     }
 
