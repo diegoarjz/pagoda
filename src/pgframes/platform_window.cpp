@@ -1,7 +1,8 @@
-#include "platform_window.h"
+#include "pgframes/platform_window.h"
+
+#include "pgframes/main_loop.h"
 
 #include "pagoda/common/pluggable_factory.h"
-
 
 namespace pgframes {
 

@@ -62,11 +62,16 @@ public:
   void SetupLayout();
   uint32_t IdForDockHint(DockHint hint);
 
+  //----------------------------------------
+  //! @name Application lifetime
+  bool QuitRequested() const;
+
   std::shared_ptr<PlatformWindow> GetPlatformWindow() const {return m_platform; };
 private:
   std::unordered_map<DockHint, uint32_t> m_docks;
   std::shared_ptr<PlatformWindow> m_platform;
   bool m_layoutInitialized{false};
+  bool m_quitRequested{false};
 };
 
 } // namespace pgframes

@@ -1,6 +1,7 @@
-#include "window.h"
+#include "pgframes/window.h"
 
 #include "pagoda/common/pluggable_factory.h"
+
 #include <imgui.h>
 #include <imgui_internal.h>
 
@@ -44,9 +45,8 @@ bool Window::DrawWindow() {
     }
 
     Draw();
-
-    ImGui::End();
   }
+  ImGui::End();
   return true;
 }
 
@@ -111,9 +111,34 @@ void WindowManager::SetupLayout() {
 }
 
 void WindowManager::DrawOpenWindows() {
+  // Draw main menu
+  if (ImGui::BeginMainMenuBar()) {
+    if (ImGui::BeginMenu("File")) {
+      if (ImGui::MenuItem("Quit")) {
+        m_quitRequested = true;
+      }
+      ImGui::EndMenu();
+    }
+    if (ImGui::BeginMenu("Window")) {
+      auto& windowFactory = WindowFactory::Instance();
+      for (const auto& windowType : windowFactory.RegisteredTypes()) {
+        if (ImGui::MenuItem(windowType.c_str())) {
+          CreateWindow(windowType);
+        }
+      }
+      ImGui::EndMenu();
+    }
+    ImGui::EndMainMenuBar();
+  }
+
+  // Draw open windows
   for (auto &w : GetOpenWindows()) {
     w->DrawWindow();
   }
+}
+
+bool WindowManager::QuitRequested() const {
+  return m_quitRequested;
 }
 
 uint32_t WindowManager::IdForDockHint(DockHint hint) { return m_docks[hint]; }

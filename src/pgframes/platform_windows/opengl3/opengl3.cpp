@@ -3,6 +3,8 @@
 #include "pagoda/api.h"
 #include "pagoda/common/pluggable_factory.h"
 
+#include "pgframes/main_loop.h"
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -148,7 +150,9 @@ bool OpenGL3GlfwPlatform::Startup() {
 
 void OpenGL3GlfwPlatform::RunMainLoop() {
   // Main loop
-  while (!glfwWindowShouldClose(m_window)) {
+
+  bool appShouldQuit = false;
+  while (!glfwWindowShouldClose(m_window) && !appShouldQuit) {
     // Poll and handle events (inputs, m_window resize, etc.)
     // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to
     // tell if dear imgui wants to use your inputs.
@@ -167,7 +171,7 @@ void OpenGL3GlfwPlatform::RunMainLoop() {
     ImGui::NewFrame();
 
     if (m_mainLoop != nullptr) {
-      m_mainLoop->RunMainLoop();
+      appShouldQuit = !m_mainLoop->RunMainLoop();
     }
 
     /*

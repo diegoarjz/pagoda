@@ -122,8 +122,8 @@ public:
           ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar;
       if (ImGui::Begin("##operationsWindow", &m_popupWindowOpen, flags)) {
         widgets::CommandList("operations", *this, {0, 100});
-        ImGui::End();
       }
+      ImGui::End();
     }
 
     // Graph editor

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "window.h"
+#include "pgframes/window.h"
 
 #include <memory>
 
@@ -10,7 +10,7 @@ public:
   MainLoop(WindowManagerPtr windowManager);
   virtual ~MainLoop() {}
 
-  virtual void RunMainLoop();
+  virtual bool RunMainLoop();
 private:
   WindowManagerPtr m_windowManager;
 };

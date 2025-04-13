@@ -1,12 +1,11 @@
 #pragma once
 
-#include "main_loop.h"
-
 #include "pagoda/image/image.h"
 
 namespace pgframes {
 
 using PlatformWindowPtr = std::shared_ptr<class PlatformWindow>;
+using MainLoopPtr = std::shared_ptr<class MainLoop>;
 
 class PlatformTexture {
 public:

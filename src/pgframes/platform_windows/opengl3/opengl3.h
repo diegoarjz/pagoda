@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../platform_window.h"
+#include "pgframes/platform_window.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

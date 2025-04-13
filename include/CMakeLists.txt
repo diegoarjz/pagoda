@@ -1,3 +1,6 @@
+#[[
+pagoda
+]]
 set(PAGODA_PUBLIC_HEADERS
   "pagoda/pagoda.h"
   "pagoda/api.h"
@@ -27,3 +30,21 @@ add_pagoda_header_only(
 set_target_properties(pagoda_public_headers PROPERTIES PUBLIC_HEADER "${PAGODA_PUBLIC_HEADERS}")
 include(GNUInstallDirs)
 install(DIRECTORY "pagoda" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+
+#[[
+pgframes
+]]
+set(PGFRAMES_PUBLIC_HEADERS
+  "pgframes/window.h"
+  "pgframes/platform_window.h"
+  "pgframes/main_loop.h"
+)
+
+add_pagoda_header_only(
+  NAME    pgframes_public_headers
+  SOURCES ${PAGODA_PUBLIC_HEADERS}
+)
+
+set_target_properties(pgframes_public_headers PROPERTIES PUBLIC_HEADER "${PGFRAMES_PUBLIC_HEADERS}")
+include(GNUInstallDirs)
+install(DIRECTORY "pgframes" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
