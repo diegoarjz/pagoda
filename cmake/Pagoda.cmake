@@ -235,7 +235,7 @@ endfunction()
 function (add_pagoda_executable)
 
   set(multiValue SOURCES DEPENDENCIES COMPILE_DEFINITIONS)
-  set(singleValue NAME)
+  set(singleValue NAME DESTINATION)
   include(CMakeParseArguments)
   cmake_parse_arguments(
       PARSED_ARGS       # prefix of output variables
@@ -270,6 +270,16 @@ function (add_pagoda_executable)
   elseif(UNIX)
     set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
       INSTALL_RPATH "$ORIGIN")
+  endif()
+
+  if (PARSED_ARGS_DESTINATION)
+    add_custom_command(
+      TARGET ${PARSED_ARGS_NAME}
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${PARSED_ARGS_NAME}>" "${PARSED_ARGS_DESTINATION}"
+      DEPENDS "${PARSED_ARGS_NAME}"
+      COMMENT "Copying ${PARSED_ARGS_NAME} to ${PARSED_ARGS_DESTINATION}"
+    )
   endif()
 endfunction()
 
