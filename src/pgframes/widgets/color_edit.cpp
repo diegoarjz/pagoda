@@ -1,4 +1,4 @@
-#include "color_edit.h"
+#include "pgframes/widgets/color_edit.h"
 
 #include "pagoda/common/delegate.h"
 
@@ -39,6 +39,8 @@ ColorEdit::~ColorEdit() {}
 
 void ColorEdit::Draw() {
   bool valueChanged = false;
+  ImGui::SetNextItemWidth(X(CalculateSize()));
+
   if (m_impl->m_isColor4) {
     valueChanged = ImGui::ColorEdit4(fmt::format("##{}", m_id).c_str(), m_impl->m_color.a);
   }

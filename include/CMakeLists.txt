@@ -38,6 +38,15 @@ set(PGFRAMES_PUBLIC_HEADERS
   "pgframes/window.h"
   "pgframes/platform_window.h"
   "pgframes/main_loop.h"
+  "pgframes/widgets/button.h"
+  "pgframes/widgets/color_edit.h"
+  "pgframes/widgets/float_edit.h"
+  "pgframes/widgets/label.h"
+  "pgframes/widgets/text_input.h"
+  "pgframes/widgets/tree_view.h"
+  "pgframes/widgets/widget.h"
+  "pgframes/widgets/collapsing_group.h"
+  "pgframes/widgets/child_window.h"
 )
 
 add_pagoda_header_only(

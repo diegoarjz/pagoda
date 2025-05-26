@@ -1,4 +1,4 @@
-#include "float_edit.h"
+#include "pgframes/widgets/float_edit.h"
 
 #include "pagoda/math/vec_base.h"
 
@@ -31,6 +31,8 @@ FloatEdit::FloatEdit(float value)
 FloatEdit::~FloatEdit() {}
 
 void FloatEdit::Draw() {
+  ImGui::SetNextItemWidth(X(CalculateSize()));
+
   bool changed = ImGui::DragFloat(fmt::format("##{}", m_id).c_str(), &m_impl->m_float);
 
   if (changed) {
@@ -64,6 +66,8 @@ Float2Edit::Float2Edit(const pagoda::math::Vec2F& value)
 Float2Edit::~Float2Edit() {}
 
 void Float2Edit::Draw() {
+  ImGui::SetNextItemWidth(X(CalculateSize()));
+
   bool changed = ImGui::DragFloat2(fmt::format("##{}", m_id).c_str(), m_impl->m_float.a);
 
   if (changed) {
@@ -97,6 +101,8 @@ Float3Edit::Float3Edit(const pagoda::math::Vec3F& value)
 Float3Edit::~Float3Edit() {}
 
 void Float3Edit::Draw() {
+  ImGui::SetNextItemWidth(X(CalculateSize()));
+
   bool changed = ImGui::DragFloat3(fmt::format("##{}", m_id).c_str(), m_impl->m_float.a);
 
   if (changed) {
@@ -130,6 +136,8 @@ Float4Edit::Float4Edit(const pagoda::math::Vec4F& value)
 Float4Edit::~Float4Edit() {}
 
 void Float4Edit::Draw() {
+  ImGui::SetNextItemWidth(X(CalculateSize()));
+
   bool changed = ImGui::DragFloat4(fmt::format("##{}", m_id).c_str(), m_impl->m_float.a);
 
   if (changed) {

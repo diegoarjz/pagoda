@@ -47,6 +47,13 @@ public:
     m_callbacks.erase(handler);
   }
 
+  /**
+   * How many callbacks are in this delegate.
+   */
+  std::size_t NumCallbacks() const {
+    return m_callbacks.size();
+  }
+
 private:
   CallbackContainer_t m_callbacks;
 };

@@ -6,6 +6,10 @@
 #include <vector>
 
 namespace pgframes {
+namespace widgets {
+using MenuPtr = std::shared_ptr<class Menu>;
+}
+
 class Window;
 using WindowPtr = std::shared_ptr<Window>;
 using WindowRef = std::weak_ptr<Window>;
@@ -35,12 +39,15 @@ public:
   WindowManagerPtr GetWindowManager() const;
 
 protected:
+  void SetMenu(const widgets::MenuPtr& menu);
 
   virtual bool Draw() = 0;
   virtual const std::string &WindowName() = 0;
 
   uint32_t m_identifier;
   bool m_initialized{false};
+
+  widgets::MenuPtr m_menu;
 
   WindowManagerPtr m_windowManager;
   friend class WindowManager;

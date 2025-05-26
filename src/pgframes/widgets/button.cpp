@@ -1,4 +1,4 @@
-#include "button.h"
+#include "pgframes/widgets/button.h"
 
 #include "pagoda/common/delegate.h"
 
@@ -29,6 +29,8 @@ Button::Button(const std::string& label)
 Button::~Button() {}
 
 void Button::Draw() {
+  ImGui::SetNextItemWidth(X(CalculateSize()));
+
   if (ImGui::Button(m_impl->m_label.c_str())) {
     m_impl->Pressed();
   }

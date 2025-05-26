@@ -1,6 +1,7 @@
 #include "pgframes/window.h"
 
 #include "pagoda/common/pluggable_factory.h"
+#include "pgframes/widgets/menu.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -35,9 +36,21 @@ bool Window::DrawWindow() {
     m_initialized = true;
   }
 
+  ImGuiWindowFlags flags = 0;
+  if (m_menu != nullptr) {
+    flags |= ImGuiWindowFlags_MenuBar;
+  }
+
   ImGui::SetNextWindowDockID(m_windowManager->IdForDockHint(GetDockHint()));
   if (ImGui::Begin((WindowName() + std::to_string(m_identifier)).c_str(),
-                   &open)) {
+                   &open, flags)) {
+
+    // Draw Menu
+    auto& menu = m_menu;
+    if (menu != nullptr) {
+      menu->Draw();
+    }
+
     if (!open) {
       Close();
       ImGui::End();
@@ -59,6 +72,10 @@ DockHint Window::GetDockHint() const { return DockHint::Main; }
 WindowManagerPtr Window::GetWindowManager() const {
   assert(m_windowManager != nullptr);
   return m_windowManager;
+}
+
+void Window::SetMenu(const widgets::MenuPtr& menu) {
+  m_menu = menu;
 }
 
 WindowManager::WindowManager(std::shared_ptr<PlatformWindow> platform)

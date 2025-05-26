@@ -1,4 +1,4 @@
-#include "label.h"
+#include "pgframes/widgets/label.h"
 
 #include "imgui.h"
 
