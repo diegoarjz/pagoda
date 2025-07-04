@@ -10,7 +10,11 @@
 #include "pgframes/viewer/renderer/renderable.h"
 
 #include <GL/glew.h>
+#ifdef PAGODA_OS_MACOS
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 #include <boost/qvm/swizzle.hpp>
 

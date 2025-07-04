@@ -3,7 +3,12 @@
 #include "pagoda/math/matrix_base.h"
 
 #include <GL/glew.h>
+
+#ifdef PAGODA_OS_MACOS
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 #include <memory>
 

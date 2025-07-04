@@ -2,6 +2,7 @@
 #define PAGODA_GEOMETRY_OPERATIONS_CLIP_H_
 
 #include <pagoda/geometry/core/geometry_builder.h>
+#include <pagoda/geometry/core/geometry.h>
 #include <pagoda/math/intersection.h>
 #include <pagoda/math/line_3d.h>
 #include <pagoda/math/plane.h>

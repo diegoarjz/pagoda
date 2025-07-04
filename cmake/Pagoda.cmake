@@ -374,6 +374,25 @@ function(add_pagoda_plugin)
   target_compile_features(${PARSED_ARGS_NAME} PRIVATE cxx_std_20)
   set_target_properties(${PARSED_ARGS_NAME} PROPERTIES PREFIX "")
 
+  target_compile_definitions(
+    ${PARSED_ARGS_NAME}
+    PRIVATE
+      $<$<CONFIG:DEBUG>:DEBUG>
+      # Set compiler id
+      $<$<CXX_COMPILER_ID:GNU>:PAGODA_COMPILER_GCC>
+      $<$<CXX_COMPILER_ID:Clang,AppleClang>:PAGODA_COMPILER_CLANG>
+      $<$<CXX_COMPILER_ID:MSVC>:PAGODA_COMPILER_MSVC>
+      # Set OS id
+      $<$<PLATFORM_ID:Darwin>:PAGODA_OS_MACOS>
+      $<$<PLATFORM_ID:Linux>:PAGODA_OS_LINUX>
+      $<$<PLATFORM_ID:Windows>:PAGODA_OS_WINDOWS>
+      # Shared libraries
+      $<$<BOOL:${PAGODA_SHARED_LIB}>:PAGODA_SHARED_LIB>
+      ${PARSED_ARGS_COMPILE_DEFINITIONS}
+      # Prevent boost from using deprecated functions on Mac
+      $<$<PLATFORM_ID:Darwin>:BOOST_NO_CXX98_FUNCTION_BASE>
+  )
+
   add_custom_command(
     TARGET ${PARSED_ARGS_NAME}
     POST_BUILD
