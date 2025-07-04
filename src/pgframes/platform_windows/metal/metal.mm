@@ -3,6 +3,8 @@
 #include "pagoda/api.h"
 #include "pagoda/common/pluggable_factory.h"
 
+#include "pgframes/main_loop.h"
+
 #include "imgui_internal.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

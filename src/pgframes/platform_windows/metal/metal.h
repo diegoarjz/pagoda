@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../platform_window.h"
+#include "pgframes/platform_window.h"
 
 #define GLFW_INCLUDE_NONE
 #define GLFW_EXPOSE_NATIVE_COCOA
