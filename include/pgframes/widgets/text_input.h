@@ -17,7 +17,8 @@ public:
 
   void Draw() override;
 
-  void SetWidget(const WidgetPtr& widget);
+  void SetText(const std::string& text);
+  std::string GetText() const;
 
   using ValueChangedCalback_t = std::function<void(const std::string&)>;
   void OnValueChanged(ValueChangedCalback_t cb);

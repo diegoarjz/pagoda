@@ -96,5 +96,16 @@ void TextEdit::OnValueChanged(ValueChangedCalback_t cb) {
   m_impl->m_onValueChanged.AddCallback(cb);
 }
 
+void TextEdit::SetText(const std::string& text) {
+  if (text != m_impl->m_value) {
+    m_impl->m_value = text;
+    m_impl->m_onValueChanged(m_impl->m_value);
+  }
+}
+
+std::string TextEdit::GetText() const {
+  return m_impl->m_value;
+}
+
 
 } // namespace pgframes::widgets
