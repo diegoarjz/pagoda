@@ -5,6 +5,8 @@
 #include <pagoda/math/matrix_base.h>
 #include <pagoda/math/vec_base.h>
 
+#include <memory>
+
 namespace pagoda::scene
 {
 //! Represents a Camera in the 3D scene.
