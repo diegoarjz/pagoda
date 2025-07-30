@@ -84,7 +84,7 @@ public:
 
     if (ImGui::Button("Load")) {
       ImGuiFileDialog::Instance()->OpenDialog("OpenGraphFile", "Choose File",
-                                              ".pgd", ".");
+                                              ".pgd");
     }
 
     if (ImGuiFileDialog::Instance()->Display("OpenGraphFile")) {
