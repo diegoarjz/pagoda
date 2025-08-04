@@ -258,11 +258,7 @@ function (add_pagoda_executable)
     COMPILE_DEFINITIONS ${PARSED_ARGS_COMPILE_DEFINITIONS}
   )
 
-  include(GNUInstallDirs)
-  install(TARGETS ${PARSED_ARGS_NAME}
-    EXPORT pagoda-export
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  )
+  install(TARGETS ${PARSED_ARGS_NAME} DESTINATION "bin")
 
   if(APPLE)
     set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
@@ -318,11 +314,8 @@ function (add_pagoda_library)
 
   set_target_properties(${PARSED_ARGS_NAME} PROPERTIES PREFIX "")
 
-  include(GNUInstallDirs)
   install(TARGETS ${PARSED_ARGS_NAME}
-    EXPORT pagoda-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  )
+    DESTINATION "bin")
 
   if(APPLE)
     set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
@@ -393,13 +386,16 @@ function(add_pagoda_plugin)
       $<$<PLATFORM_ID:Darwin>:BOOST_NO_CXX98_FUNCTION_BASE>
   )
 
-  add_custom_command(
-    TARGET ${PARSED_ARGS_NAME}
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${PARSED_ARGS_NAME}>" "${PARSED_ARGS_DESTINATION}"
-    DEPENDS "${PARSED_ARGS_NAME}"
-    COMMENT "Copying ${PARSED_ARGS_NAME} to ${PARSED_ARGS_DESTINATION}"
-  )
+  install(TARGETS ${PARSED_ARGS_NAME}
+    DESTINATION "bin/plugins")
+
+  if(APPLE)
+    set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
+      INSTALL_RPATH "@loader_path")
+  elseif(UNIX)
+    set_target_properties(${PARSED_ARGS_NAME} PROPERTIES
+      INSTALL_RPATH "$ORIGIN")
+  endif()
 
   # Generate plugin json file
   set(PAGODA_PLUGIN_NAME ${PARSED_ARGS_NAME})
@@ -415,6 +411,13 @@ function(add_pagoda_plugin)
   configure_file(
     "${JSON_FILE}"
     "${PARSED_ARGS_DESTINATION}/${PAGODA_PLUGIN_NAME}.json"
+  )
+  
+  install(
+    FILES
+      "${PARSED_ARGS_DESTINATION}/${PAGODA_PLUGIN_NAME}.json"
+    DESTINATION
+      "bin/plugins"
   )
 endfunction()
 

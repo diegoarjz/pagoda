@@ -29,22 +29,3 @@ add_subdirectory(include)
 add_subdirectory(src)
 
 add_subdirectory(tests)
-
-include(GNUInstallDirs)
-install(EXPORT pagoda-export
-        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/pagoda-config.cmake.in
-  ${CMAKE_BINARY_DIR}/pagoda-config.cmake @ONLY)
-
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/pagoda-config-version.cmake.in
-  ${CMAKE_BINARY_DIR}/pagoda-config-version.cmake @ONLY)
-
-install(
-  FILES
-    ${CMAKE_BINARY_DIR}/pagoda-config.cmake
-    ${CMAKE_BINARY_DIR}/pagoda-config-version.cmake
-  DESTINATION
-    ${CMAKE_INSTALL_LIBDIR})
